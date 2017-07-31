@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners
+                android:bottomLeftRadius="@dimen/radius_corners_default"
+                android:bottomRightRadius="@dimen/radius_corners_default" />
+            <solid
+                android:color="@color/colorSplitter" />
+        </shape>
+    </item>
+    <item android:top="1dp">
+        <shape>
+            <corners
+                android:bottomLeftRadius="@dimen/radius_corners_default"
+                android:bottomRightRadius="@dimen/radius_corners_default" />
+            <solid
+                android:color="@color/colorWhite" />
+        </shape>
+    </item>
+</layer-list>

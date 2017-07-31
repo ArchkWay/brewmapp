@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">BeerMap</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="have_account">Уже есть аккаунт?</string>
+    <string name="enter">Войти</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="facebook">Войти с помощью Facebook</string>
+    <string name="entrance">Вход</string>
+    <string name="registration">Регистрация</string>
+    <string name="photo">фото</string>
+    <string name="last_name">Ваша фамилия</string>
+    <string name="name">Ваше имя</string>
+    <string name="your_gender">Ваш пол:</string>
+    <string name="gender_man">Мужской</string>
+    <string name="gender_woman">Женский</string>
+    <string name="next">Далее</string>
+</resources>

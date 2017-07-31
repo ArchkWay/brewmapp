@@ -1,0 +1,56 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Toolbar">
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="actionMenuTextColor">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorSecondary">@color/colorWhite</item>
+    </style>
+
+    <style name="AppTheme.Button">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingLeft">@dimen/common_block_space_double</item>
+        <item name="android:paddingRight">@dimen/common_block_space_double</item>
+        <item name="android:minHeight">@dimen/height_min_button</item>
+    </style>
+
+    <style name="AppTheme.Button.Red">
+        <item name="android:background">@drawable/selector_button_red</item>
+        <item name="android:textColor">@color/color_text_button_white</item>
+    </style>
+
+    <style name="AppTheme.Button.Green">
+        <item name="android:background">@drawable/selector_button_green</item>
+        <item name="android:textColor">@color/color_text_button_green</item>
+    </style>
+
+    <style name="AppTheme.Text">
+    </style>
+
+    <style name="AppTheme.Text.H3">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppTheme.Input">
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingLeft">@dimen/common_block_space_double_semi</item>
+        <item name="android:textColor">@color/color_text_input</item>
+        <item name="android:textColorHint">@color/colorGray</item>
+        <item name="android:minHeight">@dimen/height_min_button</item>
+    </style>
+
+    <style name="AppTheme.Input.Lesser">
+        <item name="android:textSize">18sp</item>
+        <item name="android:minHeight">@dimen/height_min_input_lesser</item>
+    </style>
+</resources>

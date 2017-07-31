@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="@dimen/common_block_space">
+
+        <LinearLayout
+            android:layout_width="@dimen/size_icon_72"
+            android:layout_height="@dimen/size_icon_72"
+            android:orientation="vertical"
+            android:layout_marginRight="@dimen/common_block_space"
+            android:layout_marginLeft="@dimen/common_block_space"
+            android:background="@drawable/selector_ring"
+            android:padding="@dimen/common_block_space"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/size_icon_24"
+                android:layout_height="@dimen/size_icon_24"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_add"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="@dimen/common_block_space_half"
+                android:text="@string/photo"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Input.Lesser"
+                android:inputType="textPersonName|textCapWords"
+                android:id="@+id/activity.register.name"
+                android:background="@null"
+                android:hint="@string/name"/>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/common_block_space_double_semi"
+                android:background="@color/colorSplitter"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Input.Lesser"
+                android:background="@null"
+                android:inputType="textPersonName|textCapWords"
+                android:id="@+id/activity.register.lastName"
+                android:hint="@string/last_name"/>
+        </LinearLayout>
+    </LinearLayout>
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/common_block_space"
+        android:background="@color/colorSplitter"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/common_block_space"
+        android:paddingLeft="@dimen/common_block_space_double_semi"
+        android:paddingRight="@dimen/common_block_space_double_semi"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Text.H3"
+            android:textColor="@color/colorBlack"
+            android:layout_marginBottom="@dimen/common_block_space_double"
+            android:text="@string/your_gender"/>
+        <info.hoang8f.android.segmented.SegmentedGroup
+            xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/activity.register.segmented"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            segmentedgroup:sc_border_width="2dp"
+            segmentedgroup:sc_tint_color="@color/colorGrayControls"
+            segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big">
+
+            <RadioButton
+                android:id="@+id/activity.register.man"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/gender_man"
+                style="@style/RadioButton" />
+
+            <RadioButton
+                android:id="@+id/activity.register.woman"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/gender_woman"
+                style="@style/RadioButton" />
+        </info.hoang8f.android.segmented.SegmentedGroup>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#36363e</color>
+    <color name="colorPrimaryDark">#0c0c0e</color>
+    <color name="colorAccent">@color/colorButtonRed</color>
+
+
+    <color name="colorButtonRed">#dd6567</color>
+    <color name="colorButtonRedDark">#af5354</color>
+    <color name="colorButtonRedDisabled">#84af5354</color>
+
+    <color name="colorButtonGreen">#41c466</color>
+    <color name="colorButtonGreenDark">#329b4f</color>
+    <color name="colorButtonGreenDisabled">#85329b4f</color>
+
+
+    <color name="colorSplitter">#c2c2c5</color>
+    <color name="colorGrayControls">#a9a9a9</color>
+    <color name="colorFbSplitter">#7890c4</color>
+    <color name="colorFb">#3e60aa</color>
+    <color name="colorFbDark">#2a4379</color>
+    <color name="colorFbDisabled">#862a4379</color>
+</resources>

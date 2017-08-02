@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.frosteye.beermap.presentation.view.impl.widget.MenuFieldRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/common_block_space_double_semi"
+    android:paddingRight="@dimen/common_block_space_double_semi"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:background="@drawable/ovsa_bg_selector_simple_light">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="@dimen/size_menu_icon"
+            android:layout_height="@dimen/size_menu_icon"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:id="@+id/view.menuField.icon"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:id="@+id/view.menuField.title"/>
+    </LinearLayout>
+</ru.frosteye.beermap.presentation.view.impl.widget.MenuFieldRow>

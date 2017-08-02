@@ -119,4 +119,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+
+    @Override
+    public void proceed() {
+        startActivityAndClearTask(MainActivity.class);
+    }
 }

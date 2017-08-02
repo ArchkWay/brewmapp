@@ -5,6 +5,7 @@ import ru.frosteye.beermap.app.di.scope.PresenterScope;
 import ru.frosteye.beermap.presentation.view.impl.activity.BaseActivity;
 import ru.frosteye.beermap.presentation.view.impl.activity.ConfirmPhoneActivity;
 import ru.frosteye.beermap.presentation.view.impl.activity.LoginActivity;
+import ru.frosteye.beermap.presentation.view.impl.activity.MainActivity;
 import ru.frosteye.beermap.presentation.view.impl.activity.RegisterActivity;
 import ru.frosteye.beermap.presentation.view.impl.activity.StartActivity;
 import ru.frosteye.beermap.presentation.view.impl.fragment.BaseFragment;
@@ -21,4 +22,5 @@ public interface PresenterComponent {
     void inject(LoginActivity activity);
     void inject(RegisterActivity activity);
     void inject(ConfirmPhoneActivity activity);
+    void inject(MainActivity activity);
 }

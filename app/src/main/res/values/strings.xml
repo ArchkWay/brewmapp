@@ -15,4 +15,28 @@
     <string name="gender_man">Мужской</string>
     <string name="gender_woman">Женский</string>
     <string name="next">Далее</string>
+    <string name="my_profile">Мой профиль</string>
+    <string name="events">События</string>
+    <string name="messages">Сообщения</string>
+    <string name="serach">Поиск</string>
+    <string name="meetings">Мероприятия</string>
+    <string name="map">Карта</string>
+    <string name="friends">Друзья</string>
+    <string name="groups">Группы</string>
+    <string name="games">Игры</string>
+    <string name="favorites">Избранное</string>
+    <string name="settings">Настройки</string>
+
+    <string-array name="main_menu">
+        <item>События</item>
+        <item>Сообщения</item>
+        <item>Поиск</item>
+        <item>Мероприятия</item>
+        <item>Карта</item>
+        <item>Друзья</item>
+        <item>Группы</item>
+        <item>Игры</item>
+        <item>Избранное</item>
+        <item>Настройки</item>
+    </string-array>
 </resources>

@@ -5,4 +5,6 @@
     <dimen name="height_min_input_lesser">42dp</dimen>
     <dimen name="size_icon_24">24dp</dimen>
     <dimen name="size_icon_72">72dp</dimen>
+    <dimen name="size_avatar">72dp</dimen>
+    <dimen name="size_menu_icon">36dp</dimen>
 </resources>

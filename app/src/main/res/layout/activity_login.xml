@@ -36,6 +36,7 @@
             android:inputType="textEmailAddress"
             android:id="@+id/activity.login.login"
             android:layout_marginTop="@dimen/common_block_space_triple"
+            android:text="and.omni@gmail.com"
             android:background="@drawable/bg_input_top"
             android:hint="@string/login"/>
 

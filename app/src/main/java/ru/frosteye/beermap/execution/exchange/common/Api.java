@@ -6,6 +6,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import ru.frosteye.beermap.execution.exchange.request.base.WrapperParams;
+import ru.frosteye.beermap.execution.exchange.response.UserResponse;
 import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 
 /**
@@ -16,7 +17,7 @@ public interface Api {
 
     @POST("start/login")
     @FormUrlEncoded
-    Call<MessageResponse> login(@FieldMap WrapperParams params);
+    Call<UserResponse> login(@FieldMap WrapperParams params);
 
     @POST("start/register")
     @FormUrlEncoded

@@ -53,4 +53,10 @@ public class StartActivity extends BaseActivity implements StartView {
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+
+    @Override
+    public void proceed() {
+        startActivity(MainActivity.class);
+        finish();
+    }
 }

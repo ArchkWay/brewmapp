@@ -100,9 +100,13 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
         hintCounter.setVisibility(View.VISIBLE);
         resend.setVisibility(View.GONE);
         counter.start((time, seconds) -> {
-            if(seconds == 0) {
-                stopCounter();
-            }
+            runOnUiThread(() -> {
+                if(seconds == 0) {
+                    stopCounter();
+                } else {
+                    hintCounter.setText(getString(R.string.confirm_counter_pattern, time));
+                }
+            });
         }, 60, true);
     }
 

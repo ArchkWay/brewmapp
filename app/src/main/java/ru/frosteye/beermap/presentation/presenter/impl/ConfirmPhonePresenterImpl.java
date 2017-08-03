@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
 import ru.frosteye.beermap.execution.exchange.request.base.Keys;
+import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 import ru.frosteye.beermap.execution.task.ConfirmCodeTask;
 import ru.frosteye.beermap.execution.task.RequestCodeTask;
 import ru.frosteye.beermap.presentation.view.contract.ConfirmPhoneView;
@@ -41,7 +42,7 @@ public class ConfirmPhonePresenterImpl extends BasePresenter<ConfirmPhoneView> i
         enableControls(false);
         RequestParams params = new RequestParams();
         params.addParam(Keys.PHONE, phone);
-        requestCodeTask.execute(params, new SimpleSubscriber<ResponseBody>() {
+        requestCodeTask.execute(params, new SimpleSubscriber<MessageResponse>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);
@@ -50,8 +51,9 @@ public class ConfirmPhonePresenterImpl extends BasePresenter<ConfirmPhoneView> i
             }
 
             @Override
-            public void onNext(ResponseBody responseBody) {
+            public void onNext(MessageResponse responseBody) {
                 enableControls(true);
+                showMessage(responseBody.getMessage());
                 view.startCounter();
             }
         });

@@ -27,7 +27,7 @@ public interface Api {
 
     @POST("start/code")
     @FormUrlEncoded
-    Call<ResponseBody> requestCode(@FieldMap RequestParams params);
+    Call<MessageResponse> requestCode(@FieldMap RequestParams params);
 
     @POST("start/CheckCode")
     @FormUrlEncoded

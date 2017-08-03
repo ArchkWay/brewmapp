@@ -17,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:hint="9991234567"
         android:inputType="phone"
         android:enabled="false"
         android:gravity="center"
@@ -26,7 +25,7 @@
         app:keep_hint="true"
         android:textSize="@dimen/text_size_big_phone"
         mask:allowed_chars="1234567890"
-        mask:mask="+7 (###) ###-##-##"/>
+        mask:mask="+# (###) ###-##-##"/>
 
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -84,8 +83,7 @@
                     android:id="@+id/activity.confirmCode.hintCounter"
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/common_block_space"
-                    android:lineSpacingExtra="3dp"
-                    android:text="@string/confirm_hint"/>
+                    android:lineSpacingExtra="3dp" />
 
                 <Button
                     android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package ru.frosteye.beermap.execution.exchange.common;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import ru.frosteye.beermap.app.di.qualifier.ApiUrl;
@@ -13,6 +15,8 @@ import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
+    public static final String API_VERSION = "1.01";
+
     @Inject
     public RestClient(@ApiUrl String baseUrl,
                       IdentityProvider identityProvider) {
@@ -24,7 +28,13 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
         return Keys.TOKEN;
     }
 
+    @Override
+    protected Map<String, String> getHeaders() {
+        Map<String, String> map = super.getHeaders();
+        map.put(Keys.API_VERSION, API_VERSION);
 
+        return map;
+    }
 
     @Override
     public Class<Api> apiClass() {

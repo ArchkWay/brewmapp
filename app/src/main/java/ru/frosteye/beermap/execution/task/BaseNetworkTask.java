@@ -1,8 +1,10 @@
 package ru.frosteye.beermap.execution.task;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -43,7 +45,12 @@ public abstract class BaseNetworkTask<P, R> extends ObservableTask<P, R> {
                 return resResponse.body();
             } else {
                 String body = resResponse.errorBody().string();
-                throw new ApiException(gson.fromJson(body, MessageResponse.class).getMessage(), resResponse.code());
+                if(resResponse.code() == 409) {
+                    throw new ApiException(gson.fromJson(body, MessageResponse.class).getMessage(), resResponse.code());
+                } else {
+                    throw new ApiException(((List<String>) gson.fromJson(body, new TypeToken<List<String>>() {
+                    }.getType())).get(0), resResponse.code());
+                }
             }
         } catch (IOException e) {
             throw new ApiException(e.getMessage(), 0);

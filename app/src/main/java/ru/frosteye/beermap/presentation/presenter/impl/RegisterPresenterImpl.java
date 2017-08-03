@@ -42,8 +42,12 @@ public class RegisterPresenterImpl extends BasePresenter<RegisterView> implement
         registerTask.execute(params, new SimpleSubscriber<UserResponse>() {
             @Override
             public void onError(Throwable e) {
-                enableControls(true);
-                showMessage(e.getMessage());
+                if(e.getMessage().contains("Пользователь с таким")) {
+                    view.proceed();
+                } else {
+                    enableControls(true);
+                    showMessage(e.getMessage());
+                }
             }
 
             @Override

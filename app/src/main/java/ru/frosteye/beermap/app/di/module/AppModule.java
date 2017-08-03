@@ -1,5 +1,7 @@
 package ru.frosteye.beermap.app.di.module;
 
+import com.facebook.FacebookSdk;
+
 import ru.frosteye.beermap.R;
 import ru.frosteye.beermap.app.di.qualifier.ApiUrl;
 import ru.frosteye.beermap.app.environment.BeerMap;

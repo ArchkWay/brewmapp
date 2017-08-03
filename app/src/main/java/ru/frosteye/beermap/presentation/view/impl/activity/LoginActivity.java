@@ -2,6 +2,8 @@ package ru.frosteye.beermap.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +11,11 @@ import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import butterknife.BindView;
 import ru.frosteye.beermap.app.di.component.PresenterComponent;
@@ -29,6 +36,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.activity_login_password) EditText password;
     @BindView(R.id.activity_login_logo) View logoImage;
     @BindView(R.id.activity_login_fb) View fb;
+    @BindView(R.id.activity_login_fbLogin) LoginButton fbLogin;
 
     @Inject LoginPresenter presenter;
 
@@ -59,6 +67,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setOnDoneListener(password, this::login);
         login.setOnFocusChangeListener(loginListener);
         password.setOnFocusChangeListener(passwordListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        presenter.requestCallbackManager().onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -123,5 +137,15 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     public void proceed() {
         startActivityAndClearTask(MainActivity.class);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public LoginButton getLoginButton() {
+        return fbLogin;
     }
 }

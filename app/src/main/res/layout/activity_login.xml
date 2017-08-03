@@ -82,9 +82,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/facebook"
                 android:layout_marginLeft="@dimen/common_block_space_double"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_facebook_login"
                 android:textColor="@color/color_text_button_white"/>
         </LinearLayout>
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/activity.login.fbLogin"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"  />
 
     </LinearLayout>
 </LinearLayout>

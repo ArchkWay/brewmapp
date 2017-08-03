@@ -20,4 +20,7 @@
     <color name="colorFb">#3e60aa</color>
     <color name="colorFbDark">#2a4379</color>
     <color name="colorFbDisabled">#862a4379</color>
+
+    <color name="colorDecorImageGray">#cacaca</color>
+    <color name="colorDecorBgGray">#f3f3f3</color>
 </resources>

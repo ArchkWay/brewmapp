@@ -5,12 +5,24 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'android-apt'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'brewmap'
+            keyPassword 'rollwithus'
+            storeFile file('../brewmap.jks')
+            storePassword 'rollwithus'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
     defaultConfig {
         applicationId "ru.frosteye.beermap"
         minSdkVersion 15
@@ -23,12 +35,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -39,8 +55,9 @@ dependencies {
     compile 'info.hoang8f:android-segmented:1.0.6'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
     compile 'nl.psdcompany:duo-navigation-drawer:2.0.6'
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
+    testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.5'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 }

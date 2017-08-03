@@ -26,6 +26,16 @@
     <string name="games">Игры</string>
     <string name="favorites">Избранное</string>
     <string name="settings">Настройки</string>
+    <string name="create">Создать</string>
+    <string name="enter_phone_hint">На указанный номер телефона будет отправлено сообщение с кодом подтверждения</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="confirm_code">Код подтверждения</string>
+    <string name="confirm_hint">Мы отправили Вам SMS с кодом подтверждения</string>
+    <string name="confirm_counter_pattern">Мы отправили Вам SMS с кодом подтверждения</string>
+    <string name="confirm">Подтверждение</string>
+    <string name="enter_password_hint">Указанный номер телефона и пароль можно использовать для входа в Ваш аккаунт</string>
+    <string name="new_password_hint">Придумайте ваш пароль</string>
+    <string name="resend_code">Выслать код</string>
 
     <string-array name="main_menu">
         <item>События</item>

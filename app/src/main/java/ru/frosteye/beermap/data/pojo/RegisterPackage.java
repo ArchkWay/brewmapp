@@ -1,12 +1,17 @@
 package ru.frosteye.beermap.data.pojo;
 
+import java.io.Serializable;
+
 import javax.inject.Inject;
 
 /**
  * Created by oleg on 25.07.17.
  */
 
-public class RegisterPackage {
+public class RegisterPackage implements Serializable {
+
+    public static final String KEY = "register_package";
+
     private int gender;
     private String firstName;
     private String lastName;
@@ -33,6 +38,10 @@ public class RegisterPackage {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public int getGender() {
+        return gender;
     }
 
     public void setLastName(String lastName) {

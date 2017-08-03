@@ -19,4 +19,9 @@ public class Keys {
     public static final String LAST_LOGIN = "last_login";
     public static final String GET_THUMB = "getThumb";
     public static final String TOKEN = "token";
+    public static final String ID = "id";
+    public static final String PHONE = "phone";
+    public static final String GENDER = "gender";
+    public static final String FIRSTNAME = "firstname";
+    public static final String LASTNAME = "lastname";
 }

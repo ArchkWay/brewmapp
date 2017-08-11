@@ -5,31 +5,39 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
+import ru.frosteye.beermap.data.db.contract.UserRepo;
 import ru.frosteye.beermap.execution.exchange.common.Api;
 import ru.frosteye.beermap.execution.exchange.request.base.WrapperParams;
+import ru.frosteye.beermap.execution.exchange.response.UserResponse;
+import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 import ru.frosteye.ovsa.execution.executor.MainThread;
-import rx.Observable;
+import ru.frosteye.ovsa.execution.network.request.RequestParams;
+import io.reactivex.Observable;
 
 /**
  * Created by oleg on 26.07.17.
  */
 
-public class ConfirmCodeTask extends BaseNetworkTask<WrapperParams, ResponseBody> {
+public class ConfirmCodeTask extends BaseNetworkTask<RequestParams, UserResponse> {
+
+    private UserRepo userRepo;
 
     @Inject
     public ConfirmCodeTask(MainThread mainThread,
                            Executor executor,
-                           Api api) {
+                           Api api, UserRepo userRepo) {
         super(mainThread, executor, api);
+        this.userRepo = userRepo;
     }
 
     @Override
-    protected Observable<ResponseBody> prepareObservable(WrapperParams params) {
+    protected Observable<UserResponse> prepareObservable(RequestParams params) {
         return Observable.create(subscriber -> {
             try {
-                ResponseBody response = executeCall(getApi().confirmCode(params));
+                UserResponse response = executeCall(getApi().confirmCode(params));
+                userRepo.save(response.getUser());
                 subscriber.onNext(response);
-                subscriber.onCompleted();
+                subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);
             }

@@ -37,7 +37,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener {
 
-    @BindView(R.id.common_toolbar) Toolbar navigationToolbar;
+    @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_main_drawer) DuoDrawerLayout drawer;
     @BindView(R.id.activity_main_menu) RecyclerView menu;
     @BindView(R.id.activity_main_userName) TextView userName;
@@ -57,10 +57,10 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     protected void initView() {
-        setSupportActionBar(navigationToolbar);
+        setSupportActionBar(toolbar);
         drawer.setMarginFactor(0.5f);
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.ic_menu_toggle)).getBitmap();
-        DuoDrawerToggle drawerToggle = new CustomDuoDrawerToggle(this, navigationToolbar, drawer,
+        DuoDrawerToggle drawerToggle = new CustomDuoDrawerToggle(this, toolbar, drawer,
                 new CustomDrawerArrowDrawable(getResources(), bitmap),
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close, navigator::onDrawerClosed);
@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        navigator.onAttachView(this);
     }
 
     @Override
@@ -96,7 +97,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showMenuItems(List<MenuField> fields) {
-        adapter = new FlexibleAdapter<>(fields);
+        adapter = new FlexibleAdapter<>(fields, this);
         menu.setLayoutManager(new LinearLayoutManager(this));
         menu.setAdapter(adapter);
     }

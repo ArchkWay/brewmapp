@@ -27,6 +27,7 @@ public class UserRepoImpl extends BaseRepo<User> implements UserRepo {
     @Override
     public String provideIdentity() {
         User user = load();
-        return null;
+        if(user == null) return null;
+        return user.getToken();
     }
 }

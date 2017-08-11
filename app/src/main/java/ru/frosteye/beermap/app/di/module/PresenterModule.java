@@ -4,12 +4,18 @@ import android.view.View;
 
 import ru.frosteye.beermap.app.di.scope.PresenterScope;
 import ru.frosteye.beermap.presentation.presenter.contract.ConfirmPhonePresenter;
+import ru.frosteye.beermap.presentation.presenter.contract.EnterPasswordPresenter;
+import ru.frosteye.beermap.presentation.presenter.contract.FriendsPresenter;
+import ru.frosteye.beermap.presentation.presenter.contract.InvitePresenter;
 import ru.frosteye.beermap.presentation.presenter.contract.LoginPresenter;
 import ru.frosteye.beermap.presentation.presenter.contract.MainPresenter;
 import ru.frosteye.beermap.presentation.presenter.contract.ProfilePresenter;
 import ru.frosteye.beermap.presentation.presenter.contract.RegisterPresenter;
 import ru.frosteye.beermap.presentation.presenter.contract.StartPresenter;
 import ru.frosteye.beermap.presentation.presenter.impl.ConfirmPhonePresenterImpl;
+import ru.frosteye.beermap.presentation.presenter.impl.EnterPasswordPresenterImpl;
+import ru.frosteye.beermap.presentation.presenter.impl.FriendsPresenterImpl;
+import ru.frosteye.beermap.presentation.presenter.impl.InvitePresenterImpl;
 import ru.frosteye.beermap.presentation.presenter.impl.LoginPresenterImpl;
 import ru.frosteye.beermap.presentation.presenter.impl.MainPresenterImpl;
 import ru.frosteye.beermap.presentation.presenter.impl.ProfilePresenterImpl;
@@ -63,6 +69,21 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     ProfilePresenter provideProfilePresenter(ProfilePresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    FriendsPresenter provideFriendsPresenter(FriendsPresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    EnterPasswordPresenter provideEnterPasswordPresenter(EnterPasswordPresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    InvitePresenter provideInvitePresenter(InvitePresenterImpl presenter) {
         return presenter;
     }
 }

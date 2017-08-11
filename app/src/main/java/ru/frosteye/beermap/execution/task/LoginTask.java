@@ -11,9 +11,7 @@ import ru.frosteye.beermap.execution.exchange.request.base.WrapperParams;
 import ru.frosteye.beermap.execution.exchange.response.UserResponse;
 import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 import ru.frosteye.ovsa.execution.executor.MainThread;
-import rx.Observable;
-import rx.Subscriber;
-
+import io.reactivex.Observable;
 /**
  * Created by oleg on 26.07.17.
  */
@@ -37,7 +35,7 @@ public class LoginTask extends BaseNetworkTask<WrapperParams, UserResponse> {
                 UserResponse response = executeCall(getApi().login(params));
                 userRepo.save(response.getUser());
                 subscriber.onNext(response);
-                subscriber.onCompleted();
+                subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);
             }

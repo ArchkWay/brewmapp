@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import ru.frosteye.beermap.data.pojo.RegisterPackage;
 import ru.frosteye.beermap.data.pojo.RegisterPackageWithPhone;
 import ru.frosteye.beermap.presentation.presenter.contract.ConfirmPhonePresenter;
 import ru.frosteye.beermap.presentation.view.contract.ConfirmPhoneView;
+import ru.frosteye.ovsa.presentation.callback.SimpleTextChangeCallback;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.tool.TimeCounter;
 
@@ -52,6 +54,11 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
         enableBackButton();
         phone.setText(registerPackage.getPhone());
         resend.setOnClickListener(v -> presenter.onPhoneReady(registerPackage.getPhone()));
+        registerTextChangeListeners(s -> {
+            if(s.length() == 4) {
+                presenter.onCodeReady(s.toString());
+            }
+        }, code);
     }
 
     protected void attachPresenter() {
@@ -78,6 +85,7 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
 
     @Override
     public void proceed() {
+        stopCounter();
         Intent intent = new Intent(this, EnterPasswordActivity.class);
         intent.putExtra(RegisterPackage.KEY, registerPackage);
         startActivity(intent);
@@ -92,7 +100,7 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
 
     @Override
     public void die() {
-        stopCounter();
+        code.setText(null);
     }
 
     @Override

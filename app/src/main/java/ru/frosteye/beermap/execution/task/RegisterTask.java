@@ -10,7 +10,7 @@ import ru.frosteye.beermap.execution.exchange.request.base.WrapperParams;
 import ru.frosteye.beermap.execution.exchange.response.UserResponse;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by oleg on 26.07.17.
@@ -31,7 +31,7 @@ public class RegisterTask extends BaseNetworkTask<WrapperParams, UserResponse> {
             try {
                 UserResponse response = executeCall(getApi().register(params));
                 subscriber.onNext(response);
-                subscriber.onCompleted();
+                subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);
             }

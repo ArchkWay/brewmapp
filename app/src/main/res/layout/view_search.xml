@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_search"
+        android:padding="@dimen/common_block_space_half"
+        android:layout_margin="@dimen/common_block_space">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/find"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorGray"
+            android:paddingLeft="@dimen/common_block_space"
+            android:paddingRight="@dimen/common_block_space"
+            android:id="@+id/view.finder.input"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.finder.cancel"
+            android:src="@drawable/ic_cancel"/>
+    </LinearLayout>
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSearchBg"/>
+</merge>

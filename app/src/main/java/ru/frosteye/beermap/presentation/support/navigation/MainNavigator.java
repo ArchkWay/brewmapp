@@ -8,6 +8,7 @@ import ru.frosteye.beermap.app.di.scope.PresenterScope;
 import ru.frosteye.beermap.data.entity.MenuField;
 import ru.frosteye.beermap.presentation.view.contract.MainView;
 import ru.frosteye.beermap.presentation.view.impl.fragment.BaseFragment;
+import ru.frosteye.beermap.presentation.view.impl.fragment.FriendsFragment;
 import ru.frosteye.beermap.presentation.view.impl.fragment.ProfileFragment;
 import ru.frosteye.ovsa.presentation.navigation.Navigator;
 import ru.frosteye.ovsa.presentation.navigation.impl.BaseNavigatorImpl;
@@ -30,7 +31,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
     public void onNavigatorAction(Action action) {
         switch (action.code()) {
             default:
-                fragmentToShow = new ProfileFragment();
+                fragmentToShow = new FriendsFragment();
         }
 
         fragmentToShow.setNavigator(this);

@@ -8,16 +8,26 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.BindView;
 import info.hoang8f.android.segmented.SegmentedGroup;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.frosteye.beermap.app.di.component.PresenterComponent;
 import ru.frosteye.beermap.data.pojo.RegisterPackage;
 import ru.frosteye.beermap.presentation.presenter.contract.RegisterPresenter;
 import ru.frosteye.beermap.presentation.view.contract.RegisterView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.beermap.R;
+import ru.frosteye.ovsa.stub.listener.SelectListener;
 import ru.frosteye.ovsa.tool.TextTools;
 
 public class RegisterActivity extends BaseActivity  {
@@ -26,6 +36,8 @@ public class RegisterActivity extends BaseActivity  {
     @BindView(R.id.activity_register_lastName) EditText lastName;
     @BindView(R.id.activity_register_name) EditText firstName;
     @BindView(R.id.activity_register_segmented) SegmentedGroup segmented;
+    @BindView(R.id.activity_register_avatar) RoundedImageView avatar;
+    @BindView(R.id.activity_register_avatar_placeholder) View placeholder;
 
     @Inject RegisterPackage registerPackage;
 
@@ -54,20 +66,75 @@ public class RegisterActivity extends BaseActivity  {
             registerPackage.setGender(checkedId == R.id.activity_register_man ? 1 : 2);
             invalidateOptionsMenu();
         });
+        avatar.setOnClickListener(v -> {
+            showSelect(this, R.array.avatar_options, (text, position) -> {
+                switch (position) {
+                    case 0:
+                        takeFromGallery();
+                        break;
+                    case 1:
+                        takePhoto();
+                        break;
+                    case 2:
+                        avatar.setImageDrawable(null);
+                        registerPackage.setAvatarPath(null);
+                        break;
+                }
+            });
+        });
+    }
+
+    private void takePhoto() {
+        RxPaparazzo.single(this)
+                .usingCamera()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() != RESULT_OK) {
+                        return;
+                    }
+                    response.targetUI().showAvatar(response.data().getFile());
+                });
+    }
+
+    private void takeFromGallery() {
+        RxPaparazzo.single(this)
+                .usingGallery()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() != RESULT_OK) {
+                        return;
+                    }
+                    response.targetUI().showAvatar(response.data().getFile());
+                });
+    }
+
+    private void showAvatar(File file) {
+        registerPackage.setAvatarPath(file.getPath());
+        Picasso.with(this).load(file).fit().into(avatar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.next, menu);
-        return registerPackage.validate();
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_next).setEnabled(registerPackage.validate());
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(this, EnterPhoneActivity.class);
-        intent.putExtra(RegisterPackage.KEY, registerPackage);
-        startActivity(intent);
-        return true;
+        if(item.getItemId() == R.id.action_next) {
+            Intent intent = new Intent(this, EnterPhoneActivity.class);
+            intent.putExtra(RegisterPackage.KEY, registerPackage);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include layout="@layout/view_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bg_invite"
+            android:scaleType="centerCrop"
+            android:layout_alignParentBottom="true"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/common_block_space_quadro"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_big_phone"
+                android:layout_marginBottom="@dimen/common_block_space_triple"
+                android:text="@string/invite_hint"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_invite_facebook"
+                android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                android:adjustViewBounds="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_invite_twitter"
+                android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                android:adjustViewBounds="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_invite_vk"
+                android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                android:adjustViewBounds="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_invite_phone"
+                android:adjustViewBounds="true"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

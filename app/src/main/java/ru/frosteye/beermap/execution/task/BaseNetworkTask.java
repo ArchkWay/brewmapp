@@ -16,8 +16,7 @@ import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.base.ApiException;
 import ru.frosteye.ovsa.execution.task.ObservableTask;
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
 
 /**
  * Created by oleg on 26.07.17.
@@ -48,8 +47,7 @@ public abstract class BaseNetworkTask<P, R> extends ObservableTask<P, R> {
                 if(resResponse.code() == 409) {
                     throw new ApiException(gson.fromJson(body, MessageResponse.class).getMessage(), resResponse.code());
                 } else {
-                    throw new ApiException(((List<String>) gson.fromJson(body, new TypeToken<List<String>>() {
-                    }.getType())).get(0), resResponse.code());
+                    throw new ApiException(gson.fromJson(body,  MessageResponse.class).getMessage(), resResponse.code());
                 }
             }
         } catch (IOException e) {

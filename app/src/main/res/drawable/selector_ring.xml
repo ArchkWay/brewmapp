@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="oval">
-            <solid android:color="@color/colorGrayLight" />
+            <solid android:color="@color/colorGrayLightSemi" />
         </shape>
     </item>
     <item android:drawable="@drawable/bg_ring_gray" />

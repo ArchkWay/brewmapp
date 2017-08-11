@@ -31,11 +31,22 @@
     <string name="phone_number">Номер телефона</string>
     <string name="confirm_code">Код подтверждения</string>
     <string name="confirm_hint">Мы отправили Вам SMS с кодом подтверждения</string>
-    <string name="confirm_counter_pattern">Мы отправили Вам SMS с кодом подтверждения</string>
+    <string name="confirm_counter_pattern">Повторная отправка кода возможна через %s</string>
     <string name="confirm">Подтверждение</string>
     <string name="enter_password_hint">Указанный номер телефона и пароль можно использовать для входа в Ваш аккаунт</string>
     <string name="new_password_hint">Придумайте ваш пароль</string>
     <string name="resend_code">Выслать код</string>
+    <string name="find_friend">Поиск друга</string>
+    <string name="find">Искать</string>
+    <string name="done">Готово</string>
+    <string name="invite_friend">Пригласить друга</string>
+    <string name="invite_friends">Пригласить друзей</string>
+    <string name="invite_hint">Вы можете пригласить своих друзей также присоединится к нашему приложению</string>
+    <string-array name="avatar_options">
+        <item>Из галереи</item>
+        <item>Сделать фото</item>
+        <item>Удалить</item>
+    </string-array>
 
     <string-array name="main_menu">
         <item>События</item>

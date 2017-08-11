@@ -42,6 +42,7 @@ public class RegisterPresenterImpl extends BasePresenter<RegisterView> implement
         registerTask.execute(params, new SimpleSubscriber<UserResponse>() {
             @Override
             public void onError(Throwable e) {
+                //FIXME request error codes
                 if(e.getMessage().contains("Пользователь с таким")) {
                     view.proceed();
                 } else {

@@ -25,4 +25,7 @@ public class Keys {
     public static final String FIRSTNAME = "firstname";
     public static final String LASTNAME = "lastname";
     public static final String API_VERSION = "Api-version";
+    public static final String USER_ID = "user_id";
+    public static final String STATUS = "status";
+    public static final String CODE = "code";
 }

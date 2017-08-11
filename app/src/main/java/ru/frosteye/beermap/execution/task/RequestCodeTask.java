@@ -12,7 +12,7 @@ import ru.frosteye.beermap.execution.exchange.response.UserResponse;
 import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by oleg on 26.07.17.
@@ -33,7 +33,7 @@ public class RequestCodeTask extends BaseNetworkTask<RequestParams, MessageRespo
             try {
                 MessageResponse response = executeCall(getApi().requestCode(params));
                 subscriber.onNext(response);
-                subscriber.onCompleted();
+                subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);
             }

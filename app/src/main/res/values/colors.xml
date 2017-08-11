@@ -23,4 +23,5 @@
 
     <color name="colorDecorImageGray">#cacaca</color>
     <color name="colorDecorBgGray">#f3f3f3</color>
+    <color name="colorSearchBg">#47474f</color>
 </resources>

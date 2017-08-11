@@ -1,2 +1,2 @@
 include ':OVSA Library', ':app'
-project(':OVSA Library').projectDir = new File(settingsDir, '../OVSA/OVSA Library')
+project(':OVSA Library').projectDir = new File(settingsDir, '../OVSA 2/OVSA Library')

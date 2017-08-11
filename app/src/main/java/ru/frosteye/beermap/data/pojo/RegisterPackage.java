@@ -15,9 +15,18 @@ public class RegisterPackage implements Serializable {
     private int gender;
     private String firstName;
     private String lastName;
+    private String avatarPath;
 
     @Inject
     public RegisterPackage() {
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 
     public int isGender() {

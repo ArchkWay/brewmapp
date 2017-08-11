@@ -1,6 +1,7 @@
 package ru.frosteye.beermap.app.di.module;
 
 import com.facebook.FacebookSdk;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import ru.frosteye.beermap.R;
 import ru.frosteye.beermap.app.di.qualifier.ApiUrl;
@@ -26,6 +27,7 @@ public class AppModule extends BaseAppModule<BeerMap> {
 
     public AppModule(BeerMap context) {
         super(context);
+        RxPaparazzo.register(context);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/regular.otf")
                 .setFontAttrId(R.attr.fontPath)

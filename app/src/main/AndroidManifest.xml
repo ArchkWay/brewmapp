@@ -10,6 +10,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.file_provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths"/>
+        </provider>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/config_facebook_app_id"/>
@@ -46,11 +56,19 @@
         <activity
             android:name=".presentation.view.impl.activity.ConfirmCodeActivity"
             android:label="@string/confirm"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".presentation.view.impl.activity.EnterPasswordActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:label="@string/password">
+        <activity
+            android:name=".presentation.view.impl.activity.EnterPasswordActivity"
+            android:label="@string/password"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".presentation.view.impl.activity.InviteActivity"
+            android:label="@string/invite_friends"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

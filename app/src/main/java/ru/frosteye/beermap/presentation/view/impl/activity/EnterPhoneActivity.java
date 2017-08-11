@@ -61,13 +61,21 @@ public class EnterPhoneActivity extends BaseActivity implements RegisterView {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.next, menu);
-        return registerPackage.validate();
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_next).setEnabled(registerPackage.validate());
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        presenter.onRegisterPackageReady(registerPackage);
-        return true;
+        if(item.getItemId() == R.id.action_next) {
+            presenter.onRegisterPackageReady(registerPackage);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

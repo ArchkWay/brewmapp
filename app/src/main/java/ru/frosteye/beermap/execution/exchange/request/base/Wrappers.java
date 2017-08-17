@@ -7,4 +7,7 @@ package ru.frosteye.beermap.execution.exchange.request.base;
 public class Wrappers {
     public static final String USER = "User";
     public static final String USER_FRIENDS = "UserFriends";
+    public static final String PHOTO_ALBUM = "PhotoAlbum";
+    public static final String PHOTO = "Photo";
+    public static final String NEWS = "News";
 }

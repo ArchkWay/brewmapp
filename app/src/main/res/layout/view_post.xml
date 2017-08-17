@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.frosteye.beermap.presentation.view.impl.widget.PostView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/common_block_space_double_semi">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_block_space_double">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="@dimen/size_avatar_lesser"
+            android:layout_height="@dimen/size_avatar_lesser"
+            android:id="@+id/view.post.avatar"
+            android:scaleType="fitCenter"
+            app:riv_border_width="1dp"
+            app:riv_border_color="@color/colorSplitter"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            app:riv_mutate_background="true"
+            android:background="@color/colorGrayLight"
+            app:riv_oval="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/view.post.author"
+                android:textSize="@dimen/text_size_big_phone"
+                android:layout_marginBottom="@dimen/common_block_space_half"
+                style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/common_block_space_half"
+                android:id="@+id/view.post.date"
+                android:textColor="@color/colorProfileCounter"
+                android:textSize="@dimen/text_size_common" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view.post.text"
+        style="@style/AppTheme.Text.Georgia.BoldItalic"
+        android:layout_marginBottom="@dimen/common_block_space_double"
+        android:textSize="@dimen/text_size_common_bigger"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_post_button"
+            android:adjustViewBounds="true"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            android:paddingTop="@dimen/common_block_space_half"
+            android:paddingBottom="@dimen/common_block_space_half"
+            android:background="@drawable/selector_post_button"
+            android:src="@drawable/ic_post_comment"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_post_button"
+            android:adjustViewBounds="true"
+            android:id="@+id/view.post.more"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            android:paddingTop="@dimen/common_block_space_half"
+            android:paddingBottom="@dimen/common_block_space_half"
+            android:layout_marginRight="@dimen/common_block_space_double"
+            android:background="@drawable/selector_post_button"
+            android:src="@drawable/ic_post_more"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_post_button"
+            android:id="@+id/view.post.like"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/height_post_button"
+                android:adjustViewBounds="true"
+                android:paddingLeft="@dimen/common_block_space_double_semi"
+                android:paddingRight="@dimen/common_block_space_half"
+                android:paddingTop="@dimen/common_block_space_half"
+                android:paddingBottom="@dimen/common_block_space_half"
+                android:src="@drawable/ic_post_like"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_common_bigger"
+                android:id="@+id/view.post.like.counter"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ru.frosteye.beermap.presentation.view.impl.widget.PostView>

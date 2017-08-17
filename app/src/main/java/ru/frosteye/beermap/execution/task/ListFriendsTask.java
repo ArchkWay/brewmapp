@@ -1,27 +1,34 @@
 package ru.frosteye.beermap.execution.task;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.annotations.NonNull;
+import ru.frosteye.beermap.R;
 import ru.frosteye.beermap.data.db.contract.UserRepo;
+import ru.frosteye.beermap.data.entity.Contact;
+import ru.frosteye.beermap.data.entity.wrapper.ContactInfo;
+import ru.frosteye.beermap.data.entity.wrapper.FriendsTitleInfo;
 import ru.frosteye.beermap.execution.exchange.common.Api;
 import ru.frosteye.beermap.execution.exchange.request.base.Keys;
 import ru.frosteye.beermap.execution.exchange.request.base.WrapperParams;
 import ru.frosteye.beermap.execution.exchange.request.base.Wrappers;
+import ru.frosteye.beermap.execution.exchange.response.base.ListResponse;
 import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
+import ru.frosteye.beermap.execution.task.base.BaseNetworkTask;
 import ru.frosteye.ovsa.execution.executor.MainThread;
-import ru.frosteye.ovsa.execution.network.request.RequestParams;
+
+import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
 
 /**
  * Created by oleg on 26.07.17.
  */
 
-public class ListFriendsTask extends BaseNetworkTask<Void, MessageResponse> {
+public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
 
     private UserRepo userRepo;
 
@@ -34,17 +41,40 @@ public class ListFriendsTask extends BaseNetworkTask<Void, MessageResponse> {
     }
 
     @Override
-    protected Observable<MessageResponse> prepareObservable(Void v) {
+    protected Observable<List<IFlexible>> prepareObservable(Void v) {
         return Observable.create(subscriber -> {
             try {
+                List<IFlexible> out = new ArrayList<IFlexible>();
+                WrapperParams params = createParamsForType(2);
+                ListResponse<ContactInfo>  response = executeCall(getApi().listFriends(params));
+                boolean needFriendsHeader = false;
+                if(response.getModels().size() > 0) {
+                    FriendsTitleInfo incomingRequestInfo = new FriendsTitleInfo(getString(R.string.incoming_requests));
+                    out.add(incomingRequestInfo);
+                    out.addAll(response.getModels());
+                    needFriendsHeader = true;
+                }
 
-                WrapperParams params = createParamsForType(1);
-                MessageResponse response = executeCall(getApi().listFriends(params));
                 params = createParamsForType(0);
                 response = executeCall(getApi().listFriends(params));
-                params = createParamsForType(2);
+                if(response.getModels().size() > 0) {
+                    FriendsTitleInfo outgoingRequetInfo = new FriendsTitleInfo(getString(R.string.outgoing_requests));
+                    out.add(outgoingRequetInfo);
+                    out.addAll(response.getModels());
+                    needFriendsHeader = true;
+                }
+
+
+                params = createParamsForType(1);
                 response = executeCall(getApi().listFriends(params));
-                subscriber.onNext(response);
+                if(needFriendsHeader) {
+                    FriendsTitleInfo friends = new FriendsTitleInfo(getString(R.string.friends));
+                    out.add(friends);
+                }
+                out.addAll(response.getModels());
+
+
+                subscriber.onNext(out);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

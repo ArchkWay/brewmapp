@@ -1,12 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:background="@color/colorWhite"
+    android:id="@+id/fragment.profile.swipe"
     android:layout_height="match_parent">
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-    </LinearLayout>
-</ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/common_block_space_double_semi"
+                android:paddingRight="@dimen/common_block_space_double_semi"
+                android:paddingTop="@dimen/common_block_space_double_semi"
+                android:gravity="center_vertical">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:layout_width="@dimen/size_avatar"
+                    android:layout_height="@dimen/size_avatar"
+                    android:id="@+id/fragment.profile.avatar"
+                    android:scaleType="fitCenter"
+                    app:riv_border_width="1dp"
+                    app:riv_border_color="@color/colorSplitter"
+                    android:layout_marginRight="@dimen/common_block_space_double"
+                    app:riv_mutate_background="true"
+                    android:background="@color/colorGrayLight"
+                    app:riv_oval="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fragment.profile.username"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="2"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        android:id="@+id/fragment.profile.status"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text_size_common" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="2"
+                        android:id="@+id/fragment.profile.city"
+                        android:textColor="@color/colorProfileCounter"
+                        android:textSize="@dimen/text_size_common" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/size_profile_info_icon"
+                    android:layout_height="@dimen/size_profile_info_icon"
+                    android:src="@drawable/ic_profile_info"/>
+            </LinearLayout>
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/common_block_space_double_semi"
+                android:background="@color/colorSplitter"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/fragment.profile.counter.friends"
+                    app:counterTitle="@string/friends_count"/>
+
+                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/fragment.profile.counter.subscribers"
+                    app:counterTitle="@string/subscribers_count"/>
+
+                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/fragment.profile.counter.photos"
+                    app:counterTitle="@string/photos_count"/>
+
+                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/fragment.profile.counter.albums"
+                    app:counterTitle="@string/albums_count"/>
+            </LinearLayout>
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorSplitter"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment.profile.menu"/>
+
+            <info.hoang8f.android.segmented.SegmentedGroup
+                xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fragment.profile.flow.segment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/common_block_space_double_semi"
+                android:layout_marginLeft="@dimen/common_block_space_double"
+                android:layout_marginRight="@dimen/common_block_space_double"
+                segmentedgroup:sc_border_width="2dp"
+                segmentedgroup:sc_tint_color="@color/colorGrayControls"
+
+                segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big">
+
+                <RadioButton
+                    android:id="@+id/fragment.profile.posts.my"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/subscriptions"
+                    style="@style/RadioButton" />
+
+                <RadioButton
+                    android:id="@+id/fragment.profile.posts.subscription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/my_posts"
+                    style="@style/RadioButton" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/common_block_space_double_semi"
+                android:background="@color/colorSplitter"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment.profile.posts"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>

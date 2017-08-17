@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +35,10 @@ import ru.frosteye.beermap.presentation.presenter.contract.MainPresenter;
 import ru.frosteye.beermap.presentation.support.navigation.MainNavigator;
 import ru.frosteye.beermap.presentation.view.contract.MainView;
 import ru.frosteye.beermap.presentation.view.impl.fragment.BaseFragment;
+import ru.frosteye.beermap.presentation.view.impl.fragment.ProfileFragment;
+import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener {
 
@@ -42,11 +47,13 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @BindView(R.id.activity_main_menu) RecyclerView menu;
     @BindView(R.id.activity_main_userName) TextView userName;
     @BindView(R.id.activity_main_avatar) ImageView avatar;
+    @BindView(R.id.activity_main_profileHeader) View profileHeader;
 
     @Inject MainPresenter presenter;
     @Inject MainNavigator navigator;
 
     private FlexibleAdapter<MenuField> adapter;
+    private List<MenuField> menuItems;
     private @MenuRes int menuToShow;
 
     @Override
@@ -66,12 +73,16 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 R.string.navigation_drawer_close, navigator::onDrawerClosed);
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
+        profileHeader.setOnClickListener(v -> {
+            navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
+        });
     }
 
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
         navigator.onAttachView(this);
+        showFragment(new ProfileFragment());
     }
 
     @Override
@@ -97,6 +108,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showMenuItems(List<MenuField> fields) {
+        this.menuItems = fields;
         adapter = new FlexibleAdapter<>(fields, this);
         menu.setLayoutManager(new LinearLayoutManager(this));
         menu.setAdapter(adapter);
@@ -137,6 +149,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public boolean onItemClick(int position) {
         MenuField field = adapter.getItem(position);
+        if(field.getId() == MenuField.LOGOUT) {
+            presenter.onLogout();
+            startActivityAndClearTask(StartActivity.class);
+            finish();
+            return true;
+        }
+        MenuField.unselectAll(menuItems);
+        field.setSelected(true);
+        adapter.notifyDataSetChanged();
         navigator.onMenuItemSelected(field);
         return true;
     }

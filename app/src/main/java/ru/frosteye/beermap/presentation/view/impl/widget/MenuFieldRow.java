@@ -56,5 +56,7 @@ public class MenuFieldRow extends BaseRelativeLayout implements ModelView<MenuFi
         this.model = model;
         this.title.setText(model.getTitle());
         this.icon.setImageResource(model.getIcon());
+        setBackgroundResource(model.isSelected() ?
+            R.drawable.bg_menu_row_selected : R.drawable.selector_menu_row);
     }
 }

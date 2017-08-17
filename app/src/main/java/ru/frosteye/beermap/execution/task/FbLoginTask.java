@@ -6,8 +6,8 @@ import javax.inject.Inject;
 
 import ru.frosteye.beermap.data.db.contract.UserRepo;
 import ru.frosteye.beermap.execution.exchange.common.Api;
-import ru.frosteye.beermap.execution.exchange.request.base.WrapperParams;
 import ru.frosteye.beermap.execution.exchange.response.UserResponse;
+import ru.frosteye.beermap.execution.task.base.BaseNetworkTask;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
 import io.reactivex.Observable;

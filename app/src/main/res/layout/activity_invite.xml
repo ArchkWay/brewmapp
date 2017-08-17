@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/selector_invite_facebook"
                 android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                android:id="@+id/activity.invite.facebook"
                 android:adjustViewBounds="true"/>
 
             <ImageView
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/selector_invite_twitter"
                 android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                android:id="@+id/activity.invite.switter"
                 android:adjustViewBounds="true"/>
 
             <ImageView
@@ -56,11 +58,20 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/selector_invite_vk"
                 android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                android:id="@+id/activity.invite.vk"
                 android:adjustViewBounds="true"/>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/activity.invite.phone"
+                android:src="@drawable/selector_invite_phone"
+                android:adjustViewBounds="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:src="@drawable/selector_invite_phone"
                 android:adjustViewBounds="true"/>
         </LinearLayout>

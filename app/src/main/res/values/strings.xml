@@ -42,10 +42,46 @@
     <string name="invite_friend">Пригласить друга</string>
     <string name="invite_friends">Пригласить друзей</string>
     <string name="invite_hint">Вы можете пригласить своих друзей также присоединится к нашему приложению</string>
+    <string name="friends_count">друзей</string>
+    <string name="subscribers_count">подписчиков</string>
+    <string name="photos_count">фото</string>
+    <string name="video_count">видео</string>
+    <string name="online">Онлайн</string>
+    <string name="new_post">Новая запись</string>
+    <string name="add_photo">Добавить фото</string>
+    <string name="fav_beer">Любимое пиво</string>
+    <string name="fav_bars">Любимые заведения</string>
+    <string name="my_ratings">Мои оценки</string>
+    <string name="my_posts">Мои записи</string>
+    <string name="subscriptions">Подписки</string>
+    <string name="albums">Альбомы</string>
+    <string name="add">Добавить</string>
+    <string name="album_name">Название альбома</string>
+    <string name="album_description">Описание</string>
+    <string name="new_album">Новый альбом</string>
+    <string name="album_created">Альбом успешно создан</string>
+    <string name="cap_photo">Фото</string>
+    <string name="vk">ВКонтакте</string>
+    <string name="gp">Google</string>
+    <string name="phone">Телефон</string>
+    <string name="fb">Facebook</string>
+    <string name="invite">Пригласить</string>
+    <string name="tw">Twitter</string>
+    <string name="message_sent">Приглашение отправлено</string>
+    <string name="error">Произошла ошибка</string>
+    <string name="invited">Выслано</string>
+    <string name="invite_message">Привет, Я только что загрузил приложение BrewMapp на мой Android. Это приложение является поисковиком, навигатором, информационной базой, ценовым и новостным агрегатором и социальной сетью в мире крафтового пива! Скачай приложение с https://www.brewmapp.com и узнавай о новых сортах, пивоварнях, событиях или сам добавляй их!</string>
+    <string name="select_contact">Поделиться</string>
+    <string name="brew_invite">Приглашение в Brewmapp</string>
+    <string name="enter_post">Введите текст вашего сообщения</string>
     <string-array name="avatar_options">
         <item>Из галереи</item>
         <item>Сделать фото</item>
         <item>Удалить</item>
+    </string-array>
+    <string-array name="avatar_options_mini">
+        <item>Из галереи</item>
+        <item>Сделать фото</item>
     </string-array>
 
     <string-array name="main_menu">
@@ -60,4 +96,20 @@
         <item>Избранное</item>
         <item>Настройки</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="select_place">Выберите место</string>
+    <string name="send">Отправить</string>
+    <string name="confirm_stop_edit">Выход</string>
+    <string name="confirm_cancel_post">Отменить создание записи?</string>
+    <string name="stay">Остаться</string>
+    <string name="leave">Выйти</string>
+    <string name="post_created">Запись создана</string>
+    <string name="enter_title">Введите заголовок</string>
+    <string name="no_incoming_requests">Нет входящих запросов</string>
+    <string name="incoming_requests">Запросы в друзья</string>
+    <string name="no_outgoing_requests">Нет исходящих запросов</string>
+    <string name="outgoing_requests">Исходящие запросы</string>
+    <string name="no_friends">Друзей пока нет</string>
+    <string name="albums_count">альбомов</string>
+    <string name="logout">Выход</string>
 </resources>

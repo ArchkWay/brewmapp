@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import ru.frosteye.beermap.app.di.component.AppComponent;
 import ru.frosteye.beermap.app.di.component.DaggerAppComponent;
 import ru.frosteye.beermap.app.di.module.AppModule;

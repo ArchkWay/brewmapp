@@ -2,6 +2,11 @@
 <resources>
     <string name="config_api_url">https://developer.brewmapp.com/api/</string>
     <string name="config_facebook_app_id">248043202213811</string>
+    <integer name="com_vk_sdk_AppId">5528887</integer>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">Qmknn2lAO6dy474I75zRUgUcv</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">OnT1V1CgImwY45elnajeHWc57YuCen0RStDBrBv0ahclCs5T7j</string>
+    <string name="config_site_url">https://www.brewmapp.com</string>
 
     <string-array name="config_facebook_permissions">
         <item>email</item>

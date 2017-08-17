@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_toolbar" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_title"
+        android:id="@+id/activity.newPost.inputTitle"
+        android:paddingLeft="@dimen/common_block_space_double"
+        android:paddingTop="@dimen/common_block_space_double_semi"
+        android:paddingBottom="@dimen/common_block_space_double_semi"
+        android:textSize="@dimen/text_size_common"
+        style="@style/AppTheme.Text.Georgia.Bold"
+        android:textStyle="bold"
+        android:inputType="textCapSentences"
+        android:background="@null" />
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrayLight"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:hint="@string/enter_post"
+        android:id="@+id/activity.newPost.input"
+        android:paddingLeft="@dimen/common_block_space_double"
+        android:paddingTop="@dimen/common_block_space_double_semi"
+        android:textSize="@dimen/text_size_common"
+        android:gravity="left|top"
+        android:inputType="textMultiLine|textCapSentences"
+        android:background="@null"
+        android:layout_weight="1"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:visibility="gone"
+        android:id="@+id/activity.newPost.photos"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/common_block_space_double_semi"
+        android:paddingRight="@dimen/common_block_space_double_semi"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_width="@dimen/size_new_post_icon"
+            android:layout_height="@dimen/size_new_post_icon"
+            android:id="@+id/activity.newPost.attach.photo"
+            android:padding="@dimen/common_block_space_half_double"
+            android:layout_marginRight="@dimen/common_block_space_double"
+            android:src="@drawable/ic_new_post_photo"/>
+
+        <ImageView
+            android:layout_width="@dimen/size_new_post_icon"
+            android:layout_height="@dimen/size_new_post_icon"
+            android:id="@+id/activity.newPost.attach.file"
+            android:padding="@dimen/common_block_space_half_double"
+            android:layout_marginRight="@dimen/common_block_space_double"
+            android:src="@drawable/ic_new_post_attach"/>
+
+        <ImageView
+            android:layout_width="@dimen/size_new_post_icon"
+            android:layout_height="@dimen/size_new_post_icon"
+            android:id="@+id/activity.newPost.attach.location"
+            android:padding="@dimen/common_block_space_half_double"
+            android:src="@drawable/ic_new_post_location"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="@dimen/size_new_post_icon"
+            android:layout_height="@dimen/size_new_post_icon"
+            android:layout_gravity="right|center_vertical"
+            android:padding="@dimen/common_block_space_half_double"
+            android:id="@+id/activity.newPost.settings"
+            android:src="@drawable/ic_new_post_settings"/>
+    </LinearLayout>
+</LinearLayout>

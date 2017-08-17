@@ -30,6 +30,9 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
     @Override
     public void onNavigatorAction(Action action) {
         switch (action.code()) {
+            case MenuField.PROFILE:
+                fragmentToShow = new ProfileFragment();
+                break;
             default:
                 fragmentToShow = new FriendsFragment();
         }

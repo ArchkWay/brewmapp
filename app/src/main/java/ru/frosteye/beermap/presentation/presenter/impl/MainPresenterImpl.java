@@ -36,4 +36,9 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     public void onDestroy() {
 
     }
+
+    @Override
+    public void onLogout() {
+        userRepo.save(null);
+    }
 }

@@ -1,7 +1,10 @@
 package ru.frosteye.beermap.presentation.presenter.impl;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.beermap.execution.exchange.response.base.MessageResponse;
 import ru.frosteye.beermap.execution.task.ListFriendsTask;
 import ru.frosteye.beermap.presentation.view.contract.FriendsView;
@@ -25,17 +28,19 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     }
 
     @Override
-    public void loadFriends() {
+    public void loadFriends(boolean subscribers) {
         enableControls(false);
-        listFriendsTask.execute(null, new SimpleSubscriber<MessageResponse>() {
+        listFriendsTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                super.onError(e);
+                enableControls(true);
+                showMessage(e.getMessage());
             }
 
             @Override
-            public void onNext(MessageResponse messageResponse) {
-                super.onNext(messageResponse);
+            public void onNext(List<IFlexible> result) {
+                enableControls(true);
+                view.showFriends(result);
             }
         });
     }

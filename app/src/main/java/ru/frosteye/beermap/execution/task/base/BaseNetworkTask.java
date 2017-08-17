@@ -1,4 +1,4 @@
-package ru.frosteye.beermap.execution.task;
+package ru.frosteye.beermap.execution.task.base;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -9,6 +9,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import retrofit2.http.Field;
 import ru.frosteye.beermap.R;
 import ru.frosteye.beermap.presentation.view.impl.widget.MenuFieldRow;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
@@ -19,6 +20,7 @@ import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 
 public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow>> {
 
+    public static final int PROFILE = -1;
     public static final int EVENTS = 0;
     public static final int MESSAGES = 1;
     public static final int SEARCH = 2;
@@ -29,10 +31,12 @@ public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow
     public static final int GAMES = 7;
     public static final int FAVORITES = 8;
     public static final int SETTINGS = 9;
+    public static final int LOGOUT = 10;
 
     private int id;
     private int icon;
     private String title;
+    private boolean selected;
 
     public MenuField(int id, int icon, String title) {
         this.id = id;
@@ -51,6 +55,14 @@ public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow
 
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.view_menu_field;
@@ -67,6 +79,12 @@ public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<MenuFieldRow> holder,
                                int position, List payloads) {
         holder.view.setModel(this);
+    }
+
+    public static void unselectAll(List<MenuField> fields) {
+        for(MenuField field: fields) {
+            field.setSelected(false);
+        }
     }
 
     @Override
@@ -98,6 +116,7 @@ public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow
         out.add(new MenuField(EVENTS, R.drawable.ic_menu_games, context.getString(R.string.games)));
         out.add(new MenuField(EVENTS, R.drawable.ic_menu_favorites, context.getString(R.string.favorites)));
         out.add(new MenuField(EVENTS, R.drawable.ic_menu_settings, context.getString(R.string.settings)));
+        out.add(new MenuField(LOGOUT, R.drawable.ic_menu_settings, context.getString(R.string.logout)));
 
 
         return out;

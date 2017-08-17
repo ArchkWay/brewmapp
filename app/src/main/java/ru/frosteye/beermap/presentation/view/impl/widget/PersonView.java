@@ -23,7 +23,7 @@ public class PersonView extends BaseRelativeLayout implements ModelView<IPerson>
 
     @BindView(R.id.view_personRow_image) RoundedImageView image;
     @BindView(R.id.view_personRow_imageOverlay) RoundedImageView imageOverlay;
-    @BindView(R.id.view_personRow_title) TextView title;
+    @BindView(R.id.view_personRow_name) TextView title;
 
     private IPerson model;
 

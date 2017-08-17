@@ -8,4 +8,10 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface ProfilePresenter extends LivePresenter<ProfileView> {
+
+    int CODE_LOAD_PROFILE = 1;
+    int CODE_LOAD_POSTS = 2;
+
+    void onLoadEverything();
+    void onLoadPosts(int position, int page);
 }

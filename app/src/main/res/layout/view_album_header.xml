@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.frosteye.beermap.presentation.view.impl.widget.AlbumHeaderView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@drawable/ovsa_bg_selector_simple"
+    android:padding="@dimen/common_block_space_double_semi">
+    <ImageView
+        android:layout_width="@dimen/size_album_cover"
+        android:layout_height="@dimen/size_album_cover"
+        android:id="@+id/view.albumHeader.image"
+        android:background="@color/colorGrayLight"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="@dimen/common_block_space_double_semi"
+        android:layout_marginLeft="@dimen/common_block_space_double_semi"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_big_phone"
+            android:id="@+id/view.albumHeader.name"
+            android:textColor="@color/colorBlack"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_common"
+            android:id="@+id/view.albumHeader.description" />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="@dimen/size_album_chevron"
+        android:layout_height="@dimen/size_album_chevron"
+        android:src="@drawable/ic_chevron_right"/>
+</ru.frosteye.beermap.presentation.view.impl.widget.AlbumHeaderView>

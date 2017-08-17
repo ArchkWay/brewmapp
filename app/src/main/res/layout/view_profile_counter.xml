@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/ovsa_bg_selector_simple"
+    android:paddingTop="@dimen/common_block_space"
+    android:paddingBottom="@dimen/common_block_space"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2"
+        android:visibility="invisible"
+        android:id="@+id/view.profileCounter.counter"
+        android:textSize="@dimen/text_size_big_phone_bigger"
+        android:layout_marginBottom="@dimen/common_block_space_half"
+        style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2"
+        android:id="@+id/view.profileCounter.name"
+        android:textColor="@color/colorProfileCounter"
+        android:textSize="@dimen/text_size_common_small" />
+</LinearLayout>

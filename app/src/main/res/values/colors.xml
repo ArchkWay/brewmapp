@@ -24,4 +24,9 @@
     <color name="colorDecorImageGray">#cacaca</color>
     <color name="colorDecorBgGray">#f3f3f3</color>
     <color name="colorSearchBg">#47474f</color>
+
+    <color name="colorProfileCounter">#8e8e8e</color>
+
+    <color name="colorGreenButton">#00c363</color>
+    <color name="colorGreenButtonDark">#00974d</color>
 </resources>

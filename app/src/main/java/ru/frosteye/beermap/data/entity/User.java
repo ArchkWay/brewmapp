@@ -60,12 +60,14 @@ public class User {
     private String site;
     private String job;
     private String interests;
-    private int music;
+    private String music;
     private String films;
     private String books;
     private String games;
     private String about;
     private String status;
+
+    private Counts counts;
 
     @SerializedName(Keys.LAST_LOGIN)
     private Date lastLogin;
@@ -79,6 +81,10 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public Counts getCounts() {
+        return counts;
     }
 
     public void setId(int id) {
@@ -293,11 +299,11 @@ public class User {
         this.interests = interests;
     }
 
-    public int getMusic() {
+    public String getMusic() {
         return music;
     }
 
-    public void setMusic(int music) {
+    public void setMusic(String music) {
         this.music = music;
     }
 
@@ -355,5 +361,42 @@ public class User {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public static class Counts {
+        @SerializedName(Keys.CAP_NEWS)
+        private int news;
+
+        @SerializedName(Keys.CAP_PHOTO_ALBUM)
+        private int albums;
+
+        @SerializedName(Keys.CAP_PHOTO)
+        private int photos;
+
+        @SerializedName(Keys.CAP_SIGNED_AT_USER)
+        private int subscribers;
+
+        @SerializedName(Keys.CAP_USER_FRIENDS)
+        private int friends;
+
+        public int getNews() {
+            return news;
+        }
+
+        public int getAlbums() {
+            return albums;
+        }
+
+        public int getPhotos() {
+            return photos;
+        }
+
+        public int getSubscribers() {
+            return subscribers;
+        }
+
+        public int getFriends() {
+            return friends;
+        }
     }
 }

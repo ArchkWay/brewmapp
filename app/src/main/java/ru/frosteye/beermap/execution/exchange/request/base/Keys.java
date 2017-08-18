@@ -70,4 +70,5 @@ public class Keys {
     public static final String CAP_SIGNED_AT_USER = "SignedAtUser";
     public static final String CAP_USER_FRIENDS = "UserFriends";
     public static final String ALBUM_TITLE = "album_title";
+    public static final String DATE_NEWS = "date_news";
 }

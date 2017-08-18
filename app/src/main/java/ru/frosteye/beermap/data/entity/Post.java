@@ -23,7 +23,7 @@ public class Post implements Postable {
     private int like;
     private List<Integer> photoIds = new ArrayList<>();
 
-    @SerializedName(Keys.TIMESTAMP)
+    @SerializedName(Keys.DATE_NEWS)
     private Date date;
 
     @SerializedName(Keys.USER_INFO)

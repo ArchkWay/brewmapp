@@ -76,6 +76,7 @@ public class LoginPresenterImpl extends BasePresenter<LoginView> implements Logi
     @Override
     public void onFacebookLogin() {
         enableControls(false);
+        LoginManager.getInstance().logOut();
         view.getLoginButton().performClick();
     }
 

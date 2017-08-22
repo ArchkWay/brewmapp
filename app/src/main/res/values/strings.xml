@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeerMap</string>
+    <string name="app_name">BrewMapp</string>
     <string name="register">Зарегистрироваться</string>
     <string name="have_account">Уже есть аккаунт?</string>
     <string name="enter">Войти</string>

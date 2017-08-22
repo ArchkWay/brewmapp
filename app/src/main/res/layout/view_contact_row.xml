@@ -15,6 +15,7 @@
         android:id="@+id/view.contact.avatar"
         android:scaleType="fitCenter"
         app:riv_border_width="1dp"
+        android:src="@drawable/ic_user_man"
         app:riv_border_color="@color/colorSplitter"
         android:layout_marginRight="@dimen/common_block_space_double_semi"
         app:riv_mutate_background="true"

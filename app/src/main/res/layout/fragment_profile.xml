@@ -32,6 +32,7 @@
                     app:riv_border_color="@color/colorSplitter"
                     android:layout_marginRight="@dimen/common_block_space_double"
                     app:riv_mutate_background="true"
+                    android:src="@drawable/ic_user_man"
                     android:background="@color/colorGrayLight"
                     app:riv_oval="true"/>
 

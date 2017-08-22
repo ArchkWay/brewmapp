@@ -9,7 +9,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <ru.frosteye.beermap.presentation.view.impl.widget.FinderView
+    <com.brewmapp.presentation.view.impl.widget.FinderView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:finderHint="@string/find_friend"

@@ -112,4 +112,9 @@
     <string name="no_friends">Друзей пока нет</string>
     <string name="albums_count">альбомов</string>
     <string name="logout">Выход</string>
+    <string name="friends_only">Только для друзей</string>
+    <string name="delayed_post">Отложенная запись</string>
+    <string name="post_date">Дата публикации</string>
+    <string name="today">Сегодня</string>
+    <string name="params">Параметры</string>
 </resources>

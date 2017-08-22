@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.frosteye.beermap.presentation.view.impl.widget.FriendsTitleView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brewmapp.presentation.view.impl.widget.FriendsTitleView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,4 +9,4 @@
     style="@style/AppTheme.Text.Georgia.BoldItalic"
     android:paddingLeft="@dimen/common_block_space_double">
 
-</ru.frosteye.beermap.presentation.view.impl.widget.FriendsTitleView>
+</com.brewmapp.presentation.view.impl.widget.FriendsTitleView>

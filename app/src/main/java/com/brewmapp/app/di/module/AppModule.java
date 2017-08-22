@@ -1,0 +1,68 @@
+package com.brewmapp.app.di.module;
+
+import com.crashlytics.android.Crashlytics;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
+import com.twitter.sdk.android.core.Twitter;
+import com.vk.sdk.VKSdk;
+
+import io.fabric.sdk.android.Fabric;
+import com.brewmapp.R;
+import com.brewmapp.app.di.qualifier.ApiUrl;
+import com.brewmapp.app.environment.BeerMap;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.execution.exchange.common.Api;
+import com.brewmapp.execution.exchange.common.ApiClient;
+import com.brewmapp.execution.exchange.common.RestClient;
+import com.brewmapp.execution.social.SocialManager;
+import ru.frosteye.ovsa.di.module.BaseAppModule;
+import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
+
+@Module
+public class AppModule extends BaseAppModule<BeerMap> {
+
+    public AppModule(BeerMap context) {
+        super(context);
+        RxPaparazzo.register(context);
+        VKSdk.initialize(context);
+        Twitter.initialize(context);
+        Fabric.with(context, new Crashlytics());
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/regular.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
+    }
+
+    @Provides @Singleton
+    ApiClient provideApiClient(RestClient client) {
+        return client;
+    }
+
+    @Provides @Singleton
+    Api provideApi(ApiClient apiClient) {
+        return apiClient.getApi();
+    }
+
+    @Provides @ApiUrl
+    String provideApiUrl() {
+        return context.getString(R.string.config_api_url);
+    }
+
+    @Provides @Singleton
+    IdentityProvider provideIdentityProvider(UserRepo repo) {
+        return repo;
+    }
+
+    @Provides @Singleton
+    SocialManager provideSocialManager() {
+        return new SocialManager(context);
+    }
+}

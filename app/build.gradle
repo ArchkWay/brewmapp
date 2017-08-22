@@ -42,7 +42,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ru.frosteye.beermap"
+        applicationId "com.brewmapp"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 3

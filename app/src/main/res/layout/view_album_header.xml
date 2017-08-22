@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.frosteye.beermap.presentation.view.impl.widget.AlbumHeaderView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brewmapp.presentation.view.impl.widget.AlbumHeaderView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -35,4 +35,4 @@
         android:layout_width="@dimen/size_album_chevron"
         android:layout_height="@dimen/size_album_chevron"
         android:src="@drawable/ic_chevron_right"/>
-</ru.frosteye.beermap.presentation.view.impl.widget.AlbumHeaderView>
+</com.brewmapp.presentation.view.impl.widget.AlbumHeaderView>

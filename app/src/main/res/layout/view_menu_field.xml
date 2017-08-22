@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.frosteye.beermap.presentation.view.impl.widget.MenuFieldRow xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brewmapp.presentation.view.impl.widget.MenuFieldRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,4 +25,4 @@
             android:textSize="16sp"
             android:id="@+id/view.menuField.title"/>
     </LinearLayout>
-</ru.frosteye.beermap.presentation.view.impl.widget.MenuFieldRow>
+</com.brewmapp.presentation.view.impl.widget.MenuFieldRow>

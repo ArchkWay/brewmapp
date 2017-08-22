@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDecorBgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_toolbar" />
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/common_block_space_double"
+        android:background="@color/colorGrayLight"/>
+
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:textColor="@color/colorGrayControls"
+        android:textSize="@dimen/text_size_common"
+        android:paddingLeft="@dimen/common_block_space_double"
+        android:paddingRight="@dimen/common_block_space_double"
+        android:id="@+id/activity.newPost.settings.friendsOnly"
+        android:background="@color/colorWhite"
+        android:text="@string/friends_only"/>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrayLight"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/AppTheme.Text.Georgia.BoldItalic"
+        android:textColor="@color/colorBlack"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/common_block_space_double"
+        android:paddingRight="@dimen/common_block_space_double"
+        android:textSize="@dimen/text_size_big_phone"
+        android:text="@string/delayed_post"/>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrayLight"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/activity.newPost.settings.dateSelector"
+        android:paddingLeft="@dimen/common_block_space_double"
+        android:paddingRight="@dimen/common_block_space_double"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/post_date"
+            android:textSize="@dimen/text_size_common"
+            android:textColor="@color/colorGrayControls"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text_size_common"
+            android:id="@+id/activity.newPost.settings.date"
+            android:text="@string/today"/>
+    </LinearLayout>
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrayLight"/>
+</LinearLayout>

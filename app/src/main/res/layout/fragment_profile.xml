@@ -79,28 +79,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                <com.brewmapp.presentation.view.impl.widget.ProfileCounter
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:id="@+id/fragment.profile.counter.friends"
                     app:counterTitle="@string/friends_count"/>
 
-                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                <com.brewmapp.presentation.view.impl.widget.ProfileCounter
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:id="@+id/fragment.profile.counter.subscribers"
                     app:counterTitle="@string/subscribers_count"/>
 
-                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                <com.brewmapp.presentation.view.impl.widget.ProfileCounter
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:id="@+id/fragment.profile.counter.photos"
                     app:counterTitle="@string/photos_count"/>
 
-                <ru.frosteye.beermap.presentation.view.impl.widget.ProfileCounter
+                <com.brewmapp.presentation.view.impl.widget.ProfileCounter
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

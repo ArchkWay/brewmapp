@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.frosteye.beermap">
+    package="com.brewmapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
-        android:name=".app.environment.BeerMap"
+        android:name="com.brewmapp.app.environment.BeerMap"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,11 +34,11 @@
             android:value="@string/config_facebook_app_id"/>
 
         <activity
-            android:name=".presentation.view.impl.activity.MainActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.StartActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -47,55 +47,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.LoginActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.LoginActivity"
             android:label="@string/entrance"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.RegisterActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.RegisterActivity"
             android:label="@string/registration"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.EnterPhoneActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity"
             android:label="@string/phone_number"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.ConfirmCodeActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.ConfirmCodeActivity"
             android:label="@string/confirm"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.EnterPasswordActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity"
             android:label="@string/password"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.InviteActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.InviteActivity"
             android:label="@string/invite_friends"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.AlbumsActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.AlbumsActivity"
             android:label="@string/albums"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.AddAlbumActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.AddAlbumActivity"
             android:label="@string/new_album"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.AlbumActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.AlbumActivity"
             android:label="@string/cap_photo"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.InviteListActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.InviteListActivity"
             android:screenOrientation="portrait">
         </activity>
 
@@ -104,24 +104,31 @@
             android:value="56178a5d0ac6d5dc9bdb1e484ea345fe7241cf2b"/>
 
         <activity
-            android:name=".presentation.view.impl.activity.NewPostActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.NewPostActivity"
             android:label="@string/new_post"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.PickLocationActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.PickLocationActivity"
             android:label="@string/select_place"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".presentation.view.impl.activity.FriendsActivity"
+            android:name="com.brewmapp.presentation.view.impl.activity.FriendsActivity"
             android:label="@string/friends"
             android:screenOrientation="portrait">
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
+
+        <activity
+            android:name="com.brewmapp.presentation.view.impl.activity.NewPostSettingsActivity"
+            android:label="@string/params"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

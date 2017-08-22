@@ -1,4 +1,4 @@
-package ru.frosteye.beermap;
+package com.brewmapp;
 
 import org.junit.Test;
 

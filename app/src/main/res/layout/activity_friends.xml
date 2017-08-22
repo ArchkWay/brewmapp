@@ -11,7 +11,7 @@
 
     <include layout="@layout/view_toolbar" />
 
-    <ru.frosteye.beermap.presentation.view.impl.widget.FinderView
+    <com.brewmapp.presentation.view.impl.widget.FinderView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:finderHint="@string/find_friend"

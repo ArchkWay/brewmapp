@@ -1,0 +1,17 @@
+package com.brewmapp.presentation.presenter.contract;
+
+import com.brewmapp.presentation.view.contract.ProfileView;
+import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+
+/**
+ * Created by ovcst on 03.08.2017.
+ */
+
+public interface ProfilePresenter extends LivePresenter<ProfileView> {
+
+    int CODE_LOAD_PROFILE = 1;
+    int CODE_LOAD_POSTS = 2;
+
+    void onLoadEverything();
+    void onLoadPosts(int position, int page);
+}

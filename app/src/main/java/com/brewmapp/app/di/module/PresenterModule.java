@@ -8,6 +8,7 @@ import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
 import com.brewmapp.presentation.presenter.contract.ConfirmPhonePresenter;
 import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
+import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.presenter.contract.InviteListPresenter;
 import com.brewmapp.presentation.presenter.contract.InvitePresenter;
@@ -24,6 +25,7 @@ import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ConfirmPhonePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FriendsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InviteListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InvitePresenterImpl;
@@ -133,6 +135,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     NewPostSettingsPresenter provideNewPostSettingsPresenter(NewPostSettingsPresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    EventsPresenter provideEventsPresenter(EventsPresenterImpl presenter) {
         return presenter;
     }
 }

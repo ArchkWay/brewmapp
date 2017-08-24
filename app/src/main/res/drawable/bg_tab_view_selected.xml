@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="@dimen/common_block_space_half"
+        android:top="@dimen/common_block_space_half"
+        android:left="@dimen/common_block_space_half"
+        android:right="@dimen/common_block_space_half">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="@dimen/common_block_space_quadro" />
+            <solid android:color="@color/colorAccent" />
+            <padding android:bottom="@dimen/common_block_space_half"
+                android:top="@dimen/common_block_space_half"
+                android:left="@dimen/common_block_space_half"
+                android:right="@dimen/common_block_space_half" />
+        </shape>
+    </item>
+</layer-list>

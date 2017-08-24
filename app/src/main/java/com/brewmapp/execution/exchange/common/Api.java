@@ -89,5 +89,9 @@ public interface Api {
     @FormUrlEncoded
     Call<AlbumPhotos> loadPhotosForAlbum(@FieldMap WrapperParams params);
 
+    @POST("news")
+    @FormUrlEncoded
+    Call<Posts> loadNews(@FieldMap WrapperParams params);
+
 
 }

@@ -9,7 +9,11 @@ import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 
 import butterknife.ButterKnife;
+
+import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.contract.MainView;
+
+import java.util.List;
 
 import ru.frosteye.ovsa.presentation.view.fragment.NavigatorFragment;
 
@@ -40,5 +44,14 @@ public abstract class BaseFragment extends NavigatorFragment<MainView> {
 
     public abstract CharSequence getTitle();
 
+    public List<String> getTitleDropDown() {
+        return null;
+    }
 
+    protected FragmentInterractor interractor() {
+        if(getActivity() != null && (getActivity() instanceof FragmentInterractor)) {
+            return ((FragmentInterractor) getActivity());
+        }
+        return null;
+    }
 }

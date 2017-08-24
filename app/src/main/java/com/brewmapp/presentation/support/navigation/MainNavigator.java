@@ -6,6 +6,7 @@ import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import ru.frosteye.ovsa.presentation.navigation.Navigator;
@@ -30,6 +31,9 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
         switch (action.code()) {
             case MenuField.PROFILE:
                 fragmentToShow = new ProfileFragment();
+                break;
+            case MenuField.EVENTS:
+                fragmentToShow = new EventsFragment();
                 break;
             default:
                 fragmentToShow = new FriendsFragment();

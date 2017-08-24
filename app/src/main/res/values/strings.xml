@@ -83,6 +83,29 @@
         <item>Из галереи</item>
         <item>Сделать фото</item>
     </string-array>
+    <string-array name="event_types">
+        <item>События</item>
+        <item>Акции</item>
+        <item>Новости</item>
+    </string-array>
+    <string-array name="events_filter_events">
+        <item>Все</item>
+        <item>Я пойду</item>
+        <item>Приглашения</item>
+        <item>Подписка</item>
+        <item>Календарь</item>
+    </string-array>
+    <string-array name="events_filter_sales">
+        <item>Все</item>
+        <item>Подписка</item>
+        <item>Календарь</item>
+    </string-array>
+    <string-array name="events_filter_news">
+        <item>Все</item>
+        <item>Подписка</item>
+        <item>Календарь</item>
+        <item>Мои новости</item>
+    </string-array>
 
     <string-array name="main_menu">
         <item>События</item>
@@ -117,4 +140,5 @@
     <string name="post_date">Дата публикации</string>
     <string name="today">Сегодня</string>
     <string name="params">Параметры</string>
+    <string name="search">Поиск</string>
 </resources>

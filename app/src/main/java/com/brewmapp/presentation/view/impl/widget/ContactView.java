@@ -64,7 +64,7 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
         if(model.getImageUrl() != null) {
             Picasso.with(getContext()).load(model.getImageUrl()).fit().centerCrop().into(avatar);
         } else {
-            avatar.setImageDrawable(null);
+            avatar.setImageResource(R.drawable.ic_user_man);
         }
     }
 

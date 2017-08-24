@@ -89,7 +89,7 @@ public class InviteView extends BaseLinearLayout implements InteractiveModelView
             Picasso.with(getContext()).load(model.getPictureUrl()).fit().centerCrop().into(avatar);
         } else if(model.getLocalPictureUrl() != null) {
             avatar.setImageURI(model.getLocalPictureUrl());
-        } else avatar.setImageDrawable(null);
+        } else avatar.setImageResource(R.drawable.ic_user_man);
 
     }
 

@@ -6,4 +6,7 @@
     <declare-styleable name="ProfileCounter">
         <attr name="counterTitle" format="reference" />
     </declare-styleable>
+    <declare-styleable name="TabsView">
+        <attr name="tabsContent" format="reference" />
+    </declare-styleable>
 </resources>

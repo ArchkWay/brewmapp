@@ -61,7 +61,6 @@ public class Keys {
     public static final String LAT = "lat";
     public static final String LNG = "lng";
     public static final String PHOTOS_ID = "photos_id";
-    public static final String USER_SUBSCRIPTION = "user_subscription";
     public static final String FRIEND_ID = "friend_id";
     public static final String SUBSCRIBERS = "subscribers";
     public static final String CAP_NEWS = "News";
@@ -77,4 +76,8 @@ public class Keys {
     public static final String ONLY_FRIENDS = "only_friends";
     public static final String DATE_NEWS_DATE = "date_news_date";
     public static final String DATE_NEWS_TIMES = "date_news_times";
+    public static final String LIMIT_START = "limit_start";
+    public static final String LIMIT_END = "limit_end";
+    public static final String SUBSCRIPTION = "subscription";
+    public static final String USER_SUBSCRIPTION = "user_subscription";
 }

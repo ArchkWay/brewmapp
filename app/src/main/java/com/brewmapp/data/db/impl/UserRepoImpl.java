@@ -8,7 +8,7 @@ import ru.frosteye.ovsa.data.storage.BaseRepo;
 import ru.frosteye.ovsa.data.storage.Storage;
 
 /**
- * Created by oleg on 25.07.17.
+ * Created by oleg on 15.07.17.
  */
 
 public class UserRepoImpl extends BaseRepo<User> implements UserRepo {

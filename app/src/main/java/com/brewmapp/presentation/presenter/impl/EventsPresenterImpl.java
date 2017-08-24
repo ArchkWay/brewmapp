@@ -7,6 +7,7 @@ import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.task.LoadEventsTask;
 import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.presentation.view.contract.EventsView;
 
@@ -22,11 +23,14 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
     private UserRepo userRepo;
     private LoadNewsTask loadNewsTask;
+    private LoadEventsTask loadEventsTask;
 
     @Inject
-    public EventsPresenterImpl(UserRepo userRepo, LoadNewsTask loadNewsTask) {
+    public EventsPresenterImpl(UserRepo userRepo, LoadNewsTask loadNewsTask,
+                               LoadEventsTask loadEventsTask) {
         this.userRepo = userRepo;
         this.loadNewsTask = loadNewsTask;
+        this.loadEventsTask = loadEventsTask;
     }
 
     @Override
@@ -43,6 +47,9 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         enableControls(false);
         cancelAllTasks();
         switch (request.getMode()) {
+            case 0:
+                loadEventsTask.execute(request, new NewsSubscriber());
+                break;
             case 2:
                 loadNewsTask.execute(request, new NewsSubscriber());
                 break;

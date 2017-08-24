@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 /**
  * Created by ovcst on 03.08.2017.
@@ -58,7 +60,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     private FlexibleAdapter<ProfileMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;
-    private int page = 0;
+    private EndlessRecyclerOnScrollListener scrollListener;
+    private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
 
     @Override
     protected int getFragmentLayout() {
@@ -79,19 +82,30 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             startActivity(intent);
         });
         segment.setOnCheckedChangeListener((group, checkedId) -> {
-            page = 0;
-            presenter.onLoadPosts(checkedId == R.id.fragment_profile_posts_my ? 0 : 1, page);
+            loadPostsPackage.setPage(0);
+            loadPostsPackage.setSubs(checkedId != R.id.fragment_profile_posts_my);
+            presenter.onLoadPosts(loadPostsPackage);
         });
         swipe.setOnRefreshListener(() -> {
             segment.check(R.id.fragment_profile_posts_my);
-            page = 0;
+            loadPostsPackage.setPage(0);
             presenter.onLoadEverything();
         });
+
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
 
         });
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                loadPostsPackage.setPage(currentPage - 1);
+                presenter.onLoadPosts(loadPostsPackage);
+            }
+        };
+        posts.setLayoutManager(manager);
+        posts.addOnScrollListener(scrollListener);
         posts.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
-        posts.setLayoutManager(new LinearLayoutManager(getActivity()));
         posts.setAdapter(postAdapter);
     }
 
@@ -140,8 +154,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     }
 
     @Override
-    public void appendPosts(Posts posts, boolean clear) {
-        if(clear) postAdapter.clear();
+    public void appendPosts(Posts posts) {
+        if(loadPostsPackage.getPage() == 0) postAdapter.clear();
         postAdapter.updateDataSet(posts.getModels());
     }
 

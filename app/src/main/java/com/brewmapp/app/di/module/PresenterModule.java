@@ -6,6 +6,7 @@ import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
+import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.contract.ConfirmPhonePresenter;
 import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
@@ -19,10 +20,13 @@ import com.brewmapp.presentation.presenter.contract.NewPostSettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.PickLocationPresenter;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
+import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
+import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.BeerMapPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ConfirmPhonePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
@@ -36,6 +40,8 @@ import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.SearchAllPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
@@ -140,6 +146,20 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     EventsPresenter provideEventsPresenter(EventsPresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    BeerMapPresenter provideBeerMapPresenter(BeerMapPresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    SearchAllPresenter provideSearchPresenter(SearchAllPresenterImpl presenter) {
+        return presenter;
+    }
+    @Provides @PresenterScope
+    SettingsPresenter provideSettingsPresenter(SettingsPresenterImpl presenter) {
         return presenter;
     }
 }

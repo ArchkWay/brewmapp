@@ -6,9 +6,13 @@ import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
+import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
+
 import ru.frosteye.ovsa.presentation.navigation.Navigator;
 import ru.frosteye.ovsa.presentation.navigation.impl.BaseNavigatorImpl;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
@@ -34,6 +38,15 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 break;
             case MenuField.EVENTS:
                 fragmentToShow = new EventsFragment();
+                break;
+            case MenuField.SEARCH:
+                fragmentToShow = new SearchFragment();
+                break;
+            case MenuField.MAP:
+                fragmentToShow = new BeerMapFragment();
+                break;
+            case MenuField.SETTINGS:
+                fragmentToShow = new SettingsFragment();
                 break;
             default:
                 fragmentToShow = new FriendsFragment();

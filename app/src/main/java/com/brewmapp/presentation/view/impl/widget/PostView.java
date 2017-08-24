@@ -3,6 +3,8 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,6 +55,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -65,7 +68,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         this.model = model;
         author.setText(model.getUser().getFormattedName());
         likeCounter.setText(String.valueOf(model.getLikes()));
-        text.setText(model.getText());
+        text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
         date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
     }
 

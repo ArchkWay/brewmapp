@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 /**
- * Created by oleg on 25.07.17.
+ * Created by oleg on 15.07.17.
  */
 
 public class RegisterPackage implements Serializable {

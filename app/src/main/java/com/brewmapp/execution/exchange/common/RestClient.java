@@ -1,5 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
+import com.brewmapp.data.entity.wrapper.EventInfo;
+import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.google.gson.GsonBuilder;
 
 import java.util.Map;
@@ -20,7 +22,7 @@ import ru.frosteye.ovsa.execution.network.client.BaseRetrofitClient;
 import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
 /**
- * Created by oleg on 25.07.17.
+ * Created by oleg on 15.07.17.
  */
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
@@ -51,6 +53,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
         return super.createGsonBuilder()
                 .registerTypeAdapter(AlbumInfo.class, new AlbumsDeserializer())
                 .registerTypeAdapter(PostInfo.class, new PostDeserializer())
+                .registerTypeAdapter(EventInfo.class, new EventsDeserializer())
                 .registerTypeAdapter(ContactInfo.class, new FriendsDeserializer())
                 .registerTypeAdapter(PhotoInfo.class, new PhotoDeserializer());
     }

@@ -7,7 +7,7 @@ import java.util.Date;
 import com.brewmapp.execution.exchange.request.base.Keys;
 
 /**
- * Created by oleg on 25.07.17.
+ * Created by oleg on 15.07.17.
  */
 
 public class User {

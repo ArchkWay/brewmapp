@@ -7,14 +7,17 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.container.AlbumPhotos;
 import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
@@ -25,7 +28,7 @@ import ru.frosteye.ovsa.execution.network.request.MultipartRequestParams;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
 /**
- * Created by oleg on 25.07.17.
+ * Created by oleg on 15.07.17.
  */
 
 public interface Api {
@@ -71,7 +74,21 @@ public interface Api {
 
     @POST("news")
     @FormUrlEncoded
-    Call<Posts> loadPosts(@FieldMap WrapperParams params);
+    Call<Posts> loadPosts(@Query(Keys.LIMIT_START) int start,
+                          @Query(Keys.LIMIT_END) int end,
+                          @FieldMap WrapperParams params);
+
+    @POST("event")
+    @FormUrlEncoded
+    Call<Events> loadEvents(@Query(Keys.LIMIT_START) int start,
+                            @Query(Keys.LIMIT_END) int end,
+                            @FieldMap WrapperParams params);
+
+    @POST("shares")
+    @FormUrlEncoded
+    Call<Posts> loadSales(@Query(Keys.LIMIT_START) int start,
+                          @Query(Keys.LIMIT_END) int end,
+                          @FieldMap WrapperParams params);
 
     @POST("photoalbum/add")
     @FormUrlEncoded

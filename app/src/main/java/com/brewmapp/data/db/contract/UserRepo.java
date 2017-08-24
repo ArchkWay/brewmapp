@@ -5,7 +5,7 @@ import ru.frosteye.ovsa.data.storage.Repo;
 import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
 /**
- * Created by oleg on 25.07.17.
+ * Created by oleg on 15.07.17.
  */
 
 public interface UserRepo extends Repo<User>, IdentityProvider {

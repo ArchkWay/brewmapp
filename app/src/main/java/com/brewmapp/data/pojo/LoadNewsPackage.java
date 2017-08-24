@@ -10,12 +10,6 @@ public class LoadNewsPackage {
     private int mode, filter, page;
     private Date dateFrom, dateTo;
 
-    public LoadNewsPackage(int mode, int filter, int page) {
-        this.mode = mode;
-        this.filter = filter;
-        this.page = page;
-    }
-
     public Date getDateFrom() {
         return dateFrom;
     }
@@ -42,5 +36,29 @@ public class LoadNewsPackage {
 
     public int getPage() {
         return page;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public void setFilter(int filter) {
+        this.filter = filter;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void dropDates() {
+        dateFrom = null;
+        dateTo = null;
+    }
+
+    public void dropAll() {
+        dropDates();
+        mode = 0;
+        filter = 0;
+        page = 0;
     }
 }

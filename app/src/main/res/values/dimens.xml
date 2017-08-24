@@ -22,4 +22,5 @@
     <dimen name="size_album_chevron">36dp</dimen>
     <dimen name="size_new_post_icon">32dp</dimen>
     <dimen name="height_post_button">32dp</dimen>
+    <dimen name="width_event_preview">60dp</dimen>
 </resources>

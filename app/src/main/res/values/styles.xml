@@ -56,6 +56,15 @@
     <style name="AppTheme.Text">
     </style>
 
+    <style name="AppTheme.Paragraph">
+        <item name="android:textSize">@dimen/text_size_common</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+    </style>
+
+    <style name="AppTheme.Paragraph.Italic">
+        <item name="fontPath">fonts/italic.ttf</item>
+    </style>
+
     <style name="AppTheme.Text.Georgia">
         <item name="fontPath">fonts/italic.ttf</item>
     </style>

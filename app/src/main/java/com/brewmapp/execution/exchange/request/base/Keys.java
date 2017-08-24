@@ -80,4 +80,23 @@ public class Keys {
     public static final String LIMIT_END = "limit_end";
     public static final String SUBSCRIPTION = "subscription";
     public static final String USER_SUBSCRIPTION = "user_subscription";
+    public static final String USER_INVITATIONS = "user_invitations";
+    public static final String USER_GO = "user_go";
+    public static final String DATE_EVENTS = "date_events";
+    public static final String SHORT_TEXT = "short_text";
+    public static final String LOCATION_ID = "location_id";
+    public static final String DATE_FROM = "date_from";
+    public static final String DATE_TO = "date_to";
+    public static final String TIME_FROM = "time_from";
+    public static final String TIME_TO = "time_to";
+    public static final String REGION_ID = "region_id";
+    public static final String METRO_ID = "metro_id";
+    public static final String AVG_COST = "avg_cost";
+    public static final String AVG_COST_MAX = "avg_cost_max";
+    public static final String PHOTO_COUNT = "photo_count";
+    public static final String RESTO_INFO = "resto_info";
+    public static final String COEFFICIRNT_REVIEW = "coefficient_review";
+    public static final String COEFFICIRNT_LIKE = "coefficient_like";
+    public static final String AVG_BALL = "avg_ball";
+    public static final String I_WILL_GO = "i_will_co";
 }

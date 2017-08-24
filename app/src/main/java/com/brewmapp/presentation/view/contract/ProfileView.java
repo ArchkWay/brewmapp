@@ -10,5 +10,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 
 public interface ProfileView extends BasicView {
     void showUserProfile(UserProfile profile);
-    void appendPosts(Posts posts, boolean clear);
+    void appendPosts(Posts posts);
 }

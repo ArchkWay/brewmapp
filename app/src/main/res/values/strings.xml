@@ -88,6 +88,11 @@
         <item>Акции</item>
         <item>Новости</item>
     </string-array>
+    <string-array name="search_types">
+        <item>Пиво</item>
+        <item>Заведения</item>
+        <item>Пивоварни</item>
+    </string-array>
     <string-array name="events_filter_events">
         <item>Все</item>
         <item>Я пойду</item>
@@ -141,4 +146,5 @@
     <string name="today">Сегодня</string>
     <string name="params">Параметры</string>
     <string name="search">Поиск</string>
+    <string name="search_beer">Поиск пива</string>
 </resources>

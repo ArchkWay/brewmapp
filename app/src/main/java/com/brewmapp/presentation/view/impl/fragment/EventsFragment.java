@@ -19,6 +19,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import ru.frosteye.ovsa.tool.DateTools;
@@ -42,11 +43,10 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     private String[] tabContent = ResourceHelper.getResources()
             .getStringArray(R.array.event_types);
-    private int mode = MODE_EVENTS;
-    private int filter = 0;
-    private int page;
 
+    private LoadNewsPackage loadNewsPackage = new LoadNewsPackage();
     private FlexibleAdapter<IFlexible> adapter;
+    private EndlessRecyclerOnScrollListener scrollListener;
 
     @Override
     protected int getFragmentLayout() {
@@ -63,12 +63,21 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mode = tab.getPosition();
-                filter = 0;
-                interractor().processTitleDropDown(EventsFragment.this, filter);
+                loadNewsPackage.dropAll();
+                loadNewsPackage.setMode(tab.getPosition());
+                interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
             }
         });
-        list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                loadNewsPackage.setPage(currentPage - 1);
+                presenter.onLoadItems(loadNewsPackage);
+            }
+        };
+        list.setLayoutManager(manager);
+        list.addOnScrollListener(scrollListener);
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         adapter = new FlexibleAdapter<>(new ArrayList<>());
         list.setAdapter(adapter);
@@ -97,17 +106,20 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     public CharSequence getTitle() {
-        return tabContent[mode];
+        return tabContent[loadNewsPackage.getMode()];
     }
 
     @Override
     public void appendItems(List<IFlexible> list) {
-
+        if(loadNewsPackage.getPage() == 0) {
+            adapter.clear();
+        }
+        adapter.addItems(adapter.getItemCount(), list);
     }
 
     @Override
     public List<String> getTitleDropDown() {
-        switch (mode) {
+        switch (loadNewsPackage.getMode()) {
             case 0:
                 return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_events));
             case 1:
@@ -120,27 +132,21 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        filter = position;
-        if(filter == 2) {
-            LoadNewsPackage loadNewsPackage = new LoadNewsPackage(mode, filter, page);
-            DateTools.showDateDialogRange(getActivity(), new DateTools.RangePickerCallback() {
-                @Override
-                public void onDateSelected(Date startDate, Date endDate) {
-
-                }
+        loadNewsPackage.setFilter(position);
+        if(loadNewsPackage.getFilter() == 2) {
+            DateTools.showDateDialogRange(getActivity(), (startDate, endDate) -> {
+                loadNewsPackage.setDateFrom(startDate);
+                loadNewsPackage.setDateTo(endDate);
+                presenter.onLoadItems(loadNewsPackage);
             }, Calendar.getInstance());
         } else refreshItems();
     }
 
     private void refreshItems() {
-        refreshItems(null);
-    }
-
-    private void refreshItems(LoadNewsPackage loadNewsPackage) {
-        page = 0;
         swipe.setRefreshing(true);
         adapter.clear();
-        presenter.onLoadItems(loadNewsPackage == null ? new LoadNewsPackage(mode, filter, page) : loadNewsPackage);
+        loadNewsPackage.setPage(0);
+        presenter.onLoadItems(loadNewsPackage);
 
     }
 

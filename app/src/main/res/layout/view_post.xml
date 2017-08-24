@@ -50,14 +50,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/view.post.text"
-        style="@style/AppTheme.Text.Georgia.BoldItalic"
-        android:layout_marginBottom="@dimen/common_block_space_double"
-        android:textSize="@dimen/text_size_common_bigger"/>
+        style="@style/AppTheme.Paragraph"
+        android:layout_marginBottom="@dimen/common_block_space_double" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -67,13 +65,9 @@
             android:paddingRight="@dimen/common_block_space_double_semi"
             android:paddingTop="@dimen/common_block_space_half"
             android:paddingBottom="@dimen/common_block_space_half"
+            android:layout_centerVertical="true"
             android:background="@drawable/selector_post_button"
             android:src="@drawable/ic_post_comment"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -83,6 +77,7 @@
             android:paddingLeft="@dimen/common_block_space_double_semi"
             android:paddingRight="@dimen/common_block_space_double_semi"
             android:paddingTop="@dimen/common_block_space_half"
+            android:layout_toLeftOf="@+id/view.post.like"
             android:paddingBottom="@dimen/common_block_space_half"
             android:layout_marginRight="@dimen/common_block_space_double"
             android:background="@drawable/selector_post_button"
@@ -93,6 +88,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_post_button"
             android:id="@+id/view.post.like"
+            android:layout_alignParentRight="true"
             android:paddingRight="@dimen/common_block_space_double_semi"
             android:gravity="center_vertical">
 
@@ -114,5 +110,5 @@
                 android:id="@+id/view.post.like.counter"/>
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 </com.brewmapp.presentation.view.impl.widget.PostView>

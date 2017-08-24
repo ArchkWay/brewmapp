@@ -13,4 +13,6 @@
         <item>public_profile</item>
         <item>user_birthday</item>
     </string-array>
+
+    <integer name="config_posts_pack_size">15</integer>
 </resources>

@@ -15,6 +15,10 @@
 
 
     <color name="colorSplitter">#c2c2c5</color>
+
+    <color name="colorBlockSplitter">#d7d7d7</color>
+    <color name="colorBlockSplitterBorder">#cacaca</color>
+    <color name="colorSplitterBorder">#c2c2c5</color>
     <color name="colorGrayControls">#a9a9a9</color>
     <color name="colorFbSplitter">#7890c4</color>
     <color name="colorFb">#3e60aa</color>

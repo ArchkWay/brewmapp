@@ -31,6 +31,18 @@ public class BeerLocation {
         return info;
     }
 
+    public String getFormattedAddress() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(city);
+        if(info != null) {
+            builder.append(", ").append(info.getStreet());
+            if(info.getHouse() != null && !info.getHouse().isEmpty()) {
+                builder.append(info.getHouse());
+            }
+        }
+        return builder.toString();
+    }
+
     public static class LocationInfo {
         private int id;
 

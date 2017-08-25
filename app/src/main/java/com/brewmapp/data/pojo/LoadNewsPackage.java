@@ -44,6 +44,7 @@ public class LoadNewsPackage {
 
     public void setFilter(int filter) {
         this.filter = filter;
+        dropDates();
     }
 
     public void setPage(int page) {

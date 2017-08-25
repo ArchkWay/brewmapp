@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,7 +35,9 @@ import com.brewmapp.presentation.view.impl.widget.ProfileCounter;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.widget.FixedAppBarLayout;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 /**
@@ -45,12 +48,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_city) TextView city;
+    @BindView(R.id.fragment_profile_app_bar) FixedAppBarLayout appBar;
     @BindView(R.id.fragment_profile_counter_friends) ProfileCounter friendsCounter;
     @BindView(R.id.fragment_profile_counter_photos) ProfileCounter photosCounter;
     @BindView(R.id.fragment_profile_counter_subscribers) ProfileCounter subscribersCounter;
     @BindView(R.id.fragment_profile_counter_albums) ProfileCounter albumsCounter;
     @BindView(R.id.fragment_profile_status) TextView status;
-    @BindView(R.id.fragment_profile_swipe) SwipeRefreshLayout swipe;
+    @BindView(R.id.fragment_profile_post_refresh) SwipeRefreshLayoutBottom postRefresh;
     @BindView(R.id.fragment_profile_username) TextView username;
     @BindView(R.id.fragment_profile_menu) RecyclerView menu;
     @BindView(R.id.fragment_profile_posts) RecyclerView posts;
@@ -86,27 +90,38 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             loadPostsPackage.setSubs(checkedId != R.id.fragment_profile_posts_my);
             presenter.onLoadPosts(loadPostsPackage);
         });
-        swipe.setOnRefreshListener(() -> {
+       /* swipe.setOnRefreshListener(() -> {
             segment.check(R.id.fragment_profile_posts_my);
             loadPostsPackage.setPage(0);
             presenter.onLoadEverything();
         });
-
+*/
+        postRefresh.setOnRefreshListener(() -> {
+            loadPostsPackage.increasePage();
+            presenter.onLoadPosts(loadPostsPackage);
+        });
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
 
         });
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+        /*scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
                 loadPostsPackage.setPage(currentPage - 1);
                 presenter.onLoadPosts(loadPostsPackage);
             }
-        };
+        };*/
         posts.setLayoutManager(manager);
-        posts.addOnScrollListener(scrollListener);
         posts.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         posts.setAdapter(postAdapter);
+        appBar.setOnStateChangeListener(toolbarChange -> {
+            /*if(toolbarChange == FixedAppBarLayout.State.COLLAPSED) {
+                posts.addOnScrollListener(scrollListener);
+            } else {
+                posts.removeOnScrollListener(scrollListener);
+            }*/
+            Log.i("OV", toolbarChange.toString());
+        });
     }
 
     @Override
@@ -136,7 +151,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void enableControls(boolean enabled, int code) {
-        swipe.setRefreshing(!enabled);
+//        swipe.setRefreshing(!enabled);
 
 
     }
@@ -156,7 +171,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     public void appendPosts(Posts posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
-        postAdapter.updateDataSet(posts.getModels());
+        if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
+        postRefresh.setRefreshing(false);
+        postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
     }
 
     @Override

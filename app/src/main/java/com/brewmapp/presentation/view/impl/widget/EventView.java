@@ -10,11 +10,15 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Event;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
+import ru.frosteye.ovsa.tool.DateTools;
+
+import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
 
 /**
  * Created by ovcst on 24.08.2017.
@@ -63,6 +67,14 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         this.model = model;
         name.setText(model.getName());
         text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
+        location.setText(model.getLocation().getFormattedAddress());
+        date.setText(getString(R.string.pattern_event_start,
+                DateTools.formatDottedDate(model.getDateFrom()), model.getTimeFrom()));
+        if(model.getThumb() != null && !model.getThumb().isEmpty()) {
+            Picasso.with(getContext()).load(model.getThumb()).fit().centerCrop().into(image);
+        } else {
+            image.setImageResource(R.drawable.ic_default_brewery);
+        }
     }
 
     @Override

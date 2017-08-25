@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
 
@@ -56,8 +57,18 @@ public class Event {
 
     private int invited;
 
+    @SerializedName(Keys.GET_THUMB)
+    private String thumb;
+
     public int getId() {
         return id;
+    }
+
+    public String getThumb() {
+        if(thumb != null && !thumb.startsWith("http")) {
+            thumb = BuildConfig.SERVER_ROOT_URL + thumb;
+        }
+        return thumb;
     }
 
     public String getName() {

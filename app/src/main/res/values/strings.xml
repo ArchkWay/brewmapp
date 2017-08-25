@@ -96,9 +96,9 @@
     <string-array name="events_filter_events">
         <item>Все</item>
         <item>Я пойду</item>
+        <item>Календарь</item>
         <item>Приглашения</item>
         <item>Подписка</item>
-        <item>Календарь</item>
     </string-array>
     <string-array name="events_filter_sales">
         <item>Все</item>
@@ -147,4 +147,5 @@
     <string name="params">Параметры</string>
     <string name="search">Поиск</string>
     <string name="search_beer">Поиск пива</string>
+    <string name="pattern_event_start" formatted="false">%s в %s</string>
 </resources>

@@ -3,16 +3,22 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/common_block_space">
+    android:background="@drawable/ovsa_bg_selector_simple_white" >
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlockSplitterBorder"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_block_space">
 
         <ImageView
             android:layout_width="@dimen/width_event_preview"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/width_event_preview"
             android:id="@+id/view.event.image"
             android:layout_marginRight="@dimen/common_block_space"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"/>
 
         <LinearLayout
@@ -30,11 +36,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="@dimen/size_event_icon_mini"
+                    android:layout_height="@dimen/size_event_icon_mini"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_marginRight="@dimen/common_block_space"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -50,8 +58,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="@dimen/size_event_icon_mini"
+                    android:layout_height="@dimen/size_event_icon_mini"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:src="@drawable/ic_loc"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,6 +77,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/view.event.text"
+        android:layout_marginTop="@dimen/common_block_space"
         style="@style/AppTheme.Paragraph.Italic"
+        android:layout_marginLeft="@dimen/common_block_space"
+        android:layout_marginRight="@dimen/common_block_space"
         android:layout_marginBottom="@dimen/common_block_space_double" />
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlockSplitterBorder"/>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_block_space"
+        android:background="@color/colorBlockSplitter"/>
 </com.brewmapp.presentation.view.impl.widget.EventView>

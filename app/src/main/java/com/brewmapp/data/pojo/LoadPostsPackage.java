@@ -22,5 +22,14 @@ public class LoadPostsPackage {
 
     public void setSubs(boolean subs) {
         this.subs = subs;
+        page = 0;
+    }
+
+    public void increasePage() {
+        page++;
+    }
+
+    public void decreasePage() {
+        page--;
     }
 }

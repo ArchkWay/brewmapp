@@ -1,7 +1,9 @@
 package com.brewmapp.execution.exchange.common;
 
 import com.brewmapp.data.entity.wrapper.EventInfo;
+import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
+import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
 import com.google.gson.GsonBuilder;
 
 import java.util.Map;
@@ -55,6 +57,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(PostInfo.class, new PostDeserializer())
                 .registerTypeAdapter(EventInfo.class, new EventsDeserializer())
                 .registerTypeAdapter(ContactInfo.class, new FriendsDeserializer())
+                .registerTypeAdapter(SaleInfo.class, new SalesDeserializer())
                 .registerTypeAdapter(PhotoInfo.class, new PhotoDeserializer());
     }
 

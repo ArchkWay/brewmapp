@@ -10,4 +10,6 @@ public class Wrappers {
     public static final String PHOTO_ALBUM = "PhotoAlbum";
     public static final String PHOTO = "Photo";
     public static final String NEWS = "News";
+    public static final String EVENT = "Event";
+    public static final String SHARES = "Shares";
 }

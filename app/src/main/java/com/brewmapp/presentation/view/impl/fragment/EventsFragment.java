@@ -78,7 +78,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         };
         list.setLayoutManager(manager);
         list.addOnScrollListener(scrollListener);
-        list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         adapter = new FlexibleAdapter<>(new ArrayList<>());
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(this::refreshItems);

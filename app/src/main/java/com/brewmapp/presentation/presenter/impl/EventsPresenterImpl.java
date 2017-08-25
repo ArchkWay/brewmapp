@@ -9,6 +9,7 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.task.LoadEventsTask;
 import com.brewmapp.execution.task.LoadNewsTask;
+import com.brewmapp.execution.task.LoadSalesTask;
 import com.brewmapp.presentation.view.contract.EventsView;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -24,13 +25,15 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     private UserRepo userRepo;
     private LoadNewsTask loadNewsTask;
     private LoadEventsTask loadEventsTask;
+    private LoadSalesTask loadSalesTask;
 
     @Inject
     public EventsPresenterImpl(UserRepo userRepo, LoadNewsTask loadNewsTask,
-                               LoadEventsTask loadEventsTask) {
+                               LoadEventsTask loadEventsTask, LoadSalesTask loadSalesTask) {
         this.userRepo = userRepo;
         this.loadNewsTask = loadNewsTask;
         this.loadEventsTask = loadEventsTask;
+        this.loadSalesTask = loadSalesTask;
     }
 
     @Override
@@ -40,6 +43,8 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
     private void cancelAllTasks() {
         loadNewsTask.cancel();
+        loadEventsTask.cancel();
+        loadSalesTask.cancel();
     }
 
     @Override
@@ -49,6 +54,9 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         switch (request.getMode()) {
             case 0:
                 loadEventsTask.execute(request, new NewsSubscriber());
+                break;
+            case 1:
+                loadSalesTask.execute(request, new NewsSubscriber());
                 break;
             case 2:
                 loadNewsTask.execute(request, new NewsSubscriber());

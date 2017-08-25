@@ -10,6 +10,7 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
+import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.container.AlbumPhotos;
 import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
@@ -86,7 +87,7 @@ public interface Api {
 
     @POST("shares")
     @FormUrlEncoded
-    Call<Posts> loadSales(@Query(Keys.LIMIT_START) int start,
+    Call<Sales> loadSales(@Query(Keys.LIMIT_START) int start,
                           @Query(Keys.LIMIT_END) int end,
                           @FieldMap WrapperParams params);
 

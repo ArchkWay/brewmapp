@@ -37,6 +37,12 @@ public class Photo {
     @SerializedName(Keys.URL_PREVIEW)
     private String urlPreview;
 
+    private Size size;
+
+    public Size getSize() {
+        return size;
+    }
+
     public int getId() {
         return id;
     }
@@ -69,7 +75,7 @@ public class Photo {
         return urlPreview;
     }
 
-    public class Thumb {
+    public static class Thumb {
         private String url;
 
         @SerializedName(Keys.URL_PREVIEW)
@@ -81,6 +87,21 @@ public class Photo {
 
         public String getThumbUrl() {
             return thumbUrl;
+        }
+    }
+
+    public static class Size {
+        @SerializedName("0")
+        private int width;
+        @SerializedName("1")
+        private int height;
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
         }
     }
 }

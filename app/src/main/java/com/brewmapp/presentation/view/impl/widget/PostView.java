@@ -15,6 +15,8 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 
 import com.brewmapp.data.entity.Post;
+import com.squareup.picasso.Picasso;
+
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 import ru.frosteye.ovsa.tool.DateTools;
@@ -70,6 +72,15 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         likeCounter.setText(String.valueOf(model.getLikes()));
         text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
         date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
+        if(model.getUser().getThumbnail() != null) {
+            Picasso.with(getContext()).load(model.getUser().getThumbnail()).fit().centerCrop().into(avatar);
+        } else {
+            if(model.getUser().getGender() == 1) {
+                avatar.setImageResource(R.drawable.ic_user_man);
+            } else {
+                avatar.setImageResource(R.drawable.ic_user_woman);
+            }
+        }
     }
 
     @Override

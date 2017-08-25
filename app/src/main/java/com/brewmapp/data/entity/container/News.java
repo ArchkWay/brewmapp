@@ -5,4 +5,5 @@ package com.brewmapp.data.entity.container;
  */
 
 public class News {
+
 }

@@ -55,9 +55,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
+            buildConfigField "String", "SERVER_ROOT_URL", "\"https://brewmapp.com/\""
         }
         debug {
             signingConfig signingConfigs.config
+            buildConfigField "String", "SERVER_ROOT_URL", "\"https://developer.brewmapp.com/\""
         }
     }
 }

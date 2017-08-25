@@ -99,4 +99,8 @@ public class Keys {
     public static final String COEFFICIRNT_LIKE = "coefficient_like";
     public static final String AVG_BALL = "avg_ball";
     public static final String I_WILL_GO = "i_will_co";
+    public static final String DATE_START = "date_start";
+    public static final String DATE_END = "date_end";
+    public static final String PARENT_INFO = "parent_info";
+    public static final String DATE_SHARES = "date_shares";
 }

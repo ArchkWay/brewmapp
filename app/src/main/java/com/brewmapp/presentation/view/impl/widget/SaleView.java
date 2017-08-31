@@ -88,7 +88,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
             preview.setVisibility(VISIBLE);
             float ratio = photo.getSize().getWidth() / photo.getSize().getHeight();
             LinearLayout.LayoutParams params = ((LayoutParams) preview.getLayoutParams());
-            params.height = params.width;
+            params.height = preview.getMeasuredWidth();
             Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
         } else {
             preview.setVisibility(GONE);

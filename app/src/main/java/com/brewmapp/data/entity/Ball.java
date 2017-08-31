@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Ball {
-    private int rating;
+    private float rating;
 
     @SerializedName(Keys.COEFFICIRNT_REVIEW)
     private int coefficientReview;
@@ -16,7 +16,7 @@ public class Ball {
     @SerializedName(Keys.COEFFICIRNT_LIKE)
     private int coefficientLike;
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 

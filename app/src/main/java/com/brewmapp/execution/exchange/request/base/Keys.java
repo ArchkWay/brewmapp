@@ -103,4 +103,6 @@ public class Keys {
     public static final String DATE_END = "date_end";
     public static final String PARENT_INFO = "parent_info";
     public static final String DATE_SHARES = "date_shares";
+    public static final String TYPE = "type";
+    public static final String CAP_SHARE = "Shares";
 }

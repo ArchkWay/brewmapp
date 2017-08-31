@@ -33,4 +33,6 @@
 
     <color name="colorGreenButton">#00c363</color>
     <color name="colorGreenButtonDark">#00974d</color>
+
+    <color name="colorBlackSemi">#7b000000</color>
 </resources>

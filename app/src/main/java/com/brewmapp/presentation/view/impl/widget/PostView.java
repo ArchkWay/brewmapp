@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.brewmapp.R;
 
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
 import com.squareup.picasso.Picasso;
 
@@ -58,6 +59,9 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     protected void prepareView() {
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
+        like.setOnClickListener(v -> {
+            listener.onModelAction(Actions.ACTION_LIKE_POST, model);
+        });
     }
 
     @Override

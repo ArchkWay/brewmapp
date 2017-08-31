@@ -15,9 +15,10 @@ import com.brewmapp.presentation.view.contract.MainView;
 
 import java.util.List;
 
+import ru.frosteye.ovsa.presentation.navigation.ActionBarItemDelegate;
 import ru.frosteye.ovsa.presentation.view.fragment.NavigatorFragment;
 
-public abstract class BaseFragment extends NavigatorFragment<MainView> {
+public abstract class BaseFragment extends NavigatorFragment<MainView> implements ActionBarItemDelegate {
 
 
     @Override
@@ -53,5 +54,10 @@ public abstract class BaseFragment extends NavigatorFragment<MainView> {
             return ((FragmentInterractor) getActivity());
         }
         return null;
+    }
+
+    @Override
+    public void onBarAction(int id) {
+        super.onBarAction(id);
     }
 }

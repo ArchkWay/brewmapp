@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_toolbar" />
+
+    <com.brewmapp.presentation.view.impl.widget.FinderView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:finderHint="@string/search_hint"
+        android:id="@+id/activity.extendedSearch.search"/>
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity.extendedSearch.tabs"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity.extendedSearch.list"/>
+</LinearLayout>

@@ -21,7 +21,7 @@
             android:id="@+id/common.toolbar.title"
             android:layout_width="wrap_content"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_size_common_bigger"
+            android:textSize="@dimen/text_size_big_phone"
             android:layout_height="wrap_content" />
 
         <Spinner

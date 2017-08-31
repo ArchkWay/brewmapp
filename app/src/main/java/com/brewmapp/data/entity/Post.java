@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.data.model.ILikeable;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import ru.frosteye.ovsa.tool.DateTools;
  * Created by oleg on 17.08.17.
  */
 
-public class Post implements Postable, Serializable {
+public class Post implements Postable, Serializable, ILikeable {
 
     private int id;
     private String text, name;
@@ -33,6 +34,10 @@ public class Post implements Postable, Serializable {
 
     @SerializedName(Keys.USER_INFO)
     private User user;
+
+    public void increaseLikes() {
+        like++;
+    }
 
     public Date getDelayedDate() {
         return delayedDate;

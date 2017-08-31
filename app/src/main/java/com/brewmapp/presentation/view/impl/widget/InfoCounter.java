@@ -16,33 +16,33 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by oleg on 16.08.17.
  */
 
-public class ProfileCounter extends BaseLinearLayout {
+public class InfoCounter extends BaseLinearLayout {
 
     @BindView(R.id.view_profileCounter_counter) TextView counter;
     @BindView(R.id.view_profileCounter_name) TextView title;
 
     private String titleText;
 
-    public ProfileCounter(Context context) {
+    public InfoCounter(Context context) {
         super(context);
     }
 
-    public ProfileCounter(Context context, AttributeSet attrs) {
+    public InfoCounter(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ProfileCounter(Context context, AttributeSet attrs, int defStyleAttr) {
+    public InfoCounter(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ProfileCounter(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public InfoCounter(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
     protected int[] getStyleableResource() {
-        return R.styleable.ProfileCounter;
+        return R.styleable.InfoCounter;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ProfileCounter extends BaseLinearLayout {
 
     @Override
     protected void onTypedArrayReady(TypedArray array) {
-        titleText = array.getString(R.styleable.ProfileCounter_counterTitle);
+        titleText = array.getString(R.styleable.InfoCounter_counterTitle);
     }
 
     @Override

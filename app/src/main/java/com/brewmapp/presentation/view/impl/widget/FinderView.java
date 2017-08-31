@@ -65,6 +65,7 @@ public class FinderView extends BaseFrameLayout {
 
     @Override
     protected void prepareView() {
+        if(isInEditMode()) return;
         ButterKnife.bind(this);
         setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         input.setHint(hintString);

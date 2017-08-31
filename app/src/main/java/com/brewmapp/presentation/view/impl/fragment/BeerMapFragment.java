@@ -45,13 +45,31 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
     }
 
     @Override
-    protected void attachPresenter() {
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    protected void attachPresenter() {
+        presenter.onAttach(this);
     }
 
     @Override
     protected LivePresenter<?> getPresenter() {
-        return null;
+        return presenter;
     }
 
     @Override

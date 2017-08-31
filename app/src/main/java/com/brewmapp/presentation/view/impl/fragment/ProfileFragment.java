@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +32,7 @@ import com.brewmapp.presentation.view.contract.ProfileView;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
-import com.brewmapp.presentation.view.impl.widget.ProfileCounter;
+import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -49,10 +50,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_city) TextView city;
     @BindView(R.id.fragment_profile_app_bar) FixedAppBarLayout appBar;
-    @BindView(R.id.fragment_profile_counter_friends) ProfileCounter friendsCounter;
-    @BindView(R.id.fragment_profile_counter_photos) ProfileCounter photosCounter;
-    @BindView(R.id.fragment_profile_counter_subscribers) ProfileCounter subscribersCounter;
-    @BindView(R.id.fragment_profile_counter_albums) ProfileCounter albumsCounter;
+    @BindView(R.id.fragment_profile_counter_friends) InfoCounter friendsCounter;
+    @BindView(R.id.fragment_profile_counter_photos) InfoCounter photosCounter;
+    @BindView(R.id.fragment_profile_counter_subscribers) InfoCounter subscribersCounter;
+    @BindView(R.id.fragment_profile_counter_albums) InfoCounter albumsCounter;
     @BindView(R.id.fragment_profile_status) TextView status;
     @BindView(R.id.fragment_profile_post_refresh) SwipeRefreshLayoutBottom postRefresh;
     @BindView(R.id.fragment_profile_username) TextView username;
@@ -100,9 +101,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             loadPostsPackage.increasePage();
             presenter.onLoadPosts(loadPostsPackage);
         });
-        postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
-
-        });
+        postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         /*scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
@@ -122,6 +121,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             }*/
             Log.i("OV", toolbarChange.toString());
         });
+    }
+
+    private void processAction(int action, Object payload) {
+        switch (action) {
+            case Actions.ACTION_LIKE_POST:
+                presenter.onLikePost(((Post) payload));
+                break;
+        }
     }
 
     @Override
@@ -174,6 +181,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
         postRefresh.setRefreshing(false);
         postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
+        if(postAdapter.getItemCount() == posts.getTotal()) postRefresh.setEnabled(false);
     }
 
     @Override
@@ -187,5 +195,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void refreshState() {
+        postAdapter.notifyDataSetChanged();
     }
 }

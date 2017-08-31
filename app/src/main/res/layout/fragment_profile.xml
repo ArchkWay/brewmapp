@@ -20,7 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
                 android:orientation="vertical"
                 android:id="@+id/fragment.profile.swipe">
 
@@ -94,28 +94,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.brewmapp.presentation.view.impl.widget.ProfileCounter
+                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:id="@+id/fragment.profile.counter.friends"
                             app:counterTitle="@string/friends_count"/>
 
-                        <com.brewmapp.presentation.view.impl.widget.ProfileCounter
+                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:id="@+id/fragment.profile.counter.subscribers"
                             app:counterTitle="@string/subscribers_count"/>
 
-                        <com.brewmapp.presentation.view.impl.widget.ProfileCounter
+                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:id="@+id/fragment.profile.counter.photos"
                             app:counterTitle="@string/photos_count"/>
 
-                        <com.brewmapp.presentation.view.impl.widget.ProfileCounter
+                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

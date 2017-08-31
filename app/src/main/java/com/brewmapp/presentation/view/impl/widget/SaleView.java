@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
@@ -61,6 +62,9 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
     protected void prepareView() {
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
+        like.setOnClickListener(v -> {
+            listener.onModelAction(Actions.ACTION_LIKE_SALE, model);
+        });
     }
 
     @Override
@@ -84,8 +88,8 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
             preview.setVisibility(VISIBLE);
             float ratio = photo.getSize().getWidth() / photo.getSize().getHeight();
             LinearLayout.LayoutParams params = ((LayoutParams) preview.getLayoutParams());
-            params.height = (int)(preview.getMeasuredWidth() / ratio);
-            Picasso.with(getContext()).load(photo.getUrlPreview()).fit().into(preview);
+            params.height = params.width;
+            Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
         } else {
             preview.setVisibility(GONE);
         }

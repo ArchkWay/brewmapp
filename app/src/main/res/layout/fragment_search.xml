@@ -11,17 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:id="@+id/fragment.events.tabs"/>
+        android:id="@+id/fragment.search.tabs"/>
 
     <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment.events.swipe"
-        android:orientation="vertical">
+        android:layout_weight="1"
+        android:id="@+id/fragment.search.swipe" >
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/fragment.events.list"/>
+            android:id="@+id/fragment.search.list"/>
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AppTheme.Button.Green.Solid.Square"
+        android:id="@+id/activity.search.more"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_size_common"
+        android:text="@string/search"/>
 </LinearLayout>

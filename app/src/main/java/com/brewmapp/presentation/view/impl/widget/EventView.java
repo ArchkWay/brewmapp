@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Event;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +56,9 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
+        text.setOnClickListener(v -> {
+            listener.onModelAction(Actions.ACTION_SELECT_EVENT, model);
+        });
     }
 
     @Override

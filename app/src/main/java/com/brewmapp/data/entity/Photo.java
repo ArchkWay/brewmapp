@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -68,6 +69,9 @@ public class Photo {
     }
 
     public String getUrl() {
+        if(url != null && !url.startsWith("http")) {
+            url = BuildConfig.SERVER_ROOT_URL + url;
+        }
         return url;
     }
 

@@ -53,6 +53,11 @@ public class LoadPostsTask extends LoaderTask<LoadPostsPackage, Posts> {
         return true;
     }
 
+    @Override
+    protected boolean disableCache() {
+        return true;
+    }
+
     @NonNull
     @Override
     protected Call<Posts> getCall(LoadPostsPackage request) {

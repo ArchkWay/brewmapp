@@ -9,6 +9,8 @@ import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ConfirmCodeActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
+import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
+import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
@@ -16,8 +18,10 @@ import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostSettingsActivity;
+import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.PickLocationActivity;
 import com.brewmapp.presentation.view.impl.activity.RegisterActivity;
+import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
@@ -58,4 +62,8 @@ public interface PresenterComponent {
     void inject(PickLocationActivity activity);
     void inject(FriendsActivity activity);
     void inject(NewPostSettingsActivity activity);
+    void inject(SearchActivity activity);
+    void inject(ExtendedSearchActivity activity);
+    void inject(EventDetailsActivity activity);
+    void inject(PhotoSliderActivity activity);
 }

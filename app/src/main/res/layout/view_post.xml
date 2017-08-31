@@ -87,7 +87,7 @@
             android:paddingTop="@dimen/common_block_space_half"
             android:layout_toLeftOf="@+id/view.post.like"
             android:paddingBottom="@dimen/common_block_space_half"
-            android:layout_marginRight="@dimen/common_block_space_double"
+            android:layout_marginRight="@dimen/common_block_space"
             android:background="@drawable/selector_post_button"
             android:src="@drawable/ic_post_more"/>
 
@@ -97,23 +97,23 @@
             android:background="@drawable/selector_post_button"
             android:id="@+id/view.post.like"
             android:layout_alignParentRight="true"
-            android:paddingRight="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space"
             android:gravity="center_vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/height_post_button"
                 android:adjustViewBounds="true"
-                android:paddingLeft="@dimen/common_block_space_double_semi"
+                android:paddingLeft="@dimen/common_block_space"
                 android:paddingRight="@dimen/common_block_space_half"
                 android:paddingTop="@dimen/common_block_space_half"
                 android:paddingBottom="@dimen/common_block_space_half"
-                android:src="@drawable/ic_post_like"/>
+                android:src="@drawable/ic_like"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorButtonGreen"
                 android:textSize="@dimen/text_size_common_bigger"
                 android:id="@+id/view.post.like.counter"/>
         </LinearLayout>

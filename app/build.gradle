@@ -45,8 +45,8 @@ android {
         applicationId "com.brewmapp"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -84,6 +84,8 @@ dependencies {
     compile 'com.github.miguelbcr:RxPaparazzo:0.5.4-2.x'
     compile 'com.twitter.sdk.android:twitter:3.1.1'
     compile 'com.vk:androidsdk:1.6.9'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.google.android.gms:play-services-auth:11.0.4'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     testCompile 'junit:junit:4.12'

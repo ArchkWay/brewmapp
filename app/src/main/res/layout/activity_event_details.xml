@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include layout="@layout/view_toolbar" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_event_slider">
+
+                <com.daimajia.slider.library.SliderLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity.eventDetails.slider">
+
+                    <com.daimajia.slider.library.Indicators.PagerIndicator
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/activity.eventDetails.indicator"/>
+                </com.daimajia.slider.library.SliderLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBlackSemi"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="right"
+                    android:paddingLeft="@dimen/common_block_space"
+                    android:paddingRight="@dimen/common_block_space"
+                    android:paddingTop="@dimen/common_block_space_half"
+                    android:paddingBottom="@dimen/common_block_space_half">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_common"
+                        android:id="@+id/activity.eventDetails.photosCounter"
+                        android:textColor="@color/colorWhite"/>
+                </LinearLayout>
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingTop="@dimen/common_block_space"
+                android:paddingBottom="@dimen/common_block_space"
+                android:paddingLeft="@dimen/common_block_space_double"
+                android:paddingRight="@dimen/common_block_space_double">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_big_phone"
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginBottom="@dimen/common_block_space"
+                        android:id="@+id/activity.eventDetails.title"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/height_event_details_like"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/ic_like"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/activity.eventDetails.likes"
+                            android:layout_marginRight="@dimen/common_block_space"
+                            android:textSize="@dimen/text_size_common"
+                            android:textColor="@color/colorGreenButton"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/height_event_details_like"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/ic_dislike"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_common"
+                            android:id="@+id/activity.eventDetails.dislikes"
+                            android:textColor="@color/colorButtonRedDark"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/activity.eventDetails.rating"
+                    android:layout_width="@dimen/size_event_green_label"
+                    android:layout_height="@dimen/size_event_green_label"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:textColorHighlight="@color/colorWhite"
+                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    android:textSize="@dimen/text_size_common"
+                    android:gravity="center"
+                    android:background="@drawable/bg_circle"
+                    android:textColor="@color/colorWhite"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.eventDetails.options"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/activity.eventDetails.interested"
+                    app:counterTitle="@string/interested"/>
+                <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/activity.eventDetails.invited"
+                    app:counterTitle="@string/invited"/>
+                <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/activity.eventDetails.willGo"
+                    app:counterTitle="@string/will_go"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_big_phone"
+                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                android:textColor="@color/colorAccent"
+                android:layout_marginLeft="@dimen/common_block_space_double"
+                android:layout_marginTop="@dimen/common_block_space"
+                android:layout_marginBottom="@dimen/common_block_space"
+                android:text="@string/event_description"/>
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorGrayLight"
+                android:layout_marginBottom="@dimen/common_block_space"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.eventDetails.text"
+                android:textSize="@dimen/text_size_common"
+                style="@style/AppTheme.Text.Georgia.Italic"
+                android:layout_marginBottom="@dimen/common_block_space_double"
+                android:layout_marginRight="@dimen/common_block_space_double"
+                android:layout_marginLeft="@dimen/common_block_space_double"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</LinearLayout>

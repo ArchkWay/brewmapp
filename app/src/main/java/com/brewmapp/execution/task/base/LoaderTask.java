@@ -31,18 +31,22 @@ public abstract class LoaderTask<P, R> extends BaseNetworkTask<P, R> {
             public void subscribe(
                     @io.reactivex.annotations.NonNull ObservableEmitter<R> subscriber) throws Exception {
                 try {
-                    if(cachedFirst()) processCached(subscriber);
+                    if(cachedFirst() && !disableCache()) processCached(subscriber);
                     R result = executeCall(getCall(p));
                     getRepo().save(result);
                     subscriber.onNext(result);
                     subscriber.onComplete();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if(!cachedFirst()) processCached(subscriber);
+                    if(!cachedFirst() && !disableCache()) processCached(subscriber);
                     subscriber.onError(e);
                 }
             }
         });
+    }
+
+    protected boolean disableCache() {
+        return false;
     }
 
     private void processCached(ObservableEmitter<R> subscriber) {

@@ -111,5 +111,9 @@ public interface Api {
     @FormUrlEncoded
     Call<Posts> loadNews(@FieldMap WrapperParams params);
 
+    @POST("like/add")
+    @FormUrlEncoded
+    Call<MessageResponse> likeDislike(@FieldMap WrapperParams params);
+
 
 }

@@ -70,6 +70,7 @@
     <string name="message_sent">Приглашение отправлено</string>
     <string name="error">Произошла ошибка</string>
     <string name="invited">Выслано</string>
+    <string name="invited_to_event">приглашено</string>
     <string name="invite_message">Привет, Я только что загрузил приложение BrewMapp на мой Android. Это приложение является поисковиком, навигатором, информационной базой, ценовым и новостным агрегатором и социальной сетью в мире крафтового пива! Скачай приложение с https://www.brewmapp.com и узнавай о новых сортах, пивоварнях, событиях или сам добавляй их!</string>
     <string name="select_contact">Поделиться</string>
     <string name="brew_invite">Приглашение в Brewmapp</string>
@@ -105,6 +106,16 @@
         <item>Подписка</item>
         <item>Календарь</item>
     </string-array>
+    <string-array name="tabs_extended_search">
+        <item>Новости</item>
+        <item>Акции</item>
+        <item>События</item>
+        <item>Пиво</item>
+        <item>Заведения</item>
+        <item>Пивоварни</item>
+        <item>Пользователи</item>
+        <item>Фото</item>
+    </string-array>
     <string-array name="events_filter_news">
         <item>Все</item>
         <item>Подписка</item>
@@ -123,6 +134,12 @@
         <item>Игры</item>
         <item>Избранное</item>
         <item>Настройки</item>
+    </string-array>
+
+    <string-array name="search_beer">
+        <item>Пиво</item>
+        <item>Заведения</item>
+        <item>Пивоварни</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="select_place">Выберите место</string>
@@ -148,4 +165,12 @@
     <string name="search">Поиск</string>
     <string name="search_beer">Поиск пива</string>
     <string name="pattern_event_start" formatted="false">%s в %s</string>
+    <string name="search_hint">Введите слово или хештег</string>
+    <string name="more_results">Больше результатов</string>
+    <string name="extended_search">Расширенный поиск</string>
+    <string name="connection_error">Произошла ошибка. Проверьте подключение</string>
+    <string name="interested">интересно</string>
+    <string name="will_go">пойдут</string>
+    <string name="press_to_add_image">Нажмите, чтобы добавить новое изображение</string>
+    <string name="event_description">Описание мероприятия</string>
 </resources>

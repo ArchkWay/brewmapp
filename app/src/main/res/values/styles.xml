@@ -53,6 +53,10 @@
         <item name="android:textSize">@dimen/text_size_common</item>
     </style>
 
+    <style name="AppTheme.Button.Green.Solid.Square">
+        <item name="android:background">@drawable/selector_button_green_solid_square</item>
+    </style>
+
     <style name="AppTheme.Text">
     </style>
 

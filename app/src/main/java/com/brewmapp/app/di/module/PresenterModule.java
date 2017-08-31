@@ -9,7 +9,9 @@ import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.contract.ConfirmPhonePresenter;
 import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
+import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
+import com.brewmapp.presentation.presenter.contract.ExtendedSearchPresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.presenter.contract.InviteListPresenter;
 import com.brewmapp.presentation.presenter.contract.InvitePresenter;
@@ -17,10 +19,12 @@ import com.brewmapp.presentation.presenter.contract.LoginPresenter;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.presenter.contract.NewPostPresenter;
 import com.brewmapp.presentation.presenter.contract.NewPostSettingsPresenter;
+import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.presenter.contract.PickLocationPresenter;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
+import com.brewmapp.presentation.presenter.contract.SearchPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
@@ -29,7 +33,9 @@ import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.BeerMapPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ConfirmPhonePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.EventDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ExtendedSearchPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FriendsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InviteListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InvitePresenterImpl;
@@ -37,10 +43,12 @@ import com.brewmapp.presentation.presenter.impl.LoginPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MainPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.NewPostPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SearchAllPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.SearchPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
@@ -155,11 +163,31 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    SearchAllPresenter provideSearchPresenter(SearchAllPresenterImpl presenter) {
+    SearchAllPresenter provideSearchAllPresenter(SearchAllPresenterImpl presenter) {
         return presenter;
     }
     @Provides @PresenterScope
     SettingsPresenter provideSettingsPresenter(SettingsPresenterImpl presenter) {
+        return presenter;
+    }
+    
+    @Provides @PresenterScope
+    SearchPresenter provideSearchPresenter(SearchPresenterImpl presenter) {
+        return presenter;
+    }
+    
+    @Provides @PresenterScope
+    ExtendedSearchPresenter provideExtendedSearchActivityPresenter(ExtendedSearchPresenterImpl presenter) {
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    EventDetailsPresenter provideEventDetailsPresenter(EventDetailsPresenterImpl presenter) {
+        return presenter;
+    }
+    
+    @Provides @PresenterScope
+    PhotoSliderPresenter providePhotoSliderPresenter(PhotoSliderPresenterImpl presenter) {
         return presenter;
     }
 }

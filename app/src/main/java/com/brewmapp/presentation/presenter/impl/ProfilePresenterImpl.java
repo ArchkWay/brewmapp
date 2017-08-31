@@ -3,10 +3,15 @@ package com.brewmapp.presentation.presenter.impl;
 import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.data.pojo.ProfileUpdatePackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadPostsTask;
 import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.execution.task.LoadProfileTask;
@@ -26,15 +31,17 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     private LoadPostsTask loadPostsTask;
     private LoadProfileTask loadProfileTask;
     private LoadProfileAndPostsTask loadProfilePostsTask;
+    private LikeTask likeTask;
 
     @Inject
     public ProfilePresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
                                 LoadProfileTask loadProfileTask,
-                                LoadProfileAndPostsTask loadProfilePostsTask) {
+                                LoadProfileAndPostsTask loadProfilePostsTask, LikeTask likeTask) {
         this.userRepo = userRepo;
         this.loadPostsTask = loadPostsTask;
         this.loadProfileTask = loadProfileTask;
         this.loadProfilePostsTask = loadProfilePostsTask;
+        this.likeTask = likeTask;
     }
 
     @Override
@@ -51,6 +58,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
         loadPostsTask.cancel();
         loadProfileTask.cancel();
         loadProfilePostsTask.cancel();
+        likeTask.cancel();
     }
 
     @Override
@@ -85,6 +93,24 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             public void onNext(Posts posts) {
                 enableControls(true);
                 view.appendPosts(posts);
+            }
+        });
+    }
+
+    @Override
+    public void onLikePost(Post post) {
+        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
+        likeDislikePackage.setModel(Keys.CAP_NEWS, post.getId());
+        likeTask.execute(likeDislikePackage, new SimpleSubscriber<MessageResponse>() {
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+
+            @Override
+            public void onNext(MessageResponse messageResponse) {
+                post.increaseLikes();
+                view.refreshState();
             }
         });
     }

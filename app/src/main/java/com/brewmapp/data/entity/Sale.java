@@ -1,6 +1,7 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.data.entity.contract.Postable;
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
@@ -17,7 +18,7 @@ import ru.frosteye.ovsa.tool.DateTools;
  * Created by oleg on 17.08.17.
  */
 
-public class Sale implements Serializable {
+public class Sale implements Serializable, ILikeable {
 
     private int id;
     private String text, name;
@@ -87,5 +88,10 @@ public class Sale implements Serializable {
 
     public List<Photo> getPhotos() {
         return photo;
+    }
+
+    @Override
+    public void increaseLikes() {
+        like++;
     }
 }

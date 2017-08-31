@@ -3,7 +3,7 @@
     <declare-styleable name="FinderView">
         <attr name="finderHint" format="reference" />
     </declare-styleable>
-    <declare-styleable name="ProfileCounter">
+    <declare-styleable name="InfoCounter">
         <attr name="counterTitle" format="reference" />
     </declare-styleable>
     <declare-styleable name="TabsView">

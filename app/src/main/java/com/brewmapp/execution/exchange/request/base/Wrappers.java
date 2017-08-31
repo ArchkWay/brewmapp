@@ -12,4 +12,5 @@ public class Wrappers {
     public static final String NEWS = "News";
     public static final String EVENT = "Event";
     public static final String SHARES = "Shares";
+    public static final String LIKE = "Like";
 }

@@ -1,5 +1,6 @@
 package com.brewmapp.execution.task.base;
 
+import com.brewmapp.R;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -13,11 +14,13 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.base.ApiException;
 import ru.frosteye.ovsa.execution.task.ObservableTask;
 
+import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
+
 /**
  * Created by oleg on 26.07.17.
  */
 
-public abstract class BaseNetworkTask<P, R> extends ObservableTask<P, R> {
+public abstract class BaseNetworkTask<P, Result> extends ObservableTask<P, Result> {
 
     private Api api;
     private Gson gson = new Gson();
@@ -46,7 +49,7 @@ public abstract class BaseNetworkTask<P, R> extends ObservableTask<P, R> {
                 }
             }
         } catch (IOException e) {
-            throw new ApiException(e.getMessage(), 0);
+            throw new ApiException(getString(R.string.connection_error), 0);
         }
     }
 }

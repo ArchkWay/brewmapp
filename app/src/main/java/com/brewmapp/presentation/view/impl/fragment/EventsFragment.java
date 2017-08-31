@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,28 +10,33 @@ import android.widget.AdapterView;
 import javax.inject.Inject;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 
 import butterknife.BindView;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
+import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class EventsFragment extends BaseFragment implements EventsView, AdapterView.OnItemSelectedListener {
@@ -40,12 +46,13 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     @BindView(R.id.fragment_events_swipe) RefreshableSwipeRefreshLayout swipe;
 
     @Inject EventsPresenter presenter;
+    @Inject ActiveBox activeBox;
 
     private String[] tabContent = ResourceHelper.getResources()
             .getStringArray(R.array.event_types);
 
     private LoadNewsPackage loadNewsPackage = new LoadNewsPackage();
-    private FlexibleAdapter<IFlexible> adapter;
+    private FlexibleModelAdapter<IFlexible> adapter;
     private EndlessRecyclerOnScrollListener scrollListener;
 
     @Override
@@ -78,9 +85,24 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         };
         list.setLayoutManager(manager);
         list.addOnScrollListener(scrollListener);
-        adapter = new FlexibleAdapter<>(new ArrayList<>());
+        adapter = new FlexibleModelAdapter<IFlexible>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(this::refreshItems);
+    }
+
+    private void processAction(int action, Object payload) {
+        switch (action) {
+            case Actions.ACTION_LIKE_POST:
+                presenter.onLikePost(((Post) payload));
+                break;
+            case Actions.ACTION_LIKE_SALE:
+                presenter.onLikeSale(((Sale) payload));
+                break;
+            case Actions.ACTION_SELECT_EVENT:
+                activeBox.setActive(payload);
+                startActivity(new Intent(getActivity(), EventDetailsActivity.class));
+                break;
+        }
     }
 
     @Override
@@ -117,6 +139,11 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     }
 
     @Override
+    public void refreshState() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public List<String> getTitleDropDown() {
         switch (loadNewsPackage.getMode()) {
             case 0:
@@ -139,6 +166,15 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 presenter.onLoadItems(loadNewsPackage);
             }, Calendar.getInstance());
         } else refreshItems();
+    }
+
+    @Override
+    public void onBarAction(int id) {
+        switch (id) {
+            case R.id.action_search:
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+                break;
+        }
     }
 
     private void refreshItems() {

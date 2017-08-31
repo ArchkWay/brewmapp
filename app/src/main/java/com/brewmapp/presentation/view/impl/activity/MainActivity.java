@@ -133,6 +133,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
+        navigator.setActionBarItemDelegate(fragment);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_main_container, fragment)

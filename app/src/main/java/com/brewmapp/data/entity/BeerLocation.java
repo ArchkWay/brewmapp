@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class BeerLocation {
 
+
+    @SerializedName(Keys.LOCATION)
     private LocationInfo info;
 
     @SerializedName(Keys.CITY_ID)
@@ -37,7 +39,7 @@ public class BeerLocation {
         if(info != null) {
             builder.append(", ").append(info.getStreet());
             if(info.getHouse() != null && !info.getHouse().isEmpty()) {
-                builder.append(info.getHouse());
+                builder.append(", ").append(info.getHouse());
             }
         }
         return builder.toString();

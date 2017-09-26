@@ -3,9 +3,9 @@ package com.brewmapp.presentation.presenter.impl;
 import javax.inject.Inject;
 
 import com.brewmapp.data.entity.Album;
-import com.brewmapp.data.pojo.NewAlbumPackage;
+import com.brewmapp.data.pojo.EditAlbumPackage;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
-import com.brewmapp.execution.task.CreateAlbumTask;
+import com.brewmapp.execution.task.EditAlbumTask;
 import com.brewmapp.presentation.view.contract.AddAlbumView;
 
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
@@ -14,22 +14,22 @@ import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 
 public class AddAlbumPresenterImpl extends BasePresenter<AddAlbumView> implements AddAlbumPresenter {
 
-    private CreateAlbumTask createAlbumTask;
+    private EditAlbumTask editAlbumTask;
 
     @Inject
-    public AddAlbumPresenterImpl(CreateAlbumTask createAlbumTask) {
-        this.createAlbumTask = createAlbumTask;
+    public AddAlbumPresenterImpl(EditAlbumTask editAlbumTask) {
+        this.editAlbumTask = editAlbumTask;
     }
 
     @Override
     public void onDestroy() {
-        createAlbumTask.cancel();
+        editAlbumTask.cancel();
     }
 
     @Override
-    public void onNewAlbumRequestReady(NewAlbumPackage newAlbumPackage) {
+    public void onNewAlbumRequestReady(EditAlbumPackage editAlbumPackage) {
         enableControls(false);
-        createAlbumTask.execute(newAlbumPackage, new SimpleSubscriber<SingleResponse<Album>>() {
+        editAlbumTask.execute(editAlbumPackage, new SimpleSubscriber<SingleResponse<Album>>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);

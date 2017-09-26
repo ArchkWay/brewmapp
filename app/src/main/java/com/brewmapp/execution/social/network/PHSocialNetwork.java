@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import com.brewmapp.R;
@@ -24,9 +25,13 @@ import com.brewmapp.execution.social.SocialNetwork;
 import com.brewmapp.execution.social.SocialProfileResult;
 import com.brewmapp.execution.social.SocialResult;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.frosteye.ovsa.execution.task.ObservableTask;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
-
+import ir.mirrajabi.rxcontacts.Contact;
+import ir.mirrajabi.rxcontacts.RxContacts;
 import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
 
 /**
@@ -46,7 +51,36 @@ public class PHSocialNetwork extends SocialNetwork {
 
     @Override
     public void getFriends(final SocialContactsResult socialContactsResult, final SocialErrorListener errorListener) {
-        new ObservableTask<Void, Contacts>(BeerMap.getAppComponent().mainThread(),
+        RxContacts.fetch(appContext)
+                .filter(m->m.getInVisibleGroup() == 1)
+                .toSortedList(Contact::compareTo)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(contacts -> {
+                    List<SocialContact> out = new ArrayList<>();
+                    for(Contact contact: contacts) {
+                        SocialContact socialContact = new SocialContact();
+                        socialContact.setEmail(contact.getEmails() != null && !contact.getEmails().isEmpty() ?
+                            contact.getEmails().iterator().next() : null);
+                        socialContact.setLocalPictureUrl(contact.getThumbnail());
+                        String phone = contact.getPhoneNumbers() != null && !contact.getPhoneNumbers().isEmpty() ?
+                                contact.getPhoneNumbers().iterator().next() : null;
+                        if(phone != null) {
+                            phone = phone.replaceAll("\\D+", "");
+                        }
+                        socialContact.setPhone(phone);
+                        try {
+                            String parts[] = contact.getDisplayName().split("\\s");
+                            socialContact.setFirstName(parts[0]);
+                            socialContact.setLastName(parts[1]);
+                        } catch (Exception e) {}
+                        out.add(socialContact);
+                    }
+                    Contacts result = new Contacts(out);
+                    setContacts(result);
+                    socialContactsResult.onFriendsReady(SocialNetwork.PH, result);
+                });
+        /*new ObservableTask<Void, Contacts>(BeerMap.getAppComponent().mainThread(),
                 BeerMap.getAppComponent().executor()) {
             @Override
             protected Observable<Contacts> prepareObservable(Void aVoid) {
@@ -72,7 +106,7 @@ public class PHSocialNetwork extends SocialNetwork {
                 if(socialContactsResult != null)
                     socialContactsResult.onFriendsReady(SocialNetwork.PH, contacts);
             }
-        });
+        });*/
     }
 
     @Override

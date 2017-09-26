@@ -17,6 +17,7 @@ import com.brewmapp.presentation.presenter.contract.InviteListPresenter;
 import com.brewmapp.presentation.presenter.contract.InvitePresenter;
 import com.brewmapp.presentation.presenter.contract.LoginPresenter;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
+import com.brewmapp.presentation.presenter.contract.MapPresenter;
 import com.brewmapp.presentation.presenter.contract.NewPostPresenter;
 import com.brewmapp.presentation.presenter.contract.NewPostSettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
@@ -41,6 +42,7 @@ import com.brewmapp.presentation.presenter.impl.InviteListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InvitePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.LoginPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MainPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.MapPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.NewPostPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
@@ -188,6 +190,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     
     @Provides @PresenterScope
     PhotoSliderPresenter providePhotoSliderPresenter(PhotoSliderPresenterImpl presenter) {
+        return presenter;
+    }
+    
+    @Provides @PresenterScope
+    MapPresenter provideMapPresenter(MapPresenterImpl presenter) {
         return presenter;
     }
 }

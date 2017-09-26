@@ -59,7 +59,7 @@
     <string name="album_name">Название альбома</string>
     <string name="album_description">Описание</string>
     <string name="new_album">Новый альбом</string>
-    <string name="album_created">Альбом успешно создан</string>
+    <string name="album_created">Альбом успешно сохранен</string>
     <string name="cap_photo">Фото</string>
     <string name="vk">ВКонтакте</string>
     <string name="gp">Google</string>
@@ -141,6 +141,11 @@
         <item>Заведения</item>
         <item>Пивоварни</item>
     </string-array>
+
+    <string-array name="album_actions">
+        <item>Редактировать</item>
+        <item>Удалить</item>
+    </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="select_place">Выберите место</string>
     <string name="send">Отправить</string>
@@ -172,5 +177,14 @@
     <string name="interested">интересно</string>
     <string name="will_go">пойдут</string>
     <string name="press_to_add_image">Нажмите, чтобы добавить новое изображение</string>
-    <string name="event_description">Описание мероприятия</string>
+    <string name="event_description">Описание</string>
+    <string name="alert">Пожаловаться</string>
+    <string name="share">Поделиться</string>
+    <string name="claimed">Жалоба отправлена</string>
+    <string name="on_map">На карте</string>
+    <string name="photos">Фотографии</string>
+    <string name="enter_message">Введите сообщение</string>
+    <string name="album_removing">Удаление альбома</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="yes">Да</string>
 </resources>

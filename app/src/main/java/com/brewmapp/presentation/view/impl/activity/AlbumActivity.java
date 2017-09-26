@@ -4,13 +4,18 @@ import javax.inject.Inject;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.brewmapp.presentation.view.impl.widget.LikeView;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import java.io.File;
@@ -26,10 +31,15 @@ import com.brewmapp.data.entity.wrapper.PhotoInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.view.contract.AlbumView;
-import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import com.brewmapp.R;
 
-public class AlbumActivity extends BaseActivity implements AlbumView {
+import ru.frosteye.ovsa.execution.executor.Callback;
+import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.tool.DateTools;
+
+import com.brewmapp.R;
+import com.stfalcon.frescoimageviewer.ImageViewer;
+
+public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAdapter.OnItemClickListener {
 
     @BindView(R.id.activity_album_list) RecyclerView list;
     @BindView(R.id.activity_album_swipe) SwipeRefreshLayout swipe;
@@ -40,6 +50,7 @@ public class AlbumActivity extends BaseActivity implements AlbumView {
     private int albumId;
     private String albumTitle;
     private FlexibleAdapter<PhotoInfo> adapter;
+    private AlbumPhotos albumPhotos;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,6 +152,30 @@ public class AlbumActivity extends BaseActivity implements AlbumView {
 
     @Override
     public void showPhotos(AlbumPhotos photos) {
+        this.albumPhotos = photos;
         adapter.updateDataSet(photos.getModels());
+    }
+
+    @Override
+    public boolean onItemClick(int position) {
+        View overlay = LayoutInflater.from(this).inflate(R.layout.view_photo_overlay, null);
+        LikeView likeView = ((LikeView) overlay.findViewById(R.id.view_photoOverlay_likes));
+        TextView name = ((TextView) overlay.findViewById(R.id.view_photoOverlay_name));
+        TextView date = ((TextView) overlay.findViewById(R.id.view_photoOverlay_date));
+        new ImageViewer.Builder<>(this, albumPhotos.getModels())
+                .setFormatter(customImage -> customImage.getModel().getThumb().getUrl())
+                .setOverlayView(overlay)
+                .setImageChangeListener(position1 -> {
+                    PhotoInfo info = adapter.getItem(position1);
+                    likeView.setCount(info.getModel().getLike());
+                    date.setText(DateTools.formatDottedDateWithTime(info.getModel().getCreatedAt()));
+                    name.setText(info.getModel().getUser().getFormattedName());
+                    likeView.setOnClickListener(v -> presenter.onLikePhoto(info.getModel(), result -> {
+                        if(result) likeView.increase();
+                    }));
+                })
+                .setStartPosition(position)
+                .show();
+        return false;
     }
 }

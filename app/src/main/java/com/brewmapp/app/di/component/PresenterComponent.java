@@ -16,6 +16,7 @@ import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
 import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
+import com.brewmapp.presentation.view.impl.activity.UniversalMapActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostSettingsActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
@@ -66,4 +67,5 @@ public interface PresenterComponent {
     void inject(ExtendedSearchActivity activity);
     void inject(EventDetailsActivity activity);
     void inject(PhotoSliderActivity activity);
+    void inject(UniversalMapActivity activity);
 }

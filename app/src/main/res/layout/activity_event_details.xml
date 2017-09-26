@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -70,8 +71,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_big_phone"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:textSize="@dimen/text_size_common_biggest"
+                        style="@style/AppTheme.Text.Georgia.Italic"
                         android:textColor="@color/colorAccent"
                         android:layout_marginBottom="@dimen/common_block_space"
                         android:id="@+id/activity.eventDetails.title"/>
@@ -122,6 +123,12 @@
                     android:background="@drawable/bg_circle"
                     android:textColor="@color/colorWhite"/>
             </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/common_block_space"
+                android:layout_marginTop="@dimen/common_block_space"/>
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"

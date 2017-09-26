@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.brewmapp.presentation.view.impl.widget.ProfileMenuFieldRow xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brewmapp.presentation.view.impl.widget.CardOptionRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/common_block_space_double_semi"
     android:paddingRight="@dimen/common_block_space_double_semi"
+    android:background="@drawable/ovsa_bg_selector_simple"
     android:paddingTop="7dp"
-    android:paddingBottom="7dp"
-    android:background="@drawable/ovsa_bg_selector_simple">
+    android:paddingBottom="7dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="@dimen/size_menu_icon"
-            android:layout_height="@dimen/size_menu_icon"
-            android:layout_marginRight="@dimen/common_block_space_double_semi"
-            android:id="@+id/view.profile.menuField.icon"/>
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
-            android:textSize="17sp"
-            android:id="@+id/view.profile.menuField.name"/>
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="@dimen/size_menu_icon"
+                android:layout_height="@dimen/size_menu_icon"
+                android:layout_marginRight="@dimen/common_block_space_double_semi"
+                android:id="@+id/view.cardOption.icon"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="17sp"
+                android:id="@+id/view.cardOption.name"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:id="@+id/view.cardOption.bottom"
+            android:visibility="gone"
+            android:layout_height="@dimen/common_block_space_double"
+            />
     </LinearLayout>
-</com.brewmapp.presentation.view.impl.widget.ProfileMenuFieldRow>
+</com.brewmapp.presentation.view.impl.widget.CardOptionRow>

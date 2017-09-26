@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 import ru.frosteye.ovsa.tool.DateTools;
+import ru.frosteye.ovsa.tool.TextTools;
 
 /**
  * Created by oleg on 16.08.17.
@@ -77,7 +78,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         this.model = model;
         author.setText(model.getParent().getName());
         likeCounter.setText(String.valueOf(model.getLike()));
-        text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
+        text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
         date.setText(DateTools.formatDottedDate(model.getDateStart()));
         if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
             Photo photo = model.getPhotos().get(0);

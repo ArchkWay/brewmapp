@@ -25,6 +25,9 @@ import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.exchange.response.UserResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
+
+import java.util.Map;
+
 import ru.frosteye.ovsa.execution.network.request.MultipartRequestParams;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
@@ -95,6 +98,10 @@ public interface Api {
     @FormUrlEncoded
     Call<SingleResponse<Album>> createAlbum(@FieldMap WrapperParams params);
 
+    @POST("photoalbum/edit")
+    @FormUrlEncoded
+    Call<SingleResponse<Album>> editAlbum(@FieldMap WrapperParams params);
+
     @POST("news/add")
     @FormUrlEncoded
     Call<SingleResponse<Post>> createPost(@FieldMap WrapperParams params);
@@ -111,9 +118,20 @@ public interface Api {
     @FormUrlEncoded
     Call<Posts> loadNews(@FieldMap WrapperParams params);
 
+    @GET("claim/types")
+    Call<SingleResponse<Map<String, String>>> claimTypes();
+
+    @POST("claim/add")
+    @FormUrlEncoded
+    Call<SingleResponse<Map<String, String>>> claim(@FieldMap WrapperParams params);
+
     @POST("like/add")
     @FormUrlEncoded
     Call<MessageResponse> likeDislike(@FieldMap WrapperParams params);
+
+    @POST("photoalbum/delete")
+    @FormUrlEncoded
+    Call<MessageResponse> deleteAlbum(@FieldMap WrapperParams params);
 
 
 }

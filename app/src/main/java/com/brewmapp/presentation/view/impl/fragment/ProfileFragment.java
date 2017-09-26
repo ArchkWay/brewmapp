@@ -22,7 +22,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.ProfileMenuField;
+import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.PostInfo;
@@ -63,7 +63,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Inject ProfilePresenter presenter;
 
-    private FlexibleAdapter<ProfileMenuField> menuAdapter;
+    private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;
     private EndlessRecyclerOnScrollListener scrollListener;
     private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
@@ -75,7 +75,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     protected void initView(View view) {
-        menuAdapter = new FlexibleAdapter<>(ProfileMenuField.createDefault(getActivity()), this);
+        menuAdapter = new FlexibleAdapter<>(CardMenuField.createProfileItems(getActivity()), this);
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         menu.setAdapter(menuAdapter);

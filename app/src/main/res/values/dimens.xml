@@ -13,6 +13,7 @@
     <dimen name="text_size_big_phone">20sp</dimen>
     <dimen name="text_size_big_phone_bigger">22sp</dimen>
     <dimen name="text_size_common">16sp</dimen>
+    <dimen name="text_size_common_biggest">20sp</dimen>
     <dimen name="text_size_common_bigger">18sp</dimen>
     <dimen name="text_size_common_small">13sp</dimen>
     <dimen name="size_person_row_image">56dp</dimen>
@@ -25,6 +26,6 @@
     <dimen name="width_event_preview">80dp</dimen>
     <dimen name="size_event_icon_mini">18dp</dimen>
     <dimen name="height_event_slider">220dp</dimen>
-    <dimen name="size_event_green_label">32dp</dimen>
+    <dimen name="size_event_green_label">36dp</dimen>
     <dimen name="height_event_details_like">24dp</dimen>
 </resources>

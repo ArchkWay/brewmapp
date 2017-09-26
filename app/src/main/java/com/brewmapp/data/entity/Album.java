@@ -73,4 +73,29 @@ public class Album implements Serializable {
     public Photos getPhotos() {
         return photos;
     }
+
+    public static class SimpleAlbum implements Serializable {
+
+        private int albumId;
+        private String title;
+        private String description;
+
+        public SimpleAlbum(Album album) {
+            this.albumId = album.getId();
+            this.title = album.getName();
+            this.description = album.getDescription();
+        }
+
+        public int getAlbumId() {
+            return albumId;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
 }

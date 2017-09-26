@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.brewmapp.R;
 
-import com.brewmapp.data.entity.ProfileMenuField;
+import com.brewmapp.data.entity.CardMenuField;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
 
@@ -19,27 +20,28 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
  * Created by ovcst on 02.08.2017.
  */
 
-public class ProfileMenuFieldRow extends BaseRelativeLayout implements ModelView<ProfileMenuField> {
+public class CardOptionRow extends BaseRelativeLayout implements ModelView<CardMenuField> {
 
-    @BindView(R.id.view_profile_menuField_icon) ImageView icon;
-    @BindView(R.id.view_profile_menuField_name) TextView title;
+    @BindView(R.id.view_cardOption_icon) ImageView icon;
+    @BindView(R.id.view_cardOption_name) TextView title;
+    @BindView(R.id.view_cardOption_bottom) View bottom;
 
-    private ProfileMenuField model;
+    private CardMenuField model;
 
-    public ProfileMenuFieldRow(Context context) {
+    public CardOptionRow(Context context) {
         super(context);
     }
 
-    public ProfileMenuFieldRow(Context context, AttributeSet attrs) {
+    public CardOptionRow(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ProfileMenuFieldRow(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CardOptionRow(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ProfileMenuFieldRow(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CardOptionRow(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -49,13 +51,14 @@ public class ProfileMenuFieldRow extends BaseRelativeLayout implements ModelView
     }
 
     @Override
-    public ProfileMenuField getModel() {
+    public CardMenuField getModel() {
         return model;
     }
 
-    public void setModel(ProfileMenuField model) {
+    public void setModel(CardMenuField model) {
         this.model = model;
         this.title.setText(model.getTitle());
         this.icon.setImageResource(model.getIcon());
+        this.bottom.setVisibility(model.isExtraSpaceBottom() ? View.VISIBLE : View.GONE);
     }
 }

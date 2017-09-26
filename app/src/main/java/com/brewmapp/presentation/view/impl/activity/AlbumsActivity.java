@@ -2,6 +2,7 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.wrapper.AlbumInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -25,9 +27,13 @@ import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
 import com.brewmapp.presentation.view.contract.AlbumsView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
-import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
-public class AlbumsActivity extends BaseActivity implements AlbumsView, FlexibleAdapter.OnItemClickListener {
+import ru.frosteye.ovsa.presentation.view.dialog.Confirm;
+import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.stub.listener.SelectListener;
+
+public class AlbumsActivity extends BaseActivity implements AlbumsView, FlexibleAdapter.OnItemClickListener,
+        FlexibleAdapter.OnItemLongClickListener {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_list_list) RecyclerView list;
@@ -125,5 +131,26 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView, Flexible
         intent.putExtra(Keys.ALBUM_TITLE, albumInfo.getModel().getName());
         startActivity(intent);
         return false;
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        AlbumInfo albumInfo = adapter.getItem(position);
+        showSelect(this, R.array.album_actions, (text, position1) -> {
+            switch (position1) {
+                case 0:
+                    Intent intent = new Intent(this, AddAlbumActivity.class);
+                    intent.putExtra(Keys.ALBUM, new Album.SimpleAlbum(albumInfo.getModel()));
+                    startActivityForResult(intent, RequestCodes.REQUEST_EDIT_ALBUM);
+                    break;
+                case 1:
+                    Confirm.create(this)
+                            .title(R.string.album_removing)
+                            .message(R.string.are_you_sure)
+                            .yes(R.string.yes, (dialog, which) -> presenter.onRemoveAlbum(albumInfo.getModel()))
+                            .no(R.string.ovsa_string_cancel, (dialog, which) -> dialog.cancel()).show();
+                    break;
+            }
+        });
     }
 }

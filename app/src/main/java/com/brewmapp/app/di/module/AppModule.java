@@ -1,6 +1,7 @@
 package com.brewmapp.app.di.module;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.twitter.sdk.android.core.Twitter;
 import com.vk.sdk.VKSdk;
@@ -32,6 +33,7 @@ public class AppModule extends BaseAppModule<BeerMap> {
         RxPaparazzo.register(context);
         VKSdk.initialize(context);
         Twitter.initialize(context);
+        Fresco.initialize(context);
         Fabric.with(context, new Crashlytics());
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/regular.otf")

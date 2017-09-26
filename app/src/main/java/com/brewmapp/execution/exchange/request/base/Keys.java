@@ -106,4 +106,5 @@ public class Keys {
     public static final String TYPE = "type";
     public static final String CAP_SHARE = "Shares";
     public static final String LOCATION = "location";
+    public static final String CAP_EVENT = "Event";
 }

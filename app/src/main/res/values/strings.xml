@@ -75,6 +75,9 @@
     <string name="select_contact">Поделиться</string>
     <string name="brew_invite">Приглашение в Brewmapp</string>
     <string name="enter_post">Введите текст вашего сообщения</string>
+    <string name="duration">Всего дней:\u0020</string>
+    <string name="day">\u0020 день</string>
+    <string name="days">\u0020 дней</string>
     <string-array name="avatar_options">
         <item>Из галереи</item>
         <item>Сделать фото</item>
@@ -154,7 +157,7 @@
     <string name="stay">Остаться</string>
     <string name="leave">Выйти</string>
     <string name="post_created">Запись создана</string>
-    <string name="enter_title">Введите заголовок</string>
+    <string name="enter_title">* Введите заголовок</string>
     <string name="no_incoming_requests">Нет входящих запросов</string>
     <string name="incoming_requests">Запросы в друзья</string>
     <string name="no_outgoing_requests">Нет исходящих запросов</string>
@@ -187,4 +190,20 @@
     <string name="album_removing">Удаление альбома</string>
     <string name="are_you_sure">Вы уверены?</string>
     <string name="yes">Да</string>
+    <string name="no_events">События отсутствуют</string>
+    <string name="no_sales">Акции отсутствуют</string>
+    <string name="no_news">Новости отсутствуют</string>
+    <string name="add_photo_description">Добавьте подпись</string>
+    <string name="subscribes_count">подписок</string>
+    <string-array name="post_options">
+        <item>Поделиться</item>
+        <item>Репост</item>
+        <item>Копировать ссылку</item>
+        <item>Пожаловаться</item>
+    </string-array>
+    <string-array name="post_options_creator">
+        <item>Поделиться</item>
+        <item>Редактировать</item>
+        <item>Удалить</item>
+    </string-array>
 </resources>

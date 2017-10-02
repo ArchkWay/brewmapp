@@ -154,6 +154,10 @@
             android:label="@string/on_map"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".presentation.view.impl.activity.SaleDetailsActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

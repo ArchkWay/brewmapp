@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.brewmapp.presentation.view.impl.widget.CommonItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@drawable/ovsa_bg_selector_simple"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/common_block_space"
+    android:paddingBottom="@dimen/common_block_space"
+    android:gravity="center_vertical"
+    android:paddingRight="@dimen/common_block_space"
+    android:paddingLeft="@dimen/common_block_space_double_semi">
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_width="@dimen/size_avatar_more_lesser"
+        android:layout_height="@dimen/size_avatar_more_lesser"
+        android:id="@+id/view.commonItem.image"
+        android:scaleType="centerCrop"
+        app:riv_oval="true"
+        app:riv_mutate_background="true"
+        android:layout_marginRight="@dimen/common_block_space_double_semi"
+        android:background="@color/colorGrayLight" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:id="@+id/view.commonItem.scroll"
+        android:layout_marginRight="@dimen/common_block_space" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/view.commonItem.title"
+                android:textSize="@dimen/text_size_common_bigger"
+                android:ellipsize="marquee"
+                android:lines="1"
+                android:scrollHorizontally="true"
+                style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+</com.brewmapp.presentation.view.impl.widget.CommonItemView>

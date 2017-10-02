@@ -1,5 +1,6 @@
 package com.brewmapp.execution.task;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -9,7 +10,10 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.WrapperMultipartParams;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import ru.frosteye.ovsa.execution.executor.MainThread;
@@ -34,6 +38,9 @@ public class CreatePostTask extends BaseNetworkTask<Post, SingleResponse<Post>> 
     protected Observable<SingleResponse<Post>> prepareObservable(Post post) {
         return Observable.create(subscriber -> {
             try {
+                for(UploadPhotoResponse response: post.getFilesToUpload()) {
+                    post.getPhotoIds().add(uploadFile(response.getFile(), response.getTitle()).getId());
+                }
                 WrapperParams wrapperParams = post.createParams();
                 wrapperParams.addParam(Keys.RELATED_ID, userRepo.load().getId());
                 subscriber.onNext(executeCall(getApi().createPost(wrapperParams)));
@@ -42,5 +49,17 @@ public class CreatePostTask extends BaseNetworkTask<Post, SingleResponse<Post>> 
                 subscriber.onError(e);
             }
         });
+    }
+
+    private UploadPhotoResponse uploadFile(File file, String title) {
+        WrapperMultipartParams wrapperParams = new WrapperMultipartParams(Wrappers.PHOTO);
+        wrapperParams.addPart(Keys.RELATED_MODEL, Keys.CAP_USER);
+        wrapperParams.addPart(Keys.RELATED_ID, userRepo.load().getId());
+        wrapperParams.addPart(Keys.IMAGE, file);
+        if(title != null) {
+            wrapperParams.addPart(Keys.TITLE, title);
+        }
+        SingleResponse<UploadPhotoResponse> response = executeCall(getApi().uploadPhoto(wrapperParams));
+        return response.getData();
     }
 }

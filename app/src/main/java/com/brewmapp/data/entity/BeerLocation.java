@@ -34,15 +34,11 @@ public class BeerLocation {
     }
 
     public String getFormattedAddress() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(city);
         if(info != null) {
-            builder.append(", ").append(info.getStreet());
-            if(info.getHouse() != null && !info.getHouse().isEmpty()) {
-                builder.append(", ").append(info.getHouse());
-            }
+            return String.format("%s, %s", city, info.getFormattedAddress());
+        } else {
+            return city;
         }
-        return builder.toString();
     }
 
     public static class LocationInfo {
@@ -64,6 +60,16 @@ public class BeerLocation {
         private String house;
         private String name;
         private double lat, lng;
+
+        public String getFormattedAddress() {
+            LocationInfo info = this;
+            StringBuilder builder = new StringBuilder();
+            builder.append(info.getStreet());
+            if(info.getHouse() != null && !info.getHouse().isEmpty()) {
+                builder.append(", ").append(info.getHouse());
+            }
+            return builder.toString();
+        }
 
         public int getId() {
             return id;

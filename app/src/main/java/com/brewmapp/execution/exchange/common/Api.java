@@ -7,10 +7,14 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
+import com.brewmapp.data.entity.BeerLocation;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sales;
+import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.container.AlbumPhotos;
 import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
@@ -19,6 +23,7 @@ import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.LocationQueryParams;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
@@ -94,6 +99,11 @@ public interface Api {
                           @Query(Keys.LIMIT_END) int end,
                           @FieldMap WrapperParams params);
 
+
+    @POST("news")
+    @FormUrlEncoded
+    Call<Posts> loadNews(@FieldMap WrapperParams params);
+
     @POST("photoalbum/add")
     @FormUrlEncoded
     Call<SingleResponse<Album>> createAlbum(@FieldMap WrapperParams params);
@@ -114,9 +124,6 @@ public interface Api {
     @FormUrlEncoded
     Call<AlbumPhotos> loadPhotosForAlbum(@FieldMap WrapperParams params);
 
-    @POST("news")
-    @FormUrlEncoded
-    Call<Posts> loadNews(@FieldMap WrapperParams params);
 
     @GET("claim/types")
     Call<SingleResponse<Map<String, String>>> claimTypes();
@@ -132,6 +139,23 @@ public interface Api {
     @POST("photoalbum/delete")
     @FormUrlEncoded
     Call<MessageResponse> deleteAlbum(@FieldMap WrapperParams params);
+
+    @GET("quick_search/{query}")
+    Call<MessageResponse> quickSearch(@Path("query") String query,
+                                      @Query("lat") double lat, @Query("lon") double lon);
+
+    @POST("search/resto")
+    @FormUrlEncoded
+    Call<ListResponse<Resto>> findRestos(@QueryMap RequestParams query,
+                                          @FieldMap RequestParams params);
+
+    @POST("subscription")
+    @FormUrlEncoded
+    Call<ListResponse<Subscription>> loadUserSubscriptions(@FieldMap WrapperParams params);
+
+    @POST("geo/location")
+    @FormUrlEncoded
+    Call<ListResponse<BeerLocation.LocationInfo>> loadLocationById(@FieldMap WrapperParams params);
 
 
 }

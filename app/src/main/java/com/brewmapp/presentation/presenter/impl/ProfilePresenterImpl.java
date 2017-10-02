@@ -8,7 +8,7 @@ import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadPostsPackage;
-import com.brewmapp.data.pojo.ProfileUpdatePackage;
+import com.brewmapp.data.pojo.ProfileInfoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 import com.brewmapp.execution.task.LikeTask;
@@ -64,7 +64,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     @Override
     public void onLoadEverything() {
         enableControls(false);
-        loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileUpdatePackage>() {
+        loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileInfoPackage>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);
@@ -72,7 +72,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             }
 
             @Override
-            public void onNext(ProfileUpdatePackage pack) {
+            public void onNext(ProfileInfoPackage pack) {
                 enableControls(true);
                 view.showUserProfile(pack.getUserProfile());
             }

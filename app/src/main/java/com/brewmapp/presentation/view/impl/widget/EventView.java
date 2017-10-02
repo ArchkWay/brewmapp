@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     @BindView(R.id.view_event_text) TextView text;
     @BindView(R.id.view_event_location) TextView location;
     @BindView(R.id.view_event_image) ImageView image;
+    @BindView(R.id.view_event_container) View container;
 
     private Event model;
     private Listener listener;
@@ -56,7 +58,7 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-        text.setOnClickListener(v -> {
+        container.setOnClickListener(v -> {
             listener.onModelAction(Actions.ACTION_SELECT_EVENT, model);
         });
     }
@@ -70,7 +72,12 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     public void setModel(Event model) {
         this.model = model;
         name.setText(model.getName());
-        text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
+        if(model.getShortText()!= null && !model.getShortText().isEmpty()) {
+            text.setVisibility(VISIBLE);
+        } else {
+            text.setVisibility(GONE);
+        }
+        text.setText(model.getShortText());
         location.setText(model.getLocation().getFormattedAddress());
         date.setText(getString(R.string.pattern_event_start,
                 DateTools.formatDottedDate(model.getDateFrom()), model.getTimeFrom()));

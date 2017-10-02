@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -31,6 +32,7 @@ import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
+import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
@@ -44,6 +46,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
     @BindView(R.id.fragment_events_list) RecyclerView list;
     @BindView(R.id.fragment_events_swipe) RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.fragment_events_empty) TextView empty;
 
     @Inject EventsPresenter presenter;
     @Inject ActiveBox activeBox;
@@ -85,7 +88,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         };
         list.setLayoutManager(manager);
         list.addOnScrollListener(scrollListener);
-        adapter = new FlexibleModelAdapter<IFlexible>(new ArrayList<>(), this::processAction);
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(this::refreshItems);
     }
@@ -101,6 +104,10 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
                 startActivity(new Intent(getActivity(), EventDetailsActivity.class));
+                break;
+            case Actions.ACTION_SELECT_SALE:
+                activeBox.setActive(payload);
+                startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
         }
     }
@@ -132,10 +139,31 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     public void appendItems(List<IFlexible> list) {
+        setEmpty(loadNewsPackage.getPage() == 0 && list.isEmpty());
         if(loadNewsPackage.getPage() == 0) {
             adapter.clear();
         }
         adapter.addItems(adapter.getItemCount(), list);
+    }
+
+    private void setEmpty(boolean empty) {
+        if(!empty) {
+            this.empty.setVisibility(View.GONE);
+        } else {
+            this.empty.setVisibility(View.VISIBLE);
+            switch (loadNewsPackage.getMode()) {
+                case 0:
+                    this.empty.setText(R.string.no_events);
+                    break;
+                case 1:
+                    this.empty.setText(R.string.no_sales);
+                    break;
+                case 2:
+                    this.empty.setText(R.string.no_news);
+                    break;
+            }
+        }
+
     }
 
     @Override

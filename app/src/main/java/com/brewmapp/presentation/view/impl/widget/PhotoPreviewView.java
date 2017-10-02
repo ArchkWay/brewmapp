@@ -3,8 +3,10 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.Editable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -15,6 +17,7 @@ import com.brewmapp.R;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
+import ru.frosteye.ovsa.stub.impl.SimpleTextWatcher;
 
 /**
  * Created by oleg on 16.08.17.
@@ -22,7 +25,11 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
 public class PhotoPreviewView extends BaseLinearLayout implements ModelView<UploadPhotoResponse> {
 
+    private static final int aspectRatioHeight = 3;
+    private static final int aspectRatioWidth = 5;
+
     @BindView(R.id.view_photo_image) ImageView image;
+    @BindView(R.id.view_photo_description) TextView description;
 
 
     private UploadPhotoResponse model;
@@ -45,13 +52,14 @@ public class PhotoPreviewView extends BaseLinearLayout implements ModelView<Uplo
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(heightMeasureSpec, heightMeasureSpec);
-    }
-
-    @Override
     protected void prepareView() {
         ButterKnife.bind(this);
+        description.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                model.setTitle(editable.toString());
+            }
+        });
     }
 
     @Override
@@ -62,6 +70,7 @@ public class PhotoPreviewView extends BaseLinearLayout implements ModelView<Uplo
     @Override
     public void setModel(UploadPhotoResponse model) {
         this.model = model;
+        this.description.setText(model.getTitle());
         Picasso.with(getContext())
                 .load(model.getFile())
                 .fit().centerCrop().into(image);

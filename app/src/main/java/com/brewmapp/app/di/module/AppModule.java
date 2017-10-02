@@ -1,5 +1,6 @@
 package com.brewmapp.app.di.module;
 
+import com.brewmapp.execution.tool.HashTagHelper;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
@@ -46,6 +47,11 @@ public class AppModule extends BaseAppModule<BeerMap> {
     @Provides @Singleton
     ApiClient provideApiClient(RestClient client) {
         return client;
+    }
+
+    @Provides @Singleton
+    HashTagHelper provideHashTtagHelper() {
+        return new HashTagHelper(context);
     }
 
     @Provides @Singleton

@@ -53,7 +53,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_counter_friends) InfoCounter friendsCounter;
     @BindView(R.id.fragment_profile_counter_photos) InfoCounter photosCounter;
     @BindView(R.id.fragment_profile_counter_subscribers) InfoCounter subscribersCounter;
-    @BindView(R.id.fragment_profile_counter_albums) InfoCounter albumsCounter;
+    @BindView(R.id.fragment_profile_counter_subscribes) InfoCounter subscribesCounter;
     @BindView(R.id.fragment_profile_status) TextView status;
     @BindView(R.id.fragment_profile_post_refresh) SwipeRefreshLayoutBottom postRefresh;
     @BindView(R.id.fragment_profile_username) TextView username;
@@ -171,7 +171,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         status.setText(getString(R.string.online));
         friendsCounter.setCount(profile.getUser().getCounts().getFriends());
         photosCounter.setCount(profile.getUser().getCounts().getPhotos());
-        albumsCounter.setCount(profile.getUser().getCounts().getAlbums());
+        subscribesCounter.setCount(profile.getUser().getSubscriptionsCount());
         subscribersCounter.setCount(profile.getUser().getCounts().getSubscribers());
     }
 

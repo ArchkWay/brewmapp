@@ -26,7 +26,10 @@ import com.brewmapp.execution.social.SocialProfileResult;
 import com.brewmapp.execution.social.SocialResult;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import ru.frosteye.ovsa.execution.task.ObservableTask;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
@@ -52,10 +55,10 @@ public class PHSocialNetwork extends SocialNetwork {
     @Override
     public void getFriends(final SocialContactsResult socialContactsResult, final SocialErrorListener errorListener) {
         RxContacts.fetch(appContext)
-                .filter(m->m.getInVisibleGroup() == 1)
+                .filter(m -> m.getInVisibleGroup() == 1)
                 .toSortedList(Contact::compareTo)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(contacts -> {
                     List<SocialContact> out = new ArrayList<>();
                     for(Contact contact: contacts) {

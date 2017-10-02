@@ -107,4 +107,8 @@ public class Keys {
     public static final String CAP_SHARE = "Shares";
     public static final String LOCATION = "location";
     public static final String CAP_EVENT = "Event";
+    public static final String HASHTAG = "hashtag";
+    public static final String CAP_RESTO = "Resto";
+    public static final String CAP_LOCATION = "Location";
+    public static final String LON = "lon";
 }

@@ -2,11 +2,28 @@
 <com.brewmapp.presentation.view.impl.widget.PhotoPreviewView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        android:layout_marginLeft="@dimen/common_block_space_double"
+        android:layout_marginRight="@dimen/common_block_space_double"
         android:id="@+id/view.photo.image"
-        android:scaleType="centerCrop"/>
+        android:adjustViewBounds="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:id="@+id/view.photo.description"
+        android:hint="@string/add_photo_description"
+        android:inputType="textMultiLine|textCapSentences"
+        android:layout_marginLeft="@dimen/common_block_space_double"
+        android:layout_marginRight="@dimen/common_block_space_double"
+        android:paddingTop="@dimen/common_block_space"
+        android:textSize="@dimen/text_size_common"
+        android:layout_marginBottom="@dimen/common_block_space_double_semi"
+        android:background="@null"
+        android:gravity="left|top"/>
 </com.brewmapp.presentation.view.impl.widget.PhotoPreviewView>

@@ -14,4 +14,6 @@ public class Wrappers {
     public static final String SHARES = "Shares";
     public static final String LIKE = "Like";
     public static final String CLAIM = "Claim";
+    public static final String SUBSCTIPRION = "Subscription";
+    public static final String LOCATION = "Location";
 }

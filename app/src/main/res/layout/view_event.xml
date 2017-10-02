@@ -2,98 +2,106 @@
 <com.brewmapp.presentation.view.impl.widget.EventView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/ovsa_bg_selector_simple_white" >
+    android:layout_height="wrap_content" >
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorBlockSplitterBorder"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_block_space">
+        android:orientation="vertical"
+        android:background="@drawable/ovsa_bg_selector_simple_white"
+        android:id="@+id/view.event.container">
 
-        <ImageView
-            android:layout_width="@dimen/width_event_preview"
-            android:layout_height="@dimen/width_event_preview"
-            android:id="@+id/view.event.image"
-            android:layout_marginRight="@dimen/common_block_space"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"/>
-
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:layout_margin="@dimen/common_block_space_double_semi">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="@dimen/width_event_preview"
+                android:layout_height="@dimen/width_event_preview"
+                android:id="@+id/view.event.image"
+                android:layout_marginRight="@dimen/common_block_space"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:scrollbars="none">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/view.event.name"
-                    android:textSize="@dimen/text_size_common_bigger"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:layout_marginBottom="@dimen/common_block_space_half"
-                    style="@style/AppTheme.Text.Georgia.BoldItalic"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-
-                    <ImageView
-                        android:layout_width="@dimen/size_event_icon_mini"
-                        android:layout_height="@dimen/size_event_icon_mini"
-                        android:src="@drawable/ic_calendar"
-                        android:layout_marginRight="@dimen/common_block_space"/>
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
-                        android:id="@+id/view.event.date"
+                        android:id="@+id/view.event.name"
+                        android:textSize="@dimen/text_size_common_bigger"
                         android:lines="1"
                         android:ellipsize="end"
-                        android:textColor="@color/colorProfileCounter"
-                        android:textSize="@dimen/text_size_common" />
-                </LinearLayout>
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="@dimen/size_event_icon_mini"
-                        android:layout_height="@dimen/size_event_icon_mini"
-                        android:layout_marginRight="@dimen/common_block_space"
-                        android:src="@drawable/ic_loc"/>
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
-                        android:id="@+id/view.event.location"
-                        android:lines="1"
-                        android:ellipsize="end"
-                        android:textColor="@color/colorProfileCounter"
-                        android:textSize="@dimen/text_size_common" />
+                        android:layout_height="wrap_content" >
+
+                        <ImageView
+                            android:layout_width="@dimen/size_event_icon_mini"
+                            android:layout_height="@dimen/size_event_icon_mini"
+                            android:src="@drawable/ic_calendar"
+                            android:layout_marginRight="@dimen/common_block_space"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:id="@+id/view.event.date"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorProfileCounter"
+                            android:textSize="@dimen/text_size_common" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="@dimen/size_event_icon_mini"
+                            android:layout_height="@dimen/size_event_icon_mini"
+                            android:layout_marginRight="@dimen/common_block_space"
+                            android:src="@drawable/ic_loc"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:id="@+id/view.event.location"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorProfileCounter"
+                            android:textSize="@dimen/text_size_common" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
+            </HorizontalScrollView>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.event.text"
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+            android:layout_marginBottom="@dimen/common_block_space"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            style="@style/AppTheme.Paragraph.Italic"  />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view.event.text"
-        android:layout_marginTop="@dimen/common_block_space"
-        style="@style/AppTheme.Paragraph.Italic"
-        android:layout_marginLeft="@dimen/common_block_space"
-        android:layout_marginRight="@dimen/common_block_space"
-        android:layout_marginBottom="@dimen/common_block_space_double" />
+
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"

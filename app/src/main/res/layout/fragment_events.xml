@@ -13,16 +13,28 @@
         android:background="@color/colorPrimary"
         android:id="@+id/fragment.events.tabs"/>
 
-    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment.events.swipe"
-        android:background="@color/colorBlockSplitter"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/fragment.events.list"/>
-    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+            android:id="@+id/fragment.events.swipe"
+            android:background="@color/colorBlockSplitter"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/fragment.events.list"/>
+        </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_common"
+            android:id="@+id/fragment.events.empty"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 </LinearLayout>

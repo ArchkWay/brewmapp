@@ -20,6 +20,8 @@ public class User {
     private String email;
     private String fb;
 
+    private int subscriptionsCount;
+
     @SerializedName(Keys.FB_ACCESS_TOKEN)
     private String fbAccessToken;
 
@@ -101,6 +103,14 @@ public class User {
 
     public String getCode() {
         return code;
+    }
+
+    public int getSubscriptionsCount() {
+        return subscriptionsCount;
+    }
+
+    public void setSubscriptionsCount(int subscriptionsCount) {
+        this.subscriptionsCount = subscriptionsCount;
     }
 
     public void setCode(String code) {
@@ -378,6 +388,16 @@ public class User {
 
         @SerializedName(Keys.CAP_USER_FRIENDS)
         private int friends;
+
+        private int subscriptions;
+
+        public int getSubscriptions() {
+            return subscriptions;
+        }
+
+        public void setSubscriptions(int subscriptions) {
+            this.subscriptions = subscriptions;
+        }
 
         public int getNews() {
             return news;

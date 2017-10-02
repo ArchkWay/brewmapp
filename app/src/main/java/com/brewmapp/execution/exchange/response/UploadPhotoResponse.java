@@ -9,9 +9,24 @@ import java.io.File;
 public class UploadPhotoResponse {
     private int id;
     private transient File file;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public UploadPhotoResponse() {
     }
+
+    public UploadPhotoResponse(File file) {
+        this.file = file;
+    }
+
+
 
     public int getId() {
         return id;

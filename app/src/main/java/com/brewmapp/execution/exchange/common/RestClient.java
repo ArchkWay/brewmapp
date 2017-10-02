@@ -29,7 +29,7 @@ import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
-    public static final String API_VERSION = "1.02";
+    public static final String API_VERSION = "1.03";
 
     @Inject
     public RestClient(@ApiUrl String baseUrl,

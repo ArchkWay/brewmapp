@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_block_space">
+        android:layout_margin="@dimen/common_block_space_double_semi">
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="@dimen/size_avatar"
@@ -57,8 +57,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/view.sale.text"
         style="@style/AppTheme.Paragraph"
-        android:layout_marginLeft="@dimen/common_block_space"
-        android:layout_marginRight="@dimen/common_block_space"
+        android:layout_marginLeft="@dimen/common_block_space_double_semi"
+        android:layout_marginRight="@dimen/common_block_space_double_semi"
         android:layout_marginBottom="@dimen/common_block_space" />
 
     <ImageView

@@ -66,6 +66,9 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         like.setOnClickListener(v -> {
             listener.onModelAction(Actions.ACTION_LIKE_SALE, model);
         });
+        text.setOnClickListener(v -> {
+            listener.onModelAction(Actions.ACTION_SELECT_SALE, model);
+        });
     }
 
     @Override

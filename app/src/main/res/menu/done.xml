@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action.done"
+        android:id="@+id/action.allDone"
         android:title="@string/done"
         android:orderInCategory="100"
         app:showAsAction="always" />

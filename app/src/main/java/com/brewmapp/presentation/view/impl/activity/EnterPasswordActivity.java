@@ -58,13 +58,13 @@ public class EnterPasswordActivity extends BaseActivity implements EnterPassword
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_done).setEnabled(registerPackage.validate());
+        menu.findItem(R.id.action_allDone).setEnabled(registerPackage.validate());
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_done) {
+        if(item.getItemId() == R.id.action_allDone) {
             presenter.onRegisterPackageReady(registerPackage);
         }
         return super.onOptionsItemSelected(item);

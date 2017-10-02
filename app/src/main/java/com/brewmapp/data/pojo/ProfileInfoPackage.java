@@ -7,11 +7,11 @@ import com.brewmapp.data.entity.container.Posts;
  * Created by ovcst on 24.08.2017.
  */
 
-public class ProfileUpdatePackage {
+public class ProfileInfoPackage {
     private UserProfile userProfile;
     private Posts posts;
 
-    public ProfileUpdatePackage(UserProfile userProfile, Posts posts) {
+    public ProfileInfoPackage(UserProfile userProfile, Posts posts) {
         this.userProfile = userProfile;
         this.posts = posts;
     }

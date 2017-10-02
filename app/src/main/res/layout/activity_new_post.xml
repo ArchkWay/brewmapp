@@ -17,10 +17,11 @@
         android:id="@+id/activity.newPost.inputTitle"
         android:paddingLeft="@dimen/common_block_space_double"
         android:paddingTop="@dimen/common_block_space_double_semi"
-        android:paddingBottom="@dimen/common_block_space_double_semi"
-        android:textSize="@dimen/text_size_common"
-        style="@style/AppTheme.Text.Georgia.Bold"
+        android:paddingBottom="@dimen/common_block_space"
+        android:textSize="@dimen/text_size_common_bigger"
+        style="@style/AppTheme.Text.Georgia.BoldItalic"
         android:textStyle="bold"
+        android:lineSpacingExtra="4dp"
         android:inputType="textCapSentences"
         android:background="@null" />
 
@@ -29,25 +30,55 @@
         android:layout_height="1dp"
         android:background="@color/colorGrayLight"/>
 
-    <EditText
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint="@string/enter_post"
-        android:id="@+id/activity.newPost.input"
-        android:paddingLeft="@dimen/common_block_space_double"
-        android:paddingTop="@dimen/common_block_space_double_semi"
-        android:textSize="@dimen/text_size_common"
-        android:gravity="left|top"
-        android:inputType="textMultiLine|textCapSentences"
-        android:background="@null"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:visibility="gone"
-        android:id="@+id/activity.newPost.photos"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_post"
+                android:id="@+id/activity.newPost.input"
+                android:paddingLeft="@dimen/common_block_space_double"
+                android:paddingRight="@dimen/common_block_space_double"
+                android:paddingTop="@dimen/common_block_space_double_semi"
+                android:textSize="@dimen/text_size_common_bigger"
+                android:gravity="left|top"
+                android:layout_marginBottom="@dimen/common_block_space_double"
+                style="@style/AppTheme.Text.Georgia.Italic"
+                android:lineSpacingExtra="4dp"
+                android:inputType="textMultiLine|textCapSentences"
+                android:background="@null" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.newPost.location"
+                android:paddingLeft="@dimen/common_block_space_double"
+                android:paddingRight="@dimen/common_block_space_double"
+                android:paddingTop="@dimen/common_block_space_double_semi"
+                android:textSize="@dimen/text_size_common"
+                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="@dimen/common_block_space"
+                style="@style/AppTheme.Text.Georgia.Italic"
+                android:visibility="gone"
+                android:lineSpacingExtra="4dp"
+                android:background="@null" />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/common_block_space_double"
+                android:visibility="gone"
+                android:id="@+id/activity.newPost.photos"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

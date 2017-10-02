@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -53,13 +52,13 @@ public class AddAlbumActivity extends BaseActivity implements AddAlbumView {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.done, menu);
-        menu.findItem(R.id.action_done).setEnabled(editAlbumPackage.validate());
+        menu.findItem(R.id.action_allDone).setEnabled(editAlbumPackage.validate());
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_done) {
+        if(item.getItemId() == R.id.action_allDone) {
             presenter.onNewAlbumRequestReady(editAlbumPackage);
             return true;
         }

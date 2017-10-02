@@ -1,8 +1,10 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.data.model.ILikeable;
+import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,18 +24,29 @@ import ru.frosteye.ovsa.tool.DateTools;
 public class Post implements Postable, Serializable, ILikeable {
 
     private int id;
-    private String text, name;
+    //FIXME !!!
+    private String text, name = "Без названия";
     private double lat, lon;
     private int like;
     private Date delayedDate;
     private boolean friendsOnly;
+    private String hashTag;
     private List<Integer> photoIds = new ArrayList<>();
+    private List<UploadPhotoResponse> filesToUpload = new ArrayList<>();
 
     @SerializedName(Keys.DATE_NEWS)
     private Date date;
 
     @SerializedName(Keys.USER_INFO)
     private User user;
+
+    public String getHashTag() {
+        return hashTag;
+    }
+
+    public void setHashTag(String hashTag) {
+        this.hashTag = hashTag;
+    }
 
     public void increaseLikes() {
         like++;
@@ -75,6 +88,10 @@ public class Post implements Postable, Serializable, ILikeable {
         return photoIds;
     }
 
+    public List<UploadPhotoResponse> getFilesToUpload() {
+        return filesToUpload;
+    }
+
     public double getLat() {
         return lat;
     }
@@ -108,8 +125,8 @@ public class Post implements Postable, Serializable, ILikeable {
     }
 
     public boolean validate() {
-        return text != null && !text.isEmpty()
-                && name != null && !name.isEmpty();
+        return name != null && !name.isEmpty()
+                && (text != null && !text.isEmpty() || !getFilesToUpload().isEmpty());
     }
 
     public boolean isStarted() {
@@ -130,6 +147,9 @@ public class Post implements Postable, Serializable, ILikeable {
         }
         if(friendsOnly) {
             params.addParam(Keys.ONLY_FRIENDS, 1);
+        }
+        if(hashTag != null) {
+            params.addParam(Keys.HASHTAG, hashTag);
         }
         if(delayedDate != null) {
             params.addParam(Keys.DATE_NEWS_DATE, DateTools.formatDashedDate(delayedDate));

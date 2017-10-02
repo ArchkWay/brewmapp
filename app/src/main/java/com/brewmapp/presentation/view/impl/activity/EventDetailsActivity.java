@@ -85,7 +85,9 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         enableBackButton();
         slider.stopAutoCycle();
         optionsAdapter = new FlexibleAdapter<>(new ArrayList<>(), this);
-        options.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        options.setNestedScrollingEnabled(false);
+        options.setLayoutManager(linearLayoutManager);
         options.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         options.setAdapter(optionsAdapter);
     }

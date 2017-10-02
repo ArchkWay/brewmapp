@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -103,7 +102,7 @@ public class NewPostSettingsActivity extends BaseActivity implements NewPostSett
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_done) {
+        if(item.getItemId() == R.id.action_allDone) {
             Intent intent = new Intent();
             intent.putExtra(Keys.FRIENDS_ONLY, friendsOnly);
             intent.putExtra(Keys.DELAYED_DATE, delayedDate);

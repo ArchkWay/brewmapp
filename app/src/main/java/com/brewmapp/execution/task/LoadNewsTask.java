@@ -55,7 +55,9 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexibl
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params = createRequestParams(request);
-                Posts posts = executeCall(getApi().loadNews(params));
+                int start = request.getPage() * step;
+                int end = request.getPage() * step + step;
+                Posts posts = executeCall(getApi().loadPosts(start, end, params));
                 subscriber.onNext(new ArrayList<>(posts.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

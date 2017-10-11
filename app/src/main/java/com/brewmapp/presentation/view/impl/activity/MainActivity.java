@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -133,6 +134,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
+        processSetActionBar(0);
         navigator.setActionBarItemDelegate(fragment);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -176,6 +178,16 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void processSpinnerTitleSubtitle(String subtitle) {
 
+    }
+
+    @Override
+    public void processSetActionBar(int position) {
+        if(position==2)
+            menuToShow=R.menu.search_add;
+        else
+            menuToShow=R.menu.search;
+
+        invalidateOptionsMenu();
     }
 
     @Override

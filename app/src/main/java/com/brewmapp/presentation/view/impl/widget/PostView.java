@@ -58,6 +58,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     }
     @Override
     protected void prepareView() {
+        if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
         like.setOnClickListener(v -> {
@@ -86,6 +87,12 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                 avatar.setImageResource(R.drawable.ic_user_woman);
             }
         }
+        more.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onModelAction(Actions.ACTION_SHARE_POST,model);
+            }
+        });
     }
 
     @Override

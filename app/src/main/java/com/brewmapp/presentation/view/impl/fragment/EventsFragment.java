@@ -32,6 +32,7 @@ import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
+import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
@@ -76,6 +77,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 loadNewsPackage.dropAll();
                 loadNewsPackage.setMode(tab.getPosition());
                 interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
+                interractor().processSetActionBar(tab.getPosition());
             }
         });
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -109,6 +111,12 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 activeBox.setActive(payload);
                 startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
+            case Actions.ACTION_SALE_SHARE:
+                presenter.onShareSale(((Sale) payload));
+                break;
+            case Actions.ACTION_SHARE_POST:
+                presenter.onSharePost(((Post) payload));
+                break;
         }
     }
 
@@ -124,7 +132,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     public int getMenuToInflate() {
-        return R.menu.search;
+        return R.menu.search_add;
     }
 
     @Override
@@ -142,8 +150,11 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         setEmpty(loadNewsPackage.getPage() == 0 && list.isEmpty());
         if(loadNewsPackage.getPage() == 0) {
             adapter.clear();
+            scrollListener.reset();
+            this.list.addOnScrollListener(scrollListener);
         }
         adapter.addItems(adapter.getItemCount(), list);
+
     }
 
     private void setEmpty(boolean empty) {
@@ -202,14 +213,20 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
             case R.id.action_search:
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
+            case R.id.action_add:
+                startActivity(new Intent(getActivity(),NewPostActivity.class));
+                break;
         }
     }
 
     private void refreshItems() {
         swipe.setRefreshing(true);
+        list.removeOnScrollListener(scrollListener);
         adapter.clear();
         loadNewsPackage.setPage(0);
         presenter.onLoadItems(loadNewsPackage);
+
+
 
     }
 

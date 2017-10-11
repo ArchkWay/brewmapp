@@ -55,6 +55,7 @@ public class TabsView extends BaseFrameLayout {
 
     @Override
     protected void prepareView() {
+
         ButterKnife.bind(this);
     }
 

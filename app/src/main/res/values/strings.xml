@@ -97,6 +97,17 @@
         <item>Заведения</item>
         <item>Пивоварни</item>
     </string-array>
+    <string-array name="share_items_sale">
+        <item>Поделиться</item>
+        <item>Репост</item>
+        <item>Пожаловться</item>
+    </string-array>
+    <string-array name="share_items_post">
+        <item>Поделиться</item>
+        <item>Репост</item>
+        <item>Пожаловться</item>
+        <item>Удалить</item>
+    </string-array>
     <string-array name="events_filter_events">
         <item>Все</item>
         <item>Я пойду</item>
@@ -157,6 +168,7 @@
     <string name="stay">Остаться</string>
     <string name="leave">Выйти</string>
     <string name="post_created">Запись создана</string>
+    <string name="post_deleted">Запись удалена</string>
     <string name="enter_title">* Введите заголовок</string>
     <string name="no_incoming_requests">Нет входящих запросов</string>
     <string name="incoming_requests">Запросы в друзья</string>

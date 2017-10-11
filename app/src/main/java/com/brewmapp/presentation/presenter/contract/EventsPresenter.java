@@ -11,4 +11,7 @@ public interface EventsPresenter extends LivePresenter<EventsView> {
     void onLoadItems(LoadNewsPackage request);
     void onLikePost(Post post);
     void onLikeSale(Sale sale);
+    void onShareSale(Sale payload);
+
+    void onSharePost(Post payload);
 }

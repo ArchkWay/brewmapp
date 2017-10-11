@@ -9,4 +9,6 @@ import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 public interface FragmentInterractor {
     void processTitleDropDown(BaseFragment baseFragment, int selected);
     void processSpinnerTitleSubtitle(String subtitle);
+
+    void processSetActionBar(int position);
 }

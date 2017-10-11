@@ -57,6 +57,8 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
 
     @Override
     protected void prepareView() {
+        if(isInEditMode()) return;
+
         ButterKnife.bind(this);
         container.setOnClickListener(v -> {
             listener.onModelAction(Actions.ACTION_SELECT_EVENT, model);

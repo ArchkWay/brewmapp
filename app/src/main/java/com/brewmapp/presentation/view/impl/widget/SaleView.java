@@ -1,8 +1,10 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
@@ -61,6 +63,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
     }
     @Override
     protected void prepareView() {
+        if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
         like.setOnClickListener(v -> {
@@ -83,6 +86,8 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         likeCounter.setText(String.valueOf(model.getLike()));
         text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
         date.setText(DateTools.formatDottedDate(model.getDateStart()));
+        more.setOnClickListener(v->listener.onModelAction(Actions.ACTION_SALE_SHARE,model));
+
         if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
             Photo photo = model.getPhotos().get(0);
             if(photo.getSize() == null) {
@@ -91,9 +96,13 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
             }
             preview.setVisibility(VISIBLE);
             float ratio = photo.getSize().getWidth() / photo.getSize().getHeight();
-            LinearLayout.LayoutParams params = ((LayoutParams) preview.getLayoutParams());
-            params.height = preview.getMeasuredWidth();
-            Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
+            preview.post(() -> {
+                LayoutParams params = ((LayoutParams) preview.getLayoutParams());
+                params.height = preview.getMeasuredWidth();
+                preview.setLayoutParams(params);
+                Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
+            });
+
         } else {
             preview.setVisibility(GONE);
         }

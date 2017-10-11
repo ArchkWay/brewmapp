@@ -116,6 +116,10 @@ public interface Api {
     @FormUrlEncoded
     Call<SingleResponse<Post>> createPost(@FieldMap WrapperParams params);
 
+    @POST("news/delete")
+    @FormUrlEncoded
+    Call<SingleResponse<Post>> deletePost(@FieldMap WrapperParams params);
+
     @POST("photo/add")
     @Multipart
     Call<SingleResponse<UploadPhotoResponse>> uploadPhoto(@PartMap MultipartRequestParams params);

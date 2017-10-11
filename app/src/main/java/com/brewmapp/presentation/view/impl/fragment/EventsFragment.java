@@ -204,7 +204,9 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 loadNewsPackage.setDateTo(endDate);
                 presenter.onLoadItems(loadNewsPackage);
             }, Calendar.getInstance());
-        } else refreshItems();
+        } else {
+            refreshItems();
+        }
     }
 
     @Override

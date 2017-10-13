@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,12 +19,15 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
 
 import com.brewmapp.R;
+import com.squareup.picasso.Picasso;
 
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView {
     @BindView(R.id.activity_sale_details_avatar)    ImageView avatar;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_sale_details_title)    TextView titile;
     @BindView(R.id.activity_sale_details_resto_name)    TextView resto_name;
+    @BindView(R.id.activity_sale_details_web_view)    WebView web_view;
+    @BindView(R.id.activity_sale_details_image)    ImageView imageView;
 
     @Inject SaleDetailsPresenter presenter;
 
@@ -66,8 +70,12 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
 
     @Override
     public void showSaleDetails(Sale active) {
-        setTitle(active.getName());
+        setTitle(active.getParent().getName());
         titile.setText(active.getName());
         resto_name.setText(active.getParent().getName());
+        String img="<img src=\""+active.getPhotos().get(0).getUrl()+"\" width=\"100%\" height=\"100\"></img>";
+        web_view.loadData(img+active.getText(), "text/html; charset=utf-8", "utf-8");
+        //Picasso.with(this).load(active.getPhotos().get(0).getUrl()).fit().centerCrop().into(imageView);
+
     }
 }

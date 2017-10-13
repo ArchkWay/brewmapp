@@ -73,5 +73,35 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/common_block_space"
+        android:paddingRight="@dimen/common_block_space"
+        android:paddingTop="@dimen/common_block_space_half"
+        android:paddingBottom="@dimen/common_block_space_half"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity.sale.details.image"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/common_block_space"
+        android:paddingRight="@dimen/common_block_space"
+        android:paddingTop="@dimen/common_block_space_half"
+        android:paddingBottom="@dimen/common_block_space_half"
+        >
+        <WebView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity.sale.details.web.view"
+            />
+    </LinearLayout>
 
 </LinearLayout>

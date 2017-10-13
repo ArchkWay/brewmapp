@@ -3,6 +3,7 @@ package com.brewmapp.presentation.support.navigation;
 import javax.inject.Inject;
 
 import com.brewmapp.app.di.scope.PresenterScope;
+import com.brewmapp.data.db.contract.ActiveFragmentRepo;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
@@ -25,13 +26,16 @@ import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 public class MainNavigator extends BaseNavigatorImpl<MainView> implements Navigator<MainView> {
 
     private BaseFragment fragmentToShow;
+    private ActiveFragmentRepo activeFragmentRepo;
 
     @Inject
-    public MainNavigator() {
+    public MainNavigator(ActiveFragmentRepo activeFragmentRepo) {
+        this.activeFragmentRepo = activeFragmentRepo;
     }
 
     @Override
     public void onNavigatorAction(Action action) {
+        activeFragmentRepo.save(action.code());
         switch (action.code()) {
             case MenuField.PROFILE:
                 fragmentToShow = new ProfileFragment();
@@ -54,6 +58,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
 
         fragmentToShow.setNavigator(this);
         getView().showDrawer(false);
+
     }
 
     public void onMenuItemSelected(MenuField menuField) {

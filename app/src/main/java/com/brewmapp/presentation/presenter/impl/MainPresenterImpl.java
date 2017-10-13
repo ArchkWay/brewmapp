@@ -4,6 +4,7 @@ import android.content.Context;
 
 import javax.inject.Inject;
 
+import com.brewmapp.data.db.contract.ActiveFragmentRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
@@ -18,11 +19,13 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
 
     private UserRepo userRepo;
     private Context context;
+    private ActiveFragmentRepo activeFragmentRepo;
 
     @Inject
-    public MainPresenterImpl(UserRepo userRepo, Context context) {
+    public MainPresenterImpl(ActiveFragmentRepo activeFragmentRepo,UserRepo userRepo, Context context) {
         this.userRepo = userRepo;
         this.context = context;
+        this.activeFragmentRepo = activeFragmentRepo;
     }
 
     @Override
@@ -40,5 +43,13 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     @Override
     public void onLogout() {
         userRepo.save(null);
+    }
+
+    @Override
+    public int getActiveFragment() {
+        if(activeFragmentRepo.load()!=null)
+            return activeFragmentRepo.load();
+        else
+            return MenuField.PROFILE;
     }
 }

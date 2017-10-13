@@ -97,7 +97,10 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void attachPresenter() {
         presenter.onAttach(this);
         navigator.onAttachView(this);
-        showFragment(new ProfileFragment());
+        //showFragment(new ProfileFragment());
+        navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
+        navigator.onDrawerClosed();
+
     }
 
     @Override

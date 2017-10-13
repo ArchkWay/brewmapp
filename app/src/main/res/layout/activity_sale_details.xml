@@ -1,10 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/view_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/common_block_space"
+        android:paddingRight="@dimen/common_block_space"
+        android:paddingTop="@dimen/common_block_space_half"
+        android:paddingBottom="@dimen/common_block_space_half"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="@dimen/size_avatar"
+                android:layout_height="@dimen/size_avatar"
+                android:id="@+id/activity.sale.details.avatar"
+                android:scaleType="fitCenter"
+                app:riv_border_width="1dp"
+                android:src="@drawable/ic_default_beer"
+                app:riv_border_color="@color/colorSplitter"
+                android:layout_marginRight="@dimen/common_block_space_double_semi"
+                app:riv_mutate_background="true"
+                android:background="@color/colorGrayLight"
+                app:riv_oval="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.sale.details.resto.name"
+                android:textSize="20dp"
+                android:text="Restoname"
+                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/common_block_space"
+        android:paddingRight="@dimen/common_block_space"
+        android:paddingTop="@dimen/common_block_space_half"
+        android:paddingBottom="@dimen/common_block_space_half"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity.sale.details.title"
+            />
+    </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

@@ -9,4 +9,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface MainPresenter extends LivePresenter<MainView> {
     void onLogout();
+
+    int getActiveFragment();
 }

@@ -2,6 +2,7 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
 
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.squareup.picasso.Picasso;
 
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView {
@@ -27,7 +29,8 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @BindView(R.id.activity_sale_details_title)    TextView titile;
     @BindView(R.id.activity_sale_details_resto_name)    TextView resto_name;
     @BindView(R.id.activity_sale_details_web_view)    WebView web_view;
-    @BindView(R.id.activity_sale_details_image)    ImageView imageView;
+    @BindView(R.id.activity_sale_details_sale_more)    ImageView sale_more;
+
 
     @Inject SaleDetailsPresenter presenter;
 
@@ -45,7 +48,8 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @Override
     protected void initView() {
         enableBackButton();
-
+        sale_more.setOnClickListener((v)->
+                new DialogShare(this,getResources().getStringArray(R.array.share_items_sale),null,null));
     }
 
     @Override
@@ -73,9 +77,15 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
         setTitle(active.getParent().getName());
         titile.setText(active.getName());
         resto_name.setText(active.getParent().getName());
-        String img="<img src=\""+active.getPhotos().get(0).getUrl()+"\" width=\"100%\" height=\"100\"></img>";
+        String img="";
+        try {
+            img=String.valueOf(active.getPhotos().get(0).getUrl());
+            img="<p><a href=\""+img+"\" target=\"_blank\"><img src=\""+img+"\" width=\"100%\" ></img></a></p>";
+        }catch (Exception e){
+
+        }
         web_view.loadData(img+active.getText(), "text/html; charset=utf-8", "utf-8");
-        //Picasso.with(this).load(active.getPhotos().get(0).getUrl()).fit().centerCrop().into(imageView);
+
 
     }
 }

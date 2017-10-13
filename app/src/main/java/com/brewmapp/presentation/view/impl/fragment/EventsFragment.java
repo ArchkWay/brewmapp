@@ -43,6 +43,7 @@ import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
 import java.util.ArrayList;
@@ -175,30 +176,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     public void showShareDialog(int resource_items,Object o) {
-        new DialogShare(
-                getActivity(),
-                getResources().getStringArray(resource_items),
-                (dialog, which) -> {
-                    switch (which){
-                        case 0:
-                            Intent sendIntent = new Intent();
-                            sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                            sendIntent.setType("text/plain");
-                            startActivity(sendIntent);
-                            break;
-                        case 1:
-                            Intent intent=new Intent(getActivity(),NewPostActivity.class);
-                            startActivity(intent);
-                            break;
-                        case 2:
-                            showMessage(" разработке");
-                            break;
-                        case 3:
-                            presenter.onDeleteNewsTask((Post)o);
-                            break;
-                    }
-                });
+        new DialogShare(getActivity(),getResources().getStringArray(resource_items),presenter,o);
 
     }
 
@@ -283,23 +261,4 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     }
 
 
-    private class DialogShare extends AlertDialog.Builder {
-        public DialogShare(@NonNull Context context, String[] items, DialogInterface.OnClickListener onClickListener) {
-            super(context);
-            //setItems(items, onClickListener);
-            final ArrayAdapter<String> arrayAdapter =
-                    new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
-                        @NonNull
-                        @Override
-                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                            View view = super.getView(position, convertView, parent);
-                            ((TextView) view.findViewById(android.R.id.text1)).setTextColor(position == 3 ? Color.RED : Color.BLACK);
-                            return view;
-                        }
-                    };
-            for (String s : items) arrayAdapter.add(s);
-            setAdapter(arrayAdapter, onClickListener);
-            show();
-        }
-    }
 }

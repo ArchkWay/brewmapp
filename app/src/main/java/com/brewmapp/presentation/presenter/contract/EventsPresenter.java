@@ -14,4 +14,8 @@ public interface EventsPresenter extends LivePresenter<EventsView> {
     void onShareSale(Sale payload);
 
     void onSharePost(Post payload);
+
+    void storeTabActive(int position);
+
+    void onDeleteNewsTask(Post post);
 }

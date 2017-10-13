@@ -1,11 +1,19 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -71,6 +79,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     protected void initView(View view) {
+
         tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -78,6 +87,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 loadNewsPackage.setMode(tab.getPosition());
                 interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
                 interractor().processSetActionBar(tab.getPosition());
+                presenter.storeTabActive(tab.getPosition());
             }
         });
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -93,6 +103,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(this::refreshItems);
+
     }
 
     private void processAction(int action, Object payload) {
@@ -154,6 +165,40 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
             this.list.addOnScrollListener(scrollListener);
         }
         adapter.addItems(adapter.getItemCount(), list);
+
+    }
+
+    @Override
+    public void setTabActive(int i) {
+        tabsView.getTabs().getTabAt(i).select();
+    }
+
+    @Override
+    public void showShareDialog(int resource_items,Object o) {
+        new DialogShare(
+                getActivity(),
+                getResources().getStringArray(resource_items),
+                (dialog, which) -> {
+                    switch (which){
+                        case 0:
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                            sendIntent.setType("text/plain");
+                            startActivity(sendIntent);
+                            break;
+                        case 1:
+                            Intent intent=new Intent(getActivity(),NewPostActivity.class);
+                            startActivity(intent);
+                            break;
+                        case 2:
+                            showMessage(" разработке");
+                            break;
+                        case 3:
+                            presenter.onDeleteNewsTask((Post)o);
+                            break;
+                    }
+                });
 
     }
 
@@ -235,5 +280,26 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+
+    private class DialogShare extends AlertDialog.Builder {
+        public DialogShare(@NonNull Context context, String[] items, DialogInterface.OnClickListener onClickListener) {
+            super(context);
+            //setItems(items, onClickListener);
+            final ArrayAdapter<String> arrayAdapter =
+                    new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
+                        @NonNull
+                        @Override
+                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            ((TextView) view.findViewById(android.R.id.text1)).setTextColor(position == 3 ? Color.RED : Color.BLACK);
+                            return view;
+                        }
+                    };
+            for (String s : items) arrayAdapter.add(s);
+            setAdapter(arrayAdapter, onClickListener);
+            show();
+        }
     }
 }

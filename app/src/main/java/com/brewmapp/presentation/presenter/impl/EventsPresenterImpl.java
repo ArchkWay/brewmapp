@@ -15,6 +15,7 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import com.brewmapp.R;
+import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
@@ -51,17 +52,25 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     private LoadSalesTask loadSalesTask;
     private LikeTask likeTask;
     private DeleteNewsTask deleteNewsTask;
+    private UiSettingRepo uiSettingRepo;
 
     @Inject
     public EventsPresenterImpl(UserRepo userRepo, LoadNewsTask loadNewsTask,
                                LoadEventsTask loadEventsTask, LoadSalesTask loadSalesTask,
-                               LikeTask likeTask,DeleteNewsTask deleteNewsTask) {
+                               LikeTask likeTask, DeleteNewsTask deleteNewsTask, UiSettingRepo uiSettingRepo) {
         this.userRepo = userRepo;
         this.loadNewsTask = loadNewsTask;
         this.loadEventsTask = loadEventsTask;
         this.loadSalesTask = loadSalesTask;
         this.likeTask = likeTask;
         this.deleteNewsTask = deleteNewsTask;
+        this.uiSettingRepo=uiSettingRepo;
+    }
+
+    @Override
+    public void onAttach(EventsView eventsView) {
+        super.onAttach(eventsView);
+        eventsView.setTabActive(uiSettingRepo.getnActiveTabEventFragment());
     }
 
     @Override
@@ -109,99 +118,48 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
     @Override
     public void onShareSale(Sale payload) {
-        Context context=((EventsFragment) view).getContext();
-        new DialogShare(
-                context,
-                context.getResources().getStringArray(R.array.share_items_sale),
-                (dialog, which) -> {
-            switch (which){
-                case 0:
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                    sendIntent.setType("text/plain");
-                    context.startActivity(sendIntent);
-                    break;
-                case 1:
-                    Intent intent=new Intent(context,NewPostActivity.class);
-                    context.startActivity(intent);
-                    break;
-                case 2:
-                    showMessage(" разработке");
-                    break;
-            }
-        });
+        view.showShareDialog(R.array.share_items_sale,payload);
     }
 
     @Override
     public void onSharePost(Post payload) {
-        Context context=((EventsFragment) view).getContext();
-        String[] items=userRepo.load().getId()==payload.getUser().getId()
-                ?context.getResources().getStringArray(R.array.share_items_post)
-                :context.getResources().getStringArray(R.array.share_items_sale);
-        new DialogShare(context,
-                items,
-                (dialog, which) -> {
-          switch (which){
-              case 0:
-                  Intent sendIntent = new Intent();
-                  sendIntent.setAction(Intent.ACTION_SEND);
-                  sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                  sendIntent.setType("text/plain");
-                  context.startActivity(sendIntent);
-                  break;
-              case 1:
-                  Intent intent=new Intent(context,NewPostActivity.class);
-                  context.startActivity(intent);
-                  break;
-              case 2:
-                  showMessage(" разработке");
-                  break;
-              case 3:
-                  deleteNewsTask.execute(payload,new SimpleSubscriber<SingleResponse<Post>>(){
-                      @Override
-                      public void onError(Throwable e) {
 
-                          showMessage(e.getMessage());
-                      }
+        if(userRepo.load().getId()==payload.getUser().getId())
+            view.showShareDialog(R.array.share_items_post,payload);
+        else
+            view.showShareDialog(R.array.share_items_sale,payload);
 
-                      @Override
-                      public void onNext(SingleResponse<Post> string) {
-                          showMessage(getString(R.string.post_created));
+    }
 
-                      }
+    @Override
+    public void storeTabActive(int position) {
+        uiSettingRepo.setnActiveTabEventFragment(position);
+    }
 
-                  });
-                  break;
-          }
+    @Override
+    public void onDeleteNewsTask(Post post) {
+        deleteNewsTask.execute(post,new SimpleSubscriber<SingleResponse<Post>>(){
+            @Override
+            public void onError(Throwable e) {
+
+                showMessage(e.getMessage());
+            }
+
+            @Override
+            public void onNext(SingleResponse<Post> string) {
+                showMessage(getString(R.string.post_created));
+
+            }
+
         });
     }
 
-    private class DialogShare extends AlertDialog.Builder{
-        public DialogShare(@NonNull Context context,String[] items, DialogInterface.OnClickListener onClickListener) {
-            super(context);
-            //setItems(items, onClickListener);
-            final ArrayAdapter<String> arrayAdapter =
-                    new ArrayAdapter<String>(  context, android.R.layout.simple_list_item_1 ){
-                        @NonNull
-                        @Override
-                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                            View view=super.getView(position, convertView, parent);
-                            ((TextView) view.findViewById(android.R.id.text1)).setTextColor(position==3?Color.RED:Color.BLACK);
-                            return view;
-                        }
-                    };
-            for (String s:items) arrayAdapter.add(s);
-            setAdapter(arrayAdapter,onClickListener);
-            show();
-        }
-    }
 
-    private class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
+    class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
 
         private ILikeable iLikeable;
 
-        private LikeSubscriber(ILikeable iLikeable) {
+        LikeSubscriber(ILikeable iLikeable) {
             this.iLikeable = iLikeable;
         }
 
@@ -217,7 +175,7 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         }
     }
 
-    private class NewsSubscriber extends SimpleSubscriber<List<IFlexible>> {
+    class NewsSubscriber extends SimpleSubscriber<List<IFlexible>> {
         @Override
         public void onError(Throwable e) {
             enableControls(true);

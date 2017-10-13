@@ -3,7 +3,8 @@ package com.brewmapp.presentation.support.navigation;
 import javax.inject.Inject;
 
 import com.brewmapp.app.di.scope.PresenterScope;
-import com.brewmapp.data.db.contract.ActiveFragmentRepo;
+import com.brewmapp.data.db.contract.UiSettingRepo;
+import com.brewmapp.data.entity.UiSettingContainer;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
@@ -26,16 +27,16 @@ import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 public class MainNavigator extends BaseNavigatorImpl<MainView> implements Navigator<MainView> {
 
     private BaseFragment fragmentToShow;
-    private ActiveFragmentRepo activeFragmentRepo;
+    private UiSettingRepo uiSettingRepo;
 
     @Inject
-    public MainNavigator(ActiveFragmentRepo activeFragmentRepo) {
-        this.activeFragmentRepo = activeFragmentRepo;
+    public MainNavigator(UiSettingRepo uiSettingRepo) {
+        this.uiSettingRepo = uiSettingRepo;
     }
 
     @Override
     public void onNavigatorAction(Action action) {
-        activeFragmentRepo.save(action.code());
+        uiSettingRepo.setActiveFragment(action.code());
         switch (action.code()) {
             case MenuField.PROFILE:
                 fragmentToShow = new ProfileFragment();

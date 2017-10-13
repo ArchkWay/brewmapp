@@ -4,8 +4,9 @@ import android.content.Context;
 
 import javax.inject.Inject;
 
-import com.brewmapp.data.db.contract.ActiveFragmentRepo;
+import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.UiSettingContainer;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.view.contract.MainView;
@@ -19,13 +20,13 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
 
     private UserRepo userRepo;
     private Context context;
-    private ActiveFragmentRepo activeFragmentRepo;
+    private UiSettingRepo uiSettingRepo;
 
     @Inject
-    public MainPresenterImpl(ActiveFragmentRepo activeFragmentRepo,UserRepo userRepo, Context context) {
+    public MainPresenterImpl(UiSettingRepo uiSettingRepo, UserRepo userRepo, Context context) {
         this.userRepo = userRepo;
         this.context = context;
-        this.activeFragmentRepo = activeFragmentRepo;
+        this.uiSettingRepo = uiSettingRepo;
     }
 
     @Override
@@ -47,9 +48,6 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
 
     @Override
     public int getActiveFragment() {
-        if(activeFragmentRepo.load()!=null)
-            return activeFragmentRepo.load();
-        else
-            return MenuField.PROFILE;
+        return uiSettingRepo.getnActiveFragment();
     }
 }

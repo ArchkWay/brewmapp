@@ -20,6 +20,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseFrameLayout;
  */
 
 public class TabsView extends BaseFrameLayout {
+
     @BindView(R.id.view_tabs_tabs) TabLayout tabs;
 
     public TabsView(Context context) {
@@ -66,4 +67,9 @@ public class TabsView extends BaseFrameLayout {
         }
         tabs.addOnTabSelectedListener(listener);
     }
+
+    public TabLayout getTabs() {
+        return tabs;
+    }
+
 }

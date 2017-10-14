@@ -103,7 +103,7 @@
             android:paddingLeft="@dimen/common_block_space_double_semi"
             android:paddingRight="@dimen/common_block_space_double_semi"
             android:paddingTop="@dimen/common_block_space_half"
-            android:layout_toLeftOf="@+id/view.sale.like"
+            android:layout_toLeftOf="@+id/activity.sale.details.like"
             android:paddingBottom="@dimen/common_block_space_half"
             android:layout_marginRight="@dimen/common_block_space"
             android:background="@drawable/selector_post_button"
@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_post_button"
-            android:id="@+id/view.sale.like"
+            android:id="@+id/activity.sale.details.like"
             android:layout_marginRight="@dimen/common_block_space"
             android:layout_alignParentRight="true"
             android:paddingRight="@dimen/common_block_space"
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorButtonGreen"
                 android:textSize="@dimen/text_size_common_bigger"
-                android:id="@+id/view.sale.like.counter"/>
+                android:id="@+id/activity.sale.details.like.counter"/>
         </LinearLayout>
 
     </RelativeLayout>

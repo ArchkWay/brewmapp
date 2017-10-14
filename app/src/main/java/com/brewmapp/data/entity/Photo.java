@@ -92,6 +92,11 @@ public class Photo implements ILikeable {
         like++;
     }
 
+    @Override
+    public void increaseDisLikes() {
+        dislike++;
+    }
+
     public static class Thumb {
         private String url;
 

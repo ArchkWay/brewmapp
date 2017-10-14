@@ -42,6 +42,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView {
         return R.layout.fragment_friends;
     }
 
+
     @Override
     public void enableControls(boolean enabled, int code) {
         swipe.setRefreshing(!enabled);

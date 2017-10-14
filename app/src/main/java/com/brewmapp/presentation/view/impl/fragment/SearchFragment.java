@@ -75,6 +75,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView {
         return ResourceHelper.getString(R.string.search_beer);
     }
 
+
     @Override
     public void enableControls(boolean enabled, int code) {
 

@@ -42,6 +42,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setContentView(R.layout.activity_login);
     }
 
+
     @Override
     public void enableControls(boolean enabled, int code) {
         showTopBarLoading(!enabled);

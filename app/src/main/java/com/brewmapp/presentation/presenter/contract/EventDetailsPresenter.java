@@ -10,4 +10,5 @@ public interface EventDetailsPresenter extends LivePresenter<EventDetailsView> {
     void onLoacEventDetails(Event event);
     void onRequestAlertVariants();
     void onClaim(ClaimPackage claimPackage);
+    void onDisLakeEvent(Event event);
 }

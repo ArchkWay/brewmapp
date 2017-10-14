@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -18,6 +19,7 @@ import com.brewmapp.data.pojo.ClaimPackage;
 import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
+import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventDetailsView;
 
 import butterknife.BindView;
@@ -57,8 +59,12 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     @BindView(R.id.activity_eventDetails_invited) InfoCounter invited;
     @BindView(R.id.activity_eventDetails_interested) InfoCounter interested;
     @BindView(R.id.activity_eventDetails_text) TextView text;
+    @BindView(R.id.activity_eventDetails_like)   ImageView like;
+    @BindView(R.id.activity_eventDetails_dislike)   ImageView dislike;
 
     @Inject EventDetailsPresenter presenter;
+    @Inject EventsPresenter eventsPresenter;
+
     @Inject ActiveBox activeBox;
 
     private FlexibleAdapter<CardMenuField> optionsAdapter;
@@ -90,6 +96,8 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         options.setLayoutManager(linearLayoutManager);
         options.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         options.setAdapter(optionsAdapter);
+        like.setOnClickListener(v -> {eventsPresenter.onLike(event,this);});
+        dislike.setOnClickListener(v -> {presenter.onDisLakeEvent(event);});
     }
 
     @Override
@@ -109,7 +117,8 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
 
     @Override
     public void refreshState() {
-
+        likes.setText(String.valueOf(event.getLike()));
+        dislikes.setText(String.valueOf(event.getDislike()));
     }
 
     @Override
@@ -131,6 +140,11 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
                 intent.putExtra(Keys.PHOTOS, urls);
                 startActivity(intent);
             }));
+        }else {
+            slider.addSlider(new DefaultSliderView(this)
+                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                    .image(R.drawable.ic_default_brewery));
+
         }
         slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
             @Override
@@ -144,6 +158,9 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         interested.setCount(event.getInterested());
         invited.setCount(event.getInvited());
         text.setText(event.getText() != null ? Html.fromHtml(event.getText()) : null);
+        likes.setText(String.valueOf(event.getLike()));
+        dislikes.setText(String.valueOf(event.getDislike()));
+
     }
 
     @Override

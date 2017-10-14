@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
@@ -35,8 +36,10 @@ import com.brewmapp.presentation.view.contract.EventsView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
+import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
+import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
@@ -102,19 +105,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         }
     }
 
-    @Override
-    public void onLikePost(Post post) {
-        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
-        likeDislikePackage.setModel(Keys.CAP_NEWS, post.getId());
-        likeTask.execute(likeDislikePackage, new LikeSubscriber(post));
-    }
-
-    @Override
-    public void onLikeSale(Sale sale) {
-        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
-        likeDislikePackage.setModel(Keys.CAP_SHARE, sale.getId());
-        likeTask.execute(likeDislikePackage, new LikeSubscriber(sale));
-    }
 
     @Override
     public void onShareSale(Sale payload) {
@@ -154,13 +144,38 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         });
     }
 
+    @Override
+    public void onShareEvent(Event payload) {
+        view.showShareDialog(R.array.share_items_sale,payload);
+    }
+
+    @Override
+    public void onLike(ILikeable iLikeable,RefreshableView refreshableView) {
+        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
+        if(iLikeable instanceof Event)
+            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Event)iLikeable).getId());
+        else if (iLikeable instanceof Sale)
+            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Sale)iLikeable).getId());
+        else if (iLikeable instanceof Post)
+            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Post)iLikeable).getId());
+
+        likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
+    }
+
+    @Override
+    public void complaint(Object o) {
+
+    }
+
 
     class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
 
         private ILikeable iLikeable;
+        private RefreshableView refreshableView;
 
-        LikeSubscriber(ILikeable iLikeable) {
+        LikeSubscriber(ILikeable iLikeable,RefreshableView refreshableView) {
             this.iLikeable = iLikeable;
+            this.refreshableView = refreshableView;
         }
 
         @Override
@@ -171,7 +186,7 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         @Override
         public void onNext(MessageResponse messageResponse) {
             iLikeable.increaseLikes();
-            view.refreshState();
+            refreshableView.refreshState();
         }
     }
 

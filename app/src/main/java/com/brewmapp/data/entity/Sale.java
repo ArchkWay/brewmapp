@@ -94,4 +94,9 @@ public class Sale implements Serializable, ILikeable {
     public void increaseLikes() {
         like++;
     }
+
+    @Override
+    public void increaseDisLikes() {
+        dislike++;
+    }
 }

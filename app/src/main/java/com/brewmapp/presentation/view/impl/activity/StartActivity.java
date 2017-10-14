@@ -27,6 +27,7 @@ public class StartActivity extends BaseActivity implements StartView {
         setContentView(R.layout.activity_start);
     }
 
+
     @Override
     public void enableControls(boolean enabled, int code) {
 

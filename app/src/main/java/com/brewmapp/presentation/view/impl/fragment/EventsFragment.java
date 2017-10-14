@@ -1,19 +1,11 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -23,6 +15,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
@@ -110,10 +103,9 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     private void processAction(int action, Object payload) {
         switch (action) {
             case Actions.ACTION_LIKE_POST:
-                presenter.onLikePost(((Post) payload));
-                break;
+            case Actions.ACTION_LIKE_EVENT:
             case Actions.ACTION_LIKE_SALE:
-                presenter.onLikeSale(((Sale) payload));
+                presenter.onLike(((ILikeable) payload),this);
                 break;
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
@@ -123,11 +115,14 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 activeBox.setActive(payload);
                 startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
-            case Actions.ACTION_SALE_SHARE:
+            case Actions.ACTION_SHARE_SALE:
                 presenter.onShareSale(((Sale) payload));
                 break;
             case Actions.ACTION_SHARE_POST:
                 presenter.onSharePost(((Post) payload));
+                break;
+            case Actions.ACTION_SHARE_EVENT:
+                presenter.onShareEvent(((Event) payload));
                 break;
         }
     }

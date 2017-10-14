@@ -52,6 +52,11 @@ public class Post implements Postable, Serializable, ILikeable {
         like++;
     }
 
+    @Override
+    public void increaseDisLikes() {
+
+    }
+
     public Date getDelayedDate() {
         return delayedDate;
     }

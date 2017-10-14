@@ -1,16 +1,18 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by ovcst on 24.08.2017.
  */
 
-public class Event {
+public class Event implements Serializable, ILikeable {
     private int id;
     private String name, text;
 
@@ -142,4 +144,15 @@ public class Event {
     public int getInvited() {
         return invited;
     }
+
+    @Override
+    public void increaseLikes() {
+        like++;
+    }
+
+    @Override
+    public void increaseDisLikes() {
+        dislike++;
+    }
+
 }

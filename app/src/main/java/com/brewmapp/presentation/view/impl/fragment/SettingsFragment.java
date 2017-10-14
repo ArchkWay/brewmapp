@@ -25,6 +25,7 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         return R.layout.fragment_settings;
     }
 
+
     @Override
     public void enableControls(boolean enabled, int code) {
 

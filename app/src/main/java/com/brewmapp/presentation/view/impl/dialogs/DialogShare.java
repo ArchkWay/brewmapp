@@ -25,7 +25,7 @@ import ru.frosteye.ovsa.presentation.view.activity.OvsaActivity;
  */
 
 public class DialogShare extends AlertDialog.Builder {
-    public DialogShare(@NonNull Context context, String[] items, LivePresenter livePresenter,Object o) {
+    public DialogShare(@NonNull Context context, String[] items, EventsPresenter eventsPresenter,Object o) {
         super(context);
         final ArrayAdapter<String> arrayAdapter =
                 new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
@@ -52,12 +52,12 @@ public class DialogShare extends AlertDialog.Builder {
                     context.startActivity(intent);
                     break;
                 case 2:
-                    if (context instanceof OvsaActivity)
-                        ((OvsaActivity) context).showMessage(" разработке");
+//                    if (context instanceof OvsaActivity)
+//                        ((OvsaActivity) context).showMessage(" разработке");
+                    eventsPresenter.complaint(o);
                     break;
                 case 3:
-                    if(livePresenter instanceof EventsPresenter)
-                        ((EventsPresenter)livePresenter).onDeleteNewsTask((Post) o);
+                    eventsPresenter.onDeleteNewsTask((Post) o);
                     break;
             }
         });

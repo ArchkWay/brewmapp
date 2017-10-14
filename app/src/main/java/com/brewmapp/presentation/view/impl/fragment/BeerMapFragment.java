@@ -33,6 +33,7 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
         return R.layout.fragment_map;
     }
 
+
     @Override
     public void enableControls(boolean enabled, int code) {
 

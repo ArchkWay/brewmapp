@@ -6,4 +6,6 @@ package com.brewmapp.data.model;
 
 public interface ILikeable {
     void increaseLikes();
+
+    void increaseDisLikes();
 }

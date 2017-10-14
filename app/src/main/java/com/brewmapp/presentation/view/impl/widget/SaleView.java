@@ -1,22 +1,18 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Photo;
-import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
 import com.squareup.picasso.Picasso;
 
@@ -86,7 +82,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         likeCounter.setText(String.valueOf(model.getLike()));
         text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
         date.setText(DateTools.formatDottedDate(model.getDateStart()));
-        more.setOnClickListener(v->listener.onModelAction(Actions.ACTION_SALE_SHARE,model));
+        more.setOnClickListener(v->listener.onModelAction(Actions.ACTION_SHARE_SALE,model));
 
         if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
             Photo photo = model.getPhotos().get(0);

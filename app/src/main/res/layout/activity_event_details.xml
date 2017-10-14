@@ -20,14 +20,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_event_slider">
+                android:layout_height="@dimen/height_event_slider"
+                android:orientation="vertical"
+                >
 
                 <com.daimajia.slider.library.SliderLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/activity.eventDetails.slider">
+                    android:id="@+id/activity.eventDetails.slider"
+                    android:layout_weight="1"
+                    >
 
                     <com.daimajia.slider.library.Indicators.PagerIndicator
                         android:layout_width="wrap_content"
@@ -52,7 +56,7 @@
                         android:id="@+id/activity.eventDetails.photosCounter"
                         android:textColor="@color/colorWhite"/>
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,10 +87,11 @@
                         android:gravity="center_vertical">
 
                         <ImageView
+                            android:id="@+id/activity.eventDetails.like"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/height_event_details_like"
                             android:adjustViewBounds="true"
-                            android:src="@drawable/ic_like"/>
+                            android:src="@drawable/ic_like" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -97,10 +102,11 @@
                             android:textColor="@color/colorGreenButton"/>
 
                         <ImageView
+                            android:id="@+id/activity.eventDetails.dislike"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/height_event_details_like"
                             android:adjustViewBounds="true"
-                            android:src="@drawable/ic_dislike"/>
+                            android:src="@drawable/ic_dislike" />
 
                         <TextView
                             android:layout_width="wrap_content"

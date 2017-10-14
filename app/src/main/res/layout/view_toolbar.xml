@@ -15,7 +15,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/common.toolbar.dropdown"
         android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
 
         <TextView
             android:id="@+id/common.toolbar.title"
@@ -28,6 +30,8 @@
             android:id="@+id/common.toolbar.spinner"
             android:layout_width="wrap_content"
             android:layout_marginTop="-6dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            />
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

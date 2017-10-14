@@ -107,19 +107,13 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
 
     @Override
-    public void onShareSale(Sale payload) {
-        view.showShareDialog(R.array.share_items_sale,payload);
-    }
-
-    @Override
-    public void onSharePost(Post payload) {
-
-        if(userRepo.load().getId()==payload.getUser().getId())
+    public void onShare(ILikeable payload) {
+        if(payload instanceof Post && userRepo.load().getId()==((Post)payload).getUser().getId())
             view.showShareDialog(R.array.share_items_post,payload);
         else
             view.showShareDialog(R.array.share_items_sale,payload);
-
     }
+
 
     @Override
     public void storeTabActive(int position) {
@@ -137,16 +131,11 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
             @Override
             public void onNext(SingleResponse<Post> string) {
-                showMessage(getString(R.string.post_created));
-
+                showMessage(getString(R.string.post_deleted));
+                view.refreshState(post);
             }
 
         });
-    }
-
-    @Override
-    public void onShareEvent(Event payload) {
-        view.showShareDialog(R.array.share_items_sale,payload);
     }
 
     @Override

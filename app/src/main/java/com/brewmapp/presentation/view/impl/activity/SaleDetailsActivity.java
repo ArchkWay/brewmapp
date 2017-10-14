@@ -99,7 +99,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     }
 
     @Override
-    public void refreshState() {
+    public void refreshState(Object... objects) {
         like_counter.setText(String.valueOf(sale.getLike()));
     }
 }

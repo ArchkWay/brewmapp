@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 
@@ -25,7 +26,7 @@ import ru.frosteye.ovsa.presentation.view.activity.OvsaActivity;
  */
 
 public class DialogShare extends AlertDialog.Builder {
-    public DialogShare(@NonNull Context context, String[] items, EventsPresenter eventsPresenter,Object o) {
+    public DialogShare(@NonNull Context context, String[] items, EventsPresenter eventsPresenter,ILikeable iLikeable) {
         super(context);
         final ArrayAdapter<String> arrayAdapter =
                 new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
@@ -54,10 +55,10 @@ public class DialogShare extends AlertDialog.Builder {
                 case 2:
 //                    if (context instanceof OvsaActivity)
 //                        ((OvsaActivity) context).showMessage(" разработке");
-                    eventsPresenter.complaint(o);
+                    eventsPresenter.complaint(iLikeable);
                     break;
                 case 3:
-                    eventsPresenter.onDeleteNewsTask((Post) o);
+                    eventsPresenter.onDeleteNewsTask((Post) iLikeable);
                     break;
             }
         });

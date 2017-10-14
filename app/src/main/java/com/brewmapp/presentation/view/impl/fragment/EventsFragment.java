@@ -21,6 +21,7 @@ import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
@@ -105,7 +106,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
             case Actions.ACTION_LIKE_POST:
             case Actions.ACTION_LIKE_EVENT:
             case Actions.ACTION_LIKE_SALE:
-                presenter.onLike(((ILikeable) payload),this);
+                presenter.onLike((ILikeable)payload,this);
                 break;
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
@@ -115,14 +116,10 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 activeBox.setActive(payload);
                 startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
-            case Actions.ACTION_SHARE_SALE:
-                presenter.onShareSale(((Sale) payload));
-                break;
             case Actions.ACTION_SHARE_POST:
-                presenter.onSharePost(((Post) payload));
-                break;
+            case Actions.ACTION_SHARE_SALE:
             case Actions.ACTION_SHARE_EVENT:
-                presenter.onShareEvent(((Event) payload));
+                presenter.onShare((ILikeable)payload);
                 break;
         }
     }
@@ -170,8 +167,8 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     }
 
     @Override
-    public void showShareDialog(int resource_items,Object o) {
-        new DialogShare(getActivity(),getResources().getStringArray(resource_items),presenter,o);
+    public void showShareDialog(int resource_items,ILikeable iLikeable) {
+        new DialogShare(getActivity(),getResources().getStringArray(resource_items),presenter,iLikeable);
 
     }
 
@@ -196,7 +193,13 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     }
 
     @Override
-    public void refreshState() {
+    public void refreshState(Object... objects) {
+
+            if(objects.length>0&&objects[0] instanceof Post){
+                for(int i=0;i<adapter.getItemCount();i++) {
+
+                }
+            }
         adapter.notifyDataSetChanged();
     }
 

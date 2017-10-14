@@ -14,15 +14,11 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public interface EventsPresenter extends LivePresenter<EventsView> {
     void onLoadItems(LoadNewsPackage request);
 
-    void onShareSale(Sale payload);
-
-    void onSharePost(Post payload);
+    void onShare(ILikeable likeable);
 
     void storeTabActive(int position);
 
     void onDeleteNewsTask(Post post);
-
-    void onShareEvent(Event payload);
 
     void onLike(ILikeable likeable, RefreshableView refreshableView);
 

@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.model.ILikeable;
+
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -13,5 +15,5 @@ public interface EventsView extends BasicView, RefreshableView {
 
     void setTabActive(int i);
 
-    void showShareDialog(int resource_items, Object o);
+    void showShareDialog(int resource_items, ILikeable iLikeable);
 }

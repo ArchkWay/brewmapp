@@ -22,6 +22,7 @@ import com.brewmapp.presentation.presenter.contract.NewPostPresenter;
 import com.brewmapp.presentation.presenter.contract.NewPostSettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.presenter.contract.PickLocationPresenter;
+import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
@@ -48,6 +49,7 @@ import com.brewmapp.presentation.presenter.impl.NewPostPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.PostDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SaleDetailsPresenterImpl;
@@ -204,4 +206,10 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     SaleDetailsPresenter provideSaleDetailsPresenter(SaleDetailsPresenterImpl presenter) {
         return presenter;
     }
+
+    @Provides @PresenterScope
+    PostDetailsPresenter providePostDetailsPresenter(PostDetailsPresenterImpl presenter) {
+        return presenter;
+    }
+
 }

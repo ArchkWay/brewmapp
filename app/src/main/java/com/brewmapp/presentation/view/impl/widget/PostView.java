@@ -61,9 +61,9 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        like.setOnClickListener(v -> {
-            listener.onModelAction(Actions.ACTION_LIKE_POST, model);
-        });
+        like.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_LIKE_POST, model));
+        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+        text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
     }
 
     @Override

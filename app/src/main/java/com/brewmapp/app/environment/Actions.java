@@ -14,4 +14,5 @@ public class Actions {
     public static final int ACTION_SHARE_POST = 7;
     public static final int ACTION_SHARE_EVENT = 8;
     public static final int ACTION_LIKE_EVENT = 9;
+    public static final int ACTION_SELECT_POST = 10;
 }

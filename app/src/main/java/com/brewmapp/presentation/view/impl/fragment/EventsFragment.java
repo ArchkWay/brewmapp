@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,8 +34,11 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.contract.ResultTask;
+import com.brewmapp.presentation.view.contract.ShareDialog;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
+import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
@@ -116,10 +120,35 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 activeBox.setActive(payload);
                 startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
+            case Actions.ACTION_SELECT_POST:
+                activeBox.setActive(payload);
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), PostDetailsActivity.class));
+                break;
             case Actions.ACTION_SHARE_POST:
             case Actions.ACTION_SHARE_SALE:
             case Actions.ACTION_SHARE_EVENT:
-                presenter.onShare((ILikeable)payload);
+                presenter.onShare((ILikeable) payload, new ShareDialog() {
+                    @Override
+                    public void showShareDialog(int items, ILikeable iLikeable) {
+                        new DialogShare(getActivity(),getResources().getStringArray(items),iLikeable,this);
+                    }
+
+                    @Override
+                    public void onDelete() {
+                        presenter.onDeleteNewsTask((Post) payload, new ResultTask() {
+                            @Override
+                            public void onError(Throwable e) {
+                                showMessage(e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                refreshItems();
+                            }
+                        });
+
+                    }
+                });
                 break;
         }
     }
@@ -166,11 +195,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         tabsView.getTabs().getTabAt(i).select();
     }
 
-    @Override
-    public void showShareDialog(int resource_items,ILikeable iLikeable) {
-        new DialogShare(getActivity(),getResources().getStringArray(resource_items),presenter,iLikeable);
-
-    }
 
     private void setEmpty(boolean empty) {
         if(!empty) {
@@ -193,14 +217,10 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     }
 
     @Override
-    public void refreshState(Object... objects) {
+    public void refreshState() {
 
-            if(objects.length>0&&objects[0] instanceof Post){
-                for(int i=0;i<adapter.getItemCount();i++) {
-
-                }
-            }
         adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -237,12 +257,12 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.action_add:
-                startActivity(new Intent(getActivity(),NewPostActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(),NewPostActivity.class));
                 break;
         }
     }
 
-    private void refreshItems() {
+    public void refreshItems() {
         swipe.setRefreshing(true);
         list.removeOnScrollListener(scrollListener);
         adapter.clear();

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Sale;
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.view.contract.RefreshableView;
@@ -23,6 +24,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
 
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.contract.ShareDialog;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.squareup.picasso.Picasso;
 
@@ -55,7 +57,17 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @Override
     protected void initView() {
         enableBackButton();
-        sale_more.setOnClickListener((v)->new DialogShare(this,getResources().getStringArray(R.array.share_items_sale),eventsPresenter,sale));
+        sale_more.setOnClickListener((v)->eventsPresenter.onShare(sale, new ShareDialog() {
+            @Override
+            public void showShareDialog(int items, ILikeable iLikeable) {
+                new DialogShare(SaleDetailsActivity.this,getResources().getStringArray(R.array.share_items_sale),sale,this);
+            }
+
+            @Override
+            public void onDelete() {
+
+            }
+        }));
         like.setOnClickListener((v)->eventsPresenter.onLike(sale,this));
     }
 
@@ -99,7 +111,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     }
 
     @Override
-    public void refreshState(Object... objects) {
+    public void refreshState() {
         like_counter.setText(String.valueOf(sale.getLike()));
     }
 }

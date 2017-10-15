@@ -198,7 +198,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     }
 
     @Override
-    public void refreshState(Object... objects) {
+    public void refreshState() {
         postAdapter.notifyDataSetChanged();
     }
 }

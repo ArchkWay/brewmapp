@@ -114,7 +114,7 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
             case R.id.action_send:
                 post.setHashTag(hashTagHelper.getSingleHashTag(post.getText()));
                 highlightHashTag();
-                presenter.onPostReady(post);
+                presenter.onPostReady(post,null);
                 return true;
             case android.R.id.home:
                 processBack();

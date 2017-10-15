@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
+import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,6 +52,8 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
+
+    int REQUEST_CODE_REFRESH_ITEMS=0;
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.common_toolbar_spinner) Spinner toolbarSpinner;
@@ -183,6 +187,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
+    public void processStartActivityWithRefresh(Intent intent) {
+        startActivityForResult(intent,REQUEST_CODE_REFRESH_ITEMS);
+    }
+
+    @Override
     public void processSetActionBar(int position) {
         if(position==2)
             menuToShow=R.menu.search_add;
@@ -233,5 +242,17 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_REFRESH_ITEMS) {
+            if (resultCode == RESULT_OK) {
+                for (Fragment fragment : getSupportFragmentManager().getFragments())
+                    if (fragment instanceof EventsFragment)
+                        ((EventsFragment) fragment).refreshItems();
+            }
+        }
     }
 }

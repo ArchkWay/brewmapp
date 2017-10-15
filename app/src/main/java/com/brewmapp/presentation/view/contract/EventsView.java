@@ -7,7 +7,7 @@ import java.util.List;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
-public interface EventsView extends BasicView, RefreshableView {
+public interface EventsView extends BasicView, RefreshableView{
     int MODE_EVENTS = 0;
     int MODE_SALES = 1;
     int MODE_NEWS = 2;
@@ -15,5 +15,5 @@ public interface EventsView extends BasicView, RefreshableView {
 
     void setTabActive(int i);
 
-    void showShareDialog(int resource_items, ILikeable iLikeable);
+
 }

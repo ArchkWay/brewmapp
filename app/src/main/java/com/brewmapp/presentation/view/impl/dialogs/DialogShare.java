@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.dialogs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,9 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
+import com.brewmapp.presentation.view.contract.ShareDialog;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
@@ -26,7 +30,7 @@ import ru.frosteye.ovsa.presentation.view.activity.OvsaActivity;
  */
 
 public class DialogShare extends AlertDialog.Builder {
-    public DialogShare(@NonNull Context context, String[] items, EventsPresenter eventsPresenter,ILikeable iLikeable) {
+    public DialogShare(@NonNull Context context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
         super(context);
         final ArrayAdapter<String> arrayAdapter =
                 new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
@@ -42,9 +46,17 @@ public class DialogShare extends AlertDialog.Builder {
         setAdapter(arrayAdapter, (dialog, which) -> {
             switch (which) {
                 case 0:
+                    String text="";
+                    if(iLikeable instanceof Post)
+                        text=((Post)iLikeable).getText();
+                    else if(iLikeable instanceof Event)
+                        text=((Event)iLikeable).getText();
+                    else if(iLikeable instanceof Sale)
+                        text=((Sale)iLikeable).getText();
+
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, text);
                     sendIntent.setType("text/plain");
                     context.startActivity(sendIntent);
                     break;
@@ -53,12 +65,11 @@ public class DialogShare extends AlertDialog.Builder {
                     context.startActivity(intent);
                     break;
                 case 2:
-//                    if (context instanceof OvsaActivity)
-//                        ((OvsaActivity) context).showMessage(" разработке");
-                    eventsPresenter.complaint(iLikeable);
+                    //shareDialog.onComplaint();
                     break;
                 case 3:
-                    eventsPresenter.onDeleteNewsTask((Post) iLikeable);
+                    shareDialog.onDelete();
+
                     break;
             }
         });

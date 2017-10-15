@@ -116,7 +116,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     }
 
     @Override
-    public void refreshState(Object... objects) {
+    public void refreshState() {
         likes.setText(String.valueOf(event.getLike()));
         dislikes.setText(String.valueOf(event.getDislike()));
     }

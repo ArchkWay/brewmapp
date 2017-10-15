@@ -37,6 +37,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
     @BindView(R.id.view_sale_like_counter) TextView likeCounter;
     @BindView(R.id.view_sale_more) ImageView more;
     @BindView(R.id.view_sale_preview) ImageView preview;
+    @BindView(R.id.view_sale_container) View container;
 
     private Listener listener;
     private Sale model;
@@ -65,9 +66,10 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         like.setOnClickListener(v -> {
             listener.onModelAction(Actions.ACTION_LIKE_SALE, model);
         });
-        text.setOnClickListener(v -> {
-            listener.onModelAction(Actions.ACTION_SELECT_SALE, model);
-        });
+        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
+        text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
+        avatar.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
+        preview.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
     }
 
     @Override

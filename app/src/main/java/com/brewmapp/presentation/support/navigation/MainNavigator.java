@@ -72,4 +72,5 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
             fragmentToShow = null;
         }
     }
+
 }

@@ -5,5 +5,5 @@ package com.brewmapp.presentation.view.contract;
  */
 
 public interface RefreshableView {
-    void refreshState(Object... objects);
+    void refreshState();
 }

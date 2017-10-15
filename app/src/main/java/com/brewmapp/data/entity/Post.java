@@ -140,6 +140,10 @@ public class Post implements Postable, Serializable, ILikeable {
                 || photoIds.size() > 0;
     }
 
+    public int getLike() {
+        return like;
+    }
+
     @Override
     public WrapperParams createParams() {
         WrapperParams params = new WrapperParams(Wrappers.NEWS);

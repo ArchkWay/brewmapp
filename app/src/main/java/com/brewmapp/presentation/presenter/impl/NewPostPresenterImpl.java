@@ -16,6 +16,7 @@ import com.brewmapp.presentation.view.contract.NewPostView;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.NewPostPresenter;
+import com.brewmapp.presentation.view.contract.ResultTask;
 
 public class NewPostPresenterImpl extends BasePresenter<NewPostView> implements NewPostPresenter {
 
@@ -56,19 +57,23 @@ public class NewPostPresenterImpl extends BasePresenter<NewPostView> implements 
     }
 
     @Override
-    public void onPostReady(Post post) {
+    public void onPostReady(Post post, ResultTask resultTask) {
         enableControls(false);
         createPostTask.execute(post, new SimpleSubscriber<SingleResponse<Post>>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);
                 showMessage(e.getMessage());
+                if(resultTask!=null)
+                    resultTask.onError(e);
             }
 
             @Override
             public void onNext(SingleResponse<Post> postSingleResponse) {
                 enableControls(true);
                 view.complete();
+                if(resultTask!=null)
+                    resultTask.onComplete();
             }
         });
     }

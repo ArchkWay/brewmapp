@@ -40,6 +40,8 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.RefreshableView;
+import com.brewmapp.presentation.view.contract.ResultTask;
+import com.brewmapp.presentation.view.contract.ShareDialog;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
@@ -107,11 +109,11 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
 
     @Override
-    public void onShare(ILikeable payload) {
+    public void onShare(ILikeable payload, ShareDialog shareDialog) {
         if(payload instanceof Post && userRepo.load().getId()==((Post)payload).getUser().getId())
-            view.showShareDialog(R.array.share_items_post,payload);
+            shareDialog.showShareDialog(R.array.share_items_post,payload);
         else
-            view.showShareDialog(R.array.share_items_sale,payload);
+            shareDialog.showShareDialog(R.array.share_items_sale,payload);
     }
 
 
@@ -121,20 +123,18 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     }
 
     @Override
-    public void onDeleteNewsTask(Post post) {
+    public void onDeleteNewsTask(Post post, ResultTask resultTask) {
         deleteNewsTask.execute(post,new SimpleSubscriber<SingleResponse<Post>>(){
             @Override
             public void onError(Throwable e) {
 
-                showMessage(e.getMessage());
+                resultTask.onError(e);
             }
 
             @Override
             public void onNext(SingleResponse<Post> string) {
-                showMessage(getString(R.string.post_deleted));
-                view.refreshState(post);
+                resultTask.onComplete();
             }
-
         });
     }
 

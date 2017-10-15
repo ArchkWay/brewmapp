@@ -1,9 +1,7 @@
 package com.brewmapp.execution.task;
 
-import android.support.annotation.NonNull;
 
 import com.brewmapp.R;
-import com.brewmapp.data.db.contract.PostsRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.pojo.LoadNewsPackage;
@@ -12,7 +10,6 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
-import com.brewmapp.execution.task.base.LoaderTask;
 import com.brewmapp.presentation.view.contract.EventsView;
 
 import java.text.SimpleDateFormat;
@@ -24,10 +21,6 @@ import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import retrofit2.Call;
-import ru.frosteye.ovsa.data.storage.Repo;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 

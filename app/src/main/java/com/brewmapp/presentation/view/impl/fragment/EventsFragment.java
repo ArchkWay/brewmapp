@@ -36,6 +36,7 @@ import ru.frosteye.ovsa.tool.DateTools;
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.contract.ResultTask;
 import com.brewmapp.presentation.view.contract.ShareDialog;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
@@ -130,7 +131,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 presenter.onShare((ILikeable) payload, new ShareDialog() {
                     @Override
                     public void showShareDialog(int items, ILikeable iLikeable) {
-                        new DialogShare(getActivity(),getResources().getStringArray(items),iLikeable,this);
+                        new DialogShare((BaseActivity) getActivity(),getResources().getStringArray(items),iLikeable,this);
                     }
 
                     @Override

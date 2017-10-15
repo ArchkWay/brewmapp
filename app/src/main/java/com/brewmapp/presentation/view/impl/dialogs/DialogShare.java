@@ -13,13 +13,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.brewmapp.app.di.module.PresenterModule;
+import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
+import com.brewmapp.execution.task.LoadComplaint;
+import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.ShareDialog;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
+
+import javax.inject.Inject;
 
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -30,8 +37,13 @@ import ru.frosteye.ovsa.presentation.view.activity.OvsaActivity;
  */
 
 public class DialogShare extends AlertDialog.Builder {
-    public DialogShare(@NonNull Context context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
+
+    @Inject    LoadComplaint loadComplaint;
+
+    public DialogShare(@NonNull BaseActivity context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
         super(context);
+
+        BeerMap.getAppComponent().plus(new PresenterModule(context)).inject(this);
         final ArrayAdapter<String> arrayAdapter =
                 new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
                     @NonNull

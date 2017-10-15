@@ -2,6 +2,7 @@ package com.brewmapp.app.di.component;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
+import com.brewmapp.presentation.view.contract.ShareDialog;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
@@ -26,6 +27,7 @@ import com.brewmapp.presentation.view.impl.activity.PickLocationActivity;
 import com.brewmapp.presentation.view.impl.activity.RegisterActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 import dagger.Subcomponent;
@@ -72,4 +74,5 @@ public interface PresenterComponent {
     void inject(UniversalMapActivity activity);
     void inject(SaleDetailsActivity activity);
     void inject(PostDetailsActivity activity);
+    void inject(DialogShare dialogShare);
 }

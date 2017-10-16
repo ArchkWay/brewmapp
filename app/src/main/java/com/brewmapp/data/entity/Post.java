@@ -33,6 +33,24 @@ public class Post implements Postable, Serializable, ILikeable {
     private String hashTag;
     private List<Integer> photoIds = new ArrayList<>();
     private List<UploadPhotoResponse> filesToUpload = new ArrayList<>();
+    private String repost_model;
+    private String repost_id;
+
+    public String getRepost_model() {
+        return repost_model;
+    }
+
+    public void setRepost_model(String repost_model) {
+        this.repost_model = repost_model;
+    }
+
+    public String getRepost_id() {
+        return repost_id;
+    }
+
+    public void setRepost_id(String repost_id) {
+        this.repost_id = repost_id;
+    }
 
     @SerializedName(Keys.DATE_NEWS)
     private Date date;
@@ -150,6 +168,12 @@ public class Post implements Postable, Serializable, ILikeable {
         params.addParam(Keys.RELATED_MODEL, Keys.CAP_USER);
         params.addParam(Keys.TEXT, text);
         params.addParam(Keys.NAME, name);
+
+        if(repost_id!=null&repost_model!=null) {
+            params.addParam(Keys.REPOST_ID,repost_id);
+            params.addParam(Keys.REPOST_MODEL,repost_model);
+        }
+
         if(lat != 0) {
             params.addParam(Keys.LAT, lat);
             params.addParam(Keys.LAT, lon);

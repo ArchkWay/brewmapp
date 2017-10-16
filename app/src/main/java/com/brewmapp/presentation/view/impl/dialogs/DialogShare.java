@@ -158,7 +158,10 @@ public class DialogShare extends AlertDialog.Builder {
 
     private void selectRepost(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
         Intent intent = new Intent(context, NewPostActivity.class);
-        context.startActivity(intent);
+        if(iLikeable instanceof Post) {
+            intent.putExtra(context.getString(R.string.key_intent_serializable), (Post) iLikeable);
+            context.startActivity(intent);
+        }
     }
 
     private void selectSend(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {

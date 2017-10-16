@@ -4,9 +4,12 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import com.brewmapp.R;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.wrapper.PhotoPreviewInfo;
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.NewPhotoPackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.CreatePostTask;
@@ -57,7 +60,15 @@ public class NewPostPresenterImpl extends BasePresenter<NewPostView> implements 
     }
 
     @Override
-    public void onPostReady(Post post, ResultTask resultTask) {
+    public void onPostReady(Post post, ResultTask resultTask, ILikeable iLikeable) {
+
+        if(iLikeable!=null)
+            if(iLikeable instanceof Post) {
+                post.setRepost_id(((Post) iLikeable).getRepost_id());
+                post.setRepost_model(Keys.CAP_NEWS);
+            }
+
+
         enableControls(false);
         createPostTask.execute(post, new SimpleSubscriber<SingleResponse<Post>>() {
             @Override

@@ -208,6 +208,7 @@
     <string name="add_photo_description">Добавьте подпись</string>
     <string name="subscribes_count">подписок</string>
     <string name="claim_recieve">Ваша жалоба принята. Спасибо.</string>
+    <string name="key_intent_serializable">key_intent_serializable</string>
     <string-array name="post_options">
         <item>Поделиться</item>
         <item>Репост</item>

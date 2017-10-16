@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.tool.HashTagHelper;
@@ -114,7 +115,7 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
             case R.id.action_send:
                 post.setHashTag(hashTagHelper.getSingleHashTag(post.getText()));
                 highlightHashTag();
-                presenter.onPostReady(post,null);
+                presenter.onPostReady(post,null,(ILikeable)getIntent().getSerializableExtra(getString(R.string.key_intent_serializable)));
                 return true;
             case android.R.id.home:
                 processBack();

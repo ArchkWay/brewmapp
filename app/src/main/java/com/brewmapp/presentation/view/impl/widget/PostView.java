@@ -102,9 +102,10 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                     repost_photo.setLayoutParams(params);
                 }
             });
-            repost_name.setText(model.getRepost().getUser_resto_admin()==null?model.getRepost().getUser_info().getFormattedName():model.getRepost().getUser_resto_admin().getName());
+            //repost_name.setText(model.getRepost().getUser_resto_admin()==null?model.getRepost().getUser_info().getFormattedName():model.getRepost().getUser_resto_admin().getName());
+            repost_name.setText(model.getRepost().getUser_info()==null?"":model.getRepost().getUser_info().getFormattedName());
             repost_text.setText(new StringBuilder()
-                    .append(model.getRepost().getShort_text()==null?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
+                    .append((model.getRepost().getShort_text()==null||model.getRepost().getShort_text().equals(""))?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
                     .toString()
             );
         }

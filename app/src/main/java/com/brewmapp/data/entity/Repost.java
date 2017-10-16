@@ -15,7 +15,8 @@ public class Repost {
     private String short_text;
     private String text;
     private User user_info;
-    private Resto user_resto_admin;
+
+    //private Resto user_resto_admin;
     private List<Photo> photo;
 
     public List<Photo> getPhoto() {
@@ -26,13 +27,13 @@ public class Repost {
         this.photo = photo;
     }
 
-    public Resto getUser_resto_admin() {
-        return user_resto_admin;
-    }
-
-    public void setUser_resto_admin(Resto user_resto_admin) {
-        this.user_resto_admin = user_resto_admin;
-    }
+//    public Resto getUser_resto_admin() {
+//        return user_resto_admin;
+//    }
+//
+//    public void setUser_resto_admin(Resto user_resto_admin) {
+//        this.user_resto_admin = user_resto_admin;
+//    }
 
     public User getUser_info() {
         return user_info;

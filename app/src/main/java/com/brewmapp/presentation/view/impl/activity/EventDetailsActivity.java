@@ -35,6 +35,7 @@ import ru.frosteye.ovsa.tool.UITools;
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
+import com.brewmapp.utils.Cons;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -211,4 +212,20 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     private void share() {
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK){
+                    setResult(RESULT_OK);
+                    finish();
+                }
+                break;
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
 }

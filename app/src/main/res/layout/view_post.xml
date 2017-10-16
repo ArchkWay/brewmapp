@@ -74,7 +74,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Автор репоста"
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph.Italic"

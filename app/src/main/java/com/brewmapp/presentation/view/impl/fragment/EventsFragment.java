@@ -111,11 +111,11 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 break;
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
-                startActivity(new Intent(getActivity(), EventDetailsActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), EventDetailsActivity.class));
                 break;
             case Actions.ACTION_SELECT_SALE:
                 activeBox.setActive(payload);
-                startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
             case Actions.ACTION_SELECT_POST:
                 activeBox.setActive(payload);

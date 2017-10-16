@@ -2,6 +2,7 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
+import com.brewmapp.utils.Cons;
 
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView, RefreshableView {
     @BindView(R.id.activity_sale_details_avatar)    ImageView avatar;
@@ -101,4 +103,20 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     public void refreshState() {
         like_counter.setText(String.valueOf(sale.getLike()));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK){
+                    setResult(RESULT_OK);
+                    finish();
+                }
+                break;
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
 }

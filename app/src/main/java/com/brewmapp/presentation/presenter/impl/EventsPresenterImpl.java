@@ -104,9 +104,9 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         if(iLikeable instanceof Event)
             likeDislikePackage.setModel(Keys.CAP_EVENT, ((Event)iLikeable).getId());
         else if (iLikeable instanceof Sale)
-            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Sale)iLikeable).getId());
+            likeDislikePackage.setModel(Keys.CAP_SHARE, ((Sale)iLikeable).getId());
         else if (iLikeable instanceof Post)
-            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Post)iLikeable).getId());
+            likeDislikePackage.setModel(Keys.CAP_NEWS, ((Post)iLikeable).getId());
 
         likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
     }

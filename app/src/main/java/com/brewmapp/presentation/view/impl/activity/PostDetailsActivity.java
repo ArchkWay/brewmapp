@@ -110,9 +110,10 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
                     Picasso.with(PostDetailsActivity.this).load(photos.get(0).getUrl()).fit().centerCrop().into(repost_photo);
                 });
 
-            repost_name.setText(post.getRepost().getUser_resto_admin()==null?post.getRepost().getUser_info().getFormattedName():post.getRepost().getUser_resto_admin().getName());
+            //repost_name.setText(post.getRepost().getUser_resto_admin()==null?post.getRepost().getUser_info().getFormattedName():post.getRepost().getUser_resto_admin().getName());
+            repost_name.setText(post.getRepost().getUser_info()==null?"":post.getRepost().getUser_info().getFormattedName());
             repost_text.setText(new StringBuilder()
-                    .append(post.getRepost().getShort_text()==null?Html.fromHtml(String.valueOf(post.getRepost().getText())):post.getRepost().getShort_text())
+                    .append((post.getRepost().getShort_text()==null||post.getRepost().getShort_text().equals(""))?Html.fromHtml(String.valueOf(post.getRepost().getText())):post.getRepost().getShort_text())
                     .toString()
             );
         }

@@ -74,10 +74,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Репост:"
+            android:text="Автор репоста"
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph.Italic"
+            android:id="@+id/view.post.container.repost.name"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -85,9 +86,17 @@
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph"
-            android:layout_marginBottom="@dimen/common_block_space_double"
             android:text="shot text репоста"
-            android:id="@+id/view.post.container.repost.name"
+            android:id="@+id/view.post.container.repost.text"
+            />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/view.post.container.repost.photo"
+            android:layout_marginBottom="@dimen/common_block_space_double"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
             />
     </LinearLayout>
     <RelativeLayout

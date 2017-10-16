@@ -50,10 +50,12 @@ import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
+import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
+
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
 
-    int REQUEST_CODE_REFRESH_ITEMS=0;
+
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.common_toolbar_spinner) Spinner toolbarSpinner;

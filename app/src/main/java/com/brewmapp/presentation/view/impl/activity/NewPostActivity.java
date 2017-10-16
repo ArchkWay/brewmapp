@@ -21,6 +21,7 @@ import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.tool.HashTagHelper;
+import com.brewmapp.presentation.view.contract.ResultTask;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import java.io.File;
@@ -121,7 +122,18 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
                 highlightHashTag();
                 post.setRepost_id(getIntent().getStringExtra(getString(R.string.key_repost_id)));
                 post.setRepost_model(getIntent().getStringExtra(getString(R.string.key_repost_model)));
-                presenter.onPostReady(post, null);
+                presenter.onPostReady(post, new ResultTask() {
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
                 return false;
             case android.R.id.home:
                 processBack();
@@ -277,4 +289,6 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
         invalidateOptionsMenu();
         if(adapter.getItemCount() == 0) photos.setVisibility(View.GONE);
     }
+
+
 }

@@ -373,15 +373,6 @@ public class User {
         this.thumbnail = thumbnail;
     }
 
-    public String getFullName(){
-        return new StringBuilder()
-                .append(getFirstname())
-                .append(" ")
-                .append(getLastname())
-                .toString()
-                ;
-    }
-
     public static class Counts {
         @SerializedName(Keys.CAP_NEWS)
         private int news;

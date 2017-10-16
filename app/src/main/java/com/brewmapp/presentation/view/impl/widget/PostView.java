@@ -16,8 +16,11 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
@@ -39,6 +42,8 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @BindView(R.id.view_post_container) View container;
     @BindView(R.id.view_post_container_repost)    LinearLayout repost;
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
+    @BindView(R.id.view_post_container_repost_text)    TextView repost_text;
+    @BindView(R.id.view_post_container_repost_photo)    ImageView repost_photo;
 
     private Listener listener;
     private Post model;
@@ -67,6 +72,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         like.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_LIKE_POST, model));
         container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+        repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
     }
 
     @Override
@@ -77,14 +83,27 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @Override
     public void setModel(Post model) {
         this.model = model;
-        if(model.getRepost_id()==null)
+        if(model.getRepost()==null)
             repost.setVisibility(GONE);
         else {
             repost.setVisibility(VISIBLE);
-
-            repost_name.setText(new StringBuilder()
-                    .append(model.getRepost().getName())
-                    .append("\n")
+            repost_photo.post(() -> {
+                List<Photo> photos = model.getRepost().getPhoto();
+                if (photos != null && photos.size() > 0 && photos.get(0).getUrlPreview() != null) {
+                    float ratio = (float) photos.get(0).getSize().getWidth() / photos.get(0).getSize().getHeight();
+                    LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
+                    params.height = (int) (repost_photo.getMeasuredWidth() / ratio);
+                    repost_photo.setLayoutParams(params);
+                    Picasso.with(getContext()).load(photos.get(0).getUrl()).fit().centerCrop().into(repost_photo);
+                } else {
+                    repost_photo.setImageDrawable(null);
+                    LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
+                    params.height = params.width = 0;
+                    repost_photo.setLayoutParams(params);
+                }
+            });
+            repost_name.setText(model.getRepost().getUser_resto_admin()==null?model.getRepost().getUser_info().getFormattedName():model.getRepost().getUser_resto_admin().getName());
+            repost_text.setText(new StringBuilder()
                     .append(model.getRepost().getShort_text()==null?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
                     .toString()
             );

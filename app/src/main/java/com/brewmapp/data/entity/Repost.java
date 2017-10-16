@@ -1,17 +1,48 @@
 package com.brewmapp.data.entity;
 
+import java.util.List;
+
 /**
  * Created by xpusher on 10/16/2017.
  */
 
 public class Repost {
-    public String id;
-    public String related_model;
-    public String related_id;
-    public String name;
-    public String user_getThumb;
-    public String short_text;
-    public String text;
+    private String id;
+    private String related_model;
+    private String related_id;
+    private String name;
+    private String user_getThumb;
+    private String short_text;
+    private String text;
+    private User user_info;
+    private Resto user_resto_admin;
+    private List<Photo> photo;
+
+    public List<Photo> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(List<Photo> photo) {
+        this.photo = photo;
+    }
+
+    public Resto getUser_resto_admin() {
+        return user_resto_admin;
+    }
+
+    public void setUser_resto_admin(Resto user_resto_admin) {
+        this.user_resto_admin = user_resto_admin;
+    }
+
+    public User getUser_info() {
+        return user_info;
+    }
+
+    public void setUser_info(User user_info) {
+        this.user_info = user_info;
+    }
+
+
 
     public String getText() {
         return text;

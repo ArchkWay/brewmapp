@@ -63,15 +63,17 @@
                         android:text="Username"
                         style="@style/AppTheme.Text.Georgia.BoldItalic"
                         />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        android:id="@+id/activity.post.details.date"
+                        android:textColor="@color/colorProfileCounter"
+                        android:textSize="@dimen/text_size_common" />
 
                 </LinearLayout>
 
             </LinearLayout>
-            <ru.frosteye.ovsa.presentation.view.widget.Line
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/common_block_space"
-                android:layout_marginTop="@dimen/common_block_space"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,6 +90,47 @@
                     style="@style/AppTheme.Paragraph"
                     />
             </LinearLayout>
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/common_block_space"
+                android:layout_marginTop="@dimen/common_block_space"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view.post.container.repost"
+                android:orientation="vertical"
+
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Автор репоста"
+                    android:layout_marginRight="@dimen/common_block_space_double_semi"
+                    android:layout_marginLeft="@dimen/common_block_space_double_semi"
+                    style="@style/AppTheme.Paragraph.Italic"
+                    android:id="@+id/view.post.container.repost.name"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/common_block_space_double_semi"
+                    android:layout_marginLeft="@dimen/common_block_space_double_semi"
+                    style="@style/AppTheme.Paragraph"
+                    android:text="shot text репоста"
+                    android:id="@+id/view.post.container.repost.text"
+                    />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/view.post.container.repost.photo"
+                    android:layout_marginBottom="@dimen/common_block_space_double"
+                    android:layout_marginRight="@dimen/common_block_space_double_semi"
+                    android:layout_marginLeft="@dimen/common_block_space_double_semi"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -95,7 +138,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/common_block_space">
+        android:layout_marginBottom="@dimen/common_block_space"
+        android:layout_marginTop="@dimen/common_block_space"
+        >
 
         <ImageView
             android:layout_width="wrap_content"

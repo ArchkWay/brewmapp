@@ -29,6 +29,7 @@ import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
+import com.brewmapp.utils.Cons;
 
 import javax.inject.Inject;
 
@@ -161,9 +162,7 @@ public class DialogShare extends AlertDialog.Builder {
 
     private void selectRepost(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
         Intent intent = new Intent(context, NewPostActivity.class);
-        String[] strings=new String[2];
         if(iLikeable instanceof Post) {
-
             intent.putExtra(context.getString(R.string.key_repost_id), String.valueOf(((Post)iLikeable).getId()));
             intent.putExtra(context.getString(R.string.key_repost_model),Keys.CAP_NEWS);
         }else if( iLikeable instanceof Sale ) {
@@ -176,7 +175,7 @@ public class DialogShare extends AlertDialog.Builder {
         if(context instanceof MainActivity)
             ((MainActivity)context).processStartActivityWithRefresh(intent);
         else
-            context.startActivity(intent);
+            context.startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
     }
 
     private void selectSend(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {

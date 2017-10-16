@@ -1,11 +1,15 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Intent;
+
 import java.io.File;
 
 import javax.inject.Inject;
 
 import com.brewmapp.R;
+import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.entity.wrapper.PhotoPreviewInfo;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.NewPhotoPackage;
@@ -60,13 +64,8 @@ public class NewPostPresenterImpl extends BasePresenter<NewPostView> implements 
     }
 
     @Override
-    public void onPostReady(Post post, ResultTask resultTask, ILikeable iLikeable) {
+    public void onPostReady(Post post, ResultTask resultTask) {
 
-        if(iLikeable!=null)
-            if(iLikeable instanceof Post) {
-                post.setRepost_id(((Post) iLikeable).getRepost_id());
-                post.setRepost_model(Keys.CAP_NEWS);
-            }
 
 
         enableControls(false);

@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -36,6 +37,8 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @BindView(R.id.view_post_like_counter) TextView likeCounter;
     @BindView(R.id.view_post_more) ImageView more;
     @BindView(R.id.view_post_container) View container;
+    @BindView(R.id.view_post_container_repost)    LinearLayout repost;
+    @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
 
     private Listener listener;
     private Post model;
@@ -74,6 +77,19 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @Override
     public void setModel(Post model) {
         this.model = model;
+        if(model.getRepost_id()==null)
+            repost.setVisibility(GONE);
+        else {
+            repost.setVisibility(VISIBLE);
+
+            repost_name.setText(new StringBuilder()
+                    .append(model.getRepost().getName())
+                    .append("\n")
+                    .append(model.getRepost().getShort_text()==null?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
+                    .toString()
+            );
+        }
+
         author.setText(model.getUser().getFormattedName());
         likeCounter.setText(String.valueOf(model.getLikes()));
         text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);

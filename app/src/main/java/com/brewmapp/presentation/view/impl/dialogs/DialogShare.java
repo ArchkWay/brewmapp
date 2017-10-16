@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,12 @@ import com.brewmapp.execution.task.DeleteNewsTask;
 import com.brewmapp.execution.task.LoadClaimTypesTask;
 import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 
 import javax.inject.Inject;
 
+import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.view.IPrompt;
 import ru.frosteye.ovsa.presentation.view.SimplePrompt;
@@ -45,7 +48,7 @@ public class DialogShare extends AlertDialog.Builder {
     @Inject    ClaimTask claimTask;
     @Inject    UserRepo userRepo;
     @Inject    DeleteNewsTask deleteNewsTask;
-
+    @Inject    ActiveBox activeBox;
     public DialogShare(@NonNull BaseActivity context, ILikeable iLikeable, ResultDialog resultDialog) {
         super(context);
 
@@ -158,10 +161,22 @@ public class DialogShare extends AlertDialog.Builder {
 
     private void selectRepost(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
         Intent intent = new Intent(context, NewPostActivity.class);
+        String[] strings=new String[2];
         if(iLikeable instanceof Post) {
-            intent.putExtra(context.getString(R.string.key_intent_serializable), (Post) iLikeable);
-            context.startActivity(intent);
+
+            intent.putExtra(context.getString(R.string.key_repost_id), String.valueOf(((Post)iLikeable).getId()));
+            intent.putExtra(context.getString(R.string.key_repost_model),Keys.CAP_NEWS);
+        }else if( iLikeable instanceof Sale ) {
+            intent.putExtra(context.getString(R.string.key_repost_id),String.valueOf(((Sale)iLikeable).getId()));
+            intent.putExtra(context.getString(R.string.key_repost_model),Keys.CAP_SHARE);
+        }else if( iLikeable instanceof Event ) {
+            intent.putExtra(context.getString(R.string.key_repost_id),String.valueOf(((Event)iLikeable).getId()));
+            intent.putExtra(context.getString(R.string.key_repost_model),Keys.CAP_EVENT);
         }
+        if(context instanceof MainActivity)
+            ((MainActivity)context).processStartActivityWithRefresh(intent);
+        else
+            context.startActivity(intent);
     }
 
     private void selectSend(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {

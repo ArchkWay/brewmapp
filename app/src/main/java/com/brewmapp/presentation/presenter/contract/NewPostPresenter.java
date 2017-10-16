@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.content.Intent;
+
 import java.io.File;
 
 import com.brewmapp.data.entity.Post;
@@ -11,5 +13,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface NewPostPresenter extends LivePresenter<NewPostView> {
     void onUploadPhotoRequest(File file);
-    void onPostReady(Post post, ResultTask resultTask, ILikeable repost);
+    void onPostReady(Post post, ResultTask resultTask);
 }

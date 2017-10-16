@@ -62,9 +62,34 @@
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph"
-            android:layout_marginBottom="@dimen/common_block_space_double" />
+            android:layout_marginBottom="@dimen/common_block_space_double"
+            />
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view.post.container.repost"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Репост:"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+            style="@style/AppTheme.Paragraph.Italic"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+            style="@style/AppTheme.Paragraph"
+            android:layout_marginBottom="@dimen/common_block_space_double"
+            android:text="shot text репоста"
+            android:id="@+id/view.post.container.repost.name"
+            />
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,6 +152,7 @@
         </LinearLayout>
 
     </RelativeLayout>
+
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
         android:layout_height="1dp"

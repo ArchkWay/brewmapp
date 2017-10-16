@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
@@ -41,6 +43,8 @@ import com.brewmapp.data.entity.wrapper.PhotoPreviewInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.NewPostPresenter;
 import com.brewmapp.presentation.view.contract.NewPostView;
+
+import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 import com.twitter.Extractor;
@@ -63,7 +67,7 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
 
     @Inject NewPostPresenter presenter;
     @Inject HashTagHelper hashTagHelper;
-
+    @Inject ActiveBox activeBox;
     private FlexibleAdapter<PhotoPreviewInfo> adapter;
     private Post post = new Post();
     private boolean inputChangeLocked = false;
@@ -115,8 +119,10 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
             case R.id.action_send:
                 post.setHashTag(hashTagHelper.getSingleHashTag(post.getText()));
                 highlightHashTag();
-                presenter.onPostReady(post,null,(ILikeable)getIntent().getSerializableExtra(getString(R.string.key_intent_serializable)));
-                return true;
+                post.setRepost_id(getIntent().getStringExtra(getString(R.string.key_repost_id)));
+                post.setRepost_model(getIntent().getStringExtra(getString(R.string.key_repost_model)));
+                presenter.onPostReady(post, null);
+                return false;
             case android.R.id.home:
                 processBack();
                 return true;

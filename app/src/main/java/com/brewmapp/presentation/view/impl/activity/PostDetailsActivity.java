@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.view.impl.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -17,7 +16,7 @@ import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.view.contract.PostDetailsView;
 import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.contract.ResultTask;
-import com.brewmapp.presentation.view.contract.ShareDialog;
+import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 
 import javax.inject.Inject;
@@ -82,29 +81,7 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
         title.setText(post.getName());
         text.setText(post.getText() != null ? Html.fromHtml(post.getText()) : null);
         like.setOnClickListener((v)->eventsPresenter.onLike(post,this));
-        more.setOnClickListener((v)->eventsPresenter.onShare(post, new ShareDialog() {
-            @Override
-            public void showShareDialog(int items, ILikeable iLikeable) {
-                new DialogShare(PostDetailsActivity.this,getResources().getStringArray(items),iLikeable,this);
-            }
-
-            @Override
-            public void onDelete() {
-                eventsPresenter.onDeleteNewsTask(post, new ResultTask() {
-                    @Override
-                    public void onError(Throwable e) {
-                        showMessage(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                });
-
-            }
-        }));
+        more.setOnClickListener((v)->new DialogShare(PostDetailsActivity.this, post, () -> {setResult(RESULT_OK); finish();}));
     }
 
     @Override

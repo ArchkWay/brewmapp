@@ -13,16 +13,18 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
+import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.ClaimPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.ClaimTask;
 import com.brewmapp.execution.task.DeleteNewsTask;
 import com.brewmapp.execution.task.LoadClaimTypesTask;
-import com.brewmapp.presentation.view.contract.ShareDialog;
+import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 
@@ -41,12 +43,20 @@ public class DialogShare extends AlertDialog.Builder {
 
     @Inject    LoadClaimTypesTask loadClaimTypesTask;
     @Inject    ClaimTask claimTask;
+    @Inject    UserRepo userRepo;
+    @Inject    DeleteNewsTask deleteNewsTask;
 
-
-    public DialogShare(@NonNull BaseActivity context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
+    public DialogShare(@NonNull BaseActivity context, ILikeable iLikeable, ResultDialog resultDialog) {
         super(context);
 
         BeerMap.getAppComponent().plus(new PresenterModule(context)).inject(this);
+
+        String[] items;
+        if(iLikeable instanceof Post && userRepo.load().getId()==((Post)iLikeable).getUser().getId())
+            items=context.getResources().getStringArray(R.array.share_items_post);
+        else
+            items=context.getResources().getStringArray(R.array.share_items_sale);
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
                     @NonNull
                     @Override
@@ -60,27 +70,40 @@ public class DialogShare extends AlertDialog.Builder {
         setAdapter(arrayAdapter, (dialog, which) -> {
             switch (which) {
                 case 0:
-                    selectSend(context,items,iLikeable,shareDialog);
+                    selectSend(context,items,iLikeable, resultDialog);
                     break;
                 case 1:
-                    selectRepost(context,items,iLikeable,shareDialog);
+                    selectRepost(context,items,iLikeable, resultDialog);
                     break;
                 case 2:
-                    selectClaim(context,items,iLikeable,shareDialog);
+                    selectClaim(context,items,iLikeable, resultDialog);
                     break;
                 case 3:
-                    selectDelete(context,items,iLikeable,shareDialog);
+                    selectDelete(context,items,iLikeable, resultDialog);
                     break;
             }
         });
         show();
     }
 
-    private void selectDelete(BaseActivity context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
-        shareDialog.onDelete();
+    private void selectDelete(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
+
+        deleteNewsTask.execute((Post) iLikeable,new SimpleSubscriber<SingleResponse<Post>>(){
+            @Override
+            public void onError(Throwable e) {
+                context.showMessage(e.getMessage());;
+
+            }
+
+            @Override
+            public void onNext(SingleResponse<Post> string) {
+                resultDialog.onDelete();
+            }
+        });
+
     }
 
-    private void selectClaim(BaseActivity context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
+    private void selectClaim(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
         loadClaimTypesTask.execute(null, new SimpleSubscriber<String[]>() {
             @Override
             public void onError(Throwable e) {
@@ -133,12 +156,12 @@ public class DialogShare extends AlertDialog.Builder {
 
     }
 
-    private void selectRepost(BaseActivity context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
+    private void selectRepost(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
         Intent intent = new Intent(context, NewPostActivity.class);
         context.startActivity(intent);
     }
 
-    private void selectSend(BaseActivity context, String[] items, ILikeable iLikeable, ShareDialog shareDialog) {
+    private void selectSend(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {
         String text="";
         if(iLikeable instanceof Post)
             text=((Post)iLikeable).getText();

@@ -1,20 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
 import javax.inject.Inject;
 
-import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Event;
@@ -36,14 +23,10 @@ import com.brewmapp.presentation.view.contract.EventsView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
-import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.contract.ResultTask;
-import com.brewmapp.presentation.view.contract.ShareDialog;
-import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
-import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
 import java.util.List;
 
@@ -108,35 +91,12 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     }
 
 
-    @Override
-    public void onShare(ILikeable payload, ShareDialog shareDialog) {
-        if(payload instanceof Post && userRepo.load().getId()==((Post)payload).getUser().getId())
-            shareDialog.showShareDialog(R.array.share_items_post,payload);
-        else
-            shareDialog.showShareDialog(R.array.share_items_sale,payload);
-    }
-
 
     @Override
     public void storeTabActive(int position) {
         uiSettingRepo.setnActiveTabEventFragment(position);
     }
 
-    @Override
-    public void onDeleteNewsTask(Post post, ResultTask resultTask) {
-        deleteNewsTask.execute(post,new SimpleSubscriber<SingleResponse<Post>>(){
-            @Override
-            public void onError(Throwable e) {
-
-                resultTask.onError(e);
-            }
-
-            @Override
-            public void onNext(SingleResponse<Post> string) {
-                resultTask.onComplete();
-            }
-        });
-    }
 
     @Override
     public void onLike(ILikeable iLikeable,RefreshableView refreshableView) {
@@ -149,11 +109,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
             likeDislikePackage.setModel(Keys.CAP_EVENT, ((Post)iLikeable).getId());
 
         likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
-    }
-
-    @Override
-    public void complaint(Object o) {
-
     }
 
 

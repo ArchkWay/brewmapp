@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,16 +12,13 @@ import javax.inject.Inject;
 
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
-import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
-import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 
 import butterknife.BindView;
-import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
@@ -35,7 +31,7 @@ import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.contract.ResultTask;
-import com.brewmapp.presentation.view.contract.ShareDialog;
+import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
@@ -128,28 +124,7 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
             case Actions.ACTION_SHARE_POST:
             case Actions.ACTION_SHARE_SALE:
             case Actions.ACTION_SHARE_EVENT:
-                presenter.onShare((ILikeable) payload, new ShareDialog() {
-                    @Override
-                    public void showShareDialog(int items, ILikeable iLikeable) {
-                        new DialogShare((BaseActivity) getActivity(),getResources().getStringArray(items),iLikeable,this);
-                    }
-
-                    @Override
-                    public void onDelete() {
-                        presenter.onDeleteNewsTask((Post) payload, new ResultTask() {
-                            @Override
-                            public void onError(Throwable e) {
-                                showMessage(e.getMessage());
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                refreshItems();
-                            }
-                        });
-
-                    }
-                });
+                new DialogShare((BaseActivity) getActivity(),(ILikeable) payload, () -> refreshItems());
                 break;
         }
     }

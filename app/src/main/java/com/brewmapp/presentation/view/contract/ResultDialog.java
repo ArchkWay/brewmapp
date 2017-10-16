@@ -6,7 +6,6 @@ import com.brewmapp.data.model.ILikeable;
  * Created by Kras on 15.10.2017.
  */
 
-public interface ShareDialog {
-    void showShareDialog(int items, ILikeable iLikeable);
+public interface ResultDialog {
     void onDelete();
 }

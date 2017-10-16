@@ -2,7 +2,6 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -21,12 +20,10 @@ import com.brewmapp.presentation.view.contract.SaleDetailsView;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
 
 import com.brewmapp.R;
-import com.brewmapp.presentation.view.contract.ShareDialog;
+import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
-import com.squareup.picasso.Picasso;
 
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView, RefreshableView {
     @BindView(R.id.activity_sale_details_avatar)    ImageView avatar;
@@ -57,17 +54,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @Override
     protected void initView() {
         enableBackButton();
-        sale_more.setOnClickListener((v)->eventsPresenter.onShare(sale, new ShareDialog() {
-            @Override
-            public void showShareDialog(int items, ILikeable iLikeable) {
-                new DialogShare(SaleDetailsActivity.this,getResources().getStringArray(R.array.share_items_sale),sale,this);
-            }
-
-            @Override
-            public void onDelete() {
-
-            }
-        }));
+        sale_more.setOnClickListener((v)->new DialogShare(SaleDetailsActivity.this,sale,null));
         like.setOnClickListener((v)->eventsPresenter.onLike(sale,this));
     }
 

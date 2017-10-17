@@ -29,6 +29,7 @@ import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
 import com.brewmapp.presentation.presenter.contract.SearchPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
+import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
@@ -56,6 +57,7 @@ import com.brewmapp.presentation.presenter.impl.SaleDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SearchAllPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SearchPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
@@ -212,4 +214,8 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
         return presenter;
     }
 
+    @Provides @PresenterScope
+    ShareLikeViewPresenter provideShareLikeViewPresenter(ShareLikeViewPresenterImpl presenter){
+        return presenter;
+    }
 }

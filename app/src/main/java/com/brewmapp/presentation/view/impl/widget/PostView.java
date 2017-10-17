@@ -36,9 +36,9 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @BindView(R.id.view_post_text) TextView text;
     @BindView(R.id.view_post_avatar) ImageView avatar;
     @BindView(R.id.view_post_date) TextView date;
-    @BindView(R.id.view_post_like) View like;
-    @BindView(R.id.view_post_like_counter) TextView likeCounter;
-    @BindView(R.id.view_post_more) ImageView more;
+    @BindView(R.id.view_share_like) View like;
+    @BindView(R.id.view_share_like_counter) TextView likeCounter;
+    @BindView(R.id.view_share_more) ImageView more;
     @BindView(R.id.view_post_container) View container;
     @BindView(R.id.view_post_container_repost)    LinearLayout repost;
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;

@@ -37,6 +37,7 @@ import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
+import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 @PresenterScope
 @Subcomponent(modules = PresenterModule.class)
@@ -74,4 +75,5 @@ public interface PresenterComponent {
     void inject(SaleDetailsActivity activity);
     void inject(PostDetailsActivity activity);
     void inject(DialogShare dialogShare);
+    void inject(ShareLikeView shareLikeView);
 }

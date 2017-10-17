@@ -1,17 +1,82 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.view.View;
+
+import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Sale;
+import com.brewmapp.data.model.ILikeable;
+import com.brewmapp.data.pojo.LikeDislikePackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
+import com.brewmapp.presentation.view.contract.RefreshableView;
+import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 import javax.inject.Inject;
+
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
+import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 /**
  * Created by Kras on 17.10.2017.
  */
 
-public class ShareLikeViewPresenterImpl implements ShareLikeViewPresenter {
+public class ShareLikeViewPresenterImpl extends BasePresenter<ShareLikeView> implements ShareLikeViewPresenter {
+
+    private LikeTask likeTask;
 
     @Inject
-    public ShareLikeViewPresenterImpl(){
+    public ShareLikeViewPresenterImpl(LikeTask likeTask){
+        this.likeTask=likeTask;
+    }
+
+
+    @Override
+    public void onDestroy() {
 
     }
+
+    @Override
+    public void onAttach(ShareLikeView shareLikeView) {
+        super.onAttach(shareLikeView);
+    }
+
+    @Override
+    public void onLike(ILikeable iLikeable, RefreshableView refreshableView) {
+        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
+        if(iLikeable instanceof Event)
+            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Event)iLikeable).getId());
+        else if (iLikeable instanceof Sale)
+            likeDislikePackage.setModel(Keys.CAP_SHARE, ((Sale)iLikeable).getId());
+        else if (iLikeable instanceof Post)
+            likeDislikePackage.setModel(Keys.CAP_NEWS, ((Post)iLikeable).getId());
+
+        likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
+
+    }
+
+    class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
+
+        private ILikeable iLikeable;
+        private RefreshableView refreshableView;
+
+        LikeSubscriber(ILikeable iLikeable,RefreshableView refreshableView) {
+            this.iLikeable = iLikeable;
+            this.refreshableView = refreshableView;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onNext(MessageResponse messageResponse) {
+            iLikeable.increaseLikes();
+            refreshableView.refreshState();
+        }
+    }
+
 }

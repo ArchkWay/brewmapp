@@ -104,11 +104,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     private void processAction(int action, Object payload) {
         switch (action) {
-            case Actions.ACTION_LIKE_POST:
-            case Actions.ACTION_LIKE_EVENT:
-            case Actions.ACTION_LIKE_SALE:
-                presenter.onLike((ILikeable)payload,this);
-                break;
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
                 interractor().processStartActivityWithRefresh(new Intent(getActivity(), EventDetailsActivity.class));
@@ -120,11 +115,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
             case Actions.ACTION_SELECT_POST:
                 activeBox.setActive(payload);
                 interractor().processStartActivityWithRefresh(new Intent(getActivity(), PostDetailsActivity.class));
-                break;
-            case Actions.ACTION_SHARE_POST:
-            case Actions.ACTION_SHARE_SALE:
-            case Actions.ACTION_SHARE_EVENT:
-                new DialogShare((BaseActivity) getActivity(),(ILikeable) payload, () -> refreshItems());
                 break;
         }
     }

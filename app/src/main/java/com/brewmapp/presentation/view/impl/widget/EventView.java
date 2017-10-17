@@ -34,9 +34,8 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     @BindView(R.id.view_event_location) TextView location;
     @BindView(R.id.view_event_image) ImageView image;
     @BindView(R.id.view_event_container) View container;
-    @BindView(R.id.view_event_more) View more;
-    @BindView(R.id.view_event_like) View like;
-    @BindView(R.id.view_event_like_counter) TextView like_counter;
+    @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
+
 
     private Event model;
     private Listener listener;
@@ -64,8 +63,6 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
 
         ButterKnife.bind(this);
         container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_EVENT, model));
-        more.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SHARE_EVENT,model));
-        like.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_LIKE_EVENT,model));
     }
 
     @Override
@@ -76,6 +73,7 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     @Override
     public void setModel(Event model) {
         this.model = model;
+        shareLikeView.setiLikeable(model);
         name.setText(model.getName());
         if(model.getShortText()!= null && !model.getShortText().isEmpty()) {
             text.setVisibility(VISIBLE);
@@ -91,7 +89,6 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         } else {
             image.setImageResource(R.drawable.ic_default_brewery);
         }
-        like_counter.setText(String.valueOf(model.getLike()));
     }
 
     @Override

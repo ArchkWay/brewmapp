@@ -29,6 +29,7 @@ import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
+import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
 import com.brewmapp.utils.Cons;
 
 import javax.inject.Inject;
@@ -172,10 +173,12 @@ public class DialogShare extends AlertDialog.Builder {
             intent.putExtra(context.getString(R.string.key_repost_id),String.valueOf(((Event)iLikeable).getId()));
             intent.putExtra(context.getString(R.string.key_repost_model),Keys.CAP_EVENT);
         }
-        if(context instanceof MainActivity)
+        if(context instanceof MainActivity && iLikeable instanceof Post)
             ((MainActivity)context).processStartActivityWithRefresh(intent);
+        else if (context instanceof PostDetailsActivity)
+            context.startActivityForResult(intent,Cons.REQUEST_CODE_REFRESH_ITEMS);
         else
-            context.startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
+            context.startActivity(intent);
     }
 
     private void selectSend(BaseActivity context, String[] items, ILikeable iLikeable, ResultDialog resultDialog) {

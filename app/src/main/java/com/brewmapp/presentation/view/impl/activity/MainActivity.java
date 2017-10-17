@@ -51,6 +51,7 @@ import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_STATE;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
@@ -251,10 +252,24 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_REFRESH_ITEMS) {
             if (resultCode == RESULT_OK) {
-                for (Fragment fragment : getSupportFragmentManager().getFragments())
-                    if (fragment instanceof EventsFragment)
-                        ((EventsFragment) fragment).refreshItems();
+                refreshItems();
+            }
+        }else if(requestCode == REQUEST_CODE_REFRESH_STATE){
+            if(requestCode==RESULT_OK){
+                refreshState();
             }
         }
+    }
+
+    public void refreshState() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof EventsFragment)
+                ((EventsFragment) fragment).refreshState();
+    }
+
+    public void refreshItems() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof EventsFragment)
+                ((EventsFragment) fragment).refreshItems();
     }
 }

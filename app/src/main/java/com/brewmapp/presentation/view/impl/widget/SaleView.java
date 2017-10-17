@@ -33,11 +33,9 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
     @BindView(R.id.view_sale_text) TextView text;
     @BindView(R.id.view_sale_avatar) ImageView avatar;
     @BindView(R.id.view_sale_date) TextView date;
-    @BindView(R.id.view_sale_like) View like;
-    @BindView(R.id.view_sale_like_counter) TextView likeCounter;
-    @BindView(R.id.view_sale_more) ImageView more;
     @BindView(R.id.view_sale_preview) ImageView preview;
     @BindView(R.id.view_sale_container) View container;
+    @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
 
     private Listener listener;
     private Sale model;
@@ -63,9 +61,6 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        like.setOnClickListener(v -> {
-            listener.onModelAction(Actions.ACTION_LIKE_SALE, model);
-        });
         container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
         avatar.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
@@ -79,12 +74,11 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
 
     @Override
     public void setModel(Sale model) {
+        shareLikeView.setiLikeable(model);
         this.model = model;
         author.setText(model.getParent().getName());
-        likeCounter.setText(String.valueOf(model.getLike()));
         text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
         date.setText(DateTools.formatDottedDate(model.getDateStart()));
-        more.setOnClickListener(v->listener.onModelAction(Actions.ACTION_SHARE_SALE,model));
 
         if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
             Photo photo = model.getPhotos().get(0);

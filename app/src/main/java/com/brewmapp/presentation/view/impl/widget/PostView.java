@@ -36,14 +36,12 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @BindView(R.id.view_post_text) TextView text;
     @BindView(R.id.view_post_avatar) ImageView avatar;
     @BindView(R.id.view_post_date) TextView date;
-    @BindView(R.id.view_share_like) View like;
-    @BindView(R.id.view_share_like_counter) TextView likeCounter;
-    @BindView(R.id.view_share_more) ImageView more;
     @BindView(R.id.view_post_container) View container;
     @BindView(R.id.view_post_container_repost)    LinearLayout repost;
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
     @BindView(R.id.view_post_container_repost_text)    TextView repost_text;
     @BindView(R.id.view_post_container_repost_photo)    ImageView repost_photo;
+    @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
 
     private Listener listener;
     private Post model;
@@ -64,12 +62,12 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     public PostView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+
     @Override
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        like.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_LIKE_POST, model));
         container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
@@ -83,6 +81,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @Override
     public void setModel(Post model) {
         this.model = model;
+        shareLikeView.setiLikeable(model);
         if(model.getRepost()==null)
             repost.setVisibility(GONE);
         else {
@@ -102,16 +101,13 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                     repost_photo.setLayoutParams(params);
                 }
             });
-            //repost_name.setText(model.getRepost().getUser_resto_admin()==null?model.getRepost().getUser_info().getFormattedName():model.getRepost().getUser_resto_admin().getName());
             repost_name.setText(model.getRepost().getUser_info()==null?"":model.getRepost().getUser_info().getFormattedName());
             repost_text.setText(new StringBuilder()
                     .append((model.getRepost().getShort_text()==null||model.getRepost().getShort_text().equals(""))?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
                     .toString()
             );
         }
-
         author.setText(model.getUser().getFormattedName());
-        likeCounter.setText(String.valueOf(model.getLikes()));
         text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
         date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
         if(model.getUser().getThumbnail() != null) {
@@ -123,12 +119,6 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                 avatar.setImageResource(R.drawable.ic_user_woman);
             }
         }
-        more.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onModelAction(Actions.ACTION_SHARE_POST,model);
-            }
-        });
     }
 
     @Override

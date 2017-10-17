@@ -100,54 +100,55 @@
             android:layout_marginBottom="@dimen/common_block_space"
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph.Italic"  />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_block_space">
+        <include layout="@layout/view_share_like" />
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="@dimen/common_block_space">-->
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/height_post_button"
-                android:adjustViewBounds="true"
-                android:id="@+id/view.event.more"
-                android:paddingLeft="@dimen/common_block_space_double_semi"
-                android:paddingRight="@dimen/common_block_space_double_semi"
-                android:paddingTop="@dimen/common_block_space_half"
-                android:layout_toLeftOf="@+id/view.event.like"
-                android:paddingBottom="@dimen/common_block_space_half"
-                android:layout_marginRight="@dimen/common_block_space"
-                android:background="@drawable/selector_post_button"
-                android:src="@drawable/ic_post_more"/>
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="@dimen/height_post_button"-->
+                <!--android:adjustViewBounds="true"-->
+                <!--android:id="@+id/view.event.more"-->
+                <!--android:paddingLeft="@dimen/common_block_space_double_semi"-->
+                <!--android:paddingRight="@dimen/common_block_space_double_semi"-->
+                <!--android:paddingTop="@dimen/common_block_space_half"-->
+                <!--android:layout_toLeftOf="@+id/view.event.like"-->
+                <!--android:paddingBottom="@dimen/common_block_space_half"-->
+                <!--android:layout_marginRight="@dimen/common_block_space"-->
+                <!--android:background="@drawable/selector_post_button"-->
+                <!--android:src="@drawable/ic_post_more"/>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/selector_post_button"
-                android:id="@+id/view.event.like"
-                android:layout_marginRight="@dimen/common_block_space"
-                android:layout_alignParentRight="true"
-                android:paddingRight="@dimen/common_block_space"
-                android:gravity="center_vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/selector_post_button"-->
+                <!--android:id="@+id/view.event.like"-->
+                <!--android:layout_marginRight="@dimen/common_block_space"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:paddingRight="@dimen/common_block_space"-->
+                <!--android:gravity="center_vertical">-->
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/height_post_button"
-                    android:adjustViewBounds="true"
-                    android:paddingLeft="@dimen/common_block_space"
-                    android:paddingRight="@dimen/common_block_space_half"
-                    android:paddingTop="@dimen/common_block_space_half"
-                    android:paddingBottom="@dimen/common_block_space_half"
-                    android:src="@drawable/ic_like"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="@dimen/height_post_button"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:paddingLeft="@dimen/common_block_space"-->
+                    <!--android:paddingRight="@dimen/common_block_space_half"-->
+                    <!--android:paddingTop="@dimen/common_block_space_half"-->
+                    <!--android:paddingBottom="@dimen/common_block_space_half"-->
+                    <!--android:src="@drawable/ic_like"/>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorButtonGreen"
-                    android:textSize="@dimen/text_size_common_bigger"
-                    android:id="@+id/view.event.like.counter"/>
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/colorButtonGreen"-->
+                    <!--android:textSize="@dimen/text_size_common_bigger"-->
+                    <!--android:id="@+id/view.event.like.counter"/>-->
+            <!--</LinearLayout>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
     </LinearLayout>
 
 

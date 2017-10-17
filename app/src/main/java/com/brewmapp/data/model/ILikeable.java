@@ -8,4 +8,6 @@ public interface ILikeable {
     void increaseLikes();
 
     void increaseDisLikes();
+
+    int getLike();
 }

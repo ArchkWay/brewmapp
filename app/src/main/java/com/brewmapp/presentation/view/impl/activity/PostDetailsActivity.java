@@ -21,6 +21,7 @@ import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.contract.ResultTask;
 import com.brewmapp.presentation.view.contract.ResultDialog;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
+import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
@@ -35,22 +36,20 @@ import ru.frosteye.ovsa.tool.DateTools;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class PostDetailsActivity extends BaseActivity implements PostDetailsView , RefreshableView{
+public class PostDetailsActivity extends BaseActivity implements PostDetailsView
+{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_post_details_title)    TextView title;
     @BindView(R.id.activity_post_details_text)    TextView text;
     @BindView(R.id.activity_post_details_date)    TextView date;
-    @BindView(R.id.activity_post_details_like)    View like;
-    @BindView(R.id.activity_post_details_more)    ImageView more;
-    @BindView(R.id.activity_post_details_like_counter)    TextView counter;
     @BindView(R.id.view_post_container_repost)    LinearLayout repost;
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
     @BindView(R.id.view_post_container_repost_text)    TextView repost_text;
     @BindView(R.id.view_post_container_repost_photo)    ImageView repost_photo;
+    @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
 
 
     @Inject    PostDetailsPresenter presenter;
-    @Inject    EventsPresenter eventsPresenter;
 
     private Post post;
 
@@ -86,14 +85,9 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     }
 
     @Override
-    public void refreshState() {
-        counter.setText(String.valueOf(post.getLike()));
-    }
-
-    @Override
     public void showPostDetails(Post post) {
         this.post=post;
-
+        shareLikeView.setiLikeable(post);
         if(post.getRepost()==null) {
             repost.setVisibility(GONE);
             repost_photo.setImageDrawable(null);
@@ -110,7 +104,6 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
                     Picasso.with(PostDetailsActivity.this).load(photos.get(0).getUrl()).fit().centerCrop().into(repost_photo);
                 });
 
-            //repost_name.setText(post.getRepost().getUser_resto_admin()==null?post.getRepost().getUser_info().getFormattedName():post.getRepost().getUser_resto_admin().getName());
             repost_name.setText(post.getRepost().getUser_info()==null?"":post.getRepost().getUser_info().getFormattedName());
             repost_text.setText(new StringBuilder()
                     .append((post.getRepost().getShort_text()==null||post.getRepost().getShort_text().equals(""))?Html.fromHtml(String.valueOf(post.getRepost().getText())):post.getRepost().getShort_text())
@@ -122,8 +115,6 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
         setTitle(post.getUser().getFormattedName());
         title.setText(post.getUser().getFormattedName());
         text.setText(post.getText() != null ? Html.fromHtml(post.getText()) : null);
-        like.setOnClickListener((v)->eventsPresenter.onLike(post,this));
-        more.setOnClickListener((v)->new DialogShare(PostDetailsActivity.this, post, () -> {setResult(RESULT_OK); finish();}));
         date.setText(DateTools.formatDottedDateWithTime(post.getDate()));
     }
 

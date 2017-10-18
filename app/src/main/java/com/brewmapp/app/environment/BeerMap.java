@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import com.brewmapp.app.di.component.AppComponent;
 import com.brewmapp.app.di.component.DaggerAppComponent;
 import com.brewmapp.app.di.module.AppModule;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 
 public class BeerMap extends Application {
@@ -24,6 +26,7 @@ public class BeerMap extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();

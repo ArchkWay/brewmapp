@@ -185,6 +185,15 @@
                     android:layout_marginTop="@dimen/common_block_space_double_semi"
                     android:background="@color/colorSplitter"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_no_while_news"
+                    android:id="@+id/fragment.profile.text_no_record"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/common_block_space_double_semi"
+                    />
+
                 <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

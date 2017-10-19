@@ -81,7 +81,7 @@ public class NewPostPresenterImpl extends BasePresenter<NewPostView> implements 
             @Override
             public void onNext(SingleResponse<Post> postSingleResponse) {
                 enableControls(true);
-                view.complete();
+                //view.complete();
                 if(resultTask!=null)
                     resultTask.onComplete();
             }

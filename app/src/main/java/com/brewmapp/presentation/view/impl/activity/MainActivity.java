@@ -265,11 +265,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshState();
+            else if(fragment instanceof ProfileFragment )
+                ((ProfileFragment) fragment).refreshState();
     }
 
     public void refreshItems() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems();
+            else if(fragment instanceof ProfileFragment )
+                ((ProfileFragment) fragment).refreshItems();
     }
 }

@@ -210,6 +210,7 @@
     <string name="claim_recieve">Ваша жалоба принята. Спасибо.</string>
     <string name="key_repost_id">key_intent_serializable</string>
     <string name="key_repost_model">key_repost_model</string>
+    <string name="text_no_while_news">Тут пока еще нет новостей ;)</string>
     <string-array name="post_options">
         <item>Поделиться</item>
         <item>Репост</item>

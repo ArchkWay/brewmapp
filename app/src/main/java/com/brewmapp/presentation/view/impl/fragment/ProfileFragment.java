@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,13 +50,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_city) TextView city;
-    @BindView(R.id.fragment_profile_app_bar) FixedAppBarLayout appBar;
+    @BindView(R.id.fragment_profile_app_bar)
+    AppBarLayout appBar;
     @BindView(R.id.fragment_profile_counter_friends) InfoCounter friendsCounter;
     @BindView(R.id.fragment_profile_counter_photos) InfoCounter photosCounter;
     @BindView(R.id.fragment_profile_counter_subscribers) InfoCounter subscribersCounter;
     @BindView(R.id.fragment_profile_counter_subscribes) InfoCounter subscribesCounter;
     @BindView(R.id.fragment_profile_status) TextView status;
-    @BindView(R.id.fragment_profile_post_refresh) SwipeRefreshLayoutBottom postRefresh;
+    //@BindView(R.id.fragment_profile_post_refresh) SwipeRefreshLayoutBottom postRefresh;
     @BindView(R.id.fragment_profile_username) TextView username;
     @BindView(R.id.fragment_profile_menu) RecyclerView menu;
     @BindView(R.id.fragment_profile_posts) RecyclerView posts;
@@ -97,10 +99,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             presenter.onLoadEverything();
         });
 */
-        postRefresh.setOnRefreshListener(() -> {
-            loadPostsPackage.increasePage();
-            presenter.onLoadPosts(loadPostsPackage);
-        });
+//        postRefresh.setOnRefreshListener(() -> {
+//            loadPostsPackage.increasePage();
+//            presenter.onLoadPosts(loadPostsPackage);
+//        });
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         /*scrollListener = new EndlessRecyclerOnScrollListener(manager) {
@@ -113,14 +115,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         posts.setLayoutManager(manager);
         posts.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         posts.setAdapter(postAdapter);
-        appBar.setOnStateChangeListener(toolbarChange -> {
-            /*if(toolbarChange == FixedAppBarLayout.State.COLLAPSED) {
-                posts.addOnScrollListener(scrollListener);
-            } else {
-                posts.removeOnScrollListener(scrollListener);
-            }*/
-            Log.i("OV", toolbarChange.toString());
-        });
+//        appBar.setOnStateChangeListener(toolbarChange -> {
+//            /*if(toolbarChange == FixedAppBarLayout.State.COLLAPSED) {
+//                posts.addOnScrollListener(scrollListener);
+//            } else {
+//                posts.removeOnScrollListener(scrollListener);
+//            }*/
+//            Log.i("OV", toolbarChange.toString());
+//        });
     }
 
     private void processAction(int action, Object payload) {
@@ -177,11 +179,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void appendPosts(Posts posts) {
-        if(loadPostsPackage.getPage() == 0) postAdapter.clear();
+        if(loadPostsPackage.getPage() == 0) {
+            postAdapter.clear();
+        }
         if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
-        postRefresh.setRefreshing(false);
+//        postRefresh.setRefreshing(false);
+
         postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
-        if(postAdapter.getItemCount() == posts.getTotal()) postRefresh.setEnabled(false);
+        for(int i=0;i<posts.getModels().size();i++)
+            postAdapter.notifyItemInserted(i);
+//        if(postAdapter.getItemCount() == posts.getTotal()) postRefresh.setEnabled(false);
     }
 
     @Override

@@ -8,193 +8,191 @@
     android:background="@color/colorWhite"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ru.frosteye.ovsa.presentation.view.widget.FixedAppBarLayout
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/fragment.profile.app.bar">
-
-            <LinearLayout
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
-                android:orientation="vertical"
-                android:id="@+id/fragment.profile.swipe">
+                android:id="@+id/fragment.profile.app.bar">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorWhite"
-                    android:orientation="vertical">
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
+                    android:orientation="vertical"
+                    android:id="@+id/fragment.profile.swipe">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/common_block_space_double_semi"
-                        android:paddingRight="@dimen/common_block_space_double_semi"
-                        android:paddingTop="@dimen/common_block_space_double_semi"
-                        android:gravity="center_vertical">
-
-                        <com.makeramen.roundedimageview.RoundedImageView
-                            android:layout_width="@dimen/size_avatar"
-                            android:layout_height="@dimen/size_avatar"
-                            android:id="@+id/fragment.profile.avatar"
-                            android:scaleType="fitCenter"
-                            app:riv_border_width="1dp"
-                            app:riv_border_color="@color/colorSplitter"
-                            android:layout_marginRight="@dimen/common_block_space_double"
-                            app:riv_mutate_background="true"
-                            android:src="@drawable/ic_user_man"
-                            android:background="@color/colorGrayLight"
-                            app:riv_oval="true"/>
-
+                        android:background="@color/colorWhite"
+                        android:orientation="vertical">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:paddingLeft="@dimen/common_block_space_double_semi"
+                            android:paddingRight="@dimen/common_block_space_double_semi"
+                            android:paddingTop="@dimen/common_block_space_double_semi"
+                            android:gravity="center_vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:layout_width="@dimen/size_avatar"
+                                android:layout_height="@dimen/size_avatar"
+                                android:id="@+id/fragment.profile.avatar"
+                                android:scaleType="fitCenter"
+                                app:riv_border_width="1dp"
+                                app:riv_border_color="@color/colorSplitter"
+                                android:layout_marginRight="@dimen/common_block_space_double"
+                                app:riv_mutate_background="true"
+                                android:src="@drawable/ic_user_man"
+                                android:background="@color/colorGrayLight"
+                                app:riv_oval="true"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/fragment.profile.username"
-                                android:textSize="@dimen/text_size_big_phone"
-                                android:layout_marginBottom="@dimen/common_block_space_half"
-                                style="@style/AppTheme.Text.Georgia.BoldItalic"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="2"
-                                android:layout_marginBottom="@dimen/common_block_space_half"
-                                android:id="@+id/fragment.profile.status"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/text_size_common" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="2"
-                                android:id="@+id/fragment.profile.city"
-                                android:textColor="@color/colorProfileCounter"
-                                android:textSize="@dimen/text_size_common" />
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/fragment.profile.username"
+                                    android:textSize="@dimen/text_size_big_phone"
+                                    android:layout_marginBottom="@dimen/common_block_space_half"
+                                    style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="2"
+                                    android:layout_marginBottom="@dimen/common_block_space_half"
+                                    android:id="@+id/fragment.profile.status"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/text_size_common" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="2"
+                                    android:id="@+id/fragment.profile.city"
+                                    android:textColor="@color/colorProfileCounter"
+                                    android:textSize="@dimen/text_size_common" />
+                            </LinearLayout>
+                            <ImageView
+                                android:layout_width="@dimen/size_profile_info_icon"
+                                android:layout_height="@dimen/size_profile_info_icon"
+                                android:src="@drawable/ic_profile_info"/>
                         </LinearLayout>
-                        <ImageView
-                            android:layout_width="@dimen/size_profile_info_icon"
-                            android:layout_height="@dimen/size_profile_info_icon"
-                            android:src="@drawable/ic_profile_info"/>
+                        <ru.frosteye.ovsa.presentation.view.widget.Line
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/common_block_space_double_semi"
+                            android:background="@color/colorSplitter"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/fragment.profile.counter.friends"
+                                app:counterTitle="@string/friends_count"/>
+
+
+
+                            <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/fragment.profile.counter.subscribes"
+                                app:counterTitle="@string/subscribes_count"/>
+
+                            <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/fragment.profile.counter.subscribers"
+                                app:counterTitle="@string/subscribers_count"/>
+
+                            <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:id="@+id/fragment.profile.counter.photos"
+                                app:counterTitle="@string/photos_count"/>
+                        </LinearLayout>
+                        <ru.frosteye.ovsa.presentation.view.widget.Line
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorSplitter"/>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fragment.profile.menu"/>
+
                     </LinearLayout>
-                    <ru.frosteye.ovsa.presentation.view.widget.Line
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/common_block_space_double_semi"
-                        android:background="@color/colorSplitter"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/fragment.profile.counter.friends"
-                            app:counterTitle="@string/friends_count"/>
-
-
-
-                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/fragment.profile.counter.subscribes"
-                            app:counterTitle="@string/subscribes_count"/>
-
-                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/fragment.profile.counter.subscribers"
-                            app:counterTitle="@string/subscribers_count"/>
-
-                        <com.brewmapp.presentation.view.impl.widget.InfoCounter
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/fragment.profile.counter.photos"
-                            app:counterTitle="@string/photos_count"/>
-                    </LinearLayout>
-                    <ru.frosteye.ovsa.presentation.view.widget.Line
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorSplitter"/>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/fragment.profile.menu"/>
-
                 </LinearLayout>
-            </LinearLayout>
-        </ru.frosteye.ovsa.presentation.view.widget.FixedAppBarLayout>
+            </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:orientation="vertical">
-
-            <info.hoang8f.android.segmented.SegmentedGroup
-                android:id="@+id/fragment.profile.flow.segment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/common_block_space_double_semi"
-                android:layout_marginLeft="@dimen/common_block_space_double"
-                android:layout_marginRight="@dimen/common_block_space_double"
-                segmentedgroup:sc_border_width="2dp"
-                segmentedgroup:sc_tint_color="@color/colorGrayControls"
-                segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big">
-
-                <RadioButton
-                    android:id="@+id/fragment.profile.posts.subscription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="@string/subscriptions"
-                    style="@style/RadioButton" />
-
-                <RadioButton
-                    android:id="@+id/fragment.profile.posts.my"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/my_posts"
-                    style="@style/RadioButton" />
-            </info.hoang8f.android.segmented.SegmentedGroup>
-
-            <ru.frosteye.ovsa.presentation.view.widget.Line
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/common_block_space_double_semi"
-                android:background="@color/colorSplitter"/>
-
-
-            <ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorWhite"
-                android:id="@+id/fragment.profile.post.refresh">
+                android:orientation="vertical">
+
+                <info.hoang8f.android.segmented.SegmentedGroup
+                    android:id="@+id/fragment.profile.flow.segment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/common_block_space_double_semi"
+                    android:layout_marginLeft="@dimen/common_block_space_double"
+                    android:layout_marginRight="@dimen/common_block_space_double"
+                    segmentedgroup:sc_border_width="2dp"
+                    segmentedgroup:sc_tint_color="@color/colorGrayControls"
+                    segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big"
+                    android:layout_weight="1"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/fragment.profile.posts.subscription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/subscriptions"
+                        style="@style/RadioButton" />
+
+                    <RadioButton
+                        android:id="@+id/fragment.profile.posts.my"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/my_posts"
+                        style="@style/RadioButton" />
+                </info.hoang8f.android.segmented.SegmentedGroup>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/common_block_space_double_semi"
+                    android:background="@color/colorSplitter"/>
 
                 <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/fragment.profile.posts"/>
-            </ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom>
-        </LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fragment.profile.posts"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

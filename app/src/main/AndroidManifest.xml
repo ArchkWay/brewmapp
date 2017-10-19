@@ -35,7 +35,7 @@
 
         <activity
             android:name=".presentation.view.impl.activity.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.StartActivity"
             android:screenOrientation="portrait">
@@ -48,45 +48,45 @@
         <activity
             android:name=".presentation.view.impl.activity.LoginActivity"
             android:label="@string/entrance"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.RegisterActivity"
             android:label="@string/registration"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.EnterPhoneActivity"
             android:label="@string/phone_number"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".presentation.view.impl.activity.ConfirmCodeActivity"
             android:label="@string/confirm"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".presentation.view.impl.activity.EnterPasswordActivity"
             android:label="@string/password"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".presentation.view.impl.activity.InviteActivity"
             android:label="@string/invite_friends"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.AlbumsActivity"
             android:label="@string/albums"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.AddAlbumActivity"
             android:label="@string/new_album"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.AlbumActivity"
             android:label="@string/cap_photo"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.InviteListActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -96,15 +96,15 @@
             android:name=".presentation.view.impl.activity.NewPostActivity"
             android:label="@string/new_post"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".presentation.view.impl.activity.PickLocationActivity"
             android:label="@string/select_place"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FriendsActivity"
             android:label="@string/friends"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -113,32 +113,35 @@
         <activity
             android:name=".presentation.view.impl.activity.NewPostSettingsActivity"
             android:label="@string/params"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.SearchActivity"
             android:label="@string/search"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".presentation.view.impl.activity.ExtendedSearchActivity"
             android:label="@string/extended_search"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.EventDetailsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.PhotoSliderActivity"
             android:label="@string/photos"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.UniversalMapActivity"
             android:label="@string/on_map"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.SaleDetailsActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".presentation.view.impl.activity.PostDetailsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.view.impl.activity.PostDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".presentation.view.impl.activity.FavoriteBeerActivity" />
+        <activity android:name=".presentation.view.impl.activity.FavoriteRestoActivity"></activity>
     </application>
 
 </manifest>

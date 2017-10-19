@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.pojo.LoadPostsPackage;
+import com.brewmapp.presentation.view.impl.activity.FavoriteBeerActivity;
+import com.brewmapp.presentation.view.impl.activity.FavoriteRestoActivity;
 import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
@@ -38,10 +39,7 @@ import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.presentation.view.widget.FixedAppBarLayout;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
-import ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom;
-import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -179,11 +177,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public boolean onItemClick(int position) {
         switch (position) {
             case 0:
-                //interractor().processStartActivityWithRefresh(new Intent(getActivity(), NewPostActivity.class));
                 startActivityForResult(new Intent(getActivity(), NewPostActivity.class),Cons.REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case 1:
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(getActivity(), FavoriteBeerActivity.class));
+                break;
+            case 3:
+                startActivity(new Intent(getActivity(), FavoriteRestoActivity.class));
                 break;
         }
         return false;

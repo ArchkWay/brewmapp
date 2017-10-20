@@ -140,8 +140,15 @@
         <activity
             android:name=".presentation.view.impl.activity.PostDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".presentation.view.impl.activity.FavoriteBeerActivity" />
-        <activity android:name=".presentation.view.impl.activity.FavoriteRestoActivity"></activity>
+        <activity
+            android:name=".presentation.view.impl.activity.FavoriteBeerActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".presentation.view.impl.activity.FavoriteRestoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".presentation.view.impl.activity.AssessmentsActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

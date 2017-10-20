@@ -1,28 +1,28 @@
 package com.brewmapp.presentation.view.impl.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.presentation.presenter.contract.FavoriteBeerPresenter;
-import com.brewmapp.presentation.view.contract.FavoriteBeerView;
+import com.brewmapp.presentation.presenter.contract.AssessmentsPresenter;
+import com.brewmapp.presentation.view.contract.AssessmentsView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class FavoriteBeerActivity extends BaseActivity implements FavoriteBeerView {
+public class AssessmentsActivity extends BaseActivity  implements AssessmentsView{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
-    @Inject
-    FavoriteBeerPresenter presenter;
+
+
+    @Inject    AssessmentsPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite_beer);
+        setContentView(R.layout.activity_assessments);
     }
 
     @Override

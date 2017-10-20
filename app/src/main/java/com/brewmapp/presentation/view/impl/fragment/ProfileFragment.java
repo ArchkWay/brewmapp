@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.pojo.LoadPostsPackage;
+import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.FavoriteBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.FavoriteRestoActivity;
 import com.brewmapp.utils.Cons;
@@ -166,7 +167,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void appendPosts(Posts posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
 
-        if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
+        //if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
 
         postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
 
@@ -187,6 +188,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 break;
             case 3:
                 startActivity(new Intent(getActivity(), FavoriteRestoActivity.class));
+                break;
+            case 4:
+                startActivity(new Intent(getActivity(), AssessmentsActivity.class));
                 break;
         }
         return false;

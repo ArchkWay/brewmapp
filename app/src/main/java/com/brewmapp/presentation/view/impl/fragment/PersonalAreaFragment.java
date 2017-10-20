@@ -31,8 +31,8 @@ import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
-import com.brewmapp.presentation.view.contract.ProfileView;
+import com.brewmapp.presentation.presenter.contract.PersonalAreaPresenter;
+import com.brewmapp.presentation.view.contract.PersonalAreaView;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
@@ -48,7 +48,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by ovcst on 03.08.2017.
  */
 
-public class ProfileFragment extends BaseFragment implements ProfileView, FlexibleAdapter.OnItemClickListener {
+public class PersonalAreaFragment extends BaseFragment implements PersonalAreaView, FlexibleAdapter.OnItemClickListener {
 
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_city) TextView city;
@@ -65,7 +65,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
 
 
-    @Inject ProfilePresenter presenter;
+    @Inject    PersonalAreaPresenter presenter;
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;

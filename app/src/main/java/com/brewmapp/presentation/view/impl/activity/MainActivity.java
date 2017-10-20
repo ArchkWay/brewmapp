@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -46,7 +45,7 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
+import com.brewmapp.presentation.view.impl.fragment.PersonalAreaFragment;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -265,15 +264,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshState();
-            else if(fragment instanceof ProfileFragment )
-                ((ProfileFragment) fragment).refreshState();
+            else if(fragment instanceof PersonalAreaFragment)
+                ((PersonalAreaFragment) fragment).refreshState();
     }
 
     public void refreshItems() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems();
-            else if(fragment instanceof ProfileFragment )
-                ((ProfileFragment) fragment).refreshItems();
+            else if(fragment instanceof PersonalAreaFragment)
+                ((PersonalAreaFragment) fragment).refreshItems();
     }
 }

@@ -26,7 +26,7 @@ import com.brewmapp.presentation.presenter.contract.NewPostSettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.presenter.contract.PickLocationPresenter;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
-import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
+import com.brewmapp.presentation.presenter.contract.PersonalAreaPresenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
@@ -57,7 +57,7 @@ import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PostDetailsPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
+import com.brewmapp.presentation.presenter.impl.PersonalAreaPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SaleDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SearchAllPresenterImpl;
@@ -66,7 +66,6 @@ import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.activity.FavoriteRestoActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 import dagger.Module;
@@ -113,7 +112,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    ProfilePresenter provideProfilePresenter(ProfilePresenterImpl presenter) {
+    PersonalAreaPresenter provideProfilePresenter(PersonalAreaPresenterImpl presenter) {
         return presenter;
     }
 

@@ -73,7 +73,7 @@ public class PersonalAreaFragment extends BaseFragment implements PersonalAreaVi
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.fragment_profile;
+        return R.layout.fragment_personal_area;
     }
 
     @Override

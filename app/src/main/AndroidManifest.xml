@@ -142,13 +142,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FavoriteBeerActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FavoriteRestoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.AssessmentsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".presentation.view.impl.activity.AddFavoriteBeerActivity"></activity>
     </application>
 
 </manifest>

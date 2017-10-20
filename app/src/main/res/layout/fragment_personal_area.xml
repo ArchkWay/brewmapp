@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
+
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,8 +106,6 @@
                                 android:id="@+id/fragment.profile.counter.friends"
                                 app:counterTitle="@string/friends_count"/>
 
-
-
                             <com.brewmapp.presentation.view.impl.widget.InfoCounter
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -127,6 +126,7 @@
                                 android:layout_weight="1"
                                 android:id="@+id/fragment.profile.counter.photos"
                                 app:counterTitle="@string/photos_count"/>
+
                         </LinearLayout>
                         <ru.frosteye.ovsa.presentation.view.widget.Line
                             android:layout_width="match_parent"

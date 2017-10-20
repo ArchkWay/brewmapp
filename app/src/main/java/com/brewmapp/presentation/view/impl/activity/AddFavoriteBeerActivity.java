@@ -2,11 +2,14 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.AddFavoriteBeerPresenter;
 import com.brewmapp.presentation.view.contract.AddFavoriteBeerView;
+import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import javax.inject.Inject;
 
@@ -15,9 +18,8 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class AddFavoriteBeerActivity extends BaseActivity implements AddFavoriteBeerView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
-
-    @Inject
-    AddFavoriteBeerPresenter presenter;
+    @BindView(R.id.activity_search_search)    FinderView finder;
+    @Inject    AddFavoriteBeerPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +29,12 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
 
     @Override
     protected void initView() {
-        enableBackButton();
-
+        finder.setListener(string -> presenter.sendQuery(string));
     }
 
     @Override
     protected void attachPresenter() {
-
+            presenter.onAttach(this);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
 
     @Override
     protected void inject(PresenterComponent component) {
-
+        component.inject(this);
     }
 
     @Override
@@ -54,5 +55,10 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
     @Override
     protected Toolbar findActionBar() {
         return toolbar;
+    }
+
+    @Override
+    public void showResultQuery(String s) {
+        Log.i("QQQ",s);
     }
 }

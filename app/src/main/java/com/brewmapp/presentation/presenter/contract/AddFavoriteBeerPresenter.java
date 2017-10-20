@@ -9,4 +9,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface AddFavoriteBeerPresenter extends LivePresenter<AddFavoriteBeerView> {
+
+    void sendQuery(String query);
 }

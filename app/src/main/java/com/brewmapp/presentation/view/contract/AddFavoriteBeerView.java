@@ -7,4 +7,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface AddFavoriteBeerView extends BasicView{
+
+    void showResultQuery(String s);
+
 }

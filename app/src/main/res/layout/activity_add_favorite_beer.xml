@@ -3,9 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brewmapp.presentation.view.impl.activity.PostDetailsActivity"
-    android:orientation="vertical"
-    >
-    <include layout="@layout/view_toolbar" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.brewmapp.presentation.view.impl.activity.AddFavoriteBeerActivity"
+    android:orientation="vertical">
+
+    <!--<include layout="@layout/view_toolbar" />-->
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/Ovsa.Toolbar"
+        android:id="@+id/common.toolbar"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
+        >
+        <com.brewmapp.presentation.view.impl.widget.FinderView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:finderHint="@string/search_hint"
+            android:id="@+id/activity.search.search"/>
+
+    </android.support.v7.widget.Toolbar>
+
 
 </LinearLayout>

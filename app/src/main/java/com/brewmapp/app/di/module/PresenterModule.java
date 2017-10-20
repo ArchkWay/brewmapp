@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
+import com.brewmapp.presentation.presenter.contract.AddFavoriteBeerPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
 import com.brewmapp.presentation.presenter.contract.AssessmentsPresenter;
@@ -35,6 +36,7 @@ import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.AddFavoriteBeerPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AssessmentsPresenterImpl;
@@ -239,4 +241,8 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
         return presenter;
     }
 
+    @Provides @PresenterScope
+    AddFavoriteBeerPresenter provideAddFavoriteBeerPresenter(AddFavoriteBeerPresenterImpl presenter){
+        return presenter;
+    }
 }

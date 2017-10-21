@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.presentation.view.contract.AddFavoriteBeerView;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -10,5 +11,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface AddFavoriteBeerPresenter extends LivePresenter<AddFavoriteBeerView> {
 
-    void sendQuery(String query);
+    void sendQuery(LoadProductPackage loadProductPackage);
 }

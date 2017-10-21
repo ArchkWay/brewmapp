@@ -60,7 +60,7 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
+        if(isInEditMode()) return;
         PresenterComponent component = BeerMap.getAppComponent().plus(new PresenterModule(this));
         component.inject(this);
         ButterKnife.bind(this);

@@ -1,25 +1,45 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Product;
+import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.presentation.presenter.contract.AddFavoriteBeerPresenter;
 import com.brewmapp.presentation.view.contract.AddFavoriteBeerView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.items.IFlexible;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
+import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
-public class AddFavoriteBeerActivity extends BaseActivity implements AddFavoriteBeerView {
+public class AddFavoriteBeerActivity extends BaseActivity implements AddFavoriteBeerView{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
+    @BindView(R.id.recyclerview)    RecyclerView recyclerview;
+    @BindView(R.id.swipe)    RefreshableSwipeRefreshLayout swipe;
+
     @Inject    AddFavoriteBeerPresenter presenter;
+
+    private FlexibleModelAdapter<IFlexible> adapter;
+    private LoadProductPackage loadProductPackage;
+    private EndlessRecyclerOnScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +49,38 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
 
     @Override
     protected void initView() {
-        finder.setListener(string -> presenter.sendQuery(string));
+        loadProductPackage=new LoadProductPackage();
+        finder.setListener(string -> prepareQuery(string));
+        enableBackButton();
+
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                loadProductPackage.setPage(currentPage-1);
+                sendQuery();
+            }
+        };
+        recyclerview.setLayoutManager(manager);
+        recyclerview.addOnScrollListener(scrollListener);
+        adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        recyclerview.setAdapter(adapter);
+        swipe.setOnRefreshListener(this::refreshItems);
+    }
+
+    private void prepareQuery(String stringSearch) {
+        loadProductPackage.setPage(0);
+        loadProductPackage.setStringSearch(stringSearch);
+        sendQuery();
+    }
+
+    private void sendQuery() {
+        presenter.sendQuery(loadProductPackage);
+    }
+
+    private void refreshItems() {
+        swipe.setRefreshing(true);
+        sendQuery();
     }
 
     @Override
@@ -39,7 +90,7 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
 
     @Override
     protected LivePresenter<?> getPresenter() {
-        return null;
+        return presenter;
     }
 
     @Override
@@ -58,7 +109,25 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
     }
 
     @Override
-    public void showResultQuery(String s) {
-        Log.i("QQQ",s);
+    public void appendItems(List<IFlexible> list) {
+        if(loadProductPackage.getPage()==0)
+            adapter.clear();
+
+        adapter.addItems(adapter.getItemCount(), list);
+        adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
     }
+
+    @Override
+    public void onError() {
+        swipe.setRefreshing(false);
+    }
+
+    private void processAction(int action, Object payload) {
+        Intent intent=new Intent();
+        intent.putExtra(getString(R.string.key_serializable_extra),(Product)payload);
+        setResult(RESULT_OK,intent);
+        finish();
+    }
+
 }

@@ -1,8 +1,11 @@
 package com.brewmapp.execution.exchange.common;
 
+import com.brewmapp.data.entity.container.Products;
 import com.brewmapp.data.entity.wrapper.EventInfo;
+import com.brewmapp.data.entity.wrapper.ProductInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
+import com.brewmapp.execution.exchange.common.base.ProductsDeserializer;
 import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
 import com.google.gson.GsonBuilder;
 
@@ -58,7 +61,8 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(EventInfo.class, new EventsDeserializer())
                 .registerTypeAdapter(ContactInfo.class, new FriendsDeserializer())
                 .registerTypeAdapter(SaleInfo.class, new SalesDeserializer())
-                .registerTypeAdapter(PhotoInfo.class, new PhotoDeserializer());
+                .registerTypeAdapter(PhotoInfo.class, new PhotoDeserializer())
+                .registerTypeAdapter(ProductInfo.class, new ProductsDeserializer());
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.brewmapp.presentation.view.contract;
 
+import java.util.List;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -8,6 +11,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 
 public interface AddFavoriteBeerView extends BasicView{
 
-    void showResultQuery(String s);
+    void appendItems(List<IFlexible> s);
+    void onError();
 
 }

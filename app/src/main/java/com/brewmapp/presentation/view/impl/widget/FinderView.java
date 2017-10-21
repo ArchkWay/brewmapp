@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import butterknife.BindView;
@@ -21,7 +22,7 @@ import ru.frosteye.ovsa.stub.impl.SimpleTextWatcher;
 public class FinderView extends BaseFrameLayout {
 
     @BindView(R.id.view_finder_cancel) View cancel;
-    @BindView(R.id.view_finder_input) EditText input;
+    @BindView(R.id.view_finder_input)    AutoCompleteTextView input;
 
     private String hintString;
 

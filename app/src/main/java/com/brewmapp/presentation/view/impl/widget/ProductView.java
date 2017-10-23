@@ -50,7 +50,7 @@ public class ProductView extends BaseLinearLayout implements InteractiveModelVie
         product=model;
         Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(avatar);
         title.setText(model.getTitle());
-        setOnClickListener(v -> listener.onModelAction(0,model));
+        setOnClickListener(v -> listener.onModelAction(0,product));
     }
 
     @Override
@@ -67,6 +67,7 @@ public class ProductView extends BaseLinearLayout implements InteractiveModelVie
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
+
 
     }
 

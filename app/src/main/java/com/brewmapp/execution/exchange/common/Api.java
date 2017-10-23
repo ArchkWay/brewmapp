@@ -103,6 +103,10 @@ public interface Api {
                                  @Query(Keys.LIMIT_END) int end,
                                  @FieldMap WrapperParams params);
 
+    @POST("userinterest/add")
+    @FormUrlEncoded
+    Call<String> addInterest(@FieldMap WrapperParams params);
+
 
     @POST("event")
     @FormUrlEncoded

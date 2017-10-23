@@ -4,9 +4,15 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.brewmapp.R;
 import com.brewmapp.data.entity.Interest;
+import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -15,6 +21,12 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  */
 
 public class InterestView extends BaseLinearLayout implements InteractiveModelView<Interest> {
+    @BindView(R.id.view_interest_avatar)    ImageView avatar;
+    @BindView(R.id.view_interest_title)    TextView title;
+
+    private Interest interest;
+    private Listener listener;
+
     public InterestView(Context context) {
         super(context);
     }
@@ -34,21 +46,30 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
 
     @Override
     public void setModel(Interest model) {
+        this.interest=model;
+        if(model.getInterest_info()!=null) {
+            title.setText(model.getInterest_info().getTitle());
+            Picasso.with(getContext()).load(model.getInterest_info().getImage()).fit().centerCrop().into(avatar);
+        }
+
 
     }
 
     @Override
     public Interest getModel() {
-        return null;
+        return interest;
     }
 
     @Override
     public void setListener(Listener listener) {
-
+        this.listener = listener;
     }
 
     @Override
     protected void prepareView() {
+        if(isInEditMode()) return;
+        ButterKnife.bind(this);
+        setOnClickListener(v -> listener.onModelAction(0,interest));
 
     }
 }

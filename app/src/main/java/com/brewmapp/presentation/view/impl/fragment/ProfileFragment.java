@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,8 +32,8 @@ import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.PersonalAreaPresenter;
-import com.brewmapp.presentation.view.contract.PersonalAreaView;
+import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
+import com.brewmapp.presentation.view.contract.ProfileView;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
@@ -48,7 +49,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by ovcst on 03.08.2017.
  */
 
-public class PersonalAreaFragment extends BaseFragment implements PersonalAreaView, FlexibleAdapter.OnItemClickListener {
+public class ProfileFragment extends BaseFragment implements ProfileView, FlexibleAdapter.OnItemClickListener {
 
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_city) TextView city;
@@ -65,7 +66,8 @@ public class PersonalAreaFragment extends BaseFragment implements PersonalAreaVi
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
 
 
-    @Inject    PersonalAreaPresenter presenter;
+
+    @Inject    ProfilePresenter presenter;
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;
@@ -73,7 +75,7 @@ public class PersonalAreaFragment extends BaseFragment implements PersonalAreaVi
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.fragment_personal_area;
+        return R.layout.fragment_profile;
     }
 
     @Override
@@ -153,7 +155,7 @@ public class PersonalAreaFragment extends BaseFragment implements PersonalAreaVi
 
     @Override
     public void showUserProfile(UserProfile profile) {
-        getActivity().setTitle(profile.getUser().getFormattedName());
+        getActivity().setTitle(R.string.my_profile);
         Picasso.with(getActivity()).load(profile.getUser().getThumbnail()).fit().into(avatar);
         username.setText(profile.getUser().getFormattedName());
         status.setText(getString(R.string.online));
@@ -172,6 +174,12 @@ public class PersonalAreaFragment extends BaseFragment implements PersonalAreaVi
         postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
 
         text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
+    }
+
+    @Override
+    public void onError() {
+        status.setText(getString(R.string.offline));
+        status.setTextColor(Color.RED);
     }
 
     @Override

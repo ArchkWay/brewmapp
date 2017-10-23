@@ -15,8 +15,8 @@ import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadPostsTask;
 import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.execution.task.LoadProfileTask;
-import com.brewmapp.presentation.presenter.contract.PersonalAreaPresenter;
-import com.brewmapp.presentation.view.contract.PersonalAreaView;
+import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
+import com.brewmapp.presentation.view.contract.ProfileView;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -24,7 +24,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by ovcst on 03.08.2017.
  */
 
-public class PersonalAreaPresenterImpl extends BasePresenter<PersonalAreaView> implements PersonalAreaPresenter {
+public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements ProfilePresenter {
 
 
     private UserRepo userRepo;
@@ -34,9 +34,9 @@ public class PersonalAreaPresenterImpl extends BasePresenter<PersonalAreaView> i
     private LikeTask likeTask;
 
     @Inject
-    public PersonalAreaPresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
-                                     LoadProfileTask loadProfileTask,
-                                     LoadProfileAndPostsTask loadProfilePostsTask, LikeTask likeTask) {
+    public ProfilePresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
+                                LoadProfileTask loadProfileTask,
+                                LoadProfileAndPostsTask loadProfilePostsTask, LikeTask likeTask) {
         this.userRepo = userRepo;
         this.loadPostsTask = loadPostsTask;
         this.loadProfileTask = loadProfileTask;
@@ -45,8 +45,8 @@ public class PersonalAreaPresenterImpl extends BasePresenter<PersonalAreaView> i
     }
 
     @Override
-    public void onAttach(PersonalAreaView personalAreaView) {
-        super.onAttach(personalAreaView);
+    public void onAttach(ProfileView profileView) {
+        super.onAttach(profileView);
         if(userRepo.load().getCounts() != null) {
             view.showUserProfile(new UserProfile(userRepo.load()));
         }
@@ -69,6 +69,7 @@ public class PersonalAreaPresenterImpl extends BasePresenter<PersonalAreaView> i
             public void onError(Throwable e) {
                 enableControls(true);
                 showMessage(e.getMessage());
+                view.onError();
             }
 
             @Override
@@ -87,6 +88,7 @@ public class PersonalAreaPresenterImpl extends BasePresenter<PersonalAreaView> i
             public void onError(Throwable e) {
                 enableControls(true);
                 showMessage(e.getMessage());
+                view.onError();
             }
 
             @Override

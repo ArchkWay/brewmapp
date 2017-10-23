@@ -47,6 +47,7 @@
     <string name="photos_count">фото</string>
     <string name="video_count">видео</string>
     <string name="online">Онлайн</string>
+    <string name="offline">Оффлайн</string>
     <string name="new_post">Новая запись</string>
     <string name="add_photo">Добавить фото</string>
     <string name="fav_beer">Любимое пиво</string>

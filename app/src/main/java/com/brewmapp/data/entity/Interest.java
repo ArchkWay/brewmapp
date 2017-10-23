@@ -17,6 +17,16 @@ public class Interest {
     private String related_model;
     private String user_getThumb;
     private String user_id;
+    private Interest_info interest_info;
+
+
+    public Interest_info getInterest_info() {
+        return interest_info;
+    }
+
+    public void setInterest_info(Interest_info interest_info) {
+        this.interest_info = interest_info;
+    }
 
     public String getId() {
         return id;

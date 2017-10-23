@@ -29,7 +29,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
-public class InterestListListActivity extends BaseActivity implements InterestListView {
+public class    InterestListListActivity extends BaseActivity implements InterestListView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_interest_list)  RecyclerView recyclerView;
     @BindView(R.id.activity_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
@@ -45,7 +45,6 @@ public class InterestListListActivity extends BaseActivity implements InterestLi
         setContentView(R.layout.activity_interest_list);
     }
 
-
     @Override
     protected void initView() {
         enableBackButton();
@@ -56,7 +55,7 @@ public class InterestListListActivity extends BaseActivity implements InterestLi
         swipe.setOnRefreshListener(this::refreshItems);
         loadInterestPackage =new LoadInterestPackage();
         loadInterestPackage.setPage(0);
-        sendQuery();
+        sendQueryListInterests();
     }
 
     @Override
@@ -106,7 +105,7 @@ public class InterestListListActivity extends BaseActivity implements InterestLi
         switch (requestCode){
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
-                    Product product= (Product) data.getSerializableExtra(getString(R.string.key_serializable_extra));
+                    presenter.addInterest(data.getSerializableExtra(getString(R.string.key_serializable_extra)));
                     return;
                 }
                 break;
@@ -120,10 +119,10 @@ public class InterestListListActivity extends BaseActivity implements InterestLi
 
     private void refreshItems() {
         swipe.setRefreshing(true);
-        sendQuery();
+        sendQueryListInterests();
     }
 
-    private void sendQuery() {
+    private void sendQueryListInterests() {
         presenter.sendQuery(loadInterestPackage);
     }
 

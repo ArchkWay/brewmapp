@@ -45,7 +45,7 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
-import com.brewmapp.presentation.view.impl.fragment.PersonalAreaFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -264,15 +264,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshState();
-            else if(fragment instanceof PersonalAreaFragment)
-                ((PersonalAreaFragment) fragment).refreshState();
+            else if(fragment instanceof ProfileFragment)
+                ((ProfileFragment) fragment).refreshState();
     }
 
     public void refreshItems() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems();
-            else if(fragment instanceof PersonalAreaFragment)
-                ((PersonalAreaFragment) fragment).refreshItems();
+            else if(fragment instanceof ProfileFragment)
+                ((ProfileFragment) fragment).refreshItems();
     }
 }

@@ -10,7 +10,7 @@ import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
-import com.brewmapp.presentation.view.impl.fragment.PersonalAreaFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 
@@ -38,7 +38,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
         uiSettingRepo.setActiveFragment(action.code());
         switch (action.code()) {
             case MenuField.PROFILE:
-                fragmentToShow = new PersonalAreaFragment();
+                fragmentToShow = new ProfileFragment();
                 break;
             case MenuField.EVENTS:
                 fragmentToShow = new EventsFragment();

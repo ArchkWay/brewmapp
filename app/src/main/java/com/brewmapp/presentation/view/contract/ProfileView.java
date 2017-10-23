@@ -8,7 +8,8 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  * Created by ovcst on 03.08.2017.
  */
 
-public interface PersonalAreaView extends BasicView, RefreshableView {
+public interface ProfileView extends BasicView, RefreshableView {
     void showUserProfile(UserProfile profile);
     void appendPosts(Posts posts);
+    void onError();
 }

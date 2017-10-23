@@ -34,6 +34,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorWhite"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -87,8 +88,11 @@
                             <ImageView
                                 android:layout_width="@dimen/size_profile_info_icon"
                                 android:layout_height="@dimen/size_profile_info_icon"
-                                android:src="@drawable/ic_profile_info"/>
+                                android:src="@drawable/ic_profile_info"
+
+                                />
                         </LinearLayout>
+
                         <ru.frosteye.ovsa.presentation.view.widget.Line
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -128,6 +132,7 @@
                                 app:counterTitle="@string/photos_count"/>
 
                         </LinearLayout>
+
                         <ru.frosteye.ovsa.presentation.view.widget.Line
                             android:layout_width="match_parent"
                             android:layout_height="1dp"

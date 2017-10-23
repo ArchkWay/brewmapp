@@ -2,7 +2,6 @@ package com.brewmapp.data.entity.wrapper;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Product;
-import com.brewmapp.presentation.view.contract.AddFavoriteBeerView;
 import com.brewmapp.presentation.view.impl.widget.ProductView;
 
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;

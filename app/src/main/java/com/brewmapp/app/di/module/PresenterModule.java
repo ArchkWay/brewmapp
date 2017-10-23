@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
-import com.brewmapp.presentation.presenter.contract.AddFavoriteBeerPresenter;
+import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
 import com.brewmapp.presentation.presenter.contract.AssessmentsPresenter;
@@ -14,7 +14,7 @@ import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.ExtendedSearchPresenter;
-import com.brewmapp.presentation.presenter.contract.FavoriteBeerPresenter;
+import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.presenter.contract.FavoriteRestoPresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.presenter.contract.InviteListPresenter;
@@ -36,7 +36,7 @@ import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.AddFavoriteBeerPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.AddInterestPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AssessmentsPresenterImpl;
@@ -46,7 +46,7 @@ import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ExtendedSearchPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.FavoriteBeerPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.InterestListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FavoriteRestoPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FriendsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InviteListPresenterImpl;
@@ -237,12 +237,12 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
         return presenter;
     }
     @Provides @PresenterScope
-    FavoriteBeerPresenter provideFavoriteBeerPresenter(FavoriteBeerPresenterImpl presenter){
+    InterestListPresenter provideFavoriteBeerPresenter(InterestListPresenterImpl presenter){
         return presenter;
     }
 
     @Provides @PresenterScope
-    AddFavoriteBeerPresenter provideAddFavoriteBeerPresenter(AddFavoriteBeerPresenterImpl presenter){
+    AddInterestPresenter provideAddFavoriteBeerPresenter(AddInterestPresenterImpl presenter){
         return presenter;
     }
 }

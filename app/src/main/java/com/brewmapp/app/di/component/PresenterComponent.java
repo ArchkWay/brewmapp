@@ -3,7 +3,7 @@ package com.brewmapp.app.di.component;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
-import com.brewmapp.presentation.view.impl.activity.AddFavoriteBeerActivity;
+import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
@@ -13,7 +13,7 @@ import com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
-import com.brewmapp.presentation.view.impl.activity.FavoriteBeerActivity;
+import com.brewmapp.presentation.view.impl.activity.InterestListListActivity;
 import com.brewmapp.presentation.view.impl.activity.FavoriteRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
@@ -81,7 +81,7 @@ public interface PresenterComponent {
     void inject(DialogShare dialogShare);
     void inject(ShareLikeView shareLikeView);
     void inject(AssessmentsActivity assessmentsActivity);
-    void inject(FavoriteBeerActivity favoriteBeerActivity);
+    void inject(InterestListListActivity interestListActivity);
     void inject(FavoriteRestoActivity favoriteRestoActivity);
-    void inject(AddFavoriteBeerActivity addFavoriteBeerActivity);
+    void inject(AddInterestActivity addInterestActivity);
 }

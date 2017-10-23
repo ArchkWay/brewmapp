@@ -12,7 +12,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
-import com.brewmapp.presentation.view.impl.activity.FavoriteBeerActivity;
+import com.brewmapp.presentation.view.impl.activity.InterestListListActivity;
 import com.brewmapp.presentation.view.impl.activity.FavoriteRestoActivity;
 import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
@@ -184,7 +184,7 @@ public class PersonalAreaFragment extends BaseFragment implements PersonalAreaVi
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(getActivity(), FavoriteBeerActivity.class));
+                startActivity(new Intent(getActivity(), InterestListListActivity.class));
                 break;
             case 3:
                 startActivity(new Intent(getActivity(), FavoriteRestoActivity.class));

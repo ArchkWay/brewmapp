@@ -10,7 +10,7 @@ public class RequestCodes {
     public static final int REQUEST_PICK_LOCATION = 113;
     public static final int REQUEST_PICK_POST_SETTINGS = 114;
     public static final int REQUEST_EDIT_ALBUM = 115;
-    public static final int REQUEST_FAVORITE_BEER = 116;
+    public static final int REQUEST_INTEREST = 116;
 
 
 }

@@ -12,6 +12,7 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Product;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sales;
@@ -21,6 +22,7 @@ import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
+import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Products;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
@@ -94,6 +96,13 @@ public interface Api {
     Call<Products> loadProduct(@Query(Keys.LIMIT_START) int start,
                                @Query(Keys.LIMIT_END) int end,
                                @FieldMap WrapperParams params);
+
+    @POST("userinterest")
+    @FormUrlEncoded
+    Call<Interests> loadInterest(@Query(Keys.LIMIT_START) int start,
+                                 @Query(Keys.LIMIT_END) int end,
+                                 @FieldMap WrapperParams params);
+
 
     @POST("event")
     @FormUrlEncoded

@@ -5,16 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Product;
 import com.brewmapp.data.pojo.LoadProductPackage;
-import com.brewmapp.presentation.presenter.contract.AddFavoriteBeerPresenter;
-import com.brewmapp.presentation.view.contract.AddFavoriteBeerView;
+import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
+import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
@@ -29,13 +26,13 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
-public class AddFavoriteBeerActivity extends BaseActivity implements AddFavoriteBeerView{
+public class AddInterestActivity extends BaseActivity implements AddInterestView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
-    @BindView(R.id.recyclerview)    RecyclerView recyclerview;
-    @BindView(R.id.swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
+    @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
 
-    @Inject    AddFavoriteBeerPresenter presenter;
+    @Inject    AddInterestPresenter presenter;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private LoadProductPackage loadProductPackage;
@@ -44,14 +41,15 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_favorite_beer);
+        setContentView(R.layout.activity_add_interest);
     }
 
     @Override
     protected void initView() {
+        enableBackButton();
+
         loadProductPackage=new LoadProductPackage();
         finder.setListener(string -> prepareQuery(string));
-        enableBackButton();
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
@@ -121,6 +119,7 @@ public class AddFavoriteBeerActivity extends BaseActivity implements AddFavorite
     @Override
     public void onError() {
         swipe.setRefreshing(false);
+
     }
 
     private void processAction(int action, Object payload) {

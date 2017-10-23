@@ -141,7 +141,7 @@
             android:name=".presentation.view.impl.activity.PostDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.view.impl.activity.FavoriteBeerActivity"
+            android:name=".presentation.view.impl.activity.InterestListListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FavoriteRestoActivity"
@@ -149,7 +149,7 @@
         <activity
             android:name=".presentation.view.impl.activity.AssessmentsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".presentation.view.impl.activity.AddFavoriteBeerActivity"></activity>
+        <activity android:name=".presentation.view.impl.activity.AddInterestActivity"></activity>
     </application>
 
 </manifest>

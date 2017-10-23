@@ -1,13 +1,9 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.execution.task.LoadProductTask;
-import com.brewmapp.presentation.presenter.contract.AddFavoriteBeerPresenter;
-import com.brewmapp.presentation.view.contract.AddFavoriteBeerView;
-import com.brewmapp.utils.Cons;
+import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
+import com.brewmapp.presentation.view.contract.AddInterestView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,20 +18,20 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by xpusher on 10/20/2017.
  */
 
-public class AddFavoriteBeerPresenterImpl extends BasePresenter<AddFavoriteBeerView> implements AddFavoriteBeerPresenter {
+public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> implements AddInterestPresenter {
 
     private LoadProductTask loadProductTask;
 
     @Inject
-    public AddFavoriteBeerPresenterImpl(LoadProductTask loadProductTask){
+    public AddInterestPresenterImpl(LoadProductTask loadProductTask){
             this.loadProductTask = loadProductTask;
     }
 
 
 
     @Override
-    public void onAttach(AddFavoriteBeerView addFavoriteBeerView) {
-        super.onAttach(addFavoriteBeerView);
+    public void onAttach(AddInterestView addInterestView) {
+        super.onAttach(addInterestView);
     }
 
     @Override
@@ -45,7 +41,9 @@ public class AddFavoriteBeerPresenterImpl extends BasePresenter<AddFavoriteBeerV
 
     @Override
     public void sendQuery(LoadProductPackage loadProductPackage) {
+
         loadProductTask.cancel();
+
         if(loadProductPackage.getStringSearch().length()==0){
             view.appendItems(new ArrayList<IFlexible>());
             return;
@@ -61,6 +59,8 @@ public class AddFavoriteBeerPresenterImpl extends BasePresenter<AddFavoriteBeerV
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                view.onError();
+                view.showMessage(e.getMessage(),0);
             }
         });
     }

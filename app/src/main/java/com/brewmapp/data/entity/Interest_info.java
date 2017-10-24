@@ -36,6 +36,15 @@ public class Interest_info {
     String type_id;
     String user_getThumb;
 
+    public Interest_info(Product product) {
+        setTitle(product.getTitle());
+        setGetThumb(product.getGetThumb());
+    }
+
+    public Interest_info() {
+
+    }
+
     public String getAlias_whell() {
         return alias_whell;
     }

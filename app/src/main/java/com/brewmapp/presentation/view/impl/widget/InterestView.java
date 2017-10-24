@@ -50,7 +50,11 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
         this.interest=model;
         if(model.getInterest_info()!=null) {
             title.setText(String.valueOf(model.getInterest_info().getTitle()));
-            Picasso.with(getContext()).load(ResourceHelper.getString(R.string.config_content_url)+model.getInterest_info().getGetThumb()).fit().centerCrop().into(avatar);
+            String imgUrl=model.getInterest_info().getGetThumb();
+            if(imgUrl!=null&&!imgUrl.contains("http"))
+                imgUrl=ResourceHelper.getString(R.string.config_content_url)+imgUrl;
+
+            Picasso.with(getContext()).load(imgUrl).fit().centerCrop().into(avatar);
         }
 
 

@@ -2,11 +2,13 @@ package com.brewmapp.presentation.presenter.contract;
 
 
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Product;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.presentation.view.contract.InterestListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -16,6 +18,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface InterestListPresenter extends LivePresenter<InterestListView> {
     void requestInterests(LoadInterestPackage loadInterestPackage);
-    void addInterest(ArrayList<Serializable> serializableArrayList);
-    void removeInterest(ArrayList<Interest> serializableArrayListRemove);
+    void storeInterest(HashMap<Product,Product> hmAdd,HashMap<Interest,Interest> hmRemove);
 }

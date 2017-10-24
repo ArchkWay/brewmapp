@@ -9,12 +9,14 @@ import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.LoadInterestTask;
+import com.brewmapp.execution.task.RemoveInterestTask;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 
 import com.brewmapp.presentation.view.contract.InterestListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,13 +33,15 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
 
     private LoadInterestTask loadInterestTask;
     private AddInterestTask addInterestTask;
+    private RemoveInterestTask removeInterestTask;
     private UserRepo userRepo;
 
     @Inject
-    public InterestListPresenterImpl(LoadInterestTask loadInterestTask, AddInterestTask addInterestTask, UserRepo userRepo){
+    public InterestListPresenterImpl(LoadInterestTask loadInterestTask, AddInterestTask addInterestTask, UserRepo userRepo, RemoveInterestTask removeInterestTask){
         this.loadInterestTask =loadInterestTask;
         this.addInterestTask = addInterestTask;
         this.userRepo = userRepo;
+        this.removeInterestTask = removeInterestTask;
     }
 
     @Override
@@ -84,17 +88,35 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
     }
 
     @Override
-    public void addInterest(ArrayList<Serializable> serializableArrayList) {
-                addNewInterest(new ArrayList<>(serializableArrayList));
-
+    public void storeInterest(HashMap<Product,Product> hmAdd,HashMap<Interest,Interest> hmRemove) {
+                storeAddedInterests(new ArrayList<>(hmAdd.keySet()),new ArrayList<>(hmRemove.keySet()));
     }
 
-    @Override
-    public void removeInterest(ArrayList<Interest> serializableArrayListRemove) {
 
+    private void storeRemovedInterest(ArrayList<Interest> interests) {
+        if(interests.size()>0){
+            Interest interest=interests.get(0);
+            removeInterestTask.execute(interest.getId(),new SimpleSubscriber<String>(){
+                @Override
+                public void onNext(String s) {
+                    super.onNext(s);
+                    interests.remove(0);
+                    storeRemovedInterest(interests);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    view.showMessage(e.getMessage(),0);
+                    view.onError();
+                }
+            });
+        }else {
+            view.refreshItems();
+        }
     }
 
-    public void addNewInterest(ArrayList<Serializable> serializableArrayList) {
+    public void storeAddedInterests(ArrayList<Serializable> serializableArrayList,ArrayList<Interest> interestArrayList) {
 
         if(serializableArrayList.size()>0) {
             Serializable serializableExtra=serializableArrayList.get(0);
@@ -107,10 +129,10 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 related_model = Keys.CAP_BEER;
             } else
                 return;
-
             addInterestPackage.setRelated_id(related_id);
             addInterestPackage.setRelated_model(related_model);
             addInterestPackage.setToken(userRepo.load().getToken());
+
             addInterestTask.execute(addInterestPackage, new SimpleSubscriber<String>() {
                 @Override
                 public void onNext(String s) {
@@ -121,10 +143,12 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 @Override
                 public void onError(Throwable e) {
                     super.onError(e);
+                    view.showMessage(e.getMessage(),0);
+                    view.onError();
                 }
             });
         }else {
-            view.refreshItems();
+            storeRemovedInterest(interestArrayList);
         }
     }
 

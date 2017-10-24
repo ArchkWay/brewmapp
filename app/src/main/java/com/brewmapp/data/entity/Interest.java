@@ -19,6 +19,13 @@ public class Interest  {
     private String user_id;
     private Interest_info interest_info;
 
+    public Interest(Product product) {
+        setInterest_info(new Interest_info(product));
+    }
+
+    public Interest() {
+
+    }
 
     public Interest_info getInterest_info() {
         return interest_info;

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Product;
+import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
@@ -22,11 +24,13 @@ import com.brewmapp.presentation.view.impl.widget.InterestView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
@@ -45,8 +49,8 @@ public class    InterestListListActivity extends BaseActivity implements Interes
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private LoadInterestPackage loadInterestPackage;
-    private ArrayList<Serializable> serializableArrayListAdd =new ArrayList<>();
-    private ArrayList<Interest> interestArrayListRemove =new ArrayList<>();
+    private HashMap<Product,Product> hmAdd =new HashMap<>();
+    private HashMap<Interest,Interest> hmRemove =new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +74,24 @@ public class    InterestListListActivity extends BaseActivity implements Interes
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                interestArrayListRemove.add(((InterestView)((ModelViewHolder) viewHolder).getFrontView()).getModel());
-                visibleTextSave();
-                //adapter.removeItemWithDelay();
-                //((ModelViewHolder) viewHolder).getFrontView().getModel()
+                try {
+                    for(int i=0;i<adapter.getItemCount();i++){
+                        Interest cur=((InterestInfo)adapter.getItem(i)).getModel();
+                        Interest swipe=((InterestView)((ModelViewHolder) viewHolder).getFrontView()).getModel();
+                        if(cur==swipe){
+                            adapter.removeItem(i);
+                            hmRemove.put(cur,cur);
+                            visibleTextSave();
+                            return;
+                        }
+                    }
+                }catch (Exception e){
+
+                }
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-
 
         swipe.setOnRefreshListener(this::refreshItems);
         loadInterestPackage =new LoadInterestPackage();
@@ -96,11 +109,11 @@ public class    InterestListListActivity extends BaseActivity implements Interes
                 return;
             }
         }
-        text_save_intesest.setOnClickListener(v->{presenter.addInterest(serializableArrayListAdd);presenter.removeInterest(interestArrayListRemove);});
+        text_save_intesest.setOnClickListener(v->{
+            presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();
+        });
 
         sendQueryListInterests();
-
-        visibleTextSave();
     }
 
     @Override
@@ -150,7 +163,10 @@ public class    InterestListListActivity extends BaseActivity implements Interes
         switch (requestCode){
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
-                    serializableArrayListAdd.add(data.getSerializableExtra(getString(R.string.key_serializable_extra)));
+                    Product product= (Product) data.getSerializableExtra(getString(R.string.key_serializable_extra));
+                    hmAdd.put(product,product);
+                    adapter.addItem(0,new InterestInfo(product));
+                    adapter.notifyDataSetChanged();
                     visibleTextSave();
                     return;
                 }
@@ -160,7 +176,7 @@ public class    InterestListListActivity extends BaseActivity implements Interes
     }
 
     private void visibleTextSave() {
-        if(serializableArrayListAdd.size()==0&& interestArrayListRemove.size()==0)
+        if(hmAdd.size()==0&& hmRemove.size()==0)
             text_save_intesest.setVisibility(View.GONE);
         else
             text_save_intesest.setVisibility(View.VISIBLE);
@@ -176,9 +192,10 @@ public class    InterestListListActivity extends BaseActivity implements Interes
         sendQueryListInterests();
     }
 
-
     public void sendQueryListInterests() {
+        hmAdd.clear();hmRemove.clear();
         swipe.setRefreshing(true);
+        visibleTextSave();
         presenter.requestInterests(loadInterestPackage);
     }
 

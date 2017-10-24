@@ -3,6 +3,7 @@ package com.brewmapp.data.entity.wrapper;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Interest;
 
+import com.brewmapp.data.entity.Product;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
@@ -17,4 +18,13 @@ public class InterestInfo extends AdapterItem<Interest, InterestView> {
     public int getLayoutRes() {
         return R.layout.view_interest;
     }
+
+    public InterestInfo(Product product){
+        setModel(new Interest(product));
+    }
+
+    public InterestInfo(){
+
+    }
+
 }

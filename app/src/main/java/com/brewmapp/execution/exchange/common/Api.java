@@ -107,6 +107,10 @@ public interface Api {
     @FormUrlEncoded
     Call<Object> addInterest(@FieldMap WrapperParams params);
 
+    @POST("userinterest/delete")
+    @FormUrlEncoded
+    Call<Object> removeInterest(@FieldMap WrapperParams params);
+
 
     @POST("event")
     @FormUrlEncoded

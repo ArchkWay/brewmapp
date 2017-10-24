@@ -116,7 +116,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
         }
     }
 
-    public void storeAddedInterests(ArrayList<Serializable> serializableArrayList,ArrayList<Interest> interestArrayList) {
+    public void storeAddedInterests(ArrayList<Serializable> serializableArrayList,ArrayList<Interest> removeArrayList) {
 
         if(serializableArrayList.size()>0) {
             Serializable serializableExtra=serializableArrayList.get(0);
@@ -138,6 +138,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 public void onNext(String s) {
                     super.onNext(s);
                     serializableArrayList.remove(serializableExtra);
+                    storeAddedInterests(serializableArrayList, removeArrayList);
                 }
 
                 @Override
@@ -148,7 +149,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 }
             });
         }else {
-            storeRemovedInterest(interestArrayList);
+            storeRemovedInterest(removeArrayList);
         }
     }
 

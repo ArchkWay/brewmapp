@@ -177,7 +177,7 @@ public class    InterestListListActivity extends BaseActivity implements Interes
 
     private void visibleTextSave() {
         if(hmAdd.size()==0&& hmRemove.size()==0)
-            text_save_intesest.setVisibility(View.GONE);
+            text_save_intesest.setVisibility(View.INVISIBLE);
         else
             text_save_intesest.setVisibility(View.VISIBLE);
     }

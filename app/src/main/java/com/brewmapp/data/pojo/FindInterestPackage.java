@@ -4,7 +4,9 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 21.10.2017.
  */
 
-public class LoadProductPackage {
+public class FindInterestPackage {
+    private String interestFilter;
+
     private int mode;
     private int filter;
     private int page;
@@ -26,5 +28,12 @@ public class LoadProductPackage {
         this.page = page;
     }
 
+    public String getInterestFilter() {
+        return interestFilter;
+    }
+
+    public void setInterestFilter(String interestFilter) {
+        this.interestFilter = interestFilter;
+    }
 
 }

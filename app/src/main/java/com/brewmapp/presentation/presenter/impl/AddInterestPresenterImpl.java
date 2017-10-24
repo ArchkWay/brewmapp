@@ -1,6 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.data.pojo.FindInterestPackage;
 import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
@@ -40,16 +40,11 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
     }
 
     @Override
-    public void sendQuery(LoadProductPackage loadProductPackage) {
+    public void sendQuery(FindInterestPackage findInterestPackage) {
 
         loadProductTask.cancel();
 
-        if(loadProductPackage.getStringSearch().length()==0){
-            view.appendItems(new ArrayList<IFlexible>());
-            return;
-        }
-
-        loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
+        loadProductTask.execute(findInterestPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> product) {
                 super.onNext(product);

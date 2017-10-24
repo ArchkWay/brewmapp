@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -48,8 +49,8 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     public void setModel(Interest model) {
         this.interest=model;
         if(model.getInterest_info()!=null) {
-            title.setText(model.getInterest_info().getTitle());
-            Picasso.with(getContext()).load(model.getInterest_info().getImage()).fit().centerCrop().into(avatar);
+            title.setText(String.valueOf(model.getInterest_info().getTitle()));
+            Picasso.with(getContext()).load(ResourceHelper.getString(R.string.config_content_url)+model.getInterest_info().getGetThumb()).fit().centerCrop().into(avatar);
         }
 
 

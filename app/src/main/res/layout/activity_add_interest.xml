@@ -7,6 +7,8 @@
     tools:context="com.brewmapp.presentation.view.impl.activity.AddInterestActivity"
     android:orientation="vertical">
 
+    <include layout="@layout/view_toolbar" />
+
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,7 +18,7 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/Ovsa.Toolbar"
-        android:id="@+id/common.toolbar"
+        android:id="@+id/common.toolbar.search"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetRight="0dp"

@@ -13,6 +13,6 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 public class ProductInfo extends AdapterItem<Product, ProductView> {
     @Override
     public int getLayoutRes() {
-        return R.layout.view_product;
+        return R.layout.view_interest_add;
     }
 }

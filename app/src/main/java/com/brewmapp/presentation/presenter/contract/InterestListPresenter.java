@@ -1,10 +1,12 @@
 package com.brewmapp.presentation.presenter.contract;
 
 
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.presentation.view.contract.InterestListView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -13,7 +15,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface InterestListPresenter extends LivePresenter<InterestListView> {
-    void sendQuery(LoadInterestPackage loadInterestPackage);
-
-    void addInterest(Serializable serializableExtra);
+    void requestInterests(LoadInterestPackage loadInterestPackage);
+    void addInterest(ArrayList<Serializable> serializableArrayList);
+    void removeInterest(ArrayList<Interest> serializableArrayListRemove);
 }

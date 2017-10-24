@@ -14,7 +14,6 @@ import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListListActivity;
-import com.brewmapp.presentation.view.impl.activity.FavoriteRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
@@ -82,6 +81,5 @@ public interface PresenterComponent {
     void inject(ShareLikeView shareLikeView);
     void inject(AssessmentsActivity assessmentsActivity);
     void inject(InterestListListActivity interestListActivity);
-    void inject(FavoriteRestoActivity favoriteRestoActivity);
     void inject(AddInterestActivity addInterestActivity);
 }

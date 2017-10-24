@@ -48,8 +48,11 @@ public class ProductView extends BaseLinearLayout implements InteractiveModelVie
     @Override
     public void setModel(Product model) {
         product=model;
-        Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(avatar);
-        title.setText(model.getTitle());
+        Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(avatar);
+        String titletxt=model.getTitle();
+        if(model.getTitle_ru().length()>0)
+            titletxt=titletxt+"("+model.getTitle_ru()+")";
+        title.setText(titletxt);
         setOnClickListener(v -> listener.onModelAction(0,product));
     }
 

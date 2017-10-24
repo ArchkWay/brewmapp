@@ -4,7 +4,7 @@ package com.brewmapp.data.entity;
  * Created by Kras on 22.10.2017.
  */
 
-public class Interest {
+public class Interest  {
 
     private String id;
     private String created_at;

@@ -105,7 +105,7 @@ public interface Api {
 
     @POST("userinterest/add")
     @FormUrlEncoded
-    Call<String> addInterest(@FieldMap WrapperParams params);
+    Call<Object> addInterest(@FieldMap WrapperParams params);
 
 
     @POST("event")

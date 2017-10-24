@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Product;
-import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.data.pojo.FindInterestPackage;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -27,6 +27,7 @@ import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 public class AddInterestActivity extends BaseActivity implements AddInterestView {
+    @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
@@ -35,7 +36,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Inject    AddInterestPresenter presenter;
 
     private FlexibleModelAdapter<IFlexible> adapter;
-    private LoadProductPackage loadProductPackage;
+    private FindInterestPackage findInterestPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
 
     @Override
@@ -48,14 +49,14 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     protected void initView() {
         enableBackButton();
 
-        loadProductPackage=new LoadProductPackage();
+        findInterestPackage =new FindInterestPackage();
+        findInterestPackage.setInterestFilter(getIntent().getAction());
         finder.setListener(string -> prepareQuery(string));
-
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-                loadProductPackage.setPage(currentPage-1);
+                findInterestPackage.setPage(currentPage-1);
                 sendQuery();
             }
         };
@@ -64,20 +65,28 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         recyclerview.setAdapter(adapter);
         swipe.setOnRefreshListener(this::refreshItems);
+        setTitle(R.string.action_add);
     }
 
     private void prepareQuery(String stringSearch) {
-        loadProductPackage.setPage(0);
-        loadProductPackage.setStringSearch(stringSearch);
+        findInterestPackage.setPage(0);
+        findInterestPackage.setStringSearch(stringSearch);
         sendQuery();
     }
 
     private void sendQuery() {
-        presenter.sendQuery(loadProductPackage);
+        if(findInterestPackage.getStringSearch().length()==0){
+            findInterestPackage.setPage(0);
+            appendItems(new ArrayList<IFlexible>());
+        }else {
+            swipe.setRefreshing(true);
+            presenter.sendQuery(findInterestPackage);
+        }
+
     }
 
     private void refreshItems() {
-        swipe.setRefreshing(true);
+
         sendQuery();
     }
 
@@ -108,7 +117,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        if(loadProductPackage.getPage()==0)
+        if(findInterestPackage.getPage()==0)
             adapter.clear();
 
         adapter.addItems(adapter.getItemCount(), list);

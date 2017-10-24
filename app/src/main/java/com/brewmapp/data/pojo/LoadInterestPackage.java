@@ -7,6 +7,8 @@ package com.brewmapp.data.pojo;
 public class LoadInterestPackage {
     private int page;
 
+    String filterInterest;
+
     public int getPage() {
         return page;
     }
@@ -15,5 +17,12 @@ public class LoadInterestPackage {
         this.page = page;
     }
 
+
+    public void setFilterInterest(String interest) {
+        this.filterInterest =interest;
+    }
+    public String getFilterInterest() {
+        return filterInterest;
+    }
 
 }

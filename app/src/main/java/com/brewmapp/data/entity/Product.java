@@ -102,7 +102,7 @@ public class Product implements Serializable{
     }
 
     public String getTitle() {
-        return title;
+        return title==null?"":title;
     }
 
     public void setTitle(String title) {
@@ -110,7 +110,7 @@ public class Product implements Serializable{
     }
 
     public String getTitle_ru() {
-        return title_ru;
+        return title_ru==null?"":title_ru;
     }
 
     public void setTitle_ru(String title_ru) {

@@ -1,6 +1,6 @@
 package com.brewmapp.presentation.presenter.contract;
 
-import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.data.pojo.FindInterestPackage;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -11,5 +11,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface AddInterestPresenter extends LivePresenter<AddInterestView> {
 
-    void sendQuery(LoadProductPackage loadProductPackage);
+    void sendQuery(FindInterestPackage findInterestPackage);
 }

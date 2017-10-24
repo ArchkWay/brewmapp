@@ -12,4 +12,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 public interface InterestListView extends BasicView {
     void appendItems(List<IFlexible> iFlexibles);
     void onError();
+    void refreshItems();
 }

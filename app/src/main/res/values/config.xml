@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="config_content_url">https://brewmapp.com/</string>
-    <!--<string name="config_api_url">https://brewmapp.com/api/</string>-->
-    <string name="config_api_url">https://developer.brewmapp.com/api/</string>
+    <string name="config_api_url">https://brewmapp.com/api/</string>
+    <!--<string name="config_api_url">https://developer.brewmapp.com/api/</string>-->
     <string name="config_facebook_app_id">248043202213811</string>
     <integer name="com_vk_sdk_AppId">5528887</integer>
 

@@ -51,10 +51,10 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         this.resto =resto;
 
 //        Picasso.with(getContext()).load(resto.getGetThumb()).fit().centerInside().into(avatar);
-//        String titletxt = resto.getTitle();
+        String titletxt = resto.getName();
 //        if (resto.getTitle_ru().length() > 0)
 //            titletxt = titletxt + "(" + resto.getTitle_ru() + ")";
-//        title.setText(titletxt);
+        title.setText(titletxt);
 
         setOnClickListener(v -> listener.onModelAction(0, resto));
     }

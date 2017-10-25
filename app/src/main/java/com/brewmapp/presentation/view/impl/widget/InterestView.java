@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -48,15 +50,32 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @Override
     public void setModel(Interest model) {
         this.interest=model;
-        if(model.getInterest_info()!=null) {
-            title.setText(String.valueOf(model.getInterest_info().getTitle()));
-            String imgUrl=model.getInterest_info().getGetThumb();
-            if(imgUrl!=null&&!imgUrl.contains("http"))
-                imgUrl=ResourceHelper.getString(R.string.config_content_url)+imgUrl;
-
-            Picasso.with(getContext()).load(imgUrl).fit().centerCrop().into(avatar);
+        String imgUrl="";
+        String text="";
+        int imgUrlDefault;
+        switch (model.getRelated_model()){
+            case Keys.CAP_RESTO:
+                text=String.valueOf(model.getInterest_info().getName());
+                imgUrlDefault=R.drawable.ic_default_resto;
+                break;
+            case Keys.CAP_BEER:
+                text=String.valueOf(model.getInterest_info().getTitle());
+                imgUrlDefault=R.drawable.ic_default_beer;
+                if(model.getInterest_info()!=null) {
+                    imgUrl=model.getInterest_info().getGetThumb();
+                    if(imgUrl!=null&&!imgUrl.contains("http"))
+                        imgUrl=ResourceHelper.getString(R.string.config_content_url)+imgUrl;
+                }
+                break;
+            default:
+                return;
         }
 
+        title.setText(text);
+        if(imgUrl.length()==0)
+            Picasso.with(getContext()).load(imgUrlDefault).fit().centerCrop().into(avatar);
+        else
+            Picasso.with(getContext()).load(imgUrl).fit().centerCrop().into(avatar);
 
     }
 

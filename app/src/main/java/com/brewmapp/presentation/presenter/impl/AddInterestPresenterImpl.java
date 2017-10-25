@@ -52,7 +52,6 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
                 super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);
             }
-
             @Override
             public void onError(Throwable e) {
                 super.onError(e);

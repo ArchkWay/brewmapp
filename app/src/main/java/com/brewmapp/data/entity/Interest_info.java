@@ -5,6 +5,8 @@ package com.brewmapp.data.entity;
  */
 
 public class Interest_info {
+
+    String name;
     String alias_whell;
     String avg_ball;
     String avg_cost;
@@ -36,12 +38,25 @@ public class Interest_info {
     String type_id;
     String user_getThumb;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public Interest_info() {
+
+    }
     public Interest_info(Beer beer) {
         setTitle(beer.getTitle());
         setGetThumb(beer.getGetThumb());
     }
 
-    public Interest_info() {
+    public Interest_info(Resto resto) {
+        setName(resto.getName());
 
     }
 

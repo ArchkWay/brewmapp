@@ -4,6 +4,7 @@ import com.brewmapp.R;
 import com.brewmapp.data.entity.Interest;
 
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
@@ -13,6 +14,10 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class InterestInfo extends AdapterItem<Interest, InterestView> {
+
+    public InterestInfo(Resto resto) {
+        setModel(new Interest(resto));
+    }
 
     @Override
     public int getLayoutRes() {

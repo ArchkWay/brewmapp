@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.execution.exchange.request.base.Keys;
+
 /**
  * Created by Kras on 22.10.2017.
  */
@@ -19,12 +21,18 @@ public class Interest  {
     private String user_id;
     private Interest_info interest_info;
 
-    public Interest(Beer beer) {
-        setInterest_info(new Interest_info(beer));
-    }
 
     public Interest() {
 
+    }
+    public Interest(Beer beer) {
+        setInterest_info(new Interest_info(beer));
+        setRelated_model(Keys.CAP_BEER);
+    }
+
+    public Interest(Resto resto) {
+        setInterest_info(new Interest_info(resto));
+        setRelated_model(Keys.CAP_RESTO);
     }
 
     public Interest_info getInterest_info() {

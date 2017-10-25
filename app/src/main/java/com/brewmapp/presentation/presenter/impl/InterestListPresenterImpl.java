@@ -3,6 +3,7 @@ package com.brewmapp.presentation.presenter.impl;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
@@ -63,12 +64,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 super.onNext(iFlexibles);
                 for(int i=0;i<iFlexibles.size();){
                     InterestInfo interestInfo= (InterestInfo) iFlexibles.get(i);
-                    if(interestInfo!=null
-                            &&interestInfo.getModel()!=null
-                            &&interestInfo.getModel().getInterest_info()!=null
-                            &&interestInfo.getModel().getInterest_info().getTitle()!=null
-                            &&interestInfo.getModel().getRelated_model().equals(loadInterestPackage.getFilterInterest())
-                            ){
+                    if(isBeer(interestInfo)||isResto(interestInfo)){
                         i++;
                     }else {
                         iFlexibles.remove(i);
@@ -76,6 +72,25 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 }
 
                 view.appendItems(iFlexibles);
+            }
+
+            private boolean isResto(InterestInfo interestInfo) {
+                return interestInfo!=null
+                        &&interestInfo.getModel()!=null
+                        &&interestInfo.getModel().getRelated_model().equals(Keys.CAP_RESTO)
+                        &&interestInfo.getModel().getInterest_info()!=null
+                        &&interestInfo.getModel().getInterest_info().getName()!=null
+                        &&interestInfo.getModel().getRelated_model().equals(loadInterestPackage.getFilterInterest());
+            }
+
+            private boolean isBeer(InterestInfo interestInfo) {
+
+                return interestInfo!=null
+                        &&interestInfo.getModel()!=null
+                        &&interestInfo.getModel().getRelated_model().equals(Keys.CAP_BEER)
+                        &&interestInfo.getModel().getInterest_info()!=null
+                        &&interestInfo.getModel().getInterest_info().getTitle()!=null
+                        &&interestInfo.getModel().getRelated_model().equals(loadInterestPackage.getFilterInterest());
             }
 
             @Override
@@ -88,7 +103,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
     }
 
     @Override
-    public void storeInterest(HashMap<Beer,Beer> hmAdd, HashMap<Interest,Interest> hmRemove) {
+    public void storeInterest(HashMap<Serializable,Serializable> hmAdd, HashMap<Interest,Interest> hmRemove) {
                 storeAddedInterests(new ArrayList<>(hmAdd.keySet()),new ArrayList<>(hmRemove.keySet()));
     }
 
@@ -127,7 +142,10 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
             if (serializableExtra instanceof Beer) {
                 related_id = ((Beer) serializableExtra).getId();
                 related_model = Keys.CAP_BEER;
-            } else
+            }else if(serializableExtra instanceof Resto) {
+                related_id = String.valueOf(((Resto) serializableExtra).getId());
+                related_model = Keys.CAP_RESTO;
+            }else
                 return;
             addInterestPackage.setRelated_id(related_id);
             addInterestPackage.setRelated_model(related_model);

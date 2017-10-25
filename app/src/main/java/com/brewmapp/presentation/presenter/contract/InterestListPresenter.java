@@ -6,6 +6,7 @@ import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.presentation.view.contract.InterestListView;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -16,5 +17,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface InterestListPresenter extends LivePresenter<InterestListView> {
     void requestInterests(LoadInterestPackage loadInterestPackage);
-    void storeInterest(HashMap<Beer,Beer> hmAdd, HashMap<Interest,Interest> hmRemove);
+    void storeInterest(HashMap<Serializable,Serializable> hmAdd, HashMap<Interest,Interest> hmRemove);
 }

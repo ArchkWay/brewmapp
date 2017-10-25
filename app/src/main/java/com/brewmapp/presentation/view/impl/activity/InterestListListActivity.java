@@ -15,6 +15,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -22,6 +23,7 @@ import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.view.contract.InterestListView;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +49,7 @@ public class    InterestListListActivity extends BaseActivity implements Interes
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private LoadInterestPackage loadInterestPackage;
-    private HashMap<Beer,Beer> hmAdd =new HashMap<>();
+    private HashMap<Serializable,Serializable> hmAdd =new HashMap<>();
     private HashMap<Interest,Interest> hmRemove =new HashMap<>();
 
     @Override
@@ -161,10 +163,22 @@ public class    InterestListListActivity extends BaseActivity implements Interes
         switch (requestCode){
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
-                    Beer beer = (Beer) data.getSerializableExtra(getString(R.string.key_serializable_extra));
-                    hmAdd.put(beer, beer);
-                    adapter.addItem(0,new InterestInfo(beer));
-                    adapter.notifyDataSetChanged();
+                    Serializable serializable=data.getSerializableExtra(getString(R.string.key_serializable_extra));
+                    if(serializable instanceof Beer) {
+                        Beer beer = (Beer) serializable;
+                        hmAdd.put(beer, beer);
+                        adapter.addItem(new InterestInfo(beer));
+                        adapter.notifyDataSetChanged();
+                    }else if(serializable instanceof Resto){
+                        Resto resto=(Resto) serializable;
+                        hmAdd.put(resto, resto);
+                        adapter.addItem(new InterestInfo(resto));
+                        adapter.notifyDataSetChanged();
+                    }else{
+                        return;
+                    }
+
+
                     visibleTextSave();
                     return;
                 }

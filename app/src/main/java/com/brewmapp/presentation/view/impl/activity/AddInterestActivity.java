@@ -16,6 +16,7 @@ import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,7 +146,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     private void processAction(int action, Object payload) {
         Intent intent=new Intent();
-        intent.putExtra(getString(R.string.key_serializable_extra),(Beer)payload);
+        intent.putExtra(getString(R.string.key_serializable_extra),(Serializable) payload);
         setResult(RESULT_OK,intent);
         finish();
     }

@@ -18,4 +18,5 @@ public class Wrappers {
     public static final String LOCATION = "Location";
     public static final String BEER = "Beer";
     public static final String USER_INTEREST = "UserInterest";
+    public static final String SEARCH_TYPE = "Search";
 }

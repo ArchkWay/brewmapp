@@ -2,8 +2,7 @@ package com.brewmapp.data.entity.container;
 
 import android.support.annotation.NonNull;
 
-import com.brewmapp.data.entity.Product;
-import com.brewmapp.data.entity.wrapper.ProductInfo;
+import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
  * Created by Kras on 21.10.2017.
  */
 
-public class Products extends ListResponse<ProductInfo> {
-    public Products(@NonNull List<ProductInfo> models) {
+public class Beers extends ListResponse<BeerInfo> {
+    public Beers(@NonNull List<BeerInfo> models) {
         super(models);
     }
 }

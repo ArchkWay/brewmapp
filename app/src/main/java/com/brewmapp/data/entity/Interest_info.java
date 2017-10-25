@@ -36,9 +36,9 @@ public class Interest_info {
     String type_id;
     String user_getThumb;
 
-    public Interest_info(Product product) {
-        setTitle(product.getTitle());
-        setGetThumb(product.getGetThumb());
+    public Interest_info(Beer beer) {
+        setTitle(beer.getTitle());
+        setGetThumb(beer.getGetThumb());
     }
 
     public Interest_info() {

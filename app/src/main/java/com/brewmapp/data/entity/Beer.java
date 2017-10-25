@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by xpusher on 10/20/2017.
  */
 
-public class Product implements Serializable{
+public class Beer implements Serializable{
     private String id;
     private String country_id;
     private String brand_id;

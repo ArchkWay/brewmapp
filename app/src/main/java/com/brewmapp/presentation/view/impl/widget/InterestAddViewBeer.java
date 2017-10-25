@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.Product;
+import com.brewmapp.data.entity.Beer;
 import com.squareup.picasso.Picasso;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,45 +22,47 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by Kras on 21.10.2017.
  */
 
-public class ProductView extends BaseLinearLayout implements InteractiveModelView<Product> {
-    @BindView(R.id.view_product_avatar)    ImageView avatar;
-    @BindView(R.id.view_product_title)    TextView title;
+public class InterestAddViewBeer extends BaseLinearLayout implements InteractiveModelView<Beer> {
+    @BindView(R.id.view_interest_avatar)    ImageView avatar;
+    @BindView(R.id.view_interest_title)    TextView title;
 
-    private Product product;
+    private Beer beer;
     private Listener listener;
 
-    public ProductView(Context context) {
+    public InterestAddViewBeer(Context context) {
         super(context);
     }
 
-    public ProductView(Context context, AttributeSet attrs) {
+    public InterestAddViewBeer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ProductView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public InterestAddViewBeer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ProductView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public InterestAddViewBeer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
 
     @Override
-    public void setModel(Product model) {
-        product=model;
-        Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(avatar);
-        String titletxt=model.getTitle();
-        if(model.getTitle_ru().length()>0)
-            titletxt=titletxt+"("+model.getTitle_ru()+")";
+    public void setModel(Beer beer) {
+        this.beer =beer;
+
+        Picasso.with(getContext()).load(beer.getGetThumb()).fit().centerInside().into(avatar);
+        String titletxt = beer.getTitle();
+        if (beer.getTitle_ru().length() > 0)
+            titletxt = titletxt + "(" + beer.getTitle_ru() + ")";
         title.setText(titletxt);
-        setOnClickListener(v -> listener.onModelAction(0,product));
+
+        setOnClickListener(v -> listener.onModelAction(0, beer));
     }
 
     @Override
-    public Product getModel() {
-        return product;
+    public Beer getModel() {
+        return beer;
     }
 
     @Override

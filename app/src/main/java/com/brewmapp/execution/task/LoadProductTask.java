@@ -1,8 +1,8 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.container.Products;
-import com.brewmapp.data.pojo.FindInterestPackage;
+import com.brewmapp.data.entity.container.Beers;
+import com.brewmapp.data.pojo.FindBeerPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -24,7 +24,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by Kras on 21.10.2017.
  */
 
-public class LoadProductTask extends BaseNetworkTask<FindInterestPackage,List<IFlexible>> {
+public class LoadProductTask extends BaseNetworkTask<FindBeerPackage,List<IFlexible>> {
 
     private int step;
 
@@ -35,15 +35,15 @@ public class LoadProductTask extends BaseNetworkTask<FindInterestPackage,List<IF
     }
 
     @Override
-    protected Observable<List<IFlexible>> prepareObservable(FindInterestPackage findInterestPackage) {
+    protected Observable<List<IFlexible>> prepareObservable(FindBeerPackage findBeerPackage) {
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params = new WrapperParams(Wrappers.BEER);
-                params.addParam(Keys.TITLE, findInterestPackage.getStringSearch());
-                int start = findInterestPackage.getPage() * step;
-                int end = findInterestPackage.getPage() * step + step;
-                Products products = executeCall(getApi().loadProduct(start , end, params));
-                subscriber.onNext(new ArrayList<>(products.getModels()));
+                params.addParam(Keys.TITLE, findBeerPackage.getStringSearch());
+                int start = findBeerPackage.getPage() * step;
+                int end = findBeerPackage.getPage() * step + step;
+                Beers beers = executeCall(getApi().loadProduct(start , end, params));
+                subscriber.onNext(new ArrayList<>(beers.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

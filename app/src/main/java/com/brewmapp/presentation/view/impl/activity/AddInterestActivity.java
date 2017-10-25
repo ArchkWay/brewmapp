@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.Product;
-import com.brewmapp.data.pojo.FindInterestPackage;
+import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.pojo.FindBeerPackage;
+import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -36,7 +38,8 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Inject    AddInterestPresenter presenter;
 
     private FlexibleModelAdapter<IFlexible> adapter;
-    private FindInterestPackage findInterestPackage;
+
+    private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
 
     @Override
@@ -48,15 +51,24 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     protected void initView() {
         enableBackButton();
+        fullSearchPackage=new FullSearchPackage();
 
-        findInterestPackage =new FindInterestPackage();
-        findInterestPackage.setInterestFilter(getIntent().getAction());
+        switch (getIntent().getAction()){
+            case Keys.CAP_BEER:
+                fullSearchPackage.setType(Keys.TYPE_BEER);
+                break;
+            case Keys.CAP_RESTO:
+                fullSearchPackage.setType(Keys.TYPE_RESTO);
+                break;
+        }
+
+
         finder.setListener(string -> prepareQuery(string));
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-                findInterestPackage.setPage(currentPage-1);
+                fullSearchPackage.setPage(currentPage-1);
                 sendQuery();
             }
         };
@@ -69,18 +81,18 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     }
 
     private void prepareQuery(String stringSearch) {
-        findInterestPackage.setPage(0);
-        findInterestPackage.setStringSearch(stringSearch);
+        fullSearchPackage.setPage(0);
+        fullSearchPackage.setStringSearch(stringSearch);
         sendQuery();
     }
 
     private void sendQuery() {
-        if(findInterestPackage.getStringSearch().length()==0){
-            findInterestPackage.setPage(0);
-            appendItems(new ArrayList<IFlexible>());
+        if(fullSearchPackage.getStringSearch().length()==0){
+            fullSearchPackage.setPage(0);
+            appendItems(new ArrayList<>());
         }else {
             swipe.setRefreshing(true);
-            presenter.sendQuery(findInterestPackage);
+            presenter.sendQueryFullSearch(fullSearchPackage);
         }
 
     }
@@ -117,7 +129,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        if(findInterestPackage.getPage()==0)
+        if(fullSearchPackage.getPage()==0)
             adapter.clear();
 
         adapter.addItems(adapter.getItemCount(), list);
@@ -133,7 +145,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     private void processAction(int action, Object payload) {
         Intent intent=new Intent();
-        intent.putExtra(getString(R.string.key_serializable_extra),(Product)payload);
+        intent.putExtra(getString(R.string.key_serializable_extra),(Beer)payload);
         setResult(RESULT_OK,intent);
         finish();
     }

@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 21.10.2017.
  */
 
-public class FindInterestPackage {
+public class FindBeerPackage {
     private String interestFilter;
 
     private int mode;

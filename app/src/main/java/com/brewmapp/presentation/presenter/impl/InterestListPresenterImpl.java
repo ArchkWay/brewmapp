@@ -2,7 +2,7 @@ package com.brewmapp.presentation.presenter.impl;
 
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Product;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
@@ -88,7 +88,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
     }
 
     @Override
-    public void storeInterest(HashMap<Product,Product> hmAdd,HashMap<Interest,Interest> hmRemove) {
+    public void storeInterest(HashMap<Beer,Beer> hmAdd, HashMap<Interest,Interest> hmRemove) {
                 storeAddedInterests(new ArrayList<>(hmAdd.keySet()),new ArrayList<>(hmRemove.keySet()));
     }
 
@@ -124,8 +124,8 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
             addInterestPackage.setId(String.valueOf(userRepo.load().getId()));
             String related_id;
             String related_model;
-            if (serializableExtra instanceof Product) {
-                related_id = ((Product) serializableExtra).getId();
+            if (serializableExtra instanceof Beer) {
+                related_id = ((Beer) serializableExtra).getId();
                 related_model = Keys.CAP_BEER;
             } else
                 return;

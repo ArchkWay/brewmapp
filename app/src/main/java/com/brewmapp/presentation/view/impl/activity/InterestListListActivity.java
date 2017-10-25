@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Product;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -22,7 +22,6 @@ import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.view.contract.InterestListView;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
@@ -49,7 +47,7 @@ public class    InterestListListActivity extends BaseActivity implements Interes
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private LoadInterestPackage loadInterestPackage;
-    private HashMap<Product,Product> hmAdd =new HashMap<>();
+    private HashMap<Beer,Beer> hmAdd =new HashMap<>();
     private HashMap<Interest,Interest> hmRemove =new HashMap<>();
 
     @Override
@@ -163,9 +161,9 @@ public class    InterestListListActivity extends BaseActivity implements Interes
         switch (requestCode){
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
-                    Product product= (Product) data.getSerializableExtra(getString(R.string.key_serializable_extra));
-                    hmAdd.put(product,product);
-                    adapter.addItem(0,new InterestInfo(product));
+                    Beer beer = (Beer) data.getSerializableExtra(getString(R.string.key_serializable_extra));
+                    hmAdd.put(beer, beer);
+                    adapter.addItem(0,new InterestInfo(beer));
                     adapter.notifyDataSetChanged();
                     visibleTextSave();
                     return;

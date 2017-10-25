@@ -12,8 +12,6 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
-import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Product;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -24,10 +22,10 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.Posts;
-import com.brewmapp.data.entity.container.Products;
+import com.brewmapp.data.entity.container.Beers;
+import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.request.base.LocationQueryParams;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
@@ -93,9 +91,9 @@ public interface Api {
 
     @POST("beer/beer")
     @FormUrlEncoded
-    Call<Products> loadProduct(@Query(Keys.LIMIT_START) int start,
-                               @Query(Keys.LIMIT_END) int end,
-                               @FieldMap WrapperParams params);
+    Call<Beers> loadProduct(@Query(Keys.LIMIT_START) int start,
+                            @Query(Keys.LIMIT_END) int end,
+                            @FieldMap WrapperParams params);
 
     @POST("userinterest")
     @FormUrlEncoded
@@ -186,5 +184,24 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<BeerLocation.LocationInfo>> loadLocationById(@FieldMap WrapperParams params);
 
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<Beers> fullSearchBeer(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+
+    );
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<Restos> fullSearchResto(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+    );
 
 }

@@ -1,11 +1,12 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import com.brewmapp.data.pojo.FindInterestPackage;
+import com.brewmapp.data.pojo.FindBeerPackage;
+import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,11 +21,12 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> implements AddInterestPresenter {
 
-    private LoadProductTask loadProductTask;
+
+    private FullSearchTask fullSearchTask;
 
     @Inject
-    public AddInterestPresenterImpl(LoadProductTask loadProductTask){
-            this.loadProductTask = loadProductTask;
+    public AddInterestPresenterImpl(FullSearchTask fullSearchTask){
+        this.fullSearchTask = fullSearchTask;
     }
 
 
@@ -39,16 +41,16 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
 
     }
 
+
+
     @Override
-    public void sendQuery(FindInterestPackage findInterestPackage) {
-
-        loadProductTask.cancel();
-
-        loadProductTask.execute(findInterestPackage,new SimpleSubscriber<List<IFlexible>>(){
+    public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
+        fullSearchTask.cancel();
+        fullSearchTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
-            public void onNext(List<IFlexible> product) {
-                super.onNext(product);
-                view.appendItems(product);
+            public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
+                view.appendItems(iFlexibles);
             }
 
             @Override
@@ -58,6 +60,7 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
                 view.showMessage(e.getMessage(),0);
             }
         });
+
     }
 
 }

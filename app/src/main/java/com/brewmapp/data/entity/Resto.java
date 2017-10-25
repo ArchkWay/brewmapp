@@ -24,9 +24,7 @@ public class Resto implements ICommonItem, Serializable {
     private String in_archive;
     private String additional_data;
     private String round_clock;
-    //private int location_id;
-    //private String location;
-    //private String metro;
+    private Location location;
     private String phone;
     private String code;
     private String token;
@@ -64,6 +62,16 @@ public class Resto implements ICommonItem, Serializable {
     private String interested;
     private String no_interested;
     private String country;
+
+
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -133,29 +141,6 @@ public class Resto implements ICommonItem, Serializable {
         this.round_clock = round_clock;
     }
 
-//    public int getLocation_id() {
-//        return location_id;
-//    }
-//
-//    public void setLocation_id(int location_id) {
-//        this.location_id = location_id;
-//    }
-
-//    public String getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(String location) {
-//        this.location = location;
-//    }
-
-//    public String getMetro() {
-//        return metro;
-//    }
-//
-//    public void setMetro(String metro) {
-//        this.metro = metro;
-//    }
 
     public String getPhone() {
         return phone;
@@ -558,5 +543,20 @@ public class Resto implements ICommonItem, Serializable {
             imageSource = new SimpleImageSource(getThumb());
         }
         return imageSource;
+    }
+
+    public String getAdressFormat() {
+
+        return new StringBuilder()
+                .append(getLocation()==null?"":new StringBuilder()
+                        .append("(")
+                        .append(getLocation().getCity_id())
+                        .append(",")
+                        .append(getLocation().getLocation().getStreet())
+                        .append(",")
+                        .append(getLocation().getLocation().getHouse())
+                        .append(")"))
+                .toString()
+                ;
     }
 }

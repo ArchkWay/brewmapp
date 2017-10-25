@@ -3,17 +3,18 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -24,6 +25,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 public class InterestAddViewResto extends BaseLinearLayout implements InteractiveModelView<Resto> {
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
+    @BindView(R.id.view_interest_shot_text)    TextView shot_text;
 
     private Resto resto;
     private Listener listener;
@@ -49,12 +51,19 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     @Override
     public void setModel(Resto resto) {
         this.resto =resto;
+        String imgUrl="";
+        imgUrl= resto.getThumb();
+        if(imgUrl!=null&&!imgUrl.contains("http"))
+            imgUrl= ResourceHelper.getString(R.string.config_content_url)+imgUrl;
 
-//        Picasso.with(getContext()).load(resto.getGetThumb()).fit().centerInside().into(avatar);
-        String titletxt = resto.getName();
-//        if (resto.getTitle_ru().length() > 0)
-//            titletxt = titletxt + "(" + resto.getTitle_ru() + ")";
-        title.setText(titletxt);
+        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
+            Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
+        else
+            Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+
+
+        title.setText(resto.getName());
+        shot_text.setText(resto.getAdressFormat());
 
         setOnClickListener(v -> listener.onModelAction(0, resto));
     }

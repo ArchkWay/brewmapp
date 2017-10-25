@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -51,7 +53,16 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
     public void setModel(Beer beer) {
         this.beer =beer;
 
-        Picasso.with(getContext()).load(beer.getGetThumb()).fit().centerInside().into(avatar);
+        String imgUrl="";
+        imgUrl=beer.getGetThumb();
+        if(imgUrl!=null&&!imgUrl.contains("http"))
+            imgUrl= ResourceHelper.getString(R.string.config_content_url)+imgUrl;
+
+        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
+            Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);
+        else
+            Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+
         String titletxt = beer.getTitle();
         if (beer.getTitle_ru().length() > 0)
             titletxt = titletxt + "(" + beer.getTitle_ru() + ")";

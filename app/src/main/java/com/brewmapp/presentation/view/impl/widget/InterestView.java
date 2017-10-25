@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import butterknife.ButterKnife;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
+import ru.frosteye.ovsa.tool.TextTools;
 
 /**
  * Created by Kras on 22.10.2017.
@@ -26,6 +29,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 public class InterestView extends BaseLinearLayout implements InteractiveModelView<Interest> {
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
+    @BindView(R.id.view_interest_shot_text)    TextView shot_text;
 
     private Interest interest;
     private Listener listener;
@@ -52,30 +56,44 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
         this.interest=model;
         String imgUrl="";
         String text="";
+        String text2="";
         int imgUrlDefault;
+
+        text=model.getInterest_info().getTitle();
+        if(TextUtils.isEmpty(text))
+            text=model.getInterest_info().getName();
+
+
+        text2=model.getInterest_info().getShort_text();
+        if(TextUtils.isEmpty(text2))
+            if(!TextUtils.isEmpty(model.getInterest_info().getText()))
+                text2= Html.fromHtml(model.getInterest_info().getText()).toString();
+        if(TextUtils.isEmpty(text2))
+            text2=text;
+
+        if(model.getInterest_info()!=null) {
+            imgUrl=model.getInterest_info().getGetThumb();
+            if(imgUrl!=null&&!imgUrl.contains("http"))
+                imgUrl=ResourceHelper.getString(R.string.config_content_url)+imgUrl;
+        }
+
         switch (model.getRelated_model()){
             case Keys.CAP_RESTO:
-                text=String.valueOf(model.getInterest_info().getName());
                 imgUrlDefault=R.drawable.ic_default_resto;
                 break;
             case Keys.CAP_BEER:
-                text=String.valueOf(model.getInterest_info().getTitle());
                 imgUrlDefault=R.drawable.ic_default_beer;
-                if(model.getInterest_info()!=null) {
-                    imgUrl=model.getInterest_info().getGetThumb();
-                    if(imgUrl!=null&&!imgUrl.contains("http"))
-                        imgUrl=ResourceHelper.getString(R.string.config_content_url)+imgUrl;
-                }
                 break;
             default:
                 return;
         }
 
-        title.setText(text);
-        if(imgUrl.length()==0)
+        title.setText(String.valueOf(text));
+        shot_text.setText(String.valueOf(text2));
+        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
             Picasso.with(getContext()).load(imgUrlDefault).fit().centerCrop().into(avatar);
         else
-            Picasso.with(getContext()).load(imgUrl).fit().centerCrop().into(avatar);
+            Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
 
     }
 

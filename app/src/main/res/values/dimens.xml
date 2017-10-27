@@ -11,6 +11,7 @@
     <dimen name="size_avatar_more_lesser">42dp</dimen>
     <dimen name="size_menu_icon">36dp</dimen>
     <dimen name="text_facebook_login">16sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_big_phone">20sp</dimen>
     <dimen name="text_size_big_phone_bigger">22sp</dimen>
     <dimen name="text_size_common">16sp</dimen>

@@ -21,6 +21,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.squareup.picasso.Picasso;
@@ -56,12 +57,11 @@ import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_STATE;
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
 
-
-
     @BindView(R.id.common_toolbar) Toolbar toolbar;
-    @BindView(R.id.common_toolbar_spinner) Spinner toolbarSpinner;
+    //    @BindView(R.id.common_toolbar_spinner) Spinner toolbarSpinner;
     @BindView(R.id.common_toolbar_dropdown) View toolbarDropdown;
     @BindView(R.id.common_toolbar_title) TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
     @BindView(R.id.activity_main_drawer) DuoDrawerLayout drawer;
     @BindView(R.id.activity_main_menu) RecyclerView menu;
     @BindView(R.id.activity_main_userName) TextView userName;
@@ -160,33 +160,18 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             toolbarDropdown.setVisibility(View.VISIBLE);
             actionBar.setDisplayShowTitleEnabled(false);
             toolbarTitle.setText(baseFragment.getTitle());
-            List<Map<String, String>> content = new ArrayList<>();
-            for(String string: baseFragment.getTitleDropDown()) {
-                Map<String, String> item = new HashMap<>();
-                item.put("title", string);
-                content.add(item);
-            }
-            SimpleAdapter adapter =
-                    new SimpleAdapter(this, content, R.layout.view_spinner_item, new String[] { "title" },
-                            new int[] { android.R.id.text1 });
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            toolbarSpinner.setAdapter(adapter);
-            toolbarSpinner.setSelection(selected);
-            if(baseFragment instanceof AdapterView.OnItemSelectedListener) {
-                toolbarSpinner.setOnItemSelectedListener(((AdapterView.OnItemSelectedListener) baseFragment));
+            if(baseFragment instanceof View.OnClickListener) {
+                toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
             }
         } else {
             toolbarDropdown.setVisibility(View.GONE);
             actionBar.setDisplayShowTitleEnabled(true);
-            toolbarSpinner.setAdapter(null);
-            toolbarSpinner.setOnItemSelectedListener(null);
         }
     }
 
     @Override
     public void processSpinnerTitleSubtitle(String subtitle) {
-
+        toolbarSubTitle.setText(getString(R.string.arrow_down, subtitle));
     }
 
     @Override
@@ -196,10 +181,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void processSetActionBar(int position) {
-        if(position==2)
-            menuToShow=R.menu.search_add;
-        else
-            menuToShow=R.menu.search;
+        if (position == 2) {
+            menuToShow = R.menu.search_add;
+        } else if (position == Actions.ACTION_FILTER) {
+            menuToShow = R.menu.filter;
+        } else
+            menuToShow = R.menu.search;
 
         invalidateOptionsMenu();
     }
@@ -270,6 +257,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void refreshItems() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
-                ((EventsFragment) fragment).refreshItems();
+                ((EventsFragment) fragment).refreshItems(false);
     }
 }

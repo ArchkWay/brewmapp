@@ -26,11 +26,13 @@
             android:textSize="@dimen/text_size_big_phone"
             android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/common.toolbar.spinner"
+        <TextView
+            android:id="@+id/common.toolbar.subtitle"
             android:layout_width="wrap_content"
-            android:layout_marginTop="-6dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/colorWhite"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
             android:gravity="center_horizontal"
             />
     </LinearLayout>

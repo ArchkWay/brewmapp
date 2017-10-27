@@ -1,17 +1,27 @@
+
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.FilterAdapter;
+import com.brewmapp.data.entity.FilteredTitle;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
@@ -19,6 +29,7 @@ import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
@@ -46,12 +57,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-public class EventsFragment extends BaseFragment implements EventsView, AdapterView.OnItemSelectedListener {
+public class EventsFragment extends BaseFragment implements EventsView, View.OnClickListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
     @BindView(R.id.fragment_events_list) RecyclerView list;
     @BindView(R.id.fragment_events_swipe) RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_events_empty) TextView empty;
+    @BindView(R.id.dark_layout) LinearLayout darkBackGround;
+    @BindView(R.id.filter_list) ListView filterList;
 
     @Inject EventsPresenter presenter;
     @Inject ActiveBox activeBox;
@@ -62,6 +75,8 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     private LoadNewsPackage loadNewsPackage = new LoadNewsPackage();
     private FlexibleModelAdapter<IFlexible> adapter;
     private EndlessRecyclerOnScrollListener scrollListener;
+
+    private List<FilteredTitle> dropdownItems;
 
     @Override
     protected int getFragmentLayout() {
@@ -75,7 +90,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
 
     @Override
     protected void initView(View view) {
-
         tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -84,6 +98,11 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
                 interractor().processSetActionBar(tab.getPosition());
                 presenter.storeTabActive(tab.getPosition());
+                hideFilterLayout();
+                if (dropdownItems != null) {
+                    dropdownItems.clear();
+                }
+                refreshItems(true);
             }
         });
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -98,8 +117,23 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         list.addOnScrollListener(scrollListener);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
-        swipe.setOnRefreshListener(this::refreshItems);
+        swipe.setOnRefreshListener(() -> refreshItems(false));
+        initFilterItems();
+        filterList.setOnItemClickListener(this);
+        interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
+    }
 
+    private void fillDropDownList() {
+        dropdownItems = new ArrayList<>();
+        for (String title : this.getTitleDropDown()) {
+            dropdownItems.add(new FilteredTitle(title, false));
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        refreshItems(false);
     }
 
     private void processAction(int action, Object payload) {
@@ -117,6 +151,23 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                 interractor().processStartActivityWithRefresh(new Intent(getActivity(), PostDetailsActivity.class));
                 break;
         }
+    }
+
+    private void showLogicAnimation() {
+        animDarkBackground(darkBackGround);
+        animFlowBrandList(filterList);
+    }
+
+    private void animFlowBrandList(View viewToAnimate) {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), filterList.isShown() ? R.anim.fadeout : R.anim.fadein);
+        viewToAnimate.startAnimation(animation);
+        viewToAnimate.setVisibility(filterList.isShown() ? View.GONE : View.VISIBLE);
+    }
+
+    private void animDarkBackground(View viewToAnimate) {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), filterList.isShown() ? R.anim.fadeout : R.anim.fadein);
+        viewToAnimate.startAnimation(animation);
+        viewToAnimate.setVisibility(filterList.isShown() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -161,7 +212,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         tabsView.getTabs().getTabAt(i).select();
     }
 
-
     private void setEmpty(boolean empty) {
         if(!empty) {
             this.empty.setVisibility(View.GONE);
@@ -179,14 +229,11 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
                     break;
             }
         }
-
     }
 
     @Override
     public void refreshState() {
-
         adapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -203,20 +250,6 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        loadNewsPackage.setFilter(position);
-        if(loadNewsPackage.getFilter() == 2) {
-            DateTools.showDateDialogRange(getActivity(), (startDate, endDate) -> {
-                loadNewsPackage.setDateFrom(startDate);
-                loadNewsPackage.setDateTo(endDate);
-                presenter.onLoadItems(loadNewsPackage);
-            }, Calendar.getInstance());
-        } else {
-            refreshItems();
-        }
-    }
-
-    @Override
     public void onBarAction(int id) {
         switch (id) {
             case R.id.action_search:
@@ -228,21 +261,68 @@ public class EventsFragment extends BaseFragment implements EventsView, AdapterV
         }
     }
 
-    public void refreshItems() {
+    public void refreshItems(boolean tabSelected) {
         swipe.setRefreshing(true);
         list.removeOnScrollListener(scrollListener);
         adapter.clear();
         loadNewsPackage.setPage(0);
         presenter.onLoadItems(loadNewsPackage);
+        if (tabSelected) {
+            interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
+        }
+    }
 
-
-
+    @OnClick(R.id.dark_layout)
+    public void darkLayoutClicked() {
+        showLogicAnimation();
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    public void onClick(View v) {
+        initFilterItems();
+        showLogicAnimation();
     }
 
+    private void hideFilterLayout() {
+        filterList.setVisibility(View.GONE);
+        darkBackGround.setVisibility(View.GONE);
+    }
+
+    private void initFilterItems() {
+        if (dropdownItems == null || dropdownItems.size() == 0) {
+            fillDropDownList();
+        }
+        initAdapter();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        loadNewsPackage.setFilter(position);
+        interractor().processSpinnerTitleSubtitle(getTitleDropDown().get(position));
+        if(loadNewsPackage.getFilter() == 2) {
+            DateTools.showDateDialogRange(getActivity(), (startDate, endDate) -> {
+                loadNewsPackage.setDateFrom(startDate);
+                loadNewsPackage.setDateTo(endDate);
+                presenter.onLoadItems(loadNewsPackage);
+            }, Calendar.getInstance());
+        } else {
+            refreshItems(false);
+        }
+
+        for (int i = 0; i < dropdownItems.size(); i++) {
+            if (position == i) {
+                dropdownItems.get(position).setSelected(true);
+            } else {
+                dropdownItems.get(i).setSelected(false);
+            }
+        }
+        initAdapter();
+        showLogicAnimation();
+    }
+
+    private void initAdapter() {
+        FilterAdapter filterAdapter = new FilterAdapter(getContext(), dropdownItems);
+        filterList.setAdapter(filterAdapter);
+    }
 
 }

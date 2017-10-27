@@ -1,5 +1,9 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.entity.RestoLocation;
+
+import java.util.List;
+
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -7,4 +11,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface BeerMapView extends BasicView {
+    void showGeolocationResult(List<RestoLocation> geolocatorResultPackageList);
 }

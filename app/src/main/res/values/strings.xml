@@ -221,4 +221,9 @@
         <item>Редактировать</item>
         <item>Удалить</item>
     </string-array>
+
+    <string name="arrow_down">%1$s \u0020 \u25BD</string>
+    <string name="liked">Вы уже проголосовали</string>
+    <string name="filter">Фильтр</string>
+
 </resources>

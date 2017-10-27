@@ -3,19 +3,15 @@ package com.brewmapp.presentation.presenter.impl;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.RestoLocation;
-import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadLocationTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
-import com.brewmapp.execution.task.SearchRestosTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;

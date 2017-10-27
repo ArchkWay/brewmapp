@@ -1,31 +1,52 @@
+
 package com.brewmapp.data.entity;
 
-import java.io.Serializable;
+import javax.annotation.Generated;
+import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by nlbochas on 25/10/2017.
- */
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
+public class Region {
 
-public class Region implements Serializable {
+    @SerializedName("country_id")
+    private String mCountryId;
+    @SerializedName("id")
+    private String mId;
+    @SerializedName("name")
+    private String mName;
+    @SerializedName("name_en")
+    private String mNameEn;
 
-    private int id;
-    private String name;
-    private int countryId;
-    private Country country;
+    public String getCountryId() {
+        return mCountryId;
+    }
 
-    public int getId() {
-        return id;
+    public void setCountryId(String countryId) {
+        mCountryId = countryId;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
-    public int getCountryId() {
-        return countryId;
+    public void setName(String name) {
+        mName = name;
     }
 
-    public Country getCountry() {
-        return country;
+    public String getNameEn() {
+        return mNameEn;
     }
+
+    public void setNameEn(String nameEn) {
+        mNameEn = nameEn;
+    }
+
 }

@@ -1,53 +1,82 @@
+
 package com.brewmapp.data.entity;
 
-import java.io.Serializable;
-import java.util.List;
+import javax.annotation.Generated;
+import com.google.gson.annotations.SerializedName;
 
-public class City implements Serializable {
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
+public class City {
 
-    private int id;
-    private String name;
-    private String nameEn;
-    private int regionId;
-    private int countryId;
-    private int phoneCode;
-    private List<BeerLocation.MetroInfo> metroList;
-    private Country country;
-    private Region region;
+    @SerializedName("country_id")
+    private String mCountryId;
+    @SerializedName("id")
+    private String mId;
+    @SerializedName("name")
+    private String mName;
+    @SerializedName("name_en")
+    private String mNameEn;
+    @SerializedName("phone_code")
+    private String mPhoneCode;
+    @SerializedName("region_id")
+    private String mRegionId;
+    @SerializedName("relations")
+    private Relations mRelations;
 
-    public int getId() {
-        return id;
+    public String getCountryId() {
+        return mCountryId;
+    }
+
+    public void setCountryId(String countryId) {
+        mCountryId = countryId;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
     }
 
     public String getName() {
-        return name;
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
     }
 
     public String getNameEn() {
-        return nameEn;
+        return mNameEn;
     }
 
-    public int getRegionId() {
-        return regionId;
+    public void setNameEn(String nameEn) {
+        mNameEn = nameEn;
     }
 
-    public int getCountryId() {
-        return countryId;
+    public String getPhoneCode() {
+        return mPhoneCode;
     }
 
-    public int getPhoneCode() {
-        return phoneCode;
+    public void setPhoneCode(String phoneCode) {
+        mPhoneCode = phoneCode;
     }
 
-    public List<BeerLocation.MetroInfo> getMetroList() {
-        return metroList;
+    public String getRegionId() {
+        return mRegionId;
     }
 
-    public Country getCountry() {
-        return country;
+    public void setRegionId(String regionId) {
+        mRegionId = regionId;
     }
 
-    public Region getRegion() {
-        return region;
+    public Relations getRelations() {
+        return mRelations;
     }
+
+    public void setRelations(Relations relations) {
+        mRelations = relations;
+    }
+
 }

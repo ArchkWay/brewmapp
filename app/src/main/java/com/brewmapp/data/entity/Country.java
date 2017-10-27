@@ -1,59 +1,62 @@
+
 package com.brewmapp.data.entity;
 
-import com.brewmapp.BuildConfig;
-import com.brewmapp.data.model.ICommonItem;
-import com.brewmapp.data.pojo.SimpleImageSource;
-import com.brewmapp.execution.exchange.request.base.Keys;
+import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
+public class Country {
 
-/**
- * Created by nlbochas on 25/10/2017.
- */
+    @SerializedName("country_code")
+    private String mCountryCode;
+    @SerializedName("id")
+    private String mId;
+    @SerializedName("image")
+    private String mImage;
+    @SerializedName("name")
+    private String mName;
+    @SerializedName("name_en")
+    private String mNameEn;
 
-public class Country implements ICommonItem, Serializable {
-
-    private int id;
-    private String name;
-    private String nameEn;
-    private ICommonItem.ImageSource imageSource;
-    private String countryCode;
-
-    @SerializedName(Keys.GET_THUMB)
-    private String thumb;
-
-    public String getThumb() {
-        if(thumb != null && !thumb.startsWith("http")) {
-            thumb = BuildConfig.SERVER_ROOT_URL + thumb;
-        }
-        return thumb;
+    public String getCountryCode() {
+        return mCountryCode;
     }
 
-    @Override
-    public String title() {
-        return getName();
+    public void setCountryCode(String countryCode) {
+        mCountryCode = countryCode;
     }
 
-    @Override
-    public int id() {
-        return getId();
+    public String getId() {
+        return mId;
     }
 
-    @Override
-    public ICommonItem.ImageSource image() {
-        if(imageSource == null && getThumb() != null) {
-            imageSource = new SimpleImageSource(getThumb());
-        }
-        return imageSource;
+    public void setId(String id) {
+        mId = id;
+    }
+
+    public String getImage() {
+        return mImage;
+    }
+
+    public void setImage(String image) {
+        mImage = image;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
-    public int getId() {
-        return id;
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public String getNameEn() {
+        return mNameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        mNameEn = nameEn;
     }
 
 }

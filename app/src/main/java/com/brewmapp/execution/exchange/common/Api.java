@@ -26,7 +26,6 @@ import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.request.base.LocationQueryParams;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;

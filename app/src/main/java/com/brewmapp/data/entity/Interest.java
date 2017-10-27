@@ -2,11 +2,13 @@ package com.brewmapp.data.entity;
 
 import com.brewmapp.execution.exchange.request.base.Keys;
 
+import java.io.Serializable;
+
 /**
  * Created by Kras on 22.10.2017.
  */
 
-public class Interest  {
+public class Interest implements Serializable {
 
     private String id;
     private String created_at;

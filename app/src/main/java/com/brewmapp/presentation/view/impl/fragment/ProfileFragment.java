@@ -13,7 +13,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
-import com.brewmapp.presentation.view.impl.activity.InterestListListActivity;
+import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
@@ -191,10 +191,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListListActivity.class));
+                startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListListActivity.class));
+                startActivity(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class));
                 break;
             case 4:
                 startActivity(new Intent(getActivity(), AssessmentsActivity.class));

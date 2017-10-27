@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Kras on 25.10.2017.
  */
 
-public class Metro {
+public class Metro implements Serializable {
     private String city_id;
     private int distance;
     private String id;

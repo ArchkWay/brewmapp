@@ -141,12 +141,17 @@
             android:name=".presentation.view.impl.activity.PostDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.view.impl.activity.InterestListListActivity"
+            android:name=".presentation.view.impl.activity.InterestListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.AssessmentsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".presentation.view.impl.activity.AddInterestActivity"></activity>
+        <activity
+            android:name=".presentation.view.impl.activity.AddInterestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.view.impl.activity.RestoCardActivity"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

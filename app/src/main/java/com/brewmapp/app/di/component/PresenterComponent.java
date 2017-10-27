@@ -13,13 +13,14 @@ import com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
-import com.brewmapp.presentation.view.impl.activity.InterestListListActivity;
+import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
 import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoCardActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.UniversalMapActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
@@ -80,6 +81,7 @@ public interface PresenterComponent {
     void inject(DialogShare dialogShare);
     void inject(ShareLikeView shareLikeView);
     void inject(AssessmentsActivity assessmentsActivity);
-    void inject(InterestListListActivity interestListActivity);
+    void inject(InterestListActivity interestListActivity);
     void inject(AddInterestActivity addInterestActivity);
+    void inject(RestoCardActivity restoCardActivity);
 }

@@ -23,6 +23,7 @@ import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Beers;
+import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -203,5 +204,10 @@ public interface Api {
             @Query(Keys.LIMIT_END) int end,
             @FieldMap WrapperParams params
     );
+
+    @POST("resto/restodata")
+    @FormUrlEncoded
+    Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
+
 
 }

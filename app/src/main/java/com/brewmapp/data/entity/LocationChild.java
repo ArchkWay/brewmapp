@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Kras on 25.10.2017.
  */
 
-class LocationChild {
+class LocationChild implements Serializable{
 
     private String additional;
     private String by_user_id;

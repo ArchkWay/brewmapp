@@ -145,7 +145,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     }
 
     private void processAction(int action, Object payload) {
-        Intent intent=new Intent();
+        Intent intent=new Intent(this,InterestListActivity.class);
         intent.putExtra(getString(R.string.key_serializable_extra),(Serializable) payload);
         setResult(RESULT_OK,intent);
         finish();

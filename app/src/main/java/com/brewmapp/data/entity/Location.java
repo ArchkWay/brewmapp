@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Kras on 25.10.2017.
  */
 
-public class Location {
+public class Location implements Serializable {
     private String city_id;
     private LocationChild location;
     private Metro metro;

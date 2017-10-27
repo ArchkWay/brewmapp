@@ -39,7 +39,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
-public class    InterestListListActivity extends BaseActivity implements InterestListView {
+public class InterestListActivity extends BaseActivity implements InterestListView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_interest_list)  RecyclerView recyclerView;
     @BindView(R.id.activity_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
@@ -195,7 +195,9 @@ public class    InterestListListActivity extends BaseActivity implements Interes
     }
 
     private void processAction(int action, Object payload) {
-
+        Intent intent=new Intent(this,RestoCardActivity.class);
+        intent.putExtra(getString(R.string.key_serializable_extra),(Interest)payload);
+        startActivity(intent);
     }
 
     @Override

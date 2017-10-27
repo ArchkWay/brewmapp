@@ -1,5 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
+import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
@@ -9,6 +11,7 @@ import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDeserializer;
+import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
 import com.google.gson.GsonBuilder;
 
@@ -35,8 +38,8 @@ import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
-    public static final String API_VERSION = "1.02";
-    //public static final String API_VERSION = "1.03";
+    //public static final String API_VERSION = "1.02";
+    public static final String API_VERSION = "1.03";
 
     @Inject
     public RestClient(@ApiUrl String baseUrl,
@@ -69,6 +72,8 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(BeerInfo.class, new BeerDeserializer())
                 .registerTypeAdapter(InterestInfo.class, new InterestDeserializer())
                 .registerTypeAdapter(RestoInfo.class, new RestoDeserializer())
+                //.registerTypeAdapter(RestoDetail.class, new RestoDetailsDeserializer())
+
                 ;
     }
 

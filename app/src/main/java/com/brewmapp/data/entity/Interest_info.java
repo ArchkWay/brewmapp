@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by xpusher on 10/23/2017.
  */
 
-public class Interest_info {
+public class Interest_info implements Serializable{
 
     String name;
     String alias_whell;

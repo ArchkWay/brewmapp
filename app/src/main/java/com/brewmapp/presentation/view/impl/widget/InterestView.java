@@ -95,6 +95,10 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
         else
             Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
 
+        setOnClickListener(v -> listener.onModelAction(
+                0,interest
+        ));
+
     }
 
     @Override
@@ -111,7 +115,6 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
-        setOnClickListener(v -> listener.onModelAction(0,interest));
 
     }
 }

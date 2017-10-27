@@ -4,6 +4,7 @@ import com.brewmapp.BuildConfig;
 import com.brewmapp.data.model.ICommonItem;
 import com.brewmapp.data.pojo.SimpleImageSource;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -63,6 +64,9 @@ public class Resto implements ICommonItem, Serializable {
     private String no_interested;
     private String country;
 
+    public Resto(JsonElement jsonElement) {
+
+    }
 
 
     public Location getLocation() {

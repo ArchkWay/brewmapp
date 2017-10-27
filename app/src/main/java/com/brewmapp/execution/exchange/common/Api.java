@@ -13,6 +13,7 @@ import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.container.AlbumPhotos;

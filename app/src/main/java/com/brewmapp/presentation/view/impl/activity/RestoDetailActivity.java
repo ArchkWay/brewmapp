@@ -7,19 +7,20 @@ import android.support.v7.widget.Toolbar;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Interest;
-import com.brewmapp.presentation.presenter.contract.RestoCardPresenter;
-import com.brewmapp.presentation.view.contract.RestoCardView;
+import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.container.RestoDetails;
+import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
+import com.brewmapp.presentation.view.contract.RestoDetailView;
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class RestoCardActivity extends BaseActivity implements RestoCardView {
+public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
 
-    @Inject
-    RestoCardPresenter presenter;
+    @Inject    RestoDetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class RestoCardActivity extends BaseActivity implements RestoCardView {
     protected void initView() {
         enableBackButton();
         String resto_id=((Interest)getIntent().getSerializableExtra(getString(R.string.key_serializable_extra))).getInterest_info().getId();
-        presenter.requestResto(resto_id);
+        presenter.requestRestoDetail(resto_id);
     }
 
     @Override
@@ -59,4 +60,8 @@ public class RestoCardActivity extends BaseActivity implements RestoCardView {
         return toolbar;
     }
 
+    @Override
+    public void setModel(RestoDetail restoDetail) {
+        setTitle(restoDetail.getResto().getName());
+    }
 }

@@ -3,6 +3,7 @@ package com.brewmapp.data.entity.container;
 import android.support.annotation.NonNull;
 
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.wrapper.RestoDetailInfo;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -17,13 +18,8 @@ import java.util.List;
  * Created by Kras on 27.10.2017.
  */
 
-public class RestoDetails extends ListResponse<RestoDetail> implements JsonDeserializer<Wrapper> {
-    public RestoDetails(@NonNull List<RestoDetail> models) {
+public class RestoDetails extends ListResponse<RestoDetailInfo> {
+    public RestoDetails(@NonNull List<RestoDetailInfo> models) {
         super(models);
-    }
-
-    @Override
-    public Wrapper deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return null;
     }
 }

@@ -57,6 +57,7 @@ public class InfoCounter extends BaseLinearLayout {
 
     @Override
     protected void prepareView() {
+        if(isInEditMode()) return;
         ButterKnife.bind(this);
         title.setText(titleText);
     }

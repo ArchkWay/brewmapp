@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 26.10.2017.
  */
 
-public class LoadRestoPackage {
+public class LoadRestoDetailPackage {
     private String id;
 
     public String getId() {

@@ -195,7 +195,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     }
 
     private void processAction(int action, Object payload) {
-        Intent intent=new Intent(this,RestoCardActivity.class);
+        Intent intent=new Intent(this,RestoDetailActivity.class);
         intent.putExtra(getString(R.string.key_serializable_extra),(Interest)payload);
         startActivity(intent);
     }

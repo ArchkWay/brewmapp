@@ -20,7 +20,7 @@ import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
 import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
-import com.brewmapp.presentation.view.impl.activity.RestoCardActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.UniversalMapActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
@@ -83,5 +83,5 @@ public interface PresenterComponent {
     void inject(AssessmentsActivity assessmentsActivity);
     void inject(InterestListActivity interestListActivity);
     void inject(AddInterestActivity addInterestActivity);
-    void inject(RestoCardActivity restoCardActivity);
+    void inject(RestoDetailActivity restoDetailActivity);
 }

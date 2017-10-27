@@ -150,7 +150,7 @@
             android:name=".presentation.view.impl.activity.AddInterestActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.view.impl.activity.RestoCardActivity"
+            android:name=".presentation.view.impl.activity.RestoDetailActivity"
             android:screenOrientation="portrait" ></activity>
     </application>
 

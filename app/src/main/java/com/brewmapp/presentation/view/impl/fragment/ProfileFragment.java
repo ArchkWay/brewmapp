@@ -95,19 +95,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             loadPostsPackage.setSubs(checkedId != R.id.fragment_profile_posts_my);
             refreshItems();
         });
-//        postRefresh.setOnRefreshListener(() -> {
-//            loadPostsPackage.increasePage();
-//            presenter.onLoadPosts(loadPostsPackage);
-//        });
+
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        /*scrollListener = new EndlessRecyclerOnScrollListener(manager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                loadPostsPackage.setPage(currentPage - 1);
-                presenter.onLoadPosts(loadPostsPackage);
-            }
-        };*/
         posts.setLayoutManager(manager);
         posts.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         posts.setAdapter(postAdapter);

@@ -5,6 +5,7 @@ import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
+import com.brewmapp.data.entity.wrapper.RestoDetailInfo;
 import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
@@ -72,7 +73,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(BeerInfo.class, new BeerDeserializer())
                 .registerTypeAdapter(InterestInfo.class, new InterestDeserializer())
                 .registerTypeAdapter(RestoInfo.class, new RestoDeserializer())
-                //.registerTypeAdapter(RestoDetail.class, new RestoDetailsDeserializer())
+                .registerTypeAdapter(RestoDetailInfo.class, new RestoDetailsDeserializer())
 
                 ;
     }

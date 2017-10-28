@@ -59,22 +59,17 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
         String text2="";
         int imgUrlDefault;
 
-        text=model.getInterest_info().getTitle();
-        if(TextUtils.isEmpty(text))
-            text=model.getInterest_info().getName();
-
-
-        text2=model.getInterest_info().getShort_text();
-        if(TextUtils.isEmpty(text2))
-            if(!TextUtils.isEmpty(model.getInterest_info().getText()))
-                text2= Html.fromHtml(model.getInterest_info().getText()).toString();
-        if(TextUtils.isEmpty(text2))
-            text2=text;
-
-        if(model.getInterest_info()!=null) {
+        if(model.getInterest_info()!=null){
+            text=model.getInterest_info().getTitle();
+            if(TextUtils.isEmpty(text))
+                text=model.getInterest_info().getName();
+                text2=model.getInterest_info().getShort_text();
+            if(TextUtils.isEmpty(text2))
+                if(!TextUtils.isEmpty(model.getInterest_info().getText()))
+                    text2= Html.fromHtml(model.getInterest_info().getText()).toString();
+            if(TextUtils.isEmpty(text2))
+                text2=text;
             imgUrl=model.getInterest_info().getGetThumb();
-            if(imgUrl!=null&&!imgUrl.contains("http"))
-                imgUrl=ResourceHelper.getString(R.string.config_content_url)+imgUrl;
         }
 
         switch (model.getRelated_model()){

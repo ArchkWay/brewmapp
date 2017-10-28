@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
+
 import java.io.Serializable;
 
 /**
@@ -151,7 +153,12 @@ public class Interest_info implements Serializable{
     }
 
     public String getGetThumb() {
+        if(getThumb != null && !getThumb.startsWith("http")) {
+            getThumb= BuildConfig.SERVER_ROOT_URL + getThumb;
+        }
         return getThumb;
+
+
     }
 
     public void setGetThumb(String getThumb) {

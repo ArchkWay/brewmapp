@@ -53,8 +53,6 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         this.resto =resto;
         String imgUrl="";
         imgUrl= resto.getThumb();
-        if(imgUrl!=null&&!imgUrl.contains("http"))
-            imgUrl= ResourceHelper.getString(R.string.config_content_url)+imgUrl;
 
         if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
             Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);

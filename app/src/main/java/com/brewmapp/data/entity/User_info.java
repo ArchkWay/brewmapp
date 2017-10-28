@@ -1,31 +1,13 @@
 package com.brewmapp.data.entity;
 
-import com.brewmapp.BuildConfig;
-import com.brewmapp.data.model.ICommonItem;
-import com.brewmapp.data.pojo.SimpleImageSource;
-import com.brewmapp.execution.exchange.request.base.Keys;
-import com.google.gson.JsonElement;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 /**
- * Created by ovcst on 24.08.2017.
+ * Created by Kras on 28.10.2017.
  */
 
-public class Resto implements ICommonItem, Serializable {
-
-    private int id;
-    private String name, text;
-    private String site;
-    private String music;
-    private String user_id;
-    private String advertising;
-    private String gpa;
-    private String in_archive;
-    private String additional_data;
-    private String round_clock;
-    private Location location;
+public class User_info implements Serializable {
+    private String id;
     private String phone;
     private String code;
     private String token;
@@ -50,103 +32,25 @@ public class Resto implements ICommonItem, Serializable {
     private String mob_phone;
     private String addit_phone;
     private String skype;
+    private String site;
     private String job;
     private String interests;
+    private String music;
     private String films;
     private String books;
     private String games;
     private String about;
     private String status;
     private String last_login;
-    private String like;
-    private String dis_like;
-    private String interested;
-    private String no_interested;
-    private String country;
+    private String city_name;
 
-
-
-    public Resto(JsonElement jsonElement) {
-
+    public String getId() {
+        return id;
     }
 
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public void setMusic(String music) {
-        this.music = music;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getAdvertising() {
-        return advertising;
-    }
-
-    public void setAdvertising(String advertising) {
-        this.advertising = advertising;
-    }
-
-    public String getGpa() {
-        return gpa;
-    }
-
-    public void setGpa(String gpa) {
-        this.gpa = gpa;
-    }
-
-    public String getIn_archive() {
-        return in_archive;
-    }
-
-    public void setIn_archive(String in_archive) {
-        this.in_archive = in_archive;
-    }
-
-    public String getAdditional_data() {
-        return additional_data;
-    }
-
-    public void setAdditional_data(String additional_data) {
-        this.additional_data = additional_data;
-    }
-
-    public String getRound_clock() {
-        return round_clock;
-    }
-
-    public void setRound_clock(String round_clock) {
-        this.round_clock = round_clock;
-    }
-
 
     public String getPhone() {
         return phone;
@@ -340,6 +244,14 @@ public class Resto implements ICommonItem, Serializable {
         this.skype = skype;
     }
 
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
     public String getJob() {
         return job;
     }
@@ -354,6 +266,14 @@ public class Resto implements ICommonItem, Serializable {
 
     public void setInterests(String interests) {
         this.interests = interests;
+    }
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
     }
 
     public String getFilms() {
@@ -404,165 +324,12 @@ public class Resto implements ICommonItem, Serializable {
         this.last_login = last_login;
     }
 
-    public String getLike() {
-        return like;
+    public String getCity_name() {
+        return city_name;
     }
 
-    public void setLike(String like) {
-        this.like = like;
+    public void setCity_name(String city_name) {
+        this.city_name = city_name;
     }
 
-    public String getDis_like() {
-        return dis_like;
-    }
-
-    public void setDis_like(String dis_like) {
-        this.dis_like = dis_like;
-    }
-
-    public String getInterested() {
-        return interested;
-    }
-
-    public void setInterested(String interested) {
-        this.interested = interested;
-    }
-
-    public String getNo_interested() {
-        return no_interested;
-    }
-
-    public void setNo_interested(String no_interested) {
-        this.no_interested = no_interested;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-
-    public void setAvgCost(int avgCost) {
-        this.avgCost = avgCost;
-    }
-
-    public void setAvgCostMax(int avgCostMax) {
-        this.avgCostMax = avgCostMax;
-    }
-
-    public void setPhotoCount(int photoCount) {
-        this.photoCount = photoCount;
-    }
-
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
-    }
-
-    public ImageSource getImageSource() {
-        return imageSource;
-    }
-
-    public void setImageSource(ImageSource imageSource) {
-        this.imageSource = imageSource;
-    }
-
-    @SerializedName(Keys.GET_THUMB)
-    private String thumb;
-
-    @SerializedName(Keys.AVG_COST)
-    private int avgCost;
-
-    @SerializedName(Keys.AVG_COST_MAX)
-    private int avgCostMax;
-
-
-    @SerializedName(Keys.PHOTO_COUNT)
-    private int photoCount;
-
-    @SerializedName(Keys.LOCATION_ID)
-    private int locationId;
-
-    private ImageSource imageSource;
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getText() {
-        return text==null?"":text;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public String getMusic() {
-        return music;
-    }
-
-    public String getThumb() {
-        if(thumb != null && !thumb.startsWith("http")) {
-            thumb = BuildConfig.SERVER_ROOT_URL + thumb;
-        }
-        return thumb;
-    }
-
-    public int getLocationId() {
-        return locationId;
-    }
-
-    public int getAvgCost() {
-        return avgCost;
-    }
-
-    public int getAvgCostMax() {
-        return avgCostMax;
-    }
-
-    public int getPhotoCount() {
-        return photoCount;
-    }
-
-    @Override
-    public String title() {
-        return getName();
-    }
-
-    @Override
-    public int id() {
-        return getId();
-    }
-
-    @Override
-    public ImageSource image() {
-        if(imageSource == null && getThumb() != null) {
-            imageSource = new SimpleImageSource(getThumb());
-        }
-        return imageSource;
-    }
-
-    public String getAdressFormat() {
-
-        return new StringBuilder()
-                .append(getLocation()==null?"":new StringBuilder()
-                        .append("(")
-                        .append(getLocation().getCity_id())
-                        .append(",")
-                        .append(getLocation().getLocation().getStreet())
-                        .append(",")
-                        .append(getLocation().getLocation().getHouse())
-                        .append(")"))
-                .toString()
-                ;
-    }
 }

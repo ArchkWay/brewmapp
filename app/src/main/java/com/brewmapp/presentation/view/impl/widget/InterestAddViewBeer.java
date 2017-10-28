@@ -55,8 +55,6 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
 
         String imgUrl="";
         imgUrl=beer.getGetThumb();
-        if(imgUrl!=null&&!imgUrl.contains("http"))
-            imgUrl= ResourceHelper.getString(R.string.config_content_url)+imgUrl;
 
         if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
             Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);

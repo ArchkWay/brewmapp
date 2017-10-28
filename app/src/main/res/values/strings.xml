@@ -219,6 +219,16 @@
     <string name="message_send">Личное сообщение</string>
     <string name="text_view_interior">Интерьер:</string>
     <string name="text_view_service">Сервис</string>
+    <string name="text_view_quality_beer">Качество пива:</string>
+    <string name="text_view_common_effect">Общее впечатление:</string>
+    <string name="text_view_avg_account">Средний счет:</string>
+    <string name="text_view_place">Расположение</string>
+    <string name="text_view_call">Позвонить:</string>
+    <string name="text_view_kitchen">Кухня</string>
+    <string name="button.call">Позвонить</string>
+    <string name="text_view_resto_description">Описание</string>
+    <string name="button_text_subscribe">Подписаться</string>
+    <string name="text_view_value_not_found">--</string>
     <string-array name="post_options">
         <item>Поделиться</item>
         <item>Репост</item>

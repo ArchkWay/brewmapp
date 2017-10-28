@@ -216,6 +216,9 @@
     <string name="key_serializable_extra">key_serializable_extra</string>
     <string name="action_add">Добавление</string>
     <string name="text_button_save">Сохранить изменения</string>
+    <string name="message_send">Личное сообщение</string>
+    <string name="text_view_interior">Интерьер:</string>
+    <string name="text_view_service">Сервис</string>
     <string-array name="post_options">
         <item>Поделиться</item>
         <item>Репост</item>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.brewmapp.presentation.view.impl.activity.RestoDetailActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/common_block_space">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_event_slider"
+                android:orientation="vertical"
+                >
+
+                <com.daimajia.slider.library.SliderLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity.eventDetails.slider"
+                    android:layout_weight="1"
+                    >
+
+                    <com.daimajia.slider.library.Indicators.PagerIndicator
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/activity.eventDetails.indicator"/>
+                </com.daimajia.slider.library.SliderLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBlackSemi"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="right"
+                    android:paddingLeft="@dimen/common_block_space"
+                    android:paddingRight="@dimen/common_block_space"
+                    android:paddingTop="@dimen/common_block_space_half"
+                    android:paddingBottom="@dimen/common_block_space_half">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_common"
+                        android:id="@+id/activity.eventDetails.photosCounter"
+                        android:textColor="@color/colorWhite"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Test"
+                android:textSize="@dimen/text_size_big_phone"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/activity.resto.detail.name"
+                app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                android:textColor="@color/red_focused"
+
+                />
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorSplitter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="@dimen/common_block_space"
+                />
+
+            <include layout="@layout/view_like_dislike_fav" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+
+                >
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity.resto.detail.private.message"
+                    style="@style/AppTheme.Button.Green.Solid"
+                    android:text="@string/message_send"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:lines="1"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity.resto.detail.subscribe"
+                    style="@style/AppTheme.Button.Green.Solid"
+                    android:text="@string/enter"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:lines="1"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_interior"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_service"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

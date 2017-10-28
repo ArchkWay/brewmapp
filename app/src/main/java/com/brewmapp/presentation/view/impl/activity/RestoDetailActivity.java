@@ -3,12 +3,12 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import javax.inject.Inject;
@@ -19,13 +19,14 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
+    @BindView(R.id.activity_resto_detail_name)    TextView name;
 
     @Inject    RestoDetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resto_card);
+        setContentView(R.layout.activity_resto_detail);
     }
 
     @Override
@@ -63,5 +64,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void setModel(RestoDetail restoDetail) {
         setTitle(restoDetail.getResto().getName());
+        name.setText(restoDetail.getResto().getName());
     }
 }

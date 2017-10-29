@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.brewmapp.presentation.view.impl.activity.RestoDetailActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/activity.resto.detail.root"
+    >
 
     <include layout="@layout/view_toolbar" />
 
@@ -85,24 +87,27 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/activity.resto.detail.private.message"
+                    android:id="@+id/activity.resto.detail.button.private.message"
                     style="@style/AppTheme.Button.Green.Solid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_block_space"
                     android:layout_weight="1"
                     android:lines="1"
-                    android:text="@string/message_send" />
+                    android:text="@string/message_send"
+                    />
 
                 <Button
-                    android:id="@+id/activity.resto.detail.subscribe"
+                    android:id="@+id/activity.resto.detail.button.subscribe"
                     style="@style/AppTheme.Button.Green.Solid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_block_space"
                     android:layout_weight="1"
                     android:lines="1"
-                    android:text="@string/button_text_subscribe" />
+                    android:text="@string/button_text_subscribe"
+
+                    />
 
             </LinearLayout>
 
@@ -239,38 +244,58 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/activity.resto.detail.text.view.avg.cost"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     android:gravity="right"
                     android:layout_weight="1"
                     />
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/ic_rub"
                     android:layout_gravity="center_vertical"
                     />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/activity.resto.detail.constraintLayout"
+                >
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/common_block_space"
-                    android:layout_marginRight="@dimen/common_block_space"
-                    android:src="@drawable/ic_place" />
+                    android:src="@drawable/ic_place"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.image.view.icon_place"
+                    android:layout_margin="@dimen/common_block_space"
+                    />
 
                 <TextView
                     android:id="@+id/text_view_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_place" />
-            </LinearLayout>
+                    android:text="@string/text_view_place"
+                    app:layout_constraintStart_toEndOf="@+id/activity.resto.detail.image.view.icon_place"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_margin="@dimen/common_block_space"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                     />
+            </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -371,6 +396,7 @@
                     android:text="@string/button.call"
 
                     />
+
             </LinearLayout>
 
             <LinearLayout
@@ -414,7 +440,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="Test"
+                    android:text="@string/text_view_value_not_found"
                     android:textSize="@dimen/text_size_big_phone"
                     app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />
             </LinearLayout>

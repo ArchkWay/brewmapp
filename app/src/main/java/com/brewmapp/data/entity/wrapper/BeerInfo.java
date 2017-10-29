@@ -13,6 +13,6 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 public class BeerInfo extends AdapterItem<Beer, InterestAddViewBeer> {
     @Override
     public int getLayoutRes() {
-        return R.layout.view_beer;
+        return R.layout.view_add_beer;
     }
 }

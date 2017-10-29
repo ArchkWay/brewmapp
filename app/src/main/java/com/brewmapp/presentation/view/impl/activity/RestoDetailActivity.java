@@ -3,9 +3,12 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -23,10 +26,13 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
@@ -41,21 +47,46 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_quality_beer)    TextView beer;
     @BindView(R.id.activity_resto_detail_text_view_common_effect)    TextView effect;
     @BindView(R.id.activity_resto_detail_text_view_avg_cost)    TextView cost;
+    @BindView(R.id.activity_resto_detail_button_private_message)    Button private_message;
+    @BindView(R.id.activity_resto_detail_button_subscribe)    Button subscribe;
+    @BindView(R.id.activity_resto_detail_button_call)    Button call;
+    @BindView(R.id.activity_resto_detail_button_call1)    Button call1;
+    @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
+
+    @BindViews({
+            R.id.activity_resto_detail_constraintLayout,
+            R.id.activity_resto_detail_button_call1,
+            R.id.activity_resto_detail_button_call,
+            R.id.activity_resto_detail_button_subscribe,
+            R.id.activity_resto_detail_button_private_message,
+            R.id.activity_restoDetails_slider
+
+
+    })    List<View> viewList;
 
     @Inject    RestoDetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resto_detail);
+        setContentView(R.layout.activity_detail_resto);
     }
 
     @Override
     protected void initView() {
         enableBackButton();
+        enableControls(false,0);
         String resto_id=((Interest)getIntent().getSerializableExtra(getString(R.string.key_serializable_extra))).getInterest_info().getId();
         presenter.requestRestoDetail(resto_id);
         slider.stopAutoCycle();
+        place.setOnClickListener(v -> onClickPlace());
+
+    }
+
+
+
+    private void onClickPlace() {
+
     }
 
     @Override
@@ -75,7 +106,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
+        ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
+            view.setEnabled(enabled);
+            view.setClickable(enabled);
+        });
     }
 
     @Override
@@ -130,5 +164,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         site.setText(restoDetail.getResto().getSite());
         description.setText(Html.fromHtml(restoDetail.getResto().getText()));
         cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
+
+        enableControls(true,0);
     }
 }

@@ -13,6 +13,6 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 public class RestoInfo extends AdapterItem<Resto, InterestAddViewResto> {
     @Override
     public int getLayoutRes() {
-        return R.layout.view_resto;
+        return R.layout.view_add_resto;
     }
 }

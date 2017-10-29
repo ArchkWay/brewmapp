@@ -57,6 +57,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
+
 public class EventsFragment extends BaseFragment implements EventsView, View.OnClickListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
@@ -140,15 +142,18 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         switch (action) {
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), EventDetailsActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), EventDetailsActivity.class), REQUEST_CODE_REFRESH_ITEMS
+                );
                 break;
             case Actions.ACTION_SELECT_SALE:
                 activeBox.setActive(payload);
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), SaleDetailsActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), SaleDetailsActivity.class), REQUEST_CODE_REFRESH_ITEMS
+                );
                 break;
             case Actions.ACTION_SELECT_POST:
                 activeBox.setActive(payload);
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), PostDetailsActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), PostDetailsActivity.class), REQUEST_CODE_REFRESH_ITEMS
+                );
                 break;
         }
     }
@@ -256,7 +261,7 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.action_add:
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(),NewPostActivity.class));
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), NewPostActivity.class), REQUEST_CODE_REFRESH_ITEMS);
                 break;
         }
     }

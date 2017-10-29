@@ -14,5 +14,5 @@ public interface BeerMapPresenter extends LivePresenter<BeerMapView> {
     void onLocationChanged(SimpleLocation location);
     void onGeocodeRequest(LatLng latLng);
     void onLoadedRestoGeo(int cityId);
-    void onLoadedCity();
+    void onLoadedCity(String cityName);
 }

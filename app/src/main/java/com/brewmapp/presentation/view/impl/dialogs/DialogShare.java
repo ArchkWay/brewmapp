@@ -40,6 +40,8 @@ import ru.frosteye.ovsa.presentation.view.IPrompt;
 import ru.frosteye.ovsa.presentation.view.SimplePrompt;
 import ru.frosteye.ovsa.tool.UITools;
 
+import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
+
 /**
  * Created by Kras on 13.10.2017.
  */
@@ -174,9 +176,9 @@ public class DialogShare extends AlertDialog.Builder {
             intent.putExtra(context.getString(R.string.key_repost_model),Keys.CAP_EVENT);
         }
         if(context instanceof MainActivity && iLikeable instanceof Post)
-            ((MainActivity)context).processStartActivityWithRefresh(intent);
+            ((MainActivity)context).processStartActivityWithRefresh(intent, REQUEST_CODE_REFRESH_ITEMS);
         else if (context instanceof PostDetailsActivity)
-            context.startActivityForResult(intent,Cons.REQUEST_CODE_REFRESH_ITEMS);
+            context.startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
         else
             context.startActivity(intent);
     }

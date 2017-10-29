@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
+import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.squareup.picasso.Picasso;
 
@@ -47,10 +49,10 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
 import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_STATE;
 
@@ -175,8 +177,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
-    public void processStartActivityWithRefresh(Intent intent) {
-        startActivityForResult(intent,REQUEST_CODE_REFRESH_ITEMS);
+    public void processStartActivityWithRefresh(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -241,10 +243,13 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             if (resultCode == RESULT_OK) {
                 refreshItems();
             }
-        }else if(requestCode == REQUEST_CODE_REFRESH_STATE){
+        } else if(requestCode == REQUEST_CODE_REFRESH_STATE){
             if(requestCode==RESULT_OK){
                 refreshState();
             }
+        } else if (requestCode == REQUEST_CODE_MAP_REFRESH) {
+            Log.i("sdfdsf", "okresult");
+            showResultOnMap();
         }
     }
 
@@ -258,5 +263,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems(false);
+    }
+
+    public void showResultOnMap() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof BeerMapFragment)
+                ((BeerMapFragment) fragment).showResult();
     }
 }

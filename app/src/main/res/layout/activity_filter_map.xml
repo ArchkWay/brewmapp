@@ -3,4 +3,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/view_toolbar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filter_list"/>
+
+    <Button
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AppTheme.Button.Green.Solid.Square"
+        android:id="@+id/accept.filter"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_size_common"
+        android:text="@string/search"/>
+
 </LinearLayout>

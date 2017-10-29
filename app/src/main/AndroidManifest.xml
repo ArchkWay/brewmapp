@@ -139,6 +139,10 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".presentation.view.impl.activity.PostDetailsActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".presentation.view.impl.activity.FilterMapActivity"
+            android:label="@string/filter"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

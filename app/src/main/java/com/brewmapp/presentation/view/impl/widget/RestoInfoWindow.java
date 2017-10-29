@@ -35,4 +35,5 @@ public class RestoInfoWindow implements GoogleMap.InfoWindowAdapter {
         TextView tvSnippet = ((TextView) view.findViewById(R.id.snippet));
         tvTitle.setText(marker.getTitle());
     }
+
 }

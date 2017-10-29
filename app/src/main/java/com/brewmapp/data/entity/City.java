@@ -11,7 +11,7 @@ public class City {
     @SerializedName("country_id")
     private String mCountryId;
     @SerializedName("id")
-    private String mId;
+    private int mId;
     @SerializedName("name")
     private String mName;
     @SerializedName("name_en")
@@ -31,11 +31,11 @@ public class City {
         mCountryId = countryId;
     }
 
-    public String getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         mId = id;
     }
 

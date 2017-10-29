@@ -1,10 +1,15 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadLocationTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
@@ -12,7 +17,9 @@ import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -51,6 +58,8 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
     @Override
     public void onLocationChanged(SimpleLocation location) {
+        loadRestoLocationTask.cancel();
+        loadCityTask.cancel();
         this.simpleLocation = location;
     }
 
@@ -81,10 +90,13 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     }
 
     @Override
-    public void onLoadedCity() {
+    public void onLoadedCity(String cityName) {
         loadCityTask.cancel();
+        loadRestoLocationTask.cancel();
         enableControls(false);
-        loadCityTask.execute(null, new SimpleSubscriber<List<City>>() {
+        WrapperParams params = new WrapperParams(Wrappers.CITY);
+        params.addParam(Keys.NAME, cityName);
+        loadCityTask.execute(params, new SimpleSubscriber<List<City>>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);
@@ -93,6 +105,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
             @Override
             public void onNext(List<City> restoLocation) {
+                onLoadedRestoGeo(restoLocation.get(0).getId());
                 enableControls(true);
             }
         });

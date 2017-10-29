@@ -226,4 +226,13 @@
     <string name="liked">Вы уже проголосовали</string>
     <string name="filter">Фильтр</string>
 
+    <string name="search_resto_name">Поиск по названию заведения</string>
+    <string name="search_resto_type">Тип заведения</string>
+    <string name="search_resto_beer">Пиво</string>
+    <string name="search_resto_kitchen">Кухня</string>
+    <string name="search_resto_price">Средний счет</string>
+    <string name="search_resto_city">Где искать</string>
+    <string name="search_resto_metro">Метро</string>
+    <string name="search_resto_other">Доп. параметры</string>
+
 </resources>

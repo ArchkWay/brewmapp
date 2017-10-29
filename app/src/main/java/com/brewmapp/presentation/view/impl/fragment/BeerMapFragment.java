@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.impl.LocationFragment;
 import com.brewmapp.presentation.view.contract.BeerMapView;
+import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
@@ -32,7 +35,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -41,11 +46,14 @@ import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
+
 /**
  * Created by ovcst on 24.08.2017.
  */
 
-public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback,
+                                                                 GoogleMap.OnInfoWindowClickListener {
 
     @BindView(R.id.fragment_map_map) MapView mapView;
 
@@ -61,7 +69,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
     }
 
     @Override
@@ -120,6 +127,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         lookForLocation();
         googleMap.setMyLocationEnabled(true);
         googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity()));
+        googleMap.setOnInfoWindowClickListener(this);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setOnMyLocationButtonClickListener(() -> {
@@ -134,7 +142,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     private void setMarker(List<RestoLocation> restoLocationList) {
         if(marker != null) marker.remove();
-        LatLng forTestLatng = new LatLng(restoLocationList.get(0).getLocation_lat(), restoLocationList.get(0).getLocation_lon());
         for (RestoLocation restoLocation : restoLocationList) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .title(restoLocation.getName())
@@ -145,17 +152,31 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
             googleMap.addMarker(markerOptions);
         }
 
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(forTestLatng, 14));
+//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(forTestLatng, 14));
     }
 
     @Override
     protected void onLocationFound(Location location) {
         presenter.onLocationChanged(new SimpleLocation(location));
-//        presenter.onLoadedRestoGeo(1);
-        presenter.onLoadedCity();
+        presenter.onLoadedCity(getCityName(location));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
                 location.getLatitude(), location.getLongitude()
         ), 14));
+    }
+
+    private String getCityName(Location location) {
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return addresses != null ? addresses.get(0).getLocality() : null;
+    }
+
+    public void showResult() {
+
     }
 
     @Override
@@ -165,11 +186,11 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.i("checkMarker", marker.getSnippet());
+        Log.i("gotoKarto4ka :)", marker.getSnippet());
     }
 
     @Override
     public void onBarAction(int id) {
-        interractor().processStartActivityWithRefresh(new Intent(getActivity(), NewPostActivity.class));
+        interractor().processStartActivityWithRefresh(new Intent(getActivity(), FilterMapActivity.class), REQUEST_CODE_MAP_REFRESH);
     }
 }

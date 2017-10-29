@@ -17,4 +17,5 @@ public class Wrappers {
     public static final String SUBSCTIPRION = "Subscription";
     public static final String LOCATION = "Location";
     public static final String RESTO_LOCATION = "RestoLocation";
+    public static final String CITY = "City";
 }

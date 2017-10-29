@@ -28,7 +28,6 @@ public abstract class LocationFragment extends BaseFragment {
     private FusedLocationProviderClient client;
     private LocationRequest locationRequest = new LocationRequest();
 
-
     @Override
     public void onAttach(Context context) {
         client = LocationServices.getFusedLocationProviderClient(context);
@@ -61,15 +60,6 @@ public abstract class LocationFragment extends BaseFragment {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             onLocationFound(locationResult.getLastLocation());
-            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-            List<Address> addresses = null;
-            try {
-                addresses = geocoder.getFromLocation(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Log.i("city", addresses != null ? addresses.get(0).getLocality() : "Нету");
             client.removeLocationUpdates(this);
         }
     };

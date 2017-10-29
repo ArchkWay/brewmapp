@@ -168,7 +168,7 @@ public interface Api {
 
     @POST("geo/city")
     @FormUrlEncoded
-    Call<ListResponse<City>> loadCity(@Field(Keys.CITY_ID) String cityId);
+    Call<ListResponse<City>> loadCity(@FieldMap WrapperParams params);
 
 //    @GET("geocode/json")
 //    Call<GeoСodeResponse> getLocation(

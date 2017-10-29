@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,6 +26,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -252,6 +254,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         }
     }
 
+    @SuppressLint("RestrictedApi")
     public void refreshState() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
@@ -259,13 +262,13 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             else if(fragment instanceof ProfileFragment)
                 ((ProfileFragment) fragment).refreshState();
     }
-
+    @SuppressLint("RestrictedApi")
     public void refreshItems() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems(false);
     }
-
+    @SuppressLint("RestrictedApi")
     public void showResultOnMap() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof BeerMapFragment)

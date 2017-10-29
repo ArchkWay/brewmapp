@@ -1,6 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -12,8 +13,10 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.container.AlbumPhotos;
@@ -176,7 +179,7 @@ public interface Api {
     @POST("search/resto")
     @FormUrlEncoded
     Call<ListResponse<Resto>> findRestos(@QueryMap RequestParams query,
-                                          @FieldMap RequestParams params);
+                                         @FieldMap RequestParams params);
 
     @POST("subscription")
     @FormUrlEncoded
@@ -186,6 +189,18 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<BeerLocation.LocationInfo>> loadLocationById(@FieldMap WrapperParams params);
 
+    @GET("resto/allrestoincity")
+    Call<ListResponse<RestoLocation>> loadRestoLocationInCity(@Query(Keys.CITY_ID) int cityId);
+
+    @POST("geo/city")
+    @FormUrlEncoded
+    Call<ListResponse<City>> loadCity(@FieldMap WrapperParams params);
+
+//    @GET("geocode/json")
+//    Call<GeoСodeResponse> getLocation(
+//            @Query("address") String address,w
+//            @Query("key") String key
+//    );
 
     @POST("full_search/{query}")
     @FormUrlEncoded

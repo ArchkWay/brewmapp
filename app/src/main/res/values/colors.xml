@@ -35,4 +35,7 @@
     <color name="colorGreenButtonDark">#00974d</color>
 
     <color name="colorBlackSemi">#7b000000</color>
+
+    <color name="dark_black">#90000000</color>
+    <color name="white">#ffffff</color>
 </resources>

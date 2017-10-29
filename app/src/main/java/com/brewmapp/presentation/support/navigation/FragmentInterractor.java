@@ -12,7 +12,7 @@ import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 public interface FragmentInterractor {
     void processTitleDropDown(BaseFragment baseFragment, int selected);
     void processSpinnerTitleSubtitle(String subtitle);
-    void processStartActivityWithRefresh(Intent intent);
+    void processStartActivityWithRefresh(Intent intent,int requestCode);
     void processSetActionBar(int position);
 
 }

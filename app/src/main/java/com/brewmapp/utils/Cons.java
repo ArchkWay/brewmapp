@@ -10,4 +10,5 @@ public interface Cons {
     int REQUEST_CODE_REFRESH_STATE=1;
     int REQUEST_CODE_SEARCH=2;
 
+
 }

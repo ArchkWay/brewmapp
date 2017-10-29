@@ -1,26 +1,28 @@
+
 package com.brewmapp.data.entity;
+
+import javax.annotation.Generated;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by Kras on 25.10.2017.
- */
-
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
 public class Metro implements Serializable {
-    private String city_id;
+
+    @SerializedName("city_id")
+    private String mCityId;
+    @SerializedName("id")
+    private String mId;
+    @SerializedName("lat")
+    private String mLat;
+    @SerializedName("lon")
+    private String mLon;
+    @SerializedName("name")
+    private String mName;
+    @SerializedName("distance")
     private int distance;
-    private String id;
-    private String lat;
-    private String lon;
-    private String name;
 
-    public String getCity_id() {
-        return city_id;
-    }
-
-    public void setCity_id(String city_id) {
-        this.city_id = city_id;
-    }
 
     public int getDistance() {
         return distance;
@@ -30,35 +32,44 @@ public class Metro implements Serializable {
         this.distance = distance;
     }
 
+    public String getCityId() {
+        return mCityId;
+    }
+
+    public void setCityId(String cityId) {
+        mCityId = cityId;
+    }
+
     public String getId() {
-        return id;
+        return mId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        mId = id;
     }
 
     public String getLat() {
-        return lat;
+        return mLat;
     }
 
     public void setLat(String lat) {
-        this.lat = lat;
+        mLat = lat;
     }
 
     public String getLon() {
-        return lon;
+        return mLon;
     }
 
     public void setLon(String lon) {
-        this.lon = lon;
+        mLon = lon;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
+
 }

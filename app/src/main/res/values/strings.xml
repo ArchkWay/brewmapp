@@ -218,13 +218,13 @@
     <string name="text_button_save">Сохранить изменения</string>
     <string name="message_send">Личное сообщение</string>
     <string name="text_view_interior">Интерьер:</string>
-    <string name="text_view_service">Сервис</string>
+    <string name="text_view_service">Сервис:</string>
     <string name="text_view_quality_beer">Качество пива:</string>
     <string name="text_view_common_effect">Общее впечатление:</string>
     <string name="text_view_avg_account">Средний счет:</string>
-    <string name="text_view_place">Расположение</string>
+    <string name="text_view_place">Расположение:</string>
     <string name="text_view_call">Позвонить:</string>
-    <string name="text_view_kitchen">Кухня</string>
+    <string name="text_view_kitchen">Кухня:</string>
     <string name="button.call">Позвонить</string>
     <string name="text_view_resto_description">Описание</string>
     <string name="button_text_subscribe">Подписаться</string>
@@ -257,5 +257,16 @@
     <string name="text_view_taste">Вкус:</string>
     <string name="text_view_quality_color">Цвет:</string>
     <string name="text_view_aftertaste">Послевкусие:</string>
+    <string name="text_view_avg_price">Средняя цена:</string>
+    <string name="text_view_brand">Брэнд</string>
+    <string name="text_view_brew">Пивоварня:</string>
+    <string name="text_view_country">Страна-производитель:</string>
+    <string name="text_view_type">Тип:</string>
+    <string name="text_view_strength">Крепость:</string>
+    <string name="text_view_density">Плотность:</string>
+    <string name="text_view_ubi">UBI:</string>
+    <string name="text_view_filter_beer">Фильтрованное пиво:</string>
+    <string name="text_view_beer_taste">Вкус:</string>
+    <string name="text_view_beer_after_taste">Послевкусие:</string>
 
 </resources>

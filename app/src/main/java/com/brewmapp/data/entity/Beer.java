@@ -30,6 +30,18 @@ public class Beer implements Serializable{
     private String timestamp;
     private String image;
     private String getThumb;
+    private Relations relations;
+
+
+    public Relations getRelations() {
+        return relations;
+    }
+
+    public void setRelations(Relations relations) {
+        this.relations = relations;
+    }
+
+
 
     public String getId() {
         return id;

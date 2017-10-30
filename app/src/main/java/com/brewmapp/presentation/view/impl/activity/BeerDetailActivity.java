@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -19,15 +20,41 @@ import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView {
+
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
+    @BindView(R.id.activity_beer_detail_text_view_avg_cost)    TextView avg_cost;
+    @BindView(R.id.activity_beer_detail_text_view_brand)    TextView brand;
+    @BindView(R.id.activity_beer_detail_text_view_brew)    TextView brew;
+    @BindView(R.id.activity_beer_detail_text_view_country)    TextView country;
+    @BindView(R.id.activity_beer_detail_text_view_type)    TextView type;
+    @BindView(R.id.activity_beer_detail_text_view_strength)    TextView strength;
+    @BindView(R.id.activity_beer_detail_text_view_density)    TextView density;
+    @BindView(R.id.activity_beer_detail_text_view_ubi)    TextView ubi;
+    @BindView(R.id.activity_beer_detail_text_view_filter_beer)    TextView filter_beer;
+    @BindView(R.id.activity_beer_detail_text_view_taste)    TextView taste;
+    @BindView(R.id.activity_beer_detail_text_view_after_taste)    TextView after_taste;
+    @BindView(R.id.activity_beer_detail_text_view_description)    TextView description;
+
 
     @Inject    BeerDetailPresenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beer_detail);
     }
+
+
+    @Override
+    public void setModel(BeerDetail beerDetail) {
+        Beer beer=beerDetail.getBeer();
+        setTitle(beer.getTitle());
+        avg_cost.setText(beer.getAvg_cost());
+        //brand.setText(beer.);
+
+    }
+
 
     @Override
     protected void initView() {
@@ -55,12 +82,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
-    }
-
-    @Override
-    public void setModel(BeerDetail beerDetail) {
-        setTitle(beerDetail.getBeer().getTitle());
 
     }
 

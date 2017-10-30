@@ -57,7 +57,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
         enableBackButton();
         search.setOnClickListener(this);
         showFilters(FilterField.createDefault(this));
-
     }
 
     @Override
@@ -84,12 +83,13 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     public void showFilters(List<FilterField> fieldList) {
         adapter = new FlexibleAdapter<>(fieldList, this);
         list.setLayoutManager(new LinearLayoutManager(this));
+        list.setNestedScrollingEnabled(true);
         list.setAdapter(adapter);
     }
 
     @Override
     public boolean onItemClick(int position) {
-        Log.i("sdfdsfds", "1!!!!!");
+        Log.i("sdfdsfds", String.valueOf(position));
         return false;
     }
 }

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -58,10 +59,9 @@ public class FilterRowField extends BaseRelativeLayout implements ModelView<Filt
     public void setModel(FilterField model) {
         this.model = model;
         this.filterTitle.setText(model.getTitle());
+        this.selectedFilter.setTypeface(null, Typeface.BOLD_ITALIC);
         this.selectedFilter.setText(model.getSelectedFilter());
         this.icon.setImageResource(model.getIcon());
-        setBackgroundResource(model.isSelected() ?
-                R.drawable.bg_menu_row_selected : R.drawable.selector_menu_row);
     }
 }
 

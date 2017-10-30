@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,9 +32,9 @@ public class RestoInfoWindow implements GoogleMap.InfoWindowAdapter {
     }
 
     private void render(Marker marker, View view) {
-        TextView tvTitle = ((TextView) view.findViewById(R.id.title));
-        TextView tvSnippet = ((TextView) view.findViewById(R.id.snippet));
-        tvTitle.setText(marker.getTitle());
+        TextView restoTitle = ((TextView) view.findViewById(R.id.title));
+        restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+        restoTitle.setText(marker.getTitle());
     }
 
 }

@@ -10,6 +10,8 @@ import android.view.View;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -18,6 +20,7 @@ import com.brewmapp.presentation.presenter.impl.LocationFragment;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,6 +50,7 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
+import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
  * Created by ovcst on 24.08.2017.
@@ -186,7 +190,13 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.i("gotoKarto4ka :)", marker.getSnippet());
+        Interest interest = new Interest();
+        Interest_info interest_info = new Interest_info();
+        interest_info.setId(marker.getSnippet());
+        interest.setInterest_info(interest_info);
+        Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+        intent.putExtra(RESTO_ID, interest);
+        startActivity(intent);
     }
 
     @Override

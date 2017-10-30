@@ -125,13 +125,12 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
                 presenter.onPostReady(post, new ResultTask() {
                     @Override
                     public void onError(Throwable e) {
-
+                        showMessage(e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        setResult(RESULT_OK);
-                        finish();
+                        complete();
                     }
                 });
                 return false;

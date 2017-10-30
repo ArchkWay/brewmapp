@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -23,7 +24,11 @@ import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
+import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.container.Beers;
+import com.brewmapp.data.entity.container.RestoDetails;
+import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -88,6 +93,27 @@ public interface Api {
     Call<Posts> loadPosts(@Query(Keys.LIMIT_START) int start,
                           @Query(Keys.LIMIT_END) int end,
                           @FieldMap WrapperParams params);
+
+    @POST("beer/beer")
+    @FormUrlEncoded
+    Call<Beers> loadProduct(@Query(Keys.LIMIT_START) int start,
+                            @Query(Keys.LIMIT_END) int end,
+                            @FieldMap WrapperParams params);
+
+    @POST("userinterest")
+    @FormUrlEncoded
+    Call<Interests> loadInterest(@Query(Keys.LIMIT_START) int start,
+                                 @Query(Keys.LIMIT_END) int end,
+                                 @FieldMap WrapperParams params);
+
+    @POST("userinterest/add")
+    @FormUrlEncoded
+    Call<Object> addInterest(@FieldMap WrapperParams params);
+
+    @POST("userinterest/delete")
+    @FormUrlEncoded
+    Call<Object> removeInterest(@FieldMap WrapperParams params);
+
 
     @POST("event")
     @FormUrlEncoded
@@ -175,5 +201,29 @@ public interface Api {
 //            @Query("address") String address,w
 //            @Query("key") String key
 //    );
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<Beers> fullSearchBeer(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+
+    );
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<Restos> fullSearchResto(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+    );
+
+    @POST("resto/restodata")
+    @FormUrlEncoded
+    Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
+
 
 }

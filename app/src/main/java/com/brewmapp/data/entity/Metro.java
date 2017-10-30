@@ -4,9 +4,11 @@ package com.brewmapp.data.entity;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Metro {
+public class Metro implements Serializable {
 
     @SerializedName("city_id")
     private String mCityId;
@@ -18,6 +20,17 @@ public class Metro {
     private String mLon;
     @SerializedName("name")
     private String mName;
+    @SerializedName("distance")
+    private int distance;
+
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
 
     public String getCityId() {
         return mCityId;

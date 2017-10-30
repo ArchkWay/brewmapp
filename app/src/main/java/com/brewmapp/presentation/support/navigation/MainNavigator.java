@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.data.db.contract.UiSettingRepo;
-import com.brewmapp.data.entity.UiSettingContainer;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;

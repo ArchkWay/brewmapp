@@ -113,4 +113,8 @@ public class Keys {
     public static final String LON = "lon";
     public static final String REPOST_ID = "repost_id";
     public static final String REPOST_MODEL = "repost_model";
+    public static final String CAP_BEER = "Beer";
+    public static final String TYPE_BEER = "TYPE_BEER";
+    public static final String TYPE_RESTO = "TYPE_RESTO";
+    public static final String RESTO_ID = "resto_id";
 }

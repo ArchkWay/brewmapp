@@ -47,6 +47,7 @@
     <string name="photos_count">фото</string>
     <string name="video_count">видео</string>
     <string name="online">Онлайн</string>
+    <string name="offline">Оффлайн</string>
     <string name="new_post">Новая запись</string>
     <string name="add_photo">Добавить фото</string>
     <string name="fav_beer">Любимое пиво</string>
@@ -210,6 +211,24 @@
     <string name="claim_recieve">Ваша жалоба принята. Спасибо.</string>
     <string name="key_repost_id">key_intent_serializable</string>
     <string name="key_repost_model">key_repost_model</string>
+    <string name="text_no_while_news">Тут пока еще нет новостей ;)</string>
+    <string name="title_activity_add_beer">Поиск</string>
+    <string name="key_serializable_extra">key_serializable_extra</string>
+    <string name="action_add">Добавление</string>
+    <string name="text_button_save">Сохранить изменения</string>
+    <string name="message_send">Личное сообщение</string>
+    <string name="text_view_interior">Интерьер:</string>
+    <string name="text_view_service">Сервис</string>
+    <string name="text_view_quality_beer">Качество пива:</string>
+    <string name="text_view_common_effect">Общее впечатление:</string>
+    <string name="text_view_avg_account">Средний счет:</string>
+    <string name="text_view_place">Расположение</string>
+    <string name="text_view_call">Позвонить:</string>
+    <string name="text_view_kitchen">Кухня</string>
+    <string name="button.call">Позвонить</string>
+    <string name="text_view_resto_description">Описание</string>
+    <string name="button_text_subscribe">Подписаться</string>
+    <string name="text_view_value_not_found">--</string>
     <string-array name="post_options">
         <item>Поделиться</item>
         <item>Репост</item>

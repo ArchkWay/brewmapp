@@ -69,6 +69,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             public void onError(Throwable e) {
                 enableControls(true);
                 showMessage(e.getMessage());
+                view.onError();
             }
 
             @Override
@@ -87,6 +88,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             public void onError(Throwable e) {
                 enableControls(true);
                 showMessage(e.getMessage());
+                view.onError();
             }
 
             @Override

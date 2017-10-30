@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.brewmapp.presentation.view.impl.activity.AddInterestActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_toolbar" />
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/Ovsa.Toolbar"
+        android:id="@+id/common.toolbar.search"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
+        >
+        <com.brewmapp.presentation.view.impl.widget.FinderView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:finderHint="@string/search_hint"
+            android:id="@+id/activity.search.search"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity.add.interest.swipe"
+        android:background="@color/colorBlockSplitter"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/activity.add.interest.list"/>
+
+    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+
+</LinearLayout>

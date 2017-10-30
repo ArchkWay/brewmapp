@@ -1,9 +1,10 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.pojo.LoadPostsPackage;
+import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
+import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
+import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -36,10 +40,9 @@ import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.presentation.view.widget.FixedAppBarLayout;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
-import ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom;
-import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by ovcst on 03.08.2017.
@@ -49,23 +52,24 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_city) TextView city;
-    @BindView(R.id.fragment_profile_app_bar) FixedAppBarLayout appBar;
+    @BindView(R.id.fragment_profile_app_bar)    AppBarLayout appBar;
     @BindView(R.id.fragment_profile_counter_friends) InfoCounter friendsCounter;
     @BindView(R.id.fragment_profile_counter_photos) InfoCounter photosCounter;
     @BindView(R.id.fragment_profile_counter_subscribers) InfoCounter subscribersCounter;
     @BindView(R.id.fragment_profile_counter_subscribes) InfoCounter subscribesCounter;
     @BindView(R.id.fragment_profile_status) TextView status;
-    @BindView(R.id.fragment_profile_post_refresh) SwipeRefreshLayoutBottom postRefresh;
     @BindView(R.id.fragment_profile_username) TextView username;
     @BindView(R.id.fragment_profile_menu) RecyclerView menu;
     @BindView(R.id.fragment_profile_posts) RecyclerView posts;
     @BindView(R.id.fragment_profile_flow_segment) SegmentedGroup segment;
+    @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
 
-    @Inject ProfilePresenter presenter;
+
+
+    @Inject    ProfilePresenter presenter;
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;
-    private EndlessRecyclerOnScrollListener scrollListener;
     private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
 
     @Override
@@ -89,38 +93,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         segment.setOnCheckedChangeListener((group, checkedId) -> {
             loadPostsPackage.setPage(0);
             loadPostsPackage.setSubs(checkedId != R.id.fragment_profile_posts_my);
-            presenter.onLoadPosts(loadPostsPackage);
+            refreshItems();
         });
-       /* swipe.setOnRefreshListener(() -> {
-            segment.check(R.id.fragment_profile_posts_my);
-            loadPostsPackage.setPage(0);
-            presenter.onLoadEverything();
-        });
-*/
-        postRefresh.setOnRefreshListener(() -> {
-            loadPostsPackage.increasePage();
-            presenter.onLoadPosts(loadPostsPackage);
-        });
+
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        /*scrollListener = new EndlessRecyclerOnScrollListener(manager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                loadPostsPackage.setPage(currentPage - 1);
-                presenter.onLoadPosts(loadPostsPackage);
-            }
-        };*/
         posts.setLayoutManager(manager);
         posts.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         posts.setAdapter(postAdapter);
-        appBar.setOnStateChangeListener(toolbarChange -> {
-            /*if(toolbarChange == FixedAppBarLayout.State.COLLAPSED) {
-                posts.addOnScrollListener(scrollListener);
-            } else {
-                posts.removeOnScrollListener(scrollListener);
-            }*/
-            Log.i("OV", toolbarChange.toString());
-        });
     }
 
     private void processAction(int action, Object payload) {
@@ -158,14 +138,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void enableControls(boolean enabled, int code) {
-//        swipe.setRefreshing(!enabled);
 
 
     }
 
     @Override
     public void showUserProfile(UserProfile profile) {
-        getActivity().setTitle(profile.getUser().getFormattedName());
+        getActivity().setTitle(R.string.my_profile);
         Picasso.with(getActivity()).load(profile.getUser().getThumbnail()).fit().into(avatar);
         username.setText(profile.getUser().getFormattedName());
         status.setText(getString(R.string.online));
@@ -178,20 +157,37 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     public void appendPosts(Posts posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
-        if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
-        postRefresh.setRefreshing(false);
+
+        //if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
+
         postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
-        if(postAdapter.getItemCount() == posts.getTotal()) postRefresh.setEnabled(false);
+
+        text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
+    }
+
+    @Override
+    public void onError() {
+        status.setText(getString(R.string.offline));
+        status.setTextColor(Color.RED);
     }
 
     @Override
     public boolean onItemClick(int position) {
         switch (position) {
             case 0:
-                startActivity(new Intent(getActivity(), NewPostActivity.class));
+                startActivityForResult(new Intent(getActivity(), NewPostActivity.class),Cons.REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case 1:
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListActivity.class));
+                break;
+            case 3:
+                startActivity(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class));
+                break;
+            case 4:
+                startActivity(new Intent(getActivity(), AssessmentsActivity.class));
                 break;
         }
         return false;
@@ -200,5 +196,23 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     public void refreshState() {
         postAdapter.notifyDataSetChanged();
+    }
+
+    public void refreshItems() {
+        presenter.onLoadPosts(loadPostsPackage);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK) {
+                    refreshItems();
+                    return;
+                }
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 }

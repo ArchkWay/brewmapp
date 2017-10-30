@@ -3,6 +3,7 @@ package com.brewmapp.data.entity;
 import com.brewmapp.BuildConfig;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by xpusher on 10/20/2017.
@@ -30,7 +31,7 @@ public class Beer implements Serializable{
     private String timestamp;
     private String image;
     private String getThumb;
-    private Relations relations;
+    private Relations relations=new Relations();
 
 
     public Relations getRelations() {
@@ -124,7 +125,7 @@ public class Beer implements Serializable{
     }
 
     public String getTitle_ru() {
-        return title_ru==null?"":title_ru;
+        return (title_ru==null||title_ru.length()==0)?getTitle():title_ru;
     }
 
     public void setTitle_ru(String title_ru) {
@@ -132,7 +133,7 @@ public class Beer implements Serializable{
     }
 
     public String getText() {
-        return text;
+        return text==null?"":text;
     }
 
     public void setText(String text) {

@@ -1,27 +1,29 @@
 
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Relations {
-    private BeerBrand BeerBrand;
-    private List<BeerAftertaste> BeerAftertaste;
-    private List<BeerAveragePrice> BeerAveragePrice;
-    private List<BeerAftertaste> BeerColor;
-    private List<BeerAftertaste> BeerFragrance;
-    private BeerAftertaste BeerStrength;
-    private List<BeerAftertaste> BeerTaste;
-    private List<BeerToAftertastes> BeerToAftertastes;
-    private List<BeerToColors> BeerToColors;
-    private List<BeerToFragrances> BeerToFragrances;
-    private List<BeerToTastes> BeerToTastes;
-    private BeerType BeerType;
-    private Brewery Brewery;
-    private ProductDensity productDensity;
+public class Relations implements Serializable {
+    private BeerBrand BeerBrand=new BeerBrand();
+    private List<BeerAftertaste> BeerAftertaste=new ArrayList<>();
+    private List<BeerAveragePrice> BeerAveragePrice=new ArrayList<>();
+    private List<BeerAftertaste> BeerColor=new ArrayList<>();
+    private List<BeerAftertaste> BeerFragrance=new ArrayList<>();
+    private BeerAftertaste BeerStrength=new BeerAftertaste();
+    private List<BeerAftertaste> BeerTaste=new ArrayList<>();
+    private List<BeerToAftertastes> BeerToAftertastes=new ArrayList<>();
+    private List<BeerToColors> BeerToColors=new ArrayList<>();
+    private List<BeerToFragrances> BeerToFragrances=new ArrayList<>();
+    private List<BeerToTastes> BeerToTastes=new ArrayList<>();
+    private BeerType BeerType=new BeerType();
+    private Brewery Brewery=new Brewery();
+    private ProductDensity productDensity=new ProductDensity();
 
     @SerializedName("Country")
     private com.brewmapp.data.entity.Country mCountry;

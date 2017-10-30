@@ -37,20 +37,20 @@
                         android:layout_height="wrap_content" />
                 </com.daimajia.slider.library.SliderLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/colorBlackSemi"
-                    android:gravity="right">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:background="@color/colorBlackSemi"-->
+                    <!--android:gravity="right">-->
 
-                    <TextView
-                        android:id="@+id/activity.beerDetails.photosCounter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/text_size_common" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:id="@+id/activity.beerDetails.photosCounter"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textColor="@color/colorWhite"-->
+                        <!--android:textSize="@dimen/text_size_common" />-->
+                <!--</LinearLayout>-->
             </LinearLayout>
 
             <TextView
@@ -62,9 +62,23 @@
                 android:layout_margin="@dimen/common_block_space"
                 android:text="@string/text_view_value_not_found"
                 android:textColor="@color/red_focused"
-                android:textSize="@dimen/text_size_big_phone"/>
+                android:textSize="@dimen/text_size_big_phone"
+                android:gravity="center"
+                />
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/common_block_space"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
             <include layout="@layout/view_like_dislike_fav" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,7 +107,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="10"
+                            android:layout_weight="1"
                             android:id="@+id/activity.beer.detail.text.view.flavor"
                             android:text="@string/text_view_value_not_found"
                             />
@@ -114,7 +128,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="10"
+                            android:layout_weight="1"
                             android:id="@+id/activity.beer.detail.text.view._taste"
                             android:text="@string/text_view_value_not_found"
                             />
@@ -145,7 +159,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/text_view_value_not_found"
-                            android:layout_weight="10"/>
+                            android:layout_weight="1"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -161,7 +175,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/text_view_value_not_found"
-                            android:layout_weight="10"
+                            android:layout_weight="1"
                             />
                     </LinearLayout>
 
@@ -169,8 +183,19 @@
 
             </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <ru.frosteye.ovsa.presentation.view.widget.Line
                 android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/common_block_space"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
@@ -182,11 +207,10 @@
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_avg_price"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.beer.detail.image.view.avg_price"
-                    android:layout_margin="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
+
                     />
 
                 <TextView
@@ -194,32 +218,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_avg_price"
-                    app:layout_constraintStart_toEndOf="@+id/activity.beer.detail.image.view.avg_price"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_margin="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity.beer.detail.text.view.avg.cost"
                     android:text="@string/text_view_value_not_found"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/_chevr"/>
-
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_rub"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/_chevr"
                     />
-            </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -236,9 +254,11 @@
                     android:src="@drawable/ic_brand" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_brand"
+                    android:layout_weight="1"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -246,6 +266,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -267,6 +290,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_brew"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -274,6 +298,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:gravity="right"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -295,6 +321,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_country"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -302,6 +329,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
 
             </LinearLayout>
@@ -324,6 +352,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_type"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -331,6 +360,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -352,6 +382,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_strength"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -359,6 +390,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -380,6 +412,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_density"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -387,6 +420,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -408,6 +442,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_ubi"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -415,6 +450,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -436,6 +472,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_filter_beer"
+                    android:layout_marginRight="@dimen/common_block_space"
                     />
 
                 <TextView
@@ -443,6 +480,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -463,13 +501,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_beer_taste"/>
+                    android:text="@string/text_view_beer_taste"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    />
 
                 <TextView
                     android:id="@+id/activity.beer.detail.text.view.taste"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
 
@@ -490,15 +531,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_beer_after_taste"/>
+                    android:text="@string/text_view_beer_after_taste"
+                    android:layout_marginRight="@dimen/common_block_space"/>
 
                 <TextView
                     android:id="@+id/activity.beer.detail.text.view.after_taste"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     />
             </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/common_block_space"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -515,7 +569,8 @@
                     android:text="@string/text_view_resto_description"
                     android:textColor="@color/red_focused"
                     android:textSize="@dimen/text_size_big_phone"
-                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />
+                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/activity.beer.detail.text.view.description"

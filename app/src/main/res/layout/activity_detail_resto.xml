@@ -40,20 +40,20 @@
                         android:layout_height="wrap_content" />
                 </com.daimajia.slider.library.SliderLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/colorBlackSemi"
-                    android:gravity="right">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:background="@color/colorBlackSemi"-->
+                    <!--android:gravity="right">-->
 
-                    <TextView
-                        android:id="@+id/activity.restoDetails.photosCounter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/text_size_common" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:id="@+id/activity.restoDetails.photosCounter"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textColor="@color/colorWhite"-->
+                        <!--android:textSize="@dimen/text_size_common" />-->
+                <!--</LinearLayout>-->
             </LinearLayout>
 
             <TextView
@@ -66,7 +66,9 @@
                 android:text="@string/text_view_value_not_found"
                 android:textColor="@color/red_focused"
                 android:textSize="@dimen/text_size_big_phone"
-                app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />
+                app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                android:gravity="center"
+                />
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
                 android:layout_width="match_parent"
@@ -433,7 +435,9 @@
                     android:text="@string/text_view_resto_description"
                     android:textColor="@color/red_focused"
                     android:textSize="@dimen/text_size_big_phone"
-                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />
+                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                    android:gravity="center"
+                    />
 
                 <TextView
                     android:id="@+id/activity.resto.detail.text.view.description"

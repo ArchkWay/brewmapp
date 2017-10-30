@@ -140,12 +140,12 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         for (Kitchen kitchen:restoDetail.getResto_kitchen())
             if(kitchen.getGetThumb()!=null)
                 photos.add(kitchen.getGetThumb());
-        for (Menu menu:restoDetail.getMenu())
-            if(menu.getGetThumb()!=null)
-                photos.add(menu.getGetThumb());
-        for (Feature feature:restoDetail.getResto_feature())
-            if(feature.getGetThumb()!=null)
-                photos.add(feature.getGetThumb());
+//        for (Menu menu:restoDetail.getMenu())
+//            if(menu.getGetThumb()!=null)
+//                photos.add(menu.getGetThumb());
+//        for (Feature feature:restoDetail.getResto_feature())
+//            if(feature.getGetThumb()!=null)
+//                photos.add(feature.getGetThumb());
 
 
         for(String imgUrl:photos){

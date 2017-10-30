@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by xpusher on 10/30/2017.
  */
 
-public class BeerToTastes {
+public class BeerToTastes implements Serializable {
 
     private String beer_id;
     private String taste_id;

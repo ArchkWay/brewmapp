@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.presenter.contract;
 
-import com.brewmapp.data.pojo.FindBeerPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 

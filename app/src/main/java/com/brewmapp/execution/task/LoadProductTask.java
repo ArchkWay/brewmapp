@@ -2,7 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.container.Beers;
-import com.brewmapp.data.pojo.FindBeerPackage;
+import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -24,7 +24,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by Kras on 21.10.2017.
  */
 
-public class LoadProductTask extends BaseNetworkTask<FindBeerPackage,List<IFlexible>> {
+public class LoadProductTask extends BaseNetworkTask<LoadProductPackage,List<IFlexible>> {
 
     private int step;
 
@@ -35,13 +35,20 @@ public class LoadProductTask extends BaseNetworkTask<FindBeerPackage,List<IFlexi
     }
 
     @Override
-    protected Observable<List<IFlexible>> prepareObservable(FindBeerPackage findBeerPackage) {
+    protected Observable<List<IFlexible>> prepareObservable(LoadProductPackage loadProductPackage) {
         return Observable.create(subscriber -> {
             try {
+                int start=0;
+                int end=1;
                 WrapperParams params = new WrapperParams(Wrappers.BEER);
-                params.addParam(Keys.TITLE, findBeerPackage.getStringSearch());
-                int start = findBeerPackage.getPage() * step;
-                int end = findBeerPackage.getPage() * step + step;
+                if(loadProductPackage.getmTitle()!=null)
+                    params.addParam(Keys.TITLE, loadProductPackage.getmTitle());
+                if(loadProductPackage.getId()!=null)
+                    params.addParam(Keys.ID, loadProductPackage.getId());
+                if(loadProductPackage.getPage()!=0) {
+                    start = loadProductPackage.getPage() * step;
+                    end = loadProductPackage.getPage() * step + step;
+                }
                 Beers beers = executeCall(getApi().loadProduct(start , end, params));
                 subscriber.onNext(new ArrayList<>(beers.getModels()));
                 subscriber.onComplete();

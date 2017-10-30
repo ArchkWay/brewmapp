@@ -8,6 +8,7 @@ import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
 import com.brewmapp.presentation.presenter.contract.AssessmentsPresenter;
+import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.contract.ConfirmPhonePresenter;
 import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
@@ -43,6 +44,7 @@ import com.brewmapp.presentation.presenter.impl.AddInterestPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AssessmentsPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.BeerDetailPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.BeerMapPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ConfirmPhonePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
@@ -252,6 +254,10 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
     @Provides @PresenterScope
     FilterMapPresenter provideFilterMapViewPresenter(FilerMapPresenterImpl presenter){
+        return presenter;
+    }
+    @Provides @PresenterScope
+    BeerDetailPresenter provideBeerDetailPresenter(BeerDetailPresenterImpl presenter){
         return presenter;
     }
 

@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/common_block_space"
-                android:text="Test"
+                android:text="@string/text_view_value_not_found"
                 android:textColor="@color/red_focused"
                 android:textSize="@dimen/text_size_big_phone"
                 app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />

@@ -151,12 +151,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.RestoDetailActivity"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FilterMapActivity"
             android:label="@string/filter"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
+        <activity android:name=".presentation.view.impl.activity.BeerDetailActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

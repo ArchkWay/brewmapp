@@ -201,6 +201,11 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                 Intent intent = new Intent(this, RestoDetailActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), interest);
                 startActivity(intent);
+            }break;
+            case Keys.CAP_BEER:{
+                Intent intent = new Intent(this, BeerDetailActivity.class);
+                intent.putExtra(getString(R.string.key_serializable_extra), interest);
+                startActivity(intent);
             }
         }
     }

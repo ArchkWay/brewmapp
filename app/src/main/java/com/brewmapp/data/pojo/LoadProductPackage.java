@@ -4,20 +4,30 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 21.10.2017.
  */
 
-public class FindBeerPackage {
+public class LoadProductPackage {
     private String interestFilter;
 
     private int mode;
     private int filter;
     private int page;
-    private String stringSearch;
+    private String mTitle;
+    private String id;
 
-    public String getStringSearch() {
-        return stringSearch;
+
+    public String getId() {
+        return id;
     }
 
-    public void setStringSearch(String stringSearch) {
-        this.stringSearch = stringSearch;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getmTitle() {
+        return mTitle;
+    }
+
+    public void setmTitle(String mTitle) {
+        this.mTitle = mTitle;
     }
 
     public int getPage() {

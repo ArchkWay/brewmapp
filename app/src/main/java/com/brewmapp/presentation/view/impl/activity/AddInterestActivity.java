@@ -8,8 +8,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.Beer;
-import com.brewmapp.data.pojo.FindBeerPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;

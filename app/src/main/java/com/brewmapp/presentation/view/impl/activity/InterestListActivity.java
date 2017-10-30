@@ -195,9 +195,14 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     }
 
     private void processAction(int action, Object payload) {
-        Intent intent=new Intent(this,RestoDetailActivity.class);
-        intent.putExtra(getString(R.string.key_serializable_extra),(Interest)payload);
-        startActivity(intent);
+        Interest interest=(Interest)payload;
+        switch (interest.getRelated_model()){
+            case Keys.CAP_RESTO:{
+                Intent intent = new Intent(this, RestoDetailActivity.class);
+                intent.putExtra(getString(R.string.key_serializable_extra), interest);
+                startActivity(intent);
+            }
+        }
     }
 
     @Override

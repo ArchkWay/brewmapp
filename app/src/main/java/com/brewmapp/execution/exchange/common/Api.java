@@ -112,7 +112,7 @@ public interface Api {
 
     @POST("subscription/add")
     @FormUrlEncoded
-    Call<Object> addSubscription(@FieldMap WrapperParams params);
+    Call<SingleResponse<Subscription>> addSubscription(@FieldMap WrapperParams params);
 
     @POST("subscription/delete")
     @FormUrlEncoded

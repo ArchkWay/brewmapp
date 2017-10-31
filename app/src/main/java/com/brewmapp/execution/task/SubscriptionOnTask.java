@@ -1,10 +1,12 @@
 package com.brewmapp.execution.task;
 
+import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
 import java.util.concurrent.Executor;
@@ -33,8 +35,8 @@ public class SubscriptionOnTask extends BaseNetworkTask<SubscriptionPackage,Stri
                 params.addParam(Keys.RELATED_MODEL,subscriptionPackage.getRelated_model());
                 params.addParam(Keys.RELATED_ID,subscriptionPackage.getRelated_id());
                 //params.addParam(Keys.TOKEN,addInterestPackage.getToken());
-                Object o=executeCall(getApi().addSubscription(params));
-                subscriber.onNext("");
+                SingleResponse<Subscription> o=executeCall(getApi().addSubscription(params));
+                subscriber.onNext(o.getData().getId());
                 subscriber.onComplete();
             }catch (Exception e){
                 subscriber.onError(e);

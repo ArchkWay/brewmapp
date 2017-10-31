@@ -199,7 +199,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
         switch (interest.getRelated_model()){
             case Keys.CAP_RESTO:{
                 Intent intent = new Intent(this, RestoDetailActivity.class);
-                intent.putExtra(getString(R.string.key_serializable_extra), interest);
+                intent.putExtra(Keys.RESTO_ID, interest);
                 startActivity(intent);
             }break;
             case Keys.CAP_BEER:{

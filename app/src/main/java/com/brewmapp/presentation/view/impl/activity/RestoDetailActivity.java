@@ -78,13 +78,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         String resto_id = ((Interest) getIntent().getSerializableExtra(RESTO_ID)).getInterest_info().getId();
         presenter.requestRestoDetail(resto_id);
         slider.stopAutoCycle();
-        place.setOnClickListener(v -> onClickPlace());
+        place.setOnClickListener(v -> {});
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
     }
 
-    private void onClickPlace() {
 
-    }
 
     @Override
     protected void attachPresenter() {
@@ -175,17 +173,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     }
 
     @Override
-    public void onSuccessSubscription(String name) {
-        showMessage(getString(R.string.success_subscription, name));
-    }
-
-    @Override
     public void SubscriptionExist(boolean b) {
         subscribe.setText(b?getString(R.string.button_text_unsubscribe):getString(R.string.button_text_subscribe));
     }
 
-    @Override
-    public void onUnSuccessSubscription(String name) {
-        showMessage(getString(R.string.success_unsubscription, name));
-    }
 }

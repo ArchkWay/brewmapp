@@ -29,6 +29,7 @@ import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.entity.container.Restos;
+import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -93,6 +94,11 @@ public interface Api {
     Call<Posts> loadPosts(@Query(Keys.LIMIT_START) int start,
                           @Query(Keys.LIMIT_END) int end,
                           @FieldMap WrapperParams params);
+
+    @POST("subscription")
+    @FormUrlEncoded
+    Call<Subscriptions> loadUserSubscriptionsItems(@FieldMap WrapperParams params);
+
 
     @POST("beer/beer")
     @FormUrlEncoded
@@ -191,7 +197,8 @@ public interface Api {
 
     @POST("subscription")
     @FormUrlEncoded
-    Call<ListResponse<Subscription>> loadUserSubscriptions(@FieldMap WrapperParams params);
+    Call<ListResponse<Subscription>> loadUserSubscriptionsList(@FieldMap WrapperParams params);
+
 
     @POST("geo/location")
     @FormUrlEncoded

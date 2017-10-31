@@ -14,9 +14,6 @@ public interface RestoDetailView extends BasicView{
 
     void commonError(String... string);
 
-    void onSuccessSubscription(String name);
-
     void SubscriptionExist(boolean b);
 
-    void onUnSuccessSubscription(String name);
 }

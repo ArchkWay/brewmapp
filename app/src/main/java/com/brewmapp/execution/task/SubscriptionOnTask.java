@@ -34,7 +34,6 @@ public class SubscriptionOnTask extends BaseNetworkTask<SubscriptionPackage,Stri
                 WrapperParams params = new WrapperParams(Wrappers.SUBSCRIPTION);
                 params.addParam(Keys.RELATED_MODEL,subscriptionPackage.getRelated_model());
                 params.addParam(Keys.RELATED_ID,subscriptionPackage.getRelated_id());
-                //params.addParam(Keys.TOKEN,addInterestPackage.getToken());
                 SingleResponse<Subscription> o=executeCall(getApi().addSubscription(params));
                 subscriber.onNext(o.getData().getId());
                 subscriber.onComplete();

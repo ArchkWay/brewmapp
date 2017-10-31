@@ -7,7 +7,7 @@ import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
-import com.brewmapp.execution.task.LoadSubscriptionsTask;
+import com.brewmapp.execution.task.LoadSubscriptionsListTask;
 import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
@@ -28,7 +28,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private RestoDetail restoDetail;
     private SubscriptionOnTask subscriptionOnTask;
     private SubscriptionOffTask subscriptionOffTask;
-    private LoadSubscriptionsTask loadSubscriptionsTask;
+    private LoadSubscriptionsListTask loadSubscriptionsListTask;
     private String IdSubscription=null;
 
     public void setRestoDetail(RestoDetail restoDetail) {
@@ -36,10 +36,10 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     }
 
     @Inject
-    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsTask loadSubscriptionsTask,SubscriptionOffTask subscriptionOffTask){
+    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsListTask loadSubscriptionsListTask, SubscriptionOffTask subscriptionOffTask){
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
-        this.loadSubscriptionsTask = loadSubscriptionsTask;
+        this.loadSubscriptionsListTask = loadSubscriptionsListTask;
         this.subscriptionOffTask=subscriptionOffTask;
     }
 
@@ -73,7 +73,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             }
 
             private void requestExistSubscriptions() {
-                loadSubscriptionsTask.execute(0,new SimpleSubscriber<ListResponse<Subscription>>(){
+                loadSubscriptionsListTask.execute(0,new SimpleSubscriber<ListResponse<Subscription>>(){
                     @Override
                     public void onNext(ListResponse<Subscription> subscriptionListResponse) {
                         super.onNext(subscriptionListResponse);
@@ -99,7 +99,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void changeSubscription() {
-        if(restoDetail==null||restoDetail.getResto().getId()==0){view.commonError();return;}
+
         if(IdSubscription==null) {
             String id = String.valueOf(restoDetail.getResto().getId());
             SubscriptionPackage subscriptionPackage = new SubscriptionPackage();
@@ -107,15 +107,13 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
             subscriptionOnTask.execute(subscriptionPackage, new SimpleSubscriber<String>() {
                 @Override
-                public void onNext(String s) {
-                    super.onNext(s);
-                    view.onSuccessSubscription(restoDetail.getResto().getName());
+                public void onNext(String idSubscription) {
+                    super.onNext(idSubscription); view.SubscriptionExist(true); IdSubscription = idSubscription;
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    super.onError(e);
-                    view.commonError();
+                    super.onError(e); view.showMessage(e.getMessage(),0); view.commonError();
                 }
             });
         }else {
@@ -124,14 +122,12 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             subscriptionOffTask.execute(subscriptionPackage,new SimpleSubscriber<String>(){
                 @Override
                 public void onNext(String s) {
-                    super.onNext(s);
-                    IdSubscription=null;
-                    view.onUnSuccessSubscription(restoDetail.getResto().getName());
+                    super.onNext(s); IdSubscription=null; view.SubscriptionExist(false);
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    super.onError(e);
+                    super.onError(e); view.showMessage(e.getMessage(),0);
                 }
             });
 

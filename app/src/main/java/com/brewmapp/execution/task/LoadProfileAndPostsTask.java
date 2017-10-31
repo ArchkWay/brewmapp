@@ -54,7 +54,7 @@ public class LoadProfileAndPostsTask extends BaseNetworkTask<Void, ProfileInfoPa
 
                 params = new WrapperParams(Wrappers.SUBSCRIPTION);
                 params.addParam(Keys.USER_ID, userRepo.load().getId());
-                int subscriptionsCount = executeCall(getApi().loadUserSubscriptions(params)).getTotal();
+                int subscriptionsCount = executeCall(getApi().loadUserSubscriptionsList(params)).getTotal();
                 user.getCounts().setSubscriptions(subscriptionsCount);
                 userRepo.save(user);
 

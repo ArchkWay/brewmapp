@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
@@ -60,7 +62,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_status) TextView status;
     @BindView(R.id.fragment_profile_username) TextView username;
     @BindView(R.id.fragment_profile_menu) RecyclerView menu;
-    @BindView(R.id.fragment_profile_posts) RecyclerView posts;
+    @BindView(R.id.fragment_profile_posts) RecyclerView posts_subs;
     @BindView(R.id.fragment_profile_flow_segment) SegmentedGroup segment;
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
 
@@ -70,6 +72,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;
+    private FlexibleModelAdapter<SubscriptionInfo> subscriptionAdapter;
     private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
 
     @Override
@@ -91,16 +94,26 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             startActivity(intent);
         });
         segment.setOnCheckedChangeListener((group, checkedId) -> {
-            loadPostsPackage.setPage(0);
-            loadPostsPackage.setSubs(checkedId != R.id.fragment_profile_posts_my);
-            refreshItems();
+            switch (checkedId){
+                case R.id.fragment_profile_posts_subscription:
+                    loadPostsPackage.setSubs(true);
+                    refreshItems();
+                    break;
+                case R.id.fragment_profile_posts_my:
+                    loadPostsPackage.setPage(0);
+                    loadPostsPackage.setSubs(false);
+                    refreshItems();
+                    break;
+
+            }
         });
 
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        subscriptionAdapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        posts.setLayoutManager(manager);
-        posts.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
-        posts.setAdapter(postAdapter);
+        posts_subs.setLayoutManager(manager);
+        posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
+        posts_subs.setAdapter(postAdapter);
     }
 
     private void processAction(int action, Object payload) {
@@ -158,11 +171,22 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void appendPosts(Posts posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
 
-        //if(posts.getModels().isEmpty()) loadPostsPackage.decreasePage();
-
         postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
 
         text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
+
+        posts_subs.setAdapter(postAdapter);
+    }
+
+    @Override
+    public void appendSubscriptions(Subscriptions subscriptions) {
+        if(loadPostsPackage.getPage() == 0) postAdapter.clear();
+
+        subscriptionAdapter.addItems(menuAdapter.getItemCount(), subscriptions.getModels());
+
+        text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
+
+        posts_subs.setAdapter(subscriptionAdapter);
     }
 
     @Override
@@ -170,6 +194,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         status.setText(getString(R.string.offline));
         status.setTextColor(Color.RED);
     }
+
 
     @Override
     public boolean onItemClick(int position) {
@@ -199,7 +224,10 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     }
 
     public void refreshItems() {
-        presenter.onLoadPosts(loadPostsPackage);
+        if(loadPostsPackage.isSubs())
+            presenter.onLoadSubscription(loadPostsPackage);
+        else
+            presenter.onLoadPosts(loadPostsPackage);
     }
 
     @Override

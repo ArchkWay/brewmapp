@@ -14,8 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
@@ -205,6 +204,7 @@
                         android:id="@+id/fragment.profile.posts"/>
 
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

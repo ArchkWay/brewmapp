@@ -6,6 +6,7 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.data.pojo.ProfileInfoPackage;
@@ -15,8 +16,14 @@ import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadPostsTask;
 import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.execution.task.LoadProfileTask;
+import com.brewmapp.execution.task.LoadSubscriptionsItemsTask;
+import com.brewmapp.execution.task.LoadSubscriptionsListTask;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.view.contract.ProfileView;
+
+import java.util.List;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -29,6 +36,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
 
     private UserRepo userRepo;
     private LoadPostsTask loadPostsTask;
+    private LoadSubscriptionsItemsTask loadSubscriptionsItemsTask;
     private LoadProfileTask loadProfileTask;
     private LoadProfileAndPostsTask loadProfilePostsTask;
     private LikeTask likeTask;
@@ -36,12 +44,15 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     @Inject
     public ProfilePresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
                                 LoadProfileTask loadProfileTask,
-                                LoadProfileAndPostsTask loadProfilePostsTask, LikeTask likeTask) {
+                                LoadProfileAndPostsTask loadProfilePostsTask,
+                                LikeTask likeTask,
+                                LoadSubscriptionsItemsTask loadSubscriptionsItemsTask) {
         this.userRepo = userRepo;
         this.loadPostsTask = loadPostsTask;
         this.loadProfileTask = loadProfileTask;
         this.loadProfilePostsTask = loadProfilePostsTask;
         this.likeTask = likeTask;
+        this.loadSubscriptionsItemsTask = loadSubscriptionsItemsTask;
     }
 
     @Override
@@ -82,22 +93,33 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
 
     @Override
     public void onLoadPosts(LoadPostsPackage loadPostsPackage) {
-
         loadPostsTask.execute(loadPostsPackage, new SimpleSubscriber<Posts>() {
             @Override
             public void onError(Throwable e) {
-                enableControls(true);
-                showMessage(e.getMessage());
-                view.onError();
+                enableControls(true);showMessage(e.getMessage());view.onError();
             }
-
             @Override
             public void onNext(Posts posts) {
-                enableControls(true);
-                view.appendPosts(posts);
+                enableControls(true);view.appendPosts(posts);
             }
         });
     }
+    @Override
+    public void onLoadSubscription(LoadPostsPackage loadPostsPackage) {
+        loadSubscriptionsItemsTask.execute(0,new SimpleSubscriber<Subscriptions>(){
+            @Override
+            public void onNext(Subscriptions subscriptions) {
+                super.onNext(subscriptions);
+                enableControls(true);view.appendSubscriptions(subscriptions);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+        });
+    }
+
 
     @Override
     public void onLikePost(Post post) {
@@ -116,4 +138,5 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             }
         });
     }
+
 }

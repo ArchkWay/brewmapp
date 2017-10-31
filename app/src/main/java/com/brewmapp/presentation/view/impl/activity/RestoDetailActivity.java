@@ -35,6 +35,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
+import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
+
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
@@ -64,7 +66,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     })    List<View> viewList;
 
-    @Inject    RestoDetailPresenter presenter;
+    @Inject RestoDetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +77,12 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     protected void initView() {
         enableBackButton();
-        enableControls(false,0);
-        String resto_id=((Interest)getIntent().getSerializableExtra(getString(R.string.key_serializable_extra))).getInterest_info().getId();
+        enableControls(false, 0);
+        String resto_id = ((Interest) getIntent().getSerializableExtra(RESTO_ID)).getInterest_info().getId();
         presenter.requestRestoDetail(resto_id);
         slider.stopAutoCycle();
         place.setOnClickListener(v -> onClickPlace());
-
     }
-
-
 
     private void onClickPlace() {
 

@@ -113,115 +113,118 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/common_block_space"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_margin="@dimen/common_block_space"-->
+                <!--android:orientation="horizontal">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/common_block_space"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_interior"
-                            android:layout_weight="1"
-                            />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="10"
-                            android:id="@+id/activity.resto.detail.text.view.interior"
-                            android:text="@string/text_view_value_not_found"
-                            />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="@dimen/common_block_space"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:orientation="vertical">-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_weight="1">-->
+                        <!---->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_interior"-->
+                            <!--android:layout_weight="1"-->
+                            <!--/>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="10"-->
+                            <!--android:id="@+id/activity.resto.detail.text.view.interior"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--/>-->
 
-                    </LinearLayout>
+                    <!--</LinearLayout>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_service"
-                            android:layout_weight="1"
-                            />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="10"
-                            android:id="@+id/activity.resto.detail.text.view.service"
-                            android:text="@string/text_view_value_not_found"
-                            />
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_weight="1">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_service"-->
+                            <!--android:layout_weight="1"-->
+                            <!--/>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="10"-->
+                            <!--android:id="@+id/activity.resto.detail.text.view.service"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--/>-->
 
-                    </LinearLayout>
+                    <!--</LinearLayout>-->
 
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/common_block_space"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="@dimen/common_block_space"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:orientation="vertical">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_quality_beer"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:id="@+id/activity.resto.detail.text.view.quality.beer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            android:layout_weight="10"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_common_effect"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:id="@+id/activity.resto.detail.text.view.common.effect"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            android:layout_weight="10"
-                            />
-                    </LinearLayout>
-                </LinearLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_quality_beer"-->
+                            <!--android:layout_weight="1"/>-->
+                        <!--<TextView-->
+                            <!--android:id="@+id/activity.resto.detail.text.view.quality.beer"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--android:layout_weight="10"/>-->
+                    <!--</LinearLayout>-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_common_effect"-->
+                            <!--android:layout_weight="1"/>-->
+                        <!--<TextView-->
+                            <!--android:id="@+id/activity.resto.detail.text.view.common.effect"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--android:layout_weight="10"-->
+                            <!--/>-->
+                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
-            <ru.frosteye.ovsa.presentation.view.widget.Line
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/colorSplitter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+            <!--<ru.frosteye.ovsa.presentation.view.widget.Line-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/colorSplitter"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--android:layout_marginBottom="@dimen/cardview_compat_inset_shadow"-->
+                <!--/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -240,15 +243,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_avg_account" />
+                    android:text="@string/text_view_avg_account"
+                    style="@style/AppTheme.Paragraph"
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity.resto.detail.text.view.avg.cost"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:textSize="@dimen/text_size_common_bigger"
                     android:gravity="right"
                     android:layout_weight="1"
+                    style="@style/AppTheme.Paragraph"
                     />
                 <ImageView
                     android:layout_width="30dp"
@@ -287,6 +293,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_margin="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <ImageView
@@ -317,7 +324,9 @@
                     android:id="@+id/text_view_kitchen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_kitchen" />
+                    android:text="@string/text_view_kitchen"
+                    style="@style/AppTheme.Paragraph"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -344,7 +353,9 @@
                         android:id="@+id/text_view_call_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_view_call" />
+                        android:text="@string/text_view_call"
+                        style="@style/AppTheme.Paragraph"
+                        />
                 </LinearLayout>
 
                 <Button
@@ -384,7 +395,10 @@
                         android:id="@+id/text_view_call_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_view_call" />
+                        android:text="@string/text_view_call"
+                        style="@style/AppTheme.Paragraph"
+
+                        />
                 </LinearLayout>
 
                 <Button

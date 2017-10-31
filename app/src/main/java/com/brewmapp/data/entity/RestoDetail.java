@@ -9,7 +9,7 @@ import java.util.List;
 
 public class RestoDetail {
 
-    private Resto resto;
+    private Resto resto=new Resto();
     private List<Kitchen> resto_kitchen=new ArrayList<>();
     private List<Menu> menu=new ArrayList<>();
     private List<Feature> resto_feature=new ArrayList<>();

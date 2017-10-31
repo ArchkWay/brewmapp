@@ -228,6 +228,7 @@
     <string name="button.call">Позвонить</string>
     <string name="text_view_resto_description">Описание</string>
     <string name="button_text_subscribe">Подписаться</string>
+    <string name="button_text_unsubscribe">Отписаться</string>
     <string name="text_view_value_not_found">--</string>
     <string-array name="post_options">
         <item>Поделиться</item>
@@ -268,5 +269,7 @@
     <string name="text_view_filter_beer">Фильтрованное пиво:</string>
     <string name="text_view_beer_taste">Вкус:</string>
     <string name="text_view_beer_after_taste">Послевкусие:</string>
+    <string name="success_subscription">%s (подписка ON)</string>
+    <string name="success_unsubscription">%s (подписка OFF)</string>
 
 </resources>

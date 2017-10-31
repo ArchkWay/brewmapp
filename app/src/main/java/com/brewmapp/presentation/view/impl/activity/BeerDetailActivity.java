@@ -33,8 +33,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_beer_detail_name)    TextView name;
-    @BindView(R.id.activity_beer_detail_text_view_flavor)    TextView flavor;
-    @BindView(R.id.activity_beer_detail_text_view__taste)    TextView _taste;
+    //@BindView(R.id.activity_beer_detail_text_view_flavor)    TextView flavor;
+    //@BindView(R.id.activity_beer_detail_text_view__taste)    TextView _taste;
     @BindView(R.id.activity_beer_detail_text_view_avg_cost)    TextView avg_cost;
     @BindView(R.id.activity_beer_detail_text_view_brand)    TextView brand;
     @BindView(R.id.activity_beer_detail_text_view_brew)    TextView brew;
@@ -67,7 +67,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         name.setText(beer.getTitle_ru());
 
         Iterator<BeerAftertaste> iterator = beer.getRelations().getBeerTaste().iterator();
-        if(iterator.hasNext()) {taste.setText(iterator.next().getName());_taste.setText(iterator.next().getName());}
+        if(iterator.hasNext()) {taste.setText(iterator.next().getName());/*_taste.setText(iterator.next().getName());*/}
 
         avg_cost.setText(beer.getAvg_cost());
         brand.setText(beer.getRelations().getBeerBrand().getName());

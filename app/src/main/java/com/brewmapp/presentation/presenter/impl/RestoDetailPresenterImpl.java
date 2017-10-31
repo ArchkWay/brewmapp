@@ -1,9 +1,15 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.container.RestoDetails;
+import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
+import com.brewmapp.data.pojo.SubscriptionPackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
+import com.brewmapp.execution.task.LoadSubscriptionsTask;
+import com.brewmapp.execution.task.SubscriptionOffTask;
+import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 
@@ -18,12 +24,23 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
 
-    LoadRestoDetailTask loadRestoDetailTask;
+    private LoadRestoDetailTask loadRestoDetailTask;
+    private RestoDetail restoDetail;
+    private SubscriptionOnTask subscriptionOnTask;
+    private SubscriptionOffTask subscriptionOffTask;
+    private LoadSubscriptionsTask loadSubscriptionsTask;
+    private String IdSubscription=null;
+
+    public void setRestoDetail(RestoDetail restoDetail) {
+        this.restoDetail = restoDetail;
+    }
 
     @Inject
-    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask){
+    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsTask loadSubscriptionsTask,SubscriptionOffTask subscriptionOffTask){
         this.loadRestoDetailTask = loadRestoDetailTask;
-
+        this.subscriptionOnTask = subscriptionOnTask;
+        this.loadSubscriptionsTask = loadSubscriptionsTask;
+        this.subscriptionOffTask=subscriptionOffTask;
     }
 
     @Override
@@ -34,6 +51,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     @Override
     public void onAttach(RestoDetailView restoDetailView) {
         super.onAttach(restoDetailView);
+        setRestoDetail(null);
     }
 
     @Override
@@ -44,15 +62,79 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             @Override
             public void onNext(RestoDetail restoDetail) {
                 super.onNext(restoDetail);
+                setRestoDetail(restoDetail);
                 view.setModel(restoDetail);
+                requestExistSubscriptions();
             }
-
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
                 view.showMessage(e.getMessage(),0);
             }
+
+            private void requestExistSubscriptions() {
+                loadSubscriptionsTask.execute(0,new SimpleSubscriber<ListResponse<Subscription>>(){
+                    @Override
+                    public void onNext(ListResponse<Subscription> subscriptionListResponse) {
+                        super.onNext(subscriptionListResponse);
+                        for (Subscription s:subscriptionListResponse.getModels())
+                            if(s.getInformation().getId().equals(String.valueOf(restoDetail.getResto().getId()))) {
+                                view.SubscriptionExist(true);
+                                IdSubscription=s.getId();
+                                return;
+                            }
+                        view.SubscriptionExist(false);
+                        IdSubscription=null;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);view.commonError();
+                    }
+                });
+            }
         });
 
+    }
+
+    @Override
+    public void changeSubscription() {
+        if(restoDetail==null||restoDetail.getResto().getId()==0){view.commonError();return;}
+        if(IdSubscription==null) {
+            String id = String.valueOf(restoDetail.getResto().getId());
+            SubscriptionPackage subscriptionPackage = new SubscriptionPackage();
+            subscriptionPackage.setRelated_id(id);
+            subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
+            subscriptionOnTask.execute(subscriptionPackage, new SimpleSubscriber<String>() {
+                @Override
+                public void onNext(String s) {
+                    super.onNext(s);
+                    view.onSuccessSubscription(restoDetail.getResto().getName());
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    view.commonError();
+                }
+            });
+        }else {
+            SubscriptionPackage subscriptionPackage = new SubscriptionPackage();
+            subscriptionPackage.setId(IdSubscription);
+            subscriptionOffTask.execute(subscriptionPackage,new SimpleSubscriber<String>(){
+                @Override
+                public void onNext(String s) {
+                    super.onNext(s);
+                    IdSubscription=null;
+                    view.onUnSuccessSubscription(restoDetail.getResto().getName());
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                }
+            });
+
+        }
     }
 }

@@ -29,15 +29,18 @@ public class LoadSubscriptionsTask extends BaseNetworkTask<Integer, ListResponse
     @Inject
     public LoadSubscriptionsTask(MainThread mainThread,
                                  Executor executor,
-                                 Api api) {
+                                 Api api,
+                                    UserRepo userRepo
+                                ) {
         super(mainThread, executor, api);
+        this.userRepo = userRepo;
     }
 
     @Override
     protected Observable<ListResponse<Subscription>> prepareObservable(Integer params) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams params1 = new WrapperParams(Wrappers.SUBSCTIPRION);
+                WrapperParams params1 = new WrapperParams(Wrappers.SUBSCRIPTION);
                 params1.addParam(Keys.USER_ID, userRepo.load().getId());
                 ListResponse<Subscription> response = executeCall(getApi().loadUserSubscriptions(params1));
                 subscriber.onNext(response);

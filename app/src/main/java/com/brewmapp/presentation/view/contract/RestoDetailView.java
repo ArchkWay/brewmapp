@@ -11,4 +11,12 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 
 public interface RestoDetailView extends BasicView{
     void setModel(RestoDetail restoDetail);
+
+    void commonError(String... string);
+
+    void onSuccessSubscription(String name);
+
+    void SubscriptionExist(boolean b);
+
+    void onUnSuccessSubscription(String name);
 }

@@ -76,112 +76,111 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-
             <include layout="@layout/view_like_dislike_fav" />
 
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_margin="@dimen/common_block_space"-->
+                <!--android:orientation="horizontal">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/common_block_space"
-                android:orientation="horizontal">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="@dimen/common_block_space"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/common_block_space"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_weight="1">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_flavor"-->
+                            <!--android:layout_weight="1"-->
+                            <!--/>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:id="@+id/activity.beer.detail.text.view.flavor"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--/>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_flavor"
-                            android:layout_weight="1"
-                            />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/activity.beer.detail.text.view.flavor"
-                            android:text="@string/text_view_value_not_found"
-                            />
+                    <!--</LinearLayout>-->
 
-                    </LinearLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_weight="1">-->
+                        <!---->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_taste"-->
+                            <!--android:layout_weight="1"-->
+                            <!--/>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:id="@+id/activity.beer.detail.text.view._taste"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--/>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_taste"
-                            android:layout_weight="1"
-                            />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/activity.beer.detail.text.view._taste"
-                            android:text="@string/text_view_value_not_found"
-                            />
-
-                    </LinearLayout>
+                    <!--</LinearLayout>-->
 
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/common_block_space"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="@dimen/common_block_space"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:orientation="vertical">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_quality_color"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.color"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            android:layout_weight="1"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_aftertaste"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.aftertaste"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            android:layout_weight="1"
-                            />
-                    </LinearLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_quality_color"-->
+                            <!--android:layout_weight="1"/>-->
+                        <!--<TextView-->
+                            <!--android:id="@+id/activity.beer.detail.text.view.color"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--android:layout_weight="1"/>-->
+                    <!--</LinearLayout>-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_aftertaste"-->
+                            <!--android:layout_weight="1"/>-->
+                        <!--<TextView-->
+                            <!--android:id="@+id/activity.beer.detail.text.view.aftertaste"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/text_view_value_not_found"-->
+                            <!--android:layout_weight="1"-->
+                            <!--/>-->
+                    <!--</LinearLayout>-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
                 android:layout_width="match_parent"
@@ -192,7 +191,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -219,6 +217,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_avg_price"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -226,9 +225,10 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/activity.beer.detail.text.view.avg.cost"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     android:layout_weight="1"
                     android:gravity="right"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
                 <ImageView
                     android:layout_width="20dp"
@@ -259,6 +259,7 @@
                     android:text="@string/text_view_brand"
                     android:layout_weight="1"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -268,7 +269,8 @@
                     android:text="@string/text_view_value_not_found"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -291,6 +293,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_brew"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -299,7 +302,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
                     android:gravity="right"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -322,6 +326,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_country"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -329,7 +334,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
 
             </LinearLayout>
@@ -353,6 +359,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_type"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -360,7 +367,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -383,6 +391,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_strength"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -390,7 +399,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -413,6 +423,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_density"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -420,7 +431,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -443,6 +455,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_ubi"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -450,7 +463,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -473,6 +487,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_filter_beer"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -480,7 +495,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -503,6 +519,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_beer_taste"
                     android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
                     />
 
                 <TextView
@@ -510,7 +527,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -532,14 +550,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_beer_after_taste"
-                    android:layout_marginRight="@dimen/common_block_space"/>
+                    android:layout_marginRight="@dimen/common_block_space"
+                    style="@style/AppTheme.Paragraph"
+                    />
 
                 <TextView
                     android:id="@+id/activity.beer.detail.text.view.after_taste"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_value_not_found"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_common_bigger"
                     />
             </LinearLayout>
 
@@ -552,7 +573,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
 
             <LinearLayout
                 android:layout_width="match_parent"

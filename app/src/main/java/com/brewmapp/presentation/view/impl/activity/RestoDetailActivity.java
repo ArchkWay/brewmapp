@@ -3,7 +3,6 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -13,10 +12,8 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Kitchen;
-import com.brewmapp.data.entity.Menu;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
@@ -44,10 +41,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_restoDetails_slider)    SliderLayout slider;
     @BindView(R.id.activity_resto_detail_text_view_site)    TextView site;
     @BindView(R.id.activity_resto_detail_text_view_description)    TextView description;
-    @BindView(R.id.activity_resto_detail_text_view_interior)    TextView interior;
-    @BindView(R.id.activity_resto_detail_text_view_service)    TextView service;
-    @BindView(R.id.activity_resto_detail_text_view_quality_beer)    TextView beer;
-    @BindView(R.id.activity_resto_detail_text_view_common_effect)    TextView effect;
+    //@BindView(R.id.activity_resto_detail_text_view_interior)    TextView interior;
+    //@BindView(R.id.activity_resto_detail_text_view_service)    TextView service;
+    //@BindView(R.id.activity_resto_detail_text_view_quality_beer)    TextView beer;
+    //@BindView(R.id.activity_resto_detail_text_view_common_effect)    TextView effect;
     @BindView(R.id.activity_resto_detail_text_view_avg_cost)    TextView cost;
     @BindView(R.id.activity_resto_detail_button_private_message)    Button private_message;
     @BindView(R.id.activity_resto_detail_button_subscribe)    Button subscribe;
@@ -82,6 +79,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         presenter.requestRestoDetail(resto_id);
         slider.stopAutoCycle();
         place.setOnClickListener(v -> onClickPlace());
+        subscribe.setOnClickListener(view -> presenter.changeSubscription());
     }
 
     private void onClickPlace() {
@@ -165,5 +163,29 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
 
         enableControls(true,0);
+    }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+    }
+
+    @Override
+    public void onSuccessSubscription(String name) {
+        showMessage(getString(R.string.success_subscription, name));
+    }
+
+    @Override
+    public void SubscriptionExist(boolean b) {
+        subscribe.setText(b?getString(R.string.button_text_unsubscribe):getString(R.string.button_text_subscribe));
+    }
+
+    @Override
+    public void onUnSuccessSubscription(String name) {
+        showMessage(getString(R.string.success_unsubscription, name));
     }
 }

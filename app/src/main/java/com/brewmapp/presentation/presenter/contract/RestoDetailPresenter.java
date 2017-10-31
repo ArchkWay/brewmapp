@@ -10,4 +10,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void requestRestoDetail(String idResto);
+
+    void changeSubscription();
 }

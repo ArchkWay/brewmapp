@@ -14,11 +14,11 @@ public class Wrappers {
     public static final String SHARES = "Shares";
     public static final String LIKE = "Like";
     public static final String CLAIM = "Claim";
-    public static final String SUBSCTIPRION = "Subscription";
     public static final String LOCATION = "Location";
     public static final String BEER = "Beer";
     public static final String USER_INTEREST = "UserInterest";
     public static final String SEARCH_TYPE = "Search";
     public static final String RESTO_LOCATION = "RestoLocation";
     public static final String CITY = "City";
+    public static final String SUBSCRIPTION = "Subscription";
 }

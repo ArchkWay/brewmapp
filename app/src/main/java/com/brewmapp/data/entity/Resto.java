@@ -64,6 +64,9 @@ public class Resto implements ICommonItem, Serializable {
     private String no_interested;
     private String country;
 
+    public Resto() {
+
+    }
 
 
     public Resto(JsonElement jsonElement) {

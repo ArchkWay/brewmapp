@@ -170,7 +170,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:checked="true"
+                        android:checked="false"
                         android:text="@string/subscriptions"
                         style="@style/RadioButton" />
 
@@ -180,7 +180,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/my_posts"
-                        style="@style/RadioButton" />
+                        style="@style/RadioButton"
+                        android:checked="false"
+                        />
                 </info.hoang8f.android.segmented.SegmentedGroup>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line

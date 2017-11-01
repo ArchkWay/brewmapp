@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
+
 import java.util.List;
 
 /**
@@ -104,6 +106,8 @@ public class Information {
     }
 
     public String getGetThumb() {
+        if(getThumb!= null && getThumb.length()>0 && !getThumb.startsWith("http"))
+            getThumb= BuildConfig.SERVER_ROOT_URL + getThumb;
         return getThumb;
     }
 

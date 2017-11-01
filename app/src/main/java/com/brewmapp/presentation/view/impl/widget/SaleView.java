@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Photo;

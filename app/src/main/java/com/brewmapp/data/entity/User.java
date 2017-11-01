@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -366,6 +367,9 @@ public class User {
     }
 
     public String getThumbnail() {
+        if(thumbnail!= null && !thumbnail.startsWith("http"))
+            thumbnail= BuildConfig.SERVER_ROOT_URL + thumbnail;
+
         return thumbnail;
     }
 

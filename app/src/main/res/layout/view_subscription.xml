@@ -5,10 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorWhite">
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subscription"
-        />
+        android:id="@+id/view.post.container"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_block_space_double_semi">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="@dimen/size_avatar_lesser"
+                android:layout_height="@dimen/size_avatar_lesser"
+                android:id="@+id/view.subscription.avatar"
+                android:scaleType="fitCenter"
+                android:layout_marginRight="@dimen/common_block_space_double_semi"
+                app:riv_mutate_background="true"
+                android:background="@color/colorGrayLight"
+                app:riv_oval="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view.subscription.author"
+                    android:textSize="@dimen/text_size_big_phone"
+                    android:layout_marginBottom="@dimen/common_block_space_half"
+                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    android:text="@string/text_view_value_not_found"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/common_block_space_half"
+                    android:id="@+id/view.subscription.date"
+                    android:textColor="@color/colorProfileCounter"
+                    android:textSize="@dimen/text_size_small"
+                    android:text="@string/text_view_value_not_found"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.subscription.text"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+            style="@style/AppTheme.Paragraph"
+            android:layout_marginBottom="@dimen/common_block_space_double"
+            />
+    </LinearLayout>
 
 </com.brewmapp.presentation.view.impl.widget.SubscriptionView>

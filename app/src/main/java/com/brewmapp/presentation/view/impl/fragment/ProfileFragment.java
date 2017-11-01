@@ -171,7 +171,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void appendPosts(Posts posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
 
-        postAdapter.addItems(menuAdapter.getItemCount(), posts.getModels());
+        postAdapter.addItems(postAdapter.getItemCount(), posts.getModels());
 
         text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
 
@@ -180,11 +180,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void appendSubscriptions(Subscriptions subscriptions) {
-        if(loadPostsPackage.getPage() == 0) postAdapter.clear();
+        if(loadPostsPackage.getPage() == 0) subscriptionAdapter.clear();
 
-        subscriptionAdapter.addItems(menuAdapter.getItemCount(), subscriptions.getModels());
+        subscriptionAdapter.addItems(subscriptionAdapter.getItemCount(), subscriptions.getModels());
 
-        text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
+        text_no_record.setVisibility(subscriptionAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
 
         posts_subs.setAdapter(subscriptionAdapter);
     }

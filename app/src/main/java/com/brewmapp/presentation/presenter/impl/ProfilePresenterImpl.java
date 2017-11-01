@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Subscriptions;
@@ -17,13 +18,8 @@ import com.brewmapp.execution.task.LoadPostsTask;
 import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.execution.task.LoadProfileTask;
 import com.brewmapp.execution.task.LoadSubscriptionsItemsTask;
-import com.brewmapp.execution.task.LoadSubscriptionsListTask;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.view.contract.ProfileView;
-
-import java.util.List;
-
-import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -58,10 +54,14 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     @Override
     public void onAttach(ProfileView profileView) {
         super.onAttach(profileView);
+        showUserProfile();
+        onLoadEverything();
+    }
+
+    private void showUserProfile() {
         if(userRepo.load().getCounts() != null) {
             view.showUserProfile(new UserProfile(userRepo.load()));
         }
-        onLoadEverything();
     }
 
     @Override
@@ -86,7 +86,8 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             @Override
             public void onNext(ProfileInfoPackage pack) {
                 enableControls(true);
-                view.showUserProfile(pack.getUserProfile());
+                userRepo.save(pack.getUserProfile().getUser());
+                showUserProfile();
             }
         });
     }
@@ -111,6 +112,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             public void onNext(Subscriptions subscriptions) {
                 super.onNext(subscriptions);
                 enableControls(true);view.appendSubscriptions(subscriptions);
+                User user=userRepo.load();
+                user.setSubscriptionsCount(subscriptions.getModels().size());
+                userRepo.save(user);
+                showUserProfile();
             }
 
             @Override

@@ -10,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
@@ -93,9 +96,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             intent.putExtra(Keys.SUBSCRIBERS, true);
             startActivity(intent);
         });
+
         segment.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId){
                 case R.id.fragment_profile_posts_subscription:
+                    loadPostsPackage.setPage(0);
                     loadPostsPackage.setSubs(true);
                     refreshItems();
                     break;
@@ -113,7 +118,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         posts_subs.setLayoutManager(manager);
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
-        posts_subs.setAdapter(postAdapter);
+        //posts_subs.setAdapter(postAdapter);
     }
 
     private void processAction(int action, Object payload) {
@@ -121,12 +126,23 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             case Actions.ACTION_LIKE_POST:
                 presenter.onLikePost(((Post) payload));
                 break;
+            case Actions.ACTION_START_DETAILS_ACTIVITY:
+                Interest interest=new Interest();
+                Interest_info interest_info=new Interest_info();
+                interest_info.setId((String)payload);
+                interest.setInterest_info(interest_info);
+                Intent intent=new Intent(getContext(), RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID,interest);
+                startActivityForResult(intent,Cons.REQUEST_CODE_REFRESH_ITEMS);
+
+                break;
         }
     }
 
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        segment.check(R.id.fragment_profile_posts_subscription);
     }
 
     @Override
@@ -195,7 +211,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         status.setTextColor(Color.RED);
     }
 
-
     @Override
     public boolean onItemClick(int position) {
         switch (position) {
@@ -209,7 +224,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class));
+                startActivityForResult(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class),Cons.REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case 4:
                 startActivity(new Intent(getActivity(), AssessmentsActivity.class));

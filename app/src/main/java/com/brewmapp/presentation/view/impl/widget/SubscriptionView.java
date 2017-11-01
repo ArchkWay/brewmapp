@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Subscription;
@@ -37,6 +38,7 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
     @BindView(R.id.view_subscription_text)    TextView text;
 
     private Subscription model;
+    private Listener listener;
 
     public SubscriptionView(Context context) {
         super(context);
@@ -71,15 +73,7 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
             date.setText(getContext().getString(R.string.subscribed, DateTools.formatDottedDateWithTime(dashedDateFormat.parse(model.getCreated_at()))));
         }catch (Exception t){}
 
-        setOnClickListener(v -> {
-            Interest interest=new Interest();
-            Interest_info interest_info=new Interest_info();
-            interest_info.setId(this.model.getInformation().getId());
-            interest.setInterest_info(interest_info);
-            Intent intent=new Intent(getContext(), RestoDetailActivity.class);
-            intent.putExtra(Keys.RESTO_ID,interest);
-            getContext().startActivity(intent);
-        });
+        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY,this.model.getInformation().getId()));
     }
 
     @Override
@@ -89,7 +83,7 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
 
     @Override
     public void setListener(Listener listener) {
-
+        this.listener = listener;
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.view.contract.InterestListView;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
+import com.brewmapp.utils.Cons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -177,12 +178,14 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                     }else{
                         return;
                     }
-
-
                     visibleTextSave();
                     return;
                 }
                 break;
+            case Cons.REQUEST_CODE_REFRESH_ITEMS:{
+                if(resultCode==RESULT_OK)
+                    setResult(RESULT_OK);
+            }break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -200,7 +203,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case Keys.CAP_RESTO:{
                 Intent intent = new Intent(this, RestoDetailActivity.class);
                 intent.putExtra(Keys.RESTO_ID, interest);
-                startActivity(intent);
+                startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
             }break;
             case Keys.CAP_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);

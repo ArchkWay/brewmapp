@@ -82,8 +82,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
     }
 
-
-
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
@@ -175,6 +173,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void SubscriptionExist(boolean b) {
         subscribe.setText(b?getString(R.string.button_text_unsubscribe):getString(R.string.button_text_subscribe));
+        setResult(RESULT_OK);
     }
 
 }

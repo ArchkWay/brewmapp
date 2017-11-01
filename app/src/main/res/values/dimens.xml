@@ -28,7 +28,7 @@
     <dimen name="height_post_button">32dp</dimen>
     <dimen name="width_event_preview">80dp</dimen>
     <dimen name="size_event_icon_mini">18dp</dimen>
-    <dimen name="height_event_slider">220dp</dimen>
+    <dimen name="height_event_slider">260dp</dimen>
     <dimen name="size_event_green_label">36dp</dimen>
     <dimen name="height_event_details_like">24dp</dimen>
 </resources>

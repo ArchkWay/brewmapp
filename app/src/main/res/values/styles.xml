@@ -55,7 +55,7 @@
     <style name="AppTheme.Button.Green.Solid">
         <item name="android:background">@drawable/selector_button_green_solid</item>
         <item name="android:textColor">@color/color_text_button_white</item>
-        <item name="android:minHeight">25dp</item>
+        <item name="android:minHeight">35dp</item>
         <!--<item name="android:paddingTop">@dimen/common_block_space</item>-->
         <!--<item name="android:paddingBottom">@dimen/common_block_space</item>-->
         <!--<item name="android:paddingLeft">@dimen/common_block_space_double_semi</item>-->

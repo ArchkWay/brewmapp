@@ -23,9 +23,11 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.dialogs.DialogRating;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_resto_detail_name)    TextView name;
     @BindView(R.id.activity_restoDetails_slider)    SliderLayout slider;
+    @BindView(R.id.activity_restoDetails_indicator)    PagerIndicator pagerIndicator;
+    @BindView(R.id.activity_restoDetails_slider_photosCounter)    TextView photosCounter;
     @BindView(R.id.activity_resto_detail_text_view_site)    TextView site;
     @BindView(R.id.activity_resto_detail_text_view_description)    TextView description;
     //@BindView(R.id.activity_resto_detail_text_view_interior)    TextView interior;
@@ -56,6 +60,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_button_call)    Button call;
     @BindView(R.id.activity_resto_detail_button_call1)    Button call1;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
+
     @BindView(R.id.activity_resto_detail_rating_view_interior_linear_layout)    LinearLayout interior_linear_layout;
     @BindView(R.id.activity_resto_detail_rating_view_service_linear_layout)    LinearLayout service_linear_layout;
     @BindView(R.id.activity_resto_detail_rating_view_beer_linear_layout)    LinearLayout beer_linear_layout;
@@ -73,6 +78,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     })    List<View> viewList;
 
     @Inject RestoDetailPresenter presenter;
+
+    private ArrayList<String> photosResto=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,25 +130,27 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void setModel(RestoDetail restoDetail) {
         setTitle(restoDetail.getResto().getName());
         name.setText(restoDetail.getResto().getName());
+        photosResto.clear();
         if(restoDetail.getResto().getThumb()==null) {
             slider.addSlider(new DefaultSliderView(this)
                     .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(R.drawable.ic_default_brewery));
+                    .image(R.drawable.ic_default_brewery)
+            );
         }else {
-            slider.addSlider(new DefaultSliderView(this)
-                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(restoDetail.getResto().getThumb())
-                    .setOnSliderClickListener(slider1 -> {
-                        Intent intent = new Intent(this, PhotoSliderActivity.class);
-                        String[] urls = {restoDetail.getResto().getThumb()};
-                        intent.putExtra(Keys.PHOTOS, urls);
-                        startActivity(intent);
-                    }));
+            photosResto.add(restoDetail.getResto().getThumb());
+//            slider.addSlider(new DefaultSliderView(this)
+//                    .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+//                    .image(restoDetail.getResto().getThumb())
+//                    .setOnSliderClickListener(slider1 -> {
+//                        Intent intent = new Intent(this, PhotoSliderActivity.class);
+//                        String[] urls = {restoDetail.getResto().getThumb()};
+//                        intent.putExtra(Keys.PHOTOS, urls);
+//                        startActivity(intent);
+//                    }));
         }
-        ArrayList<String> photos=new ArrayList<>();
         for (Kitchen kitchen:restoDetail.getResto_kitchen())
             if(kitchen.getGetThumb()!=null)
-                photos.add(kitchen.getGetThumb());
+                photosResto.add(kitchen.getGetThumb());
 //        for (Menu menu:restoDetail.getMenu())
 //            if(menu.getGetThumb()!=null)
 //                photos.add(menu.getGetThumb());
@@ -149,11 +158,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 //            if(feature.getGetThumb()!=null)
 //                photos.add(feature.getGetThumb());
 
-
-        for(String imgUrl:photos){
+        for(String imgUrl:photosResto){
             if(imgUrl!=null)
                 slider.addSlider(new DefaultSliderView(this)
-                        .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                        .setScaleType(BaseSliderView.ScaleType.CenterCrop)
                         .image(imgUrl)
                         .setOnSliderClickListener(slider1 -> {
                             Intent intent = new Intent(this, PhotoSliderActivity.class);
@@ -161,6 +169,17 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                             intent.putExtra(Keys.PHOTOS, urls);
                             startActivity(intent);
                         }));
+        }
+        if(photosResto.size()>0) {
+            photosCounter.setText(String.format("%d/%d", 1, photosResto.size()));
+            slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    photosCounter.setText(String.format("%d/%d", position + 1, photosResto.size()));
+                }
+            });
+        }else {
+            photosCounter.setText("0/0");
         }
 
         site.setText(restoDetail.getResto().getSite());

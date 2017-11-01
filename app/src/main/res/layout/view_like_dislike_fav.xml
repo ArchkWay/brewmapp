@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -22,7 +22,26 @@
 
             android:gravity="center">
 
-            <include layout="@layout/view_like" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/height_post_button"
+                android:adjustViewBounds="true"
+                android:paddingLeft="@dimen/common_block_space"
+                android:paddingRight="@dimen/common_block_space_half"
+                android:paddingTop="@dimen/common_block_space_half"
+                android:paddingBottom="@dimen/common_block_space_half"
+                android:id="@+id/view.like.icon"
+                android:src="@drawable/ic_like"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorButtonGreen"
+                android:textSize="@dimen/text_size_common_bigger"
+                android:id="@+id/view.like.counter"
+                android:text="@string/text_view_value_not_found"
+                />
+
         </LinearLayout>
 
         <LinearLayout
@@ -31,7 +50,25 @@
 
             android:gravity="center">
 
-            <include layout="@layout/view_dislike" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/height_post_button"
+                android:adjustViewBounds="true"
+                android:paddingLeft="@dimen/common_block_space"
+                android:paddingRight="@dimen/common_block_space_half"
+                android:paddingTop="@dimen/common_block_space_half"
+                android:paddingBottom="@dimen/common_block_space_half"
+                android:id="@+id/view.dislike.icon"
+                android:src="@drawable/ic_dislike"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorButtonRed"
+                android:textSize="@dimen/text_size_common_bigger"
+                android:id="@+id/view.dislike.counter"
+                android:text="@string/text_view_value_not_found"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -40,7 +77,25 @@
 
             android:gravity="center">
 
-            <include layout="@layout/view_fav" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/height_post_button"
+                android:adjustViewBounds="true"
+                android:paddingLeft="@dimen/common_block_space"
+                android:paddingRight="@dimen/common_block_space_half"
+                android:paddingTop="@dimen/common_block_space_half"
+                android:paddingBottom="@dimen/common_block_space_half"
+                android:id="@+id/view.dislove.icon"
+                android:src="@drawable/ic_dislove"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorButtonRed"
+                android:textSize="@dimen/text_size_common_bigger"
+                android:id="@+id/view.dislove.counter"
+                android:text="@string/text_view_value_not_found"/>
+
         </LinearLayout>
 
 

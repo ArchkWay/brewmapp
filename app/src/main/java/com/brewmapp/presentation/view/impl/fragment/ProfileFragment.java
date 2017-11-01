@@ -173,6 +173,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void showUserProfile(UserProfile profile) {
+        if(getActivity()==null) return;
         getActivity().setTitle(R.string.my_profile);
         Picasso.with(getActivity()).load(profile.getUser().getThumbnail()).fit().into(avatar);
         username.setText(profile.getUser().getFormattedName());

@@ -1,13 +1,17 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -18,6 +22,7 @@ import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
+import com.brewmapp.presentation.view.impl.dialogs.DialogRating;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
@@ -51,6 +56,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_button_call)    Button call;
     @BindView(R.id.activity_resto_detail_button_call1)    Button call1;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
+    @BindView(R.id.activity_resto_detail_rating_view_interior_linear_layout)    LinearLayout interior_linear_layout;
+    @BindView(R.id.activity_resto_detail_rating_view_service_linear_layout)    LinearLayout service_linear_layout;
+    @BindView(R.id.activity_resto_detail_rating_view_beer_linear_layout)    LinearLayout beer_linear_layout;
+    @BindView(R.id.activity_resto_detail_rating_view_effect_linear_layout)    LinearLayout effect_linear_layout;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -70,13 +79,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
-
     @Override
     protected void initView() {
         enableBackButton();
         enableControls(false, 0);
-        String resto_id = ((Interest) getIntent().getSerializableExtra(RESTO_ID)).getInterest_info().getId();
-        presenter.requestRestoDetail(resto_id);
         slider.stopAutoCycle();
         place.setOnClickListener(v -> {});
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
@@ -85,6 +91,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        presenter.onLoadEverything(
+                ((Interest) getIntent().getSerializableExtra(RESTO_ID)).getInterest_info().getId()
+        );
     }
 
     @Override
@@ -159,6 +168,13 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
 
         enableControls(true,0);
+
+
+        interior_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Интерьер"));
+        service_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Сервис"));
+        beer_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Пиво"));
+        effect_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Общее впечатление"));
+
     }
 
     @Override

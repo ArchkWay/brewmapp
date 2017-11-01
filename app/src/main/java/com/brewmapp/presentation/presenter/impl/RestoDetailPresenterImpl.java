@@ -52,50 +52,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     public void onAttach(RestoDetailView restoDetailView) {
         super.onAttach(restoDetailView);
         setRestoDetail(null);
-    }
-
-    @Override
-    public void requestRestoDetail(String idResto) {
-        LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
-        loadRestoDetailPackage.setId(idResto);
-        loadRestoDetailTask.execute(loadRestoDetailPackage,new SimpleSubscriber<RestoDetail>(){
-            @Override
-            public void onNext(RestoDetail restoDetail) {
-                super.onNext(restoDetail);
-                setRestoDetail(restoDetail);
-                view.setModel(restoDetail);
-                requestExistSubscriptions();
-            }
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-                view.showMessage(e.getMessage(),0);
-            }
-
-            private void requestExistSubscriptions() {
-                loadSubscriptionsListTask.execute(0,new SimpleSubscriber<ListResponse<Subscription>>(){
-                    @Override
-                    public void onNext(ListResponse<Subscription> subscriptionListResponse) {
-                        super.onNext(subscriptionListResponse);
-                        for (Subscription s:subscriptionListResponse.getModels())
-                            if(s.getInformation().getId().equals(String.valueOf(restoDetail.getResto().getId()))) {
-                                view.SubscriptionExist(true);
-                                IdSubscription=s.getId();
-                                return;
-                            }
-                        view.SubscriptionExist(false);
-                        IdSubscription=null;
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);view.commonError();
-                    }
-                });
-            }
-        });
 
     }
+
 
     @Override
     public void changeSubscription() {
@@ -132,5 +91,50 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             });
 
         }
+    }
+
+    @Override
+    public void onLoadEverything(String id) {
+        if(id==null || id.length()==0) {view.commonError();return;}
+
+        LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
+        loadRestoDetailPackage.setId(id);
+        loadRestoDetailTask.execute(loadRestoDetailPackage,new SimpleSubscriber<RestoDetail>(){
+            @Override
+            public void onNext(RestoDetail restoDetail) {
+                super.onNext(restoDetail);
+                setRestoDetail(restoDetail);
+                view.setModel(restoDetail);
+                requestExistSubscriptions();
+            }
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+
+            private void requestExistSubscriptions() {
+                loadSubscriptionsListTask.execute(0,new SimpleSubscriber<ListResponse<Subscription>>(){
+                    @Override
+                    public void onNext(ListResponse<Subscription> subscriptionListResponse) {
+                        super.onNext(subscriptionListResponse);
+                        for (Subscription s:subscriptionListResponse.getModels())
+                            if(s.getInformation().getId().equals(String.valueOf(restoDetail.getResto().getId()))) {
+                                view.SubscriptionExist(true);
+                                IdSubscription=s.getId();
+                                return;
+                            }
+                        view.SubscriptionExist(false);
+                        IdSubscription=null;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);view.commonError();
+                    }
+                });
+            }
+        });
+
     }
 }

@@ -1,7 +1,6 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -14,10 +13,10 @@ import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.Kitchen;
+import com.brewmapp.data.entity.KitchenTypes;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
-import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -229,6 +228,9 @@ public interface Api {
 
     @GET("resto/type")
     Call<RestoTypes> loadRestoTypes();
+
+    @GET("resto/kitchen")
+    Call<KitchenTypes> loadKitchenTypes();
 
 
 }

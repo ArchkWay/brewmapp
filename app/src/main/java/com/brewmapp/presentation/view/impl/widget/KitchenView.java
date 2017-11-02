@@ -3,17 +3,13 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
-import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.Actions;
-import com.brewmapp.data.entity.Photo;
-import com.brewmapp.data.entity.RestoType;
+import com.brewmapp.data.entity.Kitchen;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -22,31 +18,32 @@ import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
 /**
- * Created by nixus on 01.11.2017.
+ * Created by nixus on 02.11.2017.
  */
 
-public class RestoTypeView extends BaseLinearLayout implements InteractiveModelView<RestoType> {
+public class KitchenView extends BaseLinearLayout implements InteractiveModelView<Kitchen> {
 
-    @BindView(R.id.type_name)
-    TextView typeName;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.logo) ImageView logoRestoType;
+    @BindView(R.id.chkbox) CheckBox restoTypeCheckbox;
 
     private Listener listener;
-    private RestoType model;
+    private Kitchen model;
 
-    public RestoTypeView(Context context) {
+    public KitchenView(Context context) {
         super(context);
     }
 
-    public RestoTypeView(Context context, AttributeSet attrs) {
+    public KitchenView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RestoTypeView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KitchenView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public RestoTypeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public KitchenView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
     @Override
@@ -56,14 +53,17 @@ public class RestoTypeView extends BaseLinearLayout implements InteractiveModelV
     }
 
     @Override
-    public RestoType getModel() {
+    public Kitchen getModel() {
         return model;
     }
 
     @Override
-    public void setModel(RestoType model) {
+    public void setModel(Kitchen model) {
         this.model = model;
-        typeName.setText(model.getName());
+        title.setText(model.getName());
+        if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
+        }
     }
 
     @Override

@@ -10,4 +10,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategoryView> {
     void loadRestoTypes();
+    void loadKitchenTypes();
 }

@@ -9,11 +9,9 @@ import android.util.Log;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
-import com.brewmapp.presentation.view.contract.SearchView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
@@ -60,13 +58,24 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     @Override
     protected void initView() {
         enableBackButton();
-        int filterCategory = getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0);
-        Log.i("check", String.valueOf(filterCategory));
+        
         LinearLayoutManager manager = new LinearLayoutManager(this);
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>());
         list.setAdapter(adapter);
-        presenter.loadRestoTypes();
+        initFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+    }
+
+    private void initFilterByCategory(int filterId) {
+        switch (filterId) {
+            case 1:
+                presenter.loadRestoTypes();
+                break;
+            case 3:
+                presenter.loadKitchenTypes();
+                default:
+                    break;
+        }
     }
 
     @Override
@@ -86,12 +95,13 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @Override
     public void appendItems(List<IFlexible> list) {
+        adapter.clear();
         adapter.addItems(adapter.getItemCount(), list);
     }
 
     @Override
     public boolean onItemClick(int position) {
-
+        Log.i("itemClick", String.valueOf(position));
         return false;
     }
 }

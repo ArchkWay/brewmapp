@@ -60,6 +60,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_button_call)    TextView call;
     @BindView(R.id.activity_resto_detail_button_call2)    TextView call1;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
+    @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
 
     @BindView(R.id.activity_resto_detail_rating_view_interior_linear_layout)    LinearLayout interior_linear_layout;
     @BindView(R.id.activity_resto_detail_rating_view_service_linear_layout)    LinearLayout service_linear_layout;
@@ -93,6 +94,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         slider.stopAutoCycle();
         place.setOnClickListener(v -> {});
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
+        button_revew.setOnClickListener(view -> {});
     }
 
     @Override

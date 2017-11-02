@@ -466,7 +466,7 @@
                     android:lines="1"
                     android:text="@string/button.call"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_big_phone_bigger"
+                    android:textSize="@dimen/text_size_big_phone"
                     />
 
             </LinearLayout>
@@ -517,7 +517,7 @@
                     android:lines="1"
                     android:text="@string/button.call"
                     android:gravity="center"
-                    android:textSize="@dimen/text_size_big_phone_bigger"
+                    android:textSize="@dimen/text_size_big_phone"
                     />
 
             </LinearLayout>
@@ -562,7 +562,7 @@
                 <TextView
 
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center_vertical"
                     android:text="@string/text_view_resto_description"
                     app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
@@ -595,7 +595,7 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -995,7 +995,7 @@
             <TextView
 
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/text_view_replay_users"
                 android:background="@color/colorGrayLightSemi"
@@ -1006,7 +1006,42 @@
                 android:textSize="@dimen/text_size_big_phone_bigger"
 
                 />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                >
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_while_empty_review"
+                    style="@style/AppTheme.Paragraph"
+                    android:layout_centerInParent="true"
+
+                    />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:background="@color/colorGrayLightSemi"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_text_write_review"
+                    android:background="@drawable/bg_with_corner_red"
+                    android:textColor="@color/colorButtonRed"
+                    style="@style/AppTheme.Paragraph"
+                    android:id="@+id/activity.resto.detail.button_review"
+                    android:textSize="@dimen/text_size_small"
+                    android:minWidth="170dp"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
 

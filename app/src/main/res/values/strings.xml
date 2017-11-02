@@ -225,11 +225,15 @@
     <string name="text_view_place">Расположение:</string>
     <string name="text_view_call">Позвонить:</string>
     <string name="text_view_kitchen">Кухня:</string>
-    <string name="button.call">Позвонить</string>
+    <string name="button.call">ПОЗВОНИТЬ</string>
     <string name="text_view_resto_description">Описание</string>
     <string name="button_text_subscribe">Подписаться</string>
     <string name="button_text_unsubscribe">Отписаться</string>
     <string name="text_view_value_not_found">--</string>
+    <string name="text_view_value_not_found_4">Описание отсутствует</string>
+    <string name="text_view_value_not_found_3">Сайт не указан</string>
+    <string name="text_view_value_not_found_1">не указан</string>
+    <string name="text_view_value_not_found_2">не указана</string>
     <string-array name="post_options">
         <item>Поделиться</item>
         <item>Репост</item>

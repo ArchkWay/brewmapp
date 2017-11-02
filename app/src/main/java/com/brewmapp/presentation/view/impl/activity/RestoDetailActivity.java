@@ -57,8 +57,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_avg_cost)    TextView cost;
     @BindView(R.id.activity_resto_detail_button_private_message)    Button private_message;
     @BindView(R.id.activity_resto_detail_button_subscribe)    Button subscribe;
-    @BindView(R.id.activity_resto_detail_button_call)    Button call;
-    @BindView(R.id.activity_resto_detail_button_call1)    Button call1;
+    @BindView(R.id.activity_resto_detail_button_call)    TextView call;
+    @BindView(R.id.activity_resto_detail_button_call2)    TextView call1;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
 
     @BindView(R.id.activity_resto_detail_rating_view_interior_linear_layout)    LinearLayout interior_linear_layout;
@@ -68,7 +68,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
-            R.id.activity_resto_detail_button_call1,
+            R.id.activity_resto_detail_button_call2,
             R.id.activity_resto_detail_button_call,
             R.id.activity_resto_detail_button_subscribe,
             R.id.activity_resto_detail_button_private_message,

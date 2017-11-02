@@ -13,5 +13,6 @@ public class RequestCodes {
     public static final int REQUEST_INTEREST = 116;
 
     public static final int REQUEST_CODE_MAP_REFRESH = 3;
+    public static final int REQUEST_FILTER_CATEGORY = 122;
 
 }

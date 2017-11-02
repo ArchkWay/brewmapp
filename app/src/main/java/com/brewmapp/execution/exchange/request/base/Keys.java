@@ -117,4 +117,5 @@ public class Keys {
     public static final String TYPE_BEER = "TYPE_BEER";
     public static final String TYPE_RESTO = "TYPE_RESTO";
     public static final String RESTO_ID = "resto_id";
+    public static final String FILTER_CATEGORY = "filter_category";
 }

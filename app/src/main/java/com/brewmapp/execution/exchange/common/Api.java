@@ -17,6 +17,8 @@ import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.data.entity.RestoType;
+import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.container.AlbumPhotos;
@@ -224,6 +226,9 @@ public interface Api {
     @POST("resto/restodata")
     @FormUrlEncoded
     Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
+
+    @GET("resto/type")
+    Call<RestoTypes> loadRestoTypes();
 
 
 }

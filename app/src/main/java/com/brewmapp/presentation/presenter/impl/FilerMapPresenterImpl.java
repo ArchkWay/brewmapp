@@ -31,6 +31,7 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     @Override
     public void onAttach(FilterMapView filterMapView) {
         super.onAttach(filterMapView);
+        view.showFilters(FilterField.createDefault(context));
     }
 
 

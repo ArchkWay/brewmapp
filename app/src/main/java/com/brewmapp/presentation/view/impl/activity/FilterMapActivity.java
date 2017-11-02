@@ -12,7 +12,9 @@ import android.widget.Button;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterField;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 
@@ -50,22 +52,23 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
 
     @Override
     protected void inject(PresenterComponent component) {
+        component.inject(this);
     }
 
     @Override
     protected void initView() {
         enableBackButton();
         search.setOnClickListener(this);
-        showFilters(FilterField.createDefault(this));
     }
 
     @Override
     protected void attachPresenter() {
+        presenter.onAttach(this);
     }
 
     @Override
     protected LivePresenter<?> getPresenter() {
-        return null;
+        return presenter;
     }
 
     @Override
@@ -89,7 +92,15 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
 
     @Override
     public boolean onItemClick(int position) {
-        Log.i("sdfdsfds", String.valueOf(position));
+        Intent intent = new Intent(this, FilterByCategory.class);
+        intent.putExtra(Keys.FILTER_CATEGORY, position);
+        startActivityForResult(intent, RequestCodes.REQUEST_FILTER_CATEGORY);
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 
 public class RestoType implements Serializable {
+
     private String id;
     private String name;
     private String image;

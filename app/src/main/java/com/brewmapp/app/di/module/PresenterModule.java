@@ -15,6 +15,7 @@ import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.ExtendedSearchPresenter;
+import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
@@ -51,6 +52,7 @@ import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ExtendedSearchPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.FilterByCategoryPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InterestListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FilerMapPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FriendsPresenterImpl;
@@ -252,13 +254,19 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     RestoDetailPresenter provideRestoCardPresenter(RestoDetailPresenterImpl presenter){
         return presenter;
     }
+
     @Provides @PresenterScope
     FilterMapPresenter provideFilterMapViewPresenter(FilerMapPresenterImpl presenter){
         return presenter;
     }
+
     @Provides @PresenterScope
-    BeerDetailPresenter provideBeerDetailPresenter(BeerDetailPresenterImpl presenter){
+    BeerDetailPresenter provideBeerDetailPresenter (BeerDetailPresenterImpl presenter){
         return presenter;
     }
 
+    @Provides @PresenterScope
+    FilterByCategoryPresenter provideFilterByCategory (FilterByCategoryPresenterImpl presenter){
+        return presenter;
+    }
 }

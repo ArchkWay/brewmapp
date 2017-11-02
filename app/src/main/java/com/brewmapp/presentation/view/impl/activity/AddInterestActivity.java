@@ -97,7 +97,6 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     }
 
     private void refreshItems() {
-
         sendQuery();
     }
 

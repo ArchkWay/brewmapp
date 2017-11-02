@@ -87,12 +87,13 @@
 
                     <TextView
                         android:id="@+id/activity.resto.detail.name"
-                        style="@style/AppTheme.Text.Georgia.Italic"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/common_block_space"
                         android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Text.Georgia.Italic"
                         android:textColor="@color/colorButtonRed"
                         android:textSize="@dimen/text_size_big_phone_bigger"
                         app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
@@ -337,7 +338,6 @@
                 android:background="@color/colorSplitter"
                 />
 
-
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -356,7 +356,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.image.view.icon_place"
                     android:layout_margin="@dimen/common_block_space"
-                    />
+                    tools:layout_editor_absoluteX="10dp" />
 
                 <TextView
                     android:id="@+id/text_view_place"
@@ -368,7 +368,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_margin="@dimen/common_block_space"
                     style="@style/AppTheme.Paragraph"
-                    />
+                    tools:layout_editor_absoluteX="50dp" />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -377,7 +377,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                     />
+                    tools:layout_editor_absoluteX="334dp" />
             </android.support.constraint.ConstraintLayout>
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -560,17 +560,19 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/common_block_space_quadro"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:text="@string/text_view_resto_description"
-                    android:textColor="@color/red_focused"
-                    android:textSize="@dimen/text_size_big_phone"
                     app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
                     android:background="@color/colorGrayLightSemi"
                     android:paddingLeft="@dimen/common_block_space"
                     android:gravity="center_vertical"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"
+
                     />
 
                 <TextView
@@ -584,6 +586,427 @@
                     android:textSize="@dimen/text_size_big_phone"
                     app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />
             </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@color/colorGrayLightSemi" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/common_block_space"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_news"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none0"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_news"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none1"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_from"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none2"
+                    android:layout_marginLeft="@dimen/common_block_space_half"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_cnt"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none3"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_to"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none4"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_cell_arrow"
+                    android:gravity="right"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </android.support.constraint.ConstraintLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/common_block_space"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_sale"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none5"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_sale"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none6"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_from"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none6"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none7"
+                    android:layout_marginLeft="@dimen/common_block_space_half"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_cnt"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none7"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none8"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_to"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none8"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none9"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_cell_arrow"
+                    android:gravity="right"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </android.support.constraint.ConstraintLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/common_block_space"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_event"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none10"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_event"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none10"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none11"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_from"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none11"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none12"
+                    android:layout_marginLeft="@dimen/common_block_space_half"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_cnt"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none12"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none13"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_to"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none13"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none14"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_cell_arrow"
+                    android:gravity="right"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </android.support.constraint.ConstraintLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/common_block_space"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_kitchen"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none15"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_menu"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none15"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none16"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_from"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none17"
+                    android:layout_marginLeft="@dimen/common_block_space_half"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_cnt"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none17"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none18"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_to"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none18"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none19"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_cell_arrow"
+                    android:gravity="right"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </android.support.constraint.ConstraintLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:layout_weight="1"
+                android:background="@color/colorSplitter" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/common_block_space"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_photo_icon"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none20"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_photo"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none20"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none21"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_from"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none21"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none22"
+                    android:layout_marginLeft="@dimen/common_block_space_half"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_cnt"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none22"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none23"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_bracket_to"
+                    style="@style/AppTheme.Paragraph"
+                    app:layout_constraintLeft_toRightOf="@+id/activity.resto.detail.text.view.none23"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/activity.resto.detail.text.view.none24"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_cell_arrow"
+                    android:gravity="right"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/text_view_replay_users"
+                android:background="@color/colorGrayLightSemi"
+                android:paddingLeft="@dimen/common_block_space"
+                android:gravity="center_vertical"
+                style="@style/AppTheme.Text.Georgia.Italic"
+                android:textColor="@color/colorButtonRed"
+                android:textSize="@dimen/text_size_big_phone_bigger"
+
+                />
+
 
         </LinearLayout>
 

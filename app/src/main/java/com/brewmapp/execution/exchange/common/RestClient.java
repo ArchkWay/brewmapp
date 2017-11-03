@@ -1,8 +1,10 @@
 package com.brewmapp.execution.exchange.common;
 
+import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.wrapper.EventInfo;
+import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -12,6 +14,7 @@ import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
+import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.KitchenDeserializer;
@@ -84,6 +87,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(RestoTypeInfo.class, new RestoTypeDeserializer())
                 .registerTypeAdapter(KitchenInfo.class, new KitchenDeserializer())
                 .registerTypeAdapter(PriceRangeInfo.class, new PriceRangeDeserializer())
+                .registerTypeAdapter(FeatureInfo.class, new FeatureDeserializer())
 
                 ;
     }

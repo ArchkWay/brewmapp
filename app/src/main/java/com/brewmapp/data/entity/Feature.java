@@ -1,51 +1,31 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
-/**
- * Created by Kras on 28.10.2017.
- */
+import javax.annotation.Generated;
 
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
 public class Feature implements Serializable {
-    private String id;
-    private String name;
-    private String image;
+
+    @SerializedName("getThumb")
     private String getThumb;
-    private String like;
-    private String dis_like;
-    private String interested;
-    private String no_interested;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
+    @SerializedName("id")
+    private String Id;
+    @SerializedName("image")
+    private String Image;
+    @SerializedName("name")
+    private String Name;
+    @SerializedName("relations")
+    private List<Relations> Relations;
 
     public String getGetThumb() {
-        if(getThumb!= null && !getThumb.startsWith("http")) {
-            getThumb= BuildConfig.SERVER_ROOT_URL + getThumb;
+        if(getThumb != null && !getThumb.startsWith("http")) {
+            getThumb = BuildConfig.SERVER_ROOT_URL + getThumb;
         }
         return getThumb;
     }
@@ -54,36 +34,36 @@ public class Feature implements Serializable {
         this.getThumb = getThumb;
     }
 
-    public String getLike() {
-        return like;
+    public String getId() {
+        return Id;
     }
 
-    public void setLike(String like) {
-        this.like = like;
+    public void setId(String id) {
+        Id = id;
     }
 
-    public String getDis_like() {
-        return dis_like;
+    public String getImage() {
+        return Image;
     }
 
-    public void setDis_like(String dis_like) {
-        this.dis_like = dis_like;
+    public void setImage(String image) {
+        Image = image;
     }
 
-    public String getInterested() {
-        return interested;
+    public String getName() {
+        return Name;
     }
 
-    public void setInterested(String interested) {
-        this.interested = interested;
+    public void setName(String name) {
+        Name = name;
     }
 
-    public String getNo_interested() {
-        return no_interested;
+    public List<Relations> getRelations() {
+        return Relations;
     }
 
-    public void setNo_interested(String no_interested) {
-        this.no_interested = no_interested;
+    public void setRelations(List<Relations> relations) {
+        Relations = relations;
     }
 
 }

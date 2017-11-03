@@ -3,6 +3,7 @@ package com.brewmapp.data.entity.wrapper;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.presentation.view.impl.widget.KitchenView;
+import com.brewmapp.presentation.view.impl.widget.TypeView;
 
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 

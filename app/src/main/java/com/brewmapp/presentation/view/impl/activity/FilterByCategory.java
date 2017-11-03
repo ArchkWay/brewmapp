@@ -76,6 +76,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 break;
             case 4:
                 presenter.loadPriceRangeTypes();
+            case 7:
+                presenter.loadFeatureTypes();
                 break;
                 default:
                     break;

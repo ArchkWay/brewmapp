@@ -12,4 +12,5 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void loadRestoTypes();
     void loadKitchenTypes();
     void loadPriceRangeTypes();
+    void loadFeatureTypes();
 }

@@ -13,6 +13,7 @@ import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.KitchenTypes;
 import com.brewmapp.data.entity.PriceRangeTypes;
@@ -236,5 +237,7 @@ public interface Api {
     @GET("resto/pricerange")
     Call<PriceRangeTypes> loadPriceRanges();
 
+    @GET("resto/feature")
+    Call<FeatureTypes> loadFeature();
 
 }

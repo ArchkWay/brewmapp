@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.KitchenTask;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RestoTypeTask;
@@ -23,14 +24,17 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     private RestoTypeTask restoTypeTask;
     private KitchenTask kitchenTask;
     private PriceRangeTask priceRangeTask;
+    private FeatureTask featureTask;
 
     @Inject
     public FilterByCategoryPresenterImpl(RestoTypeTask restoTypeTask,
                                          KitchenTask kitchenTask,
-                                         PriceRangeTask priceRangeTask) {
+                                         PriceRangeTask priceRangeTask,
+                                         FeatureTask featureTask) {
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
         this.priceRangeTask = priceRangeTask;
+        this.featureTask = featureTask;
     }
 
     @Override
@@ -38,6 +42,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         restoTypeTask.cancel();
         kitchenTask.cancel();
         priceRangeTask.cancel();
+        featureTask.cancel();
     }
 
     @Override
@@ -76,6 +81,22 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     public void loadPriceRangeTypes() {
         priceRangeTask.cancel();
         priceRangeTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadFeatureTypes() {
+        featureTask.cancel();
+        featureTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 showError(e.getMessage());

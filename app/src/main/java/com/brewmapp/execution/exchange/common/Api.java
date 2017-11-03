@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.KitchenTypes;
+import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.RestoTypes;
@@ -231,6 +232,9 @@ public interface Api {
 
     @GET("resto/kitchen")
     Call<KitchenTypes> loadKitchenTypes();
+
+    @GET("resto/pricerange")
+    Call<PriceRangeTypes> loadPriceRanges();
 
 
 }

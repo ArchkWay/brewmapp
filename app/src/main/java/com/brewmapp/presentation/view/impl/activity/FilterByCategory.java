@@ -73,6 +73,10 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 break;
             case 3:
                 presenter.loadKitchenTypes();
+                break;
+            case 4:
+                presenter.loadPriceRangeTypes();
+                break;
                 default:
                     break;
         }

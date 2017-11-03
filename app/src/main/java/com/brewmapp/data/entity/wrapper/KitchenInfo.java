@@ -12,5 +12,5 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class KitchenInfo extends AdapterItem<Kitchen, KitchenView> {
     @Override
-    public int getLayoutRes() {return R.layout.view_type;}
+    public int getLayoutRes() {return R.layout.view_kichen_type;}
 }

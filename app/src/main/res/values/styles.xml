@@ -120,12 +120,12 @@
         <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
             <item name="android:windowNoTitle">true</item>
         </style>
-    <style name="RatingBar" >
+    <style name="RatingBar" parent="Theme.AppCompat">
         <!--<item name="android:progressDrawable">@drawable/ic_large_star</item>-->
-        <!--<item name="colorControlNormal">@color/colorLink</item>-->
-        <!--<item name="colorControlActivated">@color/colorWhiteSemi</item>-->
-        <!--<item name="colorControlHighlight">@color/colorLink</item>-->
-        <item name="android:minHeight">80dp</item>
+        <item name="colorControlNormal">@color/colorButtonRed</item>
+        <item name="colorControlActivated">@color/colorButtonRed</item>
+        <item name="colorControlHighlight">@color/colorButtonRed</item>
+        <!--<item name="android:minHeight">80dp</item>-->
 
     </style>
 </resources>

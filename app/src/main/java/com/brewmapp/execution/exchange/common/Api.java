@@ -14,6 +14,7 @@ import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
@@ -39,6 +40,7 @@ import com.brewmapp.execution.exchange.response.UserResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import ru.frosteye.ovsa.execution.network.request.MultipartRequestParams;
@@ -240,5 +242,12 @@ public interface Api {
     @FormUrlEncoded
     Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
 
+    @POST("/api/resto/restoevaluation")
+    @FormUrlEncoded
+    Call<ListResponse<Evaluation>> getRestoEvaluation(@FieldMap WrapperParams params);
+
+    @POST("/api/resto/restoevaluation/add")
+    @FormUrlEncoded
+    Call<Object> setRestoEvaluation(@FieldMap WrapperParams params);
 
 }

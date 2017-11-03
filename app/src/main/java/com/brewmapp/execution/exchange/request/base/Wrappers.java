@@ -21,4 +21,5 @@ public class Wrappers {
     public static final String RESTO_LOCATION = "RestoLocation";
     public static final String CITY = "City";
     public static final String SUBSCRIPTION = "Subscription";
+    public static final String RESTO_EVALUATION = "RestoEvaluation";
 }

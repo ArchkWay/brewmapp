@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
+import android.widget.RatingBar;
 
 import com.brewmapp.presentation.view.contract.AddReviewRestoView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
@@ -13,4 +14,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface AddReviewRestoPresenter  extends LivePresenter<AddReviewRestoView> {
     void parseIntent(Intent intent);
+
+    RatingBar.OnRatingBarChangeListener getRatingListener();
 }

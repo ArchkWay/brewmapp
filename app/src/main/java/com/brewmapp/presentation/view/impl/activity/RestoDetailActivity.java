@@ -87,6 +87,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
+
     @Override
     protected void initView() {
         enableBackButton();
@@ -94,7 +95,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         slider.stopAutoCycle();
         place.setOnClickListener(v -> {});
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
-        button_revew.setOnClickListener(view -> {});
+        button_revew.setOnClickListener(view -> {presenter.startAddReviewRestoActivity(RestoDetailActivity.this);});
     }
 
     @Override

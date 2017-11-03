@@ -14,4 +14,5 @@ public class RequestCodes {
 
     public static final int REQUEST_CODE_MAP_REFRESH = 3;
 
+    public static final int REQUEST_CODE_REVIEW_RESTO = 117;
 }

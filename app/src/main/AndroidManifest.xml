@@ -156,8 +156,10 @@
             android:name=".presentation.view.impl.activity.FilterMapActivity"
             android:label="@string/filter"
             android:screenOrientation="portrait" />
-        <activity android:name=".presentation.view.impl.activity.BeerDetailActivity"
+        <activity
+            android:name=".presentation.view.impl.activity.BeerDetailActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".presentation.view.impl.activity.AddReviewRestoActivity"></activity>
     </application>
 
 </manifest>

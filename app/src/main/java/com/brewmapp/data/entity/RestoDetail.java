@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by Kras on 27.10.2017.
  */
 
-public class RestoDetail {
+public class RestoDetail implements Serializable{
 
     private Resto resto=new Resto();
     private List<Kitchen> resto_kitchen=new ArrayList<>();

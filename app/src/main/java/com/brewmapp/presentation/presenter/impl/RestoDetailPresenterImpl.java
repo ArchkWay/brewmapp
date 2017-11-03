@@ -1,5 +1,8 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Intent;
+
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
@@ -8,10 +11,13 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.LoadSubscriptionsListTask;
+import com.brewmapp.execution.task.RequestCodeTask;
 import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
+import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
 import javax.inject.Inject;
 
@@ -136,5 +142,12 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             }
         });
 
+    }
+
+    @Override
+    public void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity) {
+        Intent intent=new Intent(restoDetailActivity, AddReviewRestoActivity.class);
+        intent.putExtra(Keys.RESTO_ID,restoDetail);
+        restoDetailActivity.startActivityForResult(intent, RequestCodes.REQUEST_CODE_REVIEW_RESTO);
     }
 }

@@ -62,6 +62,7 @@
         android:layout_below="@+id/lyt_filter"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:id="@+id/line_bottom"
         android:background="@color/colorGrayLight"/>
 
 </com.brewmapp.presentation.view.impl.widget.FilterRowField>

@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class FilterRowField extends BaseRelativeLayout implements ModelView<Filt
     @BindView(R.id.filter_name) TextView filterTitle;
     @BindView(R.id.selected_filter) TextView selectedFilter;
     @BindView(R.id.icon_filter) ImageView icon;
+    @BindView(R.id.line_bottom) View lineBottom;
 
     private FilterField model;
 
@@ -62,6 +64,10 @@ public class FilterRowField extends BaseRelativeLayout implements ModelView<Filt
         this.selectedFilter.setTypeface(null, Typeface.BOLD_ITALIC);
         this.selectedFilter.setText(model.getSelectedFilter());
         this.icon.setImageResource(model.getIcon());
+    }
+
+    public void hideBottomLine() {
+        this.lineBottom.setVisibility(GONE);
     }
 }
 

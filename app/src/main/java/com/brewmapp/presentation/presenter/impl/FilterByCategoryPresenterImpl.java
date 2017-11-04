@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import com.brewmapp.execution.task.FeatureTask;
+import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.KitchenTask;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RestoTypeTask;
@@ -25,16 +26,19 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     private KitchenTask kitchenTask;
     private PriceRangeTask priceRangeTask;
     private FeatureTask featureTask;
+    private FullSearchTask fullSearchTask;
 
     @Inject
     public FilterByCategoryPresenterImpl(RestoTypeTask restoTypeTask,
                                          KitchenTask kitchenTask,
                                          PriceRangeTask priceRangeTask,
-                                         FeatureTask featureTask) {
+                                         FeatureTask featureTask,
+                                         FullSearchTask fullSearchTask) {
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
         this.priceRangeTask = priceRangeTask;
         this.featureTask = featureTask;
+        this.fullSearchTask = fullSearchTask;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         kitchenTask.cancel();
         priceRangeTask.cancel();
         featureTask.cancel();
+        fullSearchTask.cancel();
     }
 
     @Override
@@ -97,6 +102,22 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     public void loadFeatureTypes() {
         featureTask.cancel();
         featureTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void fullSearch() {
+        fullSearchTask.cancel();
+        fullSearchTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 showError(e.getMessage());

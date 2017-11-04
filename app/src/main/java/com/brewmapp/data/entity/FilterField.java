@@ -1,6 +1,7 @@
 package com.brewmapp.data.entity;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -34,6 +35,7 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
     private String title;
     private String selectedFilter;
     private boolean selected;
+    private boolean hideBottomLine = false;
 
     public FilterField(int id, int icon, String title, String selectedFilter) {
         this.id = id;
@@ -77,6 +79,9 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterRowField> holder,
                                int position, List payloads) {
         holder.view.setModel(this);
+        if (position == adapter.getItemCount() - 1) {
+            holder.view.hideBottomLine();
+        }
     }
 
     public static void unselectAll(List<MenuField> fields) {

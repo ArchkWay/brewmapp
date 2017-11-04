@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
@@ -36,8 +37,10 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     @BindView(R.id.activity_search_search) FinderView finder;
 
     private FlexibleModelAdapter<IFlexible> adapter;
+    private FullSearchPackage fullSearchPackage;
 
     @Inject FilterByCategoryPresenter presenter;
+    private List<IFlexible> original;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,16 +61,24 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     @Override
     protected void initView() {
         enableBackButton();
-        
+        fullSearchPackage = new FullSearchPackage();
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>());
         list.setAdapter(adapter);
         initFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+
+        finder.setListener(string -> {
+            adapter.setSearchText(string);
+            adapter.filterItems(original);
+        });
     }
 
     private void initFilterByCategory(int filterId) {
         switch (filterId) {
+            case 0:
+                fullSearchPackage.setType(Keys.TYPE_RESTO);
             case 1:
                 presenter.loadRestoTypes();
                 break;
@@ -76,6 +87,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 break;
             case 4:
                 presenter.loadPriceRangeTypes();
+                break;
             case 7:
                 presenter.loadFeatureTypes();
                 break;
@@ -101,8 +113,9 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        adapter.clear();
-        adapter.addItems(adapter.getItemCount(), list);
+        original = list;
+        adapter.updateDataSet(list);
+//        adapter.addItems(adapter.getItemCount(), list);
     }
 
     @Override

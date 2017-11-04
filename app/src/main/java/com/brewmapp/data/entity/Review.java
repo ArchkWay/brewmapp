@@ -18,6 +18,15 @@ public class Review {
     private String dis_like;
     private String interested;
     private String no_interested;
+    private String user_getThumb;
+
+    public String getUser_getThumb() {
+        return user_getThumb;
+    }
+
+    public void setUser_getThumb(String user_getThumb) {
+        this.user_getThumb = user_getThumb;
+    }
 
     public String getId() {
         return id;

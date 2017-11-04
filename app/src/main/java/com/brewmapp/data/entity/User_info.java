@@ -332,4 +332,8 @@ public class User_info implements Serializable {
         this.city_name = city_name;
     }
 
+    public String getFormattedName() {
+        return String.format("%s %s", firstname, lastname);
+    }
+
 }

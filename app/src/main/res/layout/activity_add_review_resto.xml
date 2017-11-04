@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     >
 
     <include layout="@layout/view_toolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,7 +34,6 @@
                 style="@style/AppTheme.Text.Georgia.Italic"
                 android:textColor="@color/colorButtonRed"
                 android:textSize="@dimen/text_size_big_phone_bigger"
-
                 />
         </LinearLayout>
 
@@ -45,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="2.0"
+                android:rating="0.5"
                 android:stepSize="0.5"
                 android:id="@+id/addreviewactivity.rating.interior"
 
@@ -81,10 +82,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="2.0"
+                android:rating="0.5"
                 android:stepSize="0.5"
                 android:id="@+id/addreviewactivity.rating.service"
-                style="@style/RatingBar"
                 />
 
 
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="2.0"
+                android:rating="0.5"
                 android:stepSize="0.5"
                 android:id="@+id/addreviewactivity.rating.quality_beer"
                 />
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="2.0"
+                android:rating="0.5"
                 android:stepSize="0.5"
                 android:id="@+id/addreviewactivity.rating.common_effect"
                 />
@@ -184,6 +184,8 @@
             android:layout_marginLeft="@dimen/common_block_space"
             android:layout_marginRight="@dimen/common_block_space"
             android:id="@+id/addreviewactivity.review.edit_text"
+            android:minHeight="200dp"
+            android:gravity="top|left"
             />
 
         </LinearLayout>

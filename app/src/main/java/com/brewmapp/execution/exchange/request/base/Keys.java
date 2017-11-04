@@ -118,5 +118,9 @@ public class Keys {
     public static final String TYPE_RESTO = "TYPE_RESTO";
     public static final String RESTO_ID = "resto_id";
     public static final String EVLUATION_TYPE = "evaluation_type";
+    public static final String EVLUATION_TYPE_INTERIOR = "1";
+    public static final String EVLUATION_TYPE_SERVICE = "2";
+    public static final String EVLUATION_TYPE_BEER = "3";
+    public static final String EVLUATION_TYPE_EFFECT = "4";
     public static final String EVLUATION_VALUE = "evaluation_value";
 }

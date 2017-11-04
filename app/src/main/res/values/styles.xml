@@ -11,6 +11,9 @@
         <item name="actionMenuTextColor">@color/color_text_button_white</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 
+        <item name="colorControlNormal">@color/colorButtonRed</item>
+
+
     </style>
     <style name="AppThemeWithActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -120,12 +123,5 @@
         <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
             <item name="android:windowNoTitle">true</item>
         </style>
-    <style name="RatingBar" parent="Theme.AppCompat">
-        <!--<item name="android:progressDrawable">@drawable/ic_large_star</item>-->
-        <item name="colorControlNormal">@color/colorButtonRed</item>
-        <item name="colorControlActivated">@color/colorButtonRed</item>
-        <item name="colorControlHighlight">@color/colorButtonRed</item>
-        <!--<item name="android:minHeight">80dp</item>-->
 
-    </style>
 </resources>

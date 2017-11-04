@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.content.Intent;
+
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
@@ -13,7 +15,7 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
     void changeSubscription();
 
-    void onLoadEverything(String id);
-
     void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity);
+
+    void parseIntent(Intent intent);
 }

@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Subscription;
+import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -20,7 +21,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by oleg on 26.07.17.
  */
 
-public class LoadSubscriptionsListTask extends BaseNetworkTask<Integer, ListResponse<Subscription>> {
+public class LoadSubscriptionsListTask extends BaseNetworkTask<SubscriptionPackage, ListResponse<Subscription>> {
 
     private UserRepo userRepo;
 
@@ -35,12 +36,17 @@ public class LoadSubscriptionsListTask extends BaseNetworkTask<Integer, ListResp
     }
 
     @Override
-    protected Observable<ListResponse<Subscription>> prepareObservable(Integer params) {
+    protected Observable<ListResponse<Subscription>> prepareObservable(SubscriptionPackage subscriptionPackage) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams params1 = new WrapperParams(Wrappers.SUBSCRIPTION);
-                params1.addParam(Keys.USER_ID, userRepo.load().getId());
-                ListResponse<Subscription> response = executeCall(getApi().loadUserSubscriptionsList(params1));
+                WrapperParams params = new WrapperParams(Wrappers.SUBSCRIPTION);
+                params.addParam(Keys.USER_ID, userRepo.load().getId());
+                if(subscriptionPackage.getRelated_model()!=null)
+                    params.addParam(Keys.RELATED_MODEL,subscriptionPackage.getRelated_model());
+                if(subscriptionPackage.getRelated_id()!=null)
+                    params.addParam(Keys.RELATED_ID,subscriptionPackage.getRelated_id());
+
+                ListResponse<Subscription> response = executeCall(getApi().loadUserSubscriptionsList(params));
                 subscriber.onNext(response);
                 subscriber.onComplete();
             } catch (Exception e) {

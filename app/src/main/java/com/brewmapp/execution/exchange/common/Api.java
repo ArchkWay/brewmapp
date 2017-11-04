@@ -18,6 +18,7 @@ import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.container.AlbumPhotos;
@@ -30,6 +31,7 @@ import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.entity.container.Restos;
+import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -118,6 +120,10 @@ public interface Api {
     @FormUrlEncoded
     Call<Object> addInterest(@FieldMap WrapperParams params);
 
+    @POST("reviews/add")
+    @FormUrlEncoded
+    Call<Object> addReview(@FieldMap WrapperParams params);
+
     @POST("subscription/add")
     @FormUrlEncoded
     Call<SingleResponse<Subscription>> addSubscription(@FieldMap WrapperParams params);
@@ -137,11 +143,6 @@ public interface Api {
                             @Query(Keys.LIMIT_END) int end,
                             @FieldMap WrapperParams params);
 
-    @POST("shares")
-    @FormUrlEncoded
-    Call<Sales> loadSales(@Query(Keys.LIMIT_START) int start,
-                          @Query(Keys.LIMIT_END) int end,
-                          @FieldMap WrapperParams params);
 
 
     @POST("news")
@@ -241,6 +242,23 @@ public interface Api {
     @POST("resto/restodata")
     @FormUrlEncoded
     Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
+
+
+    @POST("shares")
+    @FormUrlEncoded
+    Call<Sales> loadSales(@Query(Keys.LIMIT_START) int start,
+                          @Query(Keys.LIMIT_END) int end,
+                          @FieldMap WrapperParams params);
+
+
+    @POST("reviews")
+    @FormUrlEncoded
+    Call<Reviews> loadReviews(@FieldMap WrapperParams params);
+//    @POST("reviews")
+//    @FormUrlEncoded
+//    Call<ListResponse<Review>> loadReviews(@FieldMap WrapperParams params);
+
+
 
     @POST("/api/resto/restoevaluation")
     @FormUrlEncoded

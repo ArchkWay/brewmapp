@@ -30,10 +30,12 @@ public class SetRestoEvaluationTask extends BaseNetworkTask<RestoEvaluationPacka
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params=new WrapperParams(Wrappers.RESTO_EVALUATION);
-                params.addParam(Keys.RESTO_ID, restoEvaluationPackage.getResto_id());
-                params.addParam(Keys.EVLUATION_TYPE, restoEvaluationPackage.getEaluation_type());
-                params.addParam(Keys.EVLUATION_VALUE, restoEvaluationPackage.getEaluation_value());
-                Object o= executeCall(getApi().setRestoEvaluation(params));
+                if(restoEvaluationPackage.getEaluation_value()!=null) {
+                    params.addParam(Keys.RESTO_ID, restoEvaluationPackage.getResto_id());
+                    params.addParam(Keys.EVLUATION_TYPE, restoEvaluationPackage.getEaluation_type());
+                    params.addParam(Keys.EVLUATION_VALUE, restoEvaluationPackage.getEaluation_value());
+                    Object o = executeCall(getApi().setRestoEvaluation(params));
+                }
                 subscriber.onNext("");
                 subscriber.onComplete();
             } catch (Exception e) {

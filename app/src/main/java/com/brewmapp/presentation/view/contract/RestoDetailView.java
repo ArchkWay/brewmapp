@@ -3,6 +3,9 @@ package com.brewmapp.presentation.view.contract;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.container.RestoDetails;
 
+import java.util.List;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -16,4 +19,5 @@ public interface RestoDetailView extends BasicView{
 
     void SubscriptionExist(boolean b);
 
+    void setReviews(List<IFlexible> iFlexibles);
 }

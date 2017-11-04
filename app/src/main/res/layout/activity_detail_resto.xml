@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brewmapp.presentation.view.impl.activity.RestoDetailActivity"
     android:orientation="vertical"
-    android:id="@+id/activity.resto.detail.root"
     >
 
     <include layout="@layout/view_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             >
 
@@ -356,7 +354,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.image.view.icon_place"
                     android:layout_margin="@dimen/common_block_space"
-                    tools:layout_editor_absoluteX="10dp" />
+                    />
 
                 <TextView
                     android:id="@+id/text_view_place"
@@ -368,7 +366,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_margin="@dimen/common_block_space"
                     style="@style/AppTheme.Paragraph"
-                    tools:layout_editor_absoluteX="50dp" />
+                    />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -377,7 +375,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="334dp" />
+                     />
             </android.support.constraint.ConstraintLayout>
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -1006,20 +1004,29 @@
                 android:textSize="@dimen/text_size_big_phone_bigger"
 
                 />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="80dp"
+
                 >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_while_empty_review"
-                    style="@style/AppTheme.Paragraph"
-                    android:layout_centerInParent="true"
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/text_view_while_empty_review"-->
+                    <!--style="@style/AppTheme.Paragraph"-->
+                    <!--android:layout_centerInParent="true"-->
 
-                    />
+                    <!--/>-->
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity.restoDetails.recycler_reviews"
+
+                    >
+
+                </android.support.v7.widget.RecyclerView>
 
             </RelativeLayout>
 

@@ -1,28 +1,25 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.media.Rating;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
-import com.brewmapp.presentation.view.impl.dialogs.DialogRating;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -37,9 +34,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-
-import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
@@ -61,11 +58,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_button_call2)    TextView call1;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
     @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
-
-    @BindView(R.id.activity_resto_detail_rating_view_interior_linear_layout)    LinearLayout interior_linear_layout;
-    @BindView(R.id.activity_resto_detail_rating_view_service_linear_layout)    LinearLayout service_linear_layout;
-    @BindView(R.id.activity_resto_detail_rating_view_beer_linear_layout)    LinearLayout beer_linear_layout;
-    @BindView(R.id.activity_resto_detail_rating_view_effect_linear_layout)    LinearLayout effect_linear_layout;
+    @BindView(R.id.activity_restoDetails_recycler_reviews)    RecyclerView recycler_reviews;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -80,7 +73,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Inject RestoDetailPresenter presenter;
 
+    private final int ALL_CONTROL =0;
+
     private ArrayList<String> photosResto=new ArrayList<>();
+    private FlexibleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,19 +87,19 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     protected void initView() {
         enableBackButton();
-        enableControls(false, 0);
+        enableControls(false, ALL_CONTROL);
         slider.stopAutoCycle();
         place.setOnClickListener(v -> {});
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> {presenter.startAddReviewRestoActivity(RestoDetailActivity.this);});
+        adapter=new FlexibleAdapter<IFlexible>(new ArrayList<>());
+        recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.onLoadEverything(
-                ((Interest) getIntent().getSerializableExtra(RESTO_ID)).getInterest_info().getId()
-        );
+        presenter.parseIntent(getIntent());
     }
 
     @Override
@@ -119,8 +115,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void enableControls(boolean enabled, int code) {
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
-            view.setEnabled(enabled);
-            view.setClickable(enabled);
+            if(code == ALL_CONTROL) {
+                view.setEnabled(enabled);
+                view.setClickable(enabled);
+            }
         });
     }
 
@@ -137,29 +135,14 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         if(restoDetail.getResto().getThumb()==null) {
             slider.addSlider(new DefaultSliderView(this)
                     .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(R.drawable.ic_default_brewery)
+                    .image(R.drawable.ic_default_resto)
             );
         }else {
             photosResto.add(restoDetail.getResto().getThumb());
-//            slider.addSlider(new DefaultSliderView(this)
-//                    .setScaleType(BaseSliderView.ScaleType.CenterCrop)
-//                    .image(restoDetail.getResto().getThumb())
-//                    .setOnSliderClickListener(slider1 -> {
-//                        Intent intent = new Intent(this, PhotoSliderActivity.class);
-//                        String[] urls = {restoDetail.getResto().getThumb()};
-//                        intent.putExtra(Keys.PHOTOS, urls);
-//                        startActivity(intent);
-//                    }));
         }
         for (Kitchen kitchen:restoDetail.getResto_kitchen())
             if(kitchen.getGetThumb()!=null)
                 photosResto.add(kitchen.getGetThumb());
-//        for (Menu menu:restoDetail.getMenu())
-//            if(menu.getGetThumb()!=null)
-//                photos.add(menu.getGetThumb());
-//        for (Feature feature:restoDetail.getResto_feature())
-//            if(feature.getGetThumb()!=null)
-//                photos.add(feature.getGetThumb());
 
         for(String imgUrl:photosResto){
             if(imgUrl!=null)
@@ -182,6 +165,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 }
             });
         }else {
+            pagerIndicator.setVisibility(View.GONE);
             photosCounter.setText("0/0");
         }
 
@@ -189,13 +173,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         description.setText(Html.fromHtml(restoDetail.getResto().getText()));
         cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
 
-        enableControls(true,0);
+        enableControls(true,ALL_CONTROL);
 
 
-        interior_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Интерьер"));
-        service_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Сервис"));
-        beer_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Пиво"));
-        effect_linear_layout.setOnClickListener(view -> new DialogRating(RestoDetailActivity.this,R.style.FullHeightDialog,3,"Общее впечатление"));
 
     }
 
@@ -212,6 +192,16 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void SubscriptionExist(boolean b) {
         subscribe.setText(b?getString(R.string.button_text_unsubscribe):getString(R.string.button_text_subscribe));
         setResult(RESULT_OK);
+    }
+
+    @Override
+    public void setReviews(List<IFlexible> iFlexibles) {
+
+        adapter.addItems(0,iFlexibles);
+        adapter.notifyDataSetChanged();
+
+        recycler_reviews.setAdapter(adapter);
+
     }
 
 }

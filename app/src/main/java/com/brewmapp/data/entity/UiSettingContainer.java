@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
+
 /**
  * Created by xpusher on 10/13/2017.
  */
@@ -8,7 +10,7 @@ public class UiSettingContainer {
 
     public int nActiveFragment= MenuField.PROFILE;
 
-    public int nActiveTabEventFragment=0;
+    public int nActiveTabEventFragment= EventsFragment.TAB_EVENT;
 
 
     public int getnActiveFragment() {

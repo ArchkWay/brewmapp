@@ -596,7 +596,9 @@
                 android:layout_height="60dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/activity.resto.detail.layout_news"
+                >
 
                 <ImageView
                     android:layout_width="30dp"
@@ -677,7 +679,8 @@
                 android:layout_height="40dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/activity.resto.detail.layout_sale">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -758,7 +761,8 @@
                 android:layout_height="40dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/activity.resto.detail.layout_event">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -839,7 +843,8 @@
                 android:layout_height="40dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/activity.resto.detail.layout_menu">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -920,7 +925,8 @@
                 android:layout_height="40dp"
                 android:layout_margin="@dimen/common_block_space"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/activity.resto.detail.layout_photo">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -1021,7 +1027,7 @@
                     <!--/>-->
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="300dp"
                     android:id="@+id/activity.restoDetails.recycler_reviews"
 
                     >

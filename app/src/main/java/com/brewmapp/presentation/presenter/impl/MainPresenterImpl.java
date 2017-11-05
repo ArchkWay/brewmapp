@@ -50,4 +50,5 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     public int getActiveFragment() {
         return uiSettingRepo.getnActiveFragment();
     }
+
 }

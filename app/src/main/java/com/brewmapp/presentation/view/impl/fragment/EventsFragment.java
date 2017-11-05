@@ -71,14 +71,15 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     @Inject EventsPresenter presenter;
     @Inject ActiveBox activeBox;
 
-    private String[] tabContent = ResourceHelper.getResources()
-            .getStringArray(R.array.event_types);
-
+    private String[] tabContent = ResourceHelper.getResources().getStringArray(R.array.event_types);
     private LoadNewsPackage loadNewsPackage = new LoadNewsPackage();
     private FlexibleModelAdapter<IFlexible> adapter;
     private EndlessRecyclerOnScrollListener scrollListener;
-
     private List<FilteredTitle> dropdownItems;
+
+    public static final int TAB_EVENT=0;
+    public static final int TAB_SALE=1;
+    public static final int TAB_POST=2;
 
     @Override
     protected int getFragmentLayout() {
@@ -97,6 +98,7 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
             public void onTabSelected(TabLayout.Tab tab) {
                 loadNewsPackage.dropAll();
                 loadNewsPackage.setMode(tab.getPosition());
+                loadNewsPackage.parseIntent(getActivity().getIntent());
                 interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
                 interractor().processSetActionBar(tab.getPosition());
                 presenter.storeTabActive(tab.getPosition());

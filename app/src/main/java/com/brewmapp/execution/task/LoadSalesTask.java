@@ -50,6 +50,10 @@ public class LoadSalesTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexib
                 WrapperParams params = createRequestParams(request);
                 int start = request.getPage() * step;
                 int end = request.getPage() * step + step;
+                if(request.getRelated_model()!=null && request.getResto_id()!=null){
+                    params.addParam(Keys.RELATED_MODEL,request.getRelated_model());
+                    params.addParam(Keys.RELATED_ID,request.getResto_id());
+                }
                 Sales posts = executeCall(getApi().loadSales(start, end, params));
                 subscriber.onNext(new ArrayList<>(posts.getModels()));
                 subscriber.onComplete();

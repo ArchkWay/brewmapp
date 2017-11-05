@@ -18,4 +18,8 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity);
 
     void parseIntent(Intent intent);
+
+    void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab);
+
+    void restoreSetting();
 }

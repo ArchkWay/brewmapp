@@ -1,8 +1,10 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
+import android.net.Uri;
 
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Subscription;
@@ -19,6 +21,7 @@ import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
 import java.util.List;
@@ -37,6 +40,7 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
 
+    private UiSettingRepo uiSettingRepo;
     private LoadRestoDetailTask loadRestoDetailTask;
     private RestoDetail restoDetail;
     private SubscriptionOnTask subscriptionOnTask;
@@ -44,18 +48,20 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private LoadSubscriptionsListTask loadSubscriptionsListTask;
     private LoadReviewsTask loadReviewsTask;
     private String IdSubscription=null;
+    private HolserData holserData=new HolserData();
 
     public void setRestoDetail(RestoDetail restoDetail) {
         this.restoDetail = restoDetail;
     }
 
     @Inject
-    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsListTask loadSubscriptionsListTask, SubscriptionOffTask subscriptionOffTask,LoadReviewsTask loadReviewsTask){
+    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsListTask loadSubscriptionsListTask, SubscriptionOffTask subscriptionOffTask,LoadReviewsTask loadReviewsTask,UiSettingRepo uiSettingRepo){
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
         this.loadSubscriptionsListTask = loadSubscriptionsListTask;
         this.subscriptionOffTask=subscriptionOffTask;
         this.loadReviewsTask = loadReviewsTask;
+        this.uiSettingRepo = uiSettingRepo;
     }
 
     @Override
@@ -108,7 +114,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
     }
 
-
     @Override
     public void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity) {
         Intent intent=new Intent(restoDetailActivity, AddReviewRestoActivity.class);
@@ -129,6 +134,24 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
         loadEverything(id);
 
+    }
+
+    @Override
+    public void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab) {
+        holserData.storeUiSetting();
+        Intent intent=new Intent(
+                RequestCodes.ACTION_SHOW_EVENT_FRAGMENT,
+                null,
+                restoDetailActivity,
+                MainActivity.class);
+        intent.putExtra(Keys.RESTO_ID,restoDetail.getResto().getId());
+        intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+        restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT);
+    }
+
+    @Override
+    public void restoreSetting() {
+        holserData.restoreUiSetting();
     }
 
     private void loadEverything(String id) {
@@ -197,5 +220,35 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     }
 
+    class HolserData{
+        private int activeFragment;
+        private int activeTabFragment;
+
+        public int getActiveFragment() {
+            return activeFragment;
+        }
+
+        public void setActiveFragment(int activeFragment) {
+            this.activeFragment = activeFragment;
+        }
+
+        public int getActiveTabFragment() {
+            return activeTabFragment;
+        }
+
+        public void setActiveTabFragment(int activeTabFragment) {
+            this.activeTabFragment = activeTabFragment;
+        }
+
+        public void storeUiSetting() {
+            setActiveFragment(uiSettingRepo.getnActiveFragment());
+            setActiveTabFragment(uiSettingRepo.getnActiveTabEventFragment());
+        }
+
+        public void restoreUiSetting() {
+            uiSettingRepo.setActiveFragment(getActiveFragment());
+            uiSettingRepo.setnActiveTabEventFragment(getActiveTabFragment());
+        }
+    }
 
 }

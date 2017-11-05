@@ -9,17 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
+import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -59,6 +61,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
     @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
     @BindView(R.id.activity_restoDetails_recycler_reviews)    RecyclerView recycler_reviews;
+    @BindView(R.id.activity_resto_detail_layout_news)    ViewGroup layout_news;
+    @BindView(R.id.activity_resto_detail_layout_event)    ViewGroup layout_event;
+    @BindView(R.id.activity_resto_detail_layout_sale)    ViewGroup layout_sale;
+    @BindView(R.id.activity_resto_detail_layout_photo)    ViewGroup layout_photo;
+    @BindView(R.id.activity_resto_detail_layout_menu)    ViewGroup layout_menu;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -67,8 +74,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             R.id.activity_resto_detail_button_subscribe,
             R.id.activity_resto_detail_button_private_message,
             R.id.activity_restoDetails_slider
-
-
     })    List<View> viewList;
 
     @Inject RestoDetailPresenter presenter;
@@ -92,8 +97,12 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         place.setOnClickListener(v -> {});
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> {presenter.startAddReviewRestoActivity(RestoDetailActivity.this);});
-        adapter=new FlexibleAdapter<IFlexible>(new ArrayList<>());
+        adapter=new FlexibleAdapter<>(new ArrayList<>());
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
+        layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
+        layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
+        layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
+
     }
 
     @Override
@@ -204,4 +213,14 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
+                if(resultCode==RESULT_OK)
+                    presenter.restoreSetting();
+                return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

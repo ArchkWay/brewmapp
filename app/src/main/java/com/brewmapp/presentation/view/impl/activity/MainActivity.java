@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.v4.app.Fragment;
@@ -16,23 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -82,12 +78,22 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); //getIntent().getData().getPath()
     }
 
     @Override
     protected void initView() {
-        setSupportActionBar(toolbar);
+        if(getIntent().getAction()==null)
+            setDrawer();
+        else if(getIntent().getAction().equals(RequestCodes.ACTION_SHOW_EVENT_FRAGMENT)){
+            enableBackButton();
+            navigator.storeCodeActiveFragment(MenuField.EVENTS);
+            navigator.storeCodeTebEventFragment(getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT));
+            setResult(RESULT_OK);
+        }
+    }
+
+    private void setDrawer() {
         drawer.setMarginFactor(0.5f);
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.ic_menu_toggle)).getBitmap();
         DuoDrawerToggle drawerToggle = new CustomDuoDrawerToggle(this, toolbar, drawer,
@@ -101,6 +107,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             adapter.notifyDataSetChanged();
             navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
         });
+
     }
 
     @Override
@@ -213,7 +220,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return navigator.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case android.R.id.home:
+                return super.onOptionsItemSelected(item);
+            default:
+                return navigator.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -252,6 +264,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             Log.i("sdfdsf", "okresult");
             showResultOnMap();
         }
+    }
+
+    @Override
+    protected Toolbar findActionBar() {
+        return toolbar;
     }
 
     @SuppressLint("RestrictedApi")

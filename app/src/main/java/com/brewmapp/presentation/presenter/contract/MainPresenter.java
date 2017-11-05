@@ -11,4 +11,5 @@ public interface MainPresenter extends LivePresenter<MainView> {
     void onLogout();
 
     int getActiveFragment();
+
 }

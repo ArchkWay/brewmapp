@@ -35,7 +35,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
 
     @Override
     public void onNavigatorAction(Action action) {
-        uiSettingRepo.setActiveFragment(action.code());
+        storeCodeActiveFragment(action.code());
         switch (action.code()) {
             case MenuField.PROFILE:
                 fragmentToShow = new ProfileFragment();
@@ -72,4 +72,11 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
         }
     }
 
+    public void storeCodeActiveFragment(int active_fragment)  {
+        uiSettingRepo.setActiveFragment(active_fragment);
+    }
+
+    public void storeCodeTebEventFragment(int tabPost) {
+        uiSettingRepo.setnActiveTabEventFragment(tabPost);
+    }
 }

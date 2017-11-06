@@ -5,29 +5,34 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.RestoType;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
+import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
 /**
  * Created by nixus on 01.11.2017.
  */
 
-public class TypeView extends BaseLinearLayout implements InteractiveModelView<RestoType> {
+public class TypeView extends BaseLinearLayout implements ModelView<RestoType> {
 
     @BindView(R.id.title) TextView title;
     @BindView(R.id.logo) ImageView logoRestoType;
     @BindView(R.id.chkbox) CheckBox restoTypeCheckbox;
+    @BindView(R.id.view_root) TypeView viewRoot;
 
-    private Listener listener;
     private RestoType model;
 
     public TypeView(Context context) {
@@ -49,7 +54,6 @@ public class TypeView extends BaseLinearLayout implements InteractiveModelView<R
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-//        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
     }
 
     @Override
@@ -64,10 +68,5 @@ public class TypeView extends BaseLinearLayout implements InteractiveModelView<R
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
         }
-    }
-
-    @Override
-    public void setListener(Listener listener) {
-        this.listener = listener;
     }
 }

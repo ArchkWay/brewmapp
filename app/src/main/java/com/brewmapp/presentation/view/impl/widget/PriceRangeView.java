@@ -9,10 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.PriceRange;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -28,6 +30,9 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     ImageView logo;
     @BindView(R.id.chkbox)
     CheckBox restoTypeCheckbox;
+    @BindView(R.id.root_view)
+    PriceRangeView rootView;
+
 
     private Listener listener;
     private PriceRange model;
@@ -51,7 +56,7 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-//        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
+        rootView.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_FILTER, model));
     }
 
     @Override
@@ -65,6 +70,9 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
         title.setText(model.getName());
         if (model.getImage() == null) {
             logo.setVisibility(INVISIBLE);
+        }
+        if (rootView.isSelected()) {
+            restoTypeCheckbox.setChecked(true);
         }
     }
 

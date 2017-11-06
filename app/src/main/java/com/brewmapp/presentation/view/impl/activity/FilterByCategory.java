@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -25,6 +26,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 /**
  * Created by nixus on 01.11.2017.
@@ -33,6 +35,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public class FilterByCategory extends BaseActivity implements FilterByCategoryView, FlexibleAdapter.OnItemClickListener {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
+    @BindView(R.id.common_toolbar_title) TextView toolbarTitle;
     @BindView(R.id.categoryList) RecyclerView list;
     @BindView(R.id.activity_search_search) FinderView finder;
 
@@ -64,22 +67,20 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         fullSearchPackage = new FullSearchPackage();
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
+        list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>());
         list.setAdapter(adapter);
         initFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
-
-        finder.setListener(string -> {
-            adapter.setSearchText(string);
-            adapter.filterItems(original);
-        });
     }
 
     private void initFilterByCategory(int filterId) {
         switch (filterId) {
             case 0:
+                setTitle(R.string.search);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
             case 1:
+                setTitle(R.string.new_post);
                 presenter.loadRestoTypes();
                 break;
             case 3:
@@ -113,14 +114,18 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        original = list;
+        this.original = list;
+        adapter.clear();
         adapter.updateDataSet(list);
-//        adapter.addItems(adapter.getItemCount(), list);
+        finder.setListener(string -> {
+            adapter.setSearchText(string);
+            adapter.filterItems(original);
+        });
     }
 
     @Override
     public boolean onItemClick(int position) {
-        Log.i("itemClick", String.valueOf(position));
+        Log.i("itemClick", "checkClickItem");
         return false;
     }
 }

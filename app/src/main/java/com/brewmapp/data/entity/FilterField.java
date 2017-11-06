@@ -1,7 +1,6 @@
 package com.brewmapp.data.entity;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -35,7 +34,6 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
     private String title;
     private String selectedFilter;
     private boolean selected;
-    private boolean hideBottomLine = false;
 
     public FilterField(int id, int icon, String title, String selectedFilter) {
         this.id = id;
@@ -79,9 +77,6 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterRowField> holder,
                                int position, List payloads) {
         holder.view.setModel(this);
-        if (position == adapter.getItemCount() - 1) {
-            holder.view.hideBottomLine();
-        }
     }
 
     public static void unselectAll(List<MenuField> fields) {
@@ -109,16 +104,17 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
 
     public static List<FilterField> createDefault(Context context) {
         List<FilterField> out = new ArrayList<>();
-        out.add(new FilterField(NAME, R.drawable.ic_menu_events, context.getString(R.string.search_resto_name), "Любой"));
-        out.add(new FilterField(TYPE, R.drawable.ic_menu_messages, context.getString(R.string.search_resto_type), "Любой"));
-        out.add(new FilterField(BEER, R.drawable.ic_menu_search, context.getString(R.string.search_resto_beer), "Любой"));
-        out.add(new FilterField(KITCHEN, R.drawable.ic_menu_map, context.getString(R.string.search_resto_kitchen), "Любой"));
-        out.add(new FilterField(AVERAGE_BILL, R.drawable.ic_menu_friends, context.getString(R.string.search_resto_price), "Любой"));
+        out.add(new FilterField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любой"));
+        out.add(new FilterField(TYPE, R.drawable.ic_resto, context.getString(R.string.search_resto_type), "Любой"));
+        out.add(new FilterField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любой"));
+        out.add(new FilterField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любой"));
+        out.add(new FilterField(AVERAGE_BILL, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Любой"));
         out.add(new FilterField(CITY, R.drawable.ic_menu_settings, context.getString(R.string.search_resto_city), "Любой"));
         out.add(new FilterField(METRO, R.drawable.ic_menu_settings, context.getString(R.string.search_resto_metro), "Любой"));
         out.add(new FilterField(OTHER, R.drawable.ic_menu_settings, context.getString(R.string.search_resto_other), "Любой"));
         return out;
     }
+
 
     public String getSelectedFilter() {
         return selectedFilter;

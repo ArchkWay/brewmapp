@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import eu.davidea.flexibleadapter.items.IFilterable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class PriceRange implements Serializable {
@@ -76,5 +78,4 @@ public class PriceRange implements Serializable {
     public void setRelations(List<Relations> relations) {
         Relations = relations;
     }
-
 }

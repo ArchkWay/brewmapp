@@ -17,6 +17,7 @@ import com.brewmapp.data.entity.FilterField;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
+import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 /**
  * Created by nlbochas on 28/10/2017.
@@ -86,6 +88,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     public void showFilters(List<FilterField> fieldList) {
         adapter = new FlexibleAdapter<>(fieldList, this);
         list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setNestedScrollingEnabled(true);
         list.setAdapter(adapter);
     }

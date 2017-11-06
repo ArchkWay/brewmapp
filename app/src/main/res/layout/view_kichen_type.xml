@@ -55,9 +55,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBlockSplitterBorder"/>
-
 </com.brewmapp.presentation.view.impl.widget.KitchenView>

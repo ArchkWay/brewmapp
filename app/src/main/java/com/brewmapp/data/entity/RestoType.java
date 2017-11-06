@@ -1,6 +1,9 @@
 
 package com.brewmapp.data.entity;
 
+import android.widget.Filter;
+import android.widget.Filterable;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Generated;
@@ -8,9 +11,11 @@ import javax.annotation.Generated;
 import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
+import eu.davidea.flexibleadapter.items.IFilterable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class RestoType implements Serializable {
+public class RestoType implements Serializable, IFilterable {
 
     @SerializedName("getThumb")
     private String getThumb;
@@ -66,4 +71,8 @@ public class RestoType implements Serializable {
         Relations = relations;
     }
 
+    @Override
+    public boolean filter(String constraint) {
+        return getName().contains(constraint);
+    }
 }

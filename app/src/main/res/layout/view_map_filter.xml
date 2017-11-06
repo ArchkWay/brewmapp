@@ -33,15 +33,19 @@
                     android:id="@+id/icon_filter"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_search" />
 
                 <TextView
                     android:id="@+id/selected_filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:textColor="@color/vk_black"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="3dp"
+                    android:paddingEnd="3dp"
                     android:textStyle="bold|italic" />
 
             </LinearLayout>
@@ -57,12 +61,5 @@
             android:src="@drawable/ic_arrow_right" />
 
     </RelativeLayout>
-
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_below="@+id/lyt_filter"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:id="@+id/line_bottom"
-        android:background="@color/colorGrayLight"/>
 
 </com.brewmapp.presentation.view.impl.widget.FilterRowField>

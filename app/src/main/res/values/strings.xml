@@ -285,10 +285,12 @@
     <string name="text_view_menu">Меню</string>
     <string name="text_view_photo">Фото</string>
     <string name="text_view_replay_users">Отзывы пользователей</string>
-    <string name="text_view_while_empty_review">Пока отзывов нет, оставте свой отзыв первым ;)</string>
+    <string name="text_view_while_empty_review">Пока отзывов нет, \n оставте свой отзыв первым ;)</string>
     <string name="button_text_write_review">Написать отзыв</string>
     <string name="title_activity_add_review">Добавить отзыв</string>
     <string name="text_view_your_review">Вaш отзыв</string>
     <string name="text_edit_hint_your_review">Введите техт отзыва</string>
+    <string name="message_develop">Функция в разработке</string>
+    <string name="assessment_has_already_been_taken">Ваша оценка уже была  принята ранее</string>
 
 </resources>

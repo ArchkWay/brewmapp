@@ -22,4 +22,16 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab);
 
     void restoreSetting();
+
+    void startShowMenu(RestoDetailActivity restoDetailActivity);
+
+    void startShowPhoto(RestoDetailActivity restoDetailActivity);
+
+    void refreshContent();
+
+    void clickLike();
+
+    void clickDisLike();
+
+    void clickFav();
 }

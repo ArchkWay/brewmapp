@@ -51,6 +51,10 @@ public class LoadEventsTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexi
                 WrapperParams params = createRequestParams(request);
                 int start = request.getPage() * step;
                 int end = request.getPage() * step + step;
+                if(request.getRelated_model()!=null && request.getResto_id()!=null){
+                    params.addParam(Keys.RELATED_MODEL,request.getRelated_model());
+                    params.addParam(Keys.RELATED_ID,request.getResto_id());
+                }
                 Events posts = executeCall(getApi().loadEvents(start, end, params));
                 subscriber.onNext(new ArrayList<>(posts.getModels()));
                 subscriber.onComplete();

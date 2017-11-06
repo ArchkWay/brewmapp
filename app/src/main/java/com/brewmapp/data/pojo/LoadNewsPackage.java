@@ -12,10 +12,20 @@ import java.util.Date;
  */
 
 public class LoadNewsPackage {
+
     private String resto_id;
     private String related_model;
     private int mode, filter, page;
     private Date dateFrom, dateTo;
+    private String user_id;
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     public String getRelated_model() {
         return related_model;
@@ -86,13 +96,4 @@ public class LoadNewsPackage {
         page = 0;
     }
 
-    public void parseIntent(Intent intent) {
-        if(intent.hasExtra(Keys.RESTO_ID)){
-            int resto=intent.getIntExtra(Keys.RESTO_ID,0);
-            if(resto!=0) {
-                setResto_id(String.valueOf(resto));
-                setRelated_model(Keys.CAP_RESTO);
-            }
-        }
-    }
 }

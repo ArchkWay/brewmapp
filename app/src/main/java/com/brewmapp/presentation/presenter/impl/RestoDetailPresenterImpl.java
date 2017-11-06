@@ -1,24 +1,34 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 
+import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Subscription;
+import com.brewmapp.data.pojo.LikeDislikePackage;
+import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
+import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.DisLikeTask;
+import com.brewmapp.execution.task.LikeTask;
+import com.brewmapp.execution.task.LoadEventsTask;
+import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.LoadReviewsTask;
+import com.brewmapp.execution.task.LoadSalesTask;
 import com.brewmapp.execution.task.LoadSubscriptionsListTask;
 import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
+import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
@@ -40,6 +50,12 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
 
+    private Context context;
+    private LikeTask likeTask;
+    private DisLikeTask disLikeTask;
+    private LoadSalesTask loadSalesTask;
+    private LoadNewsTask loadNewsTask;
+    private LoadEventsTask loadEventsTask;
     private UiSettingRepo uiSettingRepo;
     private LoadRestoDetailTask loadRestoDetailTask;
     private RestoDetail restoDetail;
@@ -55,13 +71,19 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     }
 
     @Inject
-    public RestoDetailPresenterImpl(LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsListTask loadSubscriptionsListTask, SubscriptionOffTask subscriptionOffTask,LoadReviewsTask loadReviewsTask,UiSettingRepo uiSettingRepo){
+    public RestoDetailPresenterImpl(Context context,LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsListTask loadSubscriptionsListTask, SubscriptionOffTask subscriptionOffTask,LoadReviewsTask loadReviewsTask,UiSettingRepo uiSettingRepo,LoadSalesTask loadSalesTask,LoadNewsTask loadNewsTask,LoadEventsTask loadEventsTask,LikeTask likeTask){
+        this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
         this.loadSubscriptionsListTask = loadSubscriptionsListTask;
         this.subscriptionOffTask=subscriptionOffTask;
         this.loadReviewsTask = loadReviewsTask;
         this.uiSettingRepo = uiSettingRepo;
+        this.loadSalesTask= loadSalesTask;
+        this.loadEventsTask= loadEventsTask;
+        this.loadNewsTask= loadNewsTask;
+        this.likeTask= likeTask;
+
     }
 
     @Override
@@ -200,6 +222,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     @Override
                     public void onNext(ListResponse<Subscription> subscriptionListResponse) {
                         super.onNext(subscriptionListResponse);
+                        loadCntSales();
                         for (Subscription s:subscriptionListResponse.getModels())
                             if(s.getInformation().getId().equals(String.valueOf(restoDetail.getResto().getId()))) {
                                 view.SubscriptionExist(true);
@@ -208,6 +231,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                             }
                         view.SubscriptionExist(false);
                         IdSubscription=null;
+
                     }
 
                     @Override
@@ -216,9 +240,130 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     }
                 });
             }
+            private void loadCntSales() {
+                LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+                loadNewsPackage.setMode(EventsView.MODE_SALES);
+                loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadSalesTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> flexibleList) {
+                        super.onNext(flexibleList);
+                        view.setCnt(flexibleList.size(),EventsView.MODE_SALES);
+                        loadCntNews();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }
+            private void loadCntNews() {
+                LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+                loadNewsPackage.setMode(EventsView.MODE_NEWS);
+                loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadNewsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> flexibleList) {
+                        super.onNext(flexibleList);
+                        view.setCnt(flexibleList.size(), EventsView.MODE_NEWS);
+                        loadCntEvent();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+
+            }
+            private void loadCntEvent() {
+                LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+                loadNewsPackage.setMode(EventsView.MODE_EVENTS);
+                loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadEventsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> flexibleList) {
+                        super.onNext(flexibleList);
+                        view.setCnt(flexibleList.size(), EventsView.MODE_EVENTS);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+
+            }
         });
 
     }
+
+    @Override
+    public void startShowMenu(RestoDetailActivity restoDetailActivity) {
+        view.showMessage(context.getString(R.string.message_develop),0);
+    }
+
+    @Override
+    public void startShowPhoto(RestoDetailActivity restoDetailActivity) {
+        view.showMessage(context.getString(R.string.message_develop),0);
+    }
+
+    @Override
+    public void refreshContent() {
+        loadEverything(String.valueOf(restoDetail.getResto().getId()));
+    }
+
+    @Override
+    public void clickLike() {
+        LikeDislikePackage likeDislikePackage=new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
+        likeDislikePackage.setModel(Keys.CAP_RESTO,restoDetail.getResto().id());
+        likeTask.execute(likeDislikePackage,new SimpleSubscriber<MessageResponse>(){
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.showMessage(context.getString(R.string.assessment_has_already_been_taken),0);
+            }
+
+            @Override
+            public void onNext(MessageResponse messageResponse) {
+                super.onNext(messageResponse);
+                refreshContent();
+            }
+        });
+    }
+
+    @Override
+    public void clickDisLike() {
+        LikeDislikePackage likeDislikePackage=new LikeDislikePackage(LikeDislikePackage.TYPE_DISLIKE);
+        likeDislikePackage.setModel(Keys.CAP_RESTO,restoDetail.getResto().id());
+        likeTask.execute(likeDislikePackage,new SimpleSubscriber<MessageResponse>(){
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.showMessage(context.getString(R.string.assessment_has_already_been_taken),0);
+            }
+
+            @Override
+            public void onNext(MessageResponse messageResponse) {
+                super.onNext(messageResponse);
+                refreshContent();
+            }
+        });
+
+    }
+
+    @Override
+    public void clickFav() {
+        view.showMessage(context.getString(R.string.message_develop),0);
+    }
+
 
     class HolserData{
         private int activeFragment;

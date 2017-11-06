@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.content.Intent;
+
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
@@ -17,4 +19,5 @@ public interface EventsPresenter extends LivePresenter<EventsView>{
     void onLike(ILikeable likeable, RefreshableView refreshableView);
 
 
+    void parseIntent(Intent intent, LoadNewsPackage loadNewsPackage);
 }

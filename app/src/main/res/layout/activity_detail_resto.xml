@@ -82,7 +82,6 @@
                     android:layout_weight="1"
                     >
 
-
                     <TextView
                         android:id="@+id/activity.resto.detail.name"
 
@@ -98,17 +97,8 @@
 
                         />
 
-                    <!--<ru.frosteye.ovsa.presentation.view.widget.Line-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_marginBottom="@dimen/common_block_space"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:background="@color/colorSplitter"-->
-                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintStart_toStartOf="parent" />-->
-
                     <include layout="@layout/view_like_dislike_fav" />
+
                 </LinearLayout>
                 <TextView
                     android:layout_width="@dimen/size_icon_24"
@@ -371,7 +361,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_chevron_right"
+                    android:src="@drawable/ic_arrow_right"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -452,6 +442,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_value_not_found"
                         style="@style/AppTheme.Paragraph"
+                        android:gravity="center_vertical"
                         />
                 </LinearLayout>
 
@@ -502,7 +493,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_value_not_found"
                         style="@style/AppTheme.Paragraph"
-
+                        android:gravity="center_vertical"
                         />
                 </LinearLayout>
 
@@ -1017,17 +1008,19 @@
 
                 >
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/text_view_while_empty_review"-->
-                    <!--style="@style/AppTheme.Paragraph"-->
-                    <!--android:layout_centerInParent="true"-->
-
-                    <!--/>-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_while_empty_review"
+                    style="@style/AppTheme.Paragraph"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center"
+                    android:id="@+id/activity.restoDetails.empty_text_reviews"
+                    />
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="200dp"
                     android:id="@+id/activity.restoDetails.recycler_reviews"
 
                     >

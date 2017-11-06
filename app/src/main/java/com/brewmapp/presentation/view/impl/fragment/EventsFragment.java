@@ -98,7 +98,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
             public void onTabSelected(TabLayout.Tab tab) {
                 loadNewsPackage.dropAll();
                 loadNewsPackage.setMode(tab.getPosition());
-                loadNewsPackage.parseIntent(getActivity().getIntent());
                 interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
                 interractor().processSetActionBar(tab.getPosition());
                 presenter.storeTabActive(tab.getPosition());
@@ -269,10 +268,12 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     }
 
     public void refreshItems(boolean tabSelected) {
+
         swipe.setRefreshing(true);
         list.removeOnScrollListener(scrollListener);
         adapter.clear();
         loadNewsPackage.setPage(0);
+        presenter.parseIntent(getActivity().getIntent(),loadNewsPackage);
         presenter.onLoadItems(loadNewsPackage);
         if (tabSelected) {
             interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));

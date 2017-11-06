@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Intent;
+
 import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UiSettingRepo;
@@ -27,6 +29,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.contract.ResultTask;
+import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
 import java.util.List;
 
@@ -78,13 +81,13 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         enableControls(false);
         cancelAllTasks();
         switch (request.getMode()) {
-            case 0:
+            case EventsFragment.TAB_EVENT:
                 loadEventsTask.execute(request, new NewsSubscriber());
                 break;
-            case 1:
+            case EventsFragment.TAB_SALE:
                 loadSalesTask.execute(request, new NewsSubscriber());
                 break;
-            case 2:
+            case EventsFragment.TAB_POST:
                 loadNewsTask.execute(request, new NewsSubscriber());
                 break;
         }
@@ -109,6 +112,27 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
             likeDislikePackage.setModel(Keys.CAP_NEWS, ((Post)iLikeable).getId());
 
         likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
+    }
+
+    @Override
+    public void parseIntent(Intent intent, LoadNewsPackage loadNewsPackage) {
+
+        if(intent.hasExtra(Keys.RESTO_ID)){
+            int resto=intent.getIntExtra(Keys.RESTO_ID,0);
+            switch (loadNewsPackage.getMode()) {
+                case EventsFragment.TAB_EVENT:
+                case EventsFragment.TAB_SALE:
+                case EventsFragment.TAB_POST:
+                    if(resto!=0) {
+                        loadNewsPackage.setResto_id(String.valueOf(resto));
+                        loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                    }
+                    break;
+            }
+
+        }
+
+
     }
 
 

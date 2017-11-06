@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.container.RestoDetails;
 
 import java.util.List;
 
@@ -20,4 +19,6 @@ public interface RestoDetailView extends BasicView{
     void SubscriptionExist(boolean b);
 
     void setReviews(List<IFlexible> iFlexibles);
+
+    void setCnt(int i, int size);
 }

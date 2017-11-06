@@ -2,6 +2,7 @@ package com.brewmapp.presentation.view.impl.activity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
+import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -27,8 +29,13 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -58,6 +65,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_button_subscribe)    Button subscribe;
     @BindView(R.id.activity_resto_detail_button_call)    TextView call;
     @BindView(R.id.activity_resto_detail_button_call2)    TextView call1;
+    @BindView(R.id.text_view_call_1)    TextView number_call;
+    @BindView(R.id.text_view_call_2)    TextView number_cal2;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
     @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
     @BindView(R.id.activity_restoDetails_recycler_reviews)    RecyclerView recycler_reviews;
@@ -66,6 +75,15 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_layout_sale)    ViewGroup layout_sale;
     @BindView(R.id.activity_resto_detail_layout_photo)    ViewGroup layout_photo;
     @BindView(R.id.activity_resto_detail_layout_menu)    ViewGroup layout_menu;
+    @BindView(R.id.layout_like)    ViewGroup layout_like;
+    @BindView(R.id.layout_dislike)    ViewGroup layout_dislike;
+    @BindView(R.id.layout_fav)    ViewGroup layout_fav;
+    @BindView(R.id.view_like_counter)    TextView like_counter;
+    @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
+    @BindView(R.id.activity_restoDetails_empty_text_reviews)    TextView empty_text_reviews;
+    @BindView(R.id.activity_resto_detail_text_view_none8)    TextView cnt_sales;
+    @BindView(R.id.activity_resto_detail_text_view_none3)    TextView cnt_news;
+    @BindView(R.id.activity_resto_detail_text_view_none13)    TextView cnt_events;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -94,7 +112,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         enableBackButton();
         enableControls(false, ALL_CONTROL);
         slider.stopAutoCycle();
-        place.setOnClickListener(v -> {});
+        place.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> {presenter.startAddReviewRestoActivity(RestoDetailActivity.this);});
         adapter=new FlexibleAdapter<>(new ArrayList<>());
@@ -102,6 +120,14 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
+        layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
+        layout_photo.setOnClickListener(v -> presenter.startShowPhoto(RestoDetailActivity.this));
+        layout_like.setOnClickListener(v -> presenter.clickLike());
+        layout_dislike.setOnClickListener(v -> presenter.clickDisLike());
+        layout_fav.setOnClickListener(v -> presenter.clickFav());
+        private_message.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
+        call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
 
     }
 
@@ -182,6 +208,24 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         description.setText(Html.fromHtml(restoDetail.getResto().getText()));
         cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
 
+        try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
+        try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
+
+        try {
+            JSONObject jsonObject=new JSONObject(restoDetail.getResto().getAdditional_data());
+            JSONArray jsonArray=jsonObject.getJSONArray("phones");
+            for (int i=0;i<2;i++)
+                switch (i){
+                    case 0:
+                        number_call.setText(jsonArray.getString(i));
+                        break;
+                    case 1:
+                        number_cal2.setText(jsonArray.getString(i));
+                        break;
+                }
+
+        }catch (Exception e){};
+
         enableControls(true,ALL_CONTROL);
 
 
@@ -206,10 +250,28 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void setReviews(List<IFlexible> iFlexibles) {
 
+        empty_text_reviews.setVisibility(iFlexibles.size()==0?View.VISIBLE:View.GONE);
+        adapter.clear();
         adapter.addItems(0,iFlexibles);
         adapter.notifyDataSetChanged();
-
         recycler_reviews.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void setCnt(int size, int mode) {
+
+        switch (mode){
+            case EventsView.MODE_EVENTS:
+                cnt_events.setText(String.valueOf(size));
+                break;
+            case EventsView.MODE_NEWS:
+                cnt_news.setText(String.valueOf(size));
+                break;
+            case EventsView.MODE_SALES:
+                cnt_sales.setText(String.valueOf(size));
+                break;
+        }
 
     }
 
@@ -219,6 +281,12 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
                 if(resultCode==RESULT_OK)
                     presenter.restoreSetting();
+                return;
+            case RequestCodes.REQUEST_CODE_REVIEW_RESTO:
+                if(resultCode==RESULT_OK) {
+                    enableControls(false,ALL_CONTROL);
+                    presenter.refreshContent();
+                }
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);

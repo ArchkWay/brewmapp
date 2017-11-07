@@ -128,7 +128,13 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 presenter.onLikePost(((Post) payload));
                 break;
             case Actions.ACTION_START_DETAILS_ACTIVITY:
-                RestoDetailActivity.staticStartActivityForResult(getActivity(),(String)payload);
+                Interest interest=new Interest();
+                Interest_info interest_info=new Interest_info();
+                interest_info.setId((String)payload);
+                interest.setInterest_info(interest_info);
+                Intent intent=new Intent(getContext(), RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID,interest);
+                startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
                 break;
         }
     }

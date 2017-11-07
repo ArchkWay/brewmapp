@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -15,6 +17,7 @@ import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
+import com.brewmapp.utils.Cons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,8 +41,9 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Inject    AddInterestPresenter presenter;
 
-    private FlexibleModelAdapter<IFlexible> adapter;
 
+
+    private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
 
@@ -149,15 +153,32 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
             case InterestAddViewResto.ACTION_SELECT_INTEREST: {
                 Intent intent = new Intent(this, InterestListActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
+                intent.setAction(String.valueOf(InterestAddViewResto.ACTION_SELECT_INTEREST));
                 setResult(RESULT_OK, intent);
                 finish();
             }break;
             case InterestAddViewResto.ACTION_VIEW_INTEREST: {
                 if(payload instanceof Resto){
-                    RestoDetailActivity.staticStartActivityForResult(this,String.valueOf(((Resto)payload).getId()));
+                    Interest interest=new Interest();
+                    Interest_info interest_info=new Interest_info();
+                    interest_info.setId(String.valueOf(((Resto)payload).getId()));
+                    interest.setInterest_info(interest_info);
+                    Intent intent=new Intent(this, RestoDetailActivity.class);
+                    intent.putExtra(Keys.RESTO_ID,interest);
+                    startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
                 }
             }break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK)
+                    setResult(RESULT_OK,new Intent(String.valueOf(InterestAddViewResto.ACTION_VIEW_INTEREST)));
+                return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

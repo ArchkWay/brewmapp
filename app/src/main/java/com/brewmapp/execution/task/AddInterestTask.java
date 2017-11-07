@@ -1,10 +1,12 @@
 package com.brewmapp.execution.task;
 
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
 import java.util.concurrent.Executor;
@@ -36,7 +38,7 @@ public class AddInterestTask extends BaseNetworkTask<AddInterestPackage,String> 
                 if(addInterestPackage.getToken()!=null)
                     params.addParam(Keys.TOKEN,addInterestPackage.getToken());
                 Object o=executeCall(getApi().addInterest(params));
-                subscriber.onNext("");
+                subscriber.onNext(((Interest) ((SingleResponse) o).getData()).getId());
                 subscriber.onComplete();
             }catch (Exception e){
                 subscriber.onError(e);

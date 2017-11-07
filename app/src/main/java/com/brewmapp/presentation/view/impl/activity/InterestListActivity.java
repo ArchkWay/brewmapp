@@ -21,6 +21,7 @@ import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.view.contract.InterestListView;
+import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 import com.brewmapp.utils.Cons;
 
@@ -114,7 +115,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();
         });
 
-        sendQueryListInterests();
+        refreshInterests();
     }
 
     @Override
@@ -164,22 +165,29 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
         switch (requestCode){
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
-                    Serializable serializable=data.getSerializableExtra(getString(R.string.key_serializable_extra));
-                    if(serializable instanceof Beer) {
-                        Beer beer = (Beer) serializable;
-                        hmAdd.put(beer, beer);
-                        adapter.addItem(new InterestInfo(beer));
-                        adapter.notifyDataSetChanged();
-                    }else if(serializable instanceof Resto){
-                        Resto resto=(Resto) serializable;
-                        hmAdd.put(resto, resto);
-                        adapter.addItem(new InterestInfo(resto));
-                        adapter.notifyDataSetChanged();
-                    }else{
-                        return;
+                    switch (Integer.valueOf(data.getAction())){
+                        case InterestAddViewResto.ACTION_VIEW_INTEREST:
+                            setResult(RESULT_OK);
+                            refreshInterests();
+                            return;
+                        case InterestAddViewResto.ACTION_SELECT_INTEREST:
+                            Serializable serializable = data.getSerializableExtra(getString(R.string.key_serializable_extra));
+                            if (serializable instanceof Beer) {
+                                Beer beer = (Beer) serializable;
+                                hmAdd.put(beer, beer);
+                                adapter.addItem(new InterestInfo(beer));
+                                adapter.notifyDataSetChanged();
+                            } else if (serializable instanceof Resto) {
+                                Resto resto = (Resto) serializable;
+                                hmAdd.put(resto, resto);
+                                adapter.addItem(new InterestInfo(resto));
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                return;
+                            }
+                            visibleTextSave();
+                            return;
                     }
-                    visibleTextSave();
-                    return;
                 }
                 break;
             case Cons.REQUEST_CODE_REFRESH_ITEMS:{
@@ -216,10 +224,10 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     @Override
     public void refreshItems() {
         swipe.setRefreshing(true);
-        sendQueryListInterests();
+        refreshInterests();
     }
 
-    public void sendQueryListInterests() {
+    public void refreshInterests() {
         hmAdd.clear();hmRemove.clear();
         swipe.setRefreshing(true);
         visibleTextSave();

@@ -305,14 +305,4 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public static void staticStartActivityForResult(Activity activity, String resto_id) {
-        Interest interest=new Interest();
-        Interest_info interest_info=new Interest_info();
-        interest_info.setId(resto_id);
-        interest.setInterest_info(interest_info);
-        Intent intent=new Intent(activity, RestoDetailActivity.class);
-        intent.putExtra(Keys.RESTO_ID,interest);
-        activity.startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
-
-    }
 }

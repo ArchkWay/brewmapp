@@ -9,6 +9,7 @@ import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Subscription;
+import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
@@ -336,8 +337,12 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                         super.onNext(iFlexibles);
                         holderData.setFavReso(iFlexibles.size()>0);
                         view.setFav(holderData.isFavReso());
+                        if(holderData.isFavReso()) {
+                            holderData.setId_interest(((InterestInfo) iFlexibles.get(0)).getModel().getId());
+                        }else {
+                            holderData.setId_interest(null);
+                        }
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
@@ -408,11 +413,13 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     public void clickFav() {
         //view.showMessage(context.getString(R.string.message_develop),0);
         if(holderData.isFavReso()){
-            removeInterestTask.execute(String.valueOf(restoDetail.getResto().getId()),new SimpleSubscriber<String>(){
+            removeInterestTask.execute(String.valueOf(holderData.getId_interest()),new SimpleSubscriber<String>(){
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    view.setFav(false);
+                    holderData.setFavReso(false);
+                    holderData.setId_interest(null);
+                    view.setFav(holderData.isFavReso());
                 }
 
                 @Override
@@ -429,7 +436,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    view.setFav(true);
+                    holderData.setId_interest(s);
+                    holderData.setFavReso(true);
+                    view.setFav(holderData.isFavReso());
                 }
 
                 @Override
@@ -444,8 +453,17 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     class HolderData {
         private boolean favReso;
+        private String id_interest;
         private int activeFragment;
         private int activeTabFragment;
+
+        public String getId_interest() {
+            return id_interest;
+        }
+
+        public void setId_interest(String id_interest) {
+            this.id_interest = id_interest;
+        }
 
         public boolean isFavReso() {
             return favReso;

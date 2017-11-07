@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
@@ -118,7 +119,7 @@ public interface Api {
 
     @POST("userinterest/add")
     @FormUrlEncoded
-    Call<Object> addInterest(@FieldMap WrapperParams params);
+    Call<SingleResponse<Interest>> addInterest(@FieldMap WrapperParams params);
 
     @POST("reviews/add")
     @FormUrlEncoded

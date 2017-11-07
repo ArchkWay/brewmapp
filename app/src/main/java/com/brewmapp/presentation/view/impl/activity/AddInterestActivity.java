@@ -8,11 +8,13 @@ import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
+import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -143,10 +145,19 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     }
 
     private void processAction(int action, Object payload) {
-        Intent intent=new Intent(this,InterestListActivity.class);
-        intent.putExtra(getString(R.string.key_serializable_extra),(Serializable) payload);
-        setResult(RESULT_OK,intent);
-        finish();
+        switch (action){
+            case InterestAddViewResto.ACTION_SELECT_INTEREST: {
+                Intent intent = new Intent(this, InterestListActivity.class);
+                intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
+                setResult(RESULT_OK, intent);
+                finish();
+            }break;
+            case InterestAddViewResto.ACTION_VIEW_INTEREST: {
+                if(payload instanceof Resto){
+                    RestoDetailActivity.staticStartActivityForResult(this,String.valueOf(((Resto)payload).getId()));
+                }
+            }break;
+        }
     }
 
 }

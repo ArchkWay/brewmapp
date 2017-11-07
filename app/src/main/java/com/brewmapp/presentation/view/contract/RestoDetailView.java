@@ -21,4 +21,6 @@ public interface RestoDetailView extends BasicView{
     void setReviews(List<IFlexible> iFlexibles);
 
     void setCnt(int i, int size);
+
+    void setFav(boolean b);
 }

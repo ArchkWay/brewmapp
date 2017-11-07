@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,11 +14,14 @@ import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -24,6 +29,7 @@ import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
+import com.brewmapp.utils.Cons;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -84,6 +90,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_none8)    TextView cnt_sales;
     @BindView(R.id.activity_resto_detail_text_view_none3)    TextView cnt_news;
     @BindView(R.id.activity_resto_detail_text_view_none13)    TextView cnt_events;
+    @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -276,6 +283,12 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     }
 
     @Override
+    public void setFav(boolean b) {
+        fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
+        setResult(RESULT_OK);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
@@ -290,5 +303,16 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public static void staticStartActivityForResult(Activity activity, String resto_id) {
+        Interest interest=new Interest();
+        Interest_info interest_info=new Interest_info();
+        interest_info.setId(resto_id);
+        interest.setInterest_info(interest_info);
+        Intent intent=new Intent(activity, RestoDetailActivity.class);
+        intent.putExtra(Keys.RESTO_ID,interest);
+        activity.startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
+
     }
 }

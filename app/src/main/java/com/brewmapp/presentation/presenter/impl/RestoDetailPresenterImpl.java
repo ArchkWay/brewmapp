@@ -9,7 +9,9 @@ import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Subscription;
+import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LikeDislikePackage;
+import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
@@ -17,14 +19,17 @@ import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.DisLikeTask;
 import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadEventsTask;
+import com.brewmapp.execution.task.LoadInterestTask;
 import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.LoadReviewsTask;
 import com.brewmapp.execution.task.LoadSalesTask;
 import com.brewmapp.execution.task.LoadSubscriptionsListTask;
+import com.brewmapp.execution.task.RemoveInterestTask;
 import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
@@ -51,6 +56,9 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
 
     private Context context;
+    private LoadInterestTask loadInterestTask;
+    private AddInterestTask addInterestTask;
+    private RemoveInterestTask removeInterestTask;
     private LikeTask likeTask;
     private DisLikeTask disLikeTask;
     private LoadSalesTask loadSalesTask;
@@ -64,14 +72,28 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private LoadSubscriptionsListTask loadSubscriptionsListTask;
     private LoadReviewsTask loadReviewsTask;
     private String IdSubscription=null;
-    private HolserData holserData=new HolserData();
+    private HolderData holderData =new HolderData();
 
     public void setRestoDetail(RestoDetail restoDetail) {
         this.restoDetail = restoDetail;
     }
 
     @Inject
-    public RestoDetailPresenterImpl(Context context,LoadRestoDetailTask loadRestoDetailTask, SubscriptionOnTask subscriptionOnTask, LoadSubscriptionsListTask loadSubscriptionsListTask, SubscriptionOffTask subscriptionOffTask,LoadReviewsTask loadReviewsTask,UiSettingRepo uiSettingRepo,LoadSalesTask loadSalesTask,LoadNewsTask loadNewsTask,LoadEventsTask loadEventsTask,LikeTask likeTask){
+    public RestoDetailPresenterImpl(
+            Context context,
+            LoadRestoDetailTask loadRestoDetailTask,
+            SubscriptionOnTask subscriptionOnTask,
+            LoadSubscriptionsListTask loadSubscriptionsListTask,
+            SubscriptionOffTask subscriptionOffTask,
+            LoadReviewsTask loadReviewsTask,
+            UiSettingRepo uiSettingRepo,
+            LoadSalesTask loadSalesTask,
+            LoadNewsTask loadNewsTask,
+            LoadEventsTask loadEventsTask,
+            LikeTask likeTask,
+            AddInterestTask addInterestTask,
+            LoadInterestTask loadInterestTask,
+            RemoveInterestTask removeInterestTask){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -83,7 +105,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.loadEventsTask= loadEventsTask;
         this.loadNewsTask= loadNewsTask;
         this.likeTask= likeTask;
-
+        this.addInterestTask= addInterestTask;
+        this.loadInterestTask= loadInterestTask;
+        this.removeInterestTask=removeInterestTask;
     }
 
     @Override
@@ -160,7 +184,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab) {
-        holserData.storeUiSetting();
+        holderData.storeUiSetting();
         Intent intent=new Intent(
                 RequestCodes.ACTION_SHOW_EVENT_FRAGMENT,
                 null,
@@ -173,7 +197,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void restoreSetting() {
-        holserData.restoreUiSetting();
+        holderData.restoreUiSetting();
     }
 
     private void loadEverything(String id) {
@@ -291,6 +315,27 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     public void onNext(List<IFlexible> flexibleList) {
                         super.onNext(flexibleList);
                         view.setCnt(flexibleList.size(), EventsView.MODE_EVENTS);
+                        loadFav();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+
+            }
+            private void loadFav() {
+                LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
+                loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
+                loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+                loadInterestTask.execute(loadInterestPackage ,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> iFlexibles) {
+                        super.onNext(iFlexibles);
+                        holderData.setFavReso(iFlexibles.size()>0);
+                        view.setFav(holderData.isFavReso());
                     }
 
                     @Override
@@ -361,13 +406,54 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void clickFav() {
-        view.showMessage(context.getString(R.string.message_develop),0);
+        //view.showMessage(context.getString(R.string.message_develop),0);
+        if(holderData.isFavReso()){
+            removeInterestTask.execute(String.valueOf(restoDetail.getResto().getId()),new SimpleSubscriber<String>(){
+                @Override
+                public void onNext(String s) {
+                    super.onNext(s);
+                    view.setFav(false);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    view.showMessage(e.getMessage(), 0);
+                }
+            });
+        }else {
+            AddInterestPackage addInterestPackage = new AddInterestPackage();
+            addInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+            addInterestPackage.setRelated_model(Keys.CAP_RESTO);
+            addInterestTask.execute(addInterestPackage, new SimpleSubscriber<String>() {
+                @Override
+                public void onNext(String s) {
+                    super.onNext(s);
+                    view.setFav(true);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    view.showMessage(e.getMessage(), 0);
+                }
+            });
+        }
     }
 
 
-    class HolserData{
+    class HolderData {
+        private boolean favReso;
         private int activeFragment;
         private int activeTabFragment;
+
+        public boolean isFavReso() {
+            return favReso;
+        }
+
+        public void setFavReso(boolean favReso) {
+            this.favReso = favReso;
+        }
 
         public int getActiveFragment() {
             return activeFragment;

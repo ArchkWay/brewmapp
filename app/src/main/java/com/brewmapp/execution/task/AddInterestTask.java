@@ -33,7 +33,8 @@ public class AddInterestTask extends BaseNetworkTask<AddInterestPackage,String> 
                 WrapperParams params = new WrapperParams(Wrappers.USER_INTEREST);
                 params.addParam(Keys.RELATED_MODEL,addInterestPackage.getRelated_model());
                 params.addParam(Keys.RELATED_ID,addInterestPackage.getRelated_id());
-                params.addParam(Keys.TOKEN,addInterestPackage.getToken());
+                if(addInterestPackage.getToken()!=null)
+                    params.addParam(Keys.TOKEN,addInterestPackage.getToken());
                 Object o=executeCall(getApi().addInterest(params));
                 subscriber.onNext("");
                 subscriber.onComplete();

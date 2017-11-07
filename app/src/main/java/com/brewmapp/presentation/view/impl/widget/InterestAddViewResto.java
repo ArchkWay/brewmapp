@@ -26,9 +26,13 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
+    @BindView(R.id.view_interest_button_select)    ImageView arrow_right;
 
     private Resto resto;
     private Listener listener;
+
+    public final static int ACTION_SELECT_INTEREST=0;
+    public final static int ACTION_VIEW_INTEREST=1;
 
     public InterestAddViewResto(Context context) {
         super(context);
@@ -63,7 +67,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         title.setText(resto.getName());
         shot_text.setText(resto.getAdressFormat());
 
-        setOnClickListener(v -> listener.onModelAction(0, resto));
+        setOnClickListener(v -> listener.onModelAction(ACTION_VIEW_INTEREST, resto));
+        arrow_right.setOnClickListener(v -> listener.onModelAction(ACTION_SELECT_INTEREST, resto));
     }
 
     @Override

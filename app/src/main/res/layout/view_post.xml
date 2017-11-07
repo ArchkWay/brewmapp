@@ -79,6 +79,7 @@
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph.Italic"
             android:id="@+id/view.post.container.repost.name"
+            android:text="@string/text_view_value_not_found"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +87,7 @@
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph"
-            android:text="shot text репоста"
+            android:text="@string/text_view_value_not_found"
             android:id="@+id/view.post.container.repost.text"
             />
         <ImageView

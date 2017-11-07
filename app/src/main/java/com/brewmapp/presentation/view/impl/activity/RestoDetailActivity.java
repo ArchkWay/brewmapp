@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.AverageEvaluation;
+import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Kitchen;
@@ -62,10 +64,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_restoDetails_slider_photosCounter)    TextView photosCounter;
     @BindView(R.id.activity_resto_detail_text_view_site)    TextView site;
     @BindView(R.id.activity_resto_detail_text_view_description)    TextView description;
-    //@BindView(R.id.activity_resto_detail_text_view_interior)    TextView interior;
-    //@BindView(R.id.activity_resto_detail_text_view_service)    TextView service;
-    //@BindView(R.id.activity_resto_detail_text_view_quality_beer)    TextView beer;
-    //@BindView(R.id.activity_resto_detail_text_view_common_effect)    TextView effect;
+    @BindView(R.id.activity_resto_detail_text_view_interior)    TextView interior;
+    @BindView(R.id.activity_resto_detail_text_view_service)    TextView service;
+    @BindView(R.id.activity_resto_detail_text_view_quality_beer)    TextView beer;
+    @BindView(R.id.activity_resto_detail_text_view_common_effect)    TextView effect;
     @BindView(R.id.activity_resto_detail_text_view_avg_cost)    TextView cost;
     @BindView(R.id.activity_resto_detail_button_private_message)    Button private_message;
     @BindView(R.id.activity_resto_detail_button_subscribe)    Button subscribe;
@@ -90,6 +92,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_none8)    TextView cnt_sales;
     @BindView(R.id.activity_resto_detail_text_view_none3)    TextView cnt_news;
     @BindView(R.id.activity_resto_detail_text_view_none13)    TextView cnt_events;
+    @BindView(R.id.activity_resto_detail_text_view_none23)    TextView cnt_photo;
     @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
 
     @BindViews({
@@ -121,14 +124,14 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         slider.stopAutoCycle();
         place.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
-        button_revew.setOnClickListener(view -> {presenter.startAddReviewRestoActivity(RestoDetailActivity.this);});
+        button_revew.setOnClickListener(view -> presenter.startAddReviewRestoActivity(RestoDetailActivity.this));
         adapter=new FlexibleAdapter<>(new ArrayList<>());
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
         layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
-        layout_photo.setOnClickListener(v -> presenter.startShowPhoto(RestoDetailActivity.this));
+        layout_photo.setOnClickListener(v -> presenter.startShowPhoto(RestoDetailActivity.this,photosResto));
         layout_like.setOnClickListener(v -> presenter.clickLike());
         layout_dislike.setOnClickListener(v -> presenter.clickDisLike());
         layout_fav.setOnClickListener(v -> presenter.clickFav());
@@ -206,6 +209,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                     photosCounter.setText(String.format("%d/%d", position + 1, photosResto.size()));
                 }
             });
+            cnt_photo.setText(String.valueOf(photosResto.size()));
         }else {
             pagerIndicator.setVisibility(View.GONE);
             photosCounter.setText("0/0");
@@ -232,9 +236,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 }
 
         }catch (Exception e){};
-
-        enableControls(true,ALL_CONTROL);
-
 
 
     }
@@ -286,6 +287,27 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void setFav(boolean b) {
         fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
         setResult(RESULT_OK);
+    }
+
+    @Override
+    public void AverageEvaluation(List<AverageEvaluation> evaluations) {
+        for (AverageEvaluation averageEvaluation:evaluations)
+            switch (averageEvaluation.getEvaluation_type_id()){
+                case "1":
+                    interior.setText(averageEvaluation.getAverage_value());
+                    break;
+                case "2":
+                    service.setText(averageEvaluation.getAverage_value());
+                    break;
+                case "3":
+                    beer.setText(averageEvaluation.getAverage_value());
+                    break;
+                case "4":
+                    effect.setText(averageEvaluation.getAverage_value());
+                    break;
+            }
+
+        enableControls(true,ALL_CONTROL);
     }
 
     @Override

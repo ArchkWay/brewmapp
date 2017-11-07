@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UiSettingRepo;
+import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Subscription;
@@ -15,6 +16,7 @@ import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
+import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -23,6 +25,7 @@ import com.brewmapp.execution.exchange.response.base.MessageResponse;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.DisLikeTask;
 import com.brewmapp.execution.task.LikeTask;
+import com.brewmapp.execution.task.LoadRestoAverageEvaluationTask;
 import com.brewmapp.execution.task.LoadEventsTask;
 import com.brewmapp.execution.task.LoadInterestTask;
 import com.brewmapp.execution.task.LoadNewsTask;
@@ -38,8 +41,10 @@ import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
+import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,6 +62,7 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
 
     private Context context;
+    private LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask;
     private LoadInterestTask loadInterestTask;
     private AddInterestTask addInterestTask;
     private RemoveInterestTask removeInterestTask;
@@ -94,7 +100,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             LikeTask likeTask,
             AddInterestTask addInterestTask,
             LoadInterestTask loadInterestTask,
-            RemoveInterestTask removeInterestTask){
+            RemoveInterestTask removeInterestTask,
+            LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -109,6 +116,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.addInterestTask= addInterestTask;
         this.loadInterestTask= loadInterestTask;
         this.removeInterestTask=removeInterestTask;
+        this.loadRestoAverageEvaluationTask=loadRestoAverageEvaluationTask;
     }
 
     @Override
@@ -342,6 +350,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                         }else {
                             holderData.setId_interest(null);
                         }
+                        loadAvegagEvaluation();
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -350,6 +359,24 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     }
                 });
 
+            }
+            private void loadAvegagEvaluation() {
+                RestoAverageEvaluationPackage restoAverageEvaluationPackage=new RestoAverageEvaluationPackage();
+                restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadRestoAverageEvaluationTask.execute(restoAverageEvaluationPackage,new SimpleSubscriber<List<AverageEvaluation>>(){
+                    @Override
+                    public void onNext(List<AverageEvaluation> evaluations) {
+                        super.onNext(evaluations);
+                        view.AverageEvaluation(evaluations);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
             }
         });
 
@@ -361,7 +388,14 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     }
 
     @Override
-    public void startShowPhoto(RestoDetailActivity restoDetailActivity) {
+    public void startShowPhoto(RestoDetailActivity restoDetailActivity, ArrayList<String> photosResto) {
+
+        Intent intent = new Intent(restoDetailActivity, PhotoSliderActivity.class);
+        String[] urls = new String[photosResto.size()];
+        photosResto.toArray(urls);
+        intent.putExtra(Keys.PHOTOS, urls);
+        restoDetailActivity.startActivity(intent);
+
         view.showMessage(context.getString(R.string.message_develop),0);
     }
 

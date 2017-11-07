@@ -61,9 +61,11 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         switch (getIntent().getAction()){
             case Keys.CAP_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
+                setTitle(R.string.action_find_beer);
                 break;
             case Keys.CAP_RESTO:
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
+                setTitle(R.string.action_find_resto);
                 break;
         }
 
@@ -82,7 +84,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         recyclerview.setAdapter(adapter);
         swipe.setOnRefreshListener(this::refreshItems);
-        setTitle(R.string.action_add);
+
     }
 
     private void prepareQuery(String stringSearch) {

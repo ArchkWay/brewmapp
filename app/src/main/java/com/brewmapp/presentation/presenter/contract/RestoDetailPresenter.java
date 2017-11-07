@@ -5,6 +5,8 @@ import android.content.Intent;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
+import java.util.ArrayList;
+
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 /**
@@ -25,7 +27,7 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
     void startShowMenu(RestoDetailActivity restoDetailActivity);
 
-    void startShowPhoto(RestoDetailActivity restoDetailActivity);
+    void startShowPhoto(RestoDetailActivity restoDetailActivity, ArrayList<String> photosResto);
 
     void refreshContent();
 

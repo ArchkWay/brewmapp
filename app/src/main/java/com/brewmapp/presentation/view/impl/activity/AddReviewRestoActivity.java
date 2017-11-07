@@ -45,7 +45,6 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
 
     @Inject    AddReviewRestoPresenter presenter;
 
-
     private final int ALL_CONTROL =0;
     private final int EVALUATION_CONTROL =1;
     private final int TEXT_EDIT_CONTROL =2;

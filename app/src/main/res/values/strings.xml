@@ -292,5 +292,7 @@
     <string name="text_edit_hint_your_review">Введите техт отзыва</string>
     <string name="message_develop">Функция в разработке</string>
     <string name="assessment_has_already_been_taken">Ваша оценка уже была  принята ранее</string>
+    <string name="action_find_resto">Поиск заведения</string>
+    <string name="action_find_beer">Поиск пива</string>
 
 </resources>

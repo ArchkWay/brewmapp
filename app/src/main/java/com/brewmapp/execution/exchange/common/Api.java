@@ -12,6 +12,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
+import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
@@ -264,6 +265,11 @@ public interface Api {
     @POST("/api/resto/restoevaluation")
     @FormUrlEncoded
     Call<ListResponse<Evaluation>> getRestoEvaluation(@FieldMap WrapperParams params);
+
+    @POST("/api/resto/restoaveragevalue")
+    @FormUrlEncoded
+    Call<ListResponse<AverageEvaluation>> getRestoAverageEvaluation(@FieldMap WrapperParams params);
+
 
     @POST("/api/resto/restoevaluation/add")
     @FormUrlEncoded

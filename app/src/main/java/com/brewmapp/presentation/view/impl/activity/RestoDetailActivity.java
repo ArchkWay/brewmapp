@@ -122,7 +122,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         enableBackButton();
         enableControls(false, ALL_CONTROL);
         slider.stopAutoCycle();
-        place.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        place.setOnClickListener(v -> presenter.startMapFragment(RestoDetailActivity.this));
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> presenter.startAddReviewRestoActivity(RestoDetailActivity.this));
         adapter=new FlexibleAdapter<>(new ArrayList<>());
@@ -314,6 +314,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
+            case RequestCodes.REQUEST_MAP_FRAGMENT:
                 if(resultCode==RESULT_OK)
                     presenter.restoreSetting();
                 return;

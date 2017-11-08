@@ -484,6 +484,14 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
     }
 
+    @Override
+    public void startMapFragment(RestoDetailActivity restoDetailActivity) {
+        holderData.storeUiSetting();
+        Intent intent=new Intent(RequestCodes.ACTION_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
+//        intent.putExtra(Keys.RESTO_ID,restoDetail.getResto().getId());
+//        intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+        restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
+    }
 
     class HolderData {
         private boolean favReso;

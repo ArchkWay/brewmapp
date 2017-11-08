@@ -191,8 +191,10 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                 }
                 break;
             case Cons.REQUEST_CODE_REFRESH_ITEMS:{
-                if(resultCode==RESULT_OK)
+                if(resultCode==RESULT_OK) {
                     setResult(RESULT_OK);
+                    refreshInterests();
+                }
             }break;
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -14,8 +14,10 @@ public class RequestCodes {
     public static final int REQUEST_CODE_MAP_REFRESH = 3;
     public static final int REQUEST_CODE_REVIEW_RESTO = 117;
     public static final int REQUEST_SHOW_EVENT_FRAGMENT = 118;
+    public static final int REQUEST_MAP_FRAGMENT = 119;
 
 
     public static final String ACTION_SHOW_EVENT_FRAGMENT = "show_news_resto";
+    public static final String ACTION_MAP_FRAGMENT = "show_map";
     public static final String INTENT_EXTRAS = "extras";
 }

@@ -36,4 +36,6 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void clickDisLike();
 
     void clickFav();
+
+    void startMapFragment(RestoDetailActivity restoDetailActivity);
 }

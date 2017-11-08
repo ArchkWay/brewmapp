@@ -90,6 +90,10 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             navigator.storeCodeActiveFragment(MenuField.EVENTS);
             navigator.storeCodeTebEventFragment(getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT));
             setResult(RESULT_OK);
+        }else if(getIntent().getAction().equals(RequestCodes.ACTION_MAP_FRAGMENT)){
+            enableBackButton();
+            navigator.storeCodeActiveFragment(MenuField.MAP);
+            setResult(RESULT_OK);
         }
     }
 
@@ -153,7 +157,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
-        processSetActionBar(0);
+        if(menuToShow ==0 )        processSetActionBar(0);
         navigator.setActionBarItemDelegate(fragment);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -220,12 +224,13 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                return super.onOptionsItemSelected(item);
-            default:
-                return navigator.onOptionsItemSelected(item);
-        }
+//        switch (item.getItemId()){
+//            case android.R.id.home:
+//                return super.onOptionsItemSelected(item);
+//            default:
+//              return navigator.onOptionsItemSelected(item);
+//        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

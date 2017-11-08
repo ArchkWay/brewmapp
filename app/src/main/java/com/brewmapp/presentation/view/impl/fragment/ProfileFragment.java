@@ -6,11 +6,15 @@ import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Post;
@@ -19,6 +23,7 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
@@ -120,6 +125,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         posts_subs.setLayoutManager(manager);
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         //posts_subs.setAdapter(postAdapter);
+        setHasOptionsMenu(true);
+
     }
 
     private void processAction(int action, Object payload) {
@@ -245,6 +252,17 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         else
             presenter.onLoadPosts(loadPostsPackage);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_create:
+                startActivityForResult(new Intent(getActivity(), ProfileInfoActivity.class), Cons.REQUEST_CODE_REFRESH_ITEMS);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

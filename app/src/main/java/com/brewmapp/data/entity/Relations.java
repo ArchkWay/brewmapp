@@ -25,6 +25,8 @@ public class Relations implements Serializable {
     private Brewery Brewery=new Brewery();
     private ProductDensity productDensity=new ProductDensity();
 
+    @SerializedName("City")
+    private com.brewmapp.data.entity.City mCity;
     @SerializedName("Country")
     private com.brewmapp.data.entity.Country mCountry;
     @SerializedName("Metro")
@@ -34,6 +36,22 @@ public class Relations implements Serializable {
 
     public ProductDensity getProductDensity() {
         return productDensity;
+    }
+
+    public City getmCity() {
+        return mCity;
+    }
+
+    public void setmCity(City mCity) {
+        this.mCity = mCity;
+    }
+
+    public Country getmCountry() {
+        return mCountry;
+    }
+
+    public void setmCountry(Country mCountry) {
+        this.mCountry = mCountry;
     }
 
     public void setProductDensity(ProductDensity productDensity) {

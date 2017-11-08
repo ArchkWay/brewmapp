@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.entity.User;
+
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -7,4 +9,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface ProfileInfoView extends BasicView {
+    void refreshUserProfile(User load);
 }

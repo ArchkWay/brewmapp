@@ -294,5 +294,9 @@
     <string name="assessment_has_already_been_taken">Ваша оценка уже была  принята ранее</string>
     <string name="action_find_resto">Поиск заведения</string>
     <string name="action_find_beer">Поиск пива</string>
+    <string name="text_view_common_info">Общая информация</string>
+    <string name="text_view_simple_country">Страна</string>
+    <string name="text_view_simple_city">Город</string>
+    <string name="text_view_simple_marital_status">Семейное положение</string>
 
 </resources>

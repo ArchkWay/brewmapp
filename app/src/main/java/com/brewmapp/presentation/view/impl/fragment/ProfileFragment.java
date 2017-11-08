@@ -189,6 +189,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         photosCounter.setCount(profile.getUser().getCounts().getPhotos());
         subscribesCounter.setCount(profile.getUser().getSubscriptionsCount());
         subscribersCounter.setCount(profile.getUser().getCounts().getSubscribers());
+        city.setText(profile.getUser().getFormattedPlace());
     }
 
     @Override

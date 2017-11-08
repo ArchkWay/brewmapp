@@ -27,6 +27,7 @@ public class RestoType implements Serializable, IFilterable {
     private String Name;
     @SerializedName("relations")
     private List<Relations> Relations;
+    private boolean selected;
 
     public String getGetThumb() {
         if(getThumb != null && !getThumb.startsWith("http")) {
@@ -74,5 +75,13 @@ public class RestoType implements Serializable, IFilterable {
     @Override
     public boolean filter(String constraint) {
         return getName().contains(constraint);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

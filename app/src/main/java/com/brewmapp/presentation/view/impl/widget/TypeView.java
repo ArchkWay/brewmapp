@@ -3,7 +3,9 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -26,12 +28,12 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 01.11.2017.
  */
 
-public class TypeView extends BaseLinearLayout implements ModelView<RestoType> {
+public class TypeView extends BaseLinearLayout implements ModelView<RestoType>, View.OnClickListener {
 
     @BindView(R.id.title) TextView title;
     @BindView(R.id.logo) ImageView logoRestoType;
     @BindView(R.id.chkbox) CheckBox restoTypeCheckbox;
-    @BindView(R.id.view_root) TypeView viewRoot;
+    @BindView(R.id.container) ConstraintLayout viewRoot;
 
     private RestoType model;
 
@@ -54,6 +56,7 @@ public class TypeView extends BaseLinearLayout implements ModelView<RestoType> {
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
+        viewRoot.setOnClickListener(this);
     }
 
     @Override
@@ -67,6 +70,19 @@ public class TypeView extends BaseLinearLayout implements ModelView<RestoType> {
         title.setText(model.getName());
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.container) {
+            if (!restoTypeCheckbox.isChecked()) {
+                model.setSelected(true);
+                restoTypeCheckbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                restoTypeCheckbox.setChecked(false);
+            }
         }
     }
 }

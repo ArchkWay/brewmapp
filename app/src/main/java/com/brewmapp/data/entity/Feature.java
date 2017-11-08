@@ -22,6 +22,7 @@ public class Feature implements Serializable {
     private String Name;
     @SerializedName("relations")
     private List<Relations> Relations;
+    private boolean selected;
 
     public String getGetThumb() {
         if(getThumb != null && !getThumb.startsWith("http")) {
@@ -66,4 +67,11 @@ public class Feature implements Serializable {
         Relations = relations;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

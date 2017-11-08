@@ -97,6 +97,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
 
     @Override
     public boolean onItemClick(int position) {
+        Log.i("itemClick", "checkClickItem");
         Intent intent = new Intent(this, FilterByCategory.class);
         intent.putExtra(Keys.FILTER_CATEGORY, position);
         startActivityForResult(intent, RequestCodes.REQUEST_FILTER_CATEGORY);

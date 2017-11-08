@@ -253,6 +253,8 @@
     <string name="search_resto_city">Где искать</string>
     <string name="search_resto_metro">Метро</string>
     <string name="search_resto_other">Доп. параметры</string>
+    <string name="select_country">Выберите страну</string>
+    <string name="select_metro">Выберите метро</string>
     <string name="text_view_flavor">Аромат:</string>
     <string name="text_view_taste">Вкус:</string>
     <string name="text_view_quality_color">Цвет:</string>

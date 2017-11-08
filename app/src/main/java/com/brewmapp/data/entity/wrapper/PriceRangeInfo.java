@@ -13,7 +13,7 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  * Created by nixus on 03.11.2017.
  */
 
-public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements  IFilterable {
+public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements IFilterable {
 
     @Override
     public int getLayoutRes() {
@@ -23,5 +23,9 @@ public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> impl
     @Override
     public boolean filter(String constraint) {
         return getModel().getName().toLowerCase().contains(constraint);
+    }
+
+    public boolean isSelected() {
+        return getModel().isSelected();
     }
 }

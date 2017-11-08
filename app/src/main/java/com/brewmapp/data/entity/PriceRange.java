@@ -27,6 +27,7 @@ public class PriceRange implements Serializable {
     private String Name;
     @SerializedName("relations")
     private List<Relations> Relations;
+    private boolean selected;
 
     public String getGetThumb() {
         if(getThumb != null && !getThumb.startsWith("http")) {
@@ -77,5 +78,13 @@ public class PriceRange implements Serializable {
 
     public void setRelations(List<Relations> relations) {
         Relations = relations;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

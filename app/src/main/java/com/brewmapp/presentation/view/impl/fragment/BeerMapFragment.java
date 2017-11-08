@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -12,6 +13,7 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -50,6 +52,7 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
+import static com.brewmapp.execution.exchange.request.base.Keys.PARENT_INFO;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
@@ -57,14 +60,36 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
  */
 
 public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback,
-                                                                 GoogleMap.OnInfoWindowClickListener {
+        GoogleMap.OnInfoWindowClickListener {
 
-    @BindView(R.id.fragment_map_map) MapView mapView;
+    @BindView(R.id.fragment_map_map)
+    MapView mapView;
 
-    @Inject BeerMapPresenter presenter;
+    @Inject
+    BeerMapPresenter presenter;
 
     private GoogleMap googleMap;
     private Marker marker;
+    private RestoLocation location;
+
+
+    public static BeerMapFragment newInstance(RestoLocation restoLocation) {
+        BeerMapFragment fragment = new BeerMapFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Keys.LOCATION, restoLocation);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            location = (RestoLocation) arguments.getSerializable(Keys.LOCATION);
+        }
+    }
+
 
     @Override
     protected int getFragmentLayout() {
@@ -128,7 +153,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        lookForLocation();
         googleMap.setMyLocationEnabled(true);
         googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity()));
         googleMap.setOnInfoWindowClickListener(this);
@@ -142,10 +166,28 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.setOnMapClickListener(latLng -> {
             presenter.onGeocodeRequest(latLng);
         });
+
+        if (location != null) {
+            setSingleMarker();
+        } else {
+            lookForLocation();
+        }
+    }
+
+    private void setSingleMarker() {
+        if (marker != null) marker.remove();
+        MarkerOptions markerOptions = new MarkerOptions()
+                .title(location.getName())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
+                .snippet(String.valueOf(location.getId()))
+                .position(new LatLng(location.getLocation_lat(), location.getLocation_lon()));
+
+        googleMap.addMarker(markerOptions);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLocation_lat(),location.getLocation_lon()) , 15));
     }
 
     private void setMarker(List<RestoLocation> restoLocationList) {
-        if(marker != null) marker.remove();
+        if (marker != null) marker.remove();
         for (RestoLocation restoLocation : restoLocationList) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .title(restoLocation.getName())

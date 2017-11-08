@@ -24,6 +24,13 @@ public class RestoLocation implements ICommonItem, Serializable {
     @SerializedName(Keys.LOCATION_ID)
     private int locationId;
 
+    public RestoLocation(int id, String name, double location_lon, double location_lat) {
+        this.id = id;
+        this.name = name;
+        this.location_lon = location_lon;
+        this.location_lat = location_lat;
+    }
+
     public String getThumb() {
         if(thumb != null && !thumb.startsWith("http")) {
             thumb = BuildConfig.SERVER_ROOT_URL + thumb;

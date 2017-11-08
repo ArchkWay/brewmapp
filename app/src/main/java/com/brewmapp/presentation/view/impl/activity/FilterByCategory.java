@@ -65,7 +65,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     protected void initView() {
         enableBackButton();
         fullSearchPackage = new FullSearchPackage();
-
         LinearLayoutManager manager = new LinearLayoutManager(this);
         list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setLayoutManager(manager);
@@ -77,19 +76,22 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     private void initFilterByCategory(int filterId) {
         switch (filterId) {
             case 0:
-                setTitle(R.string.search);
+                setTitle(R.string.search_resto_name);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
             case 1:
-                setTitle(R.string.new_post);
+                setTitle(R.string.search_resto_type);
                 presenter.loadRestoTypes();
                 break;
             case 3:
+                setTitle(R.string.search_resto_kitchen);
                 presenter.loadKitchenTypes();
                 break;
             case 4:
+                setTitle(R.string.search_resto_price);
                 presenter.loadPriceRangeTypes();
                 break;
             case 7:
+                setTitle(R.string.search_resto_other);
                 presenter.loadFeatureTypes();
                 break;
                 default:

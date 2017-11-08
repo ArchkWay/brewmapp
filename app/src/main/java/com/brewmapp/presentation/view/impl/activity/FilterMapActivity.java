@@ -19,12 +19,14 @@ import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 

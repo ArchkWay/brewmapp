@@ -105,6 +105,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             }
         });
     }
+
     @Override
     public void onLoadSubscription(LoadPostsPackage loadPostsPackage) {
         loadSubscriptionsItemsTask.execute(0,new SimpleSubscriber<Subscriptions>(){
@@ -124,7 +125,6 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             }
         });
     }
-
 
     @Override
     public void onLikePost(Post post) {

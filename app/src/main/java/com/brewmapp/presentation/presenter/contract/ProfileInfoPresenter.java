@@ -9,4 +9,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface ProfileInfoPresenter extends LivePresenter<ProfileInfoView> {
+
 }

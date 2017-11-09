@@ -1,0 +1,139 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileInfoFragment">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSplitter"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorDecorBgGray"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile.info.activity.profile.info"
+            android:textSize="@dimen/text_size_big_phone"
+            android:layout_marginBottom="@dimen/common_block_space_half"
+            style="@style/AppTheme.Text.Georgia.Italic"
+            android:text="@string/text_view_common_info"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+
+            />
+
+    </LinearLayout>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSplitter"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_big_phone"
+            android:text="@string/text_view_simple_country"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile.info.activity.profile.country"
+            android:textSize="@dimen/text_size_big_phone"
+            style="@style/AppTheme.Text.Georgia.Bold"
+            android:text="@string/text_view_value_not_found"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+
+
+            />
+    </LinearLayout>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSplitter"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_big_phone"
+            android:text="@string/text_view_simple_city"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile.info.activity.profile.city2"
+            android:textSize="@dimen/text_size_big_phone"
+            style="@style/AppTheme.Text.Georgia.Bold"
+            android:text="@string/text_view_value_not_found"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+
+
+            />
+    </LinearLayout>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSplitter"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_big_phone"
+            android:text="@string/text_view_simple_marital_status"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile.info.activity.profile.marital_status"
+            android:textSize="@dimen/text_size_big_phone"
+            style="@style/AppTheme.Text.Georgia.Bold"
+            android:text="@string/text_view_value_not_found"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+
+
+            />
+    </LinearLayout>
+
+</LinearLayout>
+
+</FrameLayout>

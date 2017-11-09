@@ -300,5 +300,10 @@
     <string name="text_view_simple_country">Страна</string>
     <string name="text_view_simple_city">Город</string>
     <string name="text_view_simple_marital_status">Семейное положение</string>
+    <string name="marital_status_0">женат</string>
+    <string name="marital_status_1">не женат</string>
+    <string name="marital_status_2">замужем</string>
+    <string name="marital_status_3">не замужем</string>
+    <string name="save">Сохранить</string>
 
 </resources>

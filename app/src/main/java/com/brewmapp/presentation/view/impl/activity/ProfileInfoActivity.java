@@ -3,6 +3,9 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +15,7 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ProfileInfoPresenter;
 import com.brewmapp.presentation.presenter.impl.ProfileInfoPresenterImpl;
 import com.brewmapp.presentation.view.contract.ProfileInfoView;
+import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -21,13 +25,11 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
+    @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
     @BindView(R.id.profile_info_activity_profile_avatar)    ImageView avatar;
     @BindView(R.id.profile_info_activity_profile_username)    TextView user_name;
     @BindView(R.id.profile_info_activity_profile_status)    TextView status;
     @BindView(R.id.profile_info_activity_profile_city)    TextView country_city;
-    @BindView(R.id.profile_info_activity_profile_country)    TextView country;
-    @BindView(R.id.profile_info_activity_profile_marital_status)    TextView marital_status;
-    @BindView(R.id.profile_info_activity_profile_city2)    TextView city2;
 
     @Inject    ProfileInfoPresenter presenter;
 
@@ -74,9 +76,39 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
         user_name.setText(load.getFormattedName());
         country_city.setText(load.getFormattedPlace());
         status.setText(R.string.online);
-        try{country.setText(load.getRelations().getmCountry().getName());}catch (Exception e){};
-        try{city2.setText(load.getRelations().getmCity().getName());}catch (Exception e){};
-        //marital_status
+    }
 
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+    }
+
+    @Override
+    public void showFragment(BaseFragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.profile_info_activity_container, fragment)
+                .commit();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Kras on 25.10.2017.
  */
 
-class LocationChild implements Serializable{
+public class LocationChild implements Serializable{
 
     private String additional;
     private String by_user_id;
@@ -14,8 +14,8 @@ class LocationChild implements Serializable{
     private String country_id;
     private String house;
     private String id;
-    private String lat;
-    private String lon;
+    private double lat;
+    private double lon;
     private String metro_id;
     private String name;
     private String region_id;
@@ -71,19 +71,19 @@ class LocationChild implements Serializable{
         this.id = id;
     }
 
-    public String getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public String getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(String lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 

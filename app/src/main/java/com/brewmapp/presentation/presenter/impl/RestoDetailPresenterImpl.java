@@ -8,7 +8,9 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
@@ -486,11 +488,22 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void startMapFragment(RestoDetailActivity restoDetailActivity) {
+        RestoLocation restoLocation=new RestoLocation(
+                restoDetail.getResto().getId(),
+                restoDetail.getResto().getName()==null?"":restoDetail.getResto().getName(),
+                restoDetail.getResto().getLocation().getLocation().getLon(),
+                restoDetail.getResto().getLocation().getLocation().getLat()
+        );
+
+
+
         holderData.storeUiSetting();
         Intent intent=new Intent(RequestCodes.ACTION_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
 //        intent.putExtra(Keys.RESTO_ID,restoDetail.getResto().getId());
 //        intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+        intent.putExtra(Keys.LOCATION,restoLocation);
         restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
+
     }
 
     class HolderData {

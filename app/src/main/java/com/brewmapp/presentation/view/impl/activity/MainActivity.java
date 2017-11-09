@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
@@ -154,6 +155,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
+        if(getIntent().hasExtra(Keys.LOCATION)) {
+            Bundle bundle=new Bundle();
+            bundle.putSerializable(Keys.LOCATION,getIntent().getSerializableExtra(Keys.LOCATION));
+            fragment.setArguments(bundle);
+        }
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
@@ -224,13 +230,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()){
-//            case android.R.id.home:
-//                return super.onOptionsItemSelected(item);
-//            default:
-//              return navigator.onOptionsItemSelected(item);
-//        }
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case android.R.id.home:
+                return super.onOptionsItemSelected(item);
+            default:
+              return navigator.onOptionsItemSelected(item);
+        }
     }
 
     @Override

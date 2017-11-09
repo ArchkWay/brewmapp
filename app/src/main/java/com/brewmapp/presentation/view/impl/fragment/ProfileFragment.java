@@ -254,16 +254,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             presenter.onLoadPosts(loadPostsPackage);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_create:
-                startActivityForResult(new Intent(getActivity(), ProfileInfoActivity.class), Cons.REQUEST_CODE_REFRESH_ITEMS);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -277,5 +267,16 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                     super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+
+    @Override
+    public void onBarAction(int id) {
+        switch (id){
+            case R.id.action_create:
+                startActivityForResult(new Intent(getActivity(), ProfileInfoActivity.class), Cons.REQUEST_CODE_REFRESH_ITEMS);
+                return;
+            default:
+                super.onBarAction(id);
+        }
     }
 }

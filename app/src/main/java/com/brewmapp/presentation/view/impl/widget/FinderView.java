@@ -22,7 +22,7 @@ import ru.frosteye.ovsa.stub.impl.SimpleTextWatcher;
 public class FinderView extends BaseFrameLayout {
 
     @BindView(R.id.view_finder_cancel) View cancel;
-    @BindView(R.id.view_finder_input)    AutoCompleteTextView input;
+    @BindView(R.id.view_finder_input)  AutoCompleteTextView input;
 
     private String hintString;
 

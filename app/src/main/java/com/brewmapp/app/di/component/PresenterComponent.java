@@ -16,6 +16,8 @@ import com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
+import com.brewmapp.presentation.view.impl.activity.FilterByCategory;
+import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
@@ -91,4 +93,6 @@ public interface PresenterComponent {
     void inject(BeerDetailActivity beerDetailActivity);
     void inject(AddReviewRestoActivity addReviewRestoActivity);
     void inject(ProfileInfoActivity profileInfoActivity);
+    void inject(FilterByCategory filterByCategory);
+    void inject(FilterMapActivity filterMapActivity);
 }

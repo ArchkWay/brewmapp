@@ -53,10 +53,12 @@ public class FriendsFragment extends BaseFragment implements FriendsView {
         addFriend.setOnClickListener(v -> {
             startActivityForResult(new Intent(getActivity(), InviteActivity.class), RequestCodes.REQUEST_INVITE_FRIEND);
         });
+
         search.setListener(string -> {
             adapter.setSearchText(string);
             adapter.filterItems(original);
         });
+
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
         adapter = new FlexibleAdapter<>(new ArrayList<>());
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));

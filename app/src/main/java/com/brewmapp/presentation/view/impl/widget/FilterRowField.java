@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.brewmapp.data.entity.MenuField;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
 

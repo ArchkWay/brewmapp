@@ -104,14 +104,14 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
 
     public static List<FilterField> createDefault(Context context) {
         List<FilterField> out = new ArrayList<>();
-        out.add(new FilterField(NAME, R.drawable.ic_menu_events, context.getString(R.string.search_resto_name), "Любой"));
-        out.add(new FilterField(TYPE, R.drawable.ic_menu_messages, context.getString(R.string.search_resto_type), "Любой"));
-        out.add(new FilterField(BEER, R.drawable.ic_menu_search, context.getString(R.string.search_resto_beer), "Любой"));
-        out.add(new FilterField(KITCHEN, R.drawable.ic_menu_map, context.getString(R.string.search_resto_kitchen), "Любой"));
-        out.add(new FilterField(AVERAGE_BILL, R.drawable.ic_menu_friends, context.getString(R.string.search_resto_price), "Любой"));
-        out.add(new FilterField(CITY, R.drawable.ic_menu_settings, context.getString(R.string.search_resto_city), "Любой"));
-        out.add(new FilterField(METRO, R.drawable.ic_menu_settings, context.getString(R.string.search_resto_metro), "Любой"));
-        out.add(new FilterField(OTHER, R.drawable.ic_menu_settings, context.getString(R.string.search_resto_other), "Любой"));
+        out.add(new FilterField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любое"));
+        out.add(new FilterField(TYPE, R.drawable.ic_resto, context.getString(R.string.search_resto_type), "Любой"));
+        out.add(new FilterField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любое"));
+        out.add(new FilterField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любая"));
+        out.add(new FilterField(AVERAGE_BILL, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
+        out.add(new FilterField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Москва"));
+        out.add(new FilterField(METRO, R.drawable.ic_metro, context.getString(R.string.search_resto_metro), "Не имеет значения"));
+        out.add(new FilterField(OTHER, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
         return out;
     }
 

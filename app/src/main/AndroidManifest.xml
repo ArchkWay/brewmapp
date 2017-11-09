@@ -160,6 +160,9 @@
         <activity
             android:name=".presentation.view.impl.activity.BeerDetailActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".presentation.view.impl.activity.FilterByCategory"
+            android:label=""
+            android:screenOrientation="portrait" />
         <activity android:name=".presentation.view.impl.activity.AddReviewRestoActivity" />
         <activity android:name=".presentation.view.impl.activity.ProfileInfoActivity"></activity>
     </application>

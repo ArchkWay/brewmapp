@@ -123,4 +123,5 @@ public class Keys {
     public static final String EVLUATION_TYPE_BEER = "3";
     public static final String EVLUATION_TYPE_EFFECT = "4";
     public static final String EVLUATION_VALUE = "evaluation_value";
+    public static final String FILTER_CATEGORY = "filter_category";
 }

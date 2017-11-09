@@ -2,14 +2,9 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
 
-import com.brewmapp.data.db.contract.UiSettingRepo;
-import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.FilterField;
-import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
-import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
-import com.brewmapp.presentation.view.contract.MainView;
 
 import javax.inject.Inject;
 
@@ -31,6 +26,7 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     @Override
     public void onAttach(FilterMapView filterMapView) {
         super.onAttach(filterMapView);
+        view.showFilters(FilterField.createDefault(context));
     }
 
 

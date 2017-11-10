@@ -1,9 +1,12 @@
 package com.brewmapp.presentation.view.contract;
 
+import android.view.View;
 import android.widget.RadioGroup;
 
 import com.brewmapp.data.pojo.ProfileChangePackage;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
+
+import java.io.File;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -17,4 +20,7 @@ public interface ProfileEditFragmentPresenter extends LivePresenter<ProfileEditF
     RadioGroup.OnCheckedChangeListener getOnCheckedChangeListener();
 
     void save(ProfileChangePackage profileChangePackage, ProfileEditFragment.OnFragmentInteractionListener mListener);
+
+
+    void setPhoto(File file);
 }

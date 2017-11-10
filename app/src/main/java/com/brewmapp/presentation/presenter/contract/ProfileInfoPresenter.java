@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import com.brewmapp.presentation.view.contract.ProfileInfoView;
+import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -10,4 +11,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface ProfileInfoPresenter extends LivePresenter<ProfileInfoView> {
 
+    void handlePhoto(BaseFragment baseFragment, int position);
 }

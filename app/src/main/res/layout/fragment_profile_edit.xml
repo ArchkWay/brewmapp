@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment">
 
-    <!--<include layout="@layout/view_toolbar" />-->
-
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,7 +12,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorDecorBgGray"
         android:orientation="vertical">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,25 +89,21 @@
                     android:hint="@string/last_name"/>
             </LinearLayout>
         </LinearLayout>
+
         <ru.frosteye.ovsa.presentation.view.widget.Line
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/common_block_space"
             android:background="@color/colorSplitter"/>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/common_block_space"
+            android:layout_height="80dp"
+            android:paddingTop="@dimen/common_block_space_double_semi"
+            android:paddingBottom="@dimen/common_block_space_double_semi"
             android:paddingLeft="@dimen/common_block_space_double_semi"
             android:paddingRight="@dimen/common_block_space_double_semi"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/AppTheme.Text.H3"
-                android:textColor="@color/colorBlack"
-                android:layout_marginBottom="@dimen/common_block_space_double"
-                android:text="@string/your_gender"/>
+            android:orientation="vertical"
+            android:gravity="center_vertical">
             <info.hoang8f.android.segmented.SegmentedGroup
                 xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/fragment.profile.edit.segmented"
@@ -120,7 +112,6 @@
                 android:orientation="horizontal"
                 segmentedgroup:sc_border_width="2dp"
                 segmentedgroup:sc_tint_color="@color/colorGrayControls"
-
                 segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big">
 
                 <RadioButton
@@ -140,6 +131,70 @@
                     style="@style/RadioButton" />
             </info.hoang8f.android.segmented.SegmentedGroup>
         </LinearLayout>
+
+        <ru.frosteye.ovsa.presentation.view.widget.Line
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorSplitter"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/common_block_space"
+            android:paddingBottom="@dimen/common_block_space"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            android:orientation="vertical"
+            android:background="@color/colorWhite"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Text.H3"
+                android:textColor="@color/colorGrayDark"
+                android:layout_marginBottom="@dimen/common_block_space_half"
+                android:text="@string/your_state"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Text.H3"
+                android:hint="@string/input_status_hint"
+                />
+
+        </LinearLayout>
+
+        <ru.frosteye.ovsa.presentation.view.widget.Line
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorSplitter"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/common_block_space"
+            android:paddingBottom="@dimen/common_block_space"
+            android:paddingLeft="@dimen/common_block_space_double_semi"
+            android:paddingRight="@dimen/common_block_space_double_semi"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Text.H3"
+                android:textColor="@color/colorGrayDark"
+                android:layout_marginBottom="@dimen/common_block_space_half"
+                android:text="@string/birthday"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.Text.H3"
+                android:hint="@string/input_status_hint"
+                />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>

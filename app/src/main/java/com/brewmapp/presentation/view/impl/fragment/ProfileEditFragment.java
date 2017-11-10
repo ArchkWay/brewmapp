@@ -19,6 +19,8 @@ import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -90,6 +92,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
             profileChangePackage.setLastName(TextTools.extractTrimmed(lastName));
             mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_INVALIDATE_MENU)));
             },name,lastName);
+        avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_SELECT_PHOTO))));
     }
 
     @Override
@@ -128,7 +131,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public void refreshProfile(User user) {
-        Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);
+        if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail()))
+            Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);
         name.setText(user.getFirstname());
         lastName.setText(user.getLastname());
         segmentedGroup.check(user.getGender()==1?R.id.fragment_profile_edit_man:R.id.fragment_profile_edit_woman);
@@ -141,6 +145,11 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         else
             showMessage(strings[0]);
         mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_ERROR)));
+    }
+
+    @Override
+    public void selectedPhoto(File file) {
+        presenter.setPhoto(file);
     }
 
 

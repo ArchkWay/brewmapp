@@ -305,6 +305,9 @@
     <string name="marital_status_2">замужем</string>
     <string name="marital_status_3">не замужем</string>
     <string name="save">Сохранить</string>
+    <string name="your_state">Статус</string>
+    <string name="input_status_hint">Введите статус</string>
+    <string name="birthday">День рождения</string>
 
 
 </resources>

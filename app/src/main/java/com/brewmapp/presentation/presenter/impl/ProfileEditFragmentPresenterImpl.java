@@ -6,13 +6,20 @@ import android.widget.RadioGroup;
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.pojo.NewPhotoPackage;
 import com.brewmapp.data.pojo.ProfileChangePackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.ProfileChangeTask;
+import com.brewmapp.execution.task.UploadPhotoTask;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -27,11 +34,13 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
 
     private User user;
     private ProfileChangeTask profileChangeTask;
+    private UploadPhotoTask uploadPhotoTask;
 
     @Inject
-    public ProfileEditFragmentPresenterImpl(UserRepo userRepo, ProfileChangeTask profileChangeTask){
+    public ProfileEditFragmentPresenterImpl(UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadPhotoTask uploadPhotoTask){
         user=userRepo.load();
         this.profileChangeTask = profileChangeTask;
+        this.uploadPhotoTask = uploadPhotoTask;
     }
 
     @Override
@@ -74,6 +83,20 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
             public void onError(Throwable e) {
                 super.onError(e);
                 view.commonError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void setPhoto(File file) {
+        NewPhotoPackage newPhotoPackage=new NewPhotoPackage(file);
+        newPhotoPackage.setRelatedModel(Keys.CAP_USER);
+        newPhotoPackage.setRelatedId(user.getId());
+        uploadPhotoTask.execute(newPhotoPackage,new SimpleSubscriber<SingleResponse<UploadPhotoResponse>>(){
+            @Override
+            public void onNext(SingleResponse<UploadPhotoResponse> uploadPhotoResponseSingleResponse) {
+                super.onNext(uploadPhotoResponseSingleResponse);
+
             }
         });
     }

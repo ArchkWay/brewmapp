@@ -7,4 +7,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface ProfileInfoFragmentPresenter extends LivePresenter<ProfileInfoFragmentView> {
+    CharSequence getTitle();
 }

@@ -32,4 +32,9 @@ public class ProfileInfoFragmentPresenterImpl extends BasePresenter<ProfileInfoF
         super.onAttach(profileInfoFragmentView);
         view.refreshProfile(userRepo.load());
     }
+
+    @Override
+    public CharSequence getTitle() {
+        return userRepo.load().getFormattedName();
+    }
 }

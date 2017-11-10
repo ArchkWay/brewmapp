@@ -290,4 +290,8 @@ public interface Api {
     @FormUrlEncoded
     Call<Object> setRestoEvaluation(@FieldMap WrapperParams params);
 
+    @POST("profile")
+    @FormUrlEncoded
+    Call<ListResponse<User>> profileEdit(@FieldMap WrapperParams params);
+
 }

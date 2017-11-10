@@ -69,6 +69,7 @@ import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PostDetailsPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ProfileEditFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfileInfoFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfileInfoPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
@@ -80,6 +81,7 @@ import com.brewmapp.presentation.presenter.impl.SearchPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
+import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileInfoFragmentPresenter;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
@@ -290,4 +292,8 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
         return presenter;
     }
 
+    @Provides @PresenterScope
+    ProfileEditFragmentPresenter provideProfileEditFragmentPresenter(ProfileEditFragmentPresenterImpl presenter){
+        return presenter;
+    }
 }

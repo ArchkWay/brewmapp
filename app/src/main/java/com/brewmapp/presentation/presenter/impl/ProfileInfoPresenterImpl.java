@@ -5,6 +5,7 @@ import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.execution.task.LoadProfileTask;
 import com.brewmapp.presentation.presenter.contract.ProfileInfoPresenter;
 import com.brewmapp.presentation.view.contract.ProfileInfoView;
+import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileInfoFragment;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ public class ProfileInfoPresenterImpl extends BasePresenter<ProfileInfoView> imp
             @Override
             public void onNext(UserProfile userProfile) {
                 super.onNext(userProfile);
+                userRepo.save(userProfile.getUser());
             }
 
             @Override
@@ -46,7 +48,7 @@ public class ProfileInfoPresenterImpl extends BasePresenter<ProfileInfoView> imp
             }
         });
 
-        view.showFragment(new ProfileInfoFragment());
+        view.showFragment(ProfileInfoActivity.FRAGMENT_INFO);
     }
 
     @Override

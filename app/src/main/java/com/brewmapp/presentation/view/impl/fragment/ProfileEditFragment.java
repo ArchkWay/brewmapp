@@ -2,23 +2,18 @@ package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.pojo.ProfileChangePackage;
-import com.brewmapp.presentation.presenter.impl.ProfileEditFragmentPresenterImpl;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
@@ -92,8 +87,9 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         segmentedGroup.setOnCheckedChangeListener(presenter.getOnCheckedChangeListener());
         registerTextChangeListeners(s ->{
             profileChangePackage.setFirstName(TextTools.extractTrimmed(name));
+            profileChangePackage.setLastName(TextTools.extractTrimmed(lastName));
             mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_INVALIDATE_MENU)));
-            },name);
+            },name,lastName);
     }
 
     @Override
@@ -110,6 +106,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.save,menu);
+        menu.findItem(R.id.action_save).setEnabled(profileChangePackage.isNeedSave());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -117,8 +114,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
-                presenter.save();
-                mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_INFO)));
+                presenter.save(profileChangePackage,mListener);
+                hideKeyboard();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -136,6 +133,16 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         lastName.setText(user.getLastname());
         segmentedGroup.check(user.getGender()==1?R.id.fragment_profile_edit_man:R.id.fragment_profile_edit_woman);
     }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_ERROR)));
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

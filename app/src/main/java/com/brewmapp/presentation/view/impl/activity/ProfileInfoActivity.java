@@ -26,6 +26,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView,ProfileInfoFragment.OnFragmentInteractionListener,ProfileEditFragment.OnFragmentInteractionListener {
 
+
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
 
@@ -34,7 +35,8 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
     public final static int FRAGMENT_INFO=0;
     public final static int FRAGMENT_EDIT=1;
     public static final int FRAGMENT_INVALIDATE_MENU = 3;
-
+    public static final int FRAGMENT_ERROR = 4;
+    public static final int FRAGMENT_USER_SAVED = 5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +137,12 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
             case FRAGMENT_INVALIDATE_MENU:
                 invalidateOptionsMenu();
                 break;
+            case FRAGMENT_ERROR:
+                finish();
+                break;
+            case FRAGMENT_USER_SAVED:
+                setResult(RESULT_OK);
+                break;
         }
-
     }
 }

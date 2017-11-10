@@ -21,9 +21,6 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.AverageEvaluation;
-import com.brewmapp.data.entity.Evaluation;
-import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -31,19 +28,16 @@ import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
-import com.brewmapp.utils.Cons;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;

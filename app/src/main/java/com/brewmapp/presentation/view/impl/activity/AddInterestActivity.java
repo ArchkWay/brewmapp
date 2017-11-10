@@ -17,7 +17,7 @@ import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
-import com.brewmapp.utils.Cons;
+
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
+
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class AddInterestActivity extends BaseActivity implements AddInterestView {
     @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
@@ -166,7 +168,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
                     interest.setInterest_info(interest_info);
                     Intent intent=new Intent(this, RestoDetailActivity.class);
                     intent.putExtra(Keys.RESTO_ID,interest);
-                    startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
+                    startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
                 }
             }break;
         }
@@ -175,7 +177,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+            case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK)
                     setResult(RESULT_OK,new Intent(String.valueOf(InterestAddViewResto.ACTION_VIEW_INTEREST)));
                 return;

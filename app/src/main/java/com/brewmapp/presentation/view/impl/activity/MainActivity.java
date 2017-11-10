@@ -51,8 +51,9 @@ import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
-import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
-import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_STATE;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
+
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {

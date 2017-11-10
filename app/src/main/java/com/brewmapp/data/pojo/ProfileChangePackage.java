@@ -1,5 +1,7 @@
 package com.brewmapp.data.pojo;
 
+import android.text.TextUtils;
+
 /**
  * Created by Kras on 10.11.2017.
  */
@@ -22,5 +24,12 @@ public class ProfileChangePackage {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public boolean isNeedSave() {
+        if(TextUtils.isEmpty(firstName)||TextUtils.isEmpty(lastName))
+            return false;
+
+        return true;
     }
 }

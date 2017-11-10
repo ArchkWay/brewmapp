@@ -54,11 +54,12 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     @Override
     public void onAttach(ProfileView profileView) {
         super.onAttach(profileView);
-        showUserProfile();
+        refreshProfile();
         onLoadEverything();
     }
 
-    private void showUserProfile() {
+    @Override
+    public void refreshProfile() {
         if(userRepo.load().getCounts() != null) {
             view.showUserProfile(new UserProfile(userRepo.load()));
         }
@@ -87,7 +88,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             public void onNext(ProfileInfoPackage pack) {
                 enableControls(true);
                 userRepo.save(pack.getUserProfile().getUser());
-                showUserProfile();
+                refreshProfile();
             }
         });
     }
@@ -116,7 +117,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
                 User user=userRepo.load();
                 user.setSubscriptionsCount(subscriptions.getModels().size());
                 userRepo.save(user);
-                showUserProfile();
+                refreshProfile();
             }
 
             @Override

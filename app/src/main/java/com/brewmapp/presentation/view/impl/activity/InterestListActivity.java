@@ -23,7 +23,6 @@ import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.view.contract.InterestListView;
 import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
-import com.brewmapp.utils.Cons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
 public class InterestListActivity extends BaseActivity implements InterestListView {
@@ -190,7 +190,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                     }
                 }
                 break;
-            case Cons.REQUEST_CODE_REFRESH_ITEMS:{
+            case REQUEST_CODE_REFRESH_ITEMS:{
                 if(resultCode==RESULT_OK) {
                     setResult(RESULT_OK);
                     refreshInterests();
@@ -213,7 +213,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case Keys.CAP_RESTO:{
                 Intent intent = new Intent(this, RestoDetailActivity.class);
                 intent.putExtra(Keys.RESTO_ID, interest);
-                startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }break;
             case Keys.CAP_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);

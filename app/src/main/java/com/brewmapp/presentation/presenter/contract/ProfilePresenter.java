@@ -17,4 +17,6 @@ public interface ProfilePresenter extends LivePresenter<ProfileView> {
     void onLikePost(Post post);
 
     void onLoadSubscription(LoadPostsPackage loadPostsPackage);
+
+    void refreshProfile();
 }

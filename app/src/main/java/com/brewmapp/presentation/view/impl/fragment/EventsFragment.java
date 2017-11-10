@@ -49,7 +49,7 @@ import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
-import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
+
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
 import java.util.ArrayList;
@@ -57,7 +57,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
+
 
 public class EventsFragment extends BaseFragment implements EventsView, View.OnClickListener, AdapterView.OnItemClickListener {
 

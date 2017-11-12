@@ -1,8 +1,17 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.net.Uri;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +49,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @BindView(R.id.fragment_profile_edit_name)    EditText name;
     @BindView(R.id.fragment_profile_edit_lastName)    EditText lastName;
     @BindView(R.id.fragment_profile_edit_segmented)    SegmentedGroup segmentedGroup;
+    @BindView(R.id.fragment_profile_edit_layout_phone)    ConstraintLayout layout_phone;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone)    EditText edit_text_phone;
 
     private OnFragmentInteractionListener mListener;
     private ProfileChangePackage profileChangePackage=new ProfileChangePackage();
@@ -93,6 +104,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
             mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_INVALIDATE_MENU)));
             },name,lastName);
         avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_SELECT_PHOTO))));
+        edit_text_phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 
     @Override

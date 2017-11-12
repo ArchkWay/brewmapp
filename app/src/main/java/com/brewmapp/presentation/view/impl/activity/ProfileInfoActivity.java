@@ -124,6 +124,14 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                if(baseFragment instanceof ProfileEditFragment) {
+                    showFragment(FRAGMENT_INFO);
+                    return true;
+                }
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -114,27 +114,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
     }
 
-    @Override
-    public void parseIntent(Intent intent, LoadNewsPackage loadNewsPackage) {
-
-        if(intent.hasExtra(Keys.RESTO_ID)){
-            int resto=intent.getIntExtra(Keys.RESTO_ID,0);
-            switch (loadNewsPackage.getMode()) {
-                case EventsFragment.TAB_EVENT:
-                case EventsFragment.TAB_SALE:
-                case EventsFragment.TAB_POST:
-                    if(resto!=0) {
-                        loadNewsPackage.setResto_id(String.valueOf(resto));
-                        loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
-                    }
-                    break;
-            }
-
-        }
-
-
-    }
-
 
     class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
 

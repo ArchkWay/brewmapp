@@ -17,7 +17,4 @@ public interface EventsPresenter extends LivePresenter<EventsView>{
     void storeTabActive(int position);
 
     void onLike(ILikeable likeable, RefreshableView refreshableView);
-
-
-    void parseIntent(Intent intent, LoadNewsPackage loadNewsPackage);
 }

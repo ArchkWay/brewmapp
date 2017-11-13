@@ -196,13 +196,18 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     @Override
     public void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab) {
         holderData.storeUiSetting();
+        //set mode EventsFragment
         Intent intent=new Intent(
-                RequestCodes.ACTION_SHOW_EVENT_FRAGMENT,
+                MainActivity.MODE_ONLY_EVENT_FRAGMENT,
                 null,
                 restoDetailActivity,
                 MainActivity.class);
-        intent.putExtra(Keys.RESTO_ID,restoDetail.getResto().getId());
         intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+
+        //set arguments EventsFragment
+        intent.putExtra(Keys.RELATED_ID,String.valueOf(restoDetail.getResto().getId()));
+        intent.putExtra(Keys.RELATED_MODEL,Keys.CAP_RESTO);
+
         restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT);
     }
 
@@ -495,12 +500,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 restoDetail.getResto().getLocation().getLocation().getLat()
         );
 
-
-
         holderData.storeUiSetting();
-        Intent intent=new Intent(RequestCodes.ACTION_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
-//        intent.putExtra(Keys.RESTO_ID,restoDetail.getResto().getId());
-//        intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+        Intent intent=new Intent(MainActivity.MODE_ONLY_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
         intent.putExtra(Keys.LOCATION,restoLocation);
         restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
 

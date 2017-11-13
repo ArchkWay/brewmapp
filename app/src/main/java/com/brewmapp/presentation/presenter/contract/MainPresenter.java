@@ -1,5 +1,8 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.brewmapp.presentation.view.contract.MainView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -12,4 +15,7 @@ public interface MainPresenter extends LivePresenter<MainView> {
 
     int getActiveFragment();
 
+    String parseMode(Intent intent);
+
+    Bundle parseArguments(Intent intent);
 }

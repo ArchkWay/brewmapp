@@ -25,6 +25,7 @@ import com.brewmapp.data.entity.FilteredTitle;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 
@@ -82,6 +83,11 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     public static final int TAB_SALE=1;
     public static final int TAB_POST=2;
 
+    private final String MODE_DEFAULT="default";
+    private final String MODE_ONLY_BY_RESTO="by_resto";
+
+    private String mode;
+
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_events;
@@ -94,21 +100,29 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
 
     @Override
     protected void initView(View view) {
-        tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                loadNewsPackage.dropAll();
-                loadNewsPackage.setMode(tab.getPosition());
-                interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
-                interractor().processSetActionBar(tab.getPosition());
-                presenter.storeTabActive(tab.getPosition());
-                hideFilterLayout();
-                if (dropdownItems != null) {
-                    dropdownItems.clear();
+
+        mode=getArguments()==null?MODE_DEFAULT:MODE_ONLY_BY_RESTO;
+
+        //if(mode.equals(MODE_DEFAULT)) {
+            tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    loadNewsPackage.dropAll();
+                    loadNewsPackage.setMode(tab.getPosition());
+                    interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
+                    interractor().processSetActionBar(tab.getPosition());
+                    presenter.storeTabActive(tab.getPosition());
+                    hideFilterLayout();
+                    if (dropdownItems != null) {
+                        dropdownItems.clear();
+                    }
+                    refreshItems(true);
                 }
-                refreshItems(true);
-            }
-        });
+            });
+            initFilterItems();
+            filterList.setOnItemClickListener(this);
+            interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
+        //}
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
@@ -122,9 +136,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(() -> refreshItems(false));
-        initFilterItems();
-        filterList.setOnItemClickListener(this);
-        interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
     }
 
     private void fillDropDownList() {
@@ -216,7 +227,9 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
 
     @Override
     public void setTabActive(int i) {
-        tabsView.getTabs().getTabAt(i).select();
+       tabsView.getTabs().getTabAt(i).select();
+       if(mode.equals(MODE_ONLY_BY_RESTO))
+            tabsView.setVisibility(View.GONE);
     }
 
     private void setEmpty(boolean empty) {
@@ -274,7 +287,10 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         list.removeOnScrollListener(scrollListener);
         adapter.clear();
         loadNewsPackage.setPage(0);
-        presenter.parseIntent(getActivity().getIntent(),loadNewsPackage);
+
+        try {loadNewsPackage.setResto_id(getArguments().getString(Keys.RELATED_ID));}catch (Exception e){}
+        try {loadNewsPackage.setRelated_model(getArguments().getString(Keys.RELATED_MODEL));}catch (Exception e){}
+
         presenter.onLoadItems(loadNewsPackage);
         if (tabSelected) {
             interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));

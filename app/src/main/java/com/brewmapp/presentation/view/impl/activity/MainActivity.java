@@ -14,10 +14,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
@@ -60,7 +62,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     //    @BindView(R.id.common_toolbar_spinner) Spinner toolbarSpinner;
-    @BindView(R.id.common_toolbar_dropdown) View toolbarDropdown;
+    @BindView(R.id.common_toolbar_dropdown) LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title) TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
     @BindView(R.id.activity_main_drawer) DuoDrawerLayout drawer;
@@ -77,6 +79,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private List<String> dropdownItems;
     private @MenuRes int menuToShow;
 
+    public static final String MODE_DEFAULT="default";
+    public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";
+    public static final String MODE_ONLY_MAP_FRAGMENT="map_fragment";
+
+    private String mode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,19 +93,28 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     protected void initView() {
-        if(getIntent().getAction()==null)
-            setDrawer();
-        else if(getIntent().getAction().equals(RequestCodes.ACTION_SHOW_EVENT_FRAGMENT)){
-            enableBackButton();
-            navigator.storeCodeActiveFragment(MenuField.EVENTS);
-            navigator.storeCodeTebEventFragment(getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT));
-            setResult(RESULT_OK);
-        }else if(getIntent().getAction().equals(RequestCodes.ACTION_MAP_FRAGMENT)){
-            enableBackButton();
-            navigator.storeCodeActiveFragment(MenuField.MAP);
-            setResult(RESULT_OK);
+
+        mode=presenter.parseMode(getIntent());
+
+        switch (mode){
+            case MODE_DEFAULT:
+                setDrawer();
+                break;
+            case MODE_ONLY_EVENT_FRAGMENT:
+                enableBackButton();
+                navigator.storeCodeActiveFragment(MenuField.EVENTS);
+                navigator.storeCodeTebEventFragment(
+                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT)
+                );
+                setResult(RESULT_OK);
+                break;
+            case MODE_ONLY_MAP_FRAGMENT:
+                enableBackButton();
+                navigator.storeCodeActiveFragment(MenuField.MAP);
+                setResult(RESULT_OK);
+                break;
         }
-    }
+   }
 
     private void setDrawer() {
         drawer.setMarginFactor(0.5f);
@@ -156,11 +173,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
-        if(getIntent().hasExtra(Keys.LOCATION)) {
-            Bundle bundle=new Bundle();
-            bundle.putSerializable(Keys.LOCATION,getIntent().getSerializableExtra(Keys.LOCATION));
-            fragment.setArguments(bundle);
-        }
+        fragment.setArguments(presenter.parseArguments(getIntent()));
+
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
@@ -181,8 +195,14 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             toolbarDropdown.setVisibility(View.VISIBLE);
             actionBar.setDisplayShowTitleEnabled(false);
             toolbarTitle.setText(baseFragment.getTitle());
-            if(baseFragment instanceof View.OnClickListener) {
-                toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
+            if(mode.equals(MODE_DEFAULT)) {
+                if (baseFragment instanceof View.OnClickListener) {
+                    toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
+                }
+                toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
+            }else {
+                toolbarSubTitle.setVisibility(View.GONE);
+                toolbarDropdown.setGravity(Gravity.LEFT);
             }
         } else {
             toolbarDropdown.setVisibility(View.GONE);
@@ -223,8 +243,14 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(menuToShow != 0) {
-            getMenuInflater().inflate(menuToShow, menu);
+        switch (mode){
+            case MODE_DEFAULT:
+                if(menuToShow != 0)  getMenuInflater().inflate(menuToShow, menu);
+                break;
+            case MODE_ONLY_EVENT_FRAGMENT:
+            case MODE_ONLY_MAP_FRAGMENT:
+                if(menu!=null) menu.clear();
+                break;
         }
         return super.onCreateOptionsMenu(menu);
     }

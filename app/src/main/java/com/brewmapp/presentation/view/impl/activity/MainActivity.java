@@ -202,7 +202,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
             }else {
                 toolbarSubTitle.setVisibility(View.GONE);
-                toolbarDropdown.setGravity(Gravity.LEFT);
             }
         } else {
             toolbarDropdown.setVisibility(View.GONE);
@@ -249,7 +248,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 break;
             case MODE_ONLY_EVENT_FRAGMENT:
             case MODE_ONLY_MAP_FRAGMENT:
-                if(menu!=null) menu.clear();
+                if(menu!=null) menu.clear();getMenuInflater().inflate(R.menu.stub, menu);
                 break;
         }
         return super.onCreateOptionsMenu(menu);

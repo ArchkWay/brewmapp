@@ -573,7 +573,22 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/text_view_value_not_found_4"
                     android:textSize="@dimen/text_size_big_phone"
-                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar" />
+                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                    android:lines="@integer/init_max_lites_text_view"
+
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity.resto.detail.text.view.description.button"
+                    android:background="@drawable/bg_with_corner_red"
+                    android:minWidth="170dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/colorButtonRed"
+                    style="@style/AppTheme.Paragraph"
+                    android:textSize="@dimen/text_size_small"
+
+                    />
             </LinearLayout>
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -1017,10 +1032,11 @@
                     android:layout_margin="@dimen/common_block_space"
                     android:gravity="center"
                     android:id="@+id/activity.restoDetails.empty_text_reviews"
+
                     />
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:id="@+id/activity.restoDetails.recycler_reviews"
 
                     >
@@ -1039,9 +1055,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/button_text_write_review"
-                    android:background="@drawable/bg_with_corner_red"
-                    android:textColor="@color/colorButtonRed"
-                    style="@style/AppTheme.Paragraph"
+                    style="@style/AppTheme.Button.Green.Solid"
+
+                    android:textColor="@color/colorWhite"
                     android:id="@+id/activity.resto.detail.button_review"
                     android:textSize="@dimen/text_size_small"
                     android:minWidth="170dp"

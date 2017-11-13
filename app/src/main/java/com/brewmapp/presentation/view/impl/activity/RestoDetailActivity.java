@@ -1,8 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -88,6 +86,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_none13)    TextView cnt_events;
     @BindView(R.id.activity_resto_detail_text_view_none23)    TextView cnt_photo;
     @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
+    @BindView(R.id.activity_resto_detail_text_view_description_button)    Button button_more_description;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -132,8 +131,30 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         private_message.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
+        button_more_description.setOnClickListener(v->{
+            setTitleToButtonOfMoreDescription(true);
 
+        });
     }
+
+    private void setTitleToButtonOfMoreDescription(boolean click) {
+        if(button_more_description.getVisibility()==View.VISIBLE) {
+            if(click) {
+                if (description.getLineCount() > description.getMaxLines())
+                    description.setMaxLines(description.getMaxLines() * 4);
+                else
+                    description.setMaxLines(getResources().getInteger(R.integer.init_max_lites_text_view));
+            }
+
+            if (getResources().getInteger(R.integer.init_max_lites_text_view) == description.getMaxLines())
+                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать подробнее" : "Свернуть");
+            else
+                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать полностью" : "Свернуть");
+        }else {
+            button_more_description.setOnClickListener(null);
+        }
+    }
+
 
     @Override
     protected void attachPresenter() {
@@ -210,7 +231,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         }
 
         site.setText(restoDetail.getResto().getSite());
-        description.setText(Html.fromHtml(restoDetail.getResto().getText()));
+        String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
+        if(strDescription.length()>0)  description.setText(strDescription);
         cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
 
         try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
@@ -230,6 +252,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 }
 
         }catch (Exception e){};
+
+        button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
+        setTitleToButtonOfMoreDescription(false);
 
 
     }

@@ -102,6 +102,10 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
         return title;
     }
 
+    public void setSelectedFilter(String selectedFilter) {
+        this.selectedFilter = selectedFilter;
+    }
+
     public static List<FilterField> createDefault(Context context) {
         List<FilterField> out = new ArrayList<>();
         out.add(new FilterField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любое"));

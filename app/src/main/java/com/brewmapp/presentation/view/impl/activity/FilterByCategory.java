@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,7 +52,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @Inject FilterByCategoryPresenter presenter;
     private List<IFlexible> original;
-    private PriceRangeTypes priceRangeTypes;
+    private ArrayList<PriceRangeInfo> priceRangeInfos;
 
 
     @Override
@@ -103,7 +104,12 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 break;
             case 4:
                 toolbarTitle.setText(R.string.search_resto_price);
-                presenter.loadPriceRangeTypes();
+                if (getIntent().getExtras().getSerializable("price") != null) {
+                    priceRangeInfos = (ArrayList<PriceRangeInfo>) getIntent().getExtras().getSerializable("price");
+                    appendItems(new ArrayList<>(priceRangeInfos));
+                } else {
+                    presenter.loadPriceRangeTypes();
+                }
                 break;
             case 5:
                 toolbarTitle.setText(R.string.select_country);
@@ -152,13 +158,35 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @Override
     public boolean onItemClick(int position) {
-        Log.i("dsf", "price");
-        Log.i("priceRange", priceRangeTypes.getModels().get(position).getModel().getName());
+        if (original.get(0) instanceof PriceRangeInfo) {
+            PriceRangeInfo priceRangeInfo = (PriceRangeInfo) original.get(position);
+            if (!priceRangeInfo.getModel().isSelected()) {
+                priceRangeInfo.getModel().setSelected(true);
+            } else {
+                priceRangeInfo.getModel().setSelected(false);
+            }
+
+            priceRangeInfos = new ArrayList<>();
+            for(Object o: original){
+                priceRangeInfos.add((PriceRangeInfo) o);
+            }
+
+        }
+
+        adapter.updateDataSet(original);
         return false;
     }
 
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
+        if (priceRangeInfos != null) {
+            Bundle bundle = new Bundle();
+            Intent returnIntent = new Intent();
+            bundle.putSerializable("price", priceRangeInfos);
+            returnIntent.putExtras(bundle);
+            setResult(4, returnIntent);
+        }
+        finish();
     }
 
     @OnClick(R.id.filter_toolbar_cancel)

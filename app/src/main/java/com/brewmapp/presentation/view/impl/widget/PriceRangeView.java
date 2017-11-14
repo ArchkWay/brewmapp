@@ -72,6 +72,11 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
         if (model.getImage() == null) {
             logo.setVisibility(INVISIBLE);
         }
+        if (model.isSelected()) {
+            restoTypeCheckbox.setChecked(true);
+        } else {
+            restoTypeCheckbox.setChecked(false);
+        }
     }
 
     @Override
@@ -82,13 +87,7 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.container) {
-            if (!restoTypeCheckbox.isChecked()) {
-                model.setSelected(true);
-                restoTypeCheckbox.setChecked(true);
-            } else {
-                model.setSelected(false);
-                restoTypeCheckbox.setChecked(false);
-            }
+
         }
     }
 }

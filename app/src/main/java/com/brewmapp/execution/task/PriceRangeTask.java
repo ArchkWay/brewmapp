@@ -3,6 +3,7 @@ package com.brewmapp.execution.task;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.PriceRangeTypes;
 
+import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 

@@ -6,6 +6,8 @@ import com.brewmapp.data.entity.FilterField;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
@@ -26,12 +28,13 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     @Override
     public void onAttach(FilterMapView filterMapView) {
         super.onAttach(filterMapView);
+        EventBus.getDefault().register(this);
         view.showFilters(FilterField.createDefault(context));
     }
 
 
     @Override
     public void onDestroy() {
-
+        EventBus.getDefault().unregister(this);
     }
 }

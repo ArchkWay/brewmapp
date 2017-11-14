@@ -14,6 +14,8 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterField;
+import com.brewmapp.data.entity.PriceRangeTypes;
+import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
@@ -42,6 +44,8 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
 
     @Inject FilterMapPresenter presenter;
     private FlexibleAdapter<FilterField> adapter;
+    private StringBuilder priceSelectedName;
+    private ArrayList<PriceRangeInfo> priceRangeInfos;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,15 +102,18 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     @Override
     public boolean onItemClick(int position) {
         Log.i("itemClick", "checkClickItem");
+        Bundle bundle = new Bundle();
         Intent intent = new Intent(this, FilterByCategory.class);
         intent.putExtra(Keys.FILTER_CATEGORY, position);
-        startActivityForResult(intent, RequestCodes.REQUEST_FILTER_CATEGORY);
+        bundle.putSerializable("price", priceRangeInfos);
+        intent.putExtras(bundle);
+        startActivity(intent);
         return false;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
+    private void setSelectedFilter(int filterCategory, StringBuilder filters) {
+        adapter.getItem(filterCategory).setSelectedFilter(filters.toString());
+        adapter.notifyDataSetChanged();
     }
 }

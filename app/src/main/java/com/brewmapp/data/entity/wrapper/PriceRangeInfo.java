@@ -6,6 +6,8 @@ import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.presentation.view.impl.widget.PriceRangeView;
 import com.brewmapp.presentation.view.impl.widget.TypeView;
 
+import java.io.Serializable;
+
 import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
@@ -13,7 +15,7 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  * Created by nixus on 03.11.2017.
  */
 
-public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements IFilterable {
+public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements IFilterable, Serializable {
 
     @Override
     public int getLayoutRes() {

@@ -9,10 +9,12 @@ import com.brewmapp.app.di.module.RepoModule;
 import javax.inject.Singleton;
 
 import dagger.Component;
+
+import com.brewmapp.app.di.module.ShareModule;
 import com.brewmapp.execution.exchange.common.Api;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
-@Component(modules = {AppModule.class, RepoModule.class})
+@Component(modules = {AppModule.class, RepoModule.class, ShareModule.class})
 @Singleton
 public interface AppComponent {
     PresenterComponent plus(PresenterModule module);

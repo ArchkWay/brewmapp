@@ -10,5 +10,6 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface BeerDetailView extends BasicView {
-    void setModel(BeerDetail beerDetail);
+    void setModel(BeerDetail beerDetail, int mode);
+    void commonError(String... strings);
 }

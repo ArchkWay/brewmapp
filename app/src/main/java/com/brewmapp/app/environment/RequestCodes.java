@@ -28,4 +28,7 @@ public class RequestCodes {
     public final static int ACTION_SELECT =0;
     public final static int ACTION_VIEW =1;
 
+    public  final static int MODE_LOAD_ALL=0;
+    public  final static int MODE_LOAD_ONLY_LIKE=1;
+
 }

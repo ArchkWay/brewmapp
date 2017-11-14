@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerAftertaste;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
@@ -66,67 +68,69 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         setContentView(R.layout.activity_beer_detail);
     }
 
-
     @Override
-    public void setModel(BeerDetail beerDetail) {
-        Beer beer=beerDetail.getBeer();
-        setTitle(beer.getTitle());
-        avg_cost.setText(beer.getAvg_cost());
-        name.setText(beer.getTitle_ru());
+    public void setModel(BeerDetail beerDetail,int mode) {
+        switch (mode){
+            case RequestCodes.MODE_LOAD_ALL:
+                Beer beer=beerDetail.getBeer();
+                setTitle(beer.getTitle());
+                avg_cost.setText(beer.getAvg_cost());
+                name.setText(beer.getTitle_ru());
 
-        Iterator<BeerAftertaste> iterator = beer.getRelations().getBeerTaste().iterator();
-        if(iterator.hasNext()) {taste.setText(iterator.next().getName());/*_taste.setText(iterator.next().getName());*/}
+                Iterator<BeerAftertaste> iterator = beer.getRelations().getBeerTaste().iterator();
+                if(iterator.hasNext()) {taste.setText(iterator.next().getName());/*_taste.setText(iterator.next().getName());*/}
 
-        avg_cost.setText(beer.getAvg_cost());
-        brand.setText(beer.getRelations().getBeerBrand().getName());
-        brew.setText(beer.getRelations().getBrewery().getName());
-        country.setText(beer.getRelations().getCountry().getName());
-        type.setText(beer.getRelations().getBeerType().getName());
-        strength.setText(beer.getRelations().getBeerStrength().getName());
-        density.setText(beer.getRelations().getProductDensity().getName());
-        filter_beer.setText(beer.getFiltered());
+                avg_cost.setText(beer.getAvg_cost());
+                brand.setText(beer.getRelations().getBeerBrand().getName());
+                brew.setText(beer.getRelations().getBrewery().getName());
+                country.setText(beer.getRelations().getCountry().getName());
+                type.setText(beer.getRelations().getBeerType().getName());
+                strength.setText(beer.getRelations().getBeerStrength().getName());
+                density.setText(beer.getRelations().getProductDensity().getName());
+                filter_beer.setText(beer.getFiltered());
 
-        iterator = beer.getRelations().getBeerAftertaste().iterator();
-        if(iterator.hasNext()) after_taste.setText(iterator .next().getName());
+                iterator = beer.getRelations().getBeerAftertaste().iterator();
+                if(iterator.hasNext()) after_taste.setText(iterator .next().getName());
 
-        description.setText(Html.fromHtml(beer.getText()));
+                description.setText(Html.fromHtml(beer.getText()));
 
-        slider.stopAutoCycle();
+                slider.stopAutoCycle();
 
-        ArrayList<String> photos=new ArrayList<>();
-        if(beer.getGetThumb()!=null&&beer.getGetThumb().length()>0)
-            photos.add(beer.getGetThumb());
-        if(photos.size()==0){
-            slider.addSlider(new DefaultSliderView(this)
-                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(R.drawable.ic_default_brewery));
-        }else {
-            for(String s:photos){
-                slider.addSlider(new DefaultSliderView(this)
-                        .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                        .image(s)
-                        .setOnSliderClickListener(slider1 -> {
-                            Intent intent = new Intent(this, PhotoSliderActivity.class);
-                            String[] urls = {s};
-                            intent.putExtra(Keys.PHOTOS, urls);
-                            startActivity(intent);
-                        }));
+                ArrayList<String> photos=new ArrayList<>();
+                if(beer.getGetThumb()!=null&&beer.getGetThumb().length()>0)
+                    photos.add(beer.getGetThumb());
+                if(photos.size()==0){
+                    slider.addSlider(new DefaultSliderView(this)
+                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                            .image(R.drawable.ic_default_brewery));
+                }else {
+                    for(String s:photos){
+                        slider.addSlider(new DefaultSliderView(this)
+                                .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                .image(s)
+                                .setOnSliderClickListener(slider1 -> {
+                                    Intent intent = new Intent(this, PhotoSliderActivity.class);
+                                    String[] urls = {s};
+                                    intent.putExtra(Keys.PHOTOS, urls);
+                                    startActivity(intent);
+                                }));
 
-            }
+                    }
+                }
+            case RequestCodes.MODE_LOAD_ONLY_LIKE:
+                try {like_counter.setText(beerDetail.getBeer().getLike());}catch (Exception e){};
+                try {dislike_counter.setText(beerDetail.getBeer().getDis_like());}catch (Exception e){};
         }
-        try {like_counter.setText(beerDetail.getBeer().getLike());}catch (Exception e){};
-        try {dislike_counter.setText(beerDetail.getBeer().getDis_like());}catch (Exception e){};
 
     }
-
 
     @Override
     protected void initView() {
         enableBackButton();
         enableControls(false,0);
-        String beer_id=((Interest)getIntent().getSerializableExtra(getString(R.string.key_serializable_extra))).getInterest_info().getId();
-        presenter.requestBeerDetail(beer_id);
-
+        presenter.parseIntent(getIntent());
+        layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
+        layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
     }
 
     @Override
@@ -170,4 +174,14 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+    }
+
 }

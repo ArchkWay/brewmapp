@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,6 +23,7 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
@@ -46,6 +49,9 @@ import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+
+import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ALL;
+import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ONLY_LIKE;
 
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
@@ -125,16 +131,13 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
         layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
         layout_photo.setOnClickListener(v -> presenter.startShowPhoto(RestoDetailActivity.this,photosResto));
-        layout_like.setOnClickListener(v -> presenter.clickLike());
-        layout_dislike.setOnClickListener(v -> presenter.clickDisLike());
+        layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
+        layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
         layout_fav.setOnClickListener(v -> presenter.clickFav());
         private_message.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
-        button_more_description.setOnClickListener(v->{
-            setTitleToButtonOfMoreDescription(true);
-
-        });
+        button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
     }
 
     private void setTitleToButtonOfMoreDescription(boolean click) {
@@ -154,7 +157,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             button_more_description.setOnClickListener(null);
         }
     }
-
 
     @Override
     protected void attachPresenter() {
@@ -188,74 +190,79 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     }
 
     @Override
-    public void setModel(RestoDetail restoDetail) {
-        setTitle(restoDetail.getResto().getName());
-        name.setText(restoDetail.getResto().getName());
-        photosResto.clear();
-        if(restoDetail.getResto().getThumb()==null) {
-            slider.addSlider(new DefaultSliderView(this)
-                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(R.drawable.ic_default_resto)
-            );
-        }else {
-            photosResto.add(restoDetail.getResto().getThumb());
-        }
-        for (Kitchen kitchen:restoDetail.getResto_kitchen())
-            if(kitchen.getGetThumb()!=null)
-                photosResto.add(kitchen.getGetThumb());
+    public void setModel(RestoDetail restoDetail, int mode) {
 
-        for(String imgUrl:photosResto){
-            if(imgUrl!=null)
-                slider.addSlider(new DefaultSliderView(this)
-                        .setScaleType(BaseSliderView.ScaleType.CenterCrop)
-                        .image(imgUrl)
-                        .setOnSliderClickListener(slider1 -> {
-                            Intent intent = new Intent(this, PhotoSliderActivity.class);
-                            String[] urls = {imgUrl};
-                            intent.putExtra(Keys.PHOTOS, urls);
-                            startActivity(intent);
-                        }));
-        }
-        if(photosResto.size()>0) {
-            photosCounter.setText(String.format("%d/%d", 1, photosResto.size()));
-            slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
-                @Override
-                public void onPageSelected(int position) {
-                    photosCounter.setText(String.format("%d/%d", position + 1, photosResto.size()));
+        switch (mode){
+            case MODE_LOAD_ALL:
+                setTitle(restoDetail.getResto().getName());
+                name.setText(restoDetail.getResto().getName());
+                photosResto.clear();
+                if(restoDetail.getResto().getThumb()==null) {
+                    slider.addSlider(new DefaultSliderView(this)
+                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                            .image(R.drawable.ic_default_resto)
+                    );
+                }else {
+                    photosResto.add(restoDetail.getResto().getThumb());
                 }
-            });
-            cnt_photo.setText(String.valueOf(photosResto.size()));
-        }else {
-            pagerIndicator.setVisibility(View.GONE);
-            photosCounter.setText("0/0");
-        }
+                for (Kitchen kitchen:restoDetail.getResto_kitchen())
+                    if(kitchen.getGetThumb()!=null)
+                        photosResto.add(kitchen.getGetThumb());
 
-        site.setText(restoDetail.getResto().getSite());
-        String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
-        if(strDescription.length()>0)  description.setText(strDescription);
-        cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
-
-        try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
-        try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
-
-        try {
-            JSONObject jsonObject=new JSONObject(restoDetail.getResto().getAdditional_data());
-            JSONArray jsonArray=jsonObject.getJSONArray("phones");
-            for (int i=0;i<2;i++)
-                switch (i){
-                    case 0:
-                        number_call.setText(jsonArray.getString(i));
-                        break;
-                    case 1:
-                        number_cal2.setText(jsonArray.getString(i));
-                        break;
+                for(String imgUrl:photosResto){
+                    if(imgUrl!=null)
+                        slider.addSlider(new DefaultSliderView(this)
+                                .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                                .image(imgUrl)
+                                .setOnSliderClickListener(slider1 -> {
+                                    Intent intent = new Intent(this, PhotoSliderActivity.class);
+                                    String[] urls = {imgUrl};
+                                    intent.putExtra(Keys.PHOTOS, urls);
+                                    startActivity(intent);
+                                }));
+                }
+                if(photosResto.size()>0) {
+                    photosCounter.setText(String.format("%d/%d", 1, photosResto.size()));
+                    slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+                        @Override
+                        public void onPageSelected(int position) {
+                            photosCounter.setText(String.format("%d/%d", position + 1, photosResto.size()));
+                        }
+                    });
+                    cnt_photo.setText(String.valueOf(photosResto.size()));
+                }else {
+                    pagerIndicator.setVisibility(View.GONE);
+                    photosCounter.setText("0/0");
                 }
 
-        }catch (Exception e){};
+                site.setText(restoDetail.getResto().getSite());
+                String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
+                if(strDescription.length()>0)  description.setText(strDescription);
+                cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
 
-        button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
-        setTitleToButtonOfMoreDescription(false);
+                try {
+                    JSONObject jsonObject=new JSONObject(restoDetail.getResto().getAdditional_data());
+                    JSONArray jsonArray=jsonObject.getJSONArray("phones");
+                    for (int i=0;i<2;i++)
+                        switch (i){
+                            case 0:
+                                number_call.setText(jsonArray.getString(i));
+                                break;
+                            case 1:
+                                number_cal2.setText(jsonArray.getString(i));
+                                break;
+                        }
 
+                }catch (Exception e){};
+
+                button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
+                setTitleToButtonOfMoreDescription(false);
+
+            case MODE_LOAD_ONLY_LIKE:
+                try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
+                try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
+
+        }
 
     }
 
@@ -340,11 +347,28 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case RequestCodes.REQUEST_CODE_REVIEW_RESTO:
                 if(resultCode==RESULT_OK) {
                     enableControls(false,ALL_CONTROL);
-                    presenter.refreshContent();
+                    presenter.refreshContent(MODE_LOAD_ALL);
                 }
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit,menu);
+        menu.findItem(R.id.action_edit).getActionView().setOnClickListener(v -> onOptionsItemSelected(menu.findItem(R.id.action_edit)));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:
+                showMessage(getString(R.string.message_develop),0);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

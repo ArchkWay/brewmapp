@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.content.Intent;
+
 import com.brewmapp.presentation.view.contract.BeerDetailView;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -9,5 +11,10 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface BeerDetailPresenter extends LivePresenter<BeerDetailView> {
-    void requestBeerDetail(String idBeer);
+
+    void clickLike(int like_dislike);
+
+    void parseIntent(Intent intent);
+
+    void refreshContent(int mode);
 }

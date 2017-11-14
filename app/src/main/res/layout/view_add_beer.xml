@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="@dimen/common_block_space_double_semi"
+        android:layout_marginLeft="@dimen/common_block_space"
+        android:layout_marginRight="@dimen/common_block_space"
         >
         <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="@dimen/size_avatar_lesser"
@@ -30,39 +31,37 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Test"
-                android:textSize="@dimen/text_size_medium_phone"
+                android:text="@string/text_view_value_not_found"
+                android:textSize="@dimen/text_size_small"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/view.interest.title"
                 app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
-                android:layout_marginLeft="8dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintRight_toLeftOf="@+id/imageView2"
-                android:layout_marginRight="8dp"
-                app:layout_constraintHorizontal_bias="0.505"
+                app:layout_constraintRight_toLeftOf="@+id/view.interest.arrow.right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/AppTheme.Text.Georgia.Italic"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/common_block_space_half"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/size_menu_icon"
+                android:layout_height="@dimen/size_album_chevron"
+                android:src="@drawable/ic_arrow_right"
+                android:layout_gravity="center_vertical|right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="8dp"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"
-                />
-        <ImageView
-            android:layout_width="@dimen/size_album_chevron"
-            android:layout_height="@dimen/size_album_chevron"
-            android:src="@drawable/ic_chevron_right"
-            android:layout_gravity="center_vertical|right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:id="@+id/imageView2" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:id="@+id/view.interest.arrow.right" />
 
-    </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:background="@color/colorBlockSplitterBorder"/>
 
 </com.brewmapp.presentation.view.impl.widget.InterestAddViewBeer>

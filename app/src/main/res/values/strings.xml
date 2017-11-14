@@ -333,6 +333,7 @@
     <string name="hint_books">Какие книги Вы читаете</string>
     <string name="text_view_games">Игры</string>
     <string name="hint_games">В какие игры Вы любите играть</string>
+    <string name="text_view_menu_edit">Правка</string>
 
 
 </resources>

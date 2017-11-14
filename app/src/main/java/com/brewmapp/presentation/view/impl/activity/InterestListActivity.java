@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
@@ -166,11 +167,11 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
                     switch (Integer.valueOf(data.getAction())){
-                        case InterestAddViewResto.ACTION_VIEW_INTEREST:
+                        case RequestCodes.ACTION_VIEW:
                             setResult(RESULT_OK);
                             refreshInterests();
                             return;
-                        case InterestAddViewResto.ACTION_SELECT_INTEREST:
+                        case RequestCodes.ACTION_SELECT:
                             Serializable serializable = data.getSerializableExtra(getString(R.string.key_serializable_extra));
                             if (serializable instanceof Beer) {
                                 Beer beer = (Beer) serializable;

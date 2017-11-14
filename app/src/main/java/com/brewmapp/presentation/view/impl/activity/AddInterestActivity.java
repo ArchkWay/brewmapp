@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
@@ -16,7 +18,6 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
-import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
 
 
 import java.io.Serializable;
@@ -153,14 +154,14 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     private void processAction(int action, Object payload) {
         switch (action){
-            case InterestAddViewResto.ACTION_SELECT_INTEREST: {
+            case RequestCodes.ACTION_SELECT: {
                 Intent intent = new Intent(this, InterestListActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
-                intent.setAction(String.valueOf(InterestAddViewResto.ACTION_SELECT_INTEREST));
+                intent.setAction(String.valueOf(RequestCodes.ACTION_SELECT));
                 setResult(RESULT_OK, intent);
                 finish();
             }break;
-            case InterestAddViewResto.ACTION_VIEW_INTEREST: {
+            case RequestCodes.ACTION_VIEW: {
                 if(payload instanceof Resto){
                     Interest interest=new Interest();
                     Interest_info interest_info=new Interest_info();
@@ -168,6 +169,14 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
                     interest.setInterest_info(interest_info);
                     Intent intent=new Intent(this, RestoDetailActivity.class);
                     intent.putExtra(Keys.RESTO_ID,interest);
+                    startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+                }else if(payload instanceof Beer){
+                    Intent intent=new Intent(this, BeerDetailActivity.class);
+                    Interest interest=new Interest();
+                    Interest_info interest_info=new Interest_info();
+                    interest_info.setId(String.valueOf(((Beer)payload).getId()));
+                    interest.setInterest_info(interest_info);
+                    intent.putExtra(getString(R.string.key_serializable_extra),interest);
                     startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
                 }
             }break;
@@ -179,7 +188,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         switch (requestCode){
             case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK)
-                    setResult(RESULT_OK,new Intent(String.valueOf(InterestAddViewResto.ACTION_VIEW_INTEREST)));
+                    setResult(RESULT_OK,new Intent(String.valueOf(RequestCodes.ACTION_VIEW)));
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);

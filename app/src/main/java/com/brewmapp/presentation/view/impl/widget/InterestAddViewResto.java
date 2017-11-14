@@ -9,12 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Resto;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -31,8 +31,6 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     private Resto resto;
     private Listener listener;
 
-    public final static int ACTION_SELECT_INTEREST=0;
-    public final static int ACTION_VIEW_INTEREST=1;
 
     public InterestAddViewResto(Context context) {
         super(context);
@@ -67,8 +65,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         title.setText(resto.getName());
         shot_text.setText(resto.getAdressFormat());
 
-        setOnClickListener(v -> listener.onModelAction(ACTION_VIEW_INTEREST, resto));
-        arrow_right.setOnClickListener(v -> listener.onModelAction(ACTION_SELECT_INTEREST, resto));
+        setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, resto));
+        arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, resto));
     }
 
     @Override

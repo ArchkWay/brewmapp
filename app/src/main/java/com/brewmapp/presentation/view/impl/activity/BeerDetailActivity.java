@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -48,6 +51,11 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @BindView(R.id.activity_beer_detail_text_view_after_taste)    TextView after_taste;
     @BindView(R.id.activity_beer_detail_text_view_description)    TextView description;
     @BindView(R.id.activity_beerDetails_slider)    SliderLayout slider;
+    @BindView(R.id.layout_like)    ViewGroup layout_like;
+    @BindView(R.id.layout_dislike)    ViewGroup layout_dislike;
+    @BindView(R.id.layout_fav)    ViewGroup layout_fav;
+    @BindView(R.id.view_like_counter)    TextView like_counter;
+    @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
 
     @Inject    BeerDetailPresenter presenter;
 
@@ -83,9 +91,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
         description.setText(Html.fromHtml(beer.getText()));
 
-        //ubi.setText(beer.getRelations().);
-        //flavor.setText(beer.getRelations().);
-        //brand.setText(beer.);
+        slider.stopAutoCycle();
 
         ArrayList<String> photos=new ArrayList<>();
         if(beer.getGetThumb()!=null&&beer.getGetThumb().length()>0)
@@ -108,6 +114,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
             }
         }
+        try {like_counter.setText(beerDetail.getBeer().getLike());}catch (Exception e){};
+        try {dislike_counter.setText(beerDetail.getBeer().getDis_like());}catch (Exception e){};
 
     }
 
@@ -146,4 +154,20 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         return toolbar;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit,menu);
+        menu.findItem(R.id.action_edit).getActionView().setOnClickListener(v -> onOptionsItemSelected(menu.findItem(R.id.action_edit)));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:
+                showMessage(getString(R.string.message_develop),0);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -32,7 +32,24 @@ public class Beer implements Serializable{
     private String image;
     private String getThumb;
     private Relations relations=new Relations();
+    private String like;
+    private String dis_like;
 
+    public String getLike() {
+        return like;
+    }
+
+    public void setLike(String like) {
+        this.like = like;
+    }
+
+    public String getDis_like() {
+        return dis_like;
+    }
+
+    public void setDis_like(String dis_like) {
+        this.dis_like = dis_like;
+    }
 
     public Relations getRelations() {
         return relations;

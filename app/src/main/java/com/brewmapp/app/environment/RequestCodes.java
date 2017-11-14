@@ -24,4 +24,8 @@ public class RequestCodes {
     public static final String ACTION_SHOW_EVENT_FRAGMENT = "show_news_resto";
     public static final String ACTION_MAP_FRAGMENT = "show_map";
     public static final String INTENT_EXTRAS = "extras";
+
+    public final static int ACTION_SELECT =0;
+    public final static int ACTION_VIEW =1;
+
 }

@@ -7,7 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -28,10 +30,13 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView {
@@ -58,9 +63,16 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @BindView(R.id.layout_fav)    ViewGroup layout_fav;
     @BindView(R.id.view_like_counter)    TextView like_counter;
     @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
+    @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
+
+    @BindViews({
+            R.id.layout_like,
+            R.id.layout_dislike,
+            R.id.layout_fav
+    })    List<View> viewList;
+
 
     @Inject    BeerDetailPresenter presenter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +133,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
                 try {like_counter.setText(beerDetail.getBeer().getLike());}catch (Exception e){};
                 try {dislike_counter.setText(beerDetail.getBeer().getDis_like());}catch (Exception e){};
         }
-
+        enableControls(true,0);
     }
 
     @Override
@@ -131,6 +143,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         presenter.parseIntent(getIntent());
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
+        layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
     }
 
     @Override
@@ -150,6 +163,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @Override
     public void enableControls(boolean enabled, int code) {
+        ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
+                view.setEnabled(enabled);
+                view.setClickable(enabled);
+        });
 
     }
 
@@ -182,6 +199,12 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         else
             showMessage(strings[0]);
         finish();
+    }
+
+    @Override
+    public void setFavorite(boolean b) {
+        fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
+        enableControls(true,0);
     }
 
 }

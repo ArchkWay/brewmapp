@@ -133,7 +133,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_photo.setOnClickListener(v -> presenter.startShowPhoto(RestoDetailActivity.this,photosResto));
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
-        layout_fav.setOnClickListener(v -> presenter.clickFav());
+        layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);});
         private_message.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
@@ -312,7 +312,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void setFav(boolean b) {
         fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
-        setResult(RESULT_OK);
     }
 
     @Override

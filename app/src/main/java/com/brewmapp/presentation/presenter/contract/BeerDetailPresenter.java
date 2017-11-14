@@ -17,4 +17,6 @@ public interface BeerDetailPresenter extends LivePresenter<BeerDetailView> {
     void parseIntent(Intent intent);
 
     void refreshContent(int mode);
+
+    void clickFav();
 }

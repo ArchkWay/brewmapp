@@ -23,7 +23,7 @@ import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
-import com.brewmapp.execution.exchange.share.contract.LikeDislike;
+import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.LoadRestoAverageEvaluationTask;
 import com.brewmapp.execution.task.LoadEventsTask;
@@ -63,7 +63,7 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
 
-    private LikeDislike likeDislike;
+    private ContainerTasks containerTasks;
     private Context context;
     private LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask;
     private LoadInterestTask loadInterestTask;
@@ -80,7 +80,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private LoadSubscriptionsListTask loadSubscriptionsListTask;
     private LoadReviewsTask loadReviewsTask;
     private String IdSubscription=null;
-    private HolderData holderData =new HolderData();
+    private TempDataHolder tempDataHolder =new TempDataHolder();
 
     public void setRestoDetail(RestoDetail restoDetail) {
         this.restoDetail = restoDetail;
@@ -102,7 +102,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             LoadInterestTask loadInterestTask,
             RemoveInterestTask removeInterestTask,
             LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask,
-            LikeDislike likeDislike){
+            ContainerTasks containerTasks){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -117,7 +117,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.loadInterestTask= loadInterestTask;
         this.removeInterestTask=removeInterestTask;
         this.loadRestoAverageEvaluationTask=loadRestoAverageEvaluationTask;
-        this.likeDislike=likeDislike;
+        this.containerTasks = containerTasks;
     }
 
     @Override
@@ -196,7 +196,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab) {
-        holderData.storeUiSetting();
+        tempDataHolder.storeUiSetting();
         //set mode EventsFragment
         Intent intent=new Intent(
                 MainActivity.MODE_ONLY_EVENT_FRAGMENT,
@@ -214,7 +214,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void restoreSetting() {
-        holderData.restoreUiSetting();
+        tempDataHolder.restoreUiSetting();
     }
 
     private void loadData(int mode) {
@@ -365,13 +365,21 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                         @Override
                         public void onNext(List<IFlexible> iFlexibles) {
                             super.onNext(iFlexibles);
-                            holderData.setFavResto(iFlexibles.size()>0);
-                            view.setFav(holderData.isFavResto());
-                            if(holderData.isFavResto()) {
-                                holderData.setId_interest(((InterestInfo) iFlexibles.get(0)).getModel().getId());
+                            if(iFlexibles.size()==1){
+                                try {
+                                    tempDataHolder.setId_interest(((InterestInfo) iFlexibles.get(0)).getModel().getId());
+                                    tempDataHolder.setFavResto(true);
+                                    view.setFav(true);
+                                }catch (Exception e){
+                                    view.commonError(e.getMessage());
+                                }
+                            }else if(iFlexibles.size()==0){
+                                tempDataHolder.setFavResto(false);
+                                view.setFav(false);
                             }else {
-                                holderData.setId_interest(null);
+                                view.commonError();
                             }
+
                             loadAvegagEvaluation(mode);
                         }
                         @Override
@@ -438,7 +446,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void clickLikeDislike(int type_like) {
-        likeDislike.clickLike(Keys.CAP_RESTO,restoDetail.getResto().id(),type_like,new SimpleSubscriber<MessageResponse>(){
+        containerTasks.clickLikeDislike(Keys.CAP_RESTO,restoDetail.getResto().id(),type_like,new SimpleSubscriber<MessageResponse>(){
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
@@ -455,14 +463,14 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     @Override
     public void clickFav() {
         //view.showMessage(context.getString(R.string.message_develop),0);
-        if(holderData.isFavResto()){
-            removeInterestTask.execute(String.valueOf(holderData.getId_interest()),new SimpleSubscriber<String>(){
+        if(tempDataHolder.isFavResto()){
+            removeInterestTask.execute(String.valueOf(tempDataHolder.getId_interest()),new SimpleSubscriber<String>(){
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    holderData.setFavResto(false);
-                    holderData.setId_interest(null);
-                    view.setFav(holderData.isFavResto());
+                    tempDataHolder.setFavResto(false);
+                    tempDataHolder.setId_interest(null);
+                    view.setFav(tempDataHolder.isFavResto());
                 }
 
                 @Override
@@ -479,9 +487,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    holderData.setId_interest(s);
-                    holderData.setFavResto(true);
-                    view.setFav(holderData.isFavResto());
+                    tempDataHolder.setId_interest(s);
+                    tempDataHolder.setFavResto(true);
+                    view.setFav(tempDataHolder.isFavResto());
                 }
 
                 @Override
@@ -502,14 +510,14 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 restoDetail.getResto().getLocation().getLocation().getLat()
         );
 
-        holderData.storeUiSetting();
+        tempDataHolder.storeUiSetting();
         Intent intent=new Intent(MainActivity.MODE_ONLY_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
         intent.putExtra(Keys.LOCATION,restoLocation);
         restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
 
     }
 
-    class HolderData {
+    class TempDataHolder {
         private boolean favResto;
         private String id_interest;
         private int activeFragment;

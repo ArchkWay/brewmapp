@@ -1,7 +1,7 @@
 package com.brewmapp.app.di.module;
 
-import com.brewmapp.execution.exchange.share.contract.LikeDislike;
-import com.brewmapp.execution.exchange.share.impl.LikeDislikeImpl;
+import com.brewmapp.execution.task.containers.contract.ContainerTasks;
+import com.brewmapp.execution.task.containers.impl.ContainerTasksImpl;
 
 import javax.inject.Singleton;
 
@@ -15,7 +15,7 @@ import dagger.Provides;
 public class ShareModule {
     @Provides
     @Singleton
-    LikeDislike provideUserRepo(LikeDislikeImpl likeDislike) {
+    ContainerTasks provideUserRepo(ContainerTasksImpl likeDislike) {
         return likeDislike;
     }
 

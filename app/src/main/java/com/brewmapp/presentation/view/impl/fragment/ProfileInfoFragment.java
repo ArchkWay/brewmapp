@@ -105,7 +105,7 @@ public class ProfileInfoFragment extends BaseFragment implements ProfileInfoFrag
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_create:
+            case R.id.action_edit:
                 mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_EDIT)));
                 break;
         }
@@ -114,8 +114,8 @@ public class ProfileInfoFragment extends BaseFragment implements ProfileInfoFrag
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        menu.clear();
-//        inflater.inflate(R.menu.save,menu);
+        inflater.inflate(R.menu.edit,menu);
+        menu.findItem(R.id.action_edit).getActionView().setOnClickListener(v -> onOptionsItemSelected(menu.findItem(R.id.action_edit)));
         super.onCreateOptionsMenu(menu, inflater);
     }
 

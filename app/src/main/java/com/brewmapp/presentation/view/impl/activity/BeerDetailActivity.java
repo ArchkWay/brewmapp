@@ -167,7 +167,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
                 view.setEnabled(enabled);
                 view.setClickable(enabled);
         });
-
     }
 
     @Override

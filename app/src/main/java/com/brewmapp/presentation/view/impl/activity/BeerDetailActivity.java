@@ -3,12 +3,15 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,8 +46,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_beer_detail_name)    TextView name;
-    //@BindView(R.id.activity_beer_detail_text_view_flavor)    TextView flavor;
-    //@BindView(R.id.activity_beer_detail_text_view__taste)    TextView _taste;
     @BindView(R.id.activity_beer_detail_text_view_avg_cost)    TextView avg_cost;
     @BindView(R.id.activity_beer_detail_text_view_brand)    TextView brand;
     @BindView(R.id.activity_beer_detail_text_view_brew)    TextView brew;
@@ -64,6 +65,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @BindView(R.id.view_like_counter)    TextView like_counter;
     @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
     @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
+    @BindView(R.id.activity_beer_details_recycler_reviews)    RecyclerView recycler_reviews;
+    @BindView(R.id.activity_beer_detail_button_review)    Button button_review;
 
     @BindViews({
             R.id.layout_like,
@@ -85,26 +88,24 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         switch (mode){
             case RequestCodes.MODE_LOAD_ALL:
                 Beer beer=beerDetail.getBeer();
-                setTitle(beer.getTitle());
-                avg_cost.setText(beer.getAvg_cost());
-                name.setText(beer.getTitle_ru());
 
-                Iterator<BeerAftertaste> iterator = beer.getRelations().getBeerTaste().iterator();
-                if(iterator.hasNext()) {taste.setText(iterator.next().getName());/*_taste.setText(iterator.next().getName());*/}
+                String tmpStr;
 
-                avg_cost.setText(beer.getAvg_cost());
-                brand.setText(beer.getRelations().getBeerBrand().getName());
-                brew.setText(beer.getRelations().getBrewery().getName());
-                country.setText(beer.getRelations().getCountry().getName());
-                type.setText(beer.getRelations().getBeerType().getName());
-                strength.setText(beer.getRelations().getBeerStrength().getName());
-                density.setText(beer.getRelations().getProductDensity().getName());
-                filter_beer.setText(beer.getFiltered());
+                try {tmpStr=beer.getTitle();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) setTitle(beer.getTitle());
+                try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
+                try {tmpStr=beer.getTitle_ru();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) name.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerTaste().iterator().next().getName();}catch (Exception e){tmpStr=null;}if(!TextUtils.isEmpty(tmpStr)) taste.setText(tmpStr);
+                try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerBrand().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) brand.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBrewery().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) brew.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getCountry().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) country.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerType().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) type.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerStrength().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) strength.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getProductDensity().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) density.setText(tmpStr);
+                try {tmpStr=beer.getFiltered();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) filter_beer.setText(getString(tmpStr.equals("1")?R.string.yes:R.string.no));
+                try {tmpStr=beer.getRelations().getBeerAftertaste().iterator().next().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) after_taste.setText(tmpStr);
+                try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);
 
-                iterator = beer.getRelations().getBeerAftertaste().iterator();
-                if(iterator.hasNext()) after_taste.setText(iterator .next().getName());
-
-                description.setText(Html.fromHtml(beer.getText()));
 
                 slider.stopAutoCycle();
 
@@ -130,8 +131,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
                     }
                 }
             case RequestCodes.MODE_LOAD_ONLY_LIKE:
-                try {like_counter.setText(beerDetail.getBeer().getLike());}catch (Exception e){};
-                try {dislike_counter.setText(beerDetail.getBeer().getDis_like());}catch (Exception e){};
+                try {tmpStr=beerDetail.getBeer().getLike();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) like_counter.setText(tmpStr);
+                try {tmpStr=beerDetail.getBeer().getDis_like();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) dislike_counter.setText(tmpStr);
         }
         enableControls(true,0);
     }

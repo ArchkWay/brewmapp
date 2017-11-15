@@ -15,9 +15,10 @@
         android:paddingRight="@dimen/common_block_space"
         />
     <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@drawable/ic_edit2"
         android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/common_block_space"
         />
 </LinearLayout>

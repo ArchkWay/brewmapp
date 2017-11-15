@@ -219,7 +219,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case Keys.CAP_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), interest);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }
         }
     }

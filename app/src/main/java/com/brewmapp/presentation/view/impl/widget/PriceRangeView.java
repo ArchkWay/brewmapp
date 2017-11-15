@@ -24,7 +24,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 03.11.2017.
  */
 
-public class PriceRangeView extends BaseLinearLayout implements InteractiveModelView<PriceRange>, View.OnClickListener {
+public class PriceRangeView extends BaseLinearLayout implements InteractiveModelView<PriceRange> {
 
     @BindView(R.id.title)
     TextView title;
@@ -82,12 +82,5 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     @Override
     public void setListener(Listener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.container) {
-
-        }
     }
 }

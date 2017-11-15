@@ -15,7 +15,7 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  * Created by nixus on 03.11.2017.
  */
 
-public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements IFilterable, Serializable {
+public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements IFilterable {
 
     @Override
     public int getLayoutRes() {

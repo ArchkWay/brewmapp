@@ -267,15 +267,12 @@ public interface Api {
                           @Query(Keys.LIMIT_END) int end,
                           @FieldMap WrapperParams params);
 
-
     @POST("reviews")
     @FormUrlEncoded
     Call<Reviews> loadReviews(@FieldMap WrapperParams params);
 //    @POST("reviews")
 //    @FormUrlEncoded
 //    Call<ListResponse<Review>> loadReviews(@FieldMap WrapperParams params);
-
-
 
     @POST("/api/resto/restoevaluation")
     @FormUrlEncoded
@@ -285,9 +282,12 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<AverageEvaluation>> getRestoAverageEvaluation(@FieldMap WrapperParams params);
 
-
     @POST("/api/resto/restoevaluation/add")
     @FormUrlEncoded
     Call<Object> setRestoEvaluation(@FieldMap WrapperParams params);
+
+    @POST("resto/getcoordinates")
+    @FormUrlEncoded
+    Call<Object> getRestoByParametrs(@FieldMap WrapperParams params);
 
 }

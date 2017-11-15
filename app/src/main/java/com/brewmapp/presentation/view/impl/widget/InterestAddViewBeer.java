@@ -66,7 +66,7 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
             titletxt = titletxt + "(" + beer.getTitle_ru() + ")";
         title.setText(titletxt);
 
-        setOnClickListener(v -> listener.onModelAction(0, beer));
+//        setOnClickListener(v -> listener.onModelAction(0, beer));
     }
 
     @Override

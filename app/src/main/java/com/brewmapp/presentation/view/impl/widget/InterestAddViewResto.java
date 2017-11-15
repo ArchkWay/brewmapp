@@ -54,7 +54,7 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
 
     @Override
     public void setModel(Resto resto) {
-        this.resto =resto;
+        this.resto = resto;
         String imgUrl="";
         imgUrl= resto.getThumb();
 
@@ -67,8 +67,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         title.setText(resto.getName());
         shot_text.setText(resto.getAdressFormat());
 
-        setOnClickListener(v -> listener.onModelAction(ACTION_VIEW_INTEREST, resto));
-        arrow_right.setOnClickListener(v -> listener.onModelAction(ACTION_SELECT_INTEREST, resto));
+//        setOnClickListener(v -> listener.onModelAction(ACTION_VIEW_INTEREST, resto));
+//        arrow_right.setOnClickListener(v -> listener.onModelAction(ACTION_SELECT_INTEREST, resto));
     }
 
     @Override
@@ -85,9 +85,5 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
-
-
     }
-
-
 }

@@ -90,7 +90,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         }
     }
 
-
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_map;
@@ -154,7 +153,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
-        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity()));
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -205,6 +203,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     protected void onLocationFound(Location location) {
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(getCityName(location));
+        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
                 location.getLatitude(), location.getLongitude()
         ), 14));

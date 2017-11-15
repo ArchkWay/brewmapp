@@ -24,7 +24,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 03.11.2017.
  */
 
-public class FeatureView extends BaseLinearLayout implements InteractiveModelView<Feature>, View.OnClickListener {
+public class FeatureView extends BaseLinearLayout implements InteractiveModelView<Feature> {
 
     @BindView(R.id.title)
     TextView title;
@@ -57,7 +57,6 @@ public class FeatureView extends BaseLinearLayout implements InteractiveModelVie
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-        container.setOnClickListener(this);
     }
 
     @Override
@@ -72,24 +71,15 @@ public class FeatureView extends BaseLinearLayout implements InteractiveModelVie
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
         }
-
+        if (model.isSelected()) {
+            restoTypeCheckbox.setChecked(true);
+        } else {
+            restoTypeCheckbox.setChecked(false);
+        }
     }
 
     @Override
     public void setListener(Listener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.container) {
-            if (!restoTypeCheckbox.isChecked()) {
-                model.setSelected(true);
-                restoTypeCheckbox.setChecked(true);
-            } else {
-                model.setSelected(false);
-                restoTypeCheckbox.setChecked(false);
-            }
-        }
     }
 }

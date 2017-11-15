@@ -51,6 +51,7 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
     }
     @Override
     protected void prepareView() {
+        ButterKnife.bind(this);
     }
 
     @Override

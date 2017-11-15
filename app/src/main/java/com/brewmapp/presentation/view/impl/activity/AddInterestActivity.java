@@ -39,9 +39,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
     @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
 
-    @Inject    AddInterestPresenter presenter;
-
-
+    @Inject AddInterestPresenter presenter;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
@@ -56,8 +54,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     protected void initView() {
         enableBackButton();
-        fullSearchPackage=new FullSearchPackage();
-
+        fullSearchPackage = new FullSearchPackage();
         switch (getIntent().getAction()){
             case Keys.CAP_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
@@ -94,14 +91,13 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     }
 
     private void sendQuery() {
-        if(fullSearchPackage.getStringSearch().length()==0){
+        if(fullSearchPackage.getStringSearch().length() == 0){
             fullSearchPackage.setPage(0);
             appendItems(new ArrayList<>());
         }else {
             swipe.setRefreshing(true);
             presenter.sendQueryFullSearch(fullSearchPackage);
         }
-
     }
 
     private void refreshItems() {
@@ -125,7 +121,6 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
     }
 
     @Override
@@ -135,9 +130,8 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        if(fullSearchPackage.getPage()==0)
+        if(fullSearchPackage.getPage() == 0)
             adapter.clear();
-
         adapter.addItems(adapter.getItemCount(), list);
         adapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
@@ -146,7 +140,6 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     public void onError() {
         swipe.setRefreshing(false);
-
     }
 
     private void processAction(int action, Object payload) {
@@ -176,8 +169,8 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case Cons.REQUEST_CODE_REFRESH_ITEMS:
-                if(resultCode==RESULT_OK)
-                    setResult(RESULT_OK,new Intent(String.valueOf(InterestAddViewResto.ACTION_VIEW_INTEREST)));
+                if(resultCode == RESULT_OK)
+                    setResult(RESULT_OK, new Intent(String.valueOf(InterestAddViewResto.ACTION_VIEW_INTEREST)));
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);

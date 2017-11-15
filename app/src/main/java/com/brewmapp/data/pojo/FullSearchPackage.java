@@ -10,7 +10,6 @@ public class FullSearchPackage {
     private int page;
     private String stringSearch;
 
-
     public String getType() {
         return type;
     }
@@ -34,6 +33,4 @@ public class FullSearchPackage {
     public void setStringSearch(String stringSearch) {
         this.stringSearch = stringSearch;
     }
-
-
 }

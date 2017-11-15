@@ -17,6 +17,8 @@ import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
+import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
+import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 
 import java.util.List;
 
@@ -121,6 +123,14 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
         }
     }
 
+    @Override
+    public void startAddReviewRestoActivity(BeerDetailActivity beerDetailActivity) {
+        Intent intent=new Intent(beerDetailActivity, AddReviewBeerActivity.class);
+        intent.putExtra(Keys.CAP_BEER,beerDetail.getBeer().getId());
+        beerDetailActivity.startActivityForResult(intent, RequestCodes.REQUEST_CODE_REVIEW);
+
+    }
+
     private void loadData(int mode) {
         class LoadersAttributes{
             public LoadersAttributes(int mode){
@@ -180,6 +190,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                                 }else {
                                     view.commonError();
                                 }
+                                loadReviews(mode);
                             }
 
                             @Override
@@ -189,7 +200,23 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                             }
                         });
                         break;
+                    default:
+                        loadReviews(mode);
 
+                }
+            }
+            private void loadReviews(int mode){
+                switch (mode){
+                    case MODE_LOAD_ALL:
+                        containerTasks.loadReviewsTask(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
+                            @Override public void onNext(List<IFlexible> iFlexibles ) {
+                                super.onNext(iFlexibles);view.setReviews(iFlexibles);
+                            }
+                            @Override public void onError(Throwable e) {
+                                super.onError(e);view.commonError(e.getMessage());
+                            }
+                        });
+                        break;
                 }
             }
 

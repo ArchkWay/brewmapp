@@ -5,6 +5,7 @@ import android.view.View;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
+import com.brewmapp.presentation.presenter.contract.AddReviewBeerPresenter;
 import com.brewmapp.presentation.presenter.contract.AddReviewRestoPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
@@ -44,6 +45,7 @@ import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddInterestPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.AddReviewBeerPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddReviewRestoPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
@@ -83,6 +85,7 @@ import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileInfoFragmentPresenter;
+import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
@@ -294,6 +297,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     ProfileEditFragmentPresenter provideProfileEditFragmentPresenter(ProfileEditFragmentPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    AddReviewBeerPresenter provideAddReviewBeerPresenter(AddReviewBeerPresenterImpl presenter){
         return presenter;
     }
 }

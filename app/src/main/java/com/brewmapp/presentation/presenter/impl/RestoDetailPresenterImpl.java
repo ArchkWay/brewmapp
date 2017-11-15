@@ -18,7 +18,6 @@ import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
-import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
@@ -30,7 +29,6 @@ import com.brewmapp.execution.task.LoadEventsTask;
 import com.brewmapp.execution.task.LoadInterestTask;
 import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
-import com.brewmapp.execution.task.LoadReviewsTask;
 import com.brewmapp.execution.task.LoadSalesTask;
 import com.brewmapp.execution.task.LoadSubscriptionsListTask;
 import com.brewmapp.execution.task.RemoveInterestTask;
@@ -78,7 +76,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private SubscriptionOnTask subscriptionOnTask;
     private SubscriptionOffTask subscriptionOffTask;
     private LoadSubscriptionsListTask loadSubscriptionsListTask;
-    private LoadReviewsTask loadReviewsTask;
     private String IdSubscription=null;
     private TempDataHolder tempDataHolder =new TempDataHolder();
 
@@ -93,7 +90,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             SubscriptionOnTask subscriptionOnTask,
             LoadSubscriptionsListTask loadSubscriptionsListTask,
             SubscriptionOffTask subscriptionOffTask,
-            LoadReviewsTask loadReviewsTask,
             UiSettingRepo uiSettingRepo,
             LoadSalesTask loadSalesTask,
             LoadNewsTask loadNewsTask,
@@ -108,7 +104,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.subscriptionOnTask = subscriptionOnTask;
         this.loadSubscriptionsListTask = loadSubscriptionsListTask;
         this.subscriptionOffTask=subscriptionOffTask;
-        this.loadReviewsTask = loadReviewsTask;
         this.uiSettingRepo = uiSettingRepo;
         this.loadSalesTask= loadSalesTask;
         this.loadEventsTask= loadEventsTask;
@@ -174,7 +169,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     public void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity) {
         Intent intent=new Intent(restoDetailActivity, AddReviewRestoActivity.class);
         intent.putExtra(Keys.RESTO_ID,restoDetail);
-        restoDetailActivity.startActivityForResult(intent, RequestCodes.REQUEST_CODE_REVIEW_RESTO);
+        restoDetailActivity.startActivityForResult(intent, RequestCodes.REQUEST_CODE_REVIEW);
     }
 
     @Override
@@ -236,18 +231,13 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadReviews(int mode) {
-                if(mode==MODE_LOAD_ALL) {
-                    ReviewPackage reviewPackage=new ReviewPackage();
-                    reviewPackage.setRelated_model(Keys.CAP_RESTO);
-                    reviewPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
-                    loadReviewsTask.execute(reviewPackage,new SimpleSubscriber<List<IFlexible>>(){
+                if(mode==MODE_LOAD_ALL)
+                    containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
                         @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
                         @Override public void onError(Throwable e) {super.onError(e);view.commonError(e.getMessage());}
                     });
-                }else {
-                        loadSubscriptions(mode);
-                }
-
+                else
+                    loadSubscriptions(mode);
             }
             private void loadSubscriptions(int mode) {
                 if(mode==MODE_LOAD_ALL) {

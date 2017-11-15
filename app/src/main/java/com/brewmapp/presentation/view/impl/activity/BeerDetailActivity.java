@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -40,6 +41,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView {
@@ -67,15 +70,16 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
     @BindView(R.id.activity_beer_details_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_beer_detail_button_review)    Button button_review;
-
+    @BindView(R.id.activity_beer_details_empty_text_reviews)    TextView empty_text_reviews;
     @BindViews({
             R.id.layout_like,
             R.id.layout_dislike,
             R.id.layout_fav
     })    List<View> viewList;
 
-
     @Inject    BeerDetailPresenter presenter;
+
+    private FlexibleAdapter adapter=new FlexibleAdapter<>(new ArrayList<>());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +149,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
+        button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
+        recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -205,6 +211,16 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     public void setFavorite(boolean b) {
         fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
         enableControls(true,0);
+    }
+
+    @Override
+    public void setReviews(List<IFlexible> iFlexibles) {
+        empty_text_reviews.setVisibility(iFlexibles.size()==0?View.VISIBLE:View.GONE);
+        adapter.clear();
+        adapter.addItems(0,iFlexibles);
+        adapter.notifyDataSetChanged();
+        recycler_reviews.setAdapter(adapter);
+
     }
 
 }

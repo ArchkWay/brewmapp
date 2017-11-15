@@ -343,7 +343,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 if(resultCode==RESULT_OK)
                     presenter.restoreSetting();
                 return;
-            case RequestCodes.REQUEST_CODE_REVIEW_RESTO:
+            case RequestCodes.REQUEST_CODE_REVIEW:
                 if(resultCode==RESULT_OK) {
                     enableControls(false,ALL_CONTROL);
                     presenter.refreshContent(MODE_LOAD_ALL);

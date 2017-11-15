@@ -5,6 +5,7 @@ import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
+import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
@@ -99,5 +100,6 @@ public interface PresenterComponent {
     void inject(ProfileInfoActivity profileInfoActivity);
     void inject(FilterByCategory filterByCategory);
     void inject(FilterMapActivity filterMapActivity);
+    void inject(AddReviewBeerActivity addReviewBeerActivity);
 
 }

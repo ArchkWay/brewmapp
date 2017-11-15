@@ -3,6 +3,9 @@ package com.brewmapp.presentation.view.contract;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 
+import java.util.List;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -14,4 +17,6 @@ public interface BeerDetailView extends BasicView {
     void commonError(String... strings);
 
     void setFavorite(boolean b);
+
+    void setReviews(List<IFlexible> iFlexibles);
 }

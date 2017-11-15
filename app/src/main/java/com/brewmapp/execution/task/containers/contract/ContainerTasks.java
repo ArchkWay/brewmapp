@@ -19,4 +19,8 @@ public interface ContainerTasks {
     void interestOFF(String id_interest, SimpleSubscriber<String> simpleSubscriber);
 
     void interestON(String relatedModel, String relatedId, SimpleSubscriber<String> simpleSubscriber);
+
+    void loadReviewsTask(String relatedModel, int relatedId, SimpleSubscriber<List<IFlexible>> simpleSubscriber);
+
+    void addReviewTask(String relatedModel, String relatedId, String text, SimpleSubscriber<String> simpleSubscriber);
 }

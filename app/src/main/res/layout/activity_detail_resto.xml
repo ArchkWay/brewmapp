@@ -1053,7 +1053,7 @@
                 >
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height_type_0"
                     android:text="@string/button_text_write_review"
                     android:background="@drawable/bg_with_corner_red"
                     android:textColor="@color/colorButtonRed"

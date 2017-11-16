@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -53,17 +54,17 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     @Override
     public void setModel(Resto resto) {
         this.resto =resto;
-        String imgUrl="";
-        imgUrl= resto.getThumb();
 
-        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
+        if(TextUtils.isEmpty(resto.getThumb()))
             Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
         else
-            Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+            Picasso.with(getContext()).load(resto.getThumb()).fit().centerInside().into(avatar);
 
+        title.setText(new StringBuilder().append(resto.getName()).toString());
 
-        title.setText(resto.getName());
-        shot_text.setText(resto.getAdressFormat());
+        String tmpStr=new StringBuilder().append(resto.getAdressFormat()).toString();
+        if(TextUtils.isEmpty(tmpStr))       tmpStr=new StringBuilder().append(Html.fromHtml(resto.getText())).toString();
+        if(!TextUtils.isEmpty(tmpStr))      shot_text.setText(tmpStr);
 
         setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, resto));
         arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, resto));

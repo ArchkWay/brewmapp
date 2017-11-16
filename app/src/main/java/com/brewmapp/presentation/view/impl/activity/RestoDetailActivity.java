@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ALL;
 import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ONLY_LIKE;
@@ -93,6 +94,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_none23)    TextView cnt_photo;
     @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
     @BindView(R.id.activity_resto_detail_text_view_description_button)    Button button_more_description;
+    @BindView(R.id.activity_resto_details_swipe)    RefreshableSwipeRefreshLayout swipe;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -176,6 +178,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void enableControls(boolean enabled, int code) {
+        swipe.setRefreshing(!enabled);
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
             if(code == ALL_CONTROL) {
                 view.setEnabled(enabled);

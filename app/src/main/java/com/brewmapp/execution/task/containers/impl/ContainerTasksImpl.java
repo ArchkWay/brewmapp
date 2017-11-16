@@ -1,17 +1,26 @@
 package com.brewmapp.execution.task.containers.impl;
 
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LikeDislikePackage;
+import com.brewmapp.data.pojo.LikesByBeerPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
+import com.brewmapp.data.pojo.RestoGeoPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
+import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.AddReviewTask;
 import com.brewmapp.execution.task.LoadInterestTask;
+import com.brewmapp.execution.task.LoadLikesByBeerTask;
+import com.brewmapp.execution.task.LoadRestoGeoTask;
+import com.brewmapp.execution.task.LoadRestoLocationTask;
 import com.brewmapp.execution.task.LoadReviewsTask;
 import com.brewmapp.execution.task.RemoveInterestTask;
+import com.brewmapp.execution.task.SearchRestosTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.LikeTask;
 
@@ -34,15 +43,21 @@ public class ContainerTasksImpl implements ContainerTasks {
     private RemoveInterestTask removeInterestTask;
     private LoadReviewsTask loadReviewsTask;
     private AddReviewTask addReviewTask;
+    private LoadRestoGeoTask loadRestoGeoTask;
+    private LoadLikesByBeerTask loadLikesByBeerTask;
+    private SearchRestosTask searchRestosTask;
 
     @Inject
-    public ContainerTasksImpl(LikeTask likeTask,LoadInterestTask loadInterestTask,AddInterestTask addInterestTask,RemoveInterestTask removeInterestTask,LoadReviewsTask loadReviewsTask,AddReviewTask addReviewTask){
+    public ContainerTasksImpl(LikeTask likeTask,LoadInterestTask loadInterestTask,AddInterestTask addInterestTask,RemoveInterestTask removeInterestTask,LoadReviewsTask loadReviewsTask,AddReviewTask addReviewTask,LoadRestoGeoTask loadRestoGeoTask,LoadLikesByBeerTask loadLikesByBeerTask,SearchRestosTask searchRestosTask){
         this.likeTask=likeTask;
         this.loadInterestTask=loadInterestTask;
         this.addInterestTask=addInterestTask;
         this.removeInterestTask=removeInterestTask;
         this.loadReviewsTask=loadReviewsTask;
         this.addReviewTask=addReviewTask;
+        this.loadRestoGeoTask=loadRestoGeoTask;
+        this.loadLikesByBeerTask=loadLikesByBeerTask;
+        this.searchRestosTask=searchRestosTask;
     }
 
     @Override
@@ -88,5 +103,25 @@ public class ContainerTasksImpl implements ContainerTasks {
         reviewPackage.setRelated_id(relatedId);
         reviewPackage.setText(text);
         addReviewTask.execute(reviewPackage,simpleSubscriber);
+    }
+
+    @Override
+    public void loadRestoByBeer(String beer_id, SimpleSubscriber<ListResponse<Resto>> simpleSubscriber) {
+//        RestoGeoPackage restoGeoPackage=new RestoGeoPackage();
+//        restoGeoPackage.setBeer_id(beer_id);
+//        loadRestoGeoTask.execute(restoGeoPackage,simpleSubscriber);
+        SearchPackage searchPackage = new SearchPackage("");
+        searchPackage.getAdditionalFields().put(Keys.menuBeer,beer_id);
+        searchRestosTask.execute(searchPackage, simpleSubscriber);
+    }
+
+    @Override
+    public void loadLikesByBeer(String beer_id, SimpleSubscriber<Object> simpleSubscriber) {
+        LikesByBeerPackage likesByBeerPackage=new LikesByBeerPackage();
+        likesByBeerPackage.setRelated_id(beer_id);
+        likesByBeerPackage.setRelated_model(Keys.CAP_BEER);
+        loadLikesByBeerTask.execute(likesByBeerPackage,simpleSubscriber);
+
+
     }
 }

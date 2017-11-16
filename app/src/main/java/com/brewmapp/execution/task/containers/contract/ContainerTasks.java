@@ -1,5 +1,7 @@
 package com.brewmapp.execution.task.containers.contract;
 
+import com.brewmapp.data.entity.Resto;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 
 import java.util.List;
@@ -23,4 +25,8 @@ public interface ContainerTasks {
     void loadReviewsTask(String relatedModel, int relatedId, SimpleSubscriber<List<IFlexible>> simpleSubscriber);
 
     void addReviewTask(String relatedModel, String relatedId, String text, SimpleSubscriber<String> simpleSubscriber);
+
+    void loadRestoByBeer(String beer_id, SimpleSubscriber<ListResponse<Resto>> objectSimpleSubscriber);
+
+    void loadLikesByBeer(String beer_id, SimpleSubscriber<Object> simpleSubscriber);
 }

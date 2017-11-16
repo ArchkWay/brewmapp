@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,20 +19,16 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
-import com.brewmapp.data.entity.BeerAftertaste;
 import com.brewmapp.data.entity.BeerDetail;
-import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
-import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,7 +38,9 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView {
 
@@ -71,6 +68,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @BindView(R.id.activity_beer_details_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_beer_detail_button_review)    Button button_review;
     @BindView(R.id.activity_beer_details_empty_text_reviews)    TextView empty_text_reviews;
+    @BindView(R.id.activity_beer_detaild_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.activity_beer_details_recycler_resto)    RecyclerView recycler_resto;
     @BindViews({
             R.id.layout_like,
             R.id.layout_dislike,
@@ -79,7 +78,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @Inject    BeerDetailPresenter presenter;
 
-    private FlexibleAdapter adapter=new FlexibleAdapter<>(new ArrayList<>());
+    private FlexibleAdapter adapter_review =new FlexibleAdapter<>(new ArrayList<>());
+    private FlexibleAdapter adapter_resto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +151,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
+        recycler_resto.setLayoutManager(new LinearLayoutManager(this));
+        adapter_resto =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
     }
 
     @Override
@@ -170,6 +172,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @Override
     public void enableControls(boolean enabled, int code) {
+        swipe.setRefreshing(!enabled);
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
                 view.setEnabled(enabled);
                 view.setClickable(enabled);
@@ -216,11 +219,23 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @Override
     public void setReviews(List<IFlexible> iFlexibles) {
         empty_text_reviews.setVisibility(iFlexibles.size()==0?View.VISIBLE:View.GONE);
-        adapter.clear();
-        adapter.addItems(0,iFlexibles);
-        adapter.notifyDataSetChanged();
-        recycler_reviews.setAdapter(adapter);
+        adapter_review.clear();
+        adapter_review.addItems(0,iFlexibles);
+        adapter_review.notifyDataSetChanged();
+        recycler_reviews.setAdapter(adapter_review);
 
     }
 
+    @Override
+    public void addItemsResto(ArrayList<IFlexible> iFlexibles) {
+        adapter_resto.clear();
+        adapter_resto.addItems(0,iFlexibles);
+        adapter_resto.notifyDataSetChanged();
+        recycler_resto.setAdapter(adapter_resto);
+
+    }
+
+    private void processAction(int action, Object payload){
+
+    }
 }

@@ -8,10 +8,14 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
+import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.LoadProductTask;
@@ -20,6 +24,7 @@ import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -210,14 +215,56 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                     case MODE_LOAD_ALL:
                         containerTasks.loadReviewsTask(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
                             @Override public void onNext(List<IFlexible> iFlexibles ) {
-                                super.onNext(iFlexibles);view.setReviews(iFlexibles);
+                                super.onNext(iFlexibles);view.setReviews(iFlexibles);loadResto(mode);
                             }
                             @Override public void onError(Throwable e) {
                                 super.onError(e);view.commonError(e.getMessage());
                             }
                         });
                         break;
+                        default:
+                            loadResto(mode);
                 }
+            }
+            private void loadResto(int mode){
+                switch (mode){
+                    case MODE_LOAD_ALL:
+                        containerTasks.loadRestoByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<ListResponse<Resto>>(){
+                            @Override
+                            public void onNext(ListResponse<Resto> listResponse) {
+                                super.onNext(listResponse);
+                                ArrayList<RestoInfo> restoInfoArrayList=new ArrayList<>();
+                                for (Resto resto:listResponse.getModels()) {
+                                    RestoInfo restoInfo = new RestoInfo();
+                                    restoInfo.setModel(resto);
+                                    restoInfoArrayList.add(restoInfo);
+                                }
+                                view.addItemsResto(new ArrayList<>(new Restos(restoInfoArrayList).getModels()));
+                                loadWhoLike(mode);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                            }
+                        });
+                        break;
+                        default:
+                            loadWhoLike(mode);
+                }
+
+            }
+            private void loadWhoLike(int mode) {
+                containerTasks.loadLikesByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<Object>(){
+                    @Override
+                    public void onNext(Object o) {
+                        super.onNext(o);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                });
             }
 
         }

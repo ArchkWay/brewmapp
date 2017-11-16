@@ -2,7 +2,9 @@ package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
+import com.brewmapp.data.entity.wrapper.RestoInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -19,4 +21,6 @@ public interface BeerDetailView extends BasicView {
     void setFavorite(boolean b);
 
     void setReviews(List<IFlexible> iFlexibles);
+
+    void addItemsResto(ArrayList<IFlexible> iFlexibles);
 }

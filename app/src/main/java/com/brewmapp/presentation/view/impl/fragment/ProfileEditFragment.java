@@ -161,7 +161,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public void selectedPhoto(File file) {
-        presenter.setPhoto(file);
+        //presenter.setPhoto(file);
     }
 
 

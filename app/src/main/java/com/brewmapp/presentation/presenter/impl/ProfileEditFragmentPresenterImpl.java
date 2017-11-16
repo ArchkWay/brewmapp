@@ -13,6 +13,7 @@ import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.ProfileChangeTask;
+import com.brewmapp.execution.task.UploadAvatarTask;
 import com.brewmapp.execution.task.UploadPhotoTask;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
@@ -35,12 +36,15 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     private User user;
     private ProfileChangeTask profileChangeTask;
     private UploadPhotoTask uploadPhotoTask;
+    private UploadAvatarTask uploadAvatarTask;
+
 
     @Inject
-    public ProfileEditFragmentPresenterImpl(UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadPhotoTask uploadPhotoTask){
+    public ProfileEditFragmentPresenterImpl(UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadPhotoTask uploadPhotoTask,UploadAvatarTask uploadAvatarTask){
         user=userRepo.load();
         this.profileChangeTask = profileChangeTask;
         this.uploadPhotoTask = uploadPhotoTask;
+        this.uploadAvatarTask = uploadAvatarTask;
     }
 
     @Override
@@ -89,15 +93,17 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
 
     @Override
     public void setPhoto(File file) {
-        NewPhotoPackage newPhotoPackage=new NewPhotoPackage(file);
-        newPhotoPackage.setRelatedModel(Keys.CAP_USER);
-        newPhotoPackage.setRelatedId(user.getId());
-        uploadPhotoTask.execute(newPhotoPackage,new SimpleSubscriber<SingleResponse<UploadPhotoResponse>>(){
-            @Override
-            public void onNext(SingleResponse<UploadPhotoResponse> uploadPhotoResponseSingleResponse) {
-                super.onNext(uploadPhotoResponseSingleResponse);
-
-            }
-        });
+        user.setThumbnail(file.getAbsolutePath());
+//        uploadAvatarTask.execute(file,new SimpleSubscriber<String>(){
+//            @Override
+//            public void onNext(String string) {
+//                super.onNext(string);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//            }
+//        });
     }
 }

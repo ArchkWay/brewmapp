@@ -54,7 +54,7 @@ public class ProfileInfoPresenterImpl extends BasePresenter<ProfileInfoView> imp
             }
         });
 
-        view.showFragment(ProfileInfoActivity.FRAGMENT_INFO);
+        view.showFragment(ProfileInfoActivity.FRAGMENT_EDIT);
     }
 
     @Override

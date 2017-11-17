@@ -1,9 +1,10 @@
-package com.brewmapp.presentation.view.contract;
+package com.brewmapp.presentation.presenter.contract;
 
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.brewmapp.data.pojo.ProfileChangePackage;
+import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
 
 import java.io.File;

@@ -6,9 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.User;
@@ -16,15 +13,13 @@ import com.brewmapp.presentation.presenter.contract.ProfileInfoPresenter;
 import com.brewmapp.presentation.view.contract.ProfileInfoView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileInfoFragment;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView,ProfileInfoFragment.OnFragmentInteractionListener,ProfileEditFragment.OnFragmentInteractionListener {
+public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView,ProfileEditFragment.OnFragmentInteractionListener {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
 
@@ -32,7 +27,7 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
 
     private BaseFragment baseFragment;
 
-    public final static int FRAGMENT_INFO=0;
+
     public final static int FRAGMENT_EDIT=1;
     public static final int FRAGMENT_INVALIDATE_MENU = 3;
     public static final int FRAGMENT_ERROR = 4;
@@ -92,16 +87,10 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
     @Override
     public void showFragment(int fragment) {
         switch (fragment){
-            case ProfileInfoActivity.FRAGMENT_INFO:
-                baseFragment=new ProfileInfoFragment();
-                break;
             case ProfileInfoActivity.FRAGMENT_EDIT:
                 baseFragment=new ProfileEditFragment();
                 break;
-                default: {
-                    commonError();
-                    return;
-                }
+                default: {commonError();return;}
         }
 
         getSupportFragmentManager()
@@ -123,14 +112,6 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                if(baseFragment instanceof ProfileEditFragment) {
-                    showFragment(FRAGMENT_INFO);
-                    return true;
-                }
-                break;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -139,7 +120,6 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
         int key=Integer.valueOf(uri.getPath());
         switch (key){
             case FRAGMENT_EDIT:
-            case FRAGMENT_INFO:
                 showFragment(key);
                 break;
             case FRAGMENT_INVALIDATE_MENU:

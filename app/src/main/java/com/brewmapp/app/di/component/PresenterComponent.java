@@ -47,7 +47,6 @@ import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileInfoFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
@@ -62,7 +61,6 @@ public interface PresenterComponent {
     void inject(SearchFragment fragment);
     void inject(BeerMapFragment fragment);
     void inject(SettingsFragment fragment);
-    void inject(ProfileInfoFragment fragment);
     void inject(ProfileEditFragment fragment);
 
     void inject(BaseActivity activity);

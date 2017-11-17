@@ -6,16 +6,12 @@ import android.widget.RadioGroup;
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
-import com.brewmapp.data.pojo.NewPhotoPackage;
 import com.brewmapp.data.pojo.ProfileChangePackage;
-import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
-import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.ProfileChangeTask;
 import com.brewmapp.execution.task.UploadAvatarTask;
 import com.brewmapp.execution.task.UploadPhotoTask;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
@@ -79,7 +75,6 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
             @Override
             public void onNext(ListResponse<User> userListResponse) {
                 super.onNext(userListResponse);
-                mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_INFO)));
                 mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_USER_SAVED)));
             }
 

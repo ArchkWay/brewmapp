@@ -1,17 +1,10 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +16,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.pojo.ProfileChangePackage;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.squareup.picasso.Picasso;

@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
-import com.brewmapp.data.pojo.ProfileChangePackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -23,7 +22,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by Kras on 10.11.2017.
  */
 
-public class ProfileChangeTask extends BaseNetworkTask<ProfileChangePackage, ListResponse<User>> {
+public class ProfileChangeTask extends BaseNetworkTask<User, ListResponse<User>> {
 
     private UserRepo userRepo;
 
@@ -35,15 +34,15 @@ public class ProfileChangeTask extends BaseNetworkTask<ProfileChangePackage, Lis
     }
 
     @Override
-    protected Observable<ListResponse<User>> prepareObservable(ProfileChangePackage profileChangePackage) {
+    protected Observable<ListResponse<User>> prepareObservable(User user) {
             return Observable.create(subscriber -> {
                 try {
 
                     WrapperParams wrapperParams = new WrapperParams(Wrappers.USER);
-                    if(!TextUtils.isEmpty(profileChangePackage.getFirstName()))
-                        wrapperParams.addParam(Keys.FIRSTNAME,profileChangePackage.getFirstName());
-                    if(!TextUtils.isEmpty(profileChangePackage.getLastName()))
-                        wrapperParams.addParam(Keys.LASTNAME,profileChangePackage.getLastName());
+                    if(!TextUtils.isEmpty(user.getFirstname()))
+                        wrapperParams.addParam(Keys.FIRSTNAME,user.getFirstname());
+                    if(!TextUtils.isEmpty(user.getLastname()))
+                        wrapperParams.addParam(Keys.LASTNAME,user.getLastname());
 
 
                     ListResponse<User> response = executeCall(getApi().profileEdit(wrapperParams));

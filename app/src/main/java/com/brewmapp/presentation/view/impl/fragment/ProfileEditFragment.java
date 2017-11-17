@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.User;
-import com.brewmapp.data.pojo.ProfileChangePackage;
+
 import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
@@ -46,7 +46,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @BindView(R.id.fragment_profile_edit_edit_text_phone)    EditText edit_text_phone;
 
     private OnFragmentInteractionListener mListener;
-    private ProfileChangePackage profileChangePackage=new ProfileChangePackage();
+    //private ProfileChangePackage profileChangePackage=new ProfileChangePackage();
 
     @Inject    ProfileEditFragmentPresenter presenter;
 
@@ -92,8 +92,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         setHasOptionsMenu(true);
         segmentedGroup.setOnCheckedChangeListener(presenter.getOnCheckedChangeListener());
         registerTextChangeListeners(s ->{
-            profileChangePackage.setFirstName(TextTools.extractTrimmed(name));
-            profileChangePackage.setLastName(TextTools.extractTrimmed(lastName));
+            presenter.getUserWithNewData().setFirstname(TextTools.extractTrimmed(name));
+            presenter.getUserWithNewData().setLastname(TextTools.extractTrimmed(lastName));
             mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_INVALIDATE_MENU)));
             },name,lastName);
         avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileInfoActivity.FRAGMENT_SELECT_PHOTO))));
@@ -114,7 +114,9 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.save,menu);
-        menu.findItem(R.id.action_save).setEnabled(profileChangePackage.isNeedSave());
+        MenuItem save=menu.findItem(R.id.action_save);
+        save.getActionView().setOnClickListener(v -> onOptionsItemSelected(save));
+        save.getActionView().findViewById(R.id.text1).setVisibility(presenter.checkNewDataUser()?View.VISIBLE:View.INVISIBLE);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -122,7 +124,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
-                presenter.save(profileChangePackage,mListener);
+                presenter.save(mListener);
                 hideKeyboard();
                 return true;
         }
@@ -154,7 +156,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public void selectedPhoto(File file) {
-        //presenter.setPhoto(file);
+        presenter.setPhoto(file);
     }
 
 

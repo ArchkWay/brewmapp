@@ -1,9 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
-import android.view.View;
 import android.widget.RadioGroup;
-
-import com.brewmapp.data.pojo.ProfileChangePackage;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
 
@@ -20,8 +18,12 @@ public interface ProfileEditFragmentPresenter extends LivePresenter<ProfileEditF
 
     RadioGroup.OnCheckedChangeListener getOnCheckedChangeListener();
 
-    void save(ProfileChangePackage profileChangePackage, ProfileEditFragment.OnFragmentInteractionListener mListener);
+    void save(ProfileEditFragment.OnFragmentInteractionListener mListener);
 
 
     void setPhoto(File file);
+
+    User getUserWithNewData();
+
+    boolean checkNewDataUser();
 }

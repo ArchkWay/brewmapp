@@ -337,6 +337,7 @@
     <string name="no">Нет</string>
     <string name="text_view_beer_where_exist">Где наливают</string>
     <string name="text_view_beer_who_likes">Кому нравится</string>
+    <string name="text_view_menu_save">Сохранить</string>
 
 
 </resources>

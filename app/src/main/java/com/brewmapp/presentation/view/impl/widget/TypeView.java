@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.RestoType;
 import com.squareup.picasso.Picasso;
 
@@ -76,6 +77,7 @@ public class TypeView extends BaseLinearLayout implements InteractiveModelView<R
         } else {
             restoTypeCheckbox.setChecked(false);
         }
+        setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_TYPE, model));
     }
 
     @Override

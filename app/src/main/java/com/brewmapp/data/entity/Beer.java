@@ -32,6 +32,7 @@ public class Beer implements Serializable{
     private String image;
     private String getThumb;
     private Relations relations=new Relations();
+    private boolean selected;
 
 
     public Relations getRelations() {
@@ -215,5 +216,13 @@ public class Beer implements Serializable{
 
     public void setGetThumb(String getThumb) {
         this.getThumb = getThumb;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

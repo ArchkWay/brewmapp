@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
 import com.squareup.picasso.Picasso;
 
@@ -48,7 +49,6 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-
     @Override
     public void setModel(Beer beer) {
         this.beer =beer;
@@ -56,17 +56,18 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         String imgUrl="";
         imgUrl=beer.getGetThumb();
 
-        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
+        if (TextUtils.isEmpty(imgUrl)||imgUrl.length()==0) {
             Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);
-        else
+        } else {
             Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+        }
 
         String titletxt = beer.getTitle();
         if (beer.getTitle_ru().length() > 0)
             titletxt = titletxt + "(" + beer.getTitle_ru() + ")";
         title.setText(titletxt);
 
-//        setOnClickListener(v -> listener.onModelAction(0, beer));
+        setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, beer));
     }
 
     @Override
@@ -83,9 +84,5 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
-
-
     }
-
-
 }

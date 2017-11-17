@@ -14,8 +14,13 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.app.environment.FilterKeys;
+import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Feature;
+import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.PriceRangeTypes;
+import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -28,8 +33,6 @@ import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
@@ -48,7 +50,7 @@ import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
  * Created by nixus on 01.11.2017.
  */
 
-public class FilterByCategory extends BaseActivity implements FilterByCategoryView, FlexibleAdapter.OnItemClickListener {
+public class FilterByCategory extends BaseActivity implements FilterByCategoryView {
 
     @BindView(R.id.filter_toolbar)
     Toolbar toolbar;
@@ -97,8 +99,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         LinearLayoutManager manager = new LinearLayoutManager(this);
         list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setLayoutManager(manager);
-        list.setNestedScrollingEnabled(false);
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this);
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
         initFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
         initFilter();
@@ -121,7 +122,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 }
                 break;
             case FilterActions.BEER:
-                okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 toolbarTitle.setText(R.string.search_resto_beer);
                 break;
@@ -212,47 +212,63 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         }
     }
 
-    @Override
-    public boolean onItemClick(int position) {
-        if (original.get(0) instanceof PriceRangeInfo) {
-            PriceRangeInfo priceRangeInfo = (PriceRangeInfo) original.get(position);
-            if (!priceRangeInfo.getModel().isSelected()) {
-                priceRangeInfo.getModel().setSelected(true);
-            } else {
-                priceRangeInfo.getModel().setSelected(false);
-            }
-        } else if (original.get(0) instanceof FeatureInfo) {
-            FeatureInfo featureInfo = (FeatureInfo) original.get(position);
-            if (!featureInfo.getModel().isSelected()) {
-                featureInfo.getModel().setSelected(true);
-            } else {
-                featureInfo.getModel().setSelected(false);
-            }
-        } else if (original.get(0) instanceof RestoTypeInfo) {
-            RestoTypeInfo restoTypeInfo = (RestoTypeInfo) original.get(position);
-            if (!restoTypeInfo.getModel().isSelected()) {
-                restoTypeInfo.getModel().setSelected(true);
-            } else {
-                restoTypeInfo.getModel().setSelected(false);
-            }
-        } else if (original.get(0) instanceof KitchenInfo) {
-            KitchenInfo kitchenInfo = (KitchenInfo) original.get(position);
-            if (!kitchenInfo.getModel().isSelected()) {
-                kitchenInfo.getModel().setSelected(true);
-            } else {
-                kitchenInfo.getModel().setSelected(false);
-            }
-        } else if (original.get(0) instanceof BeerInfo) {
-            BeerInfo beerInfo = (BeerInfo) original.get(position);
-            selectedItem =  beerInfo.getModel().getTitle_ru();
-            selectedItemId = beerInfo.getModel().getId();
-        } else if (original.get(0) instanceof RestoInfo) {
-            RestoInfo restoInfo = (RestoInfo) original.get(position);
-            selectedItem = restoInfo.getModel().getName();
-            selectedItemId = String.valueOf(restoInfo.getModel().getId());
+    private void processAction(int action, Object payload) {
+        switch (action){
+            case FilterActions.RESTO_NAME:
+                Resto resto = (Resto) payload;
+                selectedItemId = String.valueOf(resto.getId());
+                selectedItem = resto.getName();
+                goToFilterMap();
+                break;
+            case FilterActions.RESTO_TYPE:
+                RestoType restoType = (RestoType) payload;
+                if (!restoType.isSelected()) {
+                    restoType.setSelected(true);
+                } else {
+                    restoType.setSelected(false);
+                }
+                break;
+            case FilterActions.BEER:
+                Beer beer = (Beer) payload;
+                if (!beer.isSelected()) {
+                    beer.setSelected(true);
+                } else {
+                    beer.setSelected(false);
+                }
+                break;
+            case FilterActions.KITCHEN:
+                Kitchen kitchen = (Kitchen) payload;
+                if (!kitchen.isSelected()) {
+                    kitchen.setSelected(true);
+                } else {
+                    kitchen.setSelected(false);
+                }
+                break;
+            case FilterActions.PRICE_RANGE:
+                PriceRange priceRange = (PriceRange) payload;
+                if (!priceRange.isSelected()) {
+                    priceRange.setSelected(true);
+                } else {
+                    priceRange.setSelected(false);
+                }
+                break;
+            case FilterActions.COUNTRY:
+                //TO DO
+                break;
+            case FilterActions.METRO:
+                //TO DO
+                break;
+            case FilterActions.FEATURES:
+                Feature feature = (Feature) payload;
+                if (!feature.isSelected()) {
+                    feature.setSelected(true);
+                } else {
+                    feature.setSelected(false);
+                }
+                break;
+            default:break;
         }
         adapter.updateDataSet(original);
-        return false;
     }
 
     @OnClick(R.id.filter_toolbar_subtitle)
@@ -263,6 +279,9 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         } else if (filterCategory == FilterActions.KITCHEN) {
             selectedFilter = FilterKeys.KITCHEN;
             saveStoredFilter(FilterKeys.KITCHEN);
+        } else if (filterCategory == FilterActions.BEER) {
+            selectedFilter = FilterKeys.BEER;
+            saveStoredFilter(FilterKeys.BEER);
         } else if (filterCategory == FilterActions.PRICE_RANGE) {
             selectedFilter = FilterKeys.PRICE_RANGE;
             saveStoredFilter(FilterKeys.PRICE_RANGE);

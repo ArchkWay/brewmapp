@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.PriceRange;
 
 import butterknife.BindView;
@@ -32,8 +33,6 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     ImageView logo;
     @BindView(R.id.chkbox)
     CheckBox restoTypeCheckbox;
-    @BindView(R.id.container)
-    ConstraintLayout rootView;
 
     private Listener listener;
     private PriceRange model;
@@ -57,7 +56,6 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-//        rootView.setOnClickListener(this);
     }
 
     @Override
@@ -77,6 +75,8 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
         } else {
             restoTypeCheckbox.setChecked(false);
         }
+
+        setOnClickListener(v -> listener.onModelAction(FilterActions.PRICE_RANGE, model));
     }
 
     @Override

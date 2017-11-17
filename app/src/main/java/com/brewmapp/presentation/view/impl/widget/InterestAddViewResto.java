@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Resto;
 import com.squareup.picasso.Picasso;
 
@@ -58,16 +59,18 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         String imgUrl="";
         imgUrl= resto.getThumb();
 
-        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
+        if (TextUtils.isEmpty(imgUrl)||imgUrl.length()==0) {
             Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
-        else
+        } else {
             Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+        }
 
 
         title.setText(resto.getName());
         shot_text.setText(resto.getAdressFormat());
 
 //        setOnClickListener(v -> listener.onModelAction(ACTION_VIEW_INTEREST, resto));
+        setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_NAME, resto));
 //        arrow_right.setOnClickListener(v -> listener.onModelAction(ACTION_SELECT_INTEREST, resto));
     }
 

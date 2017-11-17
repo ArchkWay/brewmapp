@@ -16,6 +16,7 @@ import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterField;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
+import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
@@ -110,7 +111,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     @Override
     public boolean onItemClick(int position) {
         if (position == 5 || position == 6) {
-            Toast.makeText(this, "В разработкецй...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, FilterByCategory.class);
             intent.putExtra(Keys.FILTER_CATEGORY, position);
@@ -131,49 +132,61 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     private void setSelectedFilter(String filterCategory, int category, String selectedItem) {
         StringBuilder filter = new StringBuilder();
         List<IFlexible> tempList;
-        if (filterCategory.equalsIgnoreCase(FilterKeys.RESTO_TYPE)) {
-            List<RestoTypeInfo> restoTypeInfos = new ArrayList<>();
-            tempList = Paper.book().read(FilterKeys.RESTO_TYPE);
-            for (Object o : tempList) {
-                restoTypeInfos.add((RestoTypeInfo) o);
-            }
-            for (int i = 0; i < restoTypeInfos.size(); i++) {
-                if (restoTypeInfos.get(i).getModel().isSelected()) {
-                    filter.append(restoTypeInfos.get(i).getModel().getName() + ", ");
+        if (filterCategory != null) {
+            if (filterCategory.equalsIgnoreCase(FilterKeys.RESTO_TYPE)) {
+                List<RestoTypeInfo> restoTypeInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.RESTO_TYPE);
+                for (Object o : tempList) {
+                    restoTypeInfos.add((RestoTypeInfo) o);
                 }
-            }
-        } else if (filterCategory.equalsIgnoreCase(FilterKeys.KITCHEN)) {
-            List<KitchenInfo> kitchenInfos = new ArrayList<>();
-            tempList = Paper.book().read(FilterKeys.KITCHEN);
-            for (Object o : tempList) {
-                kitchenInfos.add((KitchenInfo) o);
-            }
-            for (KitchenInfo kitchenInfo : kitchenInfos) {
-                if (kitchenInfo.getModel().isSelected()) {
-                    filter.append(kitchenInfo.getModel().getName() + ", ");
+                for (int i = 0; i < restoTypeInfos.size(); i++) {
+                    if (restoTypeInfos.get(i).getModel().isSelected()) {
+                        filter.append(restoTypeInfos.get(i).getModel().getName() + ", ");
+                    }
                 }
-            }
-
-        } else if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_RANGE)) {
-            List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
-            tempList = Paper.book().read(FilterKeys.PRICE_RANGE);
-            for (Object o : tempList) {
-                priceRangeInfos.add((PriceRangeInfo) o);
-            }
-            for (PriceRangeInfo priceRangeInfo : priceRangeInfos) {
-                if (priceRangeInfo.getModel().isSelected()) {
-                    filter.append(priceRangeInfo.getModel().getName() + ", ");
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.KITCHEN)) {
+                List<KitchenInfo> kitchenInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.KITCHEN);
+                for (Object o : tempList) {
+                    kitchenInfos.add((KitchenInfo) o);
                 }
-            }
-        } else if (filterCategory.equalsIgnoreCase(FilterKeys.FEATURES)) {
-            List<FeatureInfo> featureInfos = new ArrayList<>();
-            tempList = Paper.book().read(FilterKeys.FEATURES);
-            for (Object o : tempList) {
-                featureInfos.add((FeatureInfo) o);
-            }
-            for (FeatureInfo featureInfo : featureInfos) {
-                if (featureInfo.getModel().isSelected()) {
-                    filter.append(featureInfo.getModel().getName() + ", ");
+                for (KitchenInfo kitchenInfo : kitchenInfos) {
+                    if (kitchenInfo.getModel().isSelected()) {
+                        filter.append(kitchenInfo.getModel().getName() + ", ");
+                    }
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER)) {
+                    List<FilterBeerInfo> filterBeerInfos = new ArrayList<>();
+                    tempList = Paper.book().read(FilterKeys.BEER);
+                    for (Object o : tempList) {
+                        filterBeerInfos.add((FilterBeerInfo) o);
+                    }
+                    for (FilterBeerInfo filterBeerInfo : filterBeerInfos) {
+                        if (filterBeerInfo.getModel().isSelected()) {
+                            filter.append(filterBeerInfo.getModel().getTitle_ru() + ", ");
+                        }
+                    }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_RANGE)) {
+                List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.PRICE_RANGE);
+                for (Object o : tempList) {
+                    priceRangeInfos.add((PriceRangeInfo) o);
+                }
+                for (PriceRangeInfo priceRangeInfo : priceRangeInfos) {
+                    if (priceRangeInfo.getModel().isSelected()) {
+                        filter.append(priceRangeInfo.getModel().getName() + ", ");
+                    }
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.FEATURES)) {
+                List<FeatureInfo> featureInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.FEATURES);
+                for (Object o : tempList) {
+                    featureInfos.add((FeatureInfo) o);
+                }
+                for (FeatureInfo featureInfo : featureInfos) {
+                    if (featureInfo.getModel().isSelected()) {
+                        filter.append(featureInfo.getModel().getName() + ", ");
+                    }
                 }
             }
         }

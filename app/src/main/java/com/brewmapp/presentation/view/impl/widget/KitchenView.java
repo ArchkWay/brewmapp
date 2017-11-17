@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Kitchen;
 import com.squareup.picasso.Picasso;
 
@@ -72,6 +73,7 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
         } else {
             restoTypeCheckbox.setChecked(false);
         }
+        setOnClickListener(v -> listener.onModelAction(FilterActions.KITCHEN, model));
     }
 
     @Override

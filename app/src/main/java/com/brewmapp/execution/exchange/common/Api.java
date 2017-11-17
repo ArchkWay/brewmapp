@@ -32,6 +32,7 @@ import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
+import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Beers;
@@ -285,6 +286,16 @@ public interface Api {
     @POST("/api/resto/restoevaluation/add")
     @FormUrlEncoded
     Call<Object> setRestoEvaluation(@FieldMap WrapperParams params);
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<FilterBeer> filterSearchBeer(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+
+    );
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded

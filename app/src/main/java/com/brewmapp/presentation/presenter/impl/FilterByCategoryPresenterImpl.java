@@ -1,11 +1,9 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.task.FeatureTask;
-import com.brewmapp.execution.task.FullSearchTask;
+import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RestoTypeTask;
@@ -17,7 +15,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
-import io.paperdb.Paper;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -32,20 +29,20 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     private KitchenTask kitchenTask;
     private PriceRangeTask priceRangeTask;
     private FeatureTask featureTask;
-    private FullSearchTask fullSearchTask;
+    private FullSearchFilterTask fullSearchFilterTask;
 
     @Inject
     public FilterByCategoryPresenterImpl(Context context, RestoTypeTask restoTypeTask,
                                          KitchenTask kitchenTask,
                                          PriceRangeTask priceRangeTask,
                                          FeatureTask featureTask,
-                                         FullSearchTask fullSearchTask) {
+                                         FullSearchFilterTask fullSearchFilterTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
         this.priceRangeTask = priceRangeTask;
         this.featureTask = featureTask;
-        this.fullSearchTask = fullSearchTask;
+        this.fullSearchFilterTask = fullSearchFilterTask;
     }
 
     @Override
@@ -59,7 +56,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         kitchenTask.cancel();
         priceRangeTask.cancel();
         featureTask.cancel();
-        fullSearchTask.cancel();
+        fullSearchFilterTask.cancel();
     }
 
     @Override
@@ -129,8 +126,8 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
     @Override
     public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
-        fullSearchTask.cancel();
-        fullSearchTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
+        fullSearchFilterTask.cancel();
+        fullSearchFilterTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);

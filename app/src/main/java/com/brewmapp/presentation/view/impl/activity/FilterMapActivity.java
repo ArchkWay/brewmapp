@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.brewmapp.R;
@@ -20,6 +21,7 @@ import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
+import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
@@ -30,6 +32,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
@@ -40,11 +43,13 @@ import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
  * Created by nlbochas on 28/10/2017.
  */
 
-public class FilterMapActivity extends BaseActivity implements FilterMapView, View.OnClickListener, FlexibleAdapter.OnItemClickListener {
+public class FilterMapActivity extends BaseActivity implements FilterMapView, FlexibleAdapter.OnItemClickListener {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.accept_filter) Button search;
     @BindView(R.id.filter_list) RecyclerView list;
+    @BindView(R.id.offer)
+    CheckBox offer;
 
     @Inject FilterMapPresenter presenter;
     private FlexibleAdapter<FilterField> adapter;
@@ -69,7 +74,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     @Override
     protected void initView() {
         enableBackButton();
-        search.setOnClickListener(this);
         Paper.init(this);
         if (Paper.book().read("categoryList") == null) {
             Paper.book().write("categoryList", FilterField.createDefault(this));
@@ -85,12 +89,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
     @Override
     protected LivePresenter<?> getPresenter() {
         return presenter;
-    }
-
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent();
-        finish();
     }
 
     @Override
@@ -197,6 +195,15 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Vi
         }
         adapter.notifyDataSetChanged();
         Paper.book().write("categoryList", categoryList);
+    }
+
+    @OnClick(R.id.accept_filter)
+    public void acceptFilter() {
+        FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
+        if (offer.isChecked()) {
+            filterRestoPackage.setResto_discount(1);
+        }
+        presenter.loadFilterResult(filterRestoPackage);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -61,11 +62,12 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
         return model;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void setModel(Beer model) {
         this.model = model;
-        title.setText(model.getTitle_ru());
-        if (model.getImage() == null) {
+        title.setText(model.getTitle());
+        if (model.getGetThumb() == null) {
             logo.setVisibility(INVISIBLE);
         }
         if (model.isSelected()) {

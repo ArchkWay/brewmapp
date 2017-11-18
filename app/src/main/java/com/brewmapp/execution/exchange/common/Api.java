@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.Kitchen;
@@ -299,6 +300,6 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<Object> getRestoByParametrs(@FieldMap WrapperParams params);
+    Call<List<FilterRestoLocation>> loadRestoLocation(@FieldMap WrapperParams params);
 
 }

@@ -6,6 +6,7 @@ import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
+import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -18,6 +19,7 @@ import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
+import com.brewmapp.execution.exchange.common.base.FilterBeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.KitchenDeserializer;
@@ -95,6 +97,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(FeatureInfo.class, new FeatureDeserializer())
                 .registerTypeAdapter(SubscriptionInfo.class, new SubscriptionDeserializer())
                 .registerTypeAdapter(ReviewInfo.class, new ReviewDeserializer())
+                .registerTypeAdapter(FilterBeerInfo.class, new FilterBeerDeserializer())
                 ;
     }
 

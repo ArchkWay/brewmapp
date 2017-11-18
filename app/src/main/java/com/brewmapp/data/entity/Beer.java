@@ -9,7 +9,7 @@ import java.util.List;
  * Created by xpusher on 10/20/2017.
  */
 
-public class Beer implements Serializable{
+public class Beer implements Serializable {
     private String id;
     private String country_id;
     private String brand_id;
@@ -31,9 +31,8 @@ public class Beer implements Serializable{
     private String timestamp;
     private String image;
     private String getThumb;
-    private Relations relations=new Relations();
+    private Relations relations = new Relations();
     private boolean selected;
-
 
     public Relations getRelations() {
         return relations;
@@ -42,8 +41,6 @@ public class Beer implements Serializable{
     public void setRelations(Relations relations) {
         this.relations = relations;
     }
-
-
 
     public String getId() {
         return id;

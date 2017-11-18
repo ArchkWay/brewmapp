@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -18,15 +19,8 @@ import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.PriceRange;
-import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
-import com.brewmapp.data.entity.wrapper.BeerInfo;
-import com.brewmapp.data.entity.wrapper.FeatureInfo;
-import com.brewmapp.data.entity.wrapper.KitchenInfo;
-import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
-import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
@@ -64,6 +58,10 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     RecyclerView list;
     @BindView(R.id.activity_search_search)
     FinderView finder;
+    @BindView(R.id.lyt_empty_view)
+    LinearLayout emptyView;
+    @BindView(R.id.empty_title)
+    TextView emptyTitle;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
@@ -111,6 +109,9 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
             case FilterActions.RESTO_NAME:
                 okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setText(getString(R.string.filter_search_resto));
+                list.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_resto_name);
                 break;
             case FilterActions.RESTO_TYPE:
@@ -122,6 +123,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 }
                 break;
             case FilterActions.BEER:
+                emptyView.setVisibility(View.VISIBLE);
+                list.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 toolbarTitle.setText(R.string.search_resto_beer);
                 break;
@@ -197,9 +200,13 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
         if (stringSearch.length() > 3) {
+            emptyView.setVisibility(View.GONE);
+            list.setVisibility(View.VISIBLE);
             sendQuery();
         } else if (stringSearch.length() == 0) {
             adapter.clear();
+            emptyView.setVisibility(View.VISIBLE);
+            list.setVisibility(View.GONE);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -110,6 +111,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_resto));
                 list.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_resto_name);
@@ -125,6 +127,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
             case FilterActions.BEER:
                 emptyView.setVisibility(View.VISIBLE);
                 list.setVisibility(View.GONE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 toolbarTitle.setText(R.string.search_resto_beer);
                 break;

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterField;
@@ -48,8 +49,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.accept_filter) Button search;
     @BindView(R.id.filter_list) RecyclerView list;
-    @BindView(R.id.offer)
-    CheckBox offer;
+    @BindView(R.id.offer) CheckBox offer;
 
     @Inject FilterMapPresenter presenter;
     private FlexibleAdapter<FilterField> adapter;
@@ -127,8 +127,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         }
     }
 
-    private void setSelectedFilter(String filterCategory, int category, String selectedItem) {
+    private void setSelectedFilter(String filterCategory, int category, String cityId) {
         StringBuilder filter = new StringBuilder();
+        StringBuilder filterId = new StringBuilder();
         List<IFlexible> tempList;
         if (filterCategory != null) {
             if (filterCategory.equalsIgnoreCase(FilterKeys.RESTO_TYPE)) {
@@ -140,6 +141,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 for (int i = 0; i < restoTypeInfos.size(); i++) {
                     if (restoTypeInfos.get(i).getModel().isSelected()) {
                         filter.append(restoTypeInfos.get(i).getModel().getName() + ", ");
+                        filterId.append(restoTypeInfos.get(i).getModel().getId() + "|");
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.KITCHEN)) {
@@ -151,6 +153,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 for (KitchenInfo kitchenInfo : kitchenInfos) {
                     if (kitchenInfo.getModel().isSelected()) {
                         filter.append(kitchenInfo.getModel().getName() + ", ");
+                        filterId.append(kitchenInfo.getModel().getId() + "|");
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER)) {
@@ -162,6 +165,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                     for (FilterBeerInfo filterBeerInfo : filterBeerInfos) {
                         if (filterBeerInfo.getModel().isSelected()) {
                             filter.append(filterBeerInfo.getModel().getTitle_ru() + ", ");
+                            filterId.append(filterBeerInfo.getModel().getId() + "|");
                         }
                     }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_RANGE)) {
@@ -173,6 +177,8 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 for (PriceRangeInfo priceRangeInfo : priceRangeInfos) {
                     if (priceRangeInfo.getModel().isSelected()) {
                         filter.append(priceRangeInfo.getModel().getName() + ", ");
+                        filterId.append(priceRangeInfo.getModel().getId() + ",");
+
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.FEATURES)) {
@@ -184,14 +190,16 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 for (FeatureInfo featureInfo : featureInfos) {
                     if (featureInfo.getModel().isSelected()) {
                         filter.append(featureInfo.getModel().getName() + ", ");
+                        filterId.append(featureInfo.getModel().getId() + "|");
                     }
                 }
             }
         }
-        if (selectedItem != null) {
-            adapter.getItem(category).setSelectedFilter(selectedItem);
+        if (cityId != null) {
+            adapter.getItem(category).setSelectedFilter(cityId);
         } else {
             adapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
+            adapter.getItem(category).setSelectedItemId(filterId.toString());
         }
         adapter.notifyDataSetChanged();
         Paper.book().write("categoryList", categoryList);
@@ -199,11 +207,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @OnClick(R.id.accept_filter)
     public void acceptFilter() {
-        FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
-        if (offer.isChecked()) {
-            filterRestoPackage.setResto_discount(1);
-        }
-        presenter.loadFilterResult(filterRestoPackage);
+        presenter.loadFilterResult(Paper.book().read("categoryList"), offer.isChecked() ? 1 : 0);
     }
 
     @Override

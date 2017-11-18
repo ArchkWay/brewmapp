@@ -300,8 +300,8 @@
     <string name="text_view_simple_country">Страна</string>
     <string name="text_view_simple_city">Город</string>
     <string name="text_view_simple_marital_status">Семейное положение</string>
-    <string name="filter_search_beer">Для поиска введилте\n название пива</string>
-    <string name="filter_search_resto">Для поиска введите\n название заведения</string>
-    <string name="special_offer">Специальне предложения</string>
+    <string name="filter_search_beer">Для поиска введите название пива</string>
+    <string name="filter_search_resto">Для поиска введите название заведения</string>
+    <string name="special_offer">Специальные предложения</string>
 
 </resources>

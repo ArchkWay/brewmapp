@@ -24,10 +24,10 @@
 
         <TextView
             android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:text="@string/filter_search_beer"
-            android:textStyle="italic"
             android:id="@+id/empty_title"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

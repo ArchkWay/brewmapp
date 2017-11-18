@@ -2,7 +2,9 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.FilterField;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.pojo.FilterRestoPackage;
@@ -46,8 +48,16 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     }
 
     @Override
-    public void loadFilterResult(FilterRestoPackage filterRestoPackage) {
+    public void loadFilterResult(List<FilterField> filterFields, int specialOffer) {
         filterRestoTask.cancel();
+        FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
+        filterRestoPackage.setRestoCity(filterFields.get(FilterActions.RESTO_NAME).getSelectedItemId());
+        filterRestoPackage.setRestoTypes(filterFields.get(FilterActions.RESTO_TYPE).getSelectedItemId());
+        filterRestoPackage.setMenuBeer(filterFields.get(FilterActions.BEER).getSelectedItemId());
+        filterRestoPackage.setRestoKitchens(filterFields.get(FilterActions.KITCHEN).getSelectedItemId());
+        filterRestoPackage.setRestoAveragepriceRange(filterFields.get(FilterActions.PRICE_RANGE).getSelectedItemId());
+        filterRestoPackage.setRestoFeatures(filterFields.get(FilterActions.FEATURES).getSelectedItemId());
+        filterRestoPackage.setResto_discount(specialOffer);
         filterRestoTask.execute(filterRestoPackage, new SimpleSubscriber<List<FilterRestoLocation>>() {
             @Override
             public void onError(Throwable e) {

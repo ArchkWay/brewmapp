@@ -339,5 +339,8 @@
     <string name="text_view_beer_who_likes">Кому нравится</string>
     <string name="text_view_menu_save">Сохранить</string>
 
+    <string name="filter_search_beer">Для поиска введите название пива</string>
+    <string name="filter_search_resto">Для поиска введите название заведения</string>
+    <string name="special_offer">Специальные предложения</string>
 
 </resources>

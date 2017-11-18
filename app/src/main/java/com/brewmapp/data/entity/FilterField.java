@@ -30,6 +30,7 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
     public static final int OTHER = 7;
 
     private int id;
+    private String selectedItemId;
     private int icon;
     private String title;
     private String selectedFilter;
@@ -102,6 +103,10 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
         return title;
     }
 
+    public void setSelectedFilter(String selectedFilter) {
+        this.selectedFilter = selectedFilter;
+    }
+
     public static List<FilterField> createDefault(Context context) {
         List<FilterField> out = new ArrayList<>();
         out.add(new FilterField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любое"));
@@ -117,5 +122,13 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
 
     public String getSelectedFilter() {
         return selectedFilter;
+    }
+
+    public String getSelectedItemId() {
+        return selectedItemId;
+    }
+
+    public void setSelectedItemId(String selectedItemId) {
+        this.selectedItemId = selectedItemId;
     }
 }

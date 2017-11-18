@@ -42,6 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:layout_marginStart="6dp"
+                    android:maxWidth="200dp"
+                    android:maxLines="3"
                     android:textColor="@color/vk_black"
                     android:layout_gravity="center_vertical"
                     android:paddingRight="3dp"

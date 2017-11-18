@@ -6,6 +6,8 @@ import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.presentation.view.impl.widget.PriceRangeView;
 import com.brewmapp.presentation.view.impl.widget.TypeView;
 
+import java.io.Serializable;
+
 import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 

@@ -44,8 +44,6 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Inject    AddInterestPresenter presenter;
 
-
-
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
@@ -59,8 +57,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     protected void initView() {
         enableBackButton();
-        fullSearchPackage=new FullSearchPackage();
-
+        fullSearchPackage = new FullSearchPackage();
         switch (getIntent().getAction()){
             case Keys.CAP_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
@@ -97,14 +94,13 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     }
 
     private void sendQuery() {
-        if(fullSearchPackage.getStringSearch().length()==0){
+        if(fullSearchPackage.getStringSearch().length() == 0){
             fullSearchPackage.setPage(0);
             appendItems(new ArrayList<>());
         }else {
             swipe.setRefreshing(true);
             presenter.sendQueryFullSearch(fullSearchPackage);
         }
-
     }
 
     private void refreshItems() {
@@ -128,7 +124,6 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
     }
 
     @Override
@@ -138,9 +133,8 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        if(fullSearchPackage.getPage()==0)
+        if(fullSearchPackage.getPage() == 0)
             adapter.clear();
-
         adapter.addItems(adapter.getItemCount(), list);
         adapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
@@ -149,7 +143,6 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     public void onError() {
         swipe.setRefreshing(false);
-
     }
 
     private void processAction(int action, Object payload) {

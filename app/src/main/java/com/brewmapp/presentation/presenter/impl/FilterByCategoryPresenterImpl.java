@@ -1,7 +1,9 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.task.FeatureTask;
-import com.brewmapp.execution.task.FullSearchTask;
+import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RestoTypeTask;
@@ -22,23 +24,30 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategoryView> implements FilterByCategoryPresenter {
 
+    private Context context;
     private RestoTypeTask restoTypeTask;
     private KitchenTask kitchenTask;
     private PriceRangeTask priceRangeTask;
     private FeatureTask featureTask;
-    private FullSearchTask fullSearchTask;
+    private FullSearchFilterTask fullSearchFilterTask;
 
     @Inject
-    public FilterByCategoryPresenterImpl(RestoTypeTask restoTypeTask,
+    public FilterByCategoryPresenterImpl(Context context, RestoTypeTask restoTypeTask,
                                          KitchenTask kitchenTask,
                                          PriceRangeTask priceRangeTask,
                                          FeatureTask featureTask,
-                                         FullSearchTask fullSearchTask) {
+                                         FullSearchFilterTask fullSearchFilterTask) {
+        this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
         this.priceRangeTask = priceRangeTask;
         this.featureTask = featureTask;
-        this.fullSearchTask = fullSearchTask;
+        this.fullSearchFilterTask = fullSearchFilterTask;
+    }
+
+    @Override
+    public void onAttach(FilterByCategoryView filterByCategoryView) {
+        super.onAttach(filterByCategoryView);
     }
 
     @Override
@@ -47,7 +56,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         kitchenTask.cancel();
         priceRangeTask.cancel();
         featureTask.cancel();
-        fullSearchTask.cancel();
+        fullSearchFilterTask.cancel();
     }
 
     @Override
@@ -96,6 +105,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
                 view.appendItems(iFlexibles);
             }
         });
+
     }
 
     @Override
@@ -115,17 +125,18 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     }
 
     @Override
-    public void fullSearch() {
-        fullSearchTask.cancel();
-        fullSearchTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
-            @Override
-            public void onError(Throwable e) {
-                showError(e.getMessage());
-            }
-
+    public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
+        fullSearchFilterTask.cancel();
+        fullSearchFilterTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);
+            }
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.showMessage(e.getMessage(),0);
             }
         });
     }

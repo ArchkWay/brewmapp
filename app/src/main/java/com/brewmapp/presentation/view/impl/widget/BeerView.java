@@ -1,20 +1,19 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.FilterActions;
-import com.brewmapp.data.entity.Feature;
-import com.squareup.picasso.Picasso;
+import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.PriceRange;
+import com.brewmapp.data.entity.Resto;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,37 +21,35 @@ import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
 /**
- * Created by nixus on 03.11.2017.
+ * Created by nixus on 17.11.2017.
  */
 
-public class FeatureView extends BaseLinearLayout implements InteractiveModelView<Feature> {
+public class BeerView extends BaseLinearLayout implements InteractiveModelView<Beer> {
 
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.logo)
-    ImageView logoRestoType;
+    ImageView logo;
     @BindView(R.id.chkbox)
     CheckBox restoTypeCheckbox;
-    @BindView(R.id.container)
-    ConstraintLayout container;
 
     private Listener listener;
-    private Feature model;
+    private Beer model;
 
-    public FeatureView(Context context) {
+    public BeerView(Context context) {
         super(context);
     }
 
-    public FeatureView(Context context, AttributeSet attrs) {
+    public BeerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FeatureView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BeerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public FeatureView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BeerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
     @Override
@@ -61,23 +58,25 @@ public class FeatureView extends BaseLinearLayout implements InteractiveModelVie
     }
 
     @Override
-    public Feature getModel() {
+    public Beer getModel() {
         return model;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void setModel(Feature model) {
+    public void setModel(Beer model) {
         this.model = model;
-        title.setText(model.getName());
-        if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
-            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
+        title.setText(model.getTitle());
+        if (model.getGetThumb() == null) {
+            logo.setVisibility(INVISIBLE);
         }
         if (model.isSelected()) {
             restoTypeCheckbox.setChecked(true);
         } else {
             restoTypeCheckbox.setChecked(false);
         }
-        setOnClickListener(v -> listener.onModelAction(FilterActions.FEATURES, model));
+
+        setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, model));
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.RestoType;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +29,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 01.11.2017.
  */
 
-public class TypeView extends BaseLinearLayout implements ModelView<RestoType>, View.OnClickListener {
+public class TypeView extends BaseLinearLayout implements InteractiveModelView<RestoType> {
 
     @BindView(R.id.title) TextView title;
     @BindView(R.id.logo) ImageView logoRestoType;
@@ -36,6 +37,7 @@ public class TypeView extends BaseLinearLayout implements ModelView<RestoType>, 
     @BindView(R.id.container) ConstraintLayout viewRoot;
 
     private RestoType model;
+    private Listener listener;
 
     public TypeView(Context context) {
         super(context);
@@ -56,7 +58,6 @@ public class TypeView extends BaseLinearLayout implements ModelView<RestoType>, 
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-        viewRoot.setOnClickListener(this);
     }
 
     @Override
@@ -71,18 +72,16 @@ public class TypeView extends BaseLinearLayout implements ModelView<RestoType>, 
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
         }
+        if (model.isSelected()) {
+            restoTypeCheckbox.setChecked(true);
+        } else {
+            restoTypeCheckbox.setChecked(false);
+        }
+        setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_TYPE, model));
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.container) {
-            if (!restoTypeCheckbox.isChecked()) {
-                model.setSelected(true);
-                restoTypeCheckbox.setChecked(true);
-            } else {
-                model.setSelected(false);
-                restoTypeCheckbox.setChecked(false);
-            }
-        }
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 }

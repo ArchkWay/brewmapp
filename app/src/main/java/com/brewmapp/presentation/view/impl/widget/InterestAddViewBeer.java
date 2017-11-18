@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -47,7 +49,6 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-
     @Override
     public void setModel(Beer beer) {
         this.beer =beer;
@@ -72,8 +73,12 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         }
         title.setText(stringBuilder.toString());
 
-        setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, beer));
-        arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, beer));
+        if(getContext() instanceof AddInterestActivity) {
+            setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, beer));
+            arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, beer));
+        }else {
+            setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, beer));
+        }
     }
 
     @Override
@@ -90,9 +95,5 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
-
-
     }
-
-
 }

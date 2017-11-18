@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Kitchen;
 import com.squareup.picasso.Picasso;
 
@@ -23,7 +24,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 02.11.2017.
  */
 
-public class KitchenView extends BaseLinearLayout implements InteractiveModelView<Kitchen>, View.OnClickListener {
+public class KitchenView extends BaseLinearLayout implements InteractiveModelView<Kitchen> {
 
     @BindView(R.id.title) TextView title;
     @BindView(R.id.logo) ImageView logoRestoType;
@@ -51,7 +52,7 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
     }
     @Override
     protected void prepareView() {
-        rootView.setOnClickListener(this);
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -66,6 +67,13 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
         }
+
+        if (model.isSelected()) {
+            restoTypeCheckbox.setChecked(true);
+        } else {
+            restoTypeCheckbox.setChecked(false);
+        }
+        setOnClickListener(v -> listener.onModelAction(FilterActions.KITCHEN, model));
     }
 
     @Override
@@ -73,16 +81,4 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
         this.listener = listener;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.container) {
-            if (!restoTypeCheckbox.isChecked()) {
-                model.setSelected(true);
-                restoTypeCheckbox.setChecked(true);
-            } else {
-                model.setSelected(false);
-                restoTypeCheckbox.setChecked(false);
-            }
-        }
-    }
 }

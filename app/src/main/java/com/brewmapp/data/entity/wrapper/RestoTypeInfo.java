@@ -22,9 +22,4 @@ public class RestoTypeInfo extends AdapterItem<RestoType, TypeView> implements I
     public boolean filter(String constraint) {
         return getModel().getName().toLowerCase().contains(constraint);
     }
-
-    @Override
-    public RestoType getModel() {
-        return super.getModel();
-    }
 }

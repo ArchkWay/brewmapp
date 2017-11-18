@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.PriceRange;
 
 import butterknife.BindView;
@@ -24,7 +25,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 03.11.2017.
  */
 
-public class PriceRangeView extends BaseLinearLayout implements InteractiveModelView<PriceRange>, View.OnClickListener {
+public class PriceRangeView extends BaseLinearLayout implements InteractiveModelView<PriceRange> {
 
     @BindView(R.id.title)
     TextView title;
@@ -32,8 +33,6 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     ImageView logo;
     @BindView(R.id.chkbox)
     CheckBox restoTypeCheckbox;
-    @BindView(R.id.container)
-    ConstraintLayout rootView;
 
     private Listener listener;
     private PriceRange model;
@@ -57,7 +56,6 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
     @Override
     protected void prepareView() {
         ButterKnife.bind(this);
-//        rootView.setOnClickListener(this);
     }
 
     @Override
@@ -72,23 +70,17 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
         if (model.getImage() == null) {
             logo.setVisibility(INVISIBLE);
         }
+        if (model.isSelected()) {
+            restoTypeCheckbox.setChecked(true);
+        } else {
+            restoTypeCheckbox.setChecked(false);
+        }
+
+        setOnClickListener(v -> listener.onModelAction(FilterActions.PRICE_RANGE, model));
     }
 
     @Override
     public void setListener(Listener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.container) {
-            if (!restoTypeCheckbox.isChecked()) {
-                model.setSelected(true);
-                restoTypeCheckbox.setChecked(true);
-            } else {
-                model.setSelected(false);
-                restoTypeCheckbox.setChecked(false);
-            }
-        }
     }
 }

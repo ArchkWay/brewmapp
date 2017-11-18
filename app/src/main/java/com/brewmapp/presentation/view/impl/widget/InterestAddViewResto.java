@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -66,8 +68,12 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         if(TextUtils.isEmpty(tmpStr))       tmpStr=new StringBuilder().append(Html.fromHtml(resto.getText())).toString();
         if(!TextUtils.isEmpty(tmpStr))      shot_text.setText(tmpStr);
 
-        setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, resto));
-        arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, resto));
+        if(getContext() instanceof AddInterestActivity) {
+            setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, resto));
+            arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, resto));
+        }else {
+            setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_NAME, resto));
+        }
     }
 
     @Override
@@ -84,9 +90,5 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
-
-
     }
-
-
 }

@@ -31,7 +31,6 @@ public class Beer implements Serializable {
     private String timestamp;
     private String image;
     private String getThumb;
-    private Relations relations = new Relations();
     private boolean selected;
     private Relations relations=new Relations();
     private String like;

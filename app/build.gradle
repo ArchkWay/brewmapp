@@ -28,10 +28,10 @@ android {
             storePassword 'rollwithus'
         }
     }
-    dexOptions {
-        jumboMode true
-        javaMaxHeapSize "4g"
-    }
+//    dexOptions {
+//        jumboMode true
+//        javaMaxHeapSize "4g"
+//    }
     compileSdkVersion 25
     buildToolsVersion "26.0.1"
     compileOptions {
@@ -45,7 +45,7 @@ android {
         applicationId "com.brewmapp"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 11
+        versionCode 12
         versionName "1.0.5"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

@@ -18,7 +18,7 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -271,7 +271,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void onBarAction(int id) {
         switch (id){
             case R.id.action_create:
-                startActivityForResult(new Intent(getActivity(), ProfileInfoActivity.class), REQUEST_CODE_REFRESH_PROFILE);
+                startActivityForResult(new Intent(getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
                 return;
             default:
                 super.onBarAction(id);

@@ -32,4 +32,6 @@
     <dimen name="size_event_green_label">36dp</dimen>
     <dimen name="height_event_details_like">24dp</dimen>
     <dimen name="button_height_type_0">30dp</dimen>
+    <dimen name="arrow_right_width">20dp</dimen>
+    <dimen name="arrow_right_height">20dp</dimen>
 </resources>

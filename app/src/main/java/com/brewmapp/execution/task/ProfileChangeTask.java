@@ -43,6 +43,8 @@ public class ProfileChangeTask extends BaseNetworkTask<User, ListResponse<User>>
                         wrapperParams.addParam(Keys.FIRSTNAME,user.getFirstname());
                     if(!TextUtils.isEmpty(user.getLastname()))
                         wrapperParams.addParam(Keys.LASTNAME,user.getLastname());
+                    if(!TextUtils.isEmpty(user.getStatus()))
+                        wrapperParams.addParam(Keys.STATUS,user.getStatus());
 
 
                     ListResponse<User> response = executeCall(getApi().profileEdit(wrapperParams));

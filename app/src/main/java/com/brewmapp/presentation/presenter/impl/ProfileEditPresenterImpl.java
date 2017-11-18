@@ -3,10 +3,10 @@ package com.brewmapp.presentation.presenter.impl;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.execution.task.LoadProfileTask;
-import com.brewmapp.presentation.presenter.contract.ProfileInfoPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
-import com.brewmapp.presentation.view.contract.ProfileInfoView;
-import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
@@ -23,20 +23,20 @@ import static android.app.Activity.RESULT_OK;
  * Created by Kras on 08.11.2017.
  */
 
-public class ProfileInfoPresenterImpl extends BasePresenter<ProfileInfoView> implements ProfileInfoPresenter {
+public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> implements ProfileEditPresenter {
 
     private UserRepo userRepo;
     private LoadProfileTask loadProfileTask;
 
     @Inject
-    public ProfileInfoPresenterImpl(UserRepo userRepo,LoadProfileTask loadProfileTask){
+    public ProfileEditPresenterImpl(UserRepo userRepo, LoadProfileTask loadProfileTask){
         this.userRepo=userRepo;
         this.loadProfileTask=loadProfileTask;
     }
 
     @Override
-    public void onAttach(ProfileInfoView profileInfoView) {
-        super.onAttach(profileInfoView);
+    public void onAttach(ProfileEditView profileEditView) {
+        super.onAttach(profileEditView);
         view.refreshUserProfile(userRepo.load());
 
         //check online
@@ -54,7 +54,7 @@ public class ProfileInfoPresenterImpl extends BasePresenter<ProfileInfoView> imp
             }
         });
 
-        view.showFragment(ProfileInfoActivity.FRAGMENT_EDIT);
+        view.showFragment(ProfileEditActivity.FRAGMENT_EDIT);
     }
 
     @Override

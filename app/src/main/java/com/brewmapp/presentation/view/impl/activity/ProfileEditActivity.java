@@ -9,8 +9,8 @@ import android.widget.FrameLayout;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.User;
-import com.brewmapp.presentation.presenter.contract.ProfileInfoPresenter;
-import com.brewmapp.presentation.view.contract.ProfileInfoView;
+import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
 
@@ -19,14 +19,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView,ProfileEditFragment.OnFragmentInteractionListener {
+public class ProfileEditActivity extends BaseActivity implements ProfileEditView,ProfileEditFragment.OnFragmentInteractionListener {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
 
-    @Inject    ProfileInfoPresenter presenter;
+    @Inject    ProfileEditPresenter presenter;
 
     private BaseFragment baseFragment;
-
 
     public final static int FRAGMENT_EDIT=1;
     public static final int FRAGMENT_INVALIDATE_MENU = 3;
@@ -87,7 +86,7 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
     @Override
     public void showFragment(int fragment) {
         switch (fragment){
-            case ProfileInfoActivity.FRAGMENT_EDIT:
+            case ProfileEditActivity.FRAGMENT_EDIT:
                 baseFragment=new ProfileEditFragment();
                 break;
                 default: {commonError();return;}
@@ -130,6 +129,7 @@ public class ProfileInfoActivity extends BaseActivity implements ProfileInfoView
                 break;
             case FRAGMENT_USER_SAVED:
                 setResult(RESULT_OK);
+                finish();
                 break;
             case FRAGMENT_SELECT_PHOTO:
                 showSelect(this, R.array.avatar_options, (text, position) -> presenter.handlePhoto(baseFragment,position));

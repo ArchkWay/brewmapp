@@ -387,7 +387,7 @@ public class User {
     }
 
     public String getThumbnail() {
-        if(thumbnail!= null && !thumbnail.startsWith("http"))
+        if(thumbnail!= null && !thumbnail.startsWith("http")&& !thumbnail.startsWith("/"))
             thumbnail= BuildConfig.SERVER_ROOT_URL + thumbnail;
 
         return thumbnail;

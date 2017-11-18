@@ -2,7 +2,6 @@ package com.brewmapp.app.di.component;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
@@ -26,7 +25,7 @@ import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
 import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.UniversalMapActivity;
@@ -95,7 +94,7 @@ public interface PresenterComponent {
     void inject(RestoDetailActivity restoDetailActivity);
     void inject(BeerDetailActivity beerDetailActivity);
     void inject(AddReviewRestoActivity addReviewRestoActivity);
-    void inject(ProfileInfoActivity profileInfoActivity);
+    void inject(ProfileEditActivity profileEditActivity);
     void inject(FilterByCategory filterByCategory);
     void inject(FilterMapActivity filterMapActivity);
     void inject(AddReviewBeerActivity addReviewBeerActivity);

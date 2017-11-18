@@ -39,6 +39,7 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
         super.onAttach(mainView);
         view.showUser(userRepo.load());
         view.showMenuItems(MenuField.createDefault(context));
+
     }
 
     @Override

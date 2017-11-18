@@ -149,20 +149,26 @@
                 android:paddingRight="@dimen/common_block_space_double_semi"
                 android:orientation="vertical"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_status"
                 >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/AppTheme.Text.H3"
                     android:textColor="@color/colorGrayDark"
                     android:layout_marginBottom="@dimen/common_block_space_half"
-                    android:text="@string/your_state"/>
+                    android:text="@string/your_state"
+                    style="@style/AppTheme.Text.H4"
+                    android:background="@null"
+                    />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/AppTheme.Text.H3"
                     android:hint="@string/input_status_hint"
+                    android:id="@+id/fragment.profile.edit.text_status"
+                    style="@style/AppTheme.Text.H4"
+                    android:background="@null"
+
                     />
 
             </LinearLayout>
@@ -200,7 +206,9 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite">
+                android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_birthday"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -215,24 +223,29 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/birthday"
-                        android:textColor="@color/colorGrayDark" />
+                        android:textColor="@color/colorGrayDark"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
+                        />
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/birthday_hint" />
+                        android:hint="@string/birthday_hint"
+                        android:id="@+id/fragment.profile.edit.text_birthday"
+                        />
 
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -261,10 +274,13 @@
                     android:paddingRight="@dimen/common_block_space_double_semi"
                     android:paddingTop="@dimen/common_block_space"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/fragment.profile.edit.layout_city"
+                    >
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
@@ -272,22 +288,25 @@
                         android:textColor="@color/colorGrayDark" />
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/birthday_hint1" />
+                        android:hint="@string/birthday_hint1"
+                        android:id="@+id/fragment.profile.edit.text_city"/>
 
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </android.support.constraint.ConstraintLayout>
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -299,6 +318,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_family_status"
                 >
 
                 <LinearLayout
@@ -314,7 +334,8 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
@@ -322,16 +343,18 @@
                         android:textColor="@color/colorGrayDark" />
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/birthday_hint1" />
+                        android:hint="@string/birthday_hint1"
+                        android:id="@+id/fragment.profile.edit.text_family_status"/>
 
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -386,10 +409,12 @@
                     android:paddingRight="@dimen/common_block_space_double_semi"
                     android:paddingTop="@dimen/common_block_space"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
@@ -397,7 +422,8 @@
                         android:textColor="@color/colorGrayDark" />
 
                     <EditText
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_mobile_phone"
@@ -410,8 +436,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -429,6 +455,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_phone_dop"
                 >
 
                 <LinearLayout
@@ -444,24 +471,27 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_additional_mobile_phone"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_mobile_phone" />
+                        android:hint="@string/hint_mobile_phone"
+                        android:id="@+id/fragment.profile.edit.edit_text_phone_dop"/>
 
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -479,6 +509,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_skype"
                 >
 
                 <LinearLayout
@@ -494,24 +525,28 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_address_skype"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_skype" />
+                        android:hint="@string/hint_skype"
+                        android:id="@+id/fragment.profile.edit.edit_skype"
+                        />
 
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -529,6 +564,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_site"
                 >
 
                 <LinearLayout
@@ -544,24 +580,27 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_address_site"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_site" />
+                        android:hint="@string/hint_site"
+                        android:id="@+id/fragment.profile.edit.edit_site"/>
 
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -604,6 +643,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_work"
                 >
 
                 <LinearLayout
@@ -619,15 +659,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_place_of_work"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_place_of_work" />
@@ -635,8 +677,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -654,6 +696,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_interest"
                 >
 
                 <LinearLayout
@@ -669,15 +712,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_interests"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_interests" />
@@ -685,8 +730,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -704,6 +749,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_music"
                 >
 
                 <LinearLayout
@@ -719,15 +765,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_music"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_music" />
@@ -735,8 +783,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -755,6 +803,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_film"
                 >
 
                 <LinearLayout
@@ -770,15 +819,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_films"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_films" />
@@ -786,8 +837,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -805,6 +856,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_book"
                 >
 
                 <LinearLayout
@@ -820,15 +872,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_books"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_books" />
@@ -836,8 +890,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"
@@ -855,6 +909,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
+                android:id="@+id/fragment.profile.edit.layout_game"
                 >
 
                 <LinearLayout
@@ -870,15 +925,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/AppTheme.Text.H3"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/text_view_games"
                         android:textColor="@color/colorGrayDark" />
 
-                    <TextView
-                        style="@style/AppTheme.Text.H3"
+                    <EditText
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_games" />
@@ -886,8 +943,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_arrow_right"

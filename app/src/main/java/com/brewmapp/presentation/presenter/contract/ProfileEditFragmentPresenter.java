@@ -1,5 +1,9 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.TextView;
+
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
@@ -22,4 +26,8 @@ public interface ProfileEditFragmentPresenter extends LivePresenter<ProfileEditF
     User getUserWithNewData();
 
     boolean isNeedSaveUser(String... checkListCustom);
+
+    void setNewPhoto(File file);
+
+    View.OnClickListener getOnClickBirthday(FragmentActivity activity, User user, TextView text_birthday);
 }

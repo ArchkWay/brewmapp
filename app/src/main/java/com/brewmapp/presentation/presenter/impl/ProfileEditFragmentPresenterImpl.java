@@ -1,22 +1,32 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
 
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
+import com.brewmapp.execution.task.LoadProfileTask;
 import com.brewmapp.execution.task.ProfileChangeTask;
 import com.brewmapp.execution.task.UploadAvatarTask;
 import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
@@ -33,15 +43,28 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     private User user_new_data=new User();
     private ProfileChangeTask profileChangeTask;
     private UploadAvatarTask uploadAvatarTask;
+    private Context context;
+    private UserRepo userRepo;
+    private LoadProfileTask loadProfileTask;
+    String[] checkListAll={"getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname","getThumbnail"};
+    String[] checkListWithoutPthoto={"getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname"};
+    String[] checkListPhoto={"getThumbnail"};
 
 
     @Inject
-    public ProfileEditFragmentPresenterImpl(UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadAvatarTask uploadAvatarTask){
+    public ProfileEditFragmentPresenterImpl(Context context,UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadAvatarTask uploadAvatarTask,LoadProfileTask loadProfileTask){
+        this.context=context;
         user_old_data=userRepo.load();
         user_new_data.setGender(user_old_data.getGender());
         user_new_data.setBirthday(user_old_data.getBirthday());
+        user_new_data.setCityId(user_old_data.getCityId());
+        user_new_data.setCountryId(user_old_data.getCountryId());
+        user_new_data.setFamilyStatus(user_old_data.getFamilyStatus());
+
         this.profileChangeTask = profileChangeTask;
         this.uploadAvatarTask = uploadAvatarTask;
+        this.loadProfileTask = loadProfileTask;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -63,17 +86,19 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     @Override
     public void save(ProfileEditFragment.OnFragmentInteractionListener mListener) {
         class save {
+            boolean needRefreshRepo=false;
 
             public save() {
                 saveUser();
             }
 
             public void saveUser() {
-                if (isNeedSaveUser(  "getFirstname", "getStatus", "getLastname")) {
+                if (isNeedSaveUser(checkListWithoutPthoto)) {
                     profileChangeTask.execute(user_new_data, new SimpleSubscriber<ListResponse<User>>() {
                         @Override
                         public void onNext(ListResponse<User> userListResponse) {
                             super.onNext(userListResponse);
+                            needRefreshRepo=true;
                             uploadPhoto();
                         }
 
@@ -89,11 +114,35 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
             }
 
             public void uploadPhoto() {
-                if (isNeedSaveUser("getThumbnail")) {
+                if (isNeedSaveUser(checkListPhoto)) {
                     uploadAvatarTask.execute(new File(user_new_data.getThumbnail()), new SimpleSubscriber<String>() {
                         @Override
                         public void onNext(String string) {
                             super.onNext(string);
+                            needRefreshRepo=true;
+                            refreshUserRepo();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            view.commonError(e.getMessage());
+                        }
+                    });
+                }else {
+                    refreshUserRepo();
+                }
+            }
+
+            public void refreshUserRepo() {
+
+                if(needRefreshRepo) {
+                    loadProfileTask.execute(null, new SimpleSubscriber<UserProfile>() {
+                        @Override
+                        public void onNext(UserProfile userProfile) {
+                            super.onNext(userProfile);
+                            userRepo.save(userProfile.getUser());
+                            Picasso.with(context).invalidate(userProfile.getUser().getThumbnail());
                             mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.FRAGMENT_USER_SAVED)));
                         }
 
@@ -107,20 +156,41 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
                     mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.FRAGMENT_USER_SAVED)));
                 }
             }
+
         }
         new save();
     }
 
     @Override
     public boolean isNeedSaveUser(String... checkListCustom) {
-        //user_new_data.getLastname()
-        String[] checkList={"getThumbnail","getFirstname","getStatus","getLastname"};
-        if(checkListCustom.length>0)
-            checkList=checkListCustom;
+        if (checkListCustom.length==0)
+            checkListCustom=checkListAll;
 
-        for (String s:checkList) if(isNeedSaveField(s)) return true;
+        for (String s:checkListCustom) if(isNeedSaveField(s)) return true;
 
         return false;
+    }
+
+    @Override
+    public void setNewPhoto(File file) {
+        user_new_data.setThumbnail(file.getAbsolutePath());
+    }
+
+    @Override
+    public View.OnClickListener getOnClickBirthday(FragmentActivity activity, User user, TextView text_birthday) {
+        return v -> {
+            Calendar calendar = Calendar.getInstance();
+            new DatePickerDialog(
+                    activity,
+                    (view, year, month, dayOfMonth) -> {
+                        Date date=new GregorianCalendar(year, month, dayOfMonth).getTime();
+                        user_new_data.setBirthday(date);
+                        text_birthday.setText(user_new_data.getFormatedBirthday());
+                        activity.invalidateOptionsMenu();},
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            ).show();};
     }
 
     private boolean isNeedSaveField(String getMethod_name) {

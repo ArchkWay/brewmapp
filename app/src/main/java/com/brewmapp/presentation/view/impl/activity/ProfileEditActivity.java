@@ -13,6 +13,7 @@ import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -42,6 +43,7 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     @Override
     protected void initView() {
         enableBackButton();
+        setTitle(R.string.title_activity_edit_profile);
     }
 
     @Override
@@ -70,11 +72,6 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     }
 
     @Override
-    public void refreshUserProfile(User load) {
-        setTitle(load.getFormattedName());
-    }
-
-    @Override
     public void commonError(String... strings) {
         if(strings.length==0)
             showMessage(getString(R.string.error));
@@ -100,7 +97,6 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         return super.onPrepareOptionsMenu(menu);
     }
 

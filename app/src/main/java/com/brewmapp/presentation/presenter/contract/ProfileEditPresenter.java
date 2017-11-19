@@ -12,4 +12,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public interface ProfileEditPresenter extends LivePresenter<ProfileEditView> {
 
     void handlePhoto(BaseFragment baseFragment, int position);
+
 }

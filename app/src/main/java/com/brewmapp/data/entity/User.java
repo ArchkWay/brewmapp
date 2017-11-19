@@ -4,6 +4,7 @@ import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.brewmapp.execution.exchange.request.base.Keys;
 
@@ -270,6 +271,13 @@ public class User {
         return birthday;
     }
 
+    public String getFormatedBirthday(){
+        if(!new GregorianCalendar(0000, 00,00).getTime().equals(getBirthday()))
+            return android.text.format.DateFormat.format("dd MMMM yyyy",getBirthday()).toString();
+        else
+            return null;
+    }
+
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
@@ -395,6 +403,18 @@ public class User {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getFormatedStoreBirthday() {
+        return android.text.format.DateFormat.format("yyyy-MM-dd ",getBirthday()).toString();
+    }
+
+    public String getCountryCityFormated() {
+        try {
+            return String.format("%s,%s",getRelations().getmCountry().getName(),getRelations().getmCity().getName());
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public static class Counts {

@@ -9,7 +9,6 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface ProfileEditView extends BasicView {
-    void refreshUserProfile(User load);
     void commonError(String... string);
     void showFragment(int fragment);
 }

@@ -11,6 +11,7 @@ import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
+import java.util.GregorianCalendar;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -45,7 +46,33 @@ public class ProfileChangeTask extends BaseNetworkTask<User, ListResponse<User>>
                         wrapperParams.addParam(Keys.LASTNAME,user.getLastname());
                     if(!TextUtils.isEmpty(user.getStatus()))
                         wrapperParams.addParam(Keys.STATUS,user.getStatus());
+                    if(user.getFormatedBirthday()!=null)
+                        wrapperParams.addParam(Keys.BIRTHDAY,user.getFormatedStoreBirthday());
+                    if(!TextUtils.isEmpty(user.getSite()))
+                        wrapperParams.addParam(Keys.SITE,user.getSite());
+                    if(!TextUtils.isEmpty(user.getSkype()))
+                        wrapperParams.addParam(Keys.SKYPE,user.getSkype());
+                    if(!TextUtils.isEmpty(user.getAdditionalPhone()))
+                        wrapperParams.addParam(Keys.ADDIT_PHONE,user.getAdditionalPhone());
+                    if(!TextUtils.isEmpty(user.getPhone()))
+                        wrapperParams.addParam(Keys.PHONE,user.getPhone());
+                    if(!TextUtils.isEmpty(user.getInterests()))
+                        wrapperParams.addParam(Keys.INTERESTS,user.getInterests());
+                    if(!TextUtils.isEmpty(user.getMusic()))
+                        wrapperParams.addParam(Keys.MUSIC,user.getMusic());
+                    if(!TextUtils.isEmpty(user.getBooks()))
+                        wrapperParams.addParam(Keys.BOOKS,user.getBooks());
+                    if(!TextUtils.isEmpty(user.getFilms()))
+                        wrapperParams.addParam(Keys.FILMS,user.getFilms());
+                    if(!TextUtils.isEmpty(user.getGames()))
+                        wrapperParams.addParam(Keys.GAMES,user.getGames());
 
+
+
+                    //"getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms"
+                    wrapperParams.addParam(Keys.CITY_ID,user.getCityId());
+                    wrapperParams.addParam(Keys.COUNTRY_ID,user.getCountryId());
+                    wrapperParams.addParam(Keys.FAMILY_STATUS,user.getFamilyStatus());
 
                     ListResponse<User> response = executeCall(getApi().profileEdit(wrapperParams));
                     userRepo.save(response.getModels().get(0));

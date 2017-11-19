@@ -142,4 +142,11 @@ public class Keys {
 
     public static final String menuBeer="menuBeer";
     public static final String BIRTHDAY = "birthday";
+    public static final String SITE = "site";
+    public static final String SKYPE = "skype";
+    public static final String INTERESTS = "interests";
+    public static final String MUSIC = "music";
+    public static final String BOOKS = "books";
+    public static final String FILMS = "films";
+    public static final String GAMES = "games";
 }

@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
@@ -20,17 +19,17 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import ru.frosteye.ovsa.tool.TextTools;
 
 /**
@@ -41,6 +40,7 @@ import ru.frosteye.ovsa.tool.TextTools;
  */
 public class ProfileEditFragment extends BaseFragment implements ProfileEditFragmentView {
 
+    @BindView(R.id.fragment_profile_edit_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_profile_edit_avatar)    ImageView avatar;
     @BindView(R.id.fragment_profile_edit_name)      EditText name;
     @BindView(R.id.fragment_profile_edit_lastName)    EditText lastName;
@@ -57,6 +57,12 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    EditText edit_text_phone_dop;
     @BindView(R.id.fragment_profile_edit_edit_skype)    EditText edit_skype;
     @BindView(R.id.fragment_profile_edit_edit_site)    EditText edit_site;
+    @BindView(R.id.fragment_profile_edit_edit_book)    EditText edit_book;
+    @BindView(R.id.fragment_profile_edit_edit_film)    EditText edit_film;
+    @BindView(R.id.fragment_profile_edit_edit_interest)    EditText edit_interest;
+    @BindView(R.id.fragment_profile_edit_edit_game)    EditText edit_game;
+    @BindView(R.id.fragment_profile_edit_edit_music)    EditText edit_music;
+    @BindView(R.id.fragment_profile_edit_edit_work)    EditText edit_work;
 
     @BindView(R.id.fragment_profile_edit_layout_book)    View layout_book;
     @BindView(R.id.fragment_profile_edit_layout_film)    View layout_film;
@@ -125,25 +131,23 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         registerTextChangeListeners(s ->{user.setStatus(TextTools.extractTrimmed(text_status));invalidateOptionsMenu();},text_status);
         registerTextChangeListeners(s ->{user.setLastname(TextTools.extractTrimmed(lastName));invalidateOptionsMenu();},lastName);
         segmentedGroup.setOnCheckedChangeListener((group, checkedId) -> {user.setGender(checkedId== R.id.fragment_profile_edit_man?1:0);text_family_status.setText("");invalidateOptionsMenu();});
-        layout_birthday.setOnClickListener(v -> {Calendar calendar = Calendar.getInstance();new DatePickerDialog(getActivity(), (view, year, month, dayOfMonth) -> {text_birthday.setText(String.format("%s-%s-%s",String.valueOf(year),String.valueOf(month),String.valueOf(dayOfMonth)));user.setBirthday(new GregorianCalendar(year, month, dayOfMonth).getTime());invalidateOptionsMenu();}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();});
+        layout_birthday.setOnClickListener(presenter.getOnClickBirthday(getActivity(),user,text_birthday));
         avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.FRAGMENT_SELECT_PHOTO))));
-        layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);}));
+        layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);invalidateOptionsMenu();}));
+        layout_city.setOnClickListener(v -> new DialogSelectCountryCity(getActivity(),getActivity().getSupportFragmentManager(),text_city,user));
 
-        //edit_text_phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        edit_text_phone.setEnabled(false);
-        edit_text_phone_dop.setEnabled(false);
-        text_city.setEnabled(false);
-        edit_skype.setEnabled(false);
-        edit_site.setEnabled(false);
+        registerTextChangeListeners(s ->{user.setPhone(TextTools.extractTrimmed(edit_text_phone));invalidateOptionsMenu();},edit_text_phone);
+        registerTextChangeListeners(s ->{user.setAdditionalPhone(TextTools.extractTrimmed(edit_text_phone_dop));invalidateOptionsMenu();},edit_text_phone_dop);
+        registerTextChangeListeners(s ->{user.setSkype(TextTools.extractTrimmed(edit_skype));invalidateOptionsMenu();},edit_skype);
+        registerTextChangeListeners(s ->{user.setSite(TextTools.extractTrimmed(edit_site));invalidateOptionsMenu();},edit_site);
+        registerTextChangeListeners(s ->{user.setBooks(TextTools.extractTrimmed(edit_book));invalidateOptionsMenu();},edit_book);
+        registerTextChangeListeners(s ->{user.setGames(TextTools.extractTrimmed(edit_game));invalidateOptionsMenu();},edit_game);
+        registerTextChangeListeners(s ->{user.setMusic(TextTools.extractTrimmed(edit_music));invalidateOptionsMenu();},edit_music);
+        registerTextChangeListeners(s ->{user.setInterests(TextTools.extractTrimmed(edit_interest));invalidateOptionsMenu();},edit_interest);
+        registerTextChangeListeners(s ->{user.setFilms(TextTools.extractTrimmed(edit_film));invalidateOptionsMenu();},edit_film);
 
-        layout_book.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        layout_city.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        layout_game.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        layout_phone.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        layout_music.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         layout_work.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        layout_skype.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        layout_site.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        edit_work.setEnabled(false);
     }
 
     @Override
@@ -163,6 +167,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
+                swipe.setRefreshing(true);
                 presenter.save(mListener);
                 hideKeyboard();
                 return true;
@@ -172,20 +177,32 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
     }
 
     @Override
     public void refreshProfile(User user) {
-        if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail()))
+        String tmpStr;
+
+        if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail())) {
             Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);
+        }
         name.setText(user.getFirstname());
         lastName.setText(user.getLastname());
         segmentedGroup.check(user.getGender()==1?R.id.fragment_profile_edit_man:R.id.fragment_profile_edit_woman);
         text_status.setText(user.getStatus());
-        if(user.getBirthday().getYear()>0)
-            text_birthday.setText(String.format("%s-%s-%s",user.getBirthday().getYear(),user.getBirthday().getMonth(),user.getBirthday().getDay()));
+        tmpStr=user.getFormatedBirthday();        if(tmpStr!=null) text_birthday.setText(tmpStr);
         text_family_status.setText(getResources().getStringArray(user.getGender()==1?R.array.family_status_man:R.array.family_status_women)[user.getFamilyStatus()]);
+        tmpStr=user.getCountryCityFormated();     if(tmpStr!=null)  text_city.setText(tmpStr);
+
+        edit_text_phone.setText(user.getPhone());
+        edit_text_phone_dop.setText(user.getAdditionalPhone());
+        edit_book.setText(user.getBooks());
+        edit_site.setText(user.getSite());
+        edit_skype.setText(user.getSkype());
+        edit_film.setText(user.getFilms());
+        edit_interest.setText(user.getInterests());
+        edit_music.setText(user.getMusic());
+        edit_game.setText(user.getGames());
 
     }
 
@@ -200,8 +217,9 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public void selectedPhoto(File file) {
-        presenter.getUserWithNewData().setThumbnail(file.getAbsolutePath());
+        presenter.setNewPhoto(file);
         invalidateOptionsMenu();
+        Picasso.with(getContext()).load(file).fit().into(avatar);
     }
 
     private void invalidateOptionsMenu(){

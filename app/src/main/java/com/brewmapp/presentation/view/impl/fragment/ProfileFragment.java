@@ -254,12 +254,15 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case REQUEST_CODE_REFRESH_ITEMS:
-                if(resultCode==RESULT_OK) {
+                if(resultCode==RESULT_OK)
                     refreshItems();
                     return;
-                }
+
             case REQUEST_CODE_REFRESH_PROFILE:
-                presenter.refreshProfile();
+                if(resultCode==RESULT_OK) {
+                    presenter.refreshProfile();
+                    refreshItems();
+                }
                 return;
                 default:
                     super.onActivityResult(requestCode, resultCode, data);

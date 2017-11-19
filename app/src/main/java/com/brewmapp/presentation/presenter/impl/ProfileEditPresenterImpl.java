@@ -25,35 +25,14 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> implements ProfileEditPresenter {
 
-    private UserRepo userRepo;
-    private LoadProfileTask loadProfileTask;
 
     @Inject
-    public ProfileEditPresenterImpl(UserRepo userRepo, LoadProfileTask loadProfileTask){
-        this.userRepo=userRepo;
-        this.loadProfileTask=loadProfileTask;
+    public ProfileEditPresenterImpl(){
     }
 
     @Override
     public void onAttach(ProfileEditView profileEditView) {
         super.onAttach(profileEditView);
-        view.refreshUserProfile(userRepo.load());
-
-        //check online
-        loadProfileTask.execute(null,new SimpleSubscriber<UserProfile>(){
-            @Override
-            public void onNext(UserProfile userProfile) {
-                super.onNext(userProfile);
-                userRepo.save(userProfile.getUser());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-                view.commonError(e.getMessage());
-            }
-        });
-
         view.showFragment(ProfileEditActivity.FRAGMENT_EDIT);
     }
 
@@ -95,4 +74,5 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
                 break;
         }
     }
+
 }

@@ -36,6 +36,7 @@ import com.brewmapp.presentation.view.impl.activity.PickLocationActivity;
 import com.brewmapp.presentation.view.impl.activity.RegisterActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
@@ -87,6 +88,7 @@ public interface PresenterComponent {
     void inject(SaleDetailsActivity activity);
     void inject(PostDetailsActivity activity);
     void inject(DialogShare dialogShare);
+    void inject(DialogSelectCountryCity dialogSelectCountryCity);
     void inject(ShareLikeView shareLikeView);
     void inject(AssessmentsActivity assessmentsActivity);
     void inject(InterestListActivity interestListActivity);

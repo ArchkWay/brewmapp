@@ -117,32 +117,39 @@ public class DialogSelectCountryCity extends DialogFragment {
             public boolean onQueryTextChange(String txt) {
                 // TODO Auto-generated method stub
                 loadCityTask.cancel();
-                WrapperParams wrapperParams = new WrapperParams(Wrappers.CITY);
-                wrapperParams.addParam(Keys.NAME, txt);
-                wrapperParams.addParam(Keys.COUNTRY_ID, "1");
-                loadCityTask.execute(wrapperParams, new SimpleSubscriber<List<City>>() {
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        dismiss();
-                    }
+                if(txt.length()>0) {
+                    WrapperParams wrapperParams = new WrapperParams(Wrappers.CITY);
+                    wrapperParams.addParam(Keys.NAME, txt);
+                    wrapperParams.addParam(Keys.COUNTRY_ID, "1");
+                    loadCityTask.execute(wrapperParams, new SimpleSubscriber<List<City>>() {
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            dismiss();
+                        }
 
-                    @Override
-                    public void onNext(List<City> cities) {
-                        super.onNext(cities);
-                        cityList=cities;
-                        refreshableSwipeRefreshLayout.setRefreshing(false);
-                        players = new String[cities.size()];
-                        for (int i = 0; i < cities.size(); i++)
-                            players[i] = cities.get(i).getName();
-                        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, players);
-                        lv.setAdapter(adapter);
-                        if(sv.getQuery().toString().length()>0)
-                            adapter.getFilter().filter(sv.getQuery().toString());
+                        @Override
+                        public void onNext(List<City> cities) {
+                            super.onNext(cities);
+                            cityList = cities;
+                            refreshableSwipeRefreshLayout.setRefreshing(false);
+                            players = new String[cities.size()];
+                            for (int i = 0; i < cities.size(); i++)
+                                players[i] = cities.get(i).getName();
+                            adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, players);
+                            lv.setAdapter(adapter);
+                            if (sv.getQuery().toString().length() > 0)
+                                adapter.getFilter().filter(sv.getQuery().toString());
 
-                    }
-                });
-                refreshableSwipeRefreshLayout.setRefreshing(true);
+                        }
+                    });
+                    refreshableSwipeRefreshLayout.setRefreshing(true);
+                }else {
+                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[0]);
+                    lv.setAdapter(adapter);
+                    refreshableSwipeRefreshLayout.setRefreshing(false);
+                }
+
 
                 if(adapter!=null)
                     adapter.getFilter().filter(txt);

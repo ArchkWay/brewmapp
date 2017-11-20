@@ -22,6 +22,8 @@ public class Interest implements Serializable {
     private String user_getThumb;
     private String user_id;
     private Interest_info interest_info;
+    private User_info user_info;
+
 
 
     public Interest() {
@@ -35,6 +37,14 @@ public class Interest implements Serializable {
     public Interest(Resto resto) {
         setInterest_info(new Interest_info(resto));
         setRelated_model(Keys.CAP_RESTO);
+    }
+
+    public User_info getUser_info() {
+        return user_info;
+    }
+
+    public void setUser_info(User_info user_info) {
+        this.user_info = user_info;
     }
 
     public Interest_info getInterest_info() {

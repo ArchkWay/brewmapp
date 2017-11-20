@@ -70,6 +70,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @BindView(R.id.activity_beer_details_empty_text_reviews)    TextView empty_text_reviews;
     @BindView(R.id.activity_beer_detaild_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_beer_details_recycler_resto)    RecyclerView recycler_resto;
+    @BindView(R.id.activity_beer_details_recycler_interest)    RecyclerView recycler_interest;
     @BindViews({
             R.id.layout_like,
             R.id.layout_dislike,
@@ -80,6 +81,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     private FlexibleAdapter adapter_review =new FlexibleAdapter<>(new ArrayList<>());
     private FlexibleAdapter adapter_resto;
+    private FlexibleAdapter adapter_interest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +154,9 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_resto.setLayoutManager(new LinearLayoutManager(this));
+        recycler_interest.setLayoutManager(new LinearLayoutManager(this));
         adapter_resto =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
+        adapter_interest=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
     }
 
     @Override
@@ -233,6 +237,14 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         adapter_resto.notifyDataSetChanged();
         recycler_resto.setAdapter(adapter_resto);
 
+    }
+
+    @Override
+    public void addItemsInterest(List<IFlexible> iFlexibles) {
+        adapter_interest.clear();
+        adapter_interest.addItems(0,iFlexibles);
+        adapter_interest.notifyDataSetChanged();
+        recycler_interest.setAdapter(adapter_interest);
     }
 
     private void processAction(int action, Object payload){

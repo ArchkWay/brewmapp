@@ -137,6 +137,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
     }
 
     private void loadData(int mode) {
+
         class LoadersAttributes{
             public LoadersAttributes(int mode){
                 loadBeer(mode);
@@ -255,16 +256,35 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
 
             }
             private void loadWhoLike(int mode) {
-                containerTasks.loadLikesByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<Object>(){
-                    @Override
-                    public void onNext(Object o) {
-                        super.onNext(o);
-                    }
+                switch (mode) {
+                    case MODE_LOAD_ALL:
+                        containerTasks.loadInteresByUsers(Keys.CAP_BEER, Integer.valueOf(beerDetail.getBeer().getId()), new SimpleSubscriber<List<IFlexible>>() {
+                            @Override
+                            public void onNext(List<IFlexible> iFlexibles) {
+                                super.onNext(iFlexibles);
+                                view.addItemsInterest(iFlexibles);
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-                });
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                view.commonError(e.getMessage());
+                            }
+                        });
+                        break;
+                        default:
+                            //THE END
+                }
+//                containerTasks.loadLikesByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<Object>(){
+//                    @Override
+//                    public void onNext(Object o) {
+//                        super.onNext(o);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                    }
+//                });
             }
 
         }

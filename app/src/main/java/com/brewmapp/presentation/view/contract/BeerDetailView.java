@@ -23,4 +23,6 @@ public interface BeerDetailView extends BasicView {
     void setReviews(List<IFlexible> iFlexibles);
 
     void addItemsResto(ArrayList<IFlexible> iFlexibles);
+
+    void addItemsInterest(List<IFlexible> iFlexibles);
 }

@@ -35,6 +35,7 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.data.entity.container.Interests;
+import com.brewmapp.data.entity.container.InterestsByUser;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.RestoDetails;
@@ -314,4 +315,11 @@ public interface Api {
     @POST("/api/like")
     @FormUrlEncoded
     Call<Object>  loadLikesByBeer(@FieldMap WrapperParams params);
+
+    @POST("userinterest")
+    @FormUrlEncoded
+    Call<InterestsByUser> loadInterestByUsers(@Query(Keys.LIMIT_START) int start,
+                                       @Query(Keys.LIMIT_END) int end,
+                                       @FieldMap WrapperParams params);
+
 }

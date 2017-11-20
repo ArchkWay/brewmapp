@@ -810,7 +810,8 @@
                     >
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:id="@+id/activity.beer.details.recycler_interest">
 
                     </android.support.v7.widget.RecyclerView>
                 </RelativeLayout>

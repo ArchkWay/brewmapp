@@ -273,7 +273,12 @@ public class User {
 
     public String getFormatedBirthday(){
         if(!new GregorianCalendar(0000, 00,00).getTime().equals(getBirthday()))
-            return android.text.format.DateFormat.format("dd MMMM yyyy",getBirthday()).toString();
+            try {
+                return android.text.format.DateFormat.format("dd MMMM yyyy",getBirthday()).toString();
+            }catch (Exception e){
+                return null;
+            }
+
         else
             return null;
     }

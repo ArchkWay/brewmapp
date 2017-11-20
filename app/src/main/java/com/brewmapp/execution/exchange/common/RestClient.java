@@ -9,6 +9,7 @@ import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
+import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.data.entity.wrapper.RestoDetailInfo;
@@ -98,6 +99,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(SubscriptionInfo.class, new SubscriptionDeserializer())
                 .registerTypeAdapter(ReviewInfo.class, new ReviewDeserializer())
                 .registerTypeAdapter(FilterBeerInfo.class, new FilterBeerDeserializer())
+                .registerTypeAdapter(InterestInfoByUsers.class, new InterestDeserializer())
                 ;
     }
 

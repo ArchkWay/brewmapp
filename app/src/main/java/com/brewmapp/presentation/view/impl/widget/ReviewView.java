@@ -69,7 +69,7 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
 
     @Override
     public void setListener(Listener listener) {
-
+        setOnClickListener(v->listener.onModelAction(0,model));
     }
 
     @Override

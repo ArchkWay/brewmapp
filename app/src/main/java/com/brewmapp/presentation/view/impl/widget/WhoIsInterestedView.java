@@ -51,7 +51,7 @@ public class WhoIsInterestedView extends BaseLinearLayout implements Interactive
 
     @Override
     public void setModel(Interest model) {
-
+        this.model=model;
         try {author.setText(model.getUser_info().getFormattedName());}catch (Exception e){}
 
         String imgUrl=null;
@@ -68,7 +68,7 @@ public class WhoIsInterestedView extends BaseLinearLayout implements Interactive
 
     @Override
     public void setListener(Listener listener) {
-
+        setOnClickListener(view -> listener.onModelAction(0,model));
     }
 
     @Override

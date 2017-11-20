@@ -130,7 +130,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         registerTextChangeListeners(s ->{user.setFirstname(TextTools.extractTrimmed(name));invalidateOptionsMenu();},name);
         registerTextChangeListeners(s ->{user.setStatus(TextTools.extractTrimmed(text_status));invalidateOptionsMenu();},text_status);
         registerTextChangeListeners(s ->{user.setLastname(TextTools.extractTrimmed(lastName));invalidateOptionsMenu();},lastName);
-        segmentedGroup.setOnCheckedChangeListener((group, checkedId) -> {user.setGender(checkedId== R.id.fragment_profile_edit_man?1:0);text_family_status.setText("");invalidateOptionsMenu();});
+        segmentedGroup.setOnCheckedChangeListener((group, checkedId) -> {user.setGender(checkedId== R.id.fragment_profile_edit_man?1:2);text_family_status.setText("");invalidateOptionsMenu();});
         layout_birthday.setOnClickListener(presenter.getOnClickBirthday(getActivity(),user,text_birthday));
         avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.FRAGMENT_SELECT_PHOTO))));
         layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);invalidateOptionsMenu();}));

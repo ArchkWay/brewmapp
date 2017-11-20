@@ -22,6 +22,7 @@ import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
@@ -83,7 +84,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
     @Inject    BeerDetailPresenter presenter;
 
-    private FlexibleAdapter adapter_review =new FlexibleAdapter<>(new ArrayList<>());
+    private FlexibleAdapter adapter_review ;
     private FlexibleAdapter adapter_resto;
     private FlexibleAdapter adapter_interest;
 
@@ -161,6 +162,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         recycler_interest.setLayoutManager(new LinearLayoutManager(this));
         adapter_resto =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
         adapter_interest=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
+        adapter_review=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
     }
 
     @Override
@@ -255,7 +257,12 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
         Interest interest;
         if(payload instanceof Resto) {
             interest = new Interest((Resto) payload);
-        }else return;
+        }else if(payload instanceof Interest) {
+            interest = new Interest((Interest) payload);
+        }else if(payload instanceof Review) {
+            interest = new Interest((Review) payload);
+        }else
+         return;
 
         switch (interest.getRelated_model()) {
             case Keys.CAP_RESTO: {
@@ -264,6 +271,11 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }
             break;
+            case Keys.CAP_USER:{
+                Intent intent = new Intent(this, UserProfileViewActivity.class);
+                intent.putExtra(Keys.CAP_INTEREST, interest);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+            }
         }
     }
 }

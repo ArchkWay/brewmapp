@@ -114,6 +114,7 @@ public class Keys {
     public static final String REPOST_ID = "repost_id";
     public static final String REPOST_MODEL = "repost_model";
     public static final String CAP_BEER = "Beer";
+    public static final String CAP_INTEREST = "Interest";
     public static final String TYPE_BEER = "TYPE_BEER";
     public static final String TYPE_RESTO = "TYPE_RESTO";
     public static final String RESTO_ID = "resto_id";
@@ -149,4 +150,5 @@ public class Keys {
     public static final String BOOKS = "books";
     public static final String FILMS = "films";
     public static final String GAMES = "games";
+
 }

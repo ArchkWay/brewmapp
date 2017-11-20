@@ -344,5 +344,6 @@
     <string name="special_offer">Специальные предложения</string>
     <string name="title_activity_edit_profile">Настройки профиля</string>
     <string name="country">Страна</string>
+    <string name="title_view_profile">Просмотр</string>
 
 </resources>

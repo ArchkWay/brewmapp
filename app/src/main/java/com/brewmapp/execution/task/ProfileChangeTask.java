@@ -69,7 +69,8 @@ public class ProfileChangeTask extends BaseNetworkTask<User, ListResponse<User>>
 
 
 
-                    //"getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms"
+
+                    wrapperParams.addParam(Keys.GENDER,user.getGender());
                     wrapperParams.addParam(Keys.CITY_ID,user.getCityId());
                     wrapperParams.addParam(Keys.COUNTRY_ID,user.getCountryId());
                     wrapperParams.addParam(Keys.FAMILY_STATUS,user.getFamilyStatus());

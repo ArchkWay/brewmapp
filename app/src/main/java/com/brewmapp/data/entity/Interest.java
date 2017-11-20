@@ -40,6 +40,16 @@ public class Interest implements Serializable {
         setRelated_model(Keys.CAP_RESTO);
     }
 
+    public Interest(Interest interest) {
+        setUser_info(interest.getUser_info());
+        setRelated_model(Keys.CAP_USER);
+    }
+
+    public Interest(Review payload) {
+        setUser_info(payload.getUser_info());
+        setRelated_model(Keys.CAP_USER);
+    }
+
     public User_info getUser_info() {
         return user_info;
     }

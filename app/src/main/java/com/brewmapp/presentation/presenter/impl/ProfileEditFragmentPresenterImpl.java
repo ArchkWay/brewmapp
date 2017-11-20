@@ -46,8 +46,8 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     private Context context;
     private UserRepo userRepo;
     private LoadProfileTask loadProfileTask;
-    String[] checkListAll={"getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname","getThumbnail"};
-    String[] checkListWithoutPthoto={"getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname"};
+    String[] checkListAll={"getGender","getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname","getThumbnail"};
+    String[] checkListWithoutPthoto={"getGender","getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname"};
     String[] checkListPhoto={"getThumbnail"};
 
 

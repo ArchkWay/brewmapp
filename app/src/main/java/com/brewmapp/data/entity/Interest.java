@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
 import com.brewmapp.execution.exchange.request.base.Keys;
 
 import java.io.Serializable;
@@ -128,6 +129,9 @@ public class Interest implements Serializable {
     }
 
     public String getUser_getThumb() {
+        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
+            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
+
         return user_getThumb;
     }
 

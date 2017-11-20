@@ -20,6 +20,8 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
@@ -41,6 +43,8 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
+
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView {
 
@@ -248,6 +252,18 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     }
 
     private void processAction(int action, Object payload){
+        Interest interest;
+        if(payload instanceof Resto) {
+            interest = new Interest((Resto) payload);
+        }else return;
 
+        switch (interest.getRelated_model()) {
+            case Keys.CAP_RESTO: {
+                Intent intent = new Intent(this, RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID, interest);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+            }
+            break;
+        }
     }
 }

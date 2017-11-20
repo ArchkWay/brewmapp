@@ -110,7 +110,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private final int ALL_CONTROL =0;
 
     private ArrayList<String> photosResto=new ArrayList<>();
-    private FlexibleAdapter adapter;
+    private FlexibleAdapter adapter_reviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         place.setOnClickListener(v -> presenter.startMapFragment(RestoDetailActivity.this));
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> presenter.startAddReviewRestoActivity(RestoDetailActivity.this));
-        adapter=new FlexibleAdapter<>(new ArrayList<>());
+        adapter_reviews =new FlexibleAdapter<>(new ArrayList<>());
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
@@ -288,10 +288,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void setReviews(List<IFlexible> iFlexibles) {
 
         empty_text_reviews.setVisibility(iFlexibles.size()==0?View.VISIBLE:View.GONE);
-        adapter.clear();
-        adapter.addItems(0,iFlexibles);
-        adapter.notifyDataSetChanged();
-        recycler_reviews.setAdapter(adapter);
+        adapter_reviews.clear();
+        adapter_reviews.addItems(0,iFlexibles);
+        adapter_reviews.notifyDataSetChanged();
+        recycler_reviews.setAdapter(adapter_reviews);
 
     }
 

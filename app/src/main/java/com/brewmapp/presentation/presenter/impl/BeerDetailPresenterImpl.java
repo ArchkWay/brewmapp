@@ -241,7 +241,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                                     restoInfoArrayList.add(restoInfo);
                                 }
                                 view.addItemsResto(new ArrayList<>(new Restos(restoInfoArrayList).getModels()));
-                                loadWhoLike(mode);
+                                loadWhoIsInterested(mode);
                             }
 
                             @Override
@@ -251,11 +251,11 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                         });
                         break;
                         default:
-                            loadWhoLike(mode);
+                            loadWhoIsInterested(mode);
                 }
 
             }
-            private void loadWhoLike(int mode) {
+            private void loadWhoIsInterested(int mode) {
                 switch (mode) {
                     case MODE_LOAD_ALL:
                         containerTasks.loadInteresByUsers(Keys.CAP_BEER, Integer.valueOf(beerDetail.getBeer().getId()), new SimpleSubscriber<List<IFlexible>>() {

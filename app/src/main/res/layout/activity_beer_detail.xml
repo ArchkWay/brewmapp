@@ -681,8 +681,8 @@
                     />
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:src="@drawable/ic_cell_arrow"
                     android:gravity="right"
                     app:layout_constraintRight_toRightOf="parent"

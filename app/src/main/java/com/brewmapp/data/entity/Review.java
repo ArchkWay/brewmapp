@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
+
 /**
  * Created by Kras on 04.11.2017.
  */
@@ -21,6 +23,9 @@ public class Review {
     private String user_getThumb;
 
     public String getUser_getThumb() {
+        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
+            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
+
         return user_getThumb;
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="family_status_man">
+        <item>Не женат</item>
+        <item>Женат</item>
+    </string-array>
+    <string-array name="family_status_women">
+        <item>Не замужем</item>
+        <item>Замужем</item>
+    </string-array>
+</resources>

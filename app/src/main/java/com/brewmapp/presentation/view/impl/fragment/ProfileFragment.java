@@ -1,20 +1,15 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Post;
@@ -23,9 +18,8 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
-import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -54,6 +48,8 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 import static android.app.Activity.RESULT_OK;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_PROFILE;
 
 /**
  * Created by ovcst on 03.08.2017.
@@ -141,7 +137,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 interest.setInterest_info(interest_info);
                 Intent intent=new Intent(getContext(), RestoDetailActivity.class);
                 intent.putExtra(Keys.RESTO_ID,interest);
-                startActivityForResult(intent, Cons.REQUEST_CODE_REFRESH_ITEMS);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
                 break;
         }
     }
@@ -224,7 +220,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public boolean onItemClick(int position) {
         switch (position) {
             case 0:
-                startActivityForResult(new Intent(getActivity(), NewPostActivity.class),Cons.REQUEST_CODE_REFRESH_ITEMS);
+                startActivityForResult(new Intent(getActivity(), NewPostActivity.class),REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case 1:
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
@@ -233,7 +229,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListActivity.class));
                 break;
             case 3:
-                startActivityForResult(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class),Cons.REQUEST_CODE_REFRESH_ITEMS);
+                startActivityForResult(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class),REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case 4:
                 startActivity(new Intent(getActivity(), AssessmentsActivity.class));
@@ -254,15 +250,17 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             presenter.onLoadPosts(loadPostsPackage);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+            case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK) {
                     refreshItems();
                     return;
                 }
+            case REQUEST_CODE_REFRESH_PROFILE:
+                presenter.refreshProfile();
+                return;
                 default:
                     super.onActivityResult(requestCode, resultCode, data);
         }
@@ -273,10 +271,11 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void onBarAction(int id) {
         switch (id){
             case R.id.action_create:
-                startActivityForResult(new Intent(getActivity(), ProfileInfoActivity.class), Cons.REQUEST_CODE_REFRESH_ITEMS);
+                startActivityForResult(new Intent(getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
                 return;
             default:
                 super.onBarAction(id);
         }
     }
+
 }

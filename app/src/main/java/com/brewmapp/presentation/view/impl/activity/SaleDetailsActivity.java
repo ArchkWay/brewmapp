@@ -16,17 +16,13 @@ import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
-import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.contract.SaleDetailsView;
-
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-
 import com.brewmapp.R;
-import com.brewmapp.presentation.view.contract.ResultDialog;
-import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
-import com.brewmapp.utils.Cons;
+
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
                     {
@@ -99,7 +95,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+            case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK){
                     setResult(RESULT_OK);
                     finish();

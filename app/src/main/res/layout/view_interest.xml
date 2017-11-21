@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Короткий те"
+                android:text="@string/text_view_value_not_found"
                 android:layout_marginRight="8dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

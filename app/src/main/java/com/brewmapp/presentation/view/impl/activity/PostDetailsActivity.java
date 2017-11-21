@@ -13,16 +13,9 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
-import com.brewmapp.data.model.ILikeable;
-import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.view.contract.PostDetailsView;
-import com.brewmapp.presentation.view.contract.RefreshableView;
-import com.brewmapp.presentation.view.contract.ResultTask;
-import com.brewmapp.presentation.view.contract.ResultDialog;
-import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
-import com.brewmapp.utils.Cons;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,6 +28,7 @@ import ru.frosteye.ovsa.tool.DateTools;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class PostDetailsActivity extends BaseActivity implements PostDetailsView
 {
@@ -126,7 +120,7 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+            case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK){
                     setResult(RESULT_OK);
                     finish();

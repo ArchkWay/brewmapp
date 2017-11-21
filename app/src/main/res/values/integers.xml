@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="init_max_lites_text_view">5</integer>
+</resources>

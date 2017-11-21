@@ -140,4 +140,6 @@ public class Keys {
     public static final String COORD_END = "coordEnd";
     public static final String ORDER_SORT = "restoOrderSort";
 
+    public static final String menuBeer="menuBeer";
+    public static final String BIRTHDAY = "birthday";
 }

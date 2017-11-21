@@ -19,6 +19,7 @@
         android:visibility="gone"
         android:orientation="vertical"
         android:gravity="center_horizontal"
+
         >
 
         <TextView

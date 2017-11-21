@@ -5,6 +5,7 @@ import android.view.View;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
+import com.brewmapp.presentation.presenter.contract.AddReviewBeerPresenter;
 import com.brewmapp.presentation.presenter.contract.AddReviewRestoPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.AlbumsPresenter;
@@ -19,9 +20,7 @@ import com.brewmapp.presentation.presenter.contract.ExtendedSearchPresenter;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
-import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
-import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.presenter.contract.InviteListPresenter;
 import com.brewmapp.presentation.presenter.contract.InvitePresenter;
 import com.brewmapp.presentation.presenter.contract.LoginPresenter;
@@ -32,7 +31,7 @@ import com.brewmapp.presentation.presenter.contract.NewPostSettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.presenter.contract.PickLocationPresenter;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
-import com.brewmapp.presentation.presenter.contract.ProfileInfoPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
@@ -44,6 +43,7 @@ import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddInterestPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.AddReviewBeerPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddReviewRestoPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AlbumsPresenterImpl;
@@ -69,7 +69,8 @@ import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PostDetailsPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.ProfileInfoPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ProfileEditFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ProfileEditPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RestoDetailPresenterImpl;
@@ -79,8 +80,8 @@ import com.brewmapp.presentation.presenter.impl.SearchPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
+import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 import dagger.Module;
@@ -274,12 +275,22 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    ProfileInfoPresenter provideProfileInfoPresenter(ProfileInfoPresenterImpl presenter){
+    ProfileEditPresenter provideProfileInfoPresenter(ProfileEditPresenterImpl presenter){
         return presenter;
     }
 
     @Provides @PresenterScope
     FilterByCategoryPresenter provideFilterByCategory (FilterByCategoryPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    ProfileEditFragmentPresenter provideProfileEditFragmentPresenter(ProfileEditFragmentPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    AddReviewBeerPresenter provideAddReviewBeerPresenter(AddReviewBeerPresenterImpl presenter){
         return presenter;
     }
 }

@@ -2,9 +2,9 @@ package com.brewmapp.app.di.component;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
+import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
@@ -25,7 +25,7 @@ import com.brewmapp.presentation.view.impl.activity.InviteListActivity;
 import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileInfoActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.UniversalMapActivity;
@@ -44,6 +44,7 @@ import dagger.Subcomponent;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
@@ -59,6 +60,7 @@ public interface PresenterComponent {
     void inject(SearchFragment fragment);
     void inject(BeerMapFragment fragment);
     void inject(SettingsFragment fragment);
+    void inject(ProfileEditFragment fragment);
 
     void inject(BaseActivity activity);
     void inject(StartActivity activity);
@@ -92,7 +94,9 @@ public interface PresenterComponent {
     void inject(RestoDetailActivity restoDetailActivity);
     void inject(BeerDetailActivity beerDetailActivity);
     void inject(AddReviewRestoActivity addReviewRestoActivity);
-    void inject(ProfileInfoActivity profileInfoActivity);
+    void inject(ProfileEditActivity profileEditActivity);
     void inject(FilterByCategory filterByCategory);
     void inject(FilterMapActivity filterMapActivity);
+    void inject(AddReviewBeerActivity addReviewBeerActivity);
+
 }

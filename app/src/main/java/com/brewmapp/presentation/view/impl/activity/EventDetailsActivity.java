@@ -29,13 +29,11 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.IPrompt;
 import ru.frosteye.ovsa.presentation.view.SimplePrompt;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
-import ru.frosteye.ovsa.stub.listener.SelectListener;
 import ru.frosteye.ovsa.tool.UITools;
 
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
-import com.brewmapp.utils.Cons;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -43,7 +41,8 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class EventDetailsActivity extends BaseActivity implements EventDetailsView, FlexibleAdapter.OnItemClickListener {
 
@@ -216,7 +215,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case Cons.REQUEST_CODE_REFRESH_ITEMS:
+            case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK){
                     setResult(RESULT_OK);
                     finish();

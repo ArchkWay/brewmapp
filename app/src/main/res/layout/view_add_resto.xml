@@ -26,12 +26,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_default_resto"
-            />
+            android:layout_marginStart="8dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Test"
+                android:text="@string/text_view_value_not_found"
                 android:textSize="@dimen/text_size_medium_phone"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/view.interest.title"
@@ -41,11 +41,11 @@
                 android:layout_marginTop="8dp"
                 style="@style/AppTheme.Text.Georgia.BoldItalic"
 
-                />
+                android:layout_marginStart="8dp" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Короткий те"
+            android:text="@string/text_view_value_not_found"
             android:lines="1"
             android:id="@+id/view.interest.shot.text"
             app:layout_constraintRight_toLeftOf="@+id/view.interest.button_select"
@@ -53,11 +53,13 @@
             app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
             android:layout_marginLeft="8dp"
 
-            app:layout_constraintTop_toBottomOf="@+id/view.interest.title" />
+            app:layout_constraintTop_toBottomOf="@+id/view.interest.title"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
-            android:layout_width="@dimen/size_album_chevron"
-            android:layout_height="match_parent"
+            android:layout_width="36dp"
+            android:layout_height="0dp"
             android:src="@drawable/ic_arrow_right"
             android:layout_gravity="center_vertical|right"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +68,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"
-            android:id="@+id/view.interest.button_select" />
+            android:id="@+id/view.interest.button_select"
+            android:layout_marginEnd="8dp" />
 
     </android.support.constraint.ConstraintLayout>
 

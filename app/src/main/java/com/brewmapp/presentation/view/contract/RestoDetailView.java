@@ -14,7 +14,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface RestoDetailView extends BasicView{
-    void setModel(RestoDetail restoDetail);
+    void setModel(RestoDetail restoDetail, int mode);
 
     void commonError(String... string);
 

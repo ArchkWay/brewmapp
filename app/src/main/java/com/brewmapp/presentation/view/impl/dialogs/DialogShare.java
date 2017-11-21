@@ -30,7 +30,6 @@ import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
-import com.brewmapp.utils.Cons;
 
 import javax.inject.Inject;
 
@@ -40,7 +39,8 @@ import ru.frosteye.ovsa.presentation.view.IPrompt;
 import ru.frosteye.ovsa.presentation.view.SimplePrompt;
 import ru.frosteye.ovsa.tool.UITools;
 
-import static com.brewmapp.utils.Cons.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
+
 
 /**
  * Created by Kras on 13.10.2017.

@@ -9,15 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 import com.squareup.picasso.Picasso;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -28,6 +27,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 public class InterestAddViewBeer extends BaseLinearLayout implements InteractiveModelView<Beer> {
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
+    @BindView(R.id.view_interest_arrow_right)    ImageView arrow_right;
 
     private Beer beer;
     private Listener listener;
@@ -56,18 +56,29 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         String imgUrl="";
         imgUrl=beer.getGetThumb();
 
-        if (TextUtils.isEmpty(imgUrl)||imgUrl.length()==0) {
+        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
             Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);
-        } else {
+        else
             Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append(TextUtils.isEmpty(beer.getTitle())?"":beer.getTitle());
+        if(!TextUtils.isEmpty(beer.getTitle_ru())) {
+            if (stringBuilder.length() > 0) {
+                if (!stringBuilder.toString().equals(beer.getTitle_ru()))
+                    stringBuilder.append(TextUtils.isEmpty(beer.getTitle_ru()) ? "" : " (" + beer.getTitle_ru() + ")");
+            }else {
+                stringBuilder.append(TextUtils.isEmpty(beer.getTitle_ru()) ? "" : beer.getTitle_ru());
+            }
         }
+        title.setText(stringBuilder.toString());
 
-        String titletxt = beer.getTitle();
-        if (beer.getTitle_ru().length() > 0)
-            titletxt = titletxt + "(" + beer.getTitle_ru() + ")";
-        title.setText(titletxt);
-
-        setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, beer));
+        if(getContext() instanceof AddInterestActivity) {
+            setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, beer));
+            arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, beer));
+        }else {
+            setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, beer));
+        }
     }
 
     @Override

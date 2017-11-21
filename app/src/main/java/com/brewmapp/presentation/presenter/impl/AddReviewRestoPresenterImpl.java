@@ -14,6 +14,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddReviewTask;
 import com.brewmapp.execution.task.LoadRestoEvaluationTask;
 import com.brewmapp.execution.task.SetRestoEvaluationTask;
+import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.presentation.presenter.contract.AddReviewRestoPresenter;
 import com.brewmapp.presentation.view.contract.AddReviewRestoView;
 
@@ -37,6 +38,7 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
     private SetRestoEvaluationTask setRestoEvaluationTask;
     private AddReviewTask addReviewTask;
     private UserRepo userRepo;
+    private ContainerTasks containerTasks;
 
     private RestoEvaluationPackage restoEvaluationPackage =new RestoEvaluationPackage(null);
     private RestoEvaluationPackage restoEvaluationPackageInterior =new RestoEvaluationPackage(Keys.EVLUATION_TYPE_INTERIOR);
@@ -45,11 +47,12 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
     private RestoEvaluationPackage restoEvaluationPackageBeer =new RestoEvaluationPackage(Keys.EVLUATION_TYPE_BEER);
 
     @Inject
-    public AddReviewRestoPresenterImpl(LoadRestoEvaluationTask loadRestoEvaluationTask,SetRestoEvaluationTask setRestoEvaluationTask,UserRepo userRepo,AddReviewTask addReviewTask){
+    public AddReviewRestoPresenterImpl(LoadRestoEvaluationTask loadRestoEvaluationTask,SetRestoEvaluationTask setRestoEvaluationTask,UserRepo userRepo,AddReviewTask addReviewTask,ContainerTasks containerTasks){
         this.loadRestoEvaluationTask = loadRestoEvaluationTask;
         this.setRestoEvaluationTask = setRestoEvaluationTask;
         this.userRepo = userRepo;
         this.addReviewTask = addReviewTask;
+        this.containerTasks = containerTasks;
     }
 
     @Override
@@ -151,22 +154,22 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
 
 
         //Review
-        ReviewPackage reviewPackage =new ReviewPackage();
-        reviewPackage.setRelated_model(Keys.CAP_RESTO);
-        reviewPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
-        reviewPackage.setText(post.getText());
-        addReviewTask.execute(reviewPackage,new SimpleSubscriber<String>(){
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-                view.commonError(e.getMessage());
-            }
+        containerTasks.addReviewTask(
+                Keys.CAP_RESTO,
+                String.valueOf(restoDetail.getResto().getId()),
+                post.getText(),
+                new SimpleSubscriber<String>(){
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    view.commonError(e.getMessage());
+                                }
 
-            @Override
-            public void onNext(String s) {
-                super.onNext(s);
-                view.reviewSent();
-            }
-        });
+                                @Override
+                                public void onNext(String s) {
+                                    super.onNext(s);
+                                    view.reviewSent();
+                                }
+                            });
     }
 }

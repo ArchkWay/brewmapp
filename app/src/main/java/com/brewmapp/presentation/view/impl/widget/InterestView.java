@@ -54,46 +54,27 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @Override
     public void setModel(Interest model) {
         this.interest=model;
-        String imgUrl="";
-        String text="";
-        String text2="";
-        int imgUrlDefault;
+        String tmpStr;
+        try {tmpStr=model.getInterest_info().getTitle();}                               catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) title.setText(tmpStr);else tmpStr=null;
+        if(tmpStr==null)
+            try {tmpStr=model.getInterest_info().getName();}                            catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) title.setText(tmpStr);else tmpStr=null;
 
-        if(model.getInterest_info()!=null){
-            text=model.getInterest_info().getTitle();
-            if(TextUtils.isEmpty(text))
-                text=model.getInterest_info().getName();
-                text2=model.getInterest_info().getShort_text();
-            if(TextUtils.isEmpty(text2))
-                if(!TextUtils.isEmpty(model.getInterest_info().getText()))
-                    text2= Html.fromHtml(model.getInterest_info().getText()).toString();
-            if(TextUtils.isEmpty(text2))
-                text2=text;
-            imgUrl=model.getInterest_info().getGetThumb();
-        }
+        try {tmpStr=model.getInterest_info().getShort_text();}                          catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else tmpStr=null;
+        if(tmpStr==null)
+            try {tmpStr=Html.fromHtml(model.getInterest_info().getText()).toString();}  catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else tmpStr=null;
+        try {tmpStr=model.getInterest_info().getGetThumb();}                            catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) Picasso.with(getContext()).load(tmpStr).fit().centerInside().into(avatar); else tmpStr=null;
 
-        switch (model.getRelated_model()){
-            case Keys.CAP_RESTO:
-                imgUrlDefault=R.drawable.ic_default_resto;
-                break;
-            case Keys.CAP_BEER:
-                imgUrlDefault=R.drawable.ic_default_beer;
-                break;
-            default:
-                return;
-        }
-
-        title.setText(String.valueOf(text));
-        shot_text.setText(String.valueOf(text2));
-        if(TextUtils.isEmpty(imgUrl)||imgUrl.length()==0)
-            Picasso.with(getContext()).load(imgUrlDefault).fit().centerCrop().into(avatar);
-        else
-            Picasso.with(getContext()).load(imgUrl).fit().centerInside().into(avatar);
+        if(tmpStr==null)
+            switch (model.getRelated_model()){
+                case Keys.CAP_RESTO:
+                    Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
+                    break;
+                case Keys.CAP_BEER:Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);break;
+            }
 
         setOnClickListener(v -> listener.onModelAction(
                 0,interest
         ));
-
     }
 
     @Override

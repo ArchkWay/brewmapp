@@ -35,13 +35,14 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
 
     @Override
     public void onNavigatorAction(Action action) {
-        storeCodeActiveFragment(action.code());
+        storeCodeActiveFragment(MenuField.PROFILE);
         switch (action.code()) {
             case MenuField.PROFILE:
                 fragmentToShow = new ProfileFragment();
                 break;
             case MenuField.EVENTS:
                 fragmentToShow = new EventsFragment();
+                storeCodeActiveFragment(action.code());
                 break;
             case MenuField.SEARCH:
                 fragmentToShow = new SearchFragment();

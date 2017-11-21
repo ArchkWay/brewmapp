@@ -42,6 +42,7 @@ import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.WrapperValues;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.exchange.response.UserResponse;
@@ -300,4 +301,15 @@ public interface Api {
     @FormUrlEncoded
     Call<List<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
 
+    @POST("profile")
+    @FormUrlEncoded
+    Call<ListResponse<User>> profileEdit(@FieldMap WrapperParams params);
+
+    @POST("/api/resto/getcoordinates")
+    @FormUrlEncoded
+    Call<Object> loadRestoGeo(@FieldMap WrapperValues params);
+
+    @POST("/api/like")
+    @FormUrlEncoded
+    Call<Object>  loadLikesByBeer(@FieldMap WrapperParams params);
 }

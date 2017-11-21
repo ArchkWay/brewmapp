@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-
     >
         <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
@@ -18,8 +17,8 @@
             android:id="@+id/view.review.container"
             >
             <com.makeramen.roundedimageview.RoundedImageView
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_avatar_lesser"
+                android:layout_height="@dimen/size_avatar_lesser"
                 android:id="@+id/view.review.avatar"
                 android:scaleType="fitCenter"
                 app:riv_border_width="1dp"

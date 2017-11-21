@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
+import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
 /**
  * Created by nlbochas on 18/11/2017.
@@ -31,10 +32,15 @@ public class FilterRestoTask extends BaseNetworkTask<FilterRestoPackage, List<Fi
     protected Observable<List<FilterRestoLocation>> prepareObservable(FilterRestoPackage restoPackage) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams wrapperParams = new WrapperParams(Wrappers.RESTO_LOCATION);
-//                wrapperParams.addParam(Keys.NAME, params.getName());
-                wrapperParams.addParam(Keys.RESTO_DISCOUNT, restoPackage.getResto_discount());
-                subscriber.onNext(executeCall(getApi().loadRestoLocation(wrapperParams)));
+                RequestParams requestParams = new RequestParams();
+                requestParams.addParam(Keys.RESTO_CITY, restoPackage.getRestoCity());
+                requestParams.addParam(Keys.MENU_BEER, restoPackage.getMenuBeer());
+                requestParams.addParam(Keys.RESTO_TYPE, restoPackage.getRestoTypes());
+                requestParams.addParam(Keys.RESTO_FEATURES, restoPackage.getRestoFeatures());
+                requestParams.addParam(Keys.RESTO_AVERAGE, restoPackage.getRestoPrices());
+                requestParams.addParam(Keys.RESTO_KITCHEN, restoPackage.getRestoKitchens());
+                requestParams.addParam(Keys.RESTO_DISCOUNT, restoPackage.getResto_discount());
+                subscriber.onNext(executeCall(getApi().loadRestoLocation(requestParams)));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

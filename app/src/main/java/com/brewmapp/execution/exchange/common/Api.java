@@ -1,6 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -18,13 +19,10 @@ import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
-import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.KitchenTypes;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
-import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -300,6 +298,6 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<List<FilterRestoLocation>> loadRestoLocation(@FieldMap WrapperParams params);
+    Call<List<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
 
 }

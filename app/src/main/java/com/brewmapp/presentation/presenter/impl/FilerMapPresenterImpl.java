@@ -67,7 +67,7 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
             @Override
             public void onNext(List<FilterRestoLocation> restoLocations) {
                 for (FilterRestoLocation filterRestoLocation : restoLocations) {
-                    Log.i("id", filterRestoLocation.getLocationId());
+                    Log.i("restoID:", filterRestoLocation.getLocationId());
                 }
             }
         });

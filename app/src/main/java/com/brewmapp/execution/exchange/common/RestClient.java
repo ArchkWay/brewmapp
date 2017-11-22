@@ -59,7 +59,7 @@ import static com.brewmapp.BuildConfig.SERVER_API_VER;
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
-    //public static final String API_VERSION = "1.02";
+    public static final String API_VERSION = "1.02";
 
     //public static final String API_VERSION = "1.03";
 

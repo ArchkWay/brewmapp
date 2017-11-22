@@ -22,7 +22,7 @@ public class User {
     private String email;
     private String fb;
 
-    private Relations relations;
+    //private Relations relations;
 
     private int subscriptionsCount;
 
@@ -81,23 +81,23 @@ public class User {
     @SerializedName(Keys.GET_THUMB)
     private String thumbnail;
 
-    public Relations getRelations() {
-        return relations;
-    }
-
-    public void setRelations(Relations relations) {
-        this.relations = relations;
-    }
+//    public Relations getRelations() {
+//        return relations;
+//    }
+//
+//    public void setRelations(Relations relations) {
+//        this.relations = relations;
+//    }
 
     public String getFormattedName() {
         return String.format("%s %s", firstname, lastname);
     }
     public String getFormattedPlace() {
-        try {
-            return String.format("%s,%s", relations.getCountry().getName(), relations.getmCity().getName());
-        }catch (Exception e){
+//        try {
+//            return String.format("%s,%s", relations.getCountry().getName(), relations.getmCity().getName());
+//        }catch (Exception e){
             return null;
-        }
+//        }
 
     }
 
@@ -415,11 +415,11 @@ public class User {
     }
 
     public String getCountryCityFormated() {
-        try {
-            return String.format("%s,%s",getRelations().getmCountry().getName(),getRelations().getmCity().getName());
-        }catch (Exception e){
+//        try {
+//            return String.format("%s,%s",getRelations().getmCountry().getName(),getRelations().getmCity().getName());
+//        }catch (Exception e){
             return null;
-        }
+//        }
     }
 
     public static class Counts {

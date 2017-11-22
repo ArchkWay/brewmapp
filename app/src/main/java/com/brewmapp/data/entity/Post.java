@@ -1,13 +1,9 @@
 package com.brewmapp.data.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +35,15 @@ public class Post implements Postable, Serializable, ILikeable {
     private String repost_model;
     private String repost_id;
     private Repost repost;
+    private Related_model_data related_model_data;
+
+    public Related_model_data getRelated_model_data() {
+        return related_model_data;
+    }
+
+    public void setRelated_model_data(Related_model_data related_model_data) {
+        this.related_model_data = related_model_data;
+    }
 
     public Repost getRepost() {
         return repost;

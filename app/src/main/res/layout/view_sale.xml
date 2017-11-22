@@ -74,54 +74,6 @@
         android:adjustViewBounds="true"/>
 
     <include layout="@layout/view_share_like" />
-    <!--<RelativeLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="@dimen/common_block_space">-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="@dimen/height_post_button"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:id="@+id/view.sale.more"-->
-    <!--android:paddingLeft="@dimen/common_block_space_double_semi"-->
-    <!--android:paddingRight="@dimen/common_block_space_double_semi"-->
-    <!--android:paddingTop="@dimen/common_block_space_half"-->
-    <!--android:layout_toLeftOf="@+id/view.sale.like"-->
-    <!--android:paddingBottom="@dimen/common_block_space_half"-->
-    <!--android:layout_marginRight="@dimen/common_block_space"-->
-    <!--android:background="@drawable/selector_post_button"-->
-    <!--android:src="@drawable/ic_post_more"/>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@drawable/selector_post_button"-->
-    <!--android:id="@+id/view.sale.like"-->
-    <!--android:layout_marginRight="@dimen/common_block_space"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:paddingRight="@dimen/common_block_space"-->
-    <!--android:gravity="center_vertical">-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="@dimen/height_post_button"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:paddingLeft="@dimen/common_block_space"-->
-    <!--android:paddingRight="@dimen/common_block_space_half"-->
-    <!--android:paddingTop="@dimen/common_block_space_half"-->
-    <!--android:paddingBottom="@dimen/common_block_space_half"-->
-    <!--android:src="@drawable/ic_like"/>-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="@color/colorButtonGreen"-->
-    <!--android:textSize="@dimen/text_size_common_bigger"-->
-    <!--android:id="@+id/view.sale.like.counter"/>-->
-    <!--</LinearLayout>-->
-
-    <!--</RelativeLayout>-->
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"

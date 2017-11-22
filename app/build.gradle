@@ -59,7 +59,8 @@ android {
         }
         debug {
             signingConfig signingConfigs.config
-            buildConfigField "String", "SERVER_ROOT_URL", "\"https://developer.brewmapp.com/\""
+            //buildConfigField "String", "SERVER_ROOT_URL", "\"https://developer.brewmapp.com/\""
+            buildConfigField "String", "SERVER_ROOT_URL", "\"https://brewmapp.com/\""
         }
     }
     productFlavors {

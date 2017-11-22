@@ -77,18 +77,19 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     public void onLoadEverything() {
         enableControls(false);
         loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileInfoPackage>() {
-            @Override
-            public void onError(Throwable e) {
-                enableControls(true);
-                showMessage(e.getMessage());
-                view.onError();
-            }
 
             @Override
             public void onNext(ProfileInfoPackage pack) {
                 enableControls(true);
                 userRepo.save(pack.getUserProfile().getUser());
                 refreshProfile();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                enableControls(true);
+                showMessage(e.getMessage());
+                view.onError();
             }
         });
     }

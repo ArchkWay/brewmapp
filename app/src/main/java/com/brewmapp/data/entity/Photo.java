@@ -44,6 +44,10 @@ public class Photo implements ILikeable {
 
     private Size size;
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public User getUser() {
         return user;
     }

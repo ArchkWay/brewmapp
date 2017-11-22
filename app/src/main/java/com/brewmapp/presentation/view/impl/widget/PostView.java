@@ -82,9 +82,19 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     public void setModel(Post model) {
         this.model = model;
         shareLikeView.setiLikeable(model);
-        if(model.getRepost()==null)
+        if(model.getRepost()==null) {
             repost.setVisibility(GONE);
-        else {
+            repost_photo.post(() -> {
+                List<Photo> photos = model.getRelated_model_data().getPhoto();
+                if (photos != null && photos.size() > 0 && photos.get(0).getUrlPreview() != null) {
+                    float ratio = (float) photos.get(0).getSize().getWidth() / photos.get(0).getSize().getHeight();
+                    LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
+                    params.height = (int) (repost_photo.getMeasuredWidth() / ratio);
+                    repost_photo.setLayoutParams(params);
+                    Picasso.with(getContext()).load(photos.get(0).getUrl()).fit().centerCrop().into(avatar);
+                }
+            });
+        }else {
             repost.setVisibility(VISIBLE);
             repost_photo.post(() -> {
                 List<Photo> photos = model.getRepost().getPhoto();

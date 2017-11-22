@@ -5,8 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import com.brewmapp.execution.exchange.request.base.Keys;
+
+import static com.brewmapp.BuildConfig.SERVER_API_VER;
 
 /**
  * Created by oleg on 15.07.17.
@@ -22,6 +25,7 @@ public class User {
     private String email;
     private String fb;
 
+//    @SerializedName("1.03"==SERVER_API_VER?"relations":"")
     //private Relations relations;
 
     private int subscriptionsCount;

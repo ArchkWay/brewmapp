@@ -56,10 +56,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
             buildConfigField "String", "SERVER_ROOT_URL", "\"https://brewmapp.com/\""
+            buildConfigField "String", "SERVER_API_URL", "\"https://brewmapp.com/api/\""
+            buildConfigField "String", "SERVER_API_VER", "\"1.02\""
         }
         debug {
             signingConfig signingConfigs.config
             buildConfigField "String", "SERVER_ROOT_URL", "\"https://developer.brewmapp.com/\""
+            buildConfigField "String", "SERVER_API_URL", "\"https://developer.brewmapp.com/api/\""
+            buildConfigField "String", "SERVER_API_VER", "\"1.03\""
         }
     }
     productFlavors {

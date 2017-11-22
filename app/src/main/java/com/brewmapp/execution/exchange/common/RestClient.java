@@ -51,6 +51,8 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import ru.frosteye.ovsa.execution.network.client.BaseRetrofitClient;
 import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
+import static com.brewmapp.BuildConfig.SERVER_API_VER;
+
 /**
  * Created by oleg on 15.07.17.
  */
@@ -59,7 +61,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
     //public static final String API_VERSION = "1.02";
 
-    public static final String API_VERSION = "1.03";
+    //public static final String API_VERSION = "1.03";
 
     @Inject
     public RestClient(@ApiUrl String baseUrl,
@@ -75,7 +77,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
     @Override
     protected Map<String, String> getHeaders() {
         Map<String, String> map = super.getHeaders();
-        map.put(Keys.API_VERSION, API_VERSION);
+        map.put(Keys.API_VERSION, SERVER_API_VER);
 
         return map;
     }

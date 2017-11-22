@@ -25,6 +25,8 @@ import ru.frosteye.ovsa.di.module.BaseAppModule;
 import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+import static com.brewmapp.BuildConfig.SERVER_API_URL;
+
 
 @Module
 public class AppModule extends BaseAppModule<BeerMap> {
@@ -61,7 +63,8 @@ public class AppModule extends BaseAppModule<BeerMap> {
 
     @Provides @ApiUrl
     String provideApiUrl() {
-        return context.getString(R.string.config_api_url);
+        //return context.getString(R.string.config_api_url);
+        return SERVER_API_URL;
     }
 
     @Provides @Singleton

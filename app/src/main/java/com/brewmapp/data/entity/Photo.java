@@ -88,6 +88,9 @@ public class Photo implements ILikeable {
     }
 
     public String getUrlPreview() {
+        if(urlPreview != null && !urlPreview.startsWith("http")&& !url.startsWith("/")) {
+            urlPreview = BuildConfig.SERVER_ROOT_URL + urlPreview;
+        }
         return urlPreview;
     }
 

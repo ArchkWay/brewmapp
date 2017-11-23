@@ -64,6 +64,14 @@ android {
             buildConfigField "String", "SERVER_ROOT_URL", "\"https://developer.brewmapp.com/\""
             buildConfigField "String", "SERVER_API_URL", "\"https://developer.brewmapp.com/api/\""
             buildConfigField "String", "SERVER_API_VER", "\"1.03\""
+            debuggable true
+        }
+        debugProduction {
+            signingConfig signingConfigs.config
+            buildConfigField "String", "SERVER_ROOT_URL", "\"https://brewmapp.com/\""
+            buildConfigField "String", "SERVER_API_URL", "\"https://brewmapp.com/api/\""
+            buildConfigField "String", "SERVER_API_VER", "\"1.02\""
+            debuggable true
         }
     }
     productFlavors {
@@ -72,9 +80,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
     compile project(':OVSA Library')
     compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;

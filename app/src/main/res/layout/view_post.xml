@@ -64,6 +64,18 @@
             style="@style/AppTheme.Paragraph"
             android:layout_marginBottom="@dimen/common_block_space_double"
             />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/view.post.container.post.photo"
+            android:layout_marginBottom="@dimen/common_block_space_double"
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+            android:minHeight="1dp"
+            />
+
     </LinearLayout>
 
     <LinearLayout

@@ -1,12 +1,15 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +21,10 @@ import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -41,6 +47,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
     @BindView(R.id.view_post_container_repost_text)    TextView repost_text;
     @BindView(R.id.view_post_container_repost_photo)    ImageView repost_photo;
+    @BindView(R.id.view_post_container_post_photo)    ImageView post_photo;
     @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
 
     private Listener listener;
@@ -81,54 +88,106 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @Override
     public void setModel(Post model) {
         this.model = model;
-        shareLikeView.setiLikeable(model);
-        if(model.getRepost()==null) {
-            repost.setVisibility(GONE);
-            repost_photo.post(() -> {
-                List<Photo> photos = model.getRelated_model_data().getPhoto();
-                if (photos != null && photos.size() > 0 && photos.get(0).getUrlPreview() != null) {
-                    float ratio = (float) photos.get(0).getSize().getWidth() / photos.get(0).getSize().getHeight();
-                    LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
-                    params.height = (int) (repost_photo.getMeasuredWidth() / ratio);
-                    repost_photo.setLayoutParams(params);
-                    Picasso.with(getContext()).load(photos.get(0).getUrl()).fit().centerCrop().into(avatar);
+
+        class setContentPost {
+            String photoUrl=null;
+
+            public setContentPost(){
+                shareLikeView.setiLikeable(model);
+                setRepost();
+                setAvatar();
+                setTexts();
+                setImage();
+            }
+
+            private void setImage() {
+
+                try {photoUrl=model.getPhoto().get(0).getUrl();}catch (Exception e){}
+                if(photoUrl==null) return;
+
+                post_photo.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        post_photo.getViewTreeObserver().removeOnPreDrawListener(this);
+                        Picasso.with(getContext()).load(photoUrl).into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                float ratio=post_photo.getWidth()/(float)bitmap.getWidth();
+                                post_photo.setMinimumHeight((int) (bitmap.getHeight()*ratio));
+                                post_photo.setImageBitmap(bitmap);
+                                post_photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+                        return true;
+                    }
+                });
+            }
+
+            private void setTexts() {
+                text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
+                date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
+                try {author.setText(model.getRelated_model_data().getName());}catch (Exception e){}
+            }
+
+            private void setAvatar() {
+                String avatarLoad=null;
+                try {avatarLoad=model.getRelated_model_data().getGetThumb();}catch (Exception e){}
+                int avatarError;
+                switch (model.getRelated_model()){
+                    case Keys.CAP_RESTO:
+                        avatarError=R.drawable.ic_default_resto;
+                        break;
+                    default:
+                        avatarError=R.drawable.ic_default_resto;
                 }
-            });
-        }else {
-            repost.setVisibility(VISIBLE);
-            repost_photo.post(() -> {
-                List<Photo> photos = model.getRepost().getPhoto();
-                if (photos != null && photos.size() > 0 && photos.get(0).getUrlPreview() != null) {
-                    float ratio = (float) photos.get(0).getSize().getWidth() / photos.get(0).getSize().getHeight();
-                    LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
-                    params.height = (int) (repost_photo.getMeasuredWidth() / ratio);
-                    repost_photo.setLayoutParams(params);
-                    Picasso.with(getContext()).load(photos.get(0).getUrl()).fit().centerCrop().into(repost_photo);
-                } else {
-                    repost_photo.setImageDrawable(null);
-                    LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
-                    params.height = params.width = 0;
-                    repost_photo.setLayoutParams(params);
+                if(avatarLoad==null)
+                    Picasso.with(getContext()).load(avatarError).fit().centerCrop().into(avatar);
+                else
+                    Picasso.with(getContext()).load(avatarLoad).fit().centerCrop().into(avatar);
+
+            }
+
+            private void setRepost() {
+                if(model.getRepost()==null) {
+                    repost.setVisibility(GONE);
+                }else {
+                    repost.setVisibility(VISIBLE);
+                    repost_photo.post(() -> {
+                        List<Photo> photos = model.getRepost().getPhoto();
+                        if (photos != null && photos.size() > 0 && photos.get(0).getUrlPreview() != null) {
+                            float ratio = (float) photos.get(0).getSize().getWidth() / photos.get(0).getSize().getHeight();
+                            LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
+                            params.height = (int) (repost_photo.getMeasuredWidth() / ratio);
+                            repost_photo.setLayoutParams(params);
+                            Picasso.with(getContext()).load(photos.get(0).getUrl()).fit().centerCrop().into(repost_photo);
+                        } else {
+                            repost_photo.setImageDrawable(null);
+                            LayoutParams params = ((LayoutParams) repost_photo.getLayoutParams());
+                            params.height = params.width = 0;
+                            repost_photo.setLayoutParams(params);
+                        }
+                    });
+                    repost_name.setText(model.getRepost().getUser_info()==null?"":model.getRepost().getUser_info().getFormattedName());
+                    repost_text.setText(new StringBuilder()
+                            .append((model.getRepost().getShort_text()==null||model.getRepost().getShort_text().equals(""))?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
+                            .toString()
+                    );
                 }
-            });
-            repost_name.setText(model.getRepost().getUser_info()==null?"":model.getRepost().getUser_info().getFormattedName());
-            repost_text.setText(new StringBuilder()
-                    .append((model.getRepost().getShort_text()==null||model.getRepost().getShort_text().equals(""))?Html.fromHtml(String.valueOf(model.getRepost().getText())):model.getRepost().getShort_text())
-                    .toString()
-            );
-        }
-        author.setText(model.getUser().getFormattedName());
-        text.setText(model.getText() != null ? Html.fromHtml(model.getText()) : null);
-        date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
-        if(model.getUser().getThumbnail() != null) {
-            Picasso.with(getContext()).load(model.getUser().getThumbnail()).fit().centerCrop().into(avatar);
-        } else {
-            if(model.getUser().getGender() == 1) {
-                avatar.setImageResource(R.drawable.ic_user_man);
-            } else {
-                avatar.setImageResource(R.drawable.ic_user_woman);
             }
         }
+
+        new setContentPost();
     }
 
     @Override

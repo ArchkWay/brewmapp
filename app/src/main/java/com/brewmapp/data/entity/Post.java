@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +36,37 @@ public class Post implements Postable, Serializable, ILikeable {
     private String repost_model;
     private String repost_id;
     private Repost repost;
+    private String related_model;
     private Related_model_data related_model_data;
+    private String user_getThumb;
+    private List<Photo> photo=new ArrayList<>();
+
+    public List<Photo> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(List<Photo> photo) {
+        this.photo = photo;
+    }
+
+    public String getUser_getThumb() {
+        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
+            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
+
+        return user_getThumb;
+    }
+
+    public void setUser_getThumb(String user_getThumb) {
+        this.user_getThumb = user_getThumb;
+    }
+
+    public String getRelated_model() {
+        return related_model;
+    }
+
+    public void setRelated_model(String related_model) {
+        this.related_model = related_model;
+    }
 
     public Related_model_data getRelated_model_data() {
         return related_model_data;

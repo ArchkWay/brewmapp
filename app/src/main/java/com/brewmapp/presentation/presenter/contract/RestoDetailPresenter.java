@@ -15,6 +15,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
+
     void changeSubscription();
 
     void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity);

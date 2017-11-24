@@ -69,8 +69,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         if(!TextUtils.isEmpty(tmpStr))      shot_text.setText(tmpStr);
 
         if(getContext() instanceof AddInterestActivity) {
-            setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, resto));
-            arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, resto));
+            setOnClickListener(v -> listener.onModelAction(0, resto));
+            arrow_right.setOnClickListener(v -> listener.onModelAction(1, resto));
         }else {
             setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_NAME, resto));
         }

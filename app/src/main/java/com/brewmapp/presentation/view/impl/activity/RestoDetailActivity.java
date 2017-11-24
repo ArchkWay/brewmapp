@@ -28,6 +28,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -51,10 +52,9 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
-import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ALL;
-import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ONLY_LIKE;
 
-public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
+
+public class RestoDetailActivity extends BaseActivity implements RestoDetailView ,UiCustomControl {
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_resto_detail_name)    TextView name;
@@ -196,7 +196,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void setModel(RestoDetail restoDetail, int mode) {
 
         switch (mode){
-            case MODE_LOAD_ALL:
+            case REFRESH_ALL:
                 setTitle(restoDetail.getResto().getName());
                 name.setText(restoDetail.getResto().getName());
                 photosResto.clear();
@@ -261,7 +261,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
                 setTitleToButtonOfMoreDescription(false);
 
-            case MODE_LOAD_ONLY_LIKE:
+            case REFRESH_ONLY_LIKE:
                 try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
                 try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
 
@@ -349,7 +349,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case RequestCodes.REQUEST_CODE_REVIEW:
                 if(resultCode==RESULT_OK) {
                     enableControls(false,ALL_CONTROL);
-                    presenter.refreshContent(MODE_LOAD_ALL);
+                    presenter.refreshContent(REFRESH_ALL);
                 }
                 return;
         }

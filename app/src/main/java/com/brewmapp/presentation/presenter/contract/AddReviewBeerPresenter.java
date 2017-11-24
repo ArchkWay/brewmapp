@@ -12,6 +12,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface AddReviewBeerPresenter extends LivePresenter<AddReviewBeerView> {
+
     void sendReview(Post post);
 
     void parseIntent(Intent intent);

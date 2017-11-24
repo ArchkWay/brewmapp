@@ -1,7 +1,9 @@
 package com.brewmapp.execution.tool;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.brewmapp.R;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 
 /**
  * Created by xpusher on 11/24/2017.
@@ -81,7 +85,8 @@ public class HashTagHelper2 {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(context,R.string.message_develop,Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,R.string.message_develop,Toast.LENGTH_SHORT).show();
+            context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param),context, AddInterestActivity.class));
         }
 
         @Override

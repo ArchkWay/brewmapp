@@ -11,5 +11,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface UserProfilePresenter extends LivePresenter<UserProfileView> {
+
     void parseIntent(Intent intent);
 }

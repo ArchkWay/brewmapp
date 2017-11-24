@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.tool.TextTools;
 
-import static com.brewmapp.app.environment.RequestCodes.CONTROL_ONLY_TEXT_EDIT;
 
 public class AddReviewRestoActivity extends BaseActivity implements AddReviewRestoView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
@@ -50,6 +49,9 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
 
 
     private Post post = new Post();
+    private final int CONTROL_ALL=0;
+    private final int CONTROL_ONLY_TEXT_EDIT=1;
+    private final int CONTROL_ONLY_EVALUATION=2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
     @Override
     protected void initView() {
         enableBackButton();
-        enableControls(false, RequestCodes.CONTROL_ALL);
+        enableControls(false, CONTROL_ALL);
         setTitle(R.string.title_activity_add_review);
         registerTextChangeListeners(s -> {
                 post.setText(TextTools.extractTrimmed(review_edit_text)); invalidateOptionsMenu();},
@@ -87,13 +89,13 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
     @Override
     public void enableControls(boolean enabled, int code) {
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
-            if(code == RequestCodes.CONTROL_ONLY_EVALUATION && view instanceof RatingBar) {
+            if(code == CONTROL_ONLY_EVALUATION && view instanceof RatingBar) {
                 view.setEnabled(((RatingBar)view).getOnRatingBarChangeListener()!=null);
                 view.setClickable(((RatingBar)view).getOnRatingBarChangeListener()!=null);
             }else if(CONTROL_ONLY_TEXT_EDIT ==code && view instanceof EditText){
                 view.setEnabled(enabled);
                 view.setClickable(enabled);
-            } else if(code == RequestCodes.CONTROL_ALL){
+            } else if(code == CONTROL_ALL){
                 view.setEnabled(enabled);
                 view.setClickable(enabled);
             }
@@ -132,7 +134,7 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
                     service.setOnRatingBarChangeListener(null);
                     break;
             }
-        enableControls(true, RequestCodes.CONTROL_ONLY_EVALUATION);
+        enableControls(true, CONTROL_ONLY_EVALUATION);
 
     }
 

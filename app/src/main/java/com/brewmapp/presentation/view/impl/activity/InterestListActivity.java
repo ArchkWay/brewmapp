@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
@@ -21,8 +20,8 @@ import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.contract.InterestListView;
-import com.brewmapp.presentation.view.impl.widget.InterestAddViewResto;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
 import java.io.Serializable;
@@ -42,7 +41,8 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
-public class InterestListActivity extends BaseActivity implements InterestListView {
+
+public class InterestListActivity extends BaseActivity implements InterestListView,UiCustomControl {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_interest_list)  RecyclerView recyclerView;
     @BindView(R.id.activity_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
@@ -167,11 +167,11 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
                     switch (Integer.valueOf(data.getAction())){
-                        case RequestCodes.ACTION_VIEW:
+                        case VIEW_MODEL:
                             setResult(RESULT_OK);
                             refreshInterests();
                             return;
-                        case RequestCodes.ACTION_SELECT:
+                        case SELECT_MODEL:
                             Serializable serializable = data.getSerializableExtra(getString(R.string.key_serializable_extra));
                             if (serializable instanceof Beer) {
                                 Beer beer = (Beer) serializable;

@@ -37,6 +37,7 @@ import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
@@ -51,15 +52,14 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ALL;
-import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ONLY_LIKE;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
  * Created by Kras on 26.10.2017.
  */
 
-public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter {
+public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter,UiCustomControl {
+
 
     private ContainerTasks containerTasks;
     private Context context;
@@ -185,7 +185,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             view.commonError(e.getMessage());return;
         }
 
-        refreshContent(MODE_LOAD_ALL);
+        refreshContent(REFRESH_ALL);
 
     }
 
@@ -219,7 +219,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 loadRestoDetails(mode);
             }
             private void loadRestoDetails(int mode){
-                if(mode==MODE_LOAD_ALL||mode==MODE_LOAD_ONLY_LIKE) {
+                if(mode== REFRESH_ALL ||mode== REFRESH_ONLY_LIKE) {
                     LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                     loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
                     loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
@@ -231,7 +231,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadReviews(int mode) {
-                if(mode==MODE_LOAD_ALL)
+                if(mode== REFRESH_ALL)
                     containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
                         @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
                         @Override public void onError(Throwable e) {super.onError(e);view.commonError(e.getMessage());}
@@ -240,7 +240,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     loadSubscriptions(mode);
             }
             private void loadSubscriptions(int mode) {
-                if(mode==MODE_LOAD_ALL) {
+                if(mode== REFRESH_ALL) {
                     SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
                     subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
                     subscriptionPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -271,7 +271,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     }
             }
             private void loadCntSales(int mode) {
-                if(mode==MODE_LOAD_ALL) {
+                if(mode== REFRESH_ALL) {
                     LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                     loadNewsPackage.setMode(EventsView.MODE_SALES);
                     loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
@@ -296,7 +296,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadCntNews(int mode) {
-                if(mode==MODE_LOAD_ALL) {
+                if(mode== REFRESH_ALL) {
                     LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                     loadNewsPackage.setMode(EventsView.MODE_NEWS);
                     loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
@@ -322,7 +322,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
             }
             private void loadCntEvent(int mode) {
-                if(mode==MODE_LOAD_ALL) {
+                if(mode== REFRESH_ALL) {
                     LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                     loadNewsPackage.setMode(EventsView.MODE_EVENTS);
                     loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
@@ -347,7 +347,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadFav(int mode) {
-                if(mode==MODE_LOAD_ALL) {
+                if(mode== REFRESH_ALL) {
                     LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
                     loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
                     loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -385,7 +385,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
             }
             private void loadAvegagEvaluation(int mode) {
-                if(mode==MODE_LOAD_ALL) {
+                if(mode== REFRESH_ALL) {
                 RestoAverageEvaluationPackage restoAverageEvaluationPackage=new RestoAverageEvaluationPackage();
                 restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
                 restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
@@ -445,7 +445,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             @Override
             public void onNext(MessageResponse messageResponse) {
                 super.onNext(messageResponse);
-                refreshContent(MODE_LOAD_ONLY_LIKE);
+                refreshContent(REFRESH_ONLY_LIKE);
             }
         });
     }

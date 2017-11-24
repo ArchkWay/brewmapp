@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
 import com.squareup.picasso.Picasso;
 
@@ -24,7 +24,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by Kras on 21.10.2017.
  */
 
-public class InterestAddViewBeer extends BaseLinearLayout implements InteractiveModelView<Beer> {
+public class InterestAddViewBeer extends BaseLinearLayout implements InteractiveModelView<Beer>,UiCustomControl {
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_arrow_right)    ImageView arrow_right;
@@ -74,8 +74,8 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         title.setText(stringBuilder.toString());
 
         if(getContext() instanceof AddInterestActivity) {
-            setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_VIEW, beer));
-            arrow_right.setOnClickListener(v -> listener.onModelAction(RequestCodes.ACTION_SELECT, beer));
+            setOnClickListener(v -> listener.onModelAction(VIEW_MODEL, beer));
+            arrow_right.setOnClickListener(v -> listener.onModelAction(SELECT_MODEL, beer));
         }else {
             setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, beer));
         }

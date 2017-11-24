@@ -322,4 +322,7 @@ public interface Api {
                                        @Query(Keys.LIMIT_END) int end,
                                        @FieldMap WrapperParams params);
 
+    @GET("quick_search/{query}")
+    Call<MessageResponse> quickSearch(@Path("query") String query);
+
 }

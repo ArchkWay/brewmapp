@@ -21,6 +21,7 @@ import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 
@@ -33,13 +34,11 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ALL;
-
 /**
  * Created by Kras on 30.10.2017.
  */
 
-public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> implements BeerDetailPresenter {
+public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> implements BeerDetailPresenter,UiCustomControl {
 
 
     private LoadProductTask loadProductTask;
@@ -64,7 +63,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             @Override
             public void onNext(MessageResponse messageResponse) {
                 super.onNext(messageResponse);
-                loadData(RequestCodes.MODE_LOAD_ONLY_LIKE);
+                loadData(REFRESH_ONLY_LIKE);
             }
 
             @Override
@@ -80,7 +79,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
         try {
             Beer beer=new Beer(); beer.setId(((Interest)intent.getSerializableExtra(context.getString(R.string.key_serializable_extra))).getInterest_info().getId());
             beerDetail=new BeerDetail(beer);
-            refreshContent(MODE_LOAD_ALL);
+            refreshContent(REFRESH_ALL);
         }catch (Exception e){
             view.commonError(e.getMessage());
         }
@@ -89,7 +88,6 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
     @Override
     public void refreshContent(int mode) {
         loadData(mode);
-
     }
 
     @Override
@@ -145,8 +143,8 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
 
             private void loadBeer(int mode) {
                 switch (mode){
-                    case MODE_LOAD_ALL:
-                    case RequestCodes.MODE_LOAD_ONLY_LIKE:
+                    case REFRESH_ALL:
+                    case REFRESH_ONLY_LIKE:
                         LoadProductPackage loadProductPackage=new LoadProductPackage();
                         loadProductPackage.setId(beerDetail.getBeer().getId());
                         loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
@@ -176,7 +174,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             }
             private void loadFav(int mode) {
                 switch (mode){
-                    case MODE_LOAD_ALL:
+                    case REFRESH_ALL:
                         containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
@@ -213,7 +211,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             }
             private void loadReviews(int mode){
                 switch (mode){
-                    case MODE_LOAD_ALL:
+                    case REFRESH_ALL:
                         containerTasks.loadReviewsTask(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
                             @Override public void onNext(List<IFlexible> iFlexibles ) {
                                 super.onNext(iFlexibles);view.setReviews(iFlexibles);loadResto(mode);
@@ -229,7 +227,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             }
             private void loadResto(int mode){
                 switch (mode){
-                    case MODE_LOAD_ALL:
+                    case REFRESH_ALL:
                         containerTasks.loadRestoByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<ListResponse<Resto>>(){
                             @Override
                             public void onNext(ListResponse<Resto> listResponse) {
@@ -257,7 +255,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             }
             private void loadWhoIsInterested(int mode) {
                 switch (mode) {
-                    case MODE_LOAD_ALL:
+                    case REFRESH_ALL:
                         containerTasks.loadInteresByUsers(Keys.CAP_BEER, Integer.valueOf(beerDetail.getBeer().getId()), new SimpleSubscriber<List<IFlexible>>() {
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {

@@ -38,7 +38,7 @@ public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeer
     protected void initView() {
         enableBackButton();
         setTitle(R.string.title_activity_add_review);
-        enableControls(false, RequestCodes.CONTROL_ALL);
+        enableControls(false, 0);
         registerTextChangeListeners(s -> {post.setText(TextTools.extractTrimmed(review_edit_text)); invalidateOptionsMenu();},review_edit_text);
 
     }

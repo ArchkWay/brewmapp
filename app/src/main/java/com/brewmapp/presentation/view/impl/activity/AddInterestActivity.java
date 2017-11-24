@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
@@ -16,6 +15,7 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
@@ -35,7 +35,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-public class AddInterestActivity extends BaseActivity implements AddInterestView {
+public class AddInterestActivity extends BaseActivity implements AddInterestView ,UiCustomControl {
     @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
@@ -47,6 +47,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
+    private int mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,20 +58,39 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
     @Override
     protected void initView() {
         enableBackButton();
+        mode=presenter.parseIntent(getIntent());
         fullSearchPackage = new FullSearchPackage();
-        switch (getIntent().getAction()){
-            case Keys.CAP_BEER:
+
+        switch (mode){
+            case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
+                finder.setListener(string -> prepareQuery(string));
                 break;
-            case Keys.CAP_RESTO:
+            case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_resto);
+                finder.setListener(string -> prepareQuery(string));
                 break;
+            case MODE_ACTIVTY_SHOW_HASHTAG:
+                fullSearchPackage.setType(Keys.HASHTAG);
+                setTitle("Хэштаг");
+
+                try{
+                    String strRequest=getIntent().getData().toString();
+                    if(strRequest.length()>0)
+                        prepareQuery(strRequest);
+                    else
+                        commonError();
+                }catch (Exception e){
+                    commonError(e.getMessage());
+                }
+                break;
+            default:
+                commonError();
         }
 
-
-        finder.setListener(string -> prepareQuery(string));
+        swipe.setOnRefreshListener(this::refreshItems);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
@@ -83,7 +103,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         recyclerview.addOnScrollListener(scrollListener);
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         recyclerview.setAdapter(adapter);
-        swipe.setOnRefreshListener(this::refreshItems);
+
 
     }
 
@@ -99,7 +119,18 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
             appendItems(new ArrayList<>());
         }else {
             swipe.setRefreshing(true);
-            presenter.sendQueryFullSearch(fullSearchPackage);
+            switch (mode){
+                case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
+                case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
+                    presenter.sendQueryFullSearch(fullSearchPackage);
+                    break;
+                case MODE_ACTIVTY_SHOW_HASHTAG:
+                    presenter.sentQueryQuickSearch(fullSearchPackage);
+                    break;
+                default:
+                    commonError();
+            }
+
         }
     }
 
@@ -145,16 +176,26 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         swipe.setRefreshing(false);
     }
 
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+
+    }
+
     private void processAction(int action, Object payload) {
         switch (action){
-            case RequestCodes.ACTION_SELECT: {
+            case SELECT_MODEL: {
                 Intent intent = new Intent(this, InterestListActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
-                intent.setAction(String.valueOf(RequestCodes.ACTION_SELECT));
+                intent.setAction(String.valueOf(SELECT_MODEL));
                 setResult(RESULT_OK, intent);
                 finish();
             }break;
-            case RequestCodes.ACTION_VIEW: {
+            case VIEW_MODEL: {
                 if(payload instanceof Resto){
                     Interest interest=new Interest();
                     Interest_info interest_info=new Interest_info();
@@ -181,7 +222,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         switch (requestCode){
             case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK)
-                    setResult(RESULT_OK,new Intent(String.valueOf(RequestCodes.ACTION_VIEW)));
+                    setResult(RESULT_OK,new Intent(String.valueOf(VIEW_MODEL)));
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);

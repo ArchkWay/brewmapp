@@ -7,8 +7,8 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.LoadProfileTask;
-import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.presentation.presenter.contract.UserProfilePresenter;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.contract.UserProfileView;
 
 import javax.inject.Inject;
@@ -16,13 +16,13 @@ import javax.inject.Inject;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.MODE_LOAD_ALL;
+
 
 /**
  * Created by xpusher on 11/20/2017.
  */
 
-public class UserProfilePresenterImpl extends BasePresenter<UserProfileView> implements UserProfilePresenter {
+public class UserProfilePresenterImpl extends BasePresenter<UserProfileView> implements UserProfilePresenter,UiCustomControl {
 
     private User user;
     private LoadProfileTask loadProfileTask;
@@ -47,7 +47,7 @@ public class UserProfilePresenterImpl extends BasePresenter<UserProfileView> imp
             view.commonError(e.getMessage());return;
         }
 
-        refreshContent(MODE_LOAD_ALL);
+        refreshContent(REFRESH_ALL);
 
     }
 

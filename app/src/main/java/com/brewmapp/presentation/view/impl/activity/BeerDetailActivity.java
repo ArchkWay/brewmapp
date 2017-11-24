@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
@@ -27,6 +26,7 @@ import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
+import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
@@ -47,7 +47,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-public class BeerDetailActivity extends  BaseActivity implements BeerDetailView {
+public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,UiCustomControl {
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_beer_detail_name)    TextView name;
@@ -97,7 +97,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
     @Override
     public void setModel(BeerDetail beerDetail,int mode) {
         switch (mode){
-            case RequestCodes.MODE_LOAD_ALL:
+            case REFRESH_ALL:
                 Beer beer=beerDetail.getBeer();
 
                 String tmpStr;
@@ -141,7 +141,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
 
                     }
                 }
-            case RequestCodes.MODE_LOAD_ONLY_LIKE:
+            case REFRESH_ONLY_LIKE:
                 try {tmpStr=beerDetail.getBeer().getLike();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) like_counter.setText(tmpStr);
                 try {tmpStr=beerDetail.getBeer().getDis_like();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) dislike_counter.setText(tmpStr);
         }

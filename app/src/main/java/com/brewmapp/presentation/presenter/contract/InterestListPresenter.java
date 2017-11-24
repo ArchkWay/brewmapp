@@ -16,6 +16,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface InterestListPresenter extends LivePresenter<InterestListView> {
+
     void requestInterests(LoadInterestPackage loadInterestPackage);
     void storeInterest(HashMap<Serializable,Serializable> hmAdd, HashMap<Interest,Interest> hmRemove);
 }

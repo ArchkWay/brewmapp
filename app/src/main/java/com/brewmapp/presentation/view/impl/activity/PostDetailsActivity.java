@@ -1,17 +1,10 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.CharacterStyle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,12 +13,11 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.execution.tool.HashTagHelper2;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.view.contract.PostDetailsView;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 import com.squareup.picasso.Picasso;
-
-import org.xml.sax.XMLReader;
 
 import java.util.List;
 
@@ -55,7 +47,6 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     @Inject    PostDetailsPresenter presenter;
 
     private Post post;
-    private Html.TagHandler htmlTagHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,67 +59,8 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
         enableBackButton();
         text.setMovementMethod(LinkMovementMethod.getInstance());
         text.setLinksClickable(true);
-        htmlTagHandler= new Html.TagHandler() {
-            int cntOpen=0;
-            int cntClose=0;
-            @Override
-            public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-                if(tag.startsWith("mybr")){
-                    if(opening) {
-                        if (cntOpen == 0)
-                            processSpan(opening, output, new AppearanceSpan(cntOpen++));
-                    }else{
-                        if (cntClose == 0)
-                            processSpan(opening, output, new AppearanceSpan(cntClose++));
 
-                    }
-                }
-            }
-        };
 
-    }
-    void processSpan(boolean opening, Editable output, Object span) {
-        int len = output.length();
-        if (opening) {
-            output.setSpan(span, len, len, Spannable.SPAN_MARK_MARK);
-        } else {
-            Object[] objs = output.getSpans(0, len, span.getClass());
-            int where = len;
-            if (objs.length > 0) {
-                for(int i = objs.length - 1; i >= 0; --i) {
-                    if (output.getSpanFlags(objs[i]) == Spannable.SPAN_MARK_MARK) {
-                        where = output.getSpanStart(objs[i]);
-                        output.removeSpan(objs[i]);
-                        break;
-                    }
-                }
-            }
-
-            if (where != len) {
-                output.setSpan(span, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-        }
-    }
-    class AppearanceSpan extends CharacterStyle {
-        int color;
-        public AppearanceSpan(int cntColor){
-            switch (cntColor){
-                case 0:
-                    color=Color.RED;
-                    break;
-                case 1:
-                    color=Color.BLUE;
-                    break;
-                default:
-                    color=Color.BLACK;
-
-            }
-        }
-
-        @Override
-        public void updateDrawState(TextPaint tp) {
-            tp.setColor(color);
-        }
     }
 
     @Override
@@ -152,11 +84,12 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     }
 
     @Override
-    public void showPostDetails(Post post) {
-        post.setText(post.getText().replaceAll("<br>","<mybr>"));
+    public void fillContent(Post post) {
+
         this.post=post;
 
         class FillContent{
+
             public void fill(){
                 shareLikeView.setiLikeable(post);
                 repost();
@@ -165,27 +98,11 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
 
             private void texts() {
                 setTitle(post.getUser().getFormattedName());
-
                 title.setText(post.getUser().getFormattedName());
                 date.setText(DateTools.formatDottedDateWithTime(post.getDate()));
 
-                try {
-                    Spanned spannedText=Html.fromHtml(post.getText(),null,htmlTagHandler);
-                    Spannable reversedText = revertSpanned(spannedText);
-                    text.setText(reversedText);
-                }catch (Exception e){}
+                new HashTagHelper2(text,post.getText());
 
-            }
-            Spannable revertSpanned(Spanned stext) {
-                Object[] spans = stext.getSpans(0, stext.length(), Object.class);
-                Spannable ret = Spannable.Factory.getInstance().newSpannable(stext.toString());
-                if (spans != null && spans.length > 0) {
-                    for(int i = spans.length - 1; i >= 0; --i) {
-                        ret.setSpan(spans[i], stext.getSpanStart(spans[i]), stext.getSpanEnd(spans[i]), stext.getSpanFlags(spans[i]));
-                    }
-                }
-
-                return ret;
             }
 
             private void repost() {
@@ -213,6 +130,8 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
                 }
 
             }
+
+
         }
         new FillContent().fill();
 

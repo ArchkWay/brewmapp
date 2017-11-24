@@ -21,6 +21,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.tool.HashTagHelper2;
 import com.squareup.picasso.Picasso;
 
 import org.xml.sax.XMLReader;
@@ -51,7 +52,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
 
     private Listener listener;
     private Post model;
-    private Html.TagHandler htmlTagHandler;
+
 
     public PostView(Context context) {
         super(context);
@@ -78,12 +79,6 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         //text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
-        htmlTagHandler = new Html.TagHandler() {
-            @Override
-            public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-
-            }
-        };
 
     }
 
@@ -124,7 +119,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
             }
 
             private void texts() {
-                try{text.setText(Html.fromHtml(model.getText(),null,htmlTagHandler));}catch (Exception e){}
+                new HashTagHelper2(text,model.getText());
                 date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
                 try {author.setText(model.getRelated_model_data().getName());}catch (Exception e){}
             }

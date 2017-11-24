@@ -9,5 +9,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface PostDetailsView extends BasicView {
-    void showPostDetails(Post post);
+    void fillContent(Post post);
 }

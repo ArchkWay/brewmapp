@@ -109,7 +109,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     private final int ALL_CONTROL =0;
 
-    private ArrayList<String> photosResto=new ArrayList<>();
+    private ArrayList<String> photosResto = new ArrayList<>();
     private FlexibleAdapter adapter;
 
     @Override
@@ -194,7 +194,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void setModel(RestoDetail restoDetail, int mode) {
-
         switch (mode){
             case MODE_LOAD_ALL:
                 setTitle(restoDetail.getResto().getName());
@@ -286,18 +285,15 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void setReviews(List<IFlexible> iFlexibles) {
-
         empty_text_reviews.setVisibility(iFlexibles.size()==0?View.VISIBLE:View.GONE);
         adapter.clear();
         adapter.addItems(0,iFlexibles);
         adapter.notifyDataSetChanged();
         recycler_reviews.setAdapter(adapter);
-
     }
 
     @Override
     public void setCnt(int size, int mode) {
-
         switch (mode){
             case EventsView.MODE_EVENTS:
                 cnt_events.setText(String.valueOf(size));
@@ -309,7 +305,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 cnt_sales.setText(String.valueOf(size));
                 break;
         }
-
     }
 
     @Override

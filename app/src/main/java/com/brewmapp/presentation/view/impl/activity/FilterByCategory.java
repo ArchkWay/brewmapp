@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,7 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +22,8 @@ import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Feature;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.Resto;
@@ -40,6 +46,9 @@ import io.paperdb.Paper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.tool.UITools;
+
+import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
  * Created by nixus on 01.11.2017.
@@ -63,17 +72,21 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     LinearLayout emptyView;
     @BindView(R.id.empty_title)
     TextView emptyTitle;
+    @BindView(R.id.view_finder_input)
+    AutoCompleteTextView input;
+    @BindView(R.id.lytProgressBar)
+    LinearLayout lytProgressBar;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
     private String selectedItem;
     private String selectedItemId;
-
-    @Inject
-    FilterByCategoryPresenter presenter;
     private List<IFlexible> original;
     private int filterCategory;
     private String selectedFilter = null;
+
+    @Inject
+    FilterByCategoryPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +104,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         component.inject(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initView() {
         Paper.init(this);
@@ -100,6 +114,10 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
+        list.setOnTouchListener((view, motionEvent) -> {
+            UITools.hideKeyboard(this);
+            return false;
+        });
         initFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
         initFilter();
     }
@@ -117,6 +135,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 toolbarTitle.setText(R.string.search_resto_name);
                 break;
             case FilterActions.RESTO_TYPE:
+                lytProgressBar.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(R.string.search_resto_type);
                 if (getStoredFilterList(FilterKeys.RESTO_TYPE) != null) {
                     appendItems(getStoredFilterList(FilterKeys.RESTO_TYPE));
@@ -132,6 +151,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 toolbarTitle.setText(R.string.search_resto_beer);
                 break;
             case FilterActions.KITCHEN:
+                lytProgressBar.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(R.string.search_resto_kitchen);
                 if (getStoredFilterList(FilterKeys.KITCHEN) != null) {
                     appendItems(getStoredFilterList(FilterKeys.KITCHEN));
@@ -140,6 +160,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 }
                 break;
             case FilterActions.PRICE_RANGE:
+                lytProgressBar.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(R.string.search_resto_price);
                 if (getStoredFilterList(FilterKeys.PRICE_RANGE) != null) {
                     appendItems(getStoredFilterList(FilterKeys.PRICE_RANGE));
@@ -148,13 +169,16 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 }
                 break;
             case FilterActions.COUNTRY:
+                lytProgressBar.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(R.string.select_country);
                 okButton.setText(R.string.next);
                 break;
             case FilterActions.METRO:
+                lytProgressBar.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(R.string.select_metro);
                 break;
             case FilterActions.FEATURES:
+                lytProgressBar.setVisibility(View.VISIBLE);
                 toolbarTitle.setText(R.string.search_resto_other);
                 if (getStoredFilterList(FilterKeys.FEATURES) != null) {
                     appendItems(getStoredFilterList(FilterKeys.FEATURES));
@@ -183,18 +207,24 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @Override
     public void appendItems(List<IFlexible> list) {
+        lytProgressBar.setVisibility(View.GONE);
         this.original = list;
         adapter.clear();
         adapter.updateDataSet(list);
     }
 
     private void initFilter() {
+        if (input.getText().length() == 0) {
+            hideKeyboard();
+        }
         if (fullSearchPackage.getType() != null) {
             finder.setListener(string -> prepareQuery(string));
         } else {
             finder.setListener(string -> {
-                adapter.setSearchText(string);
-                adapter.filterItems(original);
+                if (original != null) {
+                    adapter.setSearchText(string);
+                    adapter.filterItems(original);
+                }
             });
         }
     }
@@ -218,6 +248,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
             fullSearchPackage.setPage(0);
             appendItems(new ArrayList<>());
         } else {
+            lytProgressBar.setVisibility(View.VISIBLE);
             presenter.sendQueryFullSearch(fullSearchPackage);
         }
     }
@@ -226,9 +257,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         switch (action){
             case FilterActions.RESTO_NAME:
                 Resto resto = (Resto) payload;
-                selectedItemId = String.valueOf(resto.getId());
-                selectedItem = resto.getName();
-                goToFilterMap();
+                goToRestoDetails(String.valueOf(resto.getId()));
                 break;
             case FilterActions.RESTO_TYPE:
                 RestoType restoType = (RestoType) payload;
@@ -281,6 +310,16 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         adapter.updateDataSet(original);
     }
 
+    private void goToRestoDetails(String restoId) {
+        Interest interest = new Interest();
+        Interest_info interest_info = new Interest_info();
+        interest_info.setId(restoId);
+        interest.setInterest_info(interest_info);
+        Intent intent = new Intent(this, RestoDetailActivity.class);
+        intent.putExtra(RESTO_ID, interest);
+        startActivity(intent);
+    }
+
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
         if (filterCategory == FilterActions.RESTO_TYPE) {
@@ -328,6 +367,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     }
 
     private void saveStoredFilter(String filterKey) {
-        Paper.book().write(filterKey, original);
+        if (original != null) {
+            Paper.book().write(filterKey, original);
+        }
     }
 }

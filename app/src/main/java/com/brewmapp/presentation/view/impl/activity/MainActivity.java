@@ -61,7 +61,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         FragmentInterractor {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
-    //    @BindView(R.id.common_toolbar_spinner) Spinner toolbarSpinner;
     @BindView(R.id.common_toolbar_dropdown) LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title) TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
@@ -76,7 +75,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     private FlexibleAdapter<MenuField> adapter;
     private List<MenuField> menuItems;
-    private List<String> dropdownItems;
     private @MenuRes int menuToShow;
 
     public static final String MODE_DEFAULT="default";
@@ -191,7 +189,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         ActionBar actionBar = getSupportActionBar();
         if(actionBar == null) return;
         if(baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
-            dropdownItems = baseFragment.getTitleDropDown();
             toolbarDropdown.setVisibility(View.VISIBLE);
             actionBar.setDisplayShowTitleEnabled(false);
             toolbarTitle.setText(baseFragment.getTitle());

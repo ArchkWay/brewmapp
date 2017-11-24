@@ -305,7 +305,7 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<User>> profileEdit(@FieldMap WrapperParams params);
 
-    @POST("/api/resto/getcoordinates")
+    @POST("api/resto/getcoordinates")
     @FormUrlEncoded
     Call<Object> loadRestoGeo(@FieldMap WrapperValues params);
 

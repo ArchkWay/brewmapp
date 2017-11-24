@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -67,9 +68,10 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     @Override
     public void setModel(Beer model) {
         this.model = model;
-        title.setText(model.getTitle());
-        if(model.getImage() != null && !model.getImage().isEmpty()) {
-            Picasso.with(getContext()).load(model.getImage()).fit().centerCrop().into(logo);
+        String titleRu = (model.getTitleRU() == null || TextUtils.isEmpty(model.getTitleRU()) ? "" : " (" + model.getTitleRU() + ")");
+        title.setText(model.getTitle() + titleRu);
+        if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
         } else {
             logo.setVisibility(INVISIBLE);
         }

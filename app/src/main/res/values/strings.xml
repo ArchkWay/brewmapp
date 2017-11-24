@@ -157,6 +157,11 @@
         <item>Пивоварни</item>
     </string-array>
 
+    <string-array name="filter_search">
+        <item>Пиво</item>
+        <item>Заведения</item>
+    </string-array>
+
     <string-array name="album_actions">
         <item>Редактировать</item>
         <item>Удалить</item>
@@ -184,6 +189,7 @@
     <string name="today">Сегодня</string>
     <string name="params">Параметры</string>
     <string name="search">Поиск</string>
+    <string name="map_search">Поиск заведения или пива</string>
     <string name="search_beer">Поиск пива</string>
     <string name="pattern_event_start" formatted="false">%s в %s</string>
     <string name="search_hint">Введите слово или хештег</string>

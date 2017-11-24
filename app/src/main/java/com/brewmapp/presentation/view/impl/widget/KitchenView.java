@@ -64,8 +64,8 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
     public void setModel(Kitchen model) {
         this.model = model;
         title.setText(model.getName());
-        if(model.getImage() != null && !model.getImage().isEmpty()) {
-            Picasso.with(getContext()).load(model.getImage()).fit().centerCrop().into(logo);
+        if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
         } else {
             logo.setVisibility(INVISIBLE);
         }

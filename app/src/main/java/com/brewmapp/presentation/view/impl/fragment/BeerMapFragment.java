@@ -24,6 +24,7 @@ import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
+import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -64,6 +65,8 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @BindView(R.id.fragment_map_map)
     MapView mapView;
+    @BindView(R.id.activity_search_search)
+    FinderView finder;
 
     @Inject
     BeerMapPresenter presenter;

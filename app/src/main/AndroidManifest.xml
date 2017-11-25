@@ -156,7 +156,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FilterMapActivity"
-            android:label="@string/filter"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.BeerDetailActivity"

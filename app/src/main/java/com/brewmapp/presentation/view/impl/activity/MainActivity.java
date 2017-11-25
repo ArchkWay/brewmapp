@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.v4.app.Fragment;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
@@ -137,7 +135,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         navigator.onAttachView(this);
         navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
         navigator.onDrawerClosed();
-
     }
 
     @Override

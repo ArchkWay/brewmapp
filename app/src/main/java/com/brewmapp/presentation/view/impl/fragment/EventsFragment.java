@@ -349,5 +349,4 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         FilterAdapter filterAdapter = new FilterAdapter(getContext(), dropdownItems);
         filterList.setAdapter(filterAdapter);
     }
-
 }

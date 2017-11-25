@@ -14,4 +14,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface FilterMapPresenter extends LivePresenter<FilterMapView> {
     void loadFilterResult(List<FilterField> fieldList, int specialOffer);
+    void storeTabActive(int position);
 }

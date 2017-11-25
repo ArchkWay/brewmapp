@@ -20,7 +20,6 @@ import ru.frosteye.ovsa.presentation.view.fragment.NavigatorFragment;
 
 public abstract class BaseFragment extends NavigatorFragment<MainView> implements ActionBarItemDelegate {
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

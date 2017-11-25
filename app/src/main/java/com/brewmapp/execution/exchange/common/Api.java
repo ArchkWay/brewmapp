@@ -299,7 +299,7 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<List<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
+    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
 
     @POST("profile")
     @FormUrlEncoded
@@ -311,5 +311,5 @@ public interface Api {
 
     @POST("/api/like")
     @FormUrlEncoded
-    Call<Object>  loadLikesByBeer(@FieldMap WrapperParams params);
+    Call<Object> loadLikesByBeer(@FieldMap WrapperParams params);
 }

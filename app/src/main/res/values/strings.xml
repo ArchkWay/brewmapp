@@ -158,8 +158,13 @@
     </string-array>
 
     <string-array name="filter_search">
-        <item>Пиво</item>
         <item>Заведения</item>
+        <item>Пиво</item>
+    </string-array>
+
+    <string-array name="filter_title_search">
+        <item>Поиск заведения</item>
+        <item>Поиск пива</item>
     </string-array>
 
     <string-array name="album_actions">
@@ -348,5 +353,7 @@
     <string name="filter_search_beer">Для поиска введите название пива</string>
     <string name="filter_search_resto">Для поиска введите название заведения</string>
     <string name="special_offer">Специальные предложения</string>
+    <string name="cancel">Отмена</string>
+    <string name="filter_search_title">Поиск 1%s</string>
 
 </resources>

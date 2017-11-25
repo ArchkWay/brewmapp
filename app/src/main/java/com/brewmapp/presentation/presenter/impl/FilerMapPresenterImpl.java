@@ -2,7 +2,6 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.FilterField;
@@ -12,13 +11,10 @@ import com.brewmapp.execution.task.FilterRestoTask;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.paperdb.Paper;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -71,5 +67,10 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
                 }
             }
         });
+    }
+
+    @Override
+    public void storeTabActive(int position) {
+
     }
 }

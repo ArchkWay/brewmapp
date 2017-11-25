@@ -1,6 +1,7 @@
 package com.brewmapp.execution.exchange.response;
 
 import com.brewmapp.data.entity.BeerLocation;
+import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
@@ -13,17 +14,23 @@ import java.util.List;
 
 public class QuickSearchResponse {
 
-    @SerializedName(Keys.CAP_RESTO)
-    private List<Resto> restos;
+    private int total;
 
-    @SerializedName(Keys.CAP_LOCATION)
-    private List<BeerLocation.LocationInfo> locations;
+    private Models models;
 
-    public List<Resto> getRestos() {
-        return restos;
+    public int getTotal() {
+        return total;
     }
 
-    public List<BeerLocation.LocationInfo> getLocations() {
-        return locations;
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public Models getModels() {
+        return models;
+    }
+
+    public void setModels(Models models) {
+        this.models = models;
     }
 }

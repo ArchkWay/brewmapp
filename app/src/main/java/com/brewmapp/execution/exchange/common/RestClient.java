@@ -1,6 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
 import com.brewmapp.data.entity.Feature;
+import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.container.Subscriptions;
@@ -26,6 +27,7 @@ import com.brewmapp.execution.exchange.common.base.InterestDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.KitchenDeserializer;
 import com.brewmapp.execution.exchange.common.base.PriceRangeDeserializer;
+import com.brewmapp.execution.exchange.common.base.QuickSearchDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
@@ -59,7 +61,7 @@ import static com.brewmapp.BuildConfig.SERVER_API_VER;
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
-    public static final String API_VERSION = "1.02";
+    //public static final String API_VERSION = "1.02";
 
     //public static final String API_VERSION = "1.03";
 
@@ -103,6 +105,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(ReviewInfo.class, new ReviewDeserializer())
                 .registerTypeAdapter(FilterBeerInfo.class, new FilterBeerDeserializer())
                 .registerTypeAdapter(InterestInfoByUsers.class, new InterestByUsersDeserializer())
+                .registerTypeAdapter(Models.class, new QuickSearchDeserializer())
                 ;
     }
 

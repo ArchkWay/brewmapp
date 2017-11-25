@@ -15,11 +15,13 @@ import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.KitchenTypes;
+import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
@@ -46,6 +48,7 @@ import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.WrapperValues;
+import com.brewmapp.execution.exchange.response.QuickSearchResponse;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.exchange.response.UserResponse;
@@ -323,6 +326,6 @@ public interface Api {
                                        @FieldMap WrapperParams params);
 
     @GET("quick_search/{query}")
-    Call<MessageResponse> quickSearch(@Path("query") String query);
+    Call<QuickSearchResponse> quickSearch(@Path("query") String query, @Query("hashtagonly") int end);
 
 }

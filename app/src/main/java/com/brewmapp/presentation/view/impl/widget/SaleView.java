@@ -15,6 +15,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Sale;
+import com.brewmapp.execution.tool.HashTagHelper2;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -78,7 +79,8 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         shareLikeView.setiLikeable(model);
         this.model = model;
         author.setText(model.getParent().getName());
-        text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
+        new HashTagHelper2(text,model.getText());
+        //text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
         date.setText(DateTools.formatDottedDate(model.getDateStart()));
 
         if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {

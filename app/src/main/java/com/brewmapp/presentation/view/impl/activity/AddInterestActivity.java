@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -60,26 +61,38 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         enableBackButton();
         mode=presenter.parseIntent(getIntent());
         fullSearchPackage = new FullSearchPackage();
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                fullSearchPackage.setPage(currentPage-1);
+                sendQuery();
+            }
+        };
 
         switch (mode){
             case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
                 finder.setListener(string -> prepareQuery(string));
+                recyclerview.addOnScrollListener(scrollListener);
                 break;
             case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_resto);
                 finder.setListener(string -> prepareQuery(string));
+                recyclerview.addOnScrollListener(scrollListener);
                 break;
             case MODE_ACTIVTY_SHOW_HASHTAG:
                 fullSearchPackage.setType(Keys.HASHTAG);
-                setTitle("Хэштаг");
 
+                toolbarSearch.setVisibility(View.GONE);
                 try{
-                    String strRequest=getIntent().getData().toString();
-                    if(strRequest.length()>0)
+                    String strRequest=getIntent().getData().toString().replace("#","");
+                    if(strRequest.length()>0) {
                         prepareQuery(strRequest);
+                        setTitle("Хэштаг - "+strRequest);
+                    }
                     else
                         commonError();
                 }catch (Exception e){
@@ -91,16 +104,7 @@ public class AddInterestActivity extends BaseActivity implements AddInterestView
         }
 
         swipe.setOnRefreshListener(this::refreshItems);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                fullSearchPackage.setPage(currentPage-1);
-                sendQuery();
-            }
-        };
         recyclerview.setLayoutManager(manager);
-        recyclerview.addOnScrollListener(scrollListener);
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         recyclerview.setAdapter(adapter);
 

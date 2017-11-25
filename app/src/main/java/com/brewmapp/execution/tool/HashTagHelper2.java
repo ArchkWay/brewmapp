@@ -69,10 +69,21 @@ public class HashTagHelper2 {
 
             if (where != len) {
                 String param=output.toString().substring(where);
-                int end=param.indexOf(SHARP,1);
+                int end=param.indexOf(" ",1);
+                //************************
+                if(end==-1)
+                    end=param.indexOf("#",1);
+                else
+                    end=Math.min(end,param.indexOf("#",1));
+                //************************
+                if(end==-1)
+                    end=param.indexOf("\n",1);
+                else
+                    end=Math.min(end,param.indexOf("\n",1));
+
                 end=end==-1?param.length():end;
                 param=param.substring(0,end);
-                span.setParam(param);
+                span.setParam(param.replaceAll("^[^a-яA-Я0-9\\s]+|[^a-яA-Я0-9\\s]+$", ""));
                 output.setSpan(span, where, where+end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -86,6 +97,8 @@ public class HashTagHelper2 {
         @Override
         public void onClick(View view) {
             //Toast.makeText(context,R.string.message_develop,Toast.LENGTH_SHORT).show();
+            if(context instanceof AddInterestActivity)
+                ((AddInterestActivity) context).finish();
             context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param),context, AddInterestActivity.class));
         }
 

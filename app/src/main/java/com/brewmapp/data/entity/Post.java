@@ -37,9 +37,19 @@ public class Post implements Postable, Serializable, ILikeable {
     private String repost_id;
     private Repost repost;
     private String related_model;
+    private String related_id;
     private Related_model_data related_model_data;
     private String user_getThumb;
     private List<Photo> photo=new ArrayList<>();
+
+
+    public String getRelated_id() {
+        return related_id;
+    }
+
+    public void setRelated_id(String related_id) {
+        this.related_id = related_id;
+    }
 
     public List<Photo> getPhoto() {
         return photo;

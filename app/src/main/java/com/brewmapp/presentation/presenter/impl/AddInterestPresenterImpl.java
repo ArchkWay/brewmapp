@@ -3,6 +3,8 @@ package com.brewmapp.presentation.presenter.impl;
 import android.content.Intent;
 
 import com.brewmapp.R;
+import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.FullSearchTask;
@@ -10,6 +12,7 @@ import com.brewmapp.execution.task.QuickSearchTask;
 import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
 import com.brewmapp.presentation.view.contract.AddInterestView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -89,12 +92,15 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
+                view.appendItems(iFlexibles);
             }
 
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                view.appendItems(new ArrayList<IFlexible>());
             }
         });
+
     }
 }

@@ -73,6 +73,11 @@ public class Resto implements ICommonItem, Serializable {
 
     }
 
+    public Resto(String id, String name) {
+        setId(Integer.valueOf(id));
+        setName(name);
+    }
+
 
     public Location getLocation() {
         return location;

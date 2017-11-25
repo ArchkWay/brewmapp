@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Editable;
@@ -18,10 +19,14 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import org.xml.sax.XMLReader;
@@ -43,6 +48,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @BindView(R.id.view_post_avatar) ImageView avatar;
     @BindView(R.id.view_post_date) TextView date;
     @BindView(R.id.view_post_container) View container;
+    @BindView(R.id.view_post_container_subcontainer) View subcontainer;
     @BindView(R.id.view_post_container_repost)    LinearLayout repost;
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
     @BindView(R.id.view_post_container_repost_text)    TextView repost_text;
@@ -76,9 +82,37 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
-        //text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+        subcontainer.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+            Interest interest=null;
+            try {
+                interest=new Interest(new Resto(model.getRelated_model_data().getId(),model.getRelated_model_data().getName()));
+            }catch (Exception e){}
+            if(interest==null)
+                try {
+                    interest=new Interest(new Resto(model.getRelated_id(),""));
+                }catch (Exception e){}
+            if(interest!=null) {
+                intent.putExtra(Keys.RESTO_ID, interest);
+                getContext().startActivity(intent);
+            }
+        } );
+        text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+        post_photo.setOnClickListener(v -> {
+            try {
+                String[] urls=new String[model.getPhoto().size()];
+               for(int i=0;i<model.getPhoto().size();i++)
+                   urls[i]=model.getPhoto().get(i).getUrl();
+               if(urls.length>0){
+                   Intent intent = new Intent(getContext(), PhotoSliderActivity.class);
+                    intent.putExtra(Keys.PHOTOS, urls);
+                    getContext().startActivity(intent);
+               }
+
+            }catch (Exception e){}
+
+        });
 
     }
 

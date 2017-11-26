@@ -67,17 +67,20 @@ public class HashTagHelper2 {
 
             if (where != len) {
                 String param=output.toString().substring(where);
-                int end=param.indexOf(" ",1);
+                String checkChar=" ";
+                int end=param.indexOf(checkChar,1);
                 //************************
+                checkChar="#";
                 if(end==-1)
-                    end=param.indexOf("#",1);
-                else
-                    end=Math.min(end,param.indexOf("#",1));
+                    end=param.indexOf(checkChar,1);
+                else if(param.indexOf(checkChar,1)!=-1)
+                    end=Math.min(end,param.indexOf(checkChar,1));
                 //************************
+                checkChar="/n";
                 if(end==-1)
-                    end=param.indexOf("\n",1);
-                else
-                    end=Math.min(end,param.indexOf("\n",1));
+                    end=param.indexOf(checkChar,1);
+                else if(param.indexOf(checkChar,1)!=-1)
+                    end=Math.min(end,param.indexOf(checkChar,1));
 
                 end=end==-1?param.length():end;
                 param=param.substring(0,end);

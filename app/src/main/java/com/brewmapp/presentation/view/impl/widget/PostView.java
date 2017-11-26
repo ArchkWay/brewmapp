@@ -141,7 +141,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                         p.height=(int) (photoHeight*ratio);
                         post_photo.setLayoutParams(p);
                         //load
-                        post(() -> Picasso.with(getContext()).load(photoUrl).error(R.drawable.ic_default_resto).into(post_photo));
+                        post(() -> Picasso.with(getContext()).load(photoUrl).error(R.drawable.ic_news).into(post_photo));
 
                         return true;
                     }

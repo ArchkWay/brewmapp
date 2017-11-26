@@ -88,7 +88,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
 
                 toolbarSearch.setVisibility(View.GONE);
                 try{
-                    String strRequest=getIntent().getData().toString().replace("#","");
+                    String strRequest=getIntent().getData().toString().replace("#","").replace("\n","");
                     if(strRequest.length()>0) {
                         prepareQuery(strRequest);
                         setTitle("Хэштаг - "+strRequest);

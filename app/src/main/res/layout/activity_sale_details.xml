@@ -2,9 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
 
     >
@@ -51,44 +50,53 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/activity.sale.details.resto.name"
                 android:textSize="20dp"
-                android:text="Restoname"
+                android:text="@string/text_view_value_not_found"
                 style="@style/AppTheme.Text.Georgia.BoldItalic"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/common_block_space_half"
+                android:id="@+id/activity.sale.details.date"
+                android:textColor="@color/colorProfileCounter"
+                android:textSize="@dimen/text_size_common"
+                android:text="@string/text_view_value_not_found"
                 />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/common_block_space"
-        android:paddingRight="@dimen/common_block_space"
-        android:paddingTop="@dimen/common_block_space_half"
-        android:paddingBottom="@dimen/common_block_space_half"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/activity.sale.details.title"
-            />
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/common_block_space"
-        android:paddingRight="@dimen/common_block_space"
-        android:paddingTop="@dimen/common_block_space_half"
-        android:paddingBottom="@dimen/common_block_space_half"
         android:layout_weight="1"
         >
-        <WebView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/activity.sale.details.web.view"
-            />
-    </LinearLayout>
+            android:paddingLeft="@dimen/common_block_space"
+            android:paddingRight="@dimen/common_block_space"
+            android:paddingTop="@dimen/common_block_space_half"
+            android:paddingBottom="@dimen/common_block_space_half"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.sale.details.text"
+                android:text="@string/text_view_value_not_found"
+                style="@style/AppTheme.Paragraph"
+                />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.sale.details.photo"
+                android:layout_marginBottom="@dimen/common_block_space_double"
+                />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <include layout="@layout/view_share_like" />
 

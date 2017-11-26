@@ -118,7 +118,9 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
 
                 texts();
 
-                avatar(avatar,null,R.drawable.ic_default_resto);
+                String urlAvatar=null;
+                try {urlAvatar=model.getParent().getThumb();}catch (Exception e){}
+                avatar(avatar,urlAvatar,R.drawable.ic_sale);
 
                 Photo new_photo=null;try {new_photo=model.getPhotos().get(0);}catch (Exception e){}
                 photo(preview,new_photo,R.drawable.ic_default_image);
@@ -156,6 +158,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
             }
 
             private void texts() {
+                try {author.setText(model.getParent().getName());}catch (Exception e){};
                 date.setText(model.getDateStartFormated());
                 new HashTagHelper2(text,model.getText());
             }

@@ -6,31 +6,36 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.webkit.WebView;
+import android.text.method.LinkMovementMethod;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Sale;
-import com.brewmapp.data.model.ILikeable;
-import com.brewmapp.presentation.presenter.contract.EventsPresenter;
+import com.brewmapp.execution.tool.HashTagHelper2;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.view.contract.SaleDetailsView;
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
+import com.squareup.picasso.Picasso;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
                     {
     @BindView(R.id.activity_sale_details_avatar)    ImageView avatar;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
-    @BindView(R.id.activity_sale_details_title)    TextView titile;
+    @BindView(R.id.activity_sale_details_date)    TextView date;
+    @BindView(R.id.activity_sale_details_text)    TextView text;
+    @BindView(R.id.activity_sale_details_photo)    ImageView photo;
     @BindView(R.id.activity_sale_details_resto_name)    TextView resto_name;
-    @BindView(R.id.activity_sale_details_web_view)    WebView web_view;
     @BindView(R.id.root_view_share_like) ShareLikeView shareLikeView;
     private Sale sale;
 
@@ -50,6 +55,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @Override
     protected void initView() {
         enableBackButton();
+        text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -73,22 +79,70 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     }
 
     @Override
-    public void showSaleDetails(Sale sale) {
+    public void setModel(Sale sale) {
         this.sale = sale;
-        shareLikeView.setiLikeable(sale);
-        setTitle(sale.getParent().getName());
-        titile.setText(sale.getName());
-        resto_name.setText(sale.getParent().getName());
-        String img="";
-        try {
-            img=String.valueOf(sale.getPhotos().get(0).getUrl());
-            img="<p><a href=\""+img+"\" target=\"_blank\"><img src=\""+img+"\" width=\"100%\" ></img></a></p>";
-        }catch (Exception e){
 
+        class FillContent{
+            String photoUrl=null;
+            int photoWidth=0;
+            int photoHeight=0;
+
+
+            public void fill(){
+                shareLikeView.setiLikeable(sale);
+                texts();
+
+                String urlAvatar=null;
+                try {urlAvatar=sale.getParent().getThumb();}catch (Exception e){}
+                avatar(avatar,urlAvatar,R.drawable.ic_sale);
+
+                Photo new_photo=null;try {new_photo=sale.getPhotos().get(0);}catch (Exception e){}
+                photo(photo,new_photo,R.drawable.ic_default_image);
+
+            }
+            private void photo(ImageView imageView, Photo new_photo, int default_photo) {
+                imageView.setImageBitmap(null);
+                try {
+                    photoUrl=new_photo.getUrl();
+                    photoHeight=new_photo.getSize().getHeight();
+                    photoWidth=new_photo.getSize().getWidth();}catch (Exception e){photoUrl=null;}
+
+                if(photoUrl==null) {imageView.setVisibility(GONE);return;}
+                else {imageView.setVisibility(VISIBLE);}
+
+                imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        //resize
+                        float ratio=(float) imageView.getWidth()/(float) photoWidth;
+                        LinearLayout.LayoutParams p= (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                        p.height=(int) (photoHeight*ratio);
+                        imageView.setLayoutParams(p);
+                        //load
+                        imageView.post(() -> Picasso.with(imageView.getContext()).load(photoUrl).error(default_photo).into(imageView));
+
+                        return true;
+                    }
+                });
+
+
+            }
+
+            private void avatar(ImageView imageView, String urlAvatar, int ic_default_resto) {
+                if(urlAvatar==null)
+                    Picasso.with(imageView.getContext()).load(ic_default_resto).fit().centerCrop().into(imageView);
+                else
+                    Picasso.with(imageView.getContext()).load(urlAvatar).fit().centerCrop().into(imageView);
+            }
+            private void texts() {
+                setTitle(R.string.text_view_sale);
+                try {resto_name.setText(sale.getParent().getName());}catch (Exception e){}
+                new HashTagHelper2(text,sale.getText());
+                date.setText(sale.getDateStartFormated());
+            }
         }
-        web_view.loadData(img+sale.getText(), "text/html; charset=utf-8", "utf-8");
-
-
+        new FillContent().fill();
     }
 
 

@@ -10,10 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -68,7 +67,7 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         if(TextUtils.isEmpty(tmpStr))       tmpStr=new StringBuilder().append(Html.fromHtml(resto.getText())).toString();
         if(!TextUtils.isEmpty(tmpStr))      shot_text.setText(tmpStr);
 
-        if(getContext() instanceof AddInterestActivity) {
+        if(getContext() instanceof MultiListActivity) {
             setOnClickListener(v -> listener.onModelAction(0, resto));
             arrow_right.setOnClickListener(v -> listener.onModelAction(1, resto));
         }else {

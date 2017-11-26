@@ -12,7 +12,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
-import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -73,7 +73,7 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
         }
         title.setText(stringBuilder.toString());
 
-        if(getContext() instanceof AddInterestActivity) {
+        if(getContext() instanceof MultiListActivity) {
             setOnClickListener(v -> listener.onModelAction(VIEW_MODEL, beer));
             arrow_right.setOnClickListener(v -> listener.onModelAction(SELECT_MODEL, beer));
         }else {

@@ -156,6 +156,14 @@ public class Post implements Postable, Serializable, ILikeable {
     public Date getDate() {
         return date;
     }
+    public String getDateFormated(){
+        try {
+            return android.text.format.DateFormat.format("dd MMMM yyyy",getDate()).toString();
+        }catch (Exception e){
+            return null;
+        }
+
+    }
 
     public int getId() {
         return id;

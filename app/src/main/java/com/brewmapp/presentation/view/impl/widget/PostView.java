@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.text.Editable;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
@@ -29,13 +28,10 @@ import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
-import org.xml.sax.XMLReader;
-
 import java.util.List;
 
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
-import ru.frosteye.ovsa.tool.DateTools;
 
 /**
  * Created by oleg on 16.08.17.
@@ -154,7 +150,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
 
             private void texts() {
                 new HashTagHelper2(text,model.getText());
-                date.setText(DateTools.formatDottedDateWithTime(model.getDate()));
+                date.setText(model.getDateFormated());
                 try {author.setText(model.getRelated_model_data().getName());}catch (Exception e){}
             }
 

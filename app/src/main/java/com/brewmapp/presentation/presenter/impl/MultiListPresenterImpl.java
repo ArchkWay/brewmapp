@@ -2,15 +2,12 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
 
-import com.brewmapp.R;
-import com.brewmapp.data.entity.container.Posts;
-import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.QuickSearchTask;
-import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
-import com.brewmapp.presentation.view.contract.AddInterestView;
+import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
+import com.brewmapp.presentation.view.contract.MultiListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by xpusher on 10/20/2017.
  */
 
-public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> implements AddInterestPresenter {
+public class MultiListPresenterImpl extends BasePresenter<MultiListView> implements MultiListPresenter {
 
 
     private FullSearchTask fullSearchTask;
@@ -34,7 +31,7 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
 
 
     @Inject
-    public AddInterestPresenterImpl(FullSearchTask fullSearchTask,QuickSearchTask quickSearchTask){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
     }
@@ -42,8 +39,8 @@ public class AddInterestPresenterImpl extends BasePresenter<AddInterestView> imp
 
 
     @Override
-    public void onAttach(AddInterestView addInterestView) {
-        super.onAttach(addInterestView);
+    public void onAttach(MultiListView multiListView) {
+        super.onAttach(multiListView);
     }
 
     @Override

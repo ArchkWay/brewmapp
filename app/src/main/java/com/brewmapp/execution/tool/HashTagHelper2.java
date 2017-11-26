@@ -12,11 +12,9 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.brewmapp.R;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 
 /**
  * Created by xpusher on 11/24/2017.
@@ -97,9 +95,9 @@ public class HashTagHelper2 {
         @Override
         public void onClick(View view) {
             //Toast.makeText(context,R.string.message_develop,Toast.LENGTH_SHORT).show();
-            if(context instanceof AddInterestActivity)
-                ((AddInterestActivity) context).finish();
-            context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param),context, AddInterestActivity.class));
+            if(context instanceof MultiListActivity)
+                ((MultiListActivity) context).finish();
+            context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param),context, MultiListActivity.class));
         }
 
         @Override

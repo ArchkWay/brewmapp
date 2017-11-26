@@ -46,14 +46,16 @@
                     android:id="@+id/view.post.author"
                     android:textSize="@dimen/text_size_big_phone"
                     android:layout_marginBottom="@dimen/common_block_space_half"
-                    style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    android:text="@string/text_view_value_not_found"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/common_block_space_half"
                     android:id="@+id/view.post.date"
                     android:textColor="@color/colorProfileCounter"
-                    android:textSize="@dimen/text_size_common" />
+                    android:textSize="@dimen/text_size_common"
+                    android:text="@string/text_view_value_not_found"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -66,6 +68,7 @@
             style="@style/AppTheme.Paragraph"
             android:layout_marginBottom="@dimen/common_block_space_double"
             android:maxLines="@integer/init_max_lites_text_view"
+            android:text="@string/text_view_value_not_found"
             />
 
         <ImageView

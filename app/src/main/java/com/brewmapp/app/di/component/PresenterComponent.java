@@ -3,7 +3,7 @@ package com.brewmapp.app.di.component;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
-import com.brewmapp.presentation.view.impl.activity.AddInterestActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.AlbumActivity;
@@ -93,7 +93,7 @@ public interface PresenterComponent {
     void inject(ShareLikeView shareLikeView);
     void inject(AssessmentsActivity assessmentsActivity);
     void inject(InterestListActivity interestListActivity);
-    void inject(AddInterestActivity addInterestActivity);
+    void inject(MultiListActivity multiListActivity);
     void inject(RestoDetailActivity restoDetailActivity);
     void inject(BeerDetailActivity beerDetailActivity);
     void inject(AddReviewRestoActivity addReviewRestoActivity);

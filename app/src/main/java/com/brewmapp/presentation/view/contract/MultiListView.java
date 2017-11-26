@@ -9,7 +9,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  * Created by xpusher on 10/20/2017.
  */
 
-public interface AddInterestView extends BasicView{
+public interface MultiListView extends BasicView{
     int MODE_ACTIVTY_SHOW_AND_SELECT_BEER=0;
     int MODE_ACTIVTY_SHOW_AND_SELECT_RESTO=1;
     int MODE_ACTIVTY_SHOW_HASHTAG=2;

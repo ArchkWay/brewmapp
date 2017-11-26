@@ -134,7 +134,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:
-                startActivityForResult(new Intent(loadInterestPackage.getFilterInterest(),null,this, AddInterestActivity.class), REQUEST_INTEREST);
+                startActivityForResult(new Intent(loadInterestPackage.getFilterInterest(),null,this, MultiListActivity.class), REQUEST_INTEREST);
             default:
                 return super.onOptionsItemSelected(item);
         }

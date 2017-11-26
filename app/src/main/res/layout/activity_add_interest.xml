@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.brewmapp.presentation.view.impl.activity.AddInterestActivity"
+    tools:context="com.brewmapp.presentation.view.impl.activity.MultiListActivity"
     android:orientation="vertical">
 
     <include layout="@layout/view_toolbar" />

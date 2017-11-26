@@ -1,21 +1,29 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sale;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -63,10 +71,34 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
+        container.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+            Interest interest=null;
+            if(interest==null)
+                try {
+                    interest=new Interest(new Resto(model.getRelated_id(),""));
+                }catch (Exception e){}
+            if(interest!=null) {
+                intent.putExtra(Keys.RESTO_ID, interest);
+                getContext().startActivity(intent);
+            }
+
+        });
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
-        avatar.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
-        preview.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
+        preview.setOnClickListener(v -> {
+            try {
+                String[] urls=new String[model.getPhotos().size()];
+                for(int i=0;i<model.getPhotos().size();i++)
+                    urls[i]=model.getPhotos().get(i).getUrl();
+                if(urls.length>0){
+                    Intent intent = new Intent(getContext(), PhotoSliderActivity.class);
+                    intent.putExtra(Keys.PHOTOS, urls);
+                    getContext().startActivity(intent);
+                }
+
+            }catch (Exception e){}
+
+        });
     }
 
     @Override
@@ -76,31 +108,92 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
 
     @Override
     public void setModel(Sale model) {
-        shareLikeView.setiLikeable(model);
-        this.model = model;
-        author.setText(model.getParent().getName());
-        new HashTagHelper2(text,model.getText());
-        //text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
-        date.setText(DateTools.formatDottedDate(model.getDateStart()));
+        this.model=model;
+        class FillContent{
+            String photoUrl=null;
+            int photoWidth=0;
+            int photoHeight=0;
+            public void fill() {
+                shareLikeView.setiLikeable(model);
 
-        if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
-            Photo photo = model.getPhotos().get(0);
-            if(photo.getSize() == null) {
-                preview.setVisibility(GONE);
-                return;
+                texts();
+
+                avatar(avatar,null,R.drawable.ic_default_resto);
+
+                Photo new_photo=null;try {new_photo=model.getPhotos().get(0);}catch (Exception e){}
+                photo(preview,new_photo,R.drawable.ic_default_image);
+
+
             }
-            preview.setVisibility(VISIBLE);
-            float ratio = (float)photo.getSize().getWidth() / photo.getSize().getHeight();
-            preview.post(() -> {
-                LayoutParams params = ((LayoutParams) preview.getLayoutParams());
-                params.height = (int) (preview.getMeasuredWidth()/ratio);
-                preview.setLayoutParams(params);
-                Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
-            });
 
-        } else {
-            preview.setVisibility(GONE);
+            private void photo(ImageView imageView,Photo new_photo,int default_photo) {
+                imageView.setImageBitmap(null);
+                try {
+                    photoUrl=new_photo.getUrl();
+                    photoHeight=new_photo.getSize().getHeight();
+                    photoWidth=new_photo.getSize().getWidth();}catch (Exception e){photoUrl=null;}
+
+                if(photoUrl==null) {imageView.setVisibility(GONE);return;}
+                else {imageView.setVisibility(VISIBLE);}
+
+                imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        //resize
+                        float ratio=(float) imageView.getWidth()/(float) photoWidth;
+                        LinearLayout.LayoutParams p= (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                        p.height=(int) (photoHeight*ratio);
+                        imageView.setLayoutParams(p);
+                        //load
+                        imageView.post(() -> Picasso.with(imageView.getContext()).load(photoUrl).error(default_photo).into(imageView));
+
+                        return true;
+                    }
+                });
+
+
+            }
+
+            private void texts() {
+                date.setText(model.getDateStartFormated());
+                new HashTagHelper2(text,model.getText());
+            }
+
+            private void avatar(ImageView imageView, String urlAvatar, int ic_default_resto) {
+                if(urlAvatar==null)
+                    Picasso.with(imageView.getContext()).load(ic_default_resto).fit().centerCrop().into(imageView);
+                else
+                    Picasso.with(imageView.getContext()).load(urlAvatar).fit().centerCrop().into(imageView);
+            }
         }
+
+        new FillContent().fill();
+//        shareLikeView.setiLikeable(model);
+//        this.model = model;
+//        author.setText(model.getParent().getName());
+//        new HashTagHelper2(text,model.getText());
+//        //text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
+//        date.setText(DateTools.formatDottedDate(model.getDateStart()));
+//
+//        if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
+//            Photo photo = model.getPhotos().get(0);
+//            if(photo.getSize() == null) {
+//                preview.setVisibility(GONE);
+//                return;
+//            }
+//            preview.setVisibility(VISIBLE);
+//            float ratio = (float)photo.getSize().getWidth() / photo.getSize().getHeight();
+//            preview.post(() -> {
+//                LayoutParams params = ((LayoutParams) preview.getLayoutParams());
+//                params.height = (int) (preview.getMeasuredWidth()/ratio);
+//                preview.setLayoutParams(params);
+//                Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
+//            });
+//
+//        } else {
+//            preview.setVisibility(GONE);
+//        }
     }
 
     @Override

@@ -15,9 +15,9 @@ import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.AddInterestPresenter;
+import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
-import com.brewmapp.presentation.view.contract.AddInterestView;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 
@@ -36,14 +36,14 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-public class AddInterestActivity extends BaseActivity implements AddInterestView ,UiCustomControl {
+public class MultiListActivity extends BaseActivity implements MultiListView,UiCustomControl {
     @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
     @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
 
-    @Inject    AddInterestPresenter presenter;
+    @Inject    MultiListPresenter presenter;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Event;
+import com.brewmapp.execution.tool.HashTagHelper2;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -38,7 +40,6 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
 
 
     private Event model;
-    private Listener listener;
 
     public EventView(Context context) {
         super(context);
@@ -62,7 +63,7 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         if(isInEditMode()) return;
 
         ButterKnife.bind(this);
-        container.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_EVENT, model));
+        text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -75,24 +76,21 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         this.model = model;
         shareLikeView.setiLikeable(model);
         name.setText(model.getName());
-        if(model.getShortText()!= null && !model.getShortText().isEmpty()) {
-            text.setVisibility(VISIBLE);
-        } else {
-            text.setVisibility(GONE);
-        }
-        text.setText(model.getShortText());
+        new HashTagHelper2(text,model.getText());
         location.setText(model.getLocation().getFormattedAddress());
         date.setText(getString(R.string.pattern_event_start,
                 DateTools.formatDottedDate(model.getDateFrom()), model.getTimeFrom()));
         if(model.getThumb() != null && !model.getThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getThumb()).fit().centerCrop().into(image);
         } else {
-            image.setImageResource(R.drawable.ic_default_brewery);
+            image.setImageResource(R.drawable.ic_default_resto);
         }
     }
 
     @Override
     public void setListener(Listener listener) {
-        this.listener = listener;
+        //this.listener = listener;
+        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_EVENT, model));
+
     }
 }

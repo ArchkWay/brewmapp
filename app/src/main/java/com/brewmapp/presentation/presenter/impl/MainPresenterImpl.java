@@ -3,12 +3,12 @@ package com.brewmapp.presentation.presenter.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.FrameLayout;
 
 import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.UiSettingContainer;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
@@ -69,8 +69,10 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     }
 
     @Override
-    public Bundle parseArguments(Intent intent) {
+    public Bundle prepareArguments(Intent intent, FrameLayout container) {
         Bundle bundle=new Bundle();
+        bundle.putBoolean(MainActivity.KEY_FERST_FRAGMENT,container.getChildCount()==0);
+
         switch (parseMode(intent)){
             case MainActivity.MODE_ONLY_EVENT_FRAGMENT:
                 bundle.putString(Keys.RELATED_MODEL,intent.getStringExtra(Keys.RELATED_MODEL));
@@ -79,7 +81,7 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
             case MainActivity.MODE_ONLY_MAP_FRAGMENT:
                 bundle.putSerializable(Keys.LOCATION,intent.getSerializableExtra(Keys.LOCATION));
                 return bundle;
-            default:return null;
+            default:return bundle;
         }
 
     }

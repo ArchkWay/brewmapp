@@ -6,7 +6,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
@@ -18,6 +20,7 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -42,6 +45,8 @@ import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
+import com.transitionseverywhere.TransitionManager;
+
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -70,6 +75,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_posts) RecyclerView posts_subs;
     @BindView(R.id.fragment_profile_flow_segment) SegmentedGroup segment;
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
+    @BindView(R.id.fragment_profile_transitions_container) ViewGroup transitions_container;
+    @BindView(R.id.fragment_profile_scrollView) ScrollView scrollView;
 
 
 
@@ -85,8 +92,22 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         return R.layout.fragment_profile;
     }
 
+
     @Override
     protected void initView(View view) {
+        if(getArguments().getBoolean(MainActivity.KEY_FERST_FRAGMENT,false)){
+            scrollView.setVisibility(View.INVISIBLE);
+            transitions_container.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    TransitionManager.getDefaultTransition().setDuration(800);
+                    TransitionManager.beginDelayedTransition(transitions_container);
+                    scrollView.setVisibility(View.VISIBLE);
+                }
+            },0);
+        }
+
+
         menuAdapter = new FlexibleAdapter<>(CardMenuField.createProfileItems(getActivity()), this);
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
@@ -122,6 +143,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         //posts_subs.setAdapter(postAdapter);
         setHasOptionsMenu(true);
+
+
 
     }
 

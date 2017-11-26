@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.MenuRes;
 import android.support.v4.app.Fragment;
@@ -18,13 +17,13 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
@@ -70,6 +69,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @BindView(R.id.activity_main_userName) TextView userName;
     @BindView(R.id.activity_main_avatar) ImageView avatar;
     @BindView(R.id.activity_main_profileHeader) View profileHeader;
+    @BindView(R.id.activity_main_container) FrameLayout container;
 
     @Inject MainPresenter presenter;
     @Inject MainNavigator navigator;
@@ -79,9 +79,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private List<String> dropdownItems;
     private @MenuRes int menuToShow;
 
+    public static final String KEY_FERST_FRAGMENT="first_fragment";
+
     public static final String MODE_DEFAULT="default";
     public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";
     public static final String MODE_ONLY_MAP_FRAGMENT="map_fragment";
+
 
     private String mode;
 
@@ -173,7 +176,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
-        fragment.setArguments(presenter.parseArguments(getIntent()));
+        fragment.setArguments(presenter.prepareArguments(getIntent(),container));
 
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();

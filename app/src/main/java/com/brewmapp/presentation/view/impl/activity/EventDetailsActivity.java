@@ -9,15 +9,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.pojo.ClaimPackage;
 import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.tool.HashTagHelper2;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventDetailsView;
@@ -41,6 +44,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
@@ -98,6 +102,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         options.setAdapter(optionsAdapter);
         like.setOnClickListener(v -> {eventsPresenter.onLike(event,this);});
         dislike.setOnClickListener(v -> {presenter.onDisLakeEvent(event);});
+        text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -122,45 +127,67 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     }
 
     @Override
-    public void showEventsDetails(Event event) {
+    public void refreshContent(Event event) {
         this.event = event;
-        optionsAdapter.updateDataSet(CardMenuField.createEventItems(event, this));
-        setTitle(event.getName());
-        title.setText(event.getName());
-        likes.setText(String.valueOf(event.getLike()));
-        dislikes.setText(String.valueOf(event.getDislike()));
-        rating.setText(String.valueOf(event.getBall().getRating()));
-        if(event.getThumb() != null) {
-            slider.addSlider(new DefaultSliderView(this)
-                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(event.getThumb())
-                    .setOnSliderClickListener(slider1 -> {
-                Intent intent = new Intent(this, PhotoSliderActivity.class);
-                String[] urls = { event.getThumb() };
-                intent.putExtra(Keys.PHOTOS, urls);
-                startActivity(intent);
-            }));
-        }else {
-            slider.addSlider(new DefaultSliderView(this)
-                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                    .image(R.drawable.ic_default_brewery));
+
+        class FillContent{
+            public FillContent(){
+                optionsAdapter.updateDataSet(CardMenuField.createEventItems(event, EventDetailsActivity.this));
+                texts();
+                images();
+                counts();
+            }
+
+            private void counts() {
+                willGo.setCount(event.getiWillGo());
+                interested.setCount(event.getInterested());
+                invited.setCount(event.getInvited());
+            }
+
+            private void images() {
+
+                if(event.getPhoto().size()>0) {
+                    String[] urls=new String[event.getPhoto().size()];
+                    for(int i=0;i<urls.length;i++)
+                        urls[i]=event.getPhoto().get(i).getUrl();
+
+                    Iterator<Photo> iterator=event.getPhoto().iterator();
+                    while (iterator.hasNext())
+                        slider.addSlider(new DefaultSliderView(EventDetailsActivity.this)
+                                .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                .image(iterator.next().getUrl())
+                                .setOnSliderClickListener(slider1 -> {
+                                    Intent intent = new Intent(EventDetailsActivity.this, PhotoSliderActivity.class);
+                                    intent.putExtra(Keys.PHOTOS, urls);
+                                    startActivity(intent);
+                                }));
+                }else {
+                    slider.addSlider(new DefaultSliderView(EventDetailsActivity.this)
+                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                            .image(R.drawable.ic_default_brewery));
+
+                }
+                slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        photosCounter.setText(String.format("%d/%d", position + 1, event.getThumb() != null ? 2 : 1));
+                    }
+                });
+                slider.addSlider(new AddPhotoSliderView(EventDetailsActivity.this));
+            }
+
+            private void texts() {
+                setTitle(event.getName());
+                title.setText(event.getName());
+                likes.setText(String.valueOf(event.getLike()));
+                dislikes.setText(String.valueOf(event.getDislike()));
+                rating.setText(String.valueOf(event.getBall().getRating()));
+                new HashTagHelper2(text,event.getText());
+            }
 
         }
-        slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                photosCounter.setText(String.format("%d/%d", position + 1, event.getThumb() != null ? 2 : 1));
-            }
-        });
-        slider.addSlider(new AddPhotoSliderView(this));
 
-        willGo.setCount(event.getiWillGo());
-        interested.setCount(event.getInterested());
-        invited.setCount(event.getInvited());
-        text.setText(event.getText() != null ? Html.fromHtml(event.getText()) : null);
-        likes.setText(String.valueOf(event.getLike()));
-        dislikes.setText(String.valueOf(event.getDislike()));
-
+        new FillContent();
     }
 
     @Override

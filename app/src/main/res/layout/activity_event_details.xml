@@ -22,13 +22,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_event_slider"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:minHeight="@dimen/height_event_slider"
                 >
-
-                <com.daimajia.slider.library.SliderLayout
+                    <com.daimajia.slider.library.SliderLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/activity.eventDetails.slider"
                     android:layout_weight="1"
                     >
@@ -38,24 +38,23 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/activity.eventDetails.indicator"/>
                 </com.daimajia.slider.library.SliderLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorBlackSemi"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="right"
-                    android:paddingLeft="@dimen/common_block_space"
-                    android:paddingRight="@dimen/common_block_space"
-                    android:paddingTop="@dimen/common_block_space_half"
-                    android:paddingBottom="@dimen/common_block_space_half">
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_common"
-                        android:id="@+id/activity.eventDetails.photosCounter"
-                        android:textColor="@color/colorWhite"/>
-                </LinearLayout>
+                        android:background="@color/colorBlackSemi"
+                        android:gravity="right"
+                        android:paddingLeft="@dimen/common_block_space"
+                        android:paddingRight="@dimen/common_block_space"
+                        android:paddingTop="@dimen/common_block_space_half"
+                        android:paddingBottom="@dimen/common_block_space_half">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_common"
+                            android:id="@+id/activity.eventDetails.photosCounter"
+                            android:textColor="@color/colorWhite"/>
+                    </LinearLayout>
                 </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

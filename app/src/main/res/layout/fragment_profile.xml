@@ -5,11 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/colorWhite"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/fragment.profile.transitions_container"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment.profile.scrollView"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

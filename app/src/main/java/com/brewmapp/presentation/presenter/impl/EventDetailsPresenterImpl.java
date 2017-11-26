@@ -43,7 +43,7 @@ public class EventDetailsPresenterImpl extends BasePresenter<EventDetailsView> i
     @Override
     public void onAttach(EventDetailsView eventDetailsView) {
         super.onAttach(eventDetailsView);
-        view.showEventsDetails(activeBox.getActive(Event.class));
+        view.refreshContent(activeBox.getActive(Event.class));
         onLoacEventDetails(activeBox.getActive(Event.class));
     }
 

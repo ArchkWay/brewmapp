@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
+
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -18,7 +19,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_block_space_double_semi">
+            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+            android:layout_marginRight="@dimen/common_block_space_double_semi">
 
             <ImageView
                 android:layout_width="@dimen/width_event_preview"
@@ -28,12 +30,7 @@
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"/>
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
-
-                <LinearLayout
+            <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -90,67 +87,20 @@
                             android:textSize="@dimen/text_size_common" />
                     </LinearLayout>
                 </LinearLayout>
-            </HorizontalScrollView>
+
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/view.event.text"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
-            android:layout_marginBottom="@dimen/common_block_space"
             android:layout_marginRight="@dimen/common_block_space_double_semi"
-            style="@style/AppTheme.Paragraph.Italic"  />
+            style="@style/AppTheme.Paragraph.Italic"
+            android:text="@string/text_view_value_not_found"
+
+            />
         <include layout="@layout/view_share_like" />
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="@dimen/common_block_space">-->
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="@dimen/height_post_button"-->
-                <!--android:adjustViewBounds="true"-->
-                <!--android:id="@+id/view.event.more"-->
-                <!--android:paddingLeft="@dimen/common_block_space_double_semi"-->
-                <!--android:paddingRight="@dimen/common_block_space_double_semi"-->
-                <!--android:paddingTop="@dimen/common_block_space_half"-->
-                <!--android:layout_toLeftOf="@+id/view.event.like"-->
-                <!--android:paddingBottom="@dimen/common_block_space_half"-->
-                <!--android:layout_marginRight="@dimen/common_block_space"-->
-                <!--android:background="@drawable/selector_post_button"-->
-                <!--android:src="@drawable/ic_post_more"/>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@drawable/selector_post_button"-->
-                <!--android:id="@+id/view.event.like"-->
-                <!--android:layout_marginRight="@dimen/common_block_space"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:paddingRight="@dimen/common_block_space"-->
-                <!--android:gravity="center_vertical">-->
-
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="@dimen/height_post_button"-->
-                    <!--android:adjustViewBounds="true"-->
-                    <!--android:paddingLeft="@dimen/common_block_space"-->
-                    <!--android:paddingRight="@dimen/common_block_space_half"-->
-                    <!--android:paddingTop="@dimen/common_block_space_half"-->
-                    <!--android:paddingBottom="@dimen/common_block_space_half"-->
-                    <!--android:src="@drawable/ic_like"/>-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="@color/colorButtonGreen"-->
-                    <!--android:textSize="@dimen/text_size_common_bigger"-->
-                    <!--android:id="@+id/view.event.like.counter"/>-->
-            <!--</LinearLayout>-->
-
-        <!--</RelativeLayout>-->
     </LinearLayout>
-
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
@@ -161,4 +111,5 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_block_space"
         android:background="@color/colorBlockSplitter"/>
+
 </com.brewmapp.presentation.view.impl.widget.EventView>

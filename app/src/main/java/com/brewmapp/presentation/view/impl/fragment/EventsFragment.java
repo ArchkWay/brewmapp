@@ -100,29 +100,37 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
 
     @Override
     protected void initView(View view) {
+        if(getArguments()==null){
+            mode=MODE_DEFAULT;
+        }else  if(getArguments().get(Keys.RELATED_MODEL)!=null&&getArguments().get(Keys.RELATED_ID)!=null){
+            mode=MODE_ONLY_BY_RESTO;
+        }else {
+            mode=MODE_DEFAULT;
+        }
 
-        mode=getArguments()==null?MODE_DEFAULT:MODE_ONLY_BY_RESTO;
+        if(mode.equals(MODE_DEFAULT))
+            interractor().processSetActionBar(0);
 
-        //if(mode.equals(MODE_DEFAULT)) {
-            tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    loadNewsPackage.dropAll();
-                    loadNewsPackage.setMode(tab.getPosition());
-                    interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
-                    interractor().processSetActionBar(tab.getPosition());
-                    presenter.storeTabActive(tab.getPosition());
-                    hideFilterLayout();
-                    if (dropdownItems != null) {
-                        dropdownItems.clear();
-                    }
-                    refreshItems(true);
+        tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                loadNewsPackage.dropAll();
+                loadNewsPackage.setMode(tab.getPosition());
+                interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
+                interractor().processSetActionBar(tab.getPosition());
+                presenter.storeTabActive(tab.getPosition());
+                hideFilterLayout();
+                if (dropdownItems != null) {
+                    dropdownItems.clear();
                 }
-            });
-            initFilterItems();
-            filterList.setOnItemClickListener(this);
-            interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
-        //}
+                refreshItems(true);
+            }
+        });
+
+        initFilterItems();
+        filterList.setOnItemClickListener(this);
+        interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
+
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override

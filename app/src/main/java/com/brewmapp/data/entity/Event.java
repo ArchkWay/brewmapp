@@ -6,7 +6,9 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ovcst on 24.08.2017.
@@ -64,6 +66,16 @@ public class Event implements Serializable, ILikeable {
 
     public int getId() {
         return id;
+    }
+
+    private List<Photo> photo=new ArrayList<>();
+
+    public List<Photo> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(List<Photo> photo) {
+        this.photo = photo;
     }
 
     public String getThumb() {

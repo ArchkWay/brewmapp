@@ -100,7 +100,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             transitions_container.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    TransitionManager.getDefaultTransition().setDuration(800);
+                    TransitionManager.getDefaultTransition().setDuration(1000);
                     TransitionManager.beginDelayedTransition(transitions_container);
                     scrollView.setVisibility(View.VISIBLE);
                 }

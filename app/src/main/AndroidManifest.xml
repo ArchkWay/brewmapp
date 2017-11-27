@@ -40,11 +40,6 @@
         <activity
             android:name=".presentation.view.impl.activity.StartActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".presentation.view.impl.activity.LoginActivity"
@@ -167,7 +162,17 @@
         <activity android:name=".presentation.view.impl.activity.AddReviewRestoActivity" />
         <activity android:name=".presentation.view.impl.activity.ProfileEditActivity" />
         <activity android:name=".presentation.view.impl.activity.AddReviewBeerActivity" />
-        <activity android:name=".presentation.view.impl.activity.UserProfileViewActivity"></activity>
+        <activity android:name=".presentation.view.impl.activity.UserProfileViewActivity" />
+        <activity android:name=".presentation.view.impl.activity.SplashActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

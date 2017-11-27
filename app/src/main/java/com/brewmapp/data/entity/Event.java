@@ -1,6 +1,7 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
@@ -63,6 +64,7 @@ public class Event implements Serializable, ILikeable {
 
     @SerializedName(Keys.GET_THUMB)
     private String thumb;
+
 
     public int getId() {
         return id;

@@ -17,6 +17,7 @@
         android:paddingRight="@dimen/common_block_space"
         android:paddingTop="@dimen/common_block_space_half"
         android:paddingBottom="@dimen/common_block_space_half"
+        android:id="@+id/activity.post.details.container_avatar"
         >
 
         <LinearLayout

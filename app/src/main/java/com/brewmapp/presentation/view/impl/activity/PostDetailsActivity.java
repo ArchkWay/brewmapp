@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,8 +13,11 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Resto;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.tool.HashTagHelper2;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.view.contract.PostDetailsView;
@@ -40,6 +44,7 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     @BindView(R.id.activity_post_details_date)    TextView date;
     @BindView(R.id.activity_post_details_photo)    ImageView photo;
     @BindView(R.id.activity_post_details_avatar)    ImageView avatar;
+    @BindView(R.id.activity_post_details_container_avatar)    LinearLayout container_avatar;
 
     @BindView(R.id.view_post_container_repost)    LinearLayout repost;
     @BindView(R.id.view_post_container_repost_name)    TextView repost_name;
@@ -65,6 +70,25 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
         text.setMovementMethod(LinkMovementMethod.getInstance());
         text.setLinksClickable(true);
         setTitle(R.string.title_activity_news_detail);
+        container_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PostDetailsActivity.this, RestoDetailActivity.class);
+                Interest interest=null;
+                try {
+                    interest=new Interest(new Resto(post.getRelated_model_data().getId(),post.getRelated_model_data().getName()));
+                }catch (Exception e){}
+                if(interest==null)
+                    try {
+                        interest=new Interest(new Resto(post.getRelated_id(),""));
+                    }catch (Exception e){}
+                if(interest!=null) {
+                    intent.putExtra(Keys.RESTO_ID, interest);
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
     @Override

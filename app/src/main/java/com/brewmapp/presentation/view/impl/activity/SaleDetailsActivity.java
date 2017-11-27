@@ -7,14 +7,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sale;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.tool.HashTagHelper2;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.view.contract.SaleDetailsView;
@@ -31,6 +35,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITE
 public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
                     {
     @BindView(R.id.activity_sale_details_avatar)    ImageView avatar;
+    @BindView(R.id.activity_sale_details_container_avatar)    LinearLayout container_avatar;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_sale_details_date)    TextView date;
     @BindView(R.id.activity_sale_details_text)    TextView text;
@@ -56,6 +61,22 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     protected void initView() {
         enableBackButton();
         text.setMovementMethod(LinkMovementMethod.getInstance());
+        container_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SaleDetailsActivity.this, RestoDetailActivity.class);
+                Interest interest=null;
+                if(interest==null)
+                    try {
+                        interest=new Interest(new Resto(sale.getRelated_id(),""));
+                    }catch (Exception e){}
+                if(interest!=null) {
+                    intent.putExtra(Keys.RESTO_ID, interest);
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
     @Override

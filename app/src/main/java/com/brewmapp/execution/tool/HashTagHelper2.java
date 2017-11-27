@@ -27,7 +27,7 @@ public class HashTagHelper2 {
 
     public HashTagHelper2(TextView textView, String content){
         try {
-            Spanned spannedText= Html.fromHtml(content.toString().replaceAll(SHARP,"<"+SPAN_TAG+">"+SHARP),null,htmlTagHandler);
+            Spanned spannedText= Html.fromHtml(content.toString().replaceAll(SHARP,"<"+SPAN_TAG+">"+SHARP).replace("<br><br>","<br>"),null,htmlTagHandler);
             Spannable reversedText = revertSpanned(spannedText);
             textView.setText(reversedText);
             context=textView.getContext();

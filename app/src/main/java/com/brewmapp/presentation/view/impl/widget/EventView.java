@@ -32,6 +32,7 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
 
     @BindView(R.id.view_event_date) TextView date;
     @BindView(R.id.view_event_name) TextView name;
+    @BindView(R.id.view_event_name_resto) TextView name_resto;
     @BindView(R.id.view_event_text) TextView text;
     @BindView(R.id.view_event_location) TextView location;
     @BindView(R.id.view_event_image) ImageView image;
@@ -80,8 +81,12 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         location.setText(model.getLocation().getFormattedAddress());
         date.setText(getString(R.string.pattern_event_start,
                 DateTools.formatDottedDate(model.getDateFrom()), model.getTimeFrom()));
-        if(model.getThumb() != null && !model.getThumb().isEmpty()) {
-            Picasso.with(getContext()).load(model.getThumb()).fit().centerCrop().into(image);
+
+        try{name_resto.setText(model.getResto().getName());}catch (Exception e){}
+        String urlImage=null;
+        try{urlImage=model.getResto().getThumb();}catch (Exception e){}
+        if(urlImage != null) {
+            Picasso.with(getContext()).load(urlImage).fit().centerCrop().into(image);
         } else {
             image.setImageResource(R.drawable.ic_default_resto);
         }

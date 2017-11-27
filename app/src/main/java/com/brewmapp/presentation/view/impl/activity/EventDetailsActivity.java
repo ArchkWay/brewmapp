@@ -10,13 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.ClaimPackage;
 import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -103,6 +106,17 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         like.setOnClickListener(v -> {eventsPresenter.onLike(event,this);});
         dislike.setOnClickListener(v -> {presenter.onDisLakeEvent(event);});
         text.setMovementMethod(LinkMovementMethod.getInstance());
+        title.setOnClickListener(view -> {
+            Intent intent = new Intent(EventDetailsActivity.this, RestoDetailActivity.class);
+            Interest interest=null;
+            try {
+                interest=new Interest(new Resto(String.valueOf(event.getResto().getId()),event.getResto().getName()));
+            }catch (Exception e){}
+            if(interest!=null) {
+                intent.putExtra(Keys.RESTO_ID, interest);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -178,7 +192,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
 
             private void texts() {
                 setTitle(event.getName());
-                title.setText(event.getName());
+                try{title.setText(event.getResto().getName());}catch (Exception e){}
                 likes.setText(String.valueOf(event.getLike()));
                 dislikes.setText(String.valueOf(event.getDislike()));
                 rating.setText(String.valueOf(event.getBall().getRating()));

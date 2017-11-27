@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -17,7 +16,8 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
-import com.brewmapp.data.entity.FilterField;
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -57,8 +57,10 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     @BindView(R.id.offer) CheckBox offer;
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
 
-    private FlexibleAdapter<FilterField> adapter;
-    private List<FilterField> categoryList;
+    private FlexibleAdapter<FilterRestoField> restoAdapter;
+    private FlexibleAdapter<FilterBeerField> beerAdapter;
+    private List<FilterRestoField> restoFilterList;
+    private List<FilterBeerField> beerFilterList;
     private String[] tabContent = ResourceHelper.getResources().getStringArray(R.array.filter_search);
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.filter_title_search);
 
@@ -84,15 +86,17 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     protected void initView() {
         enableBackButton();
         Paper.init(this);
-        if (Paper.book().read("categoryList") == null) {
-            Paper.book().write("categoryList", FilterField.createDefault(this));
-        }
-        showFilters(Paper.book().read("categoryList"));
         titleToolbar.setText(titleContent[0]);
         tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                presenter.storeTabActive(tab.getPosition());
                 titleToolbar.setText(titleContent[tab.getPosition()]);
+                if (tab.getPosition() == 0) {
+                    showRestoFilters(Paper.book().read("restoCategoryList"));
+                } else {
+                    showBeerFilters(Paper.book().read("beerCategoryList"));
+                }
             }
         });
     }
@@ -109,17 +113,31 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
     }
 
     @Override
-    public void showFilters(List<FilterField> fieldList) {
-        this.categoryList = fieldList;
-        adapter = new FlexibleAdapter<>(fieldList, this);
+    public void showRestoFilters(List<FilterRestoField> fieldList) {
+        this.restoFilterList = fieldList;
+        restoAdapter = new FlexibleAdapter<>(fieldList, this);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setNestedScrollingEnabled(true);
-        list.setAdapter(adapter);
+        list.setAdapter(restoAdapter);
+    }
+
+    @Override
+    public void showBeerFilters(List<FilterBeerField> fieldList) {
+        this.beerFilterList = fieldList;
+        beerAdapter = new FlexibleAdapter<>(fieldList, this);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
+        list.setNestedScrollingEnabled(true);
+        list.setAdapter(beerAdapter);
+    }
+
+    @Override
+    public void setTabActive(int i) {
+        tabsView.getTabs().getTabAt(i).select();
     }
 
     @Override
@@ -245,18 +263,18 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             }
         }
         if (cityId != null) {
-            adapter.getItem(category).setSelectedFilter(cityId);
+            restoAdapter.getItem(category).setSelectedFilter(cityId);
         } else if (!filterId.toString().isEmpty()){
-            adapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
-            adapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
+            restoAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
+            restoAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
         }
-        adapter.notifyDataSetChanged();
-        Paper.book().write("categoryList", categoryList);
+        restoAdapter.notifyDataSetChanged();
+        Paper.book().write("restoCategoryList", restoFilterList);
     }
 
     @OnClick(R.id.accept_filter)
     public void acceptFilter() {
-        presenter.loadFilterResult(Paper.book().read("categoryList"), offer.isChecked() ? 1 : 0);
+        presenter.loadFilterResult(Paper.book().read("restoCategoryList"), offer.isChecked() ? 1 : 0);
     }
 
     @Override

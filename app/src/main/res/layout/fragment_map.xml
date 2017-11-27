@@ -8,7 +8,7 @@
     <com.brewmapp.presentation.view.impl.widget.FinderView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:finderHint="@string/search"
+        app:finderHint="@string/map_search"
         android:id="@+id/activity.search.search"/>
 
     <com.google.android.gms.maps.MapView

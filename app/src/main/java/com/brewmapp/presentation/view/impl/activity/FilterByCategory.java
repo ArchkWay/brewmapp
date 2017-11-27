@@ -214,9 +214,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     }
 
     private void initFilter() {
-        if (input.getText().length() == 0) {
-            hideKeyboard();
-        }
         if (fullSearchPackage.getType() != null) {
             finder.setListener(string -> prepareQuery(string));
         } else {

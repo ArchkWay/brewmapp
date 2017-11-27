@@ -1,7 +1,5 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import android.content.Intent;
-
 import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UiSettingRepo;
@@ -14,7 +12,6 @@ import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
-import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.DeleteNewsTask;
 import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadEventsTask;
@@ -28,12 +25,9 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.RefreshableView;
-import com.brewmapp.presentation.view.contract.ResultTask;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
 import java.util.List;
-
-import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
 
 public class EventsPresenterImpl extends BasePresenter<EventsView> implements EventsPresenter {
 
@@ -100,7 +94,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         uiSettingRepo.setnActiveTabEventFragment(position);
     }
 
-
     @Override
     public void onLike(ILikeable iLikeable,RefreshableView refreshableView) {
         LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
@@ -113,7 +106,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
         likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
     }
-
 
     class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
 

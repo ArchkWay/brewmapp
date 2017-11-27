@@ -76,7 +76,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
             R.id.layout_fav
     })    List<View> viewList;
 
-    @Inject    BeerDetailPresenter presenter;
+    @Inject BeerDetailPresenter presenter;
 
     private FlexibleAdapter adapter_review =new FlexibleAdapter<>(new ArrayList<>());
     private FlexibleAdapter adapter_resto;
@@ -109,7 +109,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView 
                 try {tmpStr=beer.getFiltered();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) filter_beer.setText(getString(tmpStr.equals("1")?R.string.yes:R.string.no));
                 try {tmpStr=beer.getRelations().getBeerAftertaste().iterator().next().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) after_taste.setText(tmpStr);
                 try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);
-
 
                 slider.stopAutoCycle();
 

@@ -1,7 +1,6 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -13,9 +12,11 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
+import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.FilterBeerLocation;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
@@ -40,6 +41,7 @@ import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
+import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.WrapperValues;
@@ -49,7 +51,6 @@ import com.brewmapp.execution.exchange.response.UserResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 
-import java.util.List;
 import java.util.Map;
 
 import ru.frosteye.ovsa.execution.network.request.MultipartRequestParams;
@@ -301,6 +302,10 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
 
+    @POST("beer/getcoordinates")
+    @FormUrlEncoded
+    Call<ListResponse<FilterBeerLocation>> loadBeerLocation(@FieldMap RequestParams requestParams);
+
     @POST("profile")
     @FormUrlEncoded
     Call<ListResponse<User>> profileEdit(@FieldMap WrapperParams params);
@@ -312,4 +317,12 @@ public interface Api {
     @POST("/api/like")
     @FormUrlEncoded
     Call<Object> loadLikesByBeer(@FieldMap WrapperParams params);
+
+    @POST("beer/type")
+    @FormUrlEncoded
+    Call<BeerTypes> loadBeerTypes();
+
+    @POST("beer/type")
+    @FormUrlEncoded
+    Call<com.brewmapp.data.pojo.BeerBrand> loadBeerBrands();
 }

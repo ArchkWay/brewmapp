@@ -282,7 +282,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     }
 
     public void refreshItems(boolean tabSelected) {
-
         swipe.setRefreshing(true);
         list.removeOnScrollListener(scrollListener);
         adapter.clear();

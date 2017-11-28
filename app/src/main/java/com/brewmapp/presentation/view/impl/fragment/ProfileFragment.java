@@ -18,6 +18,7 @@ import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
@@ -95,7 +96,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     protected void initView(View view) {
-        if(getArguments().getBoolean(MainActivity.KEY_FERST_FRAGMENT,false)){
+        if(getArguments().getBoolean(MainActivity.KEY_FIRST_FRAGMENT,false)){
             scrollView.setVisibility(View.INVISIBLE);
             transitions_container.postDelayed(new Runnable() {
                 @Override
@@ -135,6 +136,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
             }
         });
+        segment.check(R.id.fragment_profile_posts_subscription);
 
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         subscriptionAdapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
@@ -168,7 +170,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        segment.check(R.id.fragment_profile_posts_subscription);
+
     }
 
     @Override
@@ -198,7 +200,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     }
 
     @Override
-    public void showUserProfile(UserProfile profile) {
+    public void setContent(UserProfile profile) {
         if(getActivity()==null) return;
         getActivity().setTitle(R.string.my_profile);
         Picasso.with(getActivity()).load(profile.getUser().getThumbnail()).fit().into(avatar);
@@ -297,7 +299,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     public void onBarAction(int id) {
         switch (id){
             case R.id.action_create:
-                startActivityForResult(new Intent(getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
+                startActivityForResult(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
                 return;
             default:
                 super.onBarAction(id);

@@ -381,5 +381,6 @@
     <string name="title_activity_news_detail">Новость</string>
     <string name="text_view_sale">Акция</string>
     <string name="text_view_check_connection">Проверка соединения...</string>
+    <string name="to_friends">В друзья</string>
 
 </resources>

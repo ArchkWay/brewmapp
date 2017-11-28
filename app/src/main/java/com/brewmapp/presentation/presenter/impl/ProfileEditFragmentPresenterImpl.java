@@ -143,7 +143,7 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
                             super.onNext(userProfile);
                             userRepo.save(userProfile.getUser());
                             Picasso.with(context).invalidate(userProfile.getUser().getThumbnail());
-                            mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.FRAGMENT_USER_SAVED)));
+                            mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.USER_SAVED)));
                         }
 
                         @Override
@@ -153,7 +153,7 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
                         }
                     });
                 }else {
-                    mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.FRAGMENT_USER_SAVED)));
+                    mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.USER_SAVED)));
                 }
             }
 

@@ -15,7 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:finderHint="@string/find_friend"
-        android:id="@+id/activity.friends.search"/>
+        android:id="@+id/activity.friends.search"
+        android:visibility="gone"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"

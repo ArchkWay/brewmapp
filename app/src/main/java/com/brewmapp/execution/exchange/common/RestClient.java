@@ -4,6 +4,7 @@ import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
@@ -19,6 +20,7 @@ import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
+import com.brewmapp.data.entity.wrapper.UserInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
 import com.brewmapp.execution.exchange.common.base.FilterBeerDeserializer;
@@ -34,6 +36,7 @@ import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoTypeDeserializer;
 import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
 import com.brewmapp.execution.exchange.common.base.SubscriptionDeserializer;
+import com.brewmapp.execution.exchange.common.base.UserDeserializer;
 import com.google.gson.GsonBuilder;
 
 import java.util.Map;
@@ -106,6 +109,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(FilterBeerInfo.class, new FilterBeerDeserializer())
                 .registerTypeAdapter(InterestInfoByUsers.class, new InterestByUsersDeserializer())
                 .registerTypeAdapter(Models.class, new QuickSearchDeserializer())
+                .registerTypeAdapter(UserInfo.class, new UserDeserializer())
                 ;
     }
 

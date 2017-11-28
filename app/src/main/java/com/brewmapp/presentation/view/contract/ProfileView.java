@@ -11,7 +11,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface ProfileView extends BasicView, RefreshableView {
-    void showUserProfile(UserProfile profile);
+    void setContent(UserProfile profile);
     void appendPosts(Posts posts);
     void onError();
 

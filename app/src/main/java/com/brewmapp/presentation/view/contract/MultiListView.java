@@ -14,6 +14,7 @@ public interface MultiListView extends BasicView{
     int MODE_ACTIVTY_SHOW_AND_SELECT_RESTO=1;
     int MODE_ACTIVTY_SHOW_HASHTAG=2;
     int MODE_ACTIVTY_ERROR=3;
+    int MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS =4;
 
     void appendItems(List<IFlexible> s);
     void onError();

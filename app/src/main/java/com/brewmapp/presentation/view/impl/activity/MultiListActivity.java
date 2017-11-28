@@ -83,6 +83,11 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
+            case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
+                fullSearchPackage.setType(Keys.TYPE_USER);
+                finder.setListener(string -> prepareQuery(string));
+                recyclerview.addOnScrollListener(scrollListener);
+                break;
             case MODE_ACTIVTY_SHOW_HASHTAG:
                 fullSearchPackage.setType(Keys.HASHTAG);
 
@@ -126,6 +131,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
             switch (mode){
                 case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
                 case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
+                case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
                     presenter.sendQueryFullSearch(fullSearchPackage);
                     break;
                 case MODE_ACTIVTY_SHOW_HASHTAG:

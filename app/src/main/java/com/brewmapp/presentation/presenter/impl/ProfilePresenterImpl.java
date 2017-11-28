@@ -10,12 +10,10 @@ import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadPostsPackage;
-import com.brewmapp.data.pojo.ProfileInfoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadPostsTask;
-import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.execution.task.LoadProfileTask;
 import com.brewmapp.execution.task.LoadSubscriptionsItemsTask;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
@@ -58,7 +56,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     @Override
     public void refreshProfile() {
         if(userRepo.load().getCounts() != null) {
-            view.showUserProfile(new UserProfile(userRepo.load()));
+            view.setContent(new UserProfile(userRepo.load()));
         }
     }
 

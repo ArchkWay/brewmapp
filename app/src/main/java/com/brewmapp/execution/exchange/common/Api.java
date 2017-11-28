@@ -43,6 +43,7 @@ import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.container.Users;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -339,5 +340,15 @@ public interface Api {
     @POST("beer/type")
     @FormUrlEncoded
     Call<com.brewmapp.data.pojo.BeerBrand> loadBeerBrands();
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<Users> fullSearchUser(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+
+    );
 
 }

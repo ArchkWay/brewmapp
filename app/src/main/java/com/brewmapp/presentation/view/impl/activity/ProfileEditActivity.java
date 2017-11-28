@@ -8,31 +8,24 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
-import com.squareup.picasso.Picasso;
+import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class ProfileEditActivity extends BaseActivity implements ProfileEditView,ProfileEditFragment.OnFragmentInteractionListener {
+public class ProfileEditActivity extends BaseActivity implements ProfileEditView,ProfileEditFragment.OnFragmentInteractionListener,ProfileViewFragment.OnFragmentInteractionListener  {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
 
     @Inject    ProfileEditPresenter presenter;
 
     private BaseFragment baseFragment;
-
-    public final static int FRAGMENT_EDIT=1;
-    public static final int FRAGMENT_INVALIDATE_MENU = 3;
-    public static final int FRAGMENT_ERROR = 4;
-    public static final int FRAGMENT_USER_SAVED = 5;
-    public static final int FRAGMENT_SELECT_PHOTO = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +42,7 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        showFragment(presenter.parseIntent(getIntent()));
     }
 
     @Override
@@ -83,10 +77,13 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     @Override
     public void showFragment(int fragment) {
         switch (fragment){
-            case ProfileEditActivity.FRAGMENT_EDIT:
+            case SHOW_FRAGMENT_EDIT:
                 baseFragment=new ProfileEditFragment();
                 break;
-                default: {commonError();return;}
+            case SHOW_FRAGMENT_VIEW:
+                baseFragment=new ProfileViewFragment();
+                break;
+            default: {commonError();return;}
         }
 
         getSupportFragmentManager()
@@ -114,20 +111,20 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     public void onFragmentInteraction(Uri uri) {
         int key=Integer.valueOf(uri.getPath());
         switch (key){
-            case FRAGMENT_EDIT:
+            case SHOW_FRAGMENT_EDIT:
                 showFragment(key);
                 break;
-            case FRAGMENT_INVALIDATE_MENU:
+            case INVALIDATE_MENU:
                 invalidateOptionsMenu();
                 break;
-            case FRAGMENT_ERROR:
+            case ERROR:
                 finish();
                 break;
-            case FRAGMENT_USER_SAVED:
+            case USER_SAVED:
                 setResult(RESULT_OK);
                 finish();
                 break;
-            case FRAGMENT_SELECT_PHOTO:
+            case SELECT_PHOTO:
                 showSelect(this, R.array.avatar_options, (text, position) -> presenter.handlePhoto(baseFragment,position));
                 break;
         }

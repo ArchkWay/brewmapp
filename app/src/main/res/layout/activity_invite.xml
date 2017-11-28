@@ -20,12 +20,14 @@
             android:src="@drawable/bg_invite"
             android:scaleType="centerCrop"
             android:layout_alignParentBottom="true"/>
-
-        <LinearLayout
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/common_block_space_quadro"
+            android:padding="@dimen/common_block_space_double"
             android:layout_centerInParent="true">
 
             <TextView
@@ -34,7 +36,7 @@
                 style="@style/AppTheme.Text.Georgia.BoldItalic"
                 android:gravity="center"
                 android:textSize="@dimen/text_size_big_phone"
-                android:layout_marginBottom="@dimen/common_block_space_triple"
+                android:layout_marginBottom="@dimen/common_block_space_double"
                 android:text="@string/invite_hint"/>
 
             <ImageView
@@ -66,14 +68,19 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/activity.invite.phone"
                 android:src="@drawable/selector_invite_phone"
-                android:adjustViewBounds="true"/>
+                android:adjustViewBounds="true"
+                android:layout_marginBottom="@dimen/common_block_space_double_semi"
+                />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:src="@drawable/selector_invite_phone"
+                android:visibility="visible"
+                android:src="@drawable/selector_invite_brew"
+                android:id="@+id/activity.invite.brew"
                 android:adjustViewBounds="true"/>
+
         </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 </LinearLayout>

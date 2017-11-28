@@ -1,8 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.UserProfile;
-import com.brewmapp.execution.task.LoadProfileTask;
+import android.content.Intent;
+
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 import static android.app.Activity.RESULT_OK;
@@ -33,7 +31,7 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
     @Override
     public void onAttach(ProfileEditView profileEditView) {
         super.onAttach(profileEditView);
-        view.showFragment(ProfileEditActivity.FRAGMENT_EDIT);
+
     }
 
     @Override
@@ -73,6 +71,17 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
                 ((ProfileEditFragmentView)baseFragment).selectedPhoto(null);
                 break;
         }
+    }
+
+    @Override
+    public int parseIntent(Intent intent) {
+        try {
+            return Integer.valueOf(intent.getAction());
+        }catch (Exception e){
+            return 0;
+        }
+
+
     }
 
 }

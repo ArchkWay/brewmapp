@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private List<MenuField> menuItems;
     private @MenuRes int menuToShow;
 
-    public static final String KEY_FERST_FRAGMENT="first_fragment";
+    public static final String KEY_FIRST_FRAGMENT ="first_fragment";
 
     public static final String MODE_DEFAULT="default";
     public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";

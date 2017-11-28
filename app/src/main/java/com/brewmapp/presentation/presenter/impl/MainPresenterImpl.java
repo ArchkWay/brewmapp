@@ -89,7 +89,7 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     @Override
     public Bundle prepareArguments(Intent intent, FrameLayout container) {
         Bundle bundle=new Bundle();
-        bundle.putBoolean(MainActivity.KEY_FERST_FRAGMENT,container.getChildCount()==0);
+        bundle.putBoolean(MainActivity.KEY_FIRST_FRAGMENT,container.getChildCount()==0);
 
         switch (parseMode(intent)){
             case MainActivity.MODE_ONLY_EVENT_FRAGMENT:

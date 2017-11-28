@@ -35,6 +35,7 @@
             android:value="@string/config_facebook_app_id" />
 
         <activity
+            android:hardwareAccelerated="true"
             android:name=".presentation.view.impl.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -150,7 +151,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.FilterMapActivity"
-            android:label="@string/filter"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.BeerDetailActivity"

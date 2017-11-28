@@ -144,6 +144,10 @@ public class Beer implements Serializable {
         return (title_ru==null||title_ru.length()==0)?getTitle():title_ru;
     }
 
+    public String getTitleRU() {
+        return title_ru;
+    }
+
     public void setTitle_ru(String title_ru) {
         this.title_ru = title_ru;
     }

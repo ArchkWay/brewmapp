@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
-import com.brewmapp.data.entity.FilterField;
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterRestoField;
 
 import java.util.List;
 
@@ -11,5 +12,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface FilterMapView extends BasicView {
-    void showFilters(List<FilterField> fieldList);
+    void showRestoFilters(List<FilterRestoField> fieldList);
+    void showBeerFilters(List<FilterBeerField> fieldList);
+    void setTabActive(int i);
 }

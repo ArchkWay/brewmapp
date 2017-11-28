@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.brewmapp.R;
-import com.brewmapp.presentation.view.impl.widget.FilterRowField;
+import com.brewmapp.presentation.view.impl.widget.FilterRestoRowField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
  * Created by nlbochas on 28/10/2017.
  */
 
-public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowField>> {
+public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<FilterRestoRowField>> {
 
     public static final int NAME = 0;
     public static final int TYPE = 1;
@@ -36,7 +36,7 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
     private String selectedFilter;
     private boolean selected;
 
-    public FilterField(int id, int icon, String title, String selectedFilter) {
+    public FilterRestoField(int id, int icon, String title, String selectedFilter) {
         this.id = id;
         this.icon = icon;
         this.title = title;
@@ -48,9 +48,9 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FilterField filterField = (FilterField) o;
+        FilterRestoField filterRestoField = (FilterRestoField) o;
 
-        return id == filterField.id;
+        return id == filterRestoField.id;
 
     }
 
@@ -64,18 +64,18 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
 
     @Override
     public int getLayoutRes() {
-        return R.layout.view_map_filter;
+        return R.layout.view_resto_filter;
     }
 
     @Override
-    public ModelViewHolder<FilterRowField> createViewHolder(FlexibleAdapter adapter,
-                                                          LayoutInflater inflater,
-                                                          ViewGroup parent) {
+    public ModelViewHolder<FilterRestoRowField> createViewHolder(FlexibleAdapter adapter,
+                                                                 LayoutInflater inflater,
+                                                                 ViewGroup parent) {
         return new ModelViewHolder<>(inflater.inflate(getLayoutRes(), parent, false), adapter);
     }
 
     @Override
-    public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterRowField> holder,
+    public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterRestoRowField> holder,
                                int position, List payloads) {
         holder.view.setModel(this);
     }
@@ -107,16 +107,16 @@ public class FilterField extends AbstractFlexibleItem<ModelViewHolder<FilterRowF
         this.selectedFilter = selectedFilter;
     }
 
-    public static List<FilterField> createDefault(Context context) {
-        List<FilterField> out = new ArrayList<>();
-        out.add(new FilterField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любое"));
-        out.add(new FilterField(TYPE, R.drawable.ic_resto, context.getString(R.string.search_resto_type), "Любой"));
-        out.add(new FilterField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любое"));
-        out.add(new FilterField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любая"));
-        out.add(new FilterField(AVERAGE_BILL, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
-        out.add(new FilterField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Москва"));
-        out.add(new FilterField(METRO, R.drawable.ic_metro, context.getString(R.string.search_resto_metro), "Не имеет значения"));
-        out.add(new FilterField(OTHER, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
+    public static List<FilterRestoField> createDefault(Context context) {
+        List<FilterRestoField> out = new ArrayList<>();
+        out.add(new FilterRestoField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любое"));
+        out.add(new FilterRestoField(TYPE, R.drawable.ic_resto, context.getString(R.string.search_resto_type), "Любой"));
+        out.add(new FilterRestoField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любое"));
+        out.add(new FilterRestoField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любая"));
+        out.add(new FilterRestoField(AVERAGE_BILL, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
+        out.add(new FilterRestoField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Москва"));
+        out.add(new FilterRestoField(METRO, R.drawable.ic_metro, context.getString(R.string.search_resto_metro), "Не имеет значения"));
+        out.add(new FilterRestoField(OTHER, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
         return out;
     }
 

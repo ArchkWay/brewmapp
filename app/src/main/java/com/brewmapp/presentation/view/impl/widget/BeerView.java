@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.Resto;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,10 +68,14 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     @Override
     public void setModel(Beer model) {
         this.model = model;
-        title.setText(model.getTitle());
-        if (model.getGetThumb() == null) {
+        String titleRu = (model.getTitleRU() == null || TextUtils.isEmpty(model.getTitleRU()) ? "" : " (" + model.getTitleRU() + ")");
+        title.setText(model.getTitle() + titleRu);
+        if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
+        } else {
             logo.setVisibility(INVISIBLE);
         }
+
         if (model.isSelected()) {
             restoTypeCheckbox.setChecked(true);
         } else {

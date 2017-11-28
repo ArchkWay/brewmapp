@@ -27,7 +27,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 public class KitchenView extends BaseLinearLayout implements InteractiveModelView<Kitchen> {
 
     @BindView(R.id.title) TextView title;
-    @BindView(R.id.logo) ImageView logoRestoType;
+    @BindView(R.id.logo) ImageView logo;
     @BindView(R.id.chkbox) CheckBox restoTypeCheckbox;
     @BindView(R.id.container) ConstraintLayout rootView;
 
@@ -65,7 +65,9 @@ public class KitchenView extends BaseLinearLayout implements InteractiveModelVie
         this.model = model;
         title.setText(model.getName());
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
-            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
+        } else {
+            logo.setVisibility(INVISIBLE);
         }
 
         if (model.isSelected()) {

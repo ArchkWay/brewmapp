@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 import ru.frosteye.ovsa.presentation.view.widget.BaseFrameLayout;
 import ru.frosteye.ovsa.stub.impl.SimpleTextWatcher;
+import ru.frosteye.ovsa.tool.UITools;
 
 /**
  * Created by oleg on 06.08.17.

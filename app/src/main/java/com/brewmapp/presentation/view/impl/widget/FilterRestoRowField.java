@@ -5,17 +5,14 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.FilterField;
-import com.brewmapp.data.entity.MenuField;
+import com.brewmapp.data.entity.FilterRestoField;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
 
@@ -23,28 +20,28 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
  * Created by nlbochas on 28/10/2017.
  */
 
-public class FilterRowField extends BaseRelativeLayout implements ModelView<FilterField> {
+public class FilterRestoRowField extends BaseRelativeLayout implements ModelView<FilterRestoField> {
 
     @BindView(R.id.filter_name) TextView filterTitle;
     @BindView(R.id.selected_filter) TextView selectedFilter;
     @BindView(R.id.icon_filter) ImageView icon;
 
-    private FilterField model;
+    private FilterRestoField model;
 
-    public FilterRowField(Context context) {
+    public FilterRestoRowField(Context context) {
         super(context);
     }
 
-    public FilterRowField(Context context, AttributeSet attrs) {
+    public FilterRestoRowField(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FilterRowField(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FilterRestoRowField(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public FilterRowField(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FilterRestoRowField(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -54,11 +51,11 @@ public class FilterRowField extends BaseRelativeLayout implements ModelView<Filt
     }
 
     @Override
-    public FilterField getModel() {
+    public FilterRestoField getModel() {
         return model;
     }
 
-    public void setModel(FilterField model) {
+    public void setModel(FilterRestoField model) {
         this.model = model;
         this.filterTitle.setText(model.getTitle());
         this.selectedFilter.setTypeface(null, Typeface.BOLD_ITALIC);

@@ -290,7 +290,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     }
 
     public void refreshItems(boolean tabSelected) {
-
         swipe.setRefreshing(true);
         list.removeOnScrollListener(scrollListener);
         adapter.clear();
@@ -357,5 +356,4 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         FilterAdapter filterAdapter = new FilterAdapter(getContext(), dropdownItems);
         filterList.setAdapter(filterAdapter);
     }
-
 }

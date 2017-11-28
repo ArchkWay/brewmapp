@@ -4,7 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/view_toolbar" />
+    <include layout="@layout/toolbar_center_align" />
+
+    <com.brewmapp.presentation.view.impl.widget.TabsView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:id="@+id/fragment.events.tabs"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

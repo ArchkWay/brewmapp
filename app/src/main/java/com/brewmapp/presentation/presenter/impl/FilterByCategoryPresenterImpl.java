@@ -1,7 +1,10 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
+
+import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.execution.task.BeerTypesTask;
 import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
@@ -25,11 +28,15 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategoryView> implements FilterByCategoryPresenter {
 
     private Context context;
+    //Resto filter queries
     private RestoTypeTask restoTypeTask;
     private KitchenTask kitchenTask;
     private PriceRangeTask priceRangeTask;
     private FeatureTask featureTask;
     private FullSearchFilterTask fullSearchFilterTask;
+
+    //Beer filter queries
+    private BeerTypesTask beerTypesTask;
 
     @Inject
     public FilterByCategoryPresenterImpl(Context context, RestoTypeTask restoTypeTask,

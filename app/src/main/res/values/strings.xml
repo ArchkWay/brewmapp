@@ -157,6 +157,16 @@
         <item>Пивоварни</item>
     </string-array>
 
+    <string-array name="filter_search">
+        <item>Заведения</item>
+        <item>Пиво</item>
+    </string-array>
+
+    <string-array name="filter_title_search">
+        <item>Поиск заведения</item>
+        <item>Поиск пива</item>
+    </string-array>
+
     <string-array name="album_actions">
         <item>Редактировать</item>
         <item>Удалить</item>
@@ -184,6 +194,7 @@
     <string name="today">Сегодня</string>
     <string name="params">Параметры</string>
     <string name="search">Поиск</string>
+    <string name="map_search">Поиск заведения или пива</string>
     <string name="search_beer">Поиск пива</string>
     <string name="pattern_event_start" formatted="false">%s в %s</string>
     <string name="search_hint">Введите слово или хештег</string>
@@ -250,6 +261,7 @@
     <string name="liked">Вы уже проголосовали</string>
     <string name="filter">Фильтр</string>
 
+    //Resto filter strings
     <string name="search_resto_name">Поиск по названию заведения</string>
     <string name="search_resto_type">Тип заведения</string>
     <string name="search_resto_beer">Пиво</string>
@@ -260,6 +272,25 @@
     <string name="search_resto_other">Доп. параметры</string>
     <string name="select_country">Выберите страну</string>
     <string name="select_metro">Выберите метро</string>
+
+    //Beer filter strings
+    <string name="search_beer_name">Поиск по названию пива</string>
+    <string name="search_beer_country">Страна - производитель</string>
+    <string name="search_beer_type">Тип пива</string>
+    <string name="search_beer_brand">Бренд пива</string>
+    <string name="search_beer_place">Где искать</string>
+    <string name="search_beer_power">Крепость пива</string>
+    <string name="search_beer_filter">Фильтрация пива</string>
+    <string name="search_beer_type_broj">Тип брожения</string>
+    <string name="search_beer_ibu">IBU</string>
+    <string name="search_beer_bootle">Вид ёмкости</string>
+    <string name="search_beer_color">Цвет</string>
+    <string name="search_beer_smell">Аромат</string>
+    <string name="search_beer_taste">Вкус</string>
+    <string name="search_beer_after_taste">Послевкусие</string>
+    <string name="search_beer_factory">Пивоварня</string>
+    <string name="search_beer_price">Цена</string>
+
     <string name="text_view_flavor">Аромат:</string>
     <string name="text_view_taste">Вкус:</string>
     <string name="text_view_quality_color">Цвет:</string>
@@ -342,6 +373,8 @@
     <string name="filter_search_beer">Для поиска введите название пива</string>
     <string name="filter_search_resto">Для поиска введите название заведения</string>
     <string name="special_offer">Специальные предложения</string>
+    <string name="cancel">Отмена</string>
+    <string name="filter_search_title">Поиск 1%s</string>
     <string name="title_activity_edit_profile">Настройки профиля</string>
     <string name="country">Страна</string>
     <string name="title_view_profile">Просмотр</string>

@@ -16,8 +16,6 @@ public class BeerBrand implements Serializable {
     private String name_ru;
     private String timestamp;
 
-
-
     public String getBrewery_id() {
         return brewery_id;
     }

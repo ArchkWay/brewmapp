@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @BindView(R.id.activity_main_drawer) DuoDrawerLayout drawer;
     @BindView(R.id.activity_main_menu) RecyclerView menu;
     @BindView(R.id.activity_main_userName) TextView userName;
+    @BindView(R.id.activity_main_text_view_check_connection) TextView check_connection;
     @BindView(R.id.activity_main_avatar) ImageView avatar;
     @BindView(R.id.activity_main_profileHeader) View profileHeader;
     @BindView(R.id.activity_main_container) FrameLayout container;
@@ -94,27 +95,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     protected void initView() {
-
+        setTitle("");
+        toolbar.setVisibility(View.GONE);
         mode=presenter.parseMode(getIntent());
-
-        switch (mode){
-            case MODE_DEFAULT:
-                setDrawer();
-                break;
-            case MODE_ONLY_EVENT_FRAGMENT:
-                enableBackButton();
-                navigator.storeCodeActiveFragment(MenuField.EVENTS);
-                navigator.storeCodeTebEventFragment(
-                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT)
-                );
-                setResult(RESULT_OK);
-                break;
-            case MODE_ONLY_MAP_FRAGMENT:
-                enableBackButton();
-                navigator.storeCodeActiveFragment(MenuField.MAP);
-                setResult(RESULT_OK);
-                break;
-        }
    }
 
     private void setDrawer() {
@@ -137,9 +120,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        navigator.onAttachView(this);
-        navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
-        navigator.onDrawerClosed();
     }
 
     @Override
@@ -155,20 +135,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void enableControls(boolean enabled, int code) {
 
-    }
-
-    @Override
-    public void showUser(User user) {
-        Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
-        userName.setText(user.getFormattedName());
-    }
-
-    @Override
-    public void showMenuItems(List<MenuField> fields) {
-        this.menuItems = fields;
-        adapter = new FlexibleAdapter<>(fields, this);
-        menu.setLayoutManager(new LinearLayoutManager(this));
-        menu.setAdapter(adapter);
     }
 
     @Override
@@ -240,6 +206,48 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
+    public void successCheckEnvironment(User user, List<MenuField> fields) {
+
+        check_connection.setVisibility(View.GONE);
+
+
+        Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
+        userName.setText(user.getFormattedName());
+
+        this.menuItems = fields;
+        adapter = new FlexibleAdapter<>(fields, this);
+        menu.setLayoutManager(new LinearLayoutManager(this));
+        menu.setAdapter(adapter);
+
+
+        switch (mode){
+            case MODE_DEFAULT:
+                setDrawer();
+                break;
+            case MODE_ONLY_EVENT_FRAGMENT:
+                enableBackButton();
+                navigator.storeCodeActiveFragment(MenuField.EVENTS);
+                navigator.storeCodeTebEventFragment(
+                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT)
+                );
+                setResult(RESULT_OK);
+                break;
+            case MODE_ONLY_MAP_FRAGMENT:
+                enableBackButton();
+                navigator.storeCodeActiveFragment(MenuField.MAP);
+                setResult(RESULT_OK);
+                break;
+        }
+
+
+        navigator.onAttachView(this);
+        navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
+        navigator.onDrawerClosed();
+
+        toolbar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         switch (mode){
             case MODE_DEFAULT:
@@ -304,6 +312,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected Toolbar findActionBar() {
         return toolbar;
+    }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
     }
 
     @SuppressLint("RestrictedApi")

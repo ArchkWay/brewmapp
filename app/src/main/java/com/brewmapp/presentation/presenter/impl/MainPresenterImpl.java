@@ -10,11 +10,14 @@ import javax.inject.Inject;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.MenuField;
+import com.brewmapp.data.pojo.ProfileInfoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 /**
@@ -26,19 +29,34 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     private UserRepo userRepo;
     private Context context;
     private UiSettingRepo uiSettingRepo;
+    private LoadProfileAndPostsTask loadProfilePostsTask;
 
     @Inject
-    public MainPresenterImpl(UiSettingRepo uiSettingRepo, UserRepo userRepo, Context context) {
+    public MainPresenterImpl(UiSettingRepo uiSettingRepo, UserRepo userRepo, Context context,LoadProfileAndPostsTask loadProfilePostsTask) {
         this.userRepo = userRepo;
         this.context = context;
         this.uiSettingRepo = uiSettingRepo;
+        this.loadProfilePostsTask = loadProfilePostsTask;
     }
 
     @Override
     public void onAttach(MainView mainView) {
         super.onAttach(mainView);
-        view.showUser(userRepo.load());
-        view.showMenuItems(MenuField.createDefault(context));
+
+        loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileInfoPackage>() {
+            @Override
+            public void onNext(ProfileInfoPackage pack) {
+                userRepo.save(pack.getUserProfile().getUser());
+                view.successCheckEnvironment(userRepo.load(),MenuField.createDefault(context));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                view.commonError(e.getMessage());
+            }
+        });
+
+
 
     }
 

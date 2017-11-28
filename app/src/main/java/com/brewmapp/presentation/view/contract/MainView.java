@@ -13,8 +13,10 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface MainView extends BasicView, NavigatorView {
-    void showUser(User user);
-    void showMenuItems(List<MenuField> fields);
+
     void showFragment(BaseFragment fragment);
     void showDrawer(boolean shown);
+    void successCheckEnvironment(User load, List<MenuField> aDefault);
+    void commonError(String... strings);
+
 }

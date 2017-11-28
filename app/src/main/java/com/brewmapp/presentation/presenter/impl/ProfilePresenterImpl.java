@@ -34,19 +34,17 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     private LoadPostsTask loadPostsTask;
     private LoadSubscriptionsItemsTask loadSubscriptionsItemsTask;
     private LoadProfileTask loadProfileTask;
-    private LoadProfileAndPostsTask loadProfilePostsTask;
+
     private LikeTask likeTask;
 
     @Inject
     public ProfilePresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
                                 LoadProfileTask loadProfileTask,
-                                LoadProfileAndPostsTask loadProfilePostsTask,
                                 LikeTask likeTask,
                                 LoadSubscriptionsItemsTask loadSubscriptionsItemsTask) {
         this.userRepo = userRepo;
         this.loadPostsTask = loadPostsTask;
         this.loadProfileTask = loadProfileTask;
-        this.loadProfilePostsTask = loadProfilePostsTask;
         this.likeTask = likeTask;
         this.loadSubscriptionsItemsTask = loadSubscriptionsItemsTask;
     }
@@ -55,7 +53,6 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     public void onAttach(ProfileView profileView) {
         super.onAttach(profileView);
         refreshProfile();
-        onLoadEverything();
     }
 
     @Override
@@ -69,30 +66,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     public void onDestroy() {
         loadPostsTask.cancel();
         loadProfileTask.cancel();
-        loadProfilePostsTask.cancel();
         likeTask.cancel();
     }
 
-    @Override
-    public void onLoadEverything() {
-        enableControls(false);
-        loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileInfoPackage>() {
-
-            @Override
-            public void onNext(ProfileInfoPackage pack) {
-                enableControls(true);
-                userRepo.save(pack.getUserProfile().getUser());
-                refreshProfile();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                enableControls(true);
-                showMessage(e.getMessage());
-                view.onError();
-            }
-        });
-    }
 
     @Override
     public void onLoadPosts(LoadPostsPackage loadPostsPackage) {

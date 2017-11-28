@@ -5,24 +5,18 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.Actions;
-import com.brewmapp.app.environment.FilterActions;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.RestoType;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
-import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
 /**
@@ -72,12 +66,17 @@ public class TypeView extends BaseLinearLayout implements InteractiveModelView<R
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
         }
-        if (model.isSelected()) {
-            restoTypeCheckbox.setChecked(true);
-        } else {
-            restoTypeCheckbox.setChecked(false);
-        }
-        setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_TYPE, model));
+        restoTypeCheckbox.setChecked(model.isSelected());
+
+        setOnClickListener(view -> {
+            if (!model.isSelected()) {
+                model.setSelected(true);
+                restoTypeCheckbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                restoTypeCheckbox.setChecked(false);
+            }
+        });
     }
 
     @Override

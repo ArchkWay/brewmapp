@@ -24,10 +24,10 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     public static final int TYPE = 1;
     public static final int BEER = 2;
     public static final int KITCHEN = 3;
-    public static final int AVERAGE_BILL = 4;
+    public static final int PRICE = 4;
     public static final int CITY = 5;
     public static final int METRO = 6;
-    public static final int OTHER = 7;
+    public static final int FEATURES = 7;
 
     private int id;
     private String selectedItemId;
@@ -113,10 +113,10 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
         out.add(new FilterRestoField(TYPE, R.drawable.ic_resto, context.getString(R.string.search_resto_type), "Любой"));
         out.add(new FilterRestoField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любое"));
         out.add(new FilterRestoField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любая"));
-        out.add(new FilterRestoField(AVERAGE_BILL, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
+        out.add(new FilterRestoField(PRICE, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
         out.add(new FilterRestoField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Москва"));
         out.add(new FilterRestoField(METRO, R.drawable.ic_metro, context.getString(R.string.search_resto_metro), "Не имеет значения"));
-        out.add(new FilterRestoField(OTHER, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
+        out.add(new FilterRestoField(FEATURES, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
         return out;
     }
 

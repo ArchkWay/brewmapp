@@ -107,8 +107,6 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
         recyclerview.setLayoutManager(manager);
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         recyclerview.setAdapter(adapter);
-
-
     }
 
     private void prepareQuery(String stringSearch) {

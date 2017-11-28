@@ -4,6 +4,10 @@ import android.content.Context;
 
 import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.PriceRangeType;
+import com.brewmapp.data.pojo.ScrollPackage;
+import com.brewmapp.execution.task.BeerBrandTask;
+import com.brewmapp.execution.task.BeerPackTask;
 import com.brewmapp.execution.task.BeerTypesTask;
 import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.FullSearchFilterTask;
@@ -37,19 +41,27 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
     //Beer filter queries
     private BeerTypesTask beerTypesTask;
+    private BeerPackTask beerPackTask;
+    private BeerBrandTask beerBrandTask;
 
     @Inject
     public FilterByCategoryPresenterImpl(Context context, RestoTypeTask restoTypeTask,
                                          KitchenTask kitchenTask,
                                          PriceRangeTask priceRangeTask,
                                          FeatureTask featureTask,
-                                         FullSearchFilterTask fullSearchFilterTask) {
+                                         FullSearchFilterTask fullSearchFilterTask,
+                                         BeerTypesTask beerTypesTask,
+                                         BeerPackTask beerPackTask,
+                                         BeerBrandTask beerBrandTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
         this.priceRangeTask = priceRangeTask;
         this.featureTask = featureTask;
         this.fullSearchFilterTask = fullSearchFilterTask;
+        this.beerTypesTask = beerTypesTask;
+        this.beerPackTask = beerPackTask;
+        this.beerBrandTask = beerBrandTask;
     }
 
     @Override
@@ -64,6 +76,9 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         priceRangeTask.cancel();
         featureTask.cancel();
         fullSearchFilterTask.cancel();
+        beerTypesTask.cancel();
+        beerPackTask.cancel();
+        beerBrandTask.cancel();
     }
 
     @Override
@@ -72,6 +87,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         restoTypeTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
+                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
@@ -88,6 +104,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         kitchenTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
+                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
@@ -99,11 +116,13 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     }
 
     @Override
-    public void loadPriceRangeTypes() {
+    public void loadPriceRangeTypes(String type) {
         priceRangeTask.cancel();
-        priceRangeTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+        PriceRangeType priceRangeType = new PriceRangeType(type);
+        priceRangeTask.execute(priceRangeType, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
+                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
@@ -112,7 +131,6 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
                 view.appendItems(iFlexibles);
             }
         });
-
     }
 
     @Override
@@ -121,6 +139,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         featureTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
+                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
@@ -138,12 +157,64 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
+                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
                 view.showMessage(e.getMessage(),0);
+            }
+        });
+    }
+
+    @Override
+    public void loadBeerTypes() {
+        beerTypesTask.cancel();
+        beerTypesTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadBeerPack() {
+        beerPackTask.cancel();
+        beerPackTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadBeerBrand(ScrollPackage scrollPackage) {
+        beerBrandTask.cancel();
+        beerBrandTask.execute(scrollPackage, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.appendItems(iFlexibles);
             }
         });
     }

@@ -11,4 +11,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 
 public interface FilterByCategoryView extends BasicView {
     void appendItems(List<IFlexible> list);
+    void showProgressBar(boolean show);
 }

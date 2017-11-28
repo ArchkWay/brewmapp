@@ -1,10 +1,9 @@
 package com.brewmapp.execution.exchange.common;
 
-import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Models;
-import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
+import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
@@ -19,6 +18,10 @@ import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
+import com.brewmapp.data.pojo.BeerTypes;
+import com.brewmapp.execution.exchange.common.base.BeerBrandDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerPackDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
 import com.brewmapp.execution.exchange.common.base.FilterBeerDeserializer;
@@ -106,6 +109,9 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(FilterBeerInfo.class, new FilterBeerDeserializer())
                 .registerTypeAdapter(InterestInfoByUsers.class, new InterestByUsersDeserializer())
                 .registerTypeAdapter(Models.class, new QuickSearchDeserializer())
+                .registerTypeAdapter(BeerTypeInfo.class, new BeerTypesDeserializer())
+                .registerTypeAdapter(BeerPackInfo.class, new BeerPackDeserializer())
+                .registerTypeAdapter(BeerBrandInfo.class, new BeerBrandDeserializer())
                 ;
     }
 

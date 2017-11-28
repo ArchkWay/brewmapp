@@ -13,7 +13,10 @@ import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.BeerBrand;
+import com.brewmapp.data.entity.BeerBrandTypes;
 import com.brewmapp.data.entity.BeerLocation;
+import com.brewmapp.data.entity.BeerPackTypes;
+import com.brewmapp.data.entity.BeerTypesModel;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.FilterBeerLocation;
@@ -261,8 +264,8 @@ public interface Api {
     @GET("resto/kitchen")
     Call<KitchenTypes> loadKitchenTypes();
 
-    @GET("resto/pricerange")
-    Call<PriceRangeTypes> loadPriceRanges();
+    @GET("{type}/pricerange")
+    Call<PriceRangeTypes> loadPriceRanges(@Path("type") String type);
 
     @GET("resto/feature")
     Call<FeatureTypes> loadFeature();
@@ -334,10 +337,13 @@ public interface Api {
 
     @POST("beer/type")
     @FormUrlEncoded
-    Call<BeerTypes> loadBeerTypes();
+    Call<BeerTypesModel> loadBeerTypes(@FieldMap WrapperParams params);
 
-    @POST("beer/type")
+    @POST("beer/packing")
     @FormUrlEncoded
-    Call<com.brewmapp.data.pojo.BeerBrand> loadBeerBrands();
+    Call<BeerPackTypes> loadBeerPack(@FieldMap WrapperParams params);
 
+    @POST("beer/brand")
+    @FormUrlEncoded
+    Call<BeerBrandTypes> loadBeerBrands(@FieldMap WrapperParams params);
 }

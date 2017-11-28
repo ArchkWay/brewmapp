@@ -3,9 +3,7 @@ package com.brewmapp.presentation.presenter.impl;
 import android.content.Context;
 import android.util.Log;
 
-import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.db.contract.UiSettingRepo;
-import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
@@ -44,16 +42,15 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     public void onAttach(FilterMapView filterMapView) {
         super.onAttach(filterMapView);
         Paper.init(context);
+        if (Paper.book().read("restoCategoryList") == null) {
+            Paper.book().write("restoCategoryList", FilterRestoField.createDefault(context));
+        }
+        if (Paper.book().read("beerCategoryList") == null) {
+            Paper.book().write("beerCategoryList", FilterBeerField.createDefault(context));
+        }
         if (uiSettingRepo.getnActiveFragment() == 0 || uiSettingRepo.getnActiveFragment() == -1) {
-            if (Paper.book().read("restoCategoryList") == null) {
-                Paper.book().write("restoCategoryList", FilterRestoField.createDefault(context));
-            }
             view.showRestoFilters(Paper.book().read("restoCategoryList"));
-
         } else {
-            if (Paper.book().read("beerCategoryList") == null) {
-                Paper.book().write("beerCategoryList", FilterBeerField.createDefault(context));
-            }
             view.showBeerFilters(Paper.book().read("beerCategoryList"));
         }
         filterMapView.setTabActive(uiSettingRepo.getnActiveTabEventFragment());
@@ -68,12 +65,12 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     public void loadFilterResult(List<FilterRestoField> filterRestoFields, int specialOffer) {
         filterRestoTask.cancel();
         FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
-        filterRestoPackage.setRestoCity(filterRestoFields.get(FilterActions.RESTO_NAME).getSelectedItemId());
-        filterRestoPackage.setRestoTypes(filterRestoFields.get(FilterActions.RESTO_TYPE).getSelectedItemId());
-        filterRestoPackage.setMenuBeer(filterRestoFields.get(FilterActions.BEER).getSelectedItemId());
-        filterRestoPackage.setRestoKitchens(filterRestoFields.get(FilterActions.KITCHEN).getSelectedItemId());
-        filterRestoPackage.setRestoAveragepriceRange(filterRestoFields.get(FilterActions.PRICE_RANGE).getSelectedItemId());
-        filterRestoPackage.setRestoFeatures(filterRestoFields.get(FilterActions.FEATURES).getSelectedItemId());
+        filterRestoPackage.setRestoCity(filterRestoFields.get(FilterRestoField.NAME).getSelectedItemId());
+        filterRestoPackage.setRestoTypes(filterRestoFields.get(FilterRestoField.TYPE).getSelectedItemId());
+        filterRestoPackage.setMenuBeer(filterRestoFields.get(FilterRestoField.BEER).getSelectedItemId());
+        filterRestoPackage.setRestoKitchens(filterRestoFields.get(FilterRestoField.KITCHEN).getSelectedItemId());
+        filterRestoPackage.setRestoAveragepriceRange(filterRestoFields.get(FilterRestoField.PRICE).getSelectedItemId());
+        filterRestoPackage.setRestoFeatures(filterRestoFields.get(FilterRestoField.FEATURES).getSelectedItemId());
         filterRestoPackage.setResto_discount(specialOffer);
         filterRestoTask.execute(filterRestoPackage, new SimpleSubscriber<List<FilterRestoLocation>>() {
             @Override

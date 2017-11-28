@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.FilterActions;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.squareup.picasso.Picasso;
@@ -71,7 +71,7 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
             setOnClickListener(v -> listener.onModelAction(0, resto));
             arrow_right.setOnClickListener(v -> listener.onModelAction(1, resto));
         }else {
-            setOnClickListener(v -> listener.onModelAction(FilterActions.RESTO_NAME, resto));
+            setOnClickListener(v -> listener.onModelAction(FilterRestoField.NAME, resto));
         }
     }
 

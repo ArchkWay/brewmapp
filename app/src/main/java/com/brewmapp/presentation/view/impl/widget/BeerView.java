@@ -11,10 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
-import com.brewmapp.data.entity.PriceRange;
-import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -76,13 +74,17 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
             logo.setVisibility(INVISIBLE);
         }
 
-        if (model.isSelected()) {
-            restoTypeCheckbox.setChecked(true);
-        } else {
-            restoTypeCheckbox.setChecked(false);
-        }
+        restoTypeCheckbox.setChecked(model.isSelected());
 
-        setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, model));
+        setOnClickListener(view -> {
+            if (!model.isSelected()) {
+                model.setSelected(true);
+                restoTypeCheckbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                restoTypeCheckbox.setChecked(false);
+            }
+        });
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.ScrollPackage;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
 
 import java.util.List;
@@ -15,7 +16,10 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategoryView> {
     void loadRestoTypes();
     void loadKitchenTypes();
-    void loadPriceRangeTypes();
+    void loadPriceRangeTypes(String type);
     void loadFeatureTypes();
     void sendQueryFullSearch(FullSearchPackage fullSearchPackage);
+    void loadBeerTypes();
+    void loadBeerPack();
+    void loadBeerBrand(ScrollPackage scrollPackage);
 }

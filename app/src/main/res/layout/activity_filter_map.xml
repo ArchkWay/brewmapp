@@ -26,14 +26,14 @@
                 android:layout_height="wrap_content" />
 
             <CheckBox
-                android:layout_marginStart="3dp"
-                android:layout_marginLeft="3dp"
-                android:id="@+id/offer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/filter_list"
-                android:layout_marginTop="6dp"
-                android:text="@string/special_offer" />
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:id="@+id/offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/filter_list"
+            android:layout_marginTop="6dp"
+            android:text="@string/special_offer" />
 
             <Button
                 android:id="@+id/accept.filter"

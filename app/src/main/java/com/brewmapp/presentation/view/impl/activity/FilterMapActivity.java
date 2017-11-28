@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -18,6 +19,9 @@ import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
+import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -50,12 +54,18 @@ import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
 
 public class FilterMapActivity extends BaseActivity implements FilterMapView, FlexibleAdapter.OnItemClickListener {
 
-    @BindView(R.id.filter_category_toolbar) Toolbar toolbar;
-    @BindView(R.id.title_toolbar) TextView titleToolbar;
-    @BindView(R.id.accept_filter) Button search;
-    @BindView(R.id.filter_list) RecyclerView list;
-    @BindView(R.id.offer) CheckBox offer;
-    @BindView(R.id.fragment_events_tabs) TabsView tabsView;
+    @BindView(R.id.filter_category_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView titleToolbar;
+    @BindView(R.id.accept_filter)
+    Button search;
+    @BindView(R.id.filter_list)
+    RecyclerView list;
+    @BindView(R.id.offer)
+    CheckBox offer;
+    @BindView(R.id.fragment_events_tabs)
+    TabsView tabsView;
 
     private FlexibleAdapter<FilterRestoField> restoAdapter;
     private FlexibleAdapter<FilterBeerField> beerAdapter;
@@ -64,7 +74,8 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     private String[] tabContent = ResourceHelper.getResources().getStringArray(R.array.filter_search);
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.filter_title_search);
 
-    @Inject FilterMapPresenter presenter;
+    @Inject
+    FilterMapPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,8 +104,10 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 presenter.storeTabActive(tab.getPosition());
                 titleToolbar.setText(titleContent[tab.getPosition()]);
                 if (tab.getPosition() == 0) {
+                    offer.setVisibility(View.VISIBLE);
                     showRestoFilters(Paper.book().read("restoCategoryList"));
                 } else {
+                    offer.setVisibility(View.GONE);
                     showBeerFilters(Paper.book().read("beerCategoryList"));
                 }
             }
@@ -147,6 +160,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         } else {
             Intent intent = new Intent(this, FilterByCategory.class);
             intent.putExtra(Keys.FILTER_CATEGORY, position);
+            intent.putExtra(Keys.BEER_TYPES, tabsView.getTabs().getSelectedTabPosition());
             startActivityForResult(intent, RequestCodes.REQUEST_FILTER_CATEGORY);
         }
         return false;
@@ -156,12 +170,111 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            setSelectedFilter(data.getStringExtra("filter"),
-                    data.getIntExtra("category", -999), data.getStringExtra("selectedItem"));
+            if (tabsView.getTabs().getSelectedTabPosition() == 0) {
+                setRestoSelectedFilter(data.getStringExtra("filter"),
+                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"));
+            } else {
+                setBeerSelectedFilter(data.getStringExtra("filter"),
+                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"));
+            }
         }
     }
 
-    private void setSelectedFilter(String filterCategory, int category, String cityId) {
+    private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem) {
+        StringBuilder filter = new StringBuilder();
+        StringBuilder filterId = new StringBuilder();
+        boolean notEmpty = false;
+        List<IFlexible> tempList;
+        if (filterCategory != null) {
+            if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_BEER)) {
+                List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.PRICE_BEER);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        priceRangeInfos.add((PriceRangeInfo) o);
+                    }
+                    for (PriceRangeInfo priceRangeInfo : priceRangeInfos) {
+                        if (priceRangeInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(priceRangeInfo.getModel().getName()).append(", ");
+                            filterId.append(priceRangeInfo.getModel().getId()).append(",");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Не имеет значения  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_PACK)) {
+                List<BeerPackInfo> beerPackInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_PACK);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerPackInfos.add((BeerPackInfo) o);
+                    }
+                    for (BeerPackInfo beerPackInfo : beerPackInfos) {
+                        if (beerPackInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerPackInfo.getModel().getName()).append(", ");
+                            filterId.append(beerPackInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Разливное  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_TYPES)) {
+                List<BeerTypeInfo> beerTypeInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_TYPES);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerTypeInfos.add((BeerTypeInfo) o);
+                    }
+                    for (BeerTypeInfo beerTypeInfo : beerTypeInfos) {
+                        if (beerTypeInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerTypeInfo.getModel().getName()).append(", ");
+                            filterId.append(beerTypeInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Разливное  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BRAND)) {
+                List<BeerBrandInfo> beerBrandInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_BRAND);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerBrandInfos.add((BeerBrandInfo) o);
+                    }
+                    for (BeerBrandInfo beerBrandInfo : beerBrandInfos) {
+                        if (beerBrandInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerBrandInfo.getModel().getName()).append(", ");
+                            filterId.append(beerBrandInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любой  ");
+                }
+            }
+            if (!notEmpty) {
+                filterId.append("!");
+            }
+        }
+
+        if (selectedItem != null) {
+            beerAdapter.getItem(category).setSelectedFilter(selectedItem);
+        } else if (!filterId.toString().isEmpty()) {
+            beerAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
+            beerAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
+        }
+        beerAdapter.notifyDataSetChanged();
+        Paper.book().write("beerCategoryList", beerFilterList);
+    }
+
+    private void setRestoSelectedFilter(String filterCategory, int category, String cityId) {
         StringBuilder filter = new StringBuilder();
         StringBuilder filterId = new StringBuilder();
         boolean notEmpty = false;
@@ -204,20 +317,20 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                     filter.append("Любая  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER)) {
-                    List<FilterBeerInfo> filterBeerInfos = new ArrayList<>();
-                    tempList = Paper.book().read(FilterKeys.BEER);
-                    if (tempList != null) {
-                        for (Object o : tempList) {
-                            filterBeerInfos.add((FilterBeerInfo) o);
-                        }
-                        for (FilterBeerInfo filterBeerInfo : filterBeerInfos) {
-                            if (filterBeerInfo.getModel().isSelected()) {
-                                notEmpty = true;
-                                filter.append(filterBeerInfo.getModel().getTitle_ru()).append(", ");
-                                filterId.append(filterBeerInfo.getModel().getId()).append("|");
-                            }
+                List<FilterBeerInfo> filterBeerInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        filterBeerInfos.add((FilterBeerInfo) o);
+                    }
+                    for (FilterBeerInfo filterBeerInfo : filterBeerInfos) {
+                        if (filterBeerInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(filterBeerInfo.getModel().getTitle_ru()).append(", ");
+                            filterId.append(filterBeerInfo.getModel().getId()).append("|");
                         }
                     }
+                }
                 if (!notEmpty) {
                     filter.append("Любое  ");
                 }
@@ -264,7 +377,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         }
         if (cityId != null) {
             restoAdapter.getItem(category).setSelectedFilter(cityId);
-        } else if (!filterId.toString().isEmpty()){
+        } else if (!filterId.toString().isEmpty()) {
             restoAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
             restoAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
         }

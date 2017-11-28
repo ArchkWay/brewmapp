@@ -29,13 +29,13 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static final int BEER_FILTER = 6;
     public static final int BROJ = 7;
     public static final int IBU = 8;
-    public static final int BOTTLE = 9;
+    public static final int BEER_PACK = 9;
     public static final int COLOR = 10;
     public static final int SMELL = 11;
     public static final int TASTE = 12;
     public static final int AFTER_TASTE = 13;
     public static final int FACTORY = 14;
-    public static final int PRICE = 15;
+    public static final int PRICE_BEER = 15;
 
     private int id;
     private String selectedItemId;
@@ -115,21 +115,21 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static List<FilterBeerField> createDefault(Context context) {
         List<FilterBeerField> out = new ArrayList<>();
         out.add(new FilterBeerField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_beer_name), "Любое"));
-        out.add(new FilterBeerField(COUNTRY, R.drawable.ic_resto, context.getString(R.string.search_beer_country), "Любая"));
-        out.add(new FilterBeerField(TYPE, R.drawable.ic_beer, context.getString(R.string.search_beer_type), "Любой"));
-        out.add(new FilterBeerField(BRAND, R.drawable.ic_kitchen, context.getString(R.string.search_beer_brand), "Любой"));
+        out.add(new FilterBeerField(COUNTRY, R.drawable.ic_country, context.getString(R.string.search_beer_country), "Любая"));
+        out.add(new FilterBeerField(TYPE, R.drawable.ic_beer_type, context.getString(R.string.search_beer_type), "Любой"));
+        out.add(new FilterBeerField(BRAND, R.drawable.ic_brand, context.getString(R.string.search_beer_brand), "Любой"));
         out.add(new FilterBeerField(PLACE, R.drawable.ic_city, context.getString(R.string.search_beer_place), "Москва"));
-        out.add(new FilterBeerField(POWER, R.drawable.ic_city, context.getString(R.string.search_beer_power), "Любая"));
-        out.add(new FilterBeerField(BEER_FILTER, R.drawable.ic_metro, context.getString(R.string.search_beer_filter), "Все виды"));
-        out.add(new FilterBeerField(BROJ, R.drawable.ic_feature, context.getString(R.string.search_beer_type_broj), "Любой"));
-        out.add(new FilterBeerField(IBU, R.drawable.ic_feature, context.getString(R.string.search_beer_ibu), "Любой"));
-        out.add(new FilterBeerField(BOTTLE, R.drawable.ic_feature, context.getString(R.string.search_beer_bootle), "Розливное"));
-        out.add(new FilterBeerField(COLOR, R.drawable.ic_feature, context.getString(R.string.search_beer_color), "Любой"));
-        out.add(new FilterBeerField(SMELL, R.drawable.ic_feature, context.getString(R.string.search_beer_smell), "Любой"));
-        out.add(new FilterBeerField(TASTE, R.drawable.ic_feature, context.getString(R.string.search_beer_taste), "Любой"));
-        out.add(new FilterBeerField(AFTER_TASTE, R.drawable.ic_feature, context.getString(R.string.search_beer_after_taste), "Любое"));
-        out.add(new FilterBeerField(FACTORY, R.drawable.ic_feature, context.getString(R.string.search_beer_factory), "Любая"));
-        out.add(new FilterBeerField(PRICE, R.drawable.ic_feature, context.getString(R.string.search_beer_price), "Любая"));
+        out.add(new FilterBeerField(POWER, R.drawable.ic_power, context.getString(R.string.search_beer_power), "Любая"));
+        out.add(new FilterBeerField(BEER_FILTER, R.drawable.ic_filter_beer, context.getString(R.string.search_beer_filter), "Все виды"));
+        out.add(new FilterBeerField(BROJ, R.drawable.ic_broj, context.getString(R.string.search_beer_type_broj), "Любой"));
+        out.add(new FilterBeerField(IBU, R.drawable.ic_beer_ibu, context.getString(R.string.search_beer_ibu), "Любой"));
+        out.add(new FilterBeerField(BEER_PACK, R.drawable.ic_bottle_beer, context.getString(R.string.search_beer_bootle), "Разливное"));
+        out.add(new FilterBeerField(COLOR, R.drawable.ic_color_beer, context.getString(R.string.search_beer_color), "Любой"));
+        out.add(new FilterBeerField(SMELL, R.drawable.ic_beer, context.getString(R.string.search_beer_smell), "Любой"));
+        out.add(new FilterBeerField(TASTE, R.drawable.ic_taste, context.getString(R.string.search_beer_taste), "Любой"));
+        out.add(new FilterBeerField(AFTER_TASTE, R.drawable.ic_beer_aftertaste, context.getString(R.string.search_beer_after_taste), "Любое"));
+        out.add(new FilterBeerField(FACTORY, R.drawable.ic_brewery, context.getString(R.string.search_beer_factory), "Любая"));
+        out.add(new FilterBeerField(PRICE_BEER, R.drawable.ic_price_range, context.getString(R.string.search_beer_price), "Любая"));
         return out;
     }
 

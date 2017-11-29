@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -94,6 +95,13 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
         }catch (Exception e){
             view.commonError(e.getMessage());
         }
+
+    }
+
+    @Override
+    public void finish(FragmentActivity activity) {
+        activity.setResult(Activity.RESULT_OK,new Intent(null,Uri.parse(String.valueOf(user_old_data.getId()))));
+        activity.finish();
 
     }
 

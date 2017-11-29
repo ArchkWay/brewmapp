@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +30,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_PRO
  * Created by xpusher on 11/28/2017.
  */
 
-public class InterestAddViewUser extends BaseLinearLayout implements InteractiveModelView<User> {
+public class ViewUserItem extends BaseLinearLayout implements InteractiveModelView<User> {
     @BindView(R.id.view_user_avatar)    ImageView avatar;
     @BindView(R.id.view_user_chevron_right)    ImageView chevron_right;
     @BindView(R.id.view_user_username)    TextView user_name;
@@ -38,20 +40,20 @@ public class InterestAddViewUser extends BaseLinearLayout implements Interactive
     private User user;
 
 
-    public InterestAddViewUser(Context context) {
+    public ViewUserItem(Context context) {
         super(context);
     }
 
-    public InterestAddViewUser(Context context, AttributeSet attrs) {
+    public ViewUserItem(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public InterestAddViewUser(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ViewUserItem(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public InterestAddViewUser(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ViewUserItem(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -80,8 +82,18 @@ public class InterestAddViewUser extends BaseLinearLayout implements Interactive
 
         new FillContent();
 
-        chevron_right.setOnClickListener(view -> ((Activity)getContext()).finish());
-        setOnClickListener(view -> (getContext()).startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(user.getId())),getContext(), ProfileEditActivity.class)));
+        if(getContext() instanceof MultiListActivity) {
+            chevron_right.setOnClickListener(view -> {
+                ((Activity) getContext()).setResult(Activity.RESULT_OK, new Intent(null, Uri.parse(String.valueOf(model.getId()))));
+                ((Activity) getContext()).finish();
+            });
+            setOnClickListener(view -> {
+                ((Activity) getContext()).startActivityForResult(
+                        new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileEditActivity.class),
+                        RequestCodes.REQUEST_PROFILE_FRIEND
+                );
+            });
+        }
 
     }
 

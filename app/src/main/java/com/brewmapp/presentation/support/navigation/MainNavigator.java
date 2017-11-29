@@ -10,6 +10,7 @@ import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
+import com.brewmapp.presentation.view.impl.fragment.MessageFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
@@ -52,6 +53,10 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 break;
             case MenuField.SETTINGS:
                 fragmentToShow = new SettingsFragment();
+                break;
+            case MenuField.MESSAGES:
+                fragmentToShow = new MessageFragment();
+                storeCodeActiveFragment(action.code());
                 break;
             default:
                 fragmentToShow = new FriendsFragment();

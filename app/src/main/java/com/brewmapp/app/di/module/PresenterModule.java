@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
+import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.presenter.contract.AddReviewBeerPresenter;
 import com.brewmapp.presentation.presenter.contract.AddReviewRestoPresenter;
@@ -44,6 +45,7 @@ import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.contract.UserProfilePresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.MessageFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddReviewBeerPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddReviewRestoPresenterImpl;
@@ -305,6 +307,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     ProfileViewFragmentPresenter provideProfileViewFragmentPresenter(ProfileViewFragmentPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    MessageFragmentPresenter provideMessageFragmentPresenter(MessageFragmentPresenterImpl presenter){
         return presenter;
     }
 

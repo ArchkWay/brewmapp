@@ -73,15 +73,15 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     public int parseIntent(Intent intent) {
         switch (intent.getAction()) {
             case Keys.CAP_BEER:
-                return view.MODE_ACTIVTY_SHOW_AND_SELECT_BEER;
+                return MultiListView.MODE_ACTIVTY_SHOW_AND_SELECT_BEER;
             case Keys.CAP_RESTO:
-                return view.MODE_ACTIVTY_SHOW_AND_SELECT_RESTO;
+                return MultiListView.MODE_ACTIVTY_SHOW_AND_SELECT_RESTO;
             case Keys.HASHTAG:
-                return view.MODE_ACTIVTY_SHOW_HASHTAG;
+                return MultiListView.MODE_ACTIVTY_SHOW_HASHTAG;
             case Keys.CAP_USER_FRIENDS:
-                return view.MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS;
+                return MultiListView.MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS;
             default:
-                return view.MODE_ACTIVTY_ERROR;
+                return MultiListView.MODE_ACTIVTY_ERROR;
         }
     }
 

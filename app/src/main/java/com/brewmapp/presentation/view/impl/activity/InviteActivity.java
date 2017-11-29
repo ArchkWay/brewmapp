@@ -54,7 +54,7 @@ public class InviteActivity extends BaseActivity implements InviteView {
         vk.setOnClickListener(listener);
         twitter.setOnClickListener(listener);
         phone.setOnClickListener(listener);
-        brew.setOnClickListener(view -> startActivityForResult(new Intent(Keys.CAP_USER_FRIENDS,null,InviteActivity.this,MultiListActivity.class), RequestCodes.REQUEST_INTEREST));
+
     }
 
     private View.OnClickListener listener = v -> {

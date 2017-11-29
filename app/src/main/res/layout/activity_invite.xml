@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/common_block_space_double"
+            android:padding="@dimen/common_block_space_quadro"
             android:layout_centerInParent="true">
 
             <TextView
@@ -75,10 +75,11 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:src="@drawable/selector_invite_brew"
                 android:id="@+id/activity.invite.brew"
-                android:adjustViewBounds="true"/>
+                android:adjustViewBounds="true"
+                />
 
         </LinearLayout>
         </ScrollView>

@@ -382,5 +382,6 @@
     <string name="text_view_sale">Акция</string>
     <string name="text_view_check_connection">Проверка соединения...</string>
     <string name="to_friends">В друзья</string>
+    <string name="action_find_friends">Поиск друзей</string>
 
 </resources>

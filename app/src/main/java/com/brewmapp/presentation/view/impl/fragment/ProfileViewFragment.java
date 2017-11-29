@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
@@ -200,5 +201,15 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_friends:
+                presenter.finish(getActivity());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

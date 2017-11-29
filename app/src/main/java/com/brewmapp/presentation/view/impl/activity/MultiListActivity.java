@@ -35,6 +35,7 @@ import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_PROFILE_FRIEND;
 
 public class MultiListActivity extends BaseActivity implements MultiListView,UiCustomControl {
     @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
@@ -84,6 +85,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
             case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
+                setTitle(R.string.action_find_friends);
                 fullSearchPackage.setType(Keys.TYPE_USER);
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
@@ -233,6 +235,12 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
             case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK)
                     setResult(RESULT_OK,new Intent(String.valueOf(VIEW_MODEL)));
+                return;
+            case REQUEST_PROFILE_FRIEND:
+                if(resultCode==RESULT_OK) {
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brewmapp.data.entity.User;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -60,12 +62,30 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
     @Override
     public void setModel(Contact model) {
         this.model = model;
-        username.setText(model.getTitle());
-        if(model.getImageUrl() != null) {
-            Picasso.with(getContext()).load(model.getImageUrl()).fit().centerCrop().into(avatar);
+
+        User userShow;
+        try {
+            if(model.getStatus()==0) {
+                userShow=model.getFriend_info();
+            }else {
+                userShow=model.getUser();
+            }
+        }catch (Exception e){return;};
+
+        username.setText(userShow.getFormattedName());
+        if (userShow.getThumbnail() != null) {
+            Picasso.with(getContext()).load(userShow.getThumbnail()).fit().centerCrop().into(avatar);
         } else {
-            avatar.setImageResource(R.drawable.ic_user_man);
+            try {
+                avatar.setImageResource(userShow.getGender() == 1 ? R.drawable.ic_user_man : R.drawable.ic_user_woman);
+            } catch (Exception e) {
+                avatar.setImageResource(R.drawable.ic_user_man);
+            }
         }
+
+        setOnClickListener(view -> {
+            listener.onModelAction(0,model);
+        });
     }
 
     @Override

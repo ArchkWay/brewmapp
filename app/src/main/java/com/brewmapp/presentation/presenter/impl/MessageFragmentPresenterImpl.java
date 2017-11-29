@@ -2,6 +2,10 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
 
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.task.AddFriend;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
@@ -18,10 +22,12 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentView> implements MessageFragmentPresenter {
 
     private ListFriendsTask listFriendsTask;
+    private AddFriend addFriend;
 
     @Inject
-    public MessageFragmentPresenterImpl(ListFriendsTask listFriendsTask) {
+    public MessageFragmentPresenterImpl(ListFriendsTask listFriendsTask,AddFriend addFriend) {
         this.listFriendsTask = listFriendsTask;
+        this.addFriend = addFriend;
     }
 
     @Override
@@ -49,6 +55,23 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
 
     @Override
     public void requestNewFriend(Intent data) {
+        try {
+            WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+            wrapperParams.addParam(Keys.FRIEND_ID, data.getData().toString());
+            addFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                @Override
+                public void onNext(String s) {
+                    super.onNext(s);
+                    loadFriends(true);
+                }
 
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    showMessage(e.getMessage());
+                }
+            });
+
+        }catch (Exception e){showMessage(e.getMessage());}
     }
 }

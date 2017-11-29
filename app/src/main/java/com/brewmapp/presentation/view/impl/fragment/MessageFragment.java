@@ -20,6 +20,7 @@ import com.brewmapp.presentation.view.contract.MessageFragmentView;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
@@ -32,12 +33,14 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MessageFragment extends BaseFragment implements MessageFragmentView {
+public class  MessageFragment extends BaseFragment implements MessageFragmentView {
 
 
     @BindView(R.id.fragment_friends_search) FinderView search;
@@ -71,7 +74,7 @@ public class MessageFragment extends BaseFragment implements MessageFragmentView
         });
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
-        adapter = new FlexibleAdapter<>(new ArrayList<>());
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> new DialogManageContact(getActivity(),getActivity().getSupportFragmentManager(),payload,presenter));
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
@@ -100,7 +103,7 @@ public class MessageFragment extends BaseFragment implements MessageFragmentView
 
     @Override
     public CharSequence getTitle() {
-        return ResourceHelper.getString(R.string.friends);
+        return ResourceHelper.getString(R.string.messages);
     }
 
     @Override
@@ -135,7 +138,13 @@ public class MessageFragment extends BaseFragment implements MessageFragmentView
     public void onBarAction(int id) {
         switch (id){
             case R.id.action_add:
-                startActivityForResult(new Intent(Keys.CAP_USER_FRIENDS,null,getActivity(),MultiListActivity.class), RequestCodes.REQUEST_INTEREST);
+                startActivityForResult(
+                        new Intent(
+                                Keys.CAP_USER_FRIENDS,
+                                null,getActivity(),
+                                MultiListActivity.class),
+                        RequestCodes.REQUEST_INTEREST
+                );
                 break;
                 default:
                     super.onBarAction(id);

@@ -19,6 +19,16 @@ public class Contact implements IPerson {
     @SerializedName(Keys.USER_INFO)
     private User user;
 
+    private User friend_info;
+
+    public User getFriend_info() {
+        return friend_info;
+    }
+
+    public void setFriend_info(User friend_info) {
+        this.friend_info = friend_info;
+    }
+
     public int getId() {
         return id;
     }
@@ -39,5 +49,9 @@ public class Contact implements IPerson {
     @Override
     public String getImageUrl() {
         return getUser().getThumbnail();
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

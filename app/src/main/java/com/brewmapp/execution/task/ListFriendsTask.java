@@ -1,6 +1,7 @@
 package com.brewmapp.execution.task;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -49,6 +50,7 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
                 if(response.getModels().size() > 0) {
                     FriendsTitleInfo incomingRequestInfo = new FriendsTitleInfo(getString(R.string.incoming_requests));
                     out.add(incomingRequestInfo);
+                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(2);
                     out.addAll(response.getModels());
                     needFriendsHeader = true;
                 }
@@ -58,6 +60,7 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
                 if(response.getModels().size() > 0) {
                     FriendsTitleInfo outgoingRequetInfo = new FriendsTitleInfo(getString(R.string.outgoing_requests));
                     out.add(outgoingRequetInfo);
+                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(0);
                     out.addAll(response.getModels());
                     needFriendsHeader = true;
                 }
@@ -67,6 +70,7 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
                 response = executeCall(getApi().listFriends(params));
                 if(needFriendsHeader) {
                     FriendsTitleInfo friends = new FriendsTitleInfo(getString(R.string.friends));
+                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(1);
                     out.add(friends);
                 }
                 out.addAll(response.getModels());

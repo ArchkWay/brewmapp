@@ -351,8 +351,16 @@ public interface Api {
 
     );
 
-//    @POST("friends")
-//    @FormUrlEncoded
-//    Call<ListResponse<ContactInfo>> listFriends(@FieldMap WrapperParams params);
+    @POST("friends/add")
+    @FormUrlEncoded
+    Call<Object> addFriend(@FieldMap WrapperParams params);
+
+    @POST("friends/allow")
+    @FormUrlEncoded
+    Call<Object> allowFriend(@FieldMap WrapperParams params);
+
+    @POST("friends/delete")
+    @FormUrlEncoded
+    Call<Object> deleteFriend(@FieldMap WrapperParams params);
 
 }

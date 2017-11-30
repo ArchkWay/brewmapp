@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
@@ -12,27 +11,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.User;
-import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
-import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
-import ru.frosteye.ovsa.tool.TextTools;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,27 +34,27 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @BindView(R.id.fragment_profile_edit_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_profile_edit_avatar)    ImageView avatar;
-    @BindView(R.id.fragment_profile_edit_name)      EditText name;
-    @BindView(R.id.fragment_profile_edit_lastName)    EditText lastName;
+    @BindView(R.id.fragment_profile_edit_name)      TextView name;
+    @BindView(R.id.fragment_profile_edit_lastName)    TextView lastName;
     @BindView(R.id.fragment_profile_edit_segmented)    SegmentedGroup segmentedGroup;
     @BindView(R.id.fragment_profile_edit_layout_phone)    ConstraintLayout layout_phone;
-    @BindView(R.id.fragment_profile_edit_edit_text_phone)    EditText edit_text_phone;
-    @BindView(R.id.fragment_profile_edit_text_status)    EditText text_status;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone)    TextView edit_text_phone;
+    @BindView(R.id.fragment_profile_edit_text_status)    TextView text_status;
     @BindView(R.id.fragment_profile_edit_layout_birthday)    View layout_birthday;
     @BindView(R.id.fragment_profile_edit_text_birthday)    TextView text_birthday;
     @BindView(R.id.fragment_profile_edit_layout_city)    View layout_city;
     @BindView(R.id.fragment_profile_edit_text_city)    TextView text_city;
     @BindView(R.id.fragment_profile_edit_layout_family_status)    View layout_family_status;
     @BindView(R.id.fragment_profile_edit_text_family_status)    TextView text_family_status;
-    @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    EditText edit_text_phone_dop;
-    @BindView(R.id.fragment_profile_edit_edit_skype)    EditText edit_skype;
-    @BindView(R.id.fragment_profile_edit_edit_site)    EditText edit_site;
-    @BindView(R.id.fragment_profile_edit_edit_book)    EditText edit_book;
-    @BindView(R.id.fragment_profile_edit_edit_film)    EditText edit_film;
-    @BindView(R.id.fragment_profile_edit_edit_interest)    EditText edit_interest;
-    @BindView(R.id.fragment_profile_edit_edit_game)    EditText edit_game;
-    @BindView(R.id.fragment_profile_edit_edit_music)    EditText edit_music;
-    @BindView(R.id.fragment_profile_edit_edit_work)    EditText edit_work;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    TextView edit_text_phone_dop;
+    @BindView(R.id.fragment_profile_edit_edit_skype)    TextView edit_skype;
+    @BindView(R.id.fragment_profile_edit_edit_site)    TextView edit_site;
+    @BindView(R.id.fragment_profile_edit_edit_book)    TextView edit_book;
+    @BindView(R.id.fragment_profile_edit_edit_film)    TextView edit_film;
+    @BindView(R.id.fragment_profile_edit_edit_interest)    TextView edit_interest;
+    @BindView(R.id.fragment_profile_edit_edit_game)    TextView edit_game;
+    @BindView(R.id.fragment_profile_edit_edit_music)    TextView edit_music;
+    @BindView(R.id.fragment_profile_edit_edit_work)    TextView edit_work;
 
     @BindView(R.id.fragment_profile_edit_layout_book)    View layout_book;
     @BindView(R.id.fragment_profile_edit_layout_film)    View layout_film;
@@ -84,7 +74,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.fragment_profile_edit;
+        return R.layout.fragment_profile_view;
     }
 
     @Override
@@ -146,6 +136,8 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
         if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail())) {
             Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);
+        }else {
+            Picasso.with(getContext()).load(user.getGender()==1?R.drawable.ic_user_man:R.drawable.ic_user_woman).fit().into(avatar);
         }
         name.setText(user.getFirstname());
         lastName.setText(user.getLastname());

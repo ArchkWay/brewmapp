@@ -383,5 +383,14 @@
     <string name="text_view_check_connection">Проверка соединения...</string>
     <string name="to_friends">В друзья</string>
     <string name="action_find_friends">Поиск друзей</string>
+    <string name="about">О программе</string>
+    <string name="help">Помощь</string>
+    <string name="write_to_us">Напишите нам</string>
+    <string name="terms_of_use">Пользовательское соглашение</string>
+    <string name="account">Учетная запись</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="change_phone">Изменить номер</string>
+    <string name="auth_facebook">Авторизоваться через Facebook</string>
+    <string name="delete_account">Удалить учетную запись</string>
 
 </resources>

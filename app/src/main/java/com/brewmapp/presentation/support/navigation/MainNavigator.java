@@ -43,7 +43,6 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 break;
             case MenuField.EVENTS:
                 fragmentToShow = new EventsFragment();
-                storeCodeActiveFragment(action.code());
                 break;
             case MenuField.SEARCH:
                 fragmentToShow = new SearchFragment();
@@ -53,6 +52,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 break;
             case MenuField.SETTINGS:
                 fragmentToShow = new SettingsFragment();
+                storeCodeActiveFragment(action.code());
                 break;
             case MenuField.MESSAGES:
                 fragmentToShow = new MessageFragment();

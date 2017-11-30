@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.brewmapp.R;
@@ -33,7 +35,7 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
 
     @Override
     protected void initView(View view) {
-
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -59,5 +61,11 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     @Override
     public CharSequence getTitle() {
         return ResourceHelper.getString(R.string.settings);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if(menu!=null) menu.clear();
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

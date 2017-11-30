@@ -31,7 +31,7 @@ public class AllowFriend extends BaseNetworkTask<WrapperParams , String> {
         return Observable.create(subscriber -> {
             try {
                 executeCall(getApi().allowFriend(params));
-                subscriber.onNext("Ok");
+                subscriber.onNext("");
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -19,8 +19,10 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -60,7 +62,8 @@ public class FriendsFragment extends BaseFragment implements FriendsView {
         });
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
-        adapter = new FlexibleAdapter<>(new ArrayList<>());
+        //adapter = new FlexibleAdapter<>(new ArrayList<>());
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> new DialogManageContact(getActivity(),getActivity().getSupportFragmentManager(),payload,presenter));
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);

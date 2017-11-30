@@ -149,7 +149,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 } else {
                     presenter.loadBeerTypes();
                 }
-
                 break;
             case FilterBeerField.PRICE_BEER:
                 showProgressBar(true);
@@ -159,7 +158,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 } else {
                     presenter.loadPriceRangeTypes("beer");
                 }
-
                 break;
             case FilterBeerField.BEER_PACK:
                 showProgressBar(true);
@@ -169,7 +167,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 } else {
                     presenter.loadBeerPack();
                 }
-
                 break;
             case FilterBeerField.BRAND:
                 showProgressBar(true);
@@ -179,7 +176,69 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 } else {
                     presenter.loadBeerBrand(scrollPackage);
                 }
-
+                break;
+            case FilterBeerField.COLOR:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_color);
+                if (getStoredFilterList(FilterKeys.BEER_COLOR) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_COLOR));
+                } else {
+                    presenter.loadBeerColor();
+                }
+                break;
+            case FilterBeerField.TASTE:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_taste);
+                if (getStoredFilterList(FilterKeys.BEER_TASTE) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_TASTE));
+                } else {
+                    presenter.loadBeerTaste();
+                }
+                break;
+            case FilterBeerField.SMELL:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_smell);
+                if (getStoredFilterList(FilterKeys.BEER_SMELL) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_SMELL));
+                } else {
+                    presenter.loadBeerSmell();
+                }
+                break;
+            case FilterBeerField.AFTER_TASTE:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_after_taste);
+                if (getStoredFilterList(FilterKeys.BEER_AFTER_TASTE) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_AFTER_TASTE));
+                } else {
+                    presenter.loadBeerAfterTaste();
+                }
+                break;
+            case FilterBeerField.POWER:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_power);
+                if (getStoredFilterList(FilterKeys.BEER_POWER) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_POWER));
+                } else {
+                    presenter.loadBeerPower();
+                }
+                break;
+            case FilterBeerField.DENSITY:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_type_broj);
+                if (getStoredFilterList(FilterKeys.DENSITY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.DENSITY));
+                } else {
+                    presenter.loadBeerDensity();
+                }
+                break;
+                case FilterBeerField.IBU:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_ibu);
+                if (getStoredFilterList(FilterKeys.IBU) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.IBU));
+                } else {
+                    presenter.loadBeerIbu();
+                }
                 break;
                 default:break;
         }
@@ -342,6 +401,16 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         startActivity(intent);
     }
 
+//    private void goToBeerDetails(String beerId) {
+//        Interest interest = new Interest();
+//        Interest_info interest_info = new Interest_info();
+//        interest_info.setId(beerId);
+//        interest.setInterest_info(interest_info);
+//        Intent intent = new Intent(this, BeerDetailActivity.class);
+//        intent.putExtra(BEER, interest);
+//        startActivity(intent);
+//    }
+
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
         if (!isBeer) {
@@ -362,10 +431,30 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         } else if (filterCategory == FilterBeerField.TYPE) {
             selectedFilter = FilterKeys.BEER_TYPES;
             saveStoredFilter(FilterKeys.BEER_TYPES);
-        }
-        else if (filterCategory == FilterBeerField.BRAND) {
+        } else if (filterCategory == FilterBeerField.BRAND) {
             selectedFilter = FilterKeys.BEER_BRAND;
             saveStoredFilter(FilterKeys.BEER_BRAND);
+        } else if (filterCategory == FilterBeerField.COLOR) {
+            selectedFilter = FilterKeys.BEER_COLOR;
+            saveStoredFilter(FilterKeys.BEER_COLOR);
+        } else if (filterCategory == FilterBeerField.TASTE) {
+            selectedFilter = FilterKeys.BEER_TASTE;
+            saveStoredFilter(FilterKeys.BEER_TASTE);
+        } else if (filterCategory == FilterBeerField.SMELL) {
+            selectedFilter = FilterKeys.BEER_SMELL;
+            saveStoredFilter(FilterKeys.BEER_SMELL);
+        } else if (filterCategory == FilterBeerField.AFTER_TASTE) {
+            selectedFilter = FilterKeys.BEER_AFTER_TASTE;
+            saveStoredFilter(FilterKeys.BEER_AFTER_TASTE);
+        } else if (filterCategory == FilterBeerField.POWER) {
+            selectedFilter = FilterKeys.BEER_POWER;
+            saveStoredFilter(FilterKeys.BEER_POWER);
+        } else if (filterCategory == FilterBeerField.DENSITY) {
+            selectedFilter = FilterKeys.DENSITY;
+            saveStoredFilter(FilterKeys.DENSITY);
+        }  else if (filterCategory == FilterBeerField.IBU) {
+            selectedFilter = FilterKeys.IBU;
+            saveStoredFilter(FilterKeys.IBU);
         }
     }
 

@@ -1,8 +1,15 @@
 package com.brewmapp.execution.exchange.common;
 
 import com.brewmapp.data.entity.Models;
+import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
+import com.brewmapp.data.entity.wrapper.BeerColorInfo;
+import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
+import com.brewmapp.data.entity.wrapper.BeerIbuInfo;
 import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
+import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
+import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
@@ -18,9 +25,15 @@ import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
-import com.brewmapp.data.pojo.BeerTypes;
+import com.brewmapp.execution.exchange.common.base.BeerAftertasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerBrandDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerColorDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerDensityDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerIbuDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerPackDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerPowerDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerSmellDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerTasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
@@ -112,6 +125,13 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(BeerTypeInfo.class, new BeerTypesDeserializer())
                 .registerTypeAdapter(BeerPackInfo.class, new BeerPackDeserializer())
                 .registerTypeAdapter(BeerBrandInfo.class, new BeerBrandDeserializer())
+                .registerTypeAdapter(BeerColorInfo.class, new BeerColorDeserializer())
+                .registerTypeAdapter(BeerTasteInfo.class, new BeerTasteDeserializer())
+                .registerTypeAdapter(BeerSmellInfo.class, new BeerSmellDeserializer())
+                .registerTypeAdapter(BeerAftertasteInfo.class, new BeerAftertasteDeserializer())
+                .registerTypeAdapter(BeerPowerInfo.class, new BeerPowerDeserializer())
+                .registerTypeAdapter(BeerDensityInfo.class, new BeerDensityDeserializer())
+                .registerTypeAdapter(BeerIbuInfo.class, new BeerIbuDeserializer())
                 ;
     }
 

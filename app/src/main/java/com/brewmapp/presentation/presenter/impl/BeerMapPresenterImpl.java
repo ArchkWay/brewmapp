@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -74,7 +75,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     public void onLoadedRestoGeo(int id) {
         loadRestoLocationTask.cancel();
         enableControls(false);
-        loadRestoLocationTask.execute(id, new SimpleSubscriber<List<RestoLocation>>() {
+        loadRestoLocationTask.execute(id, new SimpleSubscriber<List<FilterRestoLocation>>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);
@@ -82,7 +83,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             }
 
             @Override
-            public void onNext(List<RestoLocation> restoLocation) {
+            public void onNext(List<FilterRestoLocation> restoLocation) {
                 enableControls(true);
                 view.showGeolocationResult(restoLocation);
             }

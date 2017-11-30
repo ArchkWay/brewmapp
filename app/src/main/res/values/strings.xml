@@ -373,6 +373,7 @@
     <string name="filter_search_beer">Для поиска введите название пива</string>
     <string name="filter_search_resto">Для поиска введите название заведения</string>
     <string name="special_offer">Специальные предложения</string>
+    <string name="craft_beer">Показывать крафтовое пиво</string>
     <string name="cancel">Отмена</string>
     <string name="filter_search_title">Поиск 1%s</string>
     <string name="title_activity_edit_profile">Настройки профиля</string>

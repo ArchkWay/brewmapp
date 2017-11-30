@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +18,19 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.BeerPower;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
+import com.brewmapp.data.entity.wrapper.BeerColorInfo;
+import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
+import com.brewmapp.data.entity.wrapper.BeerIbuInfo;
 import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
+import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
+import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
@@ -31,6 +41,9 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
+import com.brewmapp.utils.events.ShowRestoOnMapEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,8 +77,12 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     RecyclerView list;
     @BindView(R.id.offer)
     CheckBox offer;
+    @BindView(R.id.craft)
+    CheckBox craft;
     @BindView(R.id.fragment_events_tabs)
     TabsView tabsView;
+    @BindView(R.id.lytProgressBar)
+    LinearLayout lytProgressBar;
 
     private FlexibleAdapter<FilterRestoField> restoAdapter;
     private FlexibleAdapter<FilterBeerField> beerAdapter;
@@ -98,16 +115,16 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         enableBackButton();
         Paper.init(this);
         titleToolbar.setText(titleContent[0]);
+        offer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 0 ? View.VISIBLE : View.GONE);
+        craft.setVisibility(tabsView.getTabs().getSelectedTabPosition() != 0 ? View.VISIBLE : View.GONE);
         tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 presenter.storeTabActive(tab.getPosition());
                 titleToolbar.setText(titleContent[tab.getPosition()]);
                 if (tab.getPosition() == 0) {
-                    offer.setVisibility(View.VISIBLE);
                     showRestoFilters(Paper.book().read("restoCategoryList"));
                 } else {
-                    offer.setVisibility(View.GONE);
                     showBeerFilters(Paper.book().read("beerCategoryList"));
                 }
             }
@@ -154,8 +171,14 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     }
 
     @Override
+    public void goToMap(List<FilterRestoLocation> restoLocations) {
+        EventBus.getDefault().post(new ShowRestoOnMapEvent(restoLocations));
+        this.finish();
+    }
+
+    @Override
     public boolean onItemClick(int position) {
-        if (position == 5 || position == 6) {
+        if ((tabsView.getTabs().getSelectedTabPosition() == 0) && (position == 5 || position == 6)){
             Toast.makeText(this, "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, FilterByCategory.class);
@@ -179,7 +202,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             }
         }
     }
-
     private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem) {
         StringBuilder filter = new StringBuilder();
         StringBuilder filterId = new StringBuilder();
@@ -238,7 +260,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                     }
                 }
                 if (!notEmpty) {
-                    filter.append("Разливное  ");
+                    filter.append("Любой  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BRAND)) {
                 List<BeerBrandInfo> beerBrandInfos = new ArrayList<>();
@@ -252,6 +274,132 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             notEmpty = true;
                             filter.append(beerBrandInfo.getModel().getName()).append(", ");
                             filterId.append(beerBrandInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любой  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_COLOR)) {
+                List<BeerColorInfo> beerColorInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_COLOR);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerColorInfos.add((BeerColorInfo) o);
+                    }
+                    for (BeerColorInfo beerColorInfo : beerColorInfos) {
+                        if (beerColorInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerColorInfo.getModel().getName()).append(", ");
+                            filterId.append(beerColorInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любой  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_POWER)) {
+                List<BeerPowerInfo> beerPowers = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_POWER);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerPowers.add((BeerPowerInfo) o);
+                    }
+                    for (BeerPowerInfo beerPowerInfo : beerPowers) {
+                        if (beerPowerInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerPowerInfo.getModel().getName()).append(", ");
+                            filterId.append(beerPowerInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любая  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_SMELL)) {
+                List<BeerSmellInfo> beerSmellInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_SMELL);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerSmellInfos.add((BeerSmellInfo) o);
+                    }
+                    for (BeerSmellInfo beerSmellInfo : beerSmellInfos) {
+                        if (beerSmellInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerSmellInfo.getModel().getName()).append(", ");
+                            filterId.append(beerSmellInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любой  ");
+                }
+            }  else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_TASTE)) {
+                List<BeerTasteInfo> beerTasteInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_TASTE);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerTasteInfos.add((BeerTasteInfo) o);
+                    }
+                    for (BeerTasteInfo beerTasteInfo : beerTasteInfos) {
+                        if (beerTasteInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerTasteInfo.getModel().getName()).append(", ");
+                            filterId.append(beerTasteInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любой  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_AFTER_TASTE)) {
+                List<BeerAftertasteInfo> beerAftertasteInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_AFTER_TASTE);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerAftertasteInfos.add((BeerAftertasteInfo) o);
+                    }
+                    for (BeerAftertasteInfo beerAftertasteInfo : beerAftertasteInfos) {
+                        if (beerAftertasteInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerAftertasteInfo.getModel().getName()).append(", ");
+                            filterId.append(beerAftertasteInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любое  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.DENSITY)) {
+                List<BeerDensityInfo> beerDensityInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.DENSITY);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerDensityInfos.add((BeerDensityInfo) o);
+                    }
+                    for (BeerDensityInfo beerDensityInfo : beerDensityInfos) {
+                        if (beerDensityInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerDensityInfo.getModel().getName()).append(", ");
+                            filterId.append(beerDensityInfo.getModel().getId()).append("|");
+                        }
+                    }
+                }
+                if (!notEmpty) {
+                    filter.append("Любое  ");
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.IBU)) {
+                List<BeerIbuInfo> beerIbuInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.IBU);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        beerIbuInfos.add((BeerIbuInfo) o);
+                    }
+                    for (BeerIbuInfo beerIbuInfo : beerIbuInfos) {
+                        if (beerIbuInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(beerIbuInfo.getModel().getName()).append(", ");
+                            filterId.append(beerIbuInfo.getModel().getId()).append("|");
                         }
                     }
                 }
@@ -387,12 +535,17 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @OnClick(R.id.accept_filter)
     public void acceptFilter() {
-        presenter.loadFilterResult(Paper.book().read("restoCategoryList"), offer.isChecked() ? 1 : 0);
+        if (tabsView.getTabs().getSelectedTabPosition() == 0) {
+            showProgressBar(true);
+            presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), offer.isChecked() ? 1 : 0);
+        } else {
+            Toast.makeText(this, "В разаработке" , Toast.LENGTH_SHORT).show();
+//            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"), craft.isChecked() ? 1 : 0);
+        }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Paper.book().destroy();
+    public void showProgressBar(boolean show) {
+        lytProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }

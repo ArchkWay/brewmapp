@@ -12,10 +12,17 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
+import com.brewmapp.data.entity.BeerAftertasteTypes;
 import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerBrandTypes;
+import com.brewmapp.data.entity.BeerColorTypes;
+import com.brewmapp.data.entity.BeerDensityTypes;
+import com.brewmapp.data.entity.BeerIbuTypes;
 import com.brewmapp.data.entity.BeerLocation;
 import com.brewmapp.data.entity.BeerPackTypes;
+import com.brewmapp.data.entity.BeerPowerTypes;
+import com.brewmapp.data.entity.BeerSmellTypes;
+import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Evaluation;
@@ -223,7 +230,7 @@ public interface Api {
     Call<ListResponse<BeerLocation.LocationInfo>> loadLocationById(@FieldMap WrapperParams params);
 
     @GET("resto/allrestoincity")
-    Call<ListResponse<RestoLocation>> loadRestoLocationInCity(@Query(Keys.CITY_ID) int cityId);
+    Call<ListResponse<FilterRestoLocation>> loadRestoLocationInCity(@Query(Keys.CITY_ID) int cityId);
 
     @POST("geo/city")
     @FormUrlEncoded
@@ -257,6 +264,10 @@ public interface Api {
     @POST("resto/restodata")
     @FormUrlEncoded
     Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
+
+    @POST("resto/restodata")
+    @FormUrlEncoded
+    Call<ListResponse<RestoDetails>> getMultiRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
 
     @GET("resto/type")
     Call<RestoTypes> loadRestoTypes();
@@ -346,4 +357,31 @@ public interface Api {
     @POST("beer/brand")
     @FormUrlEncoded
     Call<BeerBrandTypes> loadBeerBrands(@FieldMap WrapperParams params);
+
+    @POST("beer/color")
+    @FormUrlEncoded
+    Call<BeerColorTypes> loadBeerColors(@FieldMap WrapperParams params);
+
+    @POST("beer/taste")
+    @FormUrlEncoded
+    Call<BeerTasteTypes> loadBeerTaste(@FieldMap WrapperParams params);
+
+    @POST("beer/fragrance")
+    @FormUrlEncoded
+    Call<BeerSmellTypes> loadBeerSmell(@FieldMap WrapperParams params);
+
+    @POST("beer/aftertaste")
+    @FormUrlEncoded
+    Call<BeerAftertasteTypes> loadBeerAfterTaste(@FieldMap WrapperParams params);
+
+    @POST("beer/strength")
+    @FormUrlEncoded
+    Call<BeerPowerTypes> loadBeerPower(@FieldMap WrapperParams params);
+
+    @POST("beer/density")
+    @FormUrlEncoded
+    Call<BeerDensityTypes> loadBeerDensity(@FieldMap WrapperParams params);
+
+    @GET("beer/ibu")
+    Call<BeerIbuTypes> loadBeerIbu();
 }

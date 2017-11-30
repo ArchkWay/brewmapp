@@ -22,4 +22,11 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void loadBeerTypes();
     void loadBeerPack();
     void loadBeerBrand(ScrollPackage scrollPackage);
+    void loadBeerColor();
+    void loadBeerTaste();
+    void loadBeerSmell();
+    void loadBeerAfterTaste();
+    void loadBeerPower();
+    void loadBeerDensity();
+    void loadBeerIbu();
 }

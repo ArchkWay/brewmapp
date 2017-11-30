@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 
 import java.util.List;
@@ -12,5 +14,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface FilterMapPresenter extends LivePresenter<FilterMapView> {
-    void loadFilterResult(List<FilterRestoField> fieldList, int specialOffer);
-    void storeTabActive(int position);}
+    void loadRestoCoordinates(List<FilterRestoField> fieldList, int specialOffer);
+    void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer);
+    void storeTabActive(int position);
+}

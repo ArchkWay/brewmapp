@@ -21,5 +21,12 @@ public class FilterKeys {
     public static final String PRICE_BEER = "beerAveragepriceRange";
     public static final String BEER_PACK = "beerPacks";
     public static final String BEER_BRAND = "beerBrands";
+    public static final String BEER_COLOR = "beerColors";
+    public static final String BEER_TASTE = "beerTastes";
+    public static final String BEER_SMELL = "beerFragrances";
+    public static final String BEER_AFTER_TASTE = "beerAftertastes";
+    public static final String BEER_POWER = "beerStrengthes";
+    public static final String DENSITY = "beerDensity";
+    public static final String IBU  = "beerIBU";
 
 }

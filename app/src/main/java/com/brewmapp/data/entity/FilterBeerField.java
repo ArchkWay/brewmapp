@@ -27,7 +27,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static final int PLACE = 4;
     public static final int POWER = 5;
     public static final int BEER_FILTER = 6;
-    public static final int BROJ = 7;
+    public static final int DENSITY = 7;
     public static final int IBU = 8;
     public static final int BEER_PACK = 9;
     public static final int COLOR = 10;
@@ -121,7 +121,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
         out.add(new FilterBeerField(PLACE, R.drawable.ic_city, context.getString(R.string.search_beer_place), "Москва"));
         out.add(new FilterBeerField(POWER, R.drawable.ic_power, context.getString(R.string.search_beer_power), "Любая"));
         out.add(new FilterBeerField(BEER_FILTER, R.drawable.ic_filter_beer, context.getString(R.string.search_beer_filter), "Все виды"));
-        out.add(new FilterBeerField(BROJ, R.drawable.ic_broj, context.getString(R.string.search_beer_type_broj), "Любой"));
+        out.add(new FilterBeerField(DENSITY, R.drawable.ic_broj, context.getString(R.string.search_beer_type_broj), "Любой"));
         out.add(new FilterBeerField(IBU, R.drawable.ic_beer_ibu, context.getString(R.string.search_beer_ibu), "Любой"));
         out.add(new FilterBeerField(BEER_PACK, R.drawable.ic_bottle_beer, context.getString(R.string.search_beer_bootle), "Разливное"));
         out.add(new FilterBeerField(COLOR, R.drawable.ic_color_beer, context.getString(R.string.search_beer_color), "Любой"));

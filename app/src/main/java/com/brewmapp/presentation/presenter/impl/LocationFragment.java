@@ -15,6 +15,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;

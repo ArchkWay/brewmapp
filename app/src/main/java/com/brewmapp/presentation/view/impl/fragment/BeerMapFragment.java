@@ -11,6 +11,7 @@ import android.view.View;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.RestoDetail;
@@ -26,6 +27,7 @@ import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
+import com.brewmapp.utils.events.ShowRestoOnMapEvent;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -41,6 +43,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +53,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -59,7 +65,6 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 /**
  * Created by ovcst on 24.08.2017.
  */
-
 public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback,
         GoogleMap.OnInfoWindowClickListener {
 
@@ -75,7 +80,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     private Marker marker;
     private RestoLocation location;
 
-
     public static BeerMapFragment newInstance(RestoLocation restoLocation) {
         BeerMapFragment fragment = new BeerMapFragment();
         Bundle bundle = new Bundle();
@@ -87,6 +91,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Paper.init(getContext());
         Bundle arguments = getArguments();
         if (arguments != null) {
             location = (RestoLocation) arguments.getSerializable(Keys.LOCATION);
@@ -100,6 +105,14 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     public void enableControls(boolean enabled, int code) {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
@@ -125,6 +138,10 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+        Paper.book().destroy();
     }
 
     @Override
@@ -164,9 +181,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
             return true;
         });
 
-        googleMap.setOnMapClickListener(latLng -> {
-            presenter.onGeocodeRequest(latLng);
-        });
+        googleMap.setOnMapClickListener(latLng -> presenter.onGeocodeRequest(latLng));
 
         if (location != null) {
             setSingleMarker();
@@ -187,19 +202,19 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLocation_lat(),location.getLocation_lon()) , 15));
     }
 
-    private void setMarker(List<RestoLocation> restoLocationList) {
-        if (marker != null) marker.remove();
-        for (RestoLocation restoLocation : restoLocationList) {
+    private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
+        for (FilterRestoLocation restoLocation : restoLocations) {
             MarkerOptions markerOptions = new MarkerOptions()
-                    .title(restoLocation.getName())
+                    .title(restoLocation.getmName())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
-                    .snippet(String.valueOf(restoLocation.getId()))
-                    .position(new LatLng(restoLocation.getLocation_lat(), restoLocation.getLocation_lon()));
-
+                    .snippet(String.valueOf(restoLocation.getLocationId()))
+                    .position(new LatLng(restoLocation.getLocationLat(), restoLocation.getLocationLon()));
             googleMap.addMarker(markerOptions);
         }
 
-//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(forTestLatng, 14));
+        if (animateCamera) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restoLocations.get(0).getLocationLat(),restoLocations.get(0).getLocationLon()) , 9));
+        }
     }
 
     @Override
@@ -222,14 +237,13 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         }
         return addresses != null ? addresses.get(0).getLocality() : null;
     }
-
+    
     public void showResult() {
-
     }
 
     @Override
-    public void showGeolocationResult(List<RestoLocation> resultPackage) {
-        setMarker(resultPackage);
+    public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
+        setMarker(restoLocations, false);
     }
 
     @Override
@@ -245,6 +259,14 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     public void onBarAction(int id) {
-        interractor().processStartActivityWithRefresh(new Intent(getActivity(), FilterMapActivity.class), REQUEST_CODE_MAP_REFRESH);
+        Intent intent = new Intent(getContext(), FilterMapActivity.class);
+//        intent.putExtra(RESTO_ID, interest); // need to add city later, i think
+        startActivity(intent);
+    }
+
+    @Subscribe
+    public void onEvent(ShowRestoOnMapEvent event) {
+        googleMap.clear();
+        setMarker(event.getRestoLocationList(), true);
     }
 }

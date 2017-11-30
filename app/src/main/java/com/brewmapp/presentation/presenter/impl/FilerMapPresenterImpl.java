@@ -7,10 +7,16 @@ import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.FilterRestoPackage;
+import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.FilterRestoTask;
+import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
+import com.brewmapp.utils.events.ShowRestoOnMapEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -29,10 +35,13 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     private UiSettingRepo uiSettingRepo;
     private Context context;
     private FilterRestoTask filterRestoTask;
-//    private FilterBeerTask filterBeerTask; to do
+//    private FilterBeerTask filterBeerTask; totototototoDODOOOOO!!!!
+
 
     @Inject
-    public FilerMapPresenterImpl(UiSettingRepo uiSettingRepo, Context context, FilterRestoTask filterRestoTask) {
+    public FilerMapPresenterImpl(Context context, UiSettingRepo uiSettingRepo,
+                                 FilterRestoTask filterRestoTask,
+                                 LoadRestoDetailTask loadRestoDetailTask) {
         this.uiSettingRepo = uiSettingRepo;
         this.context = context;
         this.filterRestoTask = filterRestoTask;
@@ -58,12 +67,14 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         filterRestoTask.cancel();
     }
 
     @Override
-    public void loadFilterResult(List<FilterRestoField> filterRestoFields, int specialOffer) {
+    public void loadRestoCoordinates(List<FilterRestoField> filterRestoFields, int specialOffer) {
         filterRestoTask.cancel();
+        StringBuilder restoId = new StringBuilder();
         FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
         filterRestoPackage.setRestoCity(filterRestoFields.get(FilterRestoField.NAME).getSelectedItemId());
         filterRestoPackage.setRestoTypes(filterRestoFields.get(FilterRestoField.TYPE).getSelectedItemId());
@@ -75,16 +86,26 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
         filterRestoTask.execute(filterRestoPackage, new SimpleSubscriber<List<FilterRestoLocation>>() {
             @Override
             public void onError(Throwable e) {
+
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<FilterRestoLocation> restoLocations) {
-                for (FilterRestoLocation filterRestoLocation : restoLocations) {
-                    Log.i("restoID:", filterRestoLocation.getLocationId());
-                }
+                view.goToMap(restoLocations);
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
+                view.showProgressBar(false);
             }
         });
+    }
+
+    @Override
+    public void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer) {
+
     }
 
     @Override

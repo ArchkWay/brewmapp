@@ -5,16 +5,13 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.BeerPack;
-import com.brewmapp.data.entity.BeerPackTypes;
-import com.brewmapp.data.entity.FilterBeerField;
-import com.brewmapp.data.pojo.BeerTypes;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +66,7 @@ public class BeerPackView extends BaseLinearLayout implements InteractiveModelVi
     public void setModel(BeerPack model) {
         this.model = model;
         title.setText(model.getName());
+
         logo.setVisibility(INVISIBLE);
         restoTypeCheckbox.setChecked(model.isSelected());
 

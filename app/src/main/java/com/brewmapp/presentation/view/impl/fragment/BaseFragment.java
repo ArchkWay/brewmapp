@@ -32,6 +32,8 @@ public abstract class BaseFragment extends NavigatorFragment<MainView> implement
     protected void prepareView(View view) {
         ButterKnife.bind(this, view);
         getActivity().setTitle(getTitle());
+        if(interractor()!=null)   view.post(() -> interractor().processSmoothShow(true));
+
     }
 
     public String createTag() {

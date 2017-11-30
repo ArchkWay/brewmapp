@@ -14,14 +14,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:tag="@string/tag_menu"
-        app:header="@layout/view_main_menu"/>
+        app:header="@layout/view_main_menu"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:tag="@string/tag_content"
-        android:background="@android:color/white" >
+        android:background="@android:color/white"
+        android:id="@+id/activity.main.visible_container"
+        >
 
         <include layout="@layout/view_toolbar" />
 

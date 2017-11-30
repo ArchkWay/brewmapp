@@ -97,15 +97,15 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void initView(View view) {
         //if(getArguments().getBoolean(MainActivity.KEY_FIRST_FRAGMENT,false)){
-            scrollView.setVisibility(View.INVISIBLE);
-            transitions_container.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    TransitionManager.getDefaultTransition().setDuration(1000);
-                    TransitionManager.beginDelayedTransition(transitions_container);
-                    scrollView.setVisibility(View.VISIBLE);
-                }
-            },0);
+//            scrollView.setVisibility(View.INVISIBLE);
+//            transitions_container.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    TransitionManager.getDefaultTransition().setDuration(1000);
+//                    TransitionManager.beginDelayedTransition(transitions_container);
+//                    scrollView.setVisibility(View.VISIBLE);
+//                }
+//            },0);
         //}
 
 
@@ -145,7 +145,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         //posts_subs.setAdapter(postAdapter);
         setHasOptionsMenu(true);
-
 
 
     }

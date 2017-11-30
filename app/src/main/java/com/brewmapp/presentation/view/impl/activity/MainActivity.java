@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
@@ -55,6 +56,8 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+import com.transitionseverywhere.TransitionManager;
+
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -77,6 +80,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @BindView(R.id.activity_main_avatar) ImageView avatar;
     @BindView(R.id.activity_main_profileHeader) View profileHeader;
     @BindView(R.id.activity_main_container) FrameLayout container;
+    @BindView(R.id.activity_main_visible_container)    RelativeLayout visible_container;
+
 
     @Inject MainPresenter presenter;
     @Inject MainNavigator navigator;
@@ -204,19 +209,25 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
+    public synchronized void processSmoothShow(boolean show) {
+
+        TransitionManager.getDefaultTransition().setDuration(250);
+        TransitionManager.beginDelayedTransition(drawer);
+        container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+    }
+
+    @Override
     public void showDrawer(boolean shown) {
 
         if(shown) {
             drawer.openDrawer();
+
         } else {
-            drawer.post(new Runnable() {
-                @Override
-                public void run() {
-                    drawer.closeDrawer();
-                }
-            });
-
-
+            drawer.post(() -> {
+                drawer.closeDrawer();
+                processSmoothShow(false);
+                });
         }
     }
 

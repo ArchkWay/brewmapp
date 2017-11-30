@@ -100,9 +100,10 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
 
     @Override
     public void finish(FragmentActivity activity) {
-        activity.setResult(Activity.RESULT_OK,new Intent(null,Uri.parse(String.valueOf(user_old_data.getId()))));
-        activity.finish();
-
+        try {
+            activity.setResult(Activity.RESULT_OK,new Intent(null,Uri.parse(String.valueOf(user_old_data.getId()))));
+            activity.finish();
+        }catch (Exception e){}
     }
 
 }

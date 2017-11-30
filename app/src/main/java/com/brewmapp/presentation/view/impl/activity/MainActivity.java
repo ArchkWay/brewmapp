@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.MenuRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -16,8 +17,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +36,7 @@ import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -84,7 +91,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";
     public static final String MODE_ONLY_MAP_FRAGMENT="map_fragment";
 
-
+    DuoDrawerToggle drawerToggle;
     private String mode;
 
     @Override
@@ -103,7 +110,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private void setDrawer() {
         drawer.setMarginFactor(0.5f);
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.ic_menu_toggle)).getBitmap();
-        DuoDrawerToggle drawerToggle = new CustomDuoDrawerToggle(this, toolbar, drawer,
+        drawerToggle = new CustomDuoDrawerToggle(this, toolbar, drawer,
                 new CustomDrawerArrowDrawable(getResources(), bitmap),
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close, navigator::onDrawerClosed);
@@ -198,10 +205,18 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showDrawer(boolean shown) {
+
         if(shown) {
             drawer.openDrawer();
         } else {
-            drawer.closeDrawer();
+            drawer.post(new Runnable() {
+                @Override
+                public void run() {
+                    drawer.closeDrawer();
+                }
+            });
+
+
         }
     }
 

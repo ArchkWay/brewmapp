@@ -96,7 +96,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     protected void initView(View view) {
-        if(getArguments().getBoolean(MainActivity.KEY_FIRST_FRAGMENT,false)){
+        //if(getArguments().getBoolean(MainActivity.KEY_FIRST_FRAGMENT,false)){
             scrollView.setVisibility(View.INVISIBLE);
             transitions_container.postDelayed(new Runnable() {
                 @Override
@@ -106,7 +106,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                     scrollView.setVisibility(View.VISIBLE);
                 }
             },0);
-        }
+        //}
 
 
         menuAdapter = new FlexibleAdapter<>(CardMenuField.createProfileItems(getActivity()), this);

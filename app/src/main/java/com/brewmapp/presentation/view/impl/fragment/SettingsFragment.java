@@ -11,6 +11,7 @@ import com.brewmapp.presentation.view.contract.SettingsView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -19,6 +20,16 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public class SettingsFragment extends BaseFragment implements SettingsView {
+
+    @BindView(R.id.fragment_setting_about) View about;
+    @BindView(R.id.fragment_setting_help) View help;
+    @BindView(R.id.fragment_setting_write_to_us) View write_to_us;
+    @BindView(R.id.fragment_setting_terms_of_use) View terms_of_use;
+    @BindView(R.id.fragment_setting_profile) View profile;
+    @BindView(R.id.fragment_setting_change_password) View change_password;
+    @BindView(R.id.fragment_setting_change_phone) View change_phone;
+    @BindView(R.id.fragment_setting_auth_facebook) View auth_facebook;
+    @BindView(R.id.fragment_setting_delete_account) View delete_account;
 
     @Inject SettingsPresenter presenter;
 

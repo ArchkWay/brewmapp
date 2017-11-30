@@ -8,31 +8,33 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         >
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/common_block_space_double"
+            android:padding="@dimen/common_block_space_double"
             android:orientation="vertical"
             >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
+                android:id="@+id/fragment.setting.about"
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/about"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -54,20 +56,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
+                android:id="@+id/fragment.setting.help"
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/help"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -89,20 +93,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
-                >
+                android:clickable="true"
+                android:id="@+id/fragment.setting.write_to_us">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/write_to_us"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -124,15 +129,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
-                >
+                android:clickable="true"
+                android:id="@+id/fragment.setting.terms_of_use">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -159,8 +166,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
                 android:visibility="invisible"
                 >
 
@@ -174,7 +182,6 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:layout_marginBottom="@dimen/common_block_space_half"
-                        android:text="@string/terms_of_use"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
                         android:layout_weight="1"
@@ -195,20 +202,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
+                android:id="@+id/fragment.setting.profile"
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/my_profile"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -230,19 +239,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:orientation="vertical"
+                android:clickable="true"
+
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/account"
                         style="@style/AppTheme.Text.Georgia.BoldItalic"
                         android:background="@null"
@@ -255,20 +268,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
+                android:id="@+id/fragment.setting.change_password"
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/change_password"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -290,20 +305,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
-                >
+                android:clickable="true"
+                android:id="@+id/fragment.setting.change_phone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/change_phone"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -325,20 +341,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
+                android:id="@+id/fragment.setting.auth_facebook"
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/auth_facebook"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"
@@ -360,20 +378,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/background_clickable_white_gray"
                 android:orientation="vertical"
+                android:clickable="true"
                 >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_block_space_half"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/fragment.setting.delete_account"
+                    >
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/red"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/delete_account"
                         style="@style/AppTheme.Text.H4"
                         android:background="@null"

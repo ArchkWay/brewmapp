@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.MenuRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -17,13 +16,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,7 +31,6 @@ import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -103,12 +96,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
+        processShow(false,false);
     }
 
     @Override
     protected void initView() {
         setTitle("");
-        toolbar.setVisibility(View.GONE);
         mode=presenter.parseMode(getIntent());
    }
 
@@ -209,33 +202,30 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
-    public synchronized void processSmoothShow(boolean show) {
-
-        TransitionManager.getDefaultTransition().setDuration(250);
-        TransitionManager.beginDelayedTransition(drawer);
+    public synchronized void processShow(boolean show, boolean smooth) {
+        if(smooth) {
+            TransitionManager.getDefaultTransition().setDuration(250);
+            TransitionManager.beginDelayedTransition(drawer);
+        }
         container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
         toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
     }
 
     @Override
     public void showDrawer(boolean shown) {
-
-        if(shown) {
+        if(shown)
             drawer.openDrawer();
-
-        } else {
+        else
             drawer.post(() -> {
                 drawer.closeDrawer();
-                processSmoothShow(false);
-                });
-        }
+                processShow(false,true);
+            });
     }
 
     @Override
     public void successCheckEnvironment(User user, List<MenuField> fields) {
 
         check_connection.setVisibility(View.GONE);
-
 
         Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
         userName.setText(user.getFormattedName());
@@ -270,7 +260,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
         navigator.onDrawerClosed();
 
-        toolbar.setVisibility(View.VISIBLE);
     }
 
     @Override

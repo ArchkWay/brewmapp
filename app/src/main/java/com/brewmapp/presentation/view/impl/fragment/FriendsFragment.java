@@ -100,4 +100,11 @@ public class FriendsFragment extends BaseFragment implements FriendsView {
         original = list;
         adapter.updateDataSet(list);
     }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+    }
+
 }

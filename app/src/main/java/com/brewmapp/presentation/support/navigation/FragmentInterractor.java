@@ -15,5 +15,5 @@ public interface FragmentInterractor {
     void processStartActivityWithRefresh(Intent intent,int requestCode);
     void processSetActionBar(int position);
 
-    void processSmoothShow(boolean show);
+    void processShow(boolean show, boolean smooth);
 }

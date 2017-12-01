@@ -79,4 +79,17 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         if(menu!=null) menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+    }
+
+    @Override
+    public void onBarAction(int id) {
+        super.onBarAction(id);
+    }
+
+
 }

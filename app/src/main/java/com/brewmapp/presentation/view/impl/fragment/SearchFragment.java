@@ -80,4 +80,11 @@ public class SearchFragment extends BaseFragment implements SearchAllView {
     public void enableControls(boolean enabled, int code) {
 
     }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+    }
+
 }

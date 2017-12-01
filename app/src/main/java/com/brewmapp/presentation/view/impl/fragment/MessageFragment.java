@@ -1,14 +1,11 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.brewmapp.R;
@@ -17,9 +14,7 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
-import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
@@ -35,7 +30,6 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 import static android.app.Activity.RESULT_OK;
@@ -150,4 +144,11 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
                     super.onBarAction(id);
         }
     }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+    }
+
 }

@@ -21,7 +21,6 @@ import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
-import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -46,7 +45,6 @@ import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
-import com.transitionseverywhere.TransitionManager;
 
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
@@ -305,4 +303,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         }
     }
 
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+    }
 }

@@ -425,8 +425,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         photosResto.toArray(urls);
         intent.putExtra(Keys.PHOTOS, urls);
         restoDetailActivity.startActivity(intent);
-
-        view.showMessage(context.getString(R.string.message_develop),0);
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.brewmapp.R;
@@ -13,24 +12,15 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
-import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
-import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.impl.LocationFragment;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
-import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
-import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -39,7 +29,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +42,6 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
-import static com.brewmapp.execution.exchange.request.base.Keys.PARENT_INFO;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
@@ -247,4 +235,11 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void onBarAction(int id) {
         interractor().processStartActivityWithRefresh(new Intent(getActivity(), FilterMapActivity.class), REQUEST_CODE_MAP_REFRESH);
     }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+    }
+
 }

@@ -161,7 +161,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/common_block_space"
+                android:layout_marginRight="@dimen/common_block_space"
+                android:layout_marginLeft="@dimen/common_block_space"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -169,7 +170,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_margin="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
                     >
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -186,6 +188,7 @@
                             style="@style/AppTheme.Paragraph"
                             android:lines="1"
                             android:layout_weight="1"
+                            android:gravity="center_vertical"
 
                             />
                         <TextView
@@ -193,6 +196,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/activity.resto.detail.text.view.interior"
                             android:text="@string/text_view_value_not_found"
+                            android:gravity="center_vertical"
                             />
                     </LinearLayout>
 
@@ -210,13 +214,14 @@
                             style="@style/AppTheme.Paragraph"
                             android:lines="1"
                             android:layout_weight="1"
-
+                            android:gravity="center_vertical"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/activity.resto.detail.text.view.service"
                             android:text="@string/text_view_value_not_found"
+                            android:gravity="center_vertical"
                             />
 
                     </LinearLayout>
@@ -229,7 +234,8 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:id="@+id/activity.resto.detail.rating.view.beer_linear_layout"
-                    android:layout_margin="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
                     >
 
                     <LinearLayout
@@ -244,13 +250,14 @@
                             style="@style/AppTheme.Paragraph"
                             android:lines="1"
                             android:layout_weight="1"
-
+                            android:gravity="center_vertical"
                             />
                         <TextView
                             android:id="@+id/activity.resto.detail.text.view.quality.beer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/text_view_value_not_found"
+                            android:gravity="center_vertical"
                             />
                     </LinearLayout>
                     <LinearLayout
@@ -266,12 +273,14 @@
                             style="@style/AppTheme.Paragraph"
                             android:lines="1"
                             android:layout_weight="1"
+                            android:gravity="center_vertical"
                             />
                         <TextView
                             android:id="@+id/activity.resto.detail.text.view.common.effect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/text_view_value_not_found"
+                            android:gravity="center_vertical"
                             />
 
                     </LinearLayout>
@@ -307,6 +316,7 @@
                     android:text="@string/text_view_avg_account"
                     style="@style/AppTheme.Paragraph"
                     android:layout_marginRight="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -315,7 +325,7 @@
                     android:text="@string/text_view_value_not_found_1"
                     android:layout_weight="1"
                     style="@style/AppTheme.Paragraph"
-
+                    android:gravity="center_vertical"
                     />
                 <!--<ImageView-->
                     <!--android:layout_width="30dp"-->
@@ -362,6 +372,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_margin="@dimen/common_block_space"
                     style="@style/AppTheme.Paragraph"
+                    android:gravity="center_vertical"
                     />
 
                 <ImageView
@@ -401,6 +412,7 @@
                     android:text="@string/text_view_kitchen"
                     style="@style/AppTheme.Paragraph"
                     android:layout_marginRight="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -410,7 +422,7 @@
                     android:text="@string/text_view_value_not_found_2"
                     android:layout_weight="1"
                     style="@style/AppTheme.Paragraph"
-
+                    android:gravity="center_vertical"
                     />
 
             </LinearLayout>
@@ -425,12 +437,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_margin="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -481,7 +496,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_margin="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -527,7 +543,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_margin="@dimen/common_block_space"
+                android:layout_marginLeft="@dimen/common_block_space"
+                android:layout_marginRight="@dimen/common_block_space"
                 android:gravity="center_vertical"
                 >
 
@@ -578,8 +595,8 @@
                     android:layout_marginRight="@dimen/common_block_space"
                     android:layout_gravity="center_vertical"
                     android:text="@string/text_view_value_not_found_4"
-                    android:textSize="@dimen/text_size_big_phone"
                     app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                    style="@style/AppTheme.Text.H5"
                     android:lines="@integer/init_max_lites_text_view"
 
                     />
@@ -606,7 +623,8 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_margin="@dimen/common_block_space"
+                android:layout_marginRight="@dimen/common_block_space"
+                android:layout_marginLeft="@dimen/common_block_space"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:id="@+id/activity.resto.detail.layout_news"
@@ -633,6 +651,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none1"
                     android:layout_marginLeft="@dimen/common_block_space"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -645,6 +664,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none2"
                     android:layout_marginLeft="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -656,6 +676,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none3"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -667,6 +688,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none4"
+                    android:gravity="center_vertical"
                     />
 
                 <ImageView
@@ -715,6 +737,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none6"
                     android:layout_marginLeft="@dimen/common_block_space"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -727,6 +750,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none7"
                     android:layout_marginLeft="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -738,6 +762,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none8"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -749,6 +774,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none9"
+                    android:gravity="center_vertical"
                     />
 
                 <ImageView
@@ -797,6 +823,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none11"
                     android:layout_marginLeft="@dimen/common_block_space"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -809,6 +836,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none12"
                     android:layout_marginLeft="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -820,6 +848,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none13"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -831,6 +860,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none14"
+                    android:gravity="center_vertical"
                     />
 
                 <ImageView
@@ -879,6 +909,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none16"
                     android:layout_marginLeft="@dimen/common_block_space"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -891,6 +922,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none17"
                     android:layout_marginLeft="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -902,6 +934,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none18"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -913,6 +946,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none19"
+                    android:gravity="center_vertical"
                     />
 
                 <ImageView
@@ -961,6 +995,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none21"
                     android:layout_marginLeft="@dimen/common_block_space"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -973,6 +1008,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none22"
                     android:layout_marginLeft="@dimen/common_block_space_half"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -984,6 +1020,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none23"
+                    android:gravity="center_vertical"
                     />
 
                 <TextView
@@ -995,6 +1032,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/activity.resto.detail.text.view.none24"
+                    android:gravity="center_vertical"
                     />
 
                 <ImageView

@@ -5,6 +5,7 @@ import android.view.View;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.presenter.contract.AddReviewBeerPresenter;
 import com.brewmapp.presentation.presenter.contract.AddReviewRestoPresenter;
@@ -43,9 +44,9 @@ import com.brewmapp.presentation.presenter.contract.SearchPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
-import com.brewmapp.presentation.presenter.contract.UserProfilePresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MessageFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.MultiFragmentActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddReviewBeerPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.AddReviewRestoPresenterImpl;
@@ -86,7 +87,6 @@ import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
 import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
-import com.brewmapp.presentation.presenter.impl.UserProfilePresenterImpl;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
@@ -301,7 +301,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    UserProfilePresenter provideUserProfilePresenter(UserProfilePresenterImpl presenter){
+    MultiFragmentActivityPresenter provideMultiFragmentActivityPresenter(MultiFragmentActivityPresenterImpl presenter){
         return presenter;
     }
 

@@ -36,7 +36,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/about"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -50,7 +50,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/help"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -87,7 +87,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/write_to_us"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -123,7 +123,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -144,9 +144,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
                         android:text="@string/terms_of_use"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -160,7 +159,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -182,7 +181,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:layout_marginBottom="@dimen/common_block_space_half"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -196,7 +195,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -219,7 +218,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/my_profile"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -233,7 +232,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -285,7 +284,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/change_password"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -299,7 +298,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -321,7 +320,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/change_phone"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -335,7 +334,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -358,7 +357,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorGrayDark"
                         android:text="@string/auth_facebook"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
                         />
@@ -372,7 +371,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
             <LinearLayout
@@ -396,7 +395,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/red"
                         android:text="@string/delete_account"
-                        style="@style/AppTheme.Text.H4"
+                        style="@style/AppTheme.Text.H5"
                         android:background="@null"
                         android:layout_weight="1"
 
@@ -411,7 +410,7 @@
                 <ru.frosteye.ovsa.presentation.view.widget.Line
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
+                    android:background="@color/bg_gray"/>
 
             </LinearLayout>
 

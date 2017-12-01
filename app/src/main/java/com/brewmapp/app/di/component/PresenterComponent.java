@@ -3,6 +3,7 @@ package com.brewmapp.app.di.component;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
@@ -36,7 +37,6 @@ import com.brewmapp.presentation.view.impl.activity.PickLocationActivity;
 import com.brewmapp.presentation.view.impl.activity.RegisterActivity;
 import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
-import com.brewmapp.presentation.view.impl.activity.UserProfileViewActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShare;
@@ -106,6 +106,6 @@ public interface PresenterComponent {
     void inject(FilterByCategory filterByCategory);
     void inject(FilterMapActivity filterMapActivity);
     void inject(AddReviewBeerActivity addReviewBeerActivity);
-    void inject(UserProfileViewActivity userProfileViewActivity);
+    void inject(MultiFragmentActivity multiFragmentActivity);
     void inject(DialogManageContact dialogManageContact);
 }

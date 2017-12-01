@@ -108,6 +108,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="AppTheme.Text.H5">
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="AppTheme.Input">
         <item name="android:textSize">20sp</item>
         <item name="android:paddingLeft">@dimen/common_block_space_double_semi</item>

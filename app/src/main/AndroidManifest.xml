@@ -163,7 +163,7 @@
         <activity android:name=".presentation.view.impl.activity.AddReviewRestoActivity" />
         <activity android:name=".presentation.view.impl.activity.ProfileEditActivity" />
         <activity android:name=".presentation.view.impl.activity.AddReviewBeerActivity" />
-        <activity android:name=".presentation.view.impl.activity.UserProfileViewActivity" />
+        <activity android:name=".presentation.view.impl.activity.MultiFragmentActivity" />
         <activity android:name=".presentation.view.impl.activity.SplashActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait"

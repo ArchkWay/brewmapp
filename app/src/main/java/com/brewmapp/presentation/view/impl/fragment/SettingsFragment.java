@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -7,7 +8,9 @@ import android.view.View;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.SettingsView;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 
 import javax.inject.Inject;
 
@@ -47,6 +50,8 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     @Override
     protected void initView(View view) {
         setHasOptionsMenu(true);
+        about.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_ABOUT,null,getActivity(), MultiFragmentActivity.class)));
+        help.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_HELP,null,getActivity(), MultiFragmentActivity.class)));
     }
 
     @Override

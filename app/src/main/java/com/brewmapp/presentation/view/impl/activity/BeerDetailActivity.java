@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
@@ -26,6 +29,7 @@ import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -271,9 +275,14 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
             }
             break;
             case Keys.CAP_USER:{
-                Intent intent = new Intent(this, UserProfileViewActivity.class);
-                intent.putExtra(Keys.CAP_INTEREST, interest);
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+                startActivityForResult(
+                        new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(interest.getUser_info().getId())), this, ProfileEditActivity.class),
+                        RequestCodes.REQUEST_CODE_REFRESH_ITEMS
+                );
+
+//                Intent intent = new Intent(this, UserProfileViewActivity.class);
+//                intent.putExtra(Keys.CAP_INTEREST, interest);
+//                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }
         }
     }

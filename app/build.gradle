@@ -111,8 +111,8 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'io.paperdb:paperdb:2.6'
+    compile 'com.andkulikov:transitionseverywhere:1.7.7'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.5'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
-    compile "com.andkulikov:transitionseverywhere:1.7.7"
 }

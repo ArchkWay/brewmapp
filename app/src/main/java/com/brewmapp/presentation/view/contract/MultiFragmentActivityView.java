@@ -1,6 +1,9 @@
 package com.brewmapp.presentation.view.contract;
 
+import android.support.v4.app.Fragment;
+
 import com.brewmapp.data.entity.User;
+import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
@@ -14,5 +17,5 @@ public interface MultiFragmentActivityView extends BasicView{
     String MODE_ABOUT="0";
     String MODE_HELP="1";
 
-    void setContent(String modeContent);
+    void showFragment(Fragment fragment);
 }

@@ -393,4 +393,7 @@
     <string name="auth_facebook">Авторизоваться через Facebook</string>
     <string name="delete_account">Удалить учетную запись</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

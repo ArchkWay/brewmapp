@@ -1,0 +1,45 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/common_block_space_triple"
+        android:paddingRight="@dimen/common_block_space_triple"
+        android:paddingTop="?attr/actionBarSize"
+        android:background="@drawable/bg_start"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/size_start_logo"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_logo"
+            android:layout_marginBottom="@dimen/common_block_space_triple"
+            android:id="@+id/activity.start.logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            style="@style/AppTheme.Text.H4"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_view_value_not_found"
+            style="@style/AppTheme.Text.H4"
+            android:textColor="@color/white"
+            android:id="@+id/fragment.about.ver"
+            />
+
+    </LinearLayout>
+</FrameLayout>

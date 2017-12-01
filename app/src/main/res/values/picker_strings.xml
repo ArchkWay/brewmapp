@@ -3,7 +3,7 @@
     <string name="action_settings">Настройки</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment"></string>
+
     <string name="all_images">Все фото</string>
 
     <string name="permission_camera_rationale">Нет доступа к камере</string>

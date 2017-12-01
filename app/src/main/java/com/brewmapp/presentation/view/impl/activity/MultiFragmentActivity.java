@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
 
@@ -8,15 +10,20 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
+import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.HelpFragment;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class MultiFragmentActivity extends BaseActivity implements MultiFragmentActivityView {
+public class MultiFragmentActivity extends BaseActivity implements MultiFragmentActivityView,AboutFragment.OnFragmentInteractionListener,HelpFragment.OnFragmentInteractionListener  {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.multiactivity_root)    ViewGroup root;
+
+
 
     @Inject    MultiFragmentActivityPresenter presenter;
 
@@ -62,12 +69,11 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     }
 
     @Override
-    public void setContent(String modeContent) {
-        switch (modeContent){
-            case MODE_ABOUT:
-                getLayoutInflater().inflate(R.layout.about_view,root);
-                break;
-        }
+    public void showFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.multiactivity_сontainer, fragment)
+                .commit();
 
     }
 
@@ -75,5 +81,15 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     @Override
     protected Toolbar findActionBar() {
         return toolbar;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void setTitleActionBar(int title) {
+        setTitle(title);
     }
 }

@@ -17,6 +17,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -27,6 +28,7 @@ import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.ScrollPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
@@ -291,8 +293,14 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 }
                 break;
             case FilterRestoField.CITY:
+                showProgressBar(true);
+                okButton.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.select_country);
-                okButton.setText(R.string.next);
+                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
+                } else {
+                    presenter.loadCountries();
+                }
                 break;
             case FilterRestoField.METRO:
                 toolbarTitle.setText(R.string.select_metro);
@@ -382,6 +390,23 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 goToRestoDetails(String.valueOf(resto.getId()));
                 break;
             case FilterRestoField.CITY:
+                Country country = (Country) payload;
+                toolbarTitle.setText(R.string.select_region);
+                if (getStoredFilterList(FilterKeys.REGION) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.REGION));
+                } else {
+                    presenter.loadRegions(new GeoPackage(country.getId(), null));
+                }
+                //TO DO
+                break;
+            case FilterRestoField.REGION:
+//                Country country = (Country) payload;
+//                toolbarTitle.setText(R.string.select_country);
+//                if (getStoredFilterList(FilterKeys.REGION) != null) {
+//                    appendItems(getStoredFilterList(FilterKeys.REGION));
+//                } else {
+//                    presenter.loadRegions(new GeoPackage(country.getId(), null);
+//                }
                 //TO DO
                 break;
             case FilterRestoField.METRO:

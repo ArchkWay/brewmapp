@@ -2,11 +2,17 @@
 package com.brewmapp.data.entity;
 
 import javax.annotation.Generated;
+
+import com.brewmapp.R;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
+import com.google.maps.android.clustering.ClusterItem;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class FilterRestoLocation {
+public class FilterRestoLocation implements ClusterItem {
 
     @SerializedName("location_id")
     private String mLocationId;
@@ -20,6 +26,17 @@ public class FilterRestoLocation {
     private String mName;
     @SerializedName("name_en")
     private String mNameEn;
+
+    private LatLng mPosition;
+    private String snippet;
+    private BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
+    private String title;
+
+    public FilterRestoLocation(BitmapDescriptor icon, String title, String snippet) {
+        this.title = title;
+        this.snippet = snippet;
+        this.icon = icon;
+    }
 
     public String getLocationId() {
         return mLocationId;
@@ -70,4 +87,22 @@ public class FilterRestoLocation {
     }
 
 
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(getLocationLat(), getLocationLon());
+    }
+
+    @Override
+    public String getTitle() {
+        return mName;
+    }
+
+    @Override
+    public String getSnippet() {
+        return snippet;
+    }
+
+    public BitmapDescriptor getIcon() {
+        return BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
+    }
 }

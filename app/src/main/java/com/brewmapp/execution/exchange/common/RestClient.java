@@ -19,6 +19,7 @@ import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
+import com.brewmapp.data.entity.wrapper.RegionInfo;
 import com.brewmapp.data.entity.wrapper.RestoDetailInfo;
 import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
@@ -35,6 +36,7 @@ import com.brewmapp.execution.exchange.common.base.BeerPowerDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerSmellDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
+import com.brewmapp.execution.exchange.common.base.CountryDeserializer;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
 import com.brewmapp.execution.exchange.common.base.FilterBeerDeserializer;
@@ -44,6 +46,7 @@ import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.KitchenDeserializer;
 import com.brewmapp.execution.exchange.common.base.PriceRangeDeserializer;
 import com.brewmapp.execution.exchange.common.base.QuickSearchDeserializer;
+import com.brewmapp.execution.exchange.common.base.RegionDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
@@ -132,6 +135,8 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(BeerPowerInfo.class, new BeerPowerDeserializer())
                 .registerTypeAdapter(BeerDensityInfo.class, new BeerDensityDeserializer())
                 .registerTypeAdapter(BeerIbuInfo.class, new BeerIbuDeserializer())
+                .registerTypeAdapter(ContactInfo.class, new CountryDeserializer())
+                .registerTypeAdapter(RegionInfo.class, new RegionDeserializer())
                 ;
     }
 

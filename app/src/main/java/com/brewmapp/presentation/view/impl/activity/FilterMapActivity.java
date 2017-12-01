@@ -178,7 +178,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @Override
     public boolean onItemClick(int position) {
-        if ((tabsView.getTabs().getSelectedTabPosition() == 0) && (position == 5 || position == 6)){
+        if ((tabsView.getTabs().getSelectedTabPosition() == 0) && position == 6){
             Toast.makeText(this, "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, FilterByCategory.class);

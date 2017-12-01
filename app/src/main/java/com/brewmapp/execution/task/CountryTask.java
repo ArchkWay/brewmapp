@@ -1,7 +1,7 @@
 package com.brewmapp.execution.task;
 
-import com.brewmapp.data.entity.BeerIbu;
-import com.brewmapp.data.entity.BeerIbuTypes;
+import com.brewmapp.data.entity.Country;
+import com.brewmapp.data.entity.CountryTypes;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -14,25 +14,28 @@ import javax.inject.Inject;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
+import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
 /**
- * Created by nixus on 30.11.2017.
+ * Created by nixus on 02.12.2017.
  */
 
-public class BeerIbuTask extends BaseNetworkTask<BeerIbu, List<IFlexible>> {
+public class CountryTask extends BaseNetworkTask<Country, List<IFlexible>> {
 
     @Inject
-    public BeerIbuTask(MainThread mainThread,
-                           Executor executor,
-                           Api api) {
+    public CountryTask(MainThread mainThread,
+                       Executor executor,
+                       Api api) {
         super(mainThread, executor, api);
     }
 
     @Override
-    protected Observable<List<IFlexible>> prepareObservable(BeerIbu beerIbu) {
+    protected Observable<List<IFlexible>> prepareObservable(Country country) {
         return Observable.create(subscriber -> {
             try {
-                BeerIbuTypes response = executeCall(getApi().loadBeerIbu());
+                RequestParams requestParams = new RequestParams();
+//                requestParams.addParam("show_use_beer", 1);
+                CountryTypes response = executeCall(getApi().loadCountries(requestParams));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

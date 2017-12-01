@@ -15,7 +15,9 @@ public class Region {
     @SerializedName("name")
     private String mName;
     @SerializedName("name_en")
-    private String mNameEn;
+    private Object mNameEn;
+    @SerializedName("relations")
+    private Relations mRelations;
 
     public String getCountryId() {
         return mCountryId;
@@ -41,12 +43,20 @@ public class Region {
         mName = name;
     }
 
-    public String getNameEn() {
+    public Object getNameEn() {
         return mNameEn;
     }
 
-    public void setNameEn(String nameEn) {
+    public void setNameEn(Object nameEn) {
         mNameEn = nameEn;
+    }
+
+    public Relations getRelations() {
+        return mRelations;
+    }
+
+    public void setRelations(Relations relations) {
+        mRelations = relations;
     }
 
 }

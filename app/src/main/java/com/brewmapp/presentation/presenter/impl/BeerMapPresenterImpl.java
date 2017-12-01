@@ -1,13 +1,10 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
@@ -18,9 +15,7 @@ import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 

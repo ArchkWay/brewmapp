@@ -2,8 +2,8 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
 
-import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.PriceRangeType;
 import com.brewmapp.data.pojo.ScrollPackage;
 import com.brewmapp.execution.task.BeerAftertasteTask;
@@ -16,10 +16,12 @@ import com.brewmapp.execution.task.BeerPowerTask;
 import com.brewmapp.execution.task.BeerSmellTask;
 import com.brewmapp.execution.task.BeerTasteTask;
 import com.brewmapp.execution.task.BeerTypesTask;
+import com.brewmapp.execution.task.CountryTask;
 import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
 import com.brewmapp.execution.task.PriceRangeTask;
+import com.brewmapp.execution.task.RegionTask;
 import com.brewmapp.execution.task.RestoTypeTask;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
@@ -39,12 +41,15 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategoryView> implements FilterByCategoryPresenter {
 
     private Context context;
+
     //Resto filter queries
     private RestoTypeTask restoTypeTask;
     private KitchenTask kitchenTask;
     private PriceRangeTask priceRangeTask;
     private FeatureTask featureTask;
     private FullSearchFilterTask fullSearchFilterTask;
+    private CountryTask countryTask;
+    private RegionTask regionTask;
 
     //Beer filter queries
     private BeerTypesTask beerTypesTask;
@@ -73,7 +78,9 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
                                          BeerAftertasteTask beerAftertasteTask,
                                          BeerPowerTask beerPowerTask,
                                          BeerDensityTask beerDensityTask,
-                                         BeerIbuTask beerIbuTask) {
+                                         BeerIbuTask beerIbuTask,
+                                         CountryTask countryTask,
+                                         RegionTask regionTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
@@ -90,6 +97,8 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         this.beerPowerTask = beerPowerTask;
         this.beerDensityTask = beerDensityTask;
         this.beerIbuTask = beerIbuTask;
+        this.countryTask = countryTask;
+        this.regionTask = regionTask;
     }
 
     @Override
@@ -114,6 +123,8 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         beerPowerTask.cancel();
         beerDensityTask.cancel();
         beerIbuTask.cancel();
+        countryTask.cancel();
+        regionTask.cancel();
     }
 
     @Override
@@ -374,6 +385,42 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     public void loadBeerIbu() {
         beerIbuTask.cancel();
         beerIbuTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.showProgressBar(false);
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadCountries() {
+        countryTask.cancel();
+        countryTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.showProgressBar(false);
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadRegions(GeoPackage geoPackage) {
+        regionTask.cancel();
+        regionTask.execute(geoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 view.showProgressBar(false);

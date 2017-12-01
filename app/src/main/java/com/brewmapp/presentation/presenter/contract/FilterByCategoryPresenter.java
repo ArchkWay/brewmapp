@@ -1,12 +1,10 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.ScrollPackage;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
 
-import java.util.List;
-
-import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 /**
@@ -29,4 +27,6 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void loadBeerPower();
     void loadBeerDensity();
     void loadBeerIbu();
+    void loadCountries();
+    void loadRegions(GeoPackage geoPackage);
 }

@@ -25,6 +25,8 @@ import com.brewmapp.data.entity.BeerSmellTypes;
 import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.Country;
+import com.brewmapp.data.entity.CountryTypes;
 import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.FilterBeerLocation;
 import com.brewmapp.data.entity.Event;
@@ -34,6 +36,7 @@ import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
 import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.PriceRangeTypes;
+import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.RestoTypes;
@@ -345,7 +348,6 @@ public interface Api {
     @GET("quick_search/{query}")
     Call<QuickSearchResponse> quickSearch(@Path("query") String query, @Query("hashtagonly") int end);
 
-
     @POST("beer/type")
     @FormUrlEncoded
     Call<BeerTypesModel> loadBeerTypes(@FieldMap WrapperParams params);
@@ -384,4 +386,12 @@ public interface Api {
 
     @GET("beer/ibu")
     Call<BeerIbuTypes> loadBeerIbu();
+
+    @POST("geo/country")
+    @FormUrlEncoded
+    Call<CountryTypes> loadCountries(@FieldMap RequestParams requestParams);
+
+    @POST("geo/region")
+    @FormUrlEncoded
+    Call<RegionTypes> loadRegions(@FieldMap WrapperParams params);
 }

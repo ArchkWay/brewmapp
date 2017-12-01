@@ -26,8 +26,4 @@ public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> impl
     public boolean filter(String constraint) {
         return getModel().getName().toLowerCase().contains(constraint);
     }
-
-    public boolean isSelected() {
-        return getModel().isSelected();
-    }
 }

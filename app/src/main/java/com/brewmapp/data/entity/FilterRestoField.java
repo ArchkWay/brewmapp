@@ -29,6 +29,9 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     public static final int METRO = 6;
     public static final int FEATURES = 7;
 
+    public static final int REGION = 11;
+    public static final int SELECTED_CITY = 12;
+
     private int id;
     private String selectedItemId;
     private int icon;

@@ -15,6 +15,8 @@ public class FilterKeys {
     public static final String COUNTRY = "country";
     public static final String METRO = "metro";
     public static final String FEATURES = "features";
+    public static final String REGION = "region";
+    public static final String CITY = "city";
 
     //Beer keys
     public static final String BEER_TYPES = "beerTypes";

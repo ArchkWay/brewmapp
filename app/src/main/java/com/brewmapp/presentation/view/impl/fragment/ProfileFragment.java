@@ -78,8 +78,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_transitions_container) ViewGroup transitions_container;
     @BindView(R.id.fragment_profile_scrollView) ScrollView scrollView;
 
-
-
     @Inject    ProfilePresenter presenter;
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
@@ -91,7 +89,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     protected int getFragmentLayout() {
         return R.layout.fragment_profile;
     }
-
 
     @Override
     protected void initView(View view) {
@@ -143,9 +140,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         //posts_subs.setAdapter(postAdapter);
         setHasOptionsMenu(true);
-
-
-
     }
 
     private void processAction(int action, Object payload) {

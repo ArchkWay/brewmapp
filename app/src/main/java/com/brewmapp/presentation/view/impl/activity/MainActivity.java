@@ -78,11 +78,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private @MenuRes int menuToShow;
 
     public static final String KEY_FERST_FRAGMENT="first_fragment";
-
     public static final String MODE_DEFAULT="default";
     public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";
     public static final String MODE_ONLY_MAP_FRAGMENT="map_fragment";
-
 
     private String mode;
 
@@ -94,9 +92,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     protected void initView() {
-
-        mode=presenter.parseMode(getIntent());
-
+        mode = presenter.parseMode(getIntent());
         switch (mode){
             case MODE_DEFAULT:
                 setDrawer();
@@ -174,11 +170,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void showFragment(BaseFragment fragment) {
         fragment.setArguments(presenter.prepareArguments(getIntent(),container));
-
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
-        if(menuToShow ==0 )        processSetActionBar(0);
+        if (menuToShow == 0) {
+            processSetActionBar(0);
+        }
         navigator.setActionBarItemDelegate(fragment);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -190,21 +187,17 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar == null) return;
-        if(baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
-            toolbarDropdown.setVisibility(View.VISIBLE);
-            actionBar.setDisplayShowTitleEnabled(false);
-            toolbarTitle.setText(baseFragment.getTitle());
+        actionBar.setDisplayShowTitleEnabled(false);
+        toolbarTitle.setText(baseFragment.getTitle());
+        if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
+            toolbarSubTitle.setVisibility(View.VISIBLE);
             if(mode.equals(MODE_DEFAULT)) {
                 if (baseFragment instanceof View.OnClickListener) {
                     toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
                 }
-                toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
-            }else {
-                toolbarSubTitle.setVisibility(View.GONE);
             }
         } else {
-            toolbarDropdown.setVisibility(View.GONE);
-            actionBar.setDisplayShowTitleEnabled(true);
+            toolbarSubTitle.setVisibility(View.GONE);
         }
     }
 

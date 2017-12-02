@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 
 /**
@@ -21,13 +23,21 @@ import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
  */
 
 public class HashTagHelper2 {
+    public static final String LINK = "http";
     public static final String SHARP = "#";
     public static final String SPAN_TAG = "tmp";
     Context context;
 
     public HashTagHelper2(TextView textView, String content){
         try {
-            Spanned spannedText= Html.fromHtml(content.toString().replaceAll(SHARP,"<"+SPAN_TAG+">"+SHARP).replace("<br><br>","<br>"),null,htmlTagHandler);
+            String htmlStr=content.toString();
+
+            htmlStr=htmlStr.replaceAll(SHARP,"<"+SPAN_TAG+">"+SHARP);
+            htmlStr=htmlStr.replaceAll(LINK,"<"+SPAN_TAG+">"+LINK);
+            htmlStr=htmlStr.replace("<br><br>","<br>");
+
+
+            Spanned spannedText= Html.fromHtml(htmlStr,null,htmlTagHandler);
             Spannable reversedText = revertSpanned(spannedText);
             textView.setText(reversedText);
             context=textView.getContext();
@@ -100,12 +110,20 @@ public class HashTagHelper2 {
             //Toast.makeText(context,R.string.message_develop,Toast.LENGTH_SHORT).show();
             if(context instanceof MultiListActivity)
                 ((MultiListActivity) context).finish();
-            context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param),context, MultiListActivity.class));
+            if(param!=null) {
+                if(param.startsWith(LINK))
+                    context.startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(param),context, MultiFragmentActivity.class));
+                else
+                    context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param), context, MultiListActivity.class));
+            }
         }
 
         @Override
         public void updateDrawState(TextPaint tp) {
-            tp.setColor(Color.RED);
+            if(param!=null&&param.startsWith(LINK))
+                tp.setColor(Color.BLUE);
+            else
+                tp.setColor(Color.RED);
         }
 
         public String getParam() {

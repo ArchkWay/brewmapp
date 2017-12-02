@@ -1,5 +1,7 @@
 package com.brewmapp.data.pojo;
 
+import com.brewmapp.data.entity.User;
+
 import java.io.Serializable;
 
 /**
@@ -15,6 +17,13 @@ public class RegisterPackageWithPhone extends RegisterPackage implements Seriali
         setLastName(registerPackage.getLastName());
         setGender(registerPackage.getGender());
         setAvatarPath(registerPackage.getAvatarPath());
+    }
+
+    public RegisterPackageWithPhone(User user) {
+        setPhone(user.getPhone());
+        setFirstName(user.getFirstname());
+        setLastName(user.getLastname());
+        setGender(user.getGender());
     }
 
     public String getPhone() {

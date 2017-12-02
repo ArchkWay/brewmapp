@@ -19,6 +19,8 @@ import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
+
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 import butterknife.BindView;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -38,7 +40,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @BindView(R.id.fragment_profile_edit_lastName)    TextView lastName;
     @BindView(R.id.fragment_profile_edit_segmented)    SegmentedGroup segmentedGroup;
     @BindView(R.id.fragment_profile_edit_layout_phone)    ConstraintLayout layout_phone;
-    @BindView(R.id.fragment_profile_edit_edit_text_phone)    TextView edit_text_phone;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone)    MaskedEditText edit_text_phone;
     @BindView(R.id.fragment_profile_edit_text_status)    TextView text_status;
     @BindView(R.id.fragment_profile_edit_layout_birthday)    View layout_birthday;
     @BindView(R.id.fragment_profile_edit_text_birthday)    TextView text_birthday;
@@ -46,7 +48,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @BindView(R.id.fragment_profile_edit_text_city)    TextView text_city;
     @BindView(R.id.fragment_profile_edit_layout_family_status)    View layout_family_status;
     @BindView(R.id.fragment_profile_edit_text_family_status)    TextView text_family_status;
-    @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    TextView edit_text_phone_dop;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    MaskedEditText edit_text_phone_dop;
     @BindView(R.id.fragment_profile_edit_edit_skype)    TextView edit_skype;
     @BindView(R.id.fragment_profile_edit_edit_site)    TextView edit_site;
     @BindView(R.id.fragment_profile_edit_edit_book)    TextView edit_book;

@@ -1,13 +1,12 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.HelpFragment;
+import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
 
 import javax.inject.Inject;
 
@@ -35,8 +34,8 @@ public class MultiFragmentActivityPresenterImpl extends BasePresenter<MultiFragm
                 case MultiFragmentActivityView.MODE_ABOUT:
                     view.showFragment(new AboutFragment());
                     break;
-                case MultiFragmentActivityView.MODE_HELP:
-                    view.showFragment(new HelpFragment());
+                case MultiFragmentActivityView.MODE_WEBVIEW:
+                    view.showFragment(new WebViewFragment());
                     break;
                 default:
                     view.commonError();return;

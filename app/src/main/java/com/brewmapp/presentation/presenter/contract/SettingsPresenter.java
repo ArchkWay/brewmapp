@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.brewmapp.presentation.view.contract.SettingsView;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -9,4 +11,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface SettingsPresenter extends LivePresenter<SettingsView> {
+    void setPassword(FragmentActivity activity);
 }

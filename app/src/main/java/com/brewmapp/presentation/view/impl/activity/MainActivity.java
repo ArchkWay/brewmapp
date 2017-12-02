@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
-        processShow(false,false);
+        processShowDrawer(false,false);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
-    public synchronized void processShow(boolean show, boolean smooth) {
+    public synchronized void processShowDrawer(boolean show, boolean smooth) {
         if(smooth) {
             TransitionManager.getDefaultTransition().setDuration(250);
             TransitionManager.beginDelayedTransition(drawer);
@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         else
             drawer.post(() -> {
                 drawer.closeDrawer();
-                processShow(false,true);
+                processShowDrawer(false,true);
             });
     }
 

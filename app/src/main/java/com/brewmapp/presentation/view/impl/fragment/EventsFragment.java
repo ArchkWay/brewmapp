@@ -353,7 +353,7 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     @Override
     protected void prepareView(View view) {
         super.prepareView(view);
-        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+        if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
     }
 
 }

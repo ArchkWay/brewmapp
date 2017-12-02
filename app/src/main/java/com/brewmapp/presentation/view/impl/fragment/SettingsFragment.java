@@ -1,16 +1,22 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.SettingsView;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.StartActivity;
 
 import javax.inject.Inject;
 
@@ -33,8 +39,11 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     @BindView(R.id.fragment_setting_change_phone) View change_phone;
     @BindView(R.id.fragment_setting_auth_facebook) View auth_facebook;
     @BindView(R.id.fragment_setting_delete_account) View delete_account;
+    @BindView(R.id.fragment_setting_simple_exit) View simple_exit;
+    @BindView(R.id.fragment_setting_all_devices_exit) View all_devices_exit;
 
     @Inject SettingsPresenter presenter;
+    @Inject    MainPresenter presenterMain;
 
     @Override
     protected int getFragmentLayout() {
@@ -51,7 +60,17 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     protected void initView(View view) {
         setHasOptionsMenu(true);
         about.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_ABOUT,null,getActivity(), MultiFragmentActivity.class)));
-        help.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_HELP,null,getActivity(), MultiFragmentActivity.class)));
+        help.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(BuildConfig.SERVER_ROOT_URL),getActivity(), MultiFragmentActivity.class)));
+        write_to_us.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        terms_of_use.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(BuildConfig.SERVER_ROOT_URL),getActivity(), MultiFragmentActivity.class)));
+        profile.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
+        change_password.setOnClickListener(v -> presenter.setPassword(getActivity()));
+        change_phone.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
+        simple_exit.setOnClickListener(v -> {presenterMain.onLogout();startActivity(new Intent(v.getContext(),StartActivity.class));getActivity().finish();});
+        all_devices_exit.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        auth_facebook.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        delete_account.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+
     }
 
     @Override
@@ -88,7 +107,7 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     @Override
     protected void prepareView(View view) {
         super.prepareView(view);
-        if(interractor()!=null)   view.post(() -> interractor().processShow(true,true));
+        if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
     }
 
     @Override

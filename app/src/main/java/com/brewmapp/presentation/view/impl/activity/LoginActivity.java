@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.facebook.login.widget.LoginButton;
 
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 import butterknife.BindView;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.LoginPresenter;
@@ -26,7 +27,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_login_enter) Button enter;
-    @BindView(R.id.activity_login_login) EditText login;
+    @BindView(R.id.activity_login_login)    MaskedEditText login;
     @BindView(R.id.activity_login_password) EditText password;
     @BindView(R.id.activity_login_logo) View logoImage;
     @BindView(R.id.activity_login_fb) View fb;
@@ -77,7 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private void login() {
         if(TextTools.isTrimmedEmpty(login) || TextTools.isTrimmedEmpty(password)) return;
-        String loginString = TextTools.extractTrimmed(login);
+        String loginString = login.getRawText();
         String passString = TextTools.extractTrimmed(password);
         presenter.onLoginPassReady(loginString, passString);
     }

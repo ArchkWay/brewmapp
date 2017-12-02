@@ -413,6 +413,84 @@
                     android:background="@color/bg_gray"/>
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_clickable_white_gray"
+                android:orientation="vertical"
+                android:clickable="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_block_space_half"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/fragment.setting.simple_exit"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red"
+                        android:text="@string/exit"
+                        style="@style/AppTheme.Text.H5"
+                        android:background="@null"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_chevron_right"
+                        />
+
+                </LinearLayout>
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/bg_gray"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_clickable_white_gray"
+                android:orientation="vertical"
+                android:clickable="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/common_block_space_half"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/fragment.setting.all_devices_exit"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red"
+                        android:text="@string/all_devices_exit"
+                        style="@style/AppTheme.Text.H5"
+                        android:background="@null"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_chevron_right"
+                        />
+
+                </LinearLayout>
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/bg_gray"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

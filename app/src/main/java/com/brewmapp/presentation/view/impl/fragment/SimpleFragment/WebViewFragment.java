@@ -8,16 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 
-public class HelpFragment extends Fragment {
+public class WebViewFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public HelpFragment() {
+    public WebViewFragment() {
         // Required empty public constructor
     }
 
@@ -51,7 +52,22 @@ public class HelpFragment extends Fragment {
     }
 
     private void fillContent() {
+
+        class myWebViewClient extends WebViewClient {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        }
+
         WebView webView= (WebView) getView().findViewById(R.id.fragment_help_web_view);
+        webView.setWebViewClient(new myWebViewClient());
+        try {
+            webView.loadUrl(getActivity().getIntent().getData().toString());
+        }catch (Exception e){
+            mListener.commonError(e.getMessage());
+        }
     }
 
     @Override
@@ -64,5 +80,7 @@ public class HelpFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
 
         void setTitleActionBar(int title);
+
+        void commonError(String... message);
     }
 }

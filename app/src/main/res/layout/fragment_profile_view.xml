@@ -1,5 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -427,7 +428,7 @@
                             android:text="@string/text_view_mobile_phone"
                             android:textColor="@color/colorGrayDark" />
 
-                        <TextView
+                        <br.com.sapereaude.maskedEditText.MaskedEditText
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
@@ -435,7 +436,9 @@
                             android:hint="@string/hint_mobile_phone"
                             android:inputType="phone"
                             android:lines="1"
-
+                            mask:allowed_chars="1234567890"
+                            mask:mask="+# (###) ###-##-##"
+                            android:enabled="false"
                             android:id="@+id/fragment.profile.edit.edit_text_phone"
                             />
 
@@ -485,12 +488,17 @@
                             android:text="@string/text_view_additional_mobile_phone"
                             android:textColor="@color/colorGrayDark" />
 
-                        <TextView
+                        <br.com.sapereaude.maskedEditText.MaskedEditText
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_mobile_phone"
+                            android:inputType="phone"
+                            android:lines="1"
+                            mask:allowed_chars="1234567890"
+                            mask:mask="+# (###) ###-##-##"
+                            android:enabled="false"
                             android:id="@+id/fragment.profile.edit.edit_text_phone_dop"/>
 
                     </LinearLayout>

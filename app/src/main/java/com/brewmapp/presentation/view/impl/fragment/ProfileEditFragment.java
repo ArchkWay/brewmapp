@@ -26,6 +26,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 import butterknife.BindView;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -46,7 +47,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @BindView(R.id.fragment_profile_edit_lastName)    EditText lastName;
     @BindView(R.id.fragment_profile_edit_segmented)    SegmentedGroup segmentedGroup;
     @BindView(R.id.fragment_profile_edit_layout_phone)    ConstraintLayout layout_phone;
-    @BindView(R.id.fragment_profile_edit_edit_text_phone)    EditText edit_text_phone;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone)    MaskedEditText edit_text_phone;
     @BindView(R.id.fragment_profile_edit_text_status)    EditText text_status;
     @BindView(R.id.fragment_profile_edit_layout_birthday)    View layout_birthday;
     @BindView(R.id.fragment_profile_edit_text_birthday)    TextView text_birthday;
@@ -54,7 +55,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @BindView(R.id.fragment_profile_edit_text_city)    TextView text_city;
     @BindView(R.id.fragment_profile_edit_layout_family_status)    View layout_family_status;
     @BindView(R.id.fragment_profile_edit_text_family_status)    TextView text_family_status;
-    @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    EditText edit_text_phone_dop;
+    @BindView(R.id.fragment_profile_edit_edit_text_phone_dop)    MaskedEditText edit_text_phone_dop;
     @BindView(R.id.fragment_profile_edit_edit_skype)    EditText edit_skype;
     @BindView(R.id.fragment_profile_edit_edit_site)    EditText edit_site;
     @BindView(R.id.fragment_profile_edit_edit_book)    EditText edit_book;
@@ -136,8 +137,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);invalidateOptionsMenu();}));
         layout_city.setOnClickListener(v -> new DialogSelectCountryCity(getActivity(),getActivity().getSupportFragmentManager(),text_city,user));
 
-        registerTextChangeListeners(s ->{user.setPhone(TextTools.extractTrimmed(edit_text_phone));invalidateOptionsMenu();},edit_text_phone);
-        registerTextChangeListeners(s ->{user.setAdditionalPhone(TextTools.extractTrimmed(edit_text_phone_dop));invalidateOptionsMenu();},edit_text_phone_dop);
+        registerTextChangeListeners(s ->{user.setPhone(edit_text_phone.getRawText());invalidateOptionsMenu();},edit_text_phone);
+        registerTextChangeListeners(s ->{user.setAdditionalPhone(edit_text_phone_dop.getRawText());invalidateOptionsMenu();},edit_text_phone_dop);
         registerTextChangeListeners(s ->{user.setSkype(TextTools.extractTrimmed(edit_skype));invalidateOptionsMenu();},edit_skype);
         registerTextChangeListeners(s ->{user.setSite(TextTools.extractTrimmed(edit_site));invalidateOptionsMenu();},edit_site);
         registerTextChangeListeners(s ->{user.setBooks(TextTools.extractTrimmed(edit_book));invalidateOptionsMenu();},edit_book);

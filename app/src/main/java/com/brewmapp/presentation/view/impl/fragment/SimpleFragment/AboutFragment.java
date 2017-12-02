@@ -52,7 +52,7 @@ public class AboutFragment extends Fragment {
 
     private void fillContent() {
         TextView textView= (TextView) getView().findViewById(R.id.fragment_about_ver);
-        textView.setText(String.format("%s $s","Версия",BuildConfig.VERSION_NAME));
+        textView.setText(String.format("%s %s","Версия",BuildConfig.VERSION_NAME));
     }
 
     @Override
@@ -60,6 +60,7 @@ public class AboutFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

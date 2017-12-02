@@ -35,10 +35,10 @@ public class Country {
     }
 
     public String getGetThumb() {
-        if(getGetThumb() != null && !getGetThumb().startsWith("http")) {
-            mGetThumb = BuildConfig.SERVER_ROOT_URL + getGetThumb();
+        if(mGetThumb != null && !mGetThumb.startsWith("http")) {
+            mGetThumb = BuildConfig.SERVER_ROOT_URL + mGetThumb;
         }
-        return getGetThumb();
+        return mGetThumb;
     }
 
     public void setGetThumb(String getThumb) {

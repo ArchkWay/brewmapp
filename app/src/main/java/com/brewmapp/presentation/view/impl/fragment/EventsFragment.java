@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,8 +21,6 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.FilterAdapter;
 import com.brewmapp.data.entity.FilteredTitle;
-import com.brewmapp.data.entity.Post;
-import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
@@ -42,9 +39,6 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
-import com.brewmapp.presentation.view.contract.ResultTask;
-import com.brewmapp.presentation.view.contract.ResultDialog;
-import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
@@ -79,9 +73,9 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     private EndlessRecyclerOnScrollListener scrollListener;
     private List<FilteredTitle> dropdownItems;
 
-    public static final int TAB_EVENT=0;
-    public static final int TAB_SALE=1;
-    public static final int TAB_POST=2;
+    public static final int TAB_EVENT = 0;
+    public static final int TAB_SALE = 1;
+    public static final int TAB_POST = 2;
 
     private final String MODE_DEFAULT="default";
     private final String MODE_ONLY_BY_RESTO="by_resto";

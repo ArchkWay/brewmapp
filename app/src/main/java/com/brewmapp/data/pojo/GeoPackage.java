@@ -9,6 +9,11 @@ public class GeoPackage {
     private String countryId;
     private String regionId;
 
+    public GeoPackage() {
+    }
+
+    private String cityName;
+
     public GeoPackage(String countryId, String regionId) {
         this.countryId = countryId;
         this.regionId = regionId;
@@ -28,5 +33,13 @@ public class GeoPackage {
 
     public void setRegionId(String regionId) {
         this.regionId = regionId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }

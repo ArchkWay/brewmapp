@@ -171,7 +171,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     }
 
     @Override
-    public void goToMap(List<FilterRestoLocation> restoLocations) {
+    public void goToMapByRestoFilter(List<FilterRestoLocation> restoLocations) {
         EventBus.getDefault().post(new ShowRestoOnMapEvent(restoLocations));
         this.finish();
     }
@@ -370,9 +370,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 if (!notEmpty) {
                     filter.append("Любое  ");
                 }
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.DENSITY)) {
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_DENSITY)) {
                 List<BeerDensityInfo> beerDensityInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.DENSITY);
+                tempList = Paper.book().read(FilterKeys.BEER_DENSITY);
                 if (tempList != null) {
                     for (Object o : tempList) {
                         beerDensityInfos.add((BeerDensityInfo) o);
@@ -388,9 +388,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                 if (!notEmpty) {
                     filter.append("Любое  ");
                 }
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.IBU)) {
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_IBU)) {
                 List<BeerIbuInfo> beerIbuInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.IBU);
+                tempList = Paper.book().read(FilterKeys.BEER_IBU);
                 if (tempList != null) {
                     for (Object o : tempList) {
                         beerIbuInfos.add((BeerIbuInfo) o);
@@ -539,8 +539,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             showProgressBar(true);
             presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), offer.isChecked() ? 1 : 0);
         } else {
-            Toast.makeText(this, "В разаработке" , Toast.LENGTH_SHORT).show();
-//            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"), craft.isChecked() ? 1 : 0);
+            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"), craft.isChecked() ? 1 : 0);
         }
     }
 

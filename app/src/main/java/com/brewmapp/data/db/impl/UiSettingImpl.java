@@ -20,15 +20,14 @@ public class UiSettingImpl extends BaseRepo<UiSettingContainer> implements UiSet
     public UiSettingImpl(Storage storage) {
         super(storage);
         uiSettingContainer =load();
-        if(uiSettingContainer ==null){
-            uiSettingContainer =new UiSettingContainer();}
+        if (uiSettingContainer == null) {
+            uiSettingContainer = new UiSettingContainer();}
     }
 
     @Override
     protected Class<UiSettingContainer> provideClass() {
         return UiSettingContainer.class;
     }
-
 
     @Override
     public int getnActiveFragment() {

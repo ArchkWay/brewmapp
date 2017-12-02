@@ -16,6 +16,6 @@ public interface FilterMapView extends BasicView {
     void showRestoFilters(List<FilterRestoField> fieldList);
     void showBeerFilters(List<FilterBeerField> fieldList);
     void setTabActive(int i);
-    void goToMap(List<FilterRestoLocation> restoLocations);
+    void goToMapByRestoFilter(List<FilterRestoLocation> restoLocations);
     void showProgressBar(boolean show);
 }

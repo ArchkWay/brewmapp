@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.Marker;
 
 public class RestoInfoWindow implements GoogleMap.InfoWindowAdapter {
     private final View markerView;
-    private final Location myLocation;
+    private Location myLocation;
     private final Activity activity;
 
     public RestoInfoWindow(Activity activity, Location myLocation) {

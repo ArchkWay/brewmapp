@@ -8,10 +8,11 @@ import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
 public class UiSettingContainer {
 
-    public int nActiveFragment= MenuField.PROFILE;
+    public int nActiveFragment = MenuField.PROFILE;
 
-    public int nActiveTabEventFragment= EventsFragment.TAB_EVENT;
+    public int nActiveTabEventFragment = EventsFragment.TAB_EVENT;
 
+    public boolean search;
 
     public int getnActiveFragment() {
         return nActiveFragment;
@@ -28,5 +29,4 @@ public class UiSettingContainer {
     public void setnActiveTabEventFragment(int nActiveTabEventFragment) {
         this.nActiveTabEventFragment = nActiveTabEventFragment;
     }
-
 }

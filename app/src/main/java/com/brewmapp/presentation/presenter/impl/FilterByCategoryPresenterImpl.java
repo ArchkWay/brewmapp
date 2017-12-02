@@ -20,6 +20,7 @@ import com.brewmapp.execution.task.CountryTask;
 import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
+import com.brewmapp.execution.task.LoadCityTaskFilter;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RegionTask;
 import com.brewmapp.execution.task.RestoTypeTask;
@@ -50,6 +51,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     private FullSearchFilterTask fullSearchFilterTask;
     private CountryTask countryTask;
     private RegionTask regionTask;
+    private LoadCityTaskFilter cityTask;
 
     //Beer filter queries
     private BeerTypesTask beerTypesTask;
@@ -80,7 +82,8 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
                                          BeerDensityTask beerDensityTask,
                                          BeerIbuTask beerIbuTask,
                                          CountryTask countryTask,
-                                         RegionTask regionTask) {
+                                         RegionTask regionTask,
+                                         LoadCityTaskFilter cityTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
@@ -99,6 +102,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         this.beerIbuTask = beerIbuTask;
         this.countryTask = countryTask;
         this.regionTask = regionTask;
+        this.cityTask = cityTask;
     }
 
     @Override
@@ -125,6 +129,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         beerIbuTask.cancel();
         countryTask.cancel();
         regionTask.cancel();
+        cityTask.cancel();
     }
 
     @Override
@@ -421,6 +426,24 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     public void loadRegions(GeoPackage geoPackage) {
         regionTask.cancel();
         regionTask.execute(geoPackage, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                view.showProgressBar(false);
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadCity(GeoPackage geoPackage) {
+        cityTask.cancel();
+        cityTask.execute(geoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 view.showProgressBar(false);

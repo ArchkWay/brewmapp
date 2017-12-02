@@ -13,7 +13,6 @@ import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.BeerAftertasteTypes;
-import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerBrandTypes;
 import com.brewmapp.data.entity.BeerColorTypes;
 import com.brewmapp.data.entity.BeerDensityTypes;
@@ -25,20 +24,17 @@ import com.brewmapp.data.entity.BeerSmellTypes;
 import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
 import com.brewmapp.data.entity.City;
-import com.brewmapp.data.entity.Country;
+import com.brewmapp.data.entity.CityTypes;
 import com.brewmapp.data.entity.CountryTypes;
 import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.FilterBeerLocation;
-import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
-import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -57,7 +53,6 @@ import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
-import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.WrapperValues;
@@ -239,6 +234,10 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<City>> loadCity(@FieldMap WrapperParams params);
 
+    @POST("geo/city")
+    @FormUrlEncoded
+    Call<CityTypes> loadCityFilter(@FieldMap WrapperParams params);
+
 //    @GET("geocode/json")
 //    Call<GeoСodeResponse> getLocation(
 //            @Query("address") String address,w
@@ -321,11 +320,11 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
+    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap WrapperParams params);
 
     @POST("beer/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<FilterBeerLocation>> loadBeerLocation(@FieldMap RequestParams requestParams);
+    Call<ListResponse<FilterRestoLocation>> loadBeerLocation(@FieldMap WrapperParams params);
 
     @POST("profile")
     @FormUrlEncoded

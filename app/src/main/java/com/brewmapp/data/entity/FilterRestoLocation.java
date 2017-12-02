@@ -26,16 +26,16 @@ public class FilterRestoLocation implements ClusterItem {
     private String mName;
     @SerializedName("name_en")
     private String mNameEn;
+    @SerializedName("beer_id")
+    private String mBeerId;
 
     private LatLng mPosition;
     private String snippet;
-    private BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
     private String title;
 
-    public FilterRestoLocation(BitmapDescriptor icon, String title, String snippet) {
+    public FilterRestoLocation(String title, String snippet) {
         this.title = title;
         this.snippet = snippet;
-        this.icon = icon;
     }
 
     public String getLocationId() {
@@ -105,4 +105,13 @@ public class FilterRestoLocation implements ClusterItem {
     public BitmapDescriptor getIcon() {
         return BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
     }
+
+    public String getmBeerId() {
+        return mBeerId;
+    }
+
+    public void setmBeerId(String mBeerId) {
+        this.mBeerId = mBeerId;
+    }
+
 }

@@ -5,9 +5,7 @@ import android.location.LocationManager;
 
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.request.base.WrapperParams;
-import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadLocationTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
@@ -88,11 +86,10 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     @Override
     public void onLoadedCity(String cityName) {
         loadCityTask.cancel();
-        loadRestoLocationTask.cancel();
         enableControls(false);
-        WrapperParams params = new WrapperParams(Wrappers.CITY);
-        params.addParam(Keys.NAME, cityName);
-        loadCityTask.execute(params, new SimpleSubscriber<List<City>>() {
+        GeoPackage geoPackage = new GeoPackage();
+        geoPackage.setCityName(cityName);
+        loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
             @Override
             public void onError(Throwable e) {
                 enableControls(true);

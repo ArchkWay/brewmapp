@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.brewmapp.presentation.view.impl.widget.RegionView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brewmapp.presentation.view.impl.widget.CityView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="4dp"
@@ -57,4 +57,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</com.brewmapp.presentation.view.impl.widget.RegionView>
+</com.brewmapp.presentation.view.impl.widget.CityView>

@@ -29,4 +29,5 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void loadBeerIbu();
     void loadCountries();
     void loadRegions(GeoPackage geoPackage);
+    void loadCity(GeoPackage geoPackage);
 }

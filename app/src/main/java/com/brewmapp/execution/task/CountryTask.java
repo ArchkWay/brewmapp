@@ -34,7 +34,7 @@ public class CountryTask extends BaseNetworkTask<Country, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 RequestParams requestParams = new RequestParams();
-//                requestParams.addParam("show_use_beer", 1);
+                requestParams.addParam("show_use_beer", "1");
                 CountryTypes response = executeCall(getApi().loadCountries(requestParams));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();

@@ -25,6 +25,7 @@ import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
@@ -118,10 +119,10 @@ public class DialogSelectCountryCity extends DialogFragment {
                 // TODO Auto-generated method stub
                 loadCityTask.cancel();
                 if(txt.length()>0) {
-                    WrapperParams wrapperParams = new WrapperParams(Wrappers.CITY);
-                    wrapperParams.addParam(Keys.NAME, txt);
-                    wrapperParams.addParam(Keys.COUNTRY_ID, "1");
-                    loadCityTask.execute(wrapperParams, new SimpleSubscriber<List<City>>() {
+                    GeoPackage geoPackage = new GeoPackage();
+                    geoPackage.setCityName(txt);
+                    geoPackage.setCountryId("1");
+                    loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
                         @Override
                         public void onError(Throwable e) {
                             super.onError(e);

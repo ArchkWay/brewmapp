@@ -143,6 +143,7 @@ public class Keys {
 
     //Filter beer keys
     public static final String BEER_TYPES = "beerTypes";
+    public static final String SEARCH = "search";
 
     public static final String menuBeer="menuBeer";
     public static final String BIRTHDAY = "birthday";

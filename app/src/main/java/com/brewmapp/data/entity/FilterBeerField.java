@@ -34,7 +34,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static final int SMELL = 11;
     public static final int TASTE = 12;
     public static final int AFTER_TASTE = 13;
-    public static final int FACTORY = 14;
+    public static final int BREWERY = 14;
     public static final int PRICE_BEER = 15;
 
     private int id;
@@ -128,7 +128,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
         out.add(new FilterBeerField(SMELL, R.drawable.ic_beer, context.getString(R.string.search_beer_smell), "Любой"));
         out.add(new FilterBeerField(TASTE, R.drawable.ic_taste, context.getString(R.string.search_beer_taste), "Любой"));
         out.add(new FilterBeerField(AFTER_TASTE, R.drawable.ic_beer_aftertaste, context.getString(R.string.search_beer_after_taste), "Любое"));
-        out.add(new FilterBeerField(FACTORY, R.drawable.ic_brewery, context.getString(R.string.search_beer_factory), "Любая"));
+        out.add(new FilterBeerField(BREWERY, R.drawable.ic_brewery, context.getString(R.string.search_beer_factory), "Любая"));
         out.add(new FilterBeerField(PRICE_BEER, R.drawable.ic_price_range, context.getString(R.string.search_beer_price), "Любая"));
         return out;
     }

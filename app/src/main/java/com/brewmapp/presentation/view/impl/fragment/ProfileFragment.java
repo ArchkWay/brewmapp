@@ -104,7 +104,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             },0);
         }
 
-
         menuAdapter = new FlexibleAdapter<>(CardMenuField.createProfileItems(getActivity()), this);
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));

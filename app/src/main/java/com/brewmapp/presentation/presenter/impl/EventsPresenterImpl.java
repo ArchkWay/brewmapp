@@ -87,8 +87,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         }
     }
 
-
-
     @Override
     public void storeTabActive(int position) {
         uiSettingRepo.setnActiveTabEventFragment(position);

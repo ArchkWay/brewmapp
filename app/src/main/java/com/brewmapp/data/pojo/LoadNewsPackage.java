@@ -1,10 +1,5 @@
 package com.brewmapp.data.pojo;
 
-import android.content.Intent;
-
-import com.brewmapp.app.environment.RequestCodes;
-import com.brewmapp.execution.exchange.request.base.Keys;
-
 import java.util.Date;
 
 /**

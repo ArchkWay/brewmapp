@@ -11,6 +11,8 @@ import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.CityInfo;
+import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
@@ -36,6 +38,7 @@ import com.brewmapp.execution.exchange.common.base.BeerPowerDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerSmellDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
+import com.brewmapp.execution.exchange.common.base.CityDeserializer;
 import com.brewmapp.execution.exchange.common.base.CountryDeserializer;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
@@ -135,8 +138,9 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(BeerPowerInfo.class, new BeerPowerDeserializer())
                 .registerTypeAdapter(BeerDensityInfo.class, new BeerDensityDeserializer())
                 .registerTypeAdapter(BeerIbuInfo.class, new BeerIbuDeserializer())
-                .registerTypeAdapter(ContactInfo.class, new CountryDeserializer())
+                .registerTypeAdapter(CountryInfo.class, new CountryDeserializer())
                 .registerTypeAdapter(RegionInfo.class, new RegionDeserializer())
+                .registerTypeAdapter(CityInfo.class, new CityDeserializer())
                 ;
     }
 

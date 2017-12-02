@@ -17,6 +17,7 @@ public class FilterKeys {
     public static final String FEATURES = "features";
     public static final String REGION = "region";
     public static final String CITY = "city";
+    public static final String SELECTED_CITY = "selected_city";
 
     //Beer keys
     public static final String BEER_TYPES = "beerTypes";
@@ -28,7 +29,15 @@ public class FilterKeys {
     public static final String BEER_SMELL = "beerFragrances";
     public static final String BEER_AFTER_TASTE = "beerAftertastes";
     public static final String BEER_POWER = "beerStrengthes";
-    public static final String DENSITY = "beerDensity";
-    public static final String IBU  = "beerIBU";
+    public static final String BEER_DENSITY = "beerDensity";
+    public static final String BEER_IBU  = "beerIBU";
+    public static final String BEER_COUNTRY  = "beerCountries";
+    public static final String BEER_VOLUMES  = "beerVolumes";
+    public static final String BEER_BREWERIES  = "beerBreweries";
+    public static final String CRAFT  = "craft";
+    public static final String BEER_FILTETRED  = "beer_filtered";
+    public static final String BEER_DISCOUNT  = "beer_discount";
+    public static final String BEER_CITY  = "beerCity";
+    public static final String BEER_EVALUATION_TYPE = "productEvaluationType";
 
 }

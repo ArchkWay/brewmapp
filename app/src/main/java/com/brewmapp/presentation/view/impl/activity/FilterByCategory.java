@@ -17,16 +17,14 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Country;
-import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
-import com.brewmapp.data.entity.Kitchen;
-import com.brewmapp.data.entity.PriceRange;
+import com.brewmapp.data.entity.Region;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.ScrollPackage;
@@ -143,6 +141,26 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     private void initBeerFilterByCategory(int filterId) {
         this.filterCategory = filterId;
         switch (filterId) {
+            case FilterBeerField.NAME:
+                showProgressBar(true);
+                okButton.setVisibility(View.GONE);
+                fullSearchPackage.setType(Keys.TYPE_BEER);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                emptyTitle.setText(getString(R.string.filter_search_beer));
+                list.setVisibility(View.GONE);
+                toolbarTitle.setText(R.string.search_beer_name);
+                break;
+            case FilterBeerField.COUNTRY:
+                showProgressBar(true);
+                okButton.setVisibility(View.GONE);
+                toolbarTitle.setText(R.string.select_country);
+                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
+                } else {
+                    presenter.loadCountries();
+                }
+                break;
             case FilterBeerField.TYPE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type);
@@ -227,8 +245,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
             case FilterBeerField.DENSITY:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type_broj);
-                if (getStoredFilterList(FilterKeys.DENSITY) != null) {
-                    appendItems(getStoredFilterList(FilterKeys.DENSITY));
+                if (getStoredFilterList(FilterKeys.BEER_DENSITY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_DENSITY));
                 } else {
                     presenter.loadBeerDensity();
                 }
@@ -236,8 +254,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 case FilterBeerField.IBU:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_ibu);
-                if (getStoredFilterList(FilterKeys.IBU) != null) {
-                    appendItems(getStoredFilterList(FilterKeys.IBU));
+                if (getStoredFilterList(FilterKeys.BEER_IBU) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_IBU));
                 } else {
                     presenter.loadBeerIbu();
                 }
@@ -268,11 +286,13 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 }
                 break;
             case FilterRestoField.BEER:
-                showProgressBar(true);
-                list.setVisibility(View.GONE);
-                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
-                toolbarTitle.setText(R.string.search_resto_beer);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                emptyTitle.setText(getString(R.string.filter_search_beer));
+                list.setVisibility(View.GONE);
+                toolbarTitle.setText(R.string.search_beer_name);
                 break;
             case FilterRestoField.KITCHEN:
                 showProgressBar(true);
@@ -389,25 +409,54 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 Resto resto = (Resto) payload;
                 goToRestoDetails(String.valueOf(resto.getId()));
                 break;
+            case FilterRestoField.BEER:
+                Beer beer = (Beer) payload;
+                goToBeerDetails(beer.getId());
+                break;
             case FilterRestoField.CITY:
+                if (getStoredFilterList(FilterKeys.COUNTRY) == null) {
+                   saveStoredFilter(FilterKeys.COUNTRY);
+                }
                 Country country = (Country) payload;
+                if (isBeer) {
+                    selectedItem = country.getName();
+                    selectedItemId = country.getId();
+                    goToFilterMap();
+                    return;
+                }
+
                 toolbarTitle.setText(R.string.select_region);
                 if (getStoredFilterList(FilterKeys.REGION) != null) {
                     appendItems(getStoredFilterList(FilterKeys.REGION));
                 } else {
+                    showProgressBar(true);
                     presenter.loadRegions(new GeoPackage(country.getId(), null));
                 }
-                //TO DO
                 break;
             case FilterRestoField.REGION:
-//                Country country = (Country) payload;
-//                toolbarTitle.setText(R.string.select_country);
-//                if (getStoredFilterList(FilterKeys.REGION) != null) {
-//                    appendItems(getStoredFilterList(FilterKeys.REGION));
-//                } else {
-//                    presenter.loadRegions(new GeoPackage(country.getId(), null);
-//                }
-                //TO DO
+                if (getStoredFilterList(FilterKeys.REGION) == null) {
+                    saveStoredFilter(FilterKeys.REGION);
+                }
+                Region region = (Region) payload;
+                if (region.getId() == 1 || region.getId() == 2) {
+                    selectedItem = region.getName();
+                    selectedItemId = String.valueOf(region.getId());
+                    goToFilterMap();
+                    return;
+                }
+                toolbarTitle.setText(R.string.select_city);
+                if (getStoredFilterList(FilterKeys.CITY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.CITY));
+                } else {
+                    showProgressBar(true);
+                    presenter.loadCity(new GeoPackage(region.getCountryId(), String.valueOf(region.getId())));
+                }
+                break;
+            case FilterRestoField.SELECTED_CITY:
+                City city = (City) payload;
+                selectedItem = city.getName();
+                selectedItemId = String.valueOf(city.getId());
+                goToFilterMap();
                 break;
             case FilterRestoField.METRO:
                 //TO DO
@@ -426,15 +475,13 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         startActivity(intent);
     }
 
-//    private void goToBeerDetails(String beerId) {
-//        Interest interest = new Interest();
-//        Interest_info interest_info = new Interest_info();
-//        interest_info.setId(beerId);
-//        interest.setInterest_info(interest_info);
-//        Intent intent = new Intent(this, BeerDetailActivity.class);
-//        intent.putExtra(BEER, interest);
-//        startActivity(intent);
-//    }
+    private void goToBeerDetails(String beerId) {
+        Beer beer = new Beer();
+        beer.setId(beerId);
+        Intent intent = new Intent(this, BeerDetailActivity.class);
+        intent.putExtra(getString(R.string.key_serializable_extra), new Interest(beer));
+        startActivity(intent);
+    }
 
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
@@ -475,11 +522,11 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
             selectedFilter = FilterKeys.BEER_POWER;
             saveStoredFilter(FilterKeys.BEER_POWER);
         } else if (filterCategory == FilterBeerField.DENSITY) {
-            selectedFilter = FilterKeys.DENSITY;
-            saveStoredFilter(FilterKeys.DENSITY);
+            selectedFilter = FilterKeys.BEER_DENSITY;
+            saveStoredFilter(FilterKeys.BEER_DENSITY);
         }  else if (filterCategory == FilterBeerField.IBU) {
-            selectedFilter = FilterKeys.IBU;
-            saveStoredFilter(FilterKeys.IBU);
+            selectedFilter = FilterKeys.BEER_IBU;
+            saveStoredFilter(FilterKeys.BEER_IBU);
         }
     }
 

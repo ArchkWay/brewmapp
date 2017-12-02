@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,13 +47,14 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+
+import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
-
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
-        fragment.setArguments(presenter.prepareArguments(getIntent(),container));
+        fragment.setArguments(presenter.prepareArguments(getIntent(), container));
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar == null) return;
+        if (actionBar == null) return;
         actionBar.setDisplayShowTitleEnabled(false);
         toolbarTitle.setText(baseFragment.getTitle());
         if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
@@ -236,7 +236,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public boolean onCreateOptionsMenu(Menu menu) {
         switch (mode){
             case MODE_DEFAULT:
-                if(menuToShow != 0)  getMenuInflater().inflate(menuToShow, menu);
+                if(menuToShow != 0) getMenuInflater().inflate(menuToShow, menu);
                 break;
             case MODE_ONLY_EVENT_FRAGMENT:
             case MODE_ONLY_MAP_FRAGMENT:

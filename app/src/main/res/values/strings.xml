@@ -273,6 +273,7 @@
     <string name="select_country">Выберите страну</string>
     <string name="select_metro">Выберите метро</string>
     <string name="select_region">Выберите регион</string>
+    <string name="select_city">Выберите город</string>
 
     //Beer filter strings
     <string name="search_beer_name">Поиск по названию пива</string>

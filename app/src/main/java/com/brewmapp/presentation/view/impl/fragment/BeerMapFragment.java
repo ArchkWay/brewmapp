@@ -1,8 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,27 +12,18 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
-import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
-import com.brewmapp.data.pojo.GeolocatorResultPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.impl.LocationFragment;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
-import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
-import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
 import com.brewmapp.utils.events.ShowRestoOnMapEvent;
 import com.brewmapp.utils.events.markerCluster.ClusterRender;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -43,16 +32,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -62,8 +48,6 @@ import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
-import static com.brewmapp.execution.exchange.request.base.Keys.PARENT_INFO;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
@@ -213,7 +197,8 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
                 .position(new LatLng(location.getLocation_lat(), location.getLocation_lon()));
 
         googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLocation_lat(),location.getLocation_lon()) , 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLocation_lat(),
+                location.getLocation_lon()) , 15));
     }
 
     private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
@@ -222,7 +207,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
         if (animateCamera) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restoLocations.get(0).getLocationLat(),
-                                                                          restoLocations.get(0).getLocationLon()) , 9));
+                    restoLocations.get(0).getLocationLon()) , 9));
         }
     }
 
@@ -247,7 +232,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Override
     public void onBarAction(int id) {
         Intent intent = new Intent(getContext(), FilterMapActivity.class);
-//        intent.putExtra(RESTO_ID, interest); // need to add city later
         startActivity(intent);
     }
 

@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.support.navigation;
 
+import android.support.v4.app.Fragment;
+
 import javax.inject.Inject;
 
 import com.brewmapp.app.di.scope.PresenterScope;

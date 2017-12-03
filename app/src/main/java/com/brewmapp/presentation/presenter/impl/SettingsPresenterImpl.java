@@ -40,4 +40,9 @@ public class SettingsPresenterImpl extends BasePresenter<SettingsView> implement
         intent.putExtra(RegisterPackage.KEY, registerPackage);
         activity.startActivity(intent);
     }
+
+    @Override
+    public void tmpLocation() {
+
+    }
 }

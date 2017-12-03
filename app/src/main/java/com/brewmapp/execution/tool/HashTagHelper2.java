@@ -23,7 +23,7 @@ import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
  */
 
 public class HashTagHelper2 {
-    public static final String LINK = "http";
+    public static final String LINK = " http";
     public static final String SHARP = "#";
     public static final String SPAN_TAG = "tmp";
     Context context;
@@ -91,6 +91,12 @@ public class HashTagHelper2 {
                     end=param.indexOf(checkChar,1);
                 else if(param.indexOf(checkChar,1)!=-1)
                     end=Math.min(end,param.indexOf(checkChar,1));
+                //************************
+                checkChar="<";
+                if(end==-1)
+                    end=param.indexOf(checkChar,1);
+                else if(param.indexOf(checkChar,1)!=-1)
+                    end=Math.min(end,param.indexOf(checkChar,1));
 
                 end=end==-1?param.length():end;
                 param=param.substring(0,end);
@@ -111,18 +117,19 @@ public class HashTagHelper2 {
             if(context instanceof MultiListActivity)
                 ((MultiListActivity) context).finish();
             if(param!=null) {
-                if(param.startsWith(LINK))
-                    context.startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(param),context, MultiFragmentActivity.class));
-                else
+                if(param.startsWith(LINK)) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(param.replace(" ","")));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    context.startActivity(intent);
+                }else {
                     context.startActivity(new Intent(Keys.HASHTAG, Uri.parse(param), context, MultiListActivity.class));
+                }
             }
         }
 
         @Override
         public void updateDrawState(TextPaint tp) {
-            if(param!=null&&param.startsWith(LINK))
-                tp.setColor(Color.BLUE);
-            else
                 tp.setColor(Color.RED);
         }
 

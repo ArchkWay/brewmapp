@@ -62,14 +62,15 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         about.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_ABOUT,null,getActivity(), MultiFragmentActivity.class)));
         help.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(BuildConfig.SERVER_ROOT_URL),getActivity(), MultiFragmentActivity.class)));
         write_to_us.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        terms_of_use.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(BuildConfig.SERVER_ROOT_URL),getActivity(), MultiFragmentActivity.class)));
+        terms_of_use.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse("https://brewmapp.com/company/terms"),getActivity(), MultiFragmentActivity.class)));
         profile.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
         change_password.setOnClickListener(v -> presenter.setPassword(getActivity()));
         change_phone.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
         simple_exit.setOnClickListener(v -> {presenterMain.onLogout();startActivity(new Intent(v.getContext(),StartActivity.class));getActivity().finish();});
         all_devices_exit.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         auth_facebook.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        delete_account.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        //delete_account.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        delete_account.setOnClickListener(v -> presenter.tmpLocation());
 
     }
 

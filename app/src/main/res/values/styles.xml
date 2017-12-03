@@ -109,7 +109,7 @@
     </style>
 
     <style name="AppTheme.Text.H5">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="AppTheme.Input">

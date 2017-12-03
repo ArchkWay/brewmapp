@@ -26,6 +26,10 @@ public class Country {
     private String mNameEn;
     private boolean selected;
 
+    public Country(String mName) {
+        this.mName = mName;
+    }
+
     public boolean isSelected() {
         return selected;
     }

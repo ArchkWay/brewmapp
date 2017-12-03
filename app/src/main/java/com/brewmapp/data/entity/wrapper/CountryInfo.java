@@ -13,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class CountryInfo extends AdapterItem<Country, CountryView> implements IFilterable {
 
+    public CountryInfo(Country model) {
+        super(model);
+    }
+
+    public CountryInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_country;}
 

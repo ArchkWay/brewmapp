@@ -16,6 +16,10 @@ public class BeerDensity {
     private String mName;
     private boolean selected;
 
+    public BeerDensity(String mName) {
+        this.mName = mName;
+    }
+
     public String getId() {
         return mId;
     }

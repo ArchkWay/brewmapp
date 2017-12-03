@@ -13,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class BeerTasteInfo extends AdapterItem<BeerTaste, BeerTasteView> implements IFilterable {
 
+    public BeerTasteInfo(BeerTaste model) {
+        super(model);
+    }
+
+    public BeerTasteInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_beer_taste;}
 

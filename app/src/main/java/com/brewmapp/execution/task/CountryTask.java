@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.CountryTypes;
+import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -36,6 +37,9 @@ public class CountryTask extends BaseNetworkTask<Country, List<IFlexible>> {
                 RequestParams requestParams = new RequestParams();
                 requestParams.addParam("show_use_beer", 1);
                 CountryTypes response = executeCall(getApi().loadCountries(requestParams));
+                List<CountryInfo> countryInfos = new ArrayList<>();
+                countryInfos.add(0, new CountryInfo(new Country("Любой город  ")));
+                countryInfos.addAll(response.getModels());
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

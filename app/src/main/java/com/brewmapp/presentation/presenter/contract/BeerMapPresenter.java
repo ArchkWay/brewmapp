@@ -2,6 +2,7 @@ package com.brewmapp.presentation.presenter.contract;
 
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -21,4 +22,5 @@ public interface BeerMapPresenter extends LivePresenter<BeerMapView> {
     void onLoadedCity(String cityName);
     void loadRestoCoordinates(List<FilterRestoField> fieldList, int specialOffer);
     void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer);
+    void sendQueryRestoSearch(FullSearchPackage fullSearchPackage);
 }

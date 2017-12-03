@@ -3,7 +3,6 @@ package com.brewmapp.data.pojo;
 
 import javax.annotation.Generated;
 
-import com.brewmapp.data.entity.*;
 import com.brewmapp.data.entity.BeerType;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -14,7 +13,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
@@ -34,6 +32,10 @@ public class BeerTypes {
     private String mNameWheel;
     @SerializedName("parent_id")
     private String mParentId;
+
+    public BeerTypes(String mName) {
+        this.mName = mName;
+    }
 
     public Object getmRelations() {
         return mRelations;

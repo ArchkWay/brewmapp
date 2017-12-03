@@ -1,10 +1,10 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.entity.RestoLocation;
 
 import java.util.List;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -14,4 +14,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 public interface BeerMapView extends BasicView {
     void showGeolocationResult(List<FilterRestoLocation> filterRestoLocations);
     void showProgressBar(boolean show);
+    void appendItems(List<IFlexible> list);
 }

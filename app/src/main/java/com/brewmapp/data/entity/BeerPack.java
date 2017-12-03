@@ -23,6 +23,10 @@ public class BeerPack {
     private List<Relations> mRelations;
     private boolean selected;
 
+    public BeerPack(String mName) {
+        this.mName = mName;
+    }
+
     public boolean isSelected() {
         return selected;
     }

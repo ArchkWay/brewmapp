@@ -20,6 +20,10 @@ public class BeerSmell {
     private String mName;
     private boolean selected;
 
+    public BeerSmell(String mName) {
+        this.mName = mName;
+    }
+
     public boolean isSelected() {
         return selected;
     }

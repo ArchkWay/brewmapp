@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.RestoType;
 import com.squareup.picasso.Picasso;
 

@@ -10,12 +10,12 @@ import com.google.gson.annotations.SerializedName;
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Relations implements Serializable {
-    private BeerBrand BeerBrand = new BeerBrand();
+    private BeerBrand BeerBrand = new BeerBrand("");
     private List<BeerAftertaste> BeerAftertaste=new ArrayList<>();
     private List<BeerAveragePrice> BeerAveragePrice=new ArrayList<>();
     private List<BeerAftertaste> BeerColor=new ArrayList<>();
     private List<BeerAftertaste> BeerFragrance=new ArrayList<>();
-    private BeerAftertaste BeerStrength=new BeerAftertaste();
+    private BeerAftertaste BeerStrength=new BeerAftertaste("");
     private List<BeerAftertaste> BeerTaste=new ArrayList<>();
     private List<BeerToAftertastes> BeerToAftertastes=new ArrayList<>();
     private List<BeerToColors> BeerToColors=new ArrayList<>();

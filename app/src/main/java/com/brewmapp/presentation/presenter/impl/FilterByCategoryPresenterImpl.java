@@ -208,7 +208,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     @Override
     public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
         fullSearchFilterTask.cancel();
-        fullSearchFilterTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
+        fullSearchFilterTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
@@ -261,9 +261,9 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     }
 
     @Override
-    public void loadBeerBrand(ScrollPackage scrollPackage) {
+    public void loadBeerBrand(FullSearchPackage fullSearchPackage) {
         beerBrandTask.cancel();
-        beerBrandTask.execute(scrollPackage, new SimpleSubscriber<List<IFlexible>>() {
+        beerBrandTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 view.showProgressBar(false);

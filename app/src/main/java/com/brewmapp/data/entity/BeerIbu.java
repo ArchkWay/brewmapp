@@ -16,6 +16,10 @@ public class BeerIbu {
     private String mName;
     private boolean selected;
 
+    public BeerIbu(String mName) {
+        this.mName = mName;
+    }
+
     public String getId() {
         return mId;
     }

@@ -13,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class BeerDensityInfo extends AdapterItem<BeerDensity, BeerDensityView> implements IFilterable {
 
+    public BeerDensityInfo(BeerDensity model) {
+        super(model);
+    }
+
+    public BeerDensityInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_beer_density;}
 

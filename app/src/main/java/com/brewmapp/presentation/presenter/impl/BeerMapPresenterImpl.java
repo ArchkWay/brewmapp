@@ -9,12 +9,14 @@ import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.task.FilterBeerTask;
 import com.brewmapp.execution.task.FilterRestoTask;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadLocationTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
+import com.brewmapp.execution.task.SearchOnMapTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
@@ -35,25 +38,26 @@ import ru.frosteye.ovsa.tool.Geolocator;
 public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements BeerMapPresenter {
 
     private SimpleLocation simpleLocation;
-    //    private LoadLocationTask loadLocationTask;
     private Geolocator geolocator;
 
     private LoadRestoLocationTask loadRestoLocationTask;
     private LoadCityTask loadCityTask;
     private FilterRestoTask filterRestoTask;
     private FilterBeerTask filterBeerTask;
+    private SearchOnMapTask searchOnMapTask;
 
     @Inject
-    public BeerMapPresenterImpl(LoadLocationTask loadLocationTask,
-                                LoadCityTask loadCityTask,
+    public BeerMapPresenterImpl(LoadCityTask loadCityTask,
                                 LoadRestoLocationTask loadRestoLocationTask,
                                 FilterRestoTask filterRestoTask,
-                                FilterBeerTask filterBeerTask) {
+                                FilterBeerTask filterBeerTask,
+                                SearchOnMapTask searchOnMapTask) {
+
         this.loadRestoLocationTask = loadRestoLocationTask;
         this.loadCityTask = loadCityTask;
         this.filterRestoTask = filterRestoTask;
         this.filterBeerTask = filterBeerTask;
-//        this.loadLocationTask = loadLocationTask;
+        this.searchOnMapTask = searchOnMapTask;
     }
 
     @Override
@@ -62,6 +66,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         loadCityTask.cancel();
         filterRestoTask.cancel();
         filterBeerTask.cancel();
+        searchOnMapTask.cancel();
     }
 
     @Override
@@ -163,6 +168,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         filterBeerPackage.setBeerStrengthes(fieldList.get(FilterBeerField.POWER).getSelectedItemId());
         filterBeerPackage.setBeerPacks(fieldList.get(FilterBeerField.BEER_PACK).getSelectedItemId());
         filterBeerPackage.setBeerBreweries(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
+        filterBeerPackage.setBeerCity(fieldList.get(FilterBeerField.PLACE).getSelectedItemId());
         filterBeerPackage.setCraft(craftBeer);
         filterBeerPackage.setBeerDensity(fieldList.get(FilterBeerField.DENSITY).getSelectedItemId());
 //        filterBeerPackage.setBeerFiltered(fieldList.get(FilterBeerField.COUNTRY).getSelectedItemId());
@@ -197,5 +203,23 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             }
         });
     }
+
+    @Override
+    public void sendQueryRestoSearch(FullSearchPackage fullSearchPackage) {
+        searchOnMapTask.cancel();
+        searchOnMapTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
+                view.appendItems(iFlexibles);
+            }
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.showMessage(e.getMessage(),0);
+            }
+        });
+    }
+
 }
 

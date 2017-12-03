@@ -11,6 +11,12 @@
         app:finderHint="@string/map_search"
         android:id="@+id/activity.search.search"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
+        android:id="@+id/restoList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/fragment.map.map"
         android:layout_width="match_parent"

@@ -29,6 +29,10 @@ public class PriceRange implements Serializable {
     private List<Relations> Relations;
     private boolean selected;
 
+    public PriceRange(String name) {
+        Name = name;
+    }
+
     public String getGetThumb() {
         if(getThumb != null && !getThumb.startsWith("http")) {
             getThumb = BuildConfig.SERVER_ROOT_URL + getThumb;

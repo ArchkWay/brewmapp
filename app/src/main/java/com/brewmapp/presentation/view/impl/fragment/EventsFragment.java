@@ -97,7 +97,7 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         if(getArguments()==null){
             mode=MODE_DEFAULT;
         }else  if(getArguments().get(Keys.RELATED_MODEL)!=null&&getArguments().get(Keys.RELATED_ID)!=null){
-            mode=MODE_ONLY_BY_RESTO;
+            mode = MODE_ONLY_BY_RESTO;
         }else {
             mode=MODE_DEFAULT;
         }

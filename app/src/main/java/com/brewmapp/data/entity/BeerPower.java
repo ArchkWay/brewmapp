@@ -22,6 +22,10 @@ public class BeerPower {
     private Object mTimestamp;
     private boolean selected;
 
+    public BeerPower(String mName) {
+        this.mName = mName;
+    }
+
     public boolean isSelected() {
         return selected;
     }

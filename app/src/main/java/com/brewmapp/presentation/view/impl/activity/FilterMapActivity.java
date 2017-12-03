@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -115,11 +114,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             public void onTabSelected(TabLayout.Tab tab) {
                 presenter.storeTabActive(tab.getPosition());
                 titleToolbar.setText(titleContent[tab.getPosition()]);
-                if (tab.getPosition() == 0) {
-                    showRestoFilters(Paper.book().read("restoCategoryList"));
-                } else {
-                    showBeerFilters(Paper.book().read("beerCategoryList"));
-                }
+                presenter.selectTab(tab.getPosition());
             }
         });
     }
@@ -160,8 +155,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @Override
     public void setTabActive(int i) {
-        Log.i("chsdf", String.valueOf(tabsView.getTabs().getTabCount()));
-//        tabsView.getTabs().getTabAt(0).select();
+        tabsView.getTabs().getTabAt(i);
     }
 
     @Override
@@ -183,14 +177,16 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         if (resultCode == RESULT_OK) {
             if (tabsView.getTabs().getSelectedTabPosition() == 0) {
                 setRestoSelectedFilter(data.getStringExtra("filter"),
-                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"));
+                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
+                        data.getStringExtra("selectedItemId"));
             } else {
                 setBeerSelectedFilter(data.getStringExtra("filter"),
-                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"));
+                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
+                        data.getStringExtra("selectedItemId"));
             }
         }
     }
-    private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem) {
+    private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem, String countryId) {
         StringBuilder filter = new StringBuilder();
         StringBuilder filterId = new StringBuilder();
         boolean notEmpty = false;
@@ -211,9 +207,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Не имеет значения  ");
-                }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_PACK)) {
                 List<BeerPackInfo> beerPackInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_PACK);
@@ -228,9 +221,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerPackInfo.getModel().getId()).append("|");
                         }
                     }
-                }
-                if (!notEmpty) {
-                    filter.append("Разливное  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_TYPES)) {
                 List<BeerTypeInfo> beerTypeInfos = new ArrayList<>();
@@ -247,9 +237,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
-                }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BRAND)) {
                 List<BeerBrandInfo> beerBrandInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_BRAND);
@@ -264,9 +251,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerBrandInfo.getModel().getId()).append("|");
                         }
                     }
-                }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_COLOR)) {
                 List<BeerColorInfo> beerColorInfos = new ArrayList<>();
@@ -283,9 +267,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
-                }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_POWER)) {
                 List<BeerPowerInfo> beerPowers = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_POWER);
@@ -300,9 +281,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerPowerInfo.getModel().getId()).append("|");
                         }
                     }
-                }
-                if (!notEmpty) {
-                    filter.append("Любая  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_SMELL)) {
                 List<BeerSmellInfo> beerSmellInfos = new ArrayList<>();
@@ -319,9 +297,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
-                }
             }  else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_TASTE)) {
                 List<BeerTasteInfo> beerTasteInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_TASTE);
@@ -336,9 +311,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerTasteInfo.getModel().getId()).append("|");
                         }
                     }
-                }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_AFTER_TASTE)) {
                 List<BeerAftertasteInfo> beerAftertasteInfos = new ArrayList<>();
@@ -355,9 +327,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Любое  ");
-                }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_DENSITY)) {
                 List<BeerDensityInfo> beerDensityInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_DENSITY);
@@ -372,9 +341,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerDensityInfo.getModel().getId()).append("|");
                         }
                     }
-                }
-                if (!notEmpty) {
-                    filter.append("Любое  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_IBU)) {
                 List<BeerIbuInfo> beerIbuInfos = new ArrayList<>();
@@ -391,9 +357,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
-                }
             }
             if (!notEmpty) {
                 filterId.append("!");
@@ -402,16 +365,16 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
         if (selectedItem != null) {
             beerAdapter.getItem(category).setSelectedFilter(selectedItem);
-            beerAdapter.getItem(category).setSelectedItemId(filterId.toString());
+            beerAdapter.getItem(category).setSelectedItemId(countryId);
         } else if (!filterId.toString().isEmpty()) {
             beerAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
             beerAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
         }
         beerAdapter.notifyDataSetChanged();
-        Paper.book().write("beerCategoryList", beerFilterList);
+        presenter.saveBeerFilterChanges(beerFilterList);
     }
 
-    private void setRestoSelectedFilter(String filterCategory, int category, String cityId) {
+    private void setRestoSelectedFilter(String filterCategory, int category, String cityName, String cityId) {
         StringBuilder filter = new StringBuilder();
         StringBuilder filterId = new StringBuilder();
         boolean notEmpty = false;
@@ -432,9 +395,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Любой  ");
-                }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.KITCHEN)) {
                 List<KitchenInfo> kitchenInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.KITCHEN);
@@ -449,27 +409,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(kitchenInfo.getModel().getId()).append("|");
                         }
                     }
-                }
-                if (!notEmpty) {
-                    filter.append("Любая  ");
-                }
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER)) {
-                List<FilterBeerInfo> filterBeerInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.BEER);
-                if (tempList != null) {
-                    for (Object o : tempList) {
-                        filterBeerInfos.add((FilterBeerInfo) o);
-                    }
-                    for (FilterBeerInfo filterBeerInfo : filterBeerInfos) {
-                        if (filterBeerInfo.getModel().isSelected()) {
-                            notEmpty = true;
-                            filter.append(filterBeerInfo.getModel().getTitle_ru()).append(", ");
-                            filterId.append(filterBeerInfo.getModel().getId()).append("|");
-                        }
-                    }
-                }
-                if (!notEmpty) {
-                    filter.append("Любое  ");
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_RANGE)) {
                 List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
@@ -486,9 +425,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Не имеет значения  ");
-                }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.FEATURES)) {
                 List<FeatureInfo> featureInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.FEATURES);
@@ -504,23 +440,20 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                         }
                     }
                 }
-                if (!notEmpty) {
-                    filter.append("Не имеют значения  ");
-                }
             }
             if (!notEmpty) {
                 filterId.append("!");
             }
         }
-        if (cityId != null) {
-            restoAdapter.getItem(category).setSelectedFilter(cityId);
-            restoAdapter.getItem(category).setSelectedItemId(filterId.toString());
+        if (cityName != null) {
+            restoAdapter.getItem(category).setSelectedFilter(cityName);
+            restoAdapter.getItem(category).setSelectedItemId(cityId);
         } else if (!filterId.toString().isEmpty()) {
             restoAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
             restoAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
         }
         restoAdapter.notifyDataSetChanged();
-        Paper.book().write("restoCategoryList", restoFilterList);
+        presenter.saveRestoFilterChanges(restoFilterList);
     }
 
     @OnClick(R.id.accept_filter)
@@ -535,5 +468,11 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         }
         setResult(RESULT_OK, returnIntent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Paper.book().destroy();
     }
 }

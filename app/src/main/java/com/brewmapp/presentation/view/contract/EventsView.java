@@ -1,7 +1,5 @@
 package com.brewmapp.presentation.view.contract;
 
-import com.brewmapp.data.model.ILikeable;
-
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;

@@ -13,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class BeerPowerInfo extends AdapterItem<BeerPower, BeerPowerView> implements IFilterable {
 
+    public BeerPowerInfo(BeerPower model) {
+        super(model);
+    }
+
+    public BeerPowerInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_beer_power;}
 

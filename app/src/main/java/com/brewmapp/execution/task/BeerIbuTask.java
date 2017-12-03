@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.BeerIbu;
 import com.brewmapp.data.entity.BeerIbuTypes;
+import com.brewmapp.data.entity.wrapper.BeerIbuInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -33,7 +34,10 @@ public class BeerIbuTask extends BaseNetworkTask<BeerIbu, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 BeerIbuTypes response = executeCall(getApi().loadBeerIbu());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<BeerIbuInfo> beerTypeInfos = new ArrayList<>();
+                beerTypeInfos.add(0, new BeerIbuInfo(new BeerIbu("Любой  ")));
+                beerTypeInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(beerTypeInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

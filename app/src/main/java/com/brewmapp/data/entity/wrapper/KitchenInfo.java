@@ -3,7 +3,6 @@ package com.brewmapp.data.entity.wrapper;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.presentation.view.impl.widget.KitchenView;
-import com.brewmapp.presentation.view.impl.widget.TypeView;
 
 import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
@@ -13,6 +12,14 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class KitchenInfo extends AdapterItem<Kitchen, KitchenView> implements IFilterable {
+
+    public KitchenInfo(Kitchen model) {
+        super(model);
+    }
+
+    public KitchenInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_kichen_type;}
 

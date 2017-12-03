@@ -1,6 +1,7 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.BeerTypesModel;
+import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -33,9 +34,13 @@ public class BeerTypesTask extends BaseNetworkTask<BeerTypes, List<IFlexible>> {
     protected Observable<List<IFlexible>> prepareObservable(BeerTypes beerTypes) {
         return Observable.create(subscriber -> {
             try {
+
                 WrapperParams params = new WrapperParams("");
                 BeerTypesModel response = executeCall(getApi().loadBeerTypes(params));
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<BeerTypeInfo> beerTypeInfos = new ArrayList<>();
+                beerTypeInfos.add(0, new BeerTypeInfo(new BeerTypes("Любой  ")));
+                beerTypeInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(beerTypeInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

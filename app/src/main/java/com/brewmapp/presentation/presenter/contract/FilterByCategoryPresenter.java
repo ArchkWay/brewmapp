@@ -19,7 +19,7 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void sendQueryFullSearch(FullSearchPackage fullSearchPackage);
     void loadBeerTypes();
     void loadBeerPack();
-    void loadBeerBrand(ScrollPackage scrollPackage);
+    void loadBeerBrand(FullSearchPackage fullSearchPackage);
     void loadBeerColor();
     void loadBeerTaste();
     void loadBeerSmell();

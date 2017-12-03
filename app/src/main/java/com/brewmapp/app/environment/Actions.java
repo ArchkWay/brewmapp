@@ -18,5 +18,6 @@ public class Actions {
     public static final int ACTION_FILTER = 11;
     public static final int ACTION_SELECT_FILTER = 12;
     public static final int ACTION_START_DETAILS_ACTIVITY = 13;
+    public static final int ACTION_RESTO = 15;
 
 }

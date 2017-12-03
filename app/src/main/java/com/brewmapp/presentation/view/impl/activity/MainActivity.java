@@ -278,17 +278,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_REFRESH_ITEMS) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_REFRESH_ITEMS) {
                 refreshItems();
-            }
-        } else if(requestCode == REQUEST_CODE_REFRESH_STATE){
-            if(requestCode==RESULT_OK){
+            } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
                 refreshState();
+            } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
+                showMapResult(data.getBooleanExtra("isBeer", false),
+                        data.getIntExtra("checkBox", 0));
             }
-        } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
-            showMapResult(data.getBooleanExtra("isBeer", false),
-                    data.getIntExtra("checkBox", 0));
         }
     }
 

@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.BeerSmell;
 import com.brewmapp.data.entity.BeerSmellTypes;
+import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
@@ -36,7 +37,10 @@ public class BeerSmellTask extends BaseNetworkTask<BeerSmell, List<IFlexible>> {
                 WrapperParams params = new WrapperParams("BeerFragrance");
                 params.addParam("id", "");    //it's backend style :)
                 BeerSmellTypes response = executeCall(getApi().loadBeerSmell(params));
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<BeerSmellInfo> beerAftertasteInfos = new ArrayList<>();
+                beerAftertasteInfos.add(0, new BeerSmellInfo(new BeerSmell("Любой  ")));
+                beerAftertasteInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(beerAftertasteInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

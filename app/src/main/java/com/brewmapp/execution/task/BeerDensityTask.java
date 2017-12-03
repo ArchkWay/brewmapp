@@ -1,9 +1,8 @@
 package com.brewmapp.execution.task;
 
-import com.brewmapp.data.entity.BeerColor;
-import com.brewmapp.data.entity.BeerColorTypes;
 import com.brewmapp.data.entity.BeerDensity;
 import com.brewmapp.data.entity.BeerDensityTypes;
+import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
@@ -38,7 +37,10 @@ public class BeerDensityTask extends BaseNetworkTask<BeerDensity, List<IFlexible
                 WrapperParams params = new WrapperParams("ProductDensity");
                 params.addParam("id", "");    //it's backend style :)
                 BeerDensityTypes response = executeCall(getApi().loadBeerDensity(params));
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<BeerDensityInfo> beerDensityInfos = new ArrayList<>();
+                beerDensityInfos.add(0, new BeerDensityInfo(new BeerDensity("Любое  ")));
+                beerDensityInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(beerDensityInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -8,7 +8,7 @@ import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 
-import org.greenrobot.eventbus.EventBus;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -50,11 +50,29 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void storeTabActive(int position) {
         uiSettingRepo.setnActiveTabEventFragment(position);
+    }
+
+    @Override
+    public void selectTab(int position) {
+        if (position == 0) {
+            view.showRestoFilters(Paper.book().read("restoCategoryList"));
+        } else {
+            view.showBeerFilters(Paper.book().read("beerCategoryList"));
+        }
+    }
+
+    @Override
+    public void saveRestoFilterChanges(List<FilterRestoField> fields) {
+        new Thread(() -> Paper.book().write("restoCategoryList", fields)).start();
+    }
+
+    @Override
+    public void saveBeerFilterChanges(List<FilterBeerField> fields) {
+        new Thread(() -> Paper.book().write("beerCategoryList", fields)).start();
     }
 }

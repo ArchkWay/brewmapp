@@ -1,5 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
+import com.brewmapp.data.entity.FilterOnMapResto;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
@@ -43,6 +45,7 @@ import com.brewmapp.execution.exchange.common.base.CountryDeserializer;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
 import com.brewmapp.execution.exchange.common.base.FilterBeerDeserializer;
+import com.brewmapp.execution.exchange.common.base.FilterLocationDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestByUsersDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
@@ -141,6 +144,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(CountryInfo.class, new CountryDeserializer())
                 .registerTypeAdapter(RegionInfo.class, new RegionDeserializer())
                 .registerTypeAdapter(CityInfo.class, new CityDeserializer())
+                .registerTypeAdapter(FilterOnMapResto.class, new FilterLocationDeserializer())
                 ;
     }
 

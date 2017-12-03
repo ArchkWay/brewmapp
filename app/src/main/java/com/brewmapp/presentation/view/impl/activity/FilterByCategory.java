@@ -79,7 +79,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
-    private ScrollPackage scrollPackage = new ScrollPackage();
     private String selectedItem;
     private String selectedItemId;
     private List<IFlexible> original;
@@ -113,11 +112,11 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     protected void initView() {
         Paper.init(this);
         fullSearchPackage = new FullSearchPackage();
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                scrollPackage.setPage(currentPage - 1);
+            LinearLayoutManager manager = new LinearLayoutManager(this);
+            scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+                @Override
+                public void onLoadMore(int currentPage) {
+                    fullSearchPackage.setPage(currentPage - 1);
             }
         };
         list.addOnScrollListener(scrollListener);
@@ -129,6 +128,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
             UITools.hideKeyboard(this);
             return false;
         });
+
         isBeer = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 1;
         if (!isBeer) {
             initRestoFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
@@ -170,6 +170,16 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                     presenter.loadBeerTypes();
                 }
                 break;
+            case FilterBeerField.PLACE:
+                showProgressBar(true);
+                okButton.setVisibility(View.GONE);
+                toolbarTitle.setText(R.string.select_country);
+                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
+                } else {
+                    presenter.loadCountries();
+                }
+                break;
             case FilterBeerField.PRICE_BEER:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_price);
@@ -194,7 +204,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 if (getStoredFilterList(FilterKeys.BEER_BRAND) != null) {
                     appendItems(getStoredFilterList(FilterKeys.BEER_BRAND));
                 } else {
-                    presenter.loadBeerBrand(scrollPackage);
+                    presenter.loadBeerBrand(fullSearchPackage);
                 }
                 break;
             case FilterBeerField.COLOR:
@@ -418,7 +428,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                    saveStoredFilter(FilterKeys.COUNTRY);
                 }
                 Country country = (Country) payload;
-                if (isBeer) {
+                if (isBeer && filterCategory != FilterBeerField.PLACE) {
                     selectedItem = country.getName();
                     selectedItemId = country.getId();
                     goToFilterMap();
@@ -527,6 +537,9 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         }  else if (filterCategory == FilterBeerField.IBU) {
             selectedFilter = FilterKeys.BEER_IBU;
             saveStoredFilter(FilterKeys.BEER_IBU);
+        } else if (filterCategory == FilterBeerField.PLACE) {
+            selectedFilter = FilterKeys.COUNTRY;
+            saveStoredFilter(FilterKeys.COUNTRY);
         }
     }
 

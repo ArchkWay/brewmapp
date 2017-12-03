@@ -12,6 +12,14 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class FeatureInfo extends AdapterItem<Feature, FeatureView> implements IFilterable {
+
+    public FeatureInfo(Feature model) {
+        super(model);
+    }
+
+    public FeatureInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_features;}
 

@@ -36,7 +36,10 @@ public class PriceRangeTask extends BaseNetworkTask<PriceRangeType, List<IFlexib
         return Observable.create(subscriber -> {
             try {
                 PriceRangeTypes response = executeCall(getApi().loadPriceRanges(priceRange.getType()));
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
+                priceRangeInfos.add(0, new PriceRangeInfo(new PriceRange("Не имеет значения  ")));
+                priceRangeInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(priceRangeInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

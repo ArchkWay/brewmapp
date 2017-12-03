@@ -20,6 +20,10 @@ public class BeerTaste {
     private String Name;
     private boolean selected;
 
+    public BeerTaste(String name) {
+        Name = name;
+    }
+
     public boolean isSelected() {
         return selected;
     }

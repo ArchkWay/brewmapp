@@ -39,6 +39,10 @@ public class BeerBrand {
 
     private boolean selected;
 
+    public BeerBrand(String name) {
+        Name = name;
+    }
+
     public Object getBreweryId() {
         return BreweryId;
     }

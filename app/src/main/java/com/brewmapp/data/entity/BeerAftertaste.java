@@ -20,6 +20,10 @@ public class BeerAftertaste {
     private String mName;
     private boolean selected;
 
+    public BeerAftertaste(String mName) {
+        this.mName = mName;
+    }
+
     public String getGetThumb() {
         if(mGetThumb != null && !mGetThumb.startsWith("http")) {
             mGetThumb = BuildConfig.SERVER_ROOT_URL + mGetThumb;

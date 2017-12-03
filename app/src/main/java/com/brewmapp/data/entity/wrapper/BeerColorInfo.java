@@ -13,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class BeerColorInfo extends AdapterItem<BeerColor, BeerColorView> implements IFilterable {
 
+    public BeerColorInfo(BeerColor model) {
+        super(model);
+    }
+
+    public BeerColorInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_beer_color;}
 

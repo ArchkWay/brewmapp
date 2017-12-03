@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
@@ -14,6 +16,7 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.presenter.impl.LocationFragment;
@@ -30,21 +33,25 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.clustering.ClusterManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
@@ -59,6 +66,8 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     MapView mapView;
     @BindView(R.id.activity_search_search)
     FinderView finder;
+    @BindView(R.id.restoList)
+    RecyclerView list;
 
     @Inject
     BeerMapPresenter presenter;
@@ -67,6 +76,9 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     private Marker marker;
     private RestoLocation location;
     private ProgressDialog dialog;
+    private FlexibleModelAdapter<IFlexible> adapter;
+    private FullSearchPackage searchPackage;
+    private EndlessRecyclerOnScrollListener scrollListener;
 
     private ClusterManager<FilterRestoLocation> mClusterManager;
 
@@ -102,8 +114,40 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         dialog = ProgressDialog.show(getContext(), "Загрузка...",
                 "Поиск заведений...", true, false);
         interractor().processSetActionBar(Actions.ACTION_FILTER);
+
+        searchPackage = new FullSearchPackage();
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                searchPackage.setPage(currentPage - 1);
+            }
+        };
+        list.addOnScrollListener(scrollListener);
+        list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
+        list.setLayoutManager(manager);
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        list.setAdapter(adapter);
+//        list.setOnTouchListener((view, motionEvent) -> {
+//            UITools.hideKeyboard(getContext());
+//            return false;
+//        });
+
+        finder.setListener(this::prepareQuery);
+
         mapView.onCreate(null);
         mapView.getMapAsync(this);
+    }
+
+    private void prepareQuery(String stringSearch) {
+        searchPackage.setPage(0);
+        searchPackage.setStringSearch(stringSearch);
+        if (stringSearch.length() > 3) {
+            presenter.sendQueryRestoSearch(searchPackage);
+        } else if (stringSearch.length() == 0) {
+            adapter.clear();
+            list.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -256,4 +300,22 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         intent.putExtra(RESTO_ID, interest);
         startActivity(intent);
     }
+
+    private void processAction(int action, Object payload) {
+        FilterRestoLocation filterRestoLocation = (FilterRestoLocation) payload;
+        Log.i("filterLoc:", filterRestoLocation.getmName());
+    }
+
+    @Override
+    public void appendItems(List<IFlexible> restoList) {
+        list.setVisibility(View.VISIBLE);
+//        if(searchPackage.getPage() == 0) {
+//            adapter.clear();
+//            scrollListener.reset();
+//            this.list.addOnScrollListener(scrollListener);
+//            list.setVisibility(View.GONE);
+//        }
+        adapter.addItems(adapter.getItemCount(), restoList);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -44,6 +45,7 @@ import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.FilterBeer;
+import com.brewmapp.data.entity.container.FilterRestoLocationTypes;
 import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.InterestsByUser;
 import com.brewmapp.data.entity.container.Posts;
@@ -393,4 +395,10 @@ public interface Api {
     @POST("geo/region")
     @FormUrlEncoded
     Call<RegionTypes> loadRegions(@FieldMap WrapperParams params);
+
+    @POST("resto/getcoordinatesbytext")
+    @FormUrlEncoded
+    Call<FilterRestoLocationTypes> searchOnMap(@Field("searchString") String searchString,
+                                               @Field(Keys.LIMIT_START) int start,
+                                               @Field(Keys.LIMIT_END) int end);
 }

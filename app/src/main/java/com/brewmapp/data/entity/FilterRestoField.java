@@ -117,7 +117,7 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
         out.add(new FilterRestoField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любое"));
         out.add(new FilterRestoField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любая"));
         out.add(new FilterRestoField(PRICE, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
-        out.add(new FilterRestoField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Москва"));
+        out.add(new FilterRestoField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Любой город"));
         out.add(new FilterRestoField(METRO, R.drawable.ic_metro, context.getString(R.string.search_resto_metro), "Не имеет значения"));
         out.add(new FilterRestoField(FEATURES, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
         return out;

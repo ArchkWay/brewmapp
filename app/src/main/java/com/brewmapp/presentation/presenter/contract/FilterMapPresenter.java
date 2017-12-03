@@ -14,7 +14,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface FilterMapPresenter extends LivePresenter<FilterMapView> {
-    void loadRestoCoordinates(List<FilterRestoField> fieldList, int specialOffer);
-    void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer);
     void storeTabActive(int position);
 }

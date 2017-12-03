@@ -15,7 +15,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 public interface FilterMapView extends BasicView {
     void showRestoFilters(List<FilterRestoField> fieldList);
     void showBeerFilters(List<FilterBeerField> fieldList);
-    void setTabActive(int i);
-    void goToMapByRestoFilter(List<FilterRestoLocation> restoLocations);
-    void showProgressBar(boolean show);
+    void setTabActive(int i);;
 }

@@ -7,10 +7,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +18,8 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
-import com.brewmapp.data.entity.BeerPower;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
-import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
 import com.brewmapp.data.entity.wrapper.BeerColorInfo;
@@ -41,9 +39,6 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.view.contract.FilterMapView;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
-import com.brewmapp.utils.events.ShowRestoOnMapEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,8 +76,6 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     CheckBox craft;
     @BindView(R.id.fragment_events_tabs)
     TabsView tabsView;
-    @BindView(R.id.lytProgressBar)
-    LinearLayout lytProgressBar;
 
     private FlexibleAdapter<FilterRestoField> restoAdapter;
     private FlexibleAdapter<FilterBeerField> beerAdapter;
@@ -167,13 +160,8 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @Override
     public void setTabActive(int i) {
-        tabsView.getTabs().getTabAt(i).select();
-    }
-
-    @Override
-    public void goToMapByRestoFilter(List<FilterRestoLocation> restoLocations) {
-        EventBus.getDefault().post(new ShowRestoOnMapEvent(restoLocations));
-        this.finish();
+        Log.i("chsdf", String.valueOf(tabsView.getTabs().getTabCount()));
+//        tabsView.getTabs().getTabAt(0).select();
     }
 
     @Override
@@ -414,6 +402,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
         if (selectedItem != null) {
             beerAdapter.getItem(category).setSelectedFilter(selectedItem);
+            beerAdapter.getItem(category).setSelectedItemId(filterId.toString());
         } else if (!filterId.toString().isEmpty()) {
             beerAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
             beerAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
@@ -525,6 +514,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         }
         if (cityId != null) {
             restoAdapter.getItem(category).setSelectedFilter(cityId);
+            restoAdapter.getItem(category).setSelectedItemId(filterId.toString());
         } else if (!filterId.toString().isEmpty()) {
             restoAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
             restoAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
@@ -535,16 +525,15 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
 
     @OnClick(R.id.accept_filter)
     public void acceptFilter() {
+        Intent returnIntent = new Intent();
         if (tabsView.getTabs().getSelectedTabPosition() == 0) {
-            showProgressBar(true);
-            presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), offer.isChecked() ? 1 : 0);
+            returnIntent.putExtra("isBeer", false);
+            returnIntent.putExtra("check", offer.isChecked() ? 1 : 0);
         } else {
-            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"), craft.isChecked() ? 1 : 0);
+            returnIntent.putExtra("isBeer", true);
+            returnIntent.putExtra("check", craft.isChecked() ? 1 : 0);
         }
-    }
-
-    @Override
-    public void showProgressBar(boolean show) {
-        lytProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 }

@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,11 +47,10 @@ import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
-import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
 
@@ -288,9 +286,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             if(requestCode==RESULT_OK){
                 refreshState();
             }
-        } else if (requestCode == REQUEST_CODE_MAP_REFRESH) {
-            Log.i("sdfdsf", "okresult");
-            showResultOnMap();
+        } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
+            showMapResult(data.getBooleanExtra("isBeer", false),
+                    data.getIntExtra("checkBox", 0));
         }
     }
 
@@ -316,9 +314,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @SuppressLint("RestrictedApi")
     public void showResultOnMap() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if (fragment instanceof BeerMapFragment)
-                ((BeerMapFragment) fragment).showResult();
-            else if(fragment instanceof ProfileFragment)
+            if(fragment instanceof ProfileFragment)
                 ((ProfileFragment) fragment).refreshItems();
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void showMapResult(boolean isBeer, int checkBox) {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof BeerMapFragment) {
+                ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
+    }
     }
 }

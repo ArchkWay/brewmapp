@@ -320,11 +320,11 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap WrapperParams params);
+    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams params);
 
     @POST("beer/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<FilterRestoLocation>> loadBeerLocation(@FieldMap WrapperParams params);
+    Call<ListResponse<FilterRestoLocation>> loadBeerLocation(@FieldMap RequestParams params);
 
     @POST("profile")
     @FormUrlEncoded

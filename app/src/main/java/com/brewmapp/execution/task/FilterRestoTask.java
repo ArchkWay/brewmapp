@@ -4,7 +4,6 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -15,6 +14,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
+import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
 /**
  * Created by nlbochas on 18/11/2017.
@@ -31,7 +31,7 @@ public class FilterRestoTask extends BaseNetworkTask<FilterRestoPackage, List<Fi
     protected Observable<List<FilterRestoLocation>> prepareObservable(FilterRestoPackage restoPackage) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams params = new WrapperParams("");
+                RequestParams params = new RequestParams();
                 params.addParam(Keys.RESTO_CITY, restoPackage.getRestoCity() != null ? restoPackage.getRestoCity() : "");
                 params.addParam(Keys.MENU_BEER, restoPackage.getMenuBeer() != null ? restoPackage.getMenuBeer() : "");
                 params.addParam(Keys.RESTO_TYPE, restoPackage.getRestoTypes() != null ? restoPackage.getRestoTypes() : "");

@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -21,7 +22,6 @@ import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.RestoInfoWindow;
-import com.brewmapp.utils.events.ShowRestoOnMapEvent;
 import com.brewmapp.utils.events.markerCluster.ClusterRender;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,13 +30,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.Cluster;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.clustering.ClusterManager;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -48,13 +46,14 @@ import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
  * Created by ovcst on 24.08.2017.
  */
-public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback, ClusterManager.OnClusterItemInfoWindowClickListener<FilterRestoLocation>,
-        ClusterManager.OnClusterClickListener<FilterRestoLocation>, ClusterManager.OnClusterInfoWindowClickListener<FilterRestoLocation>, ClusterManager.OnClusterItemClickListener<FilterRestoLocation>{
+public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback,
+        ClusterManager.OnClusterItemInfoWindowClickListener<FilterRestoLocation> {
 
     @BindView(R.id.fragment_map_map)
     MapView mapView;
@@ -67,6 +66,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     private GoogleMap googleMap;
     private Marker marker;
     private RestoLocation location;
+    private ProgressDialog dialog;
 
     private ClusterManager<FilterRestoLocation> mClusterManager;
 
@@ -98,15 +98,9 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-    }
-
-    @Override
     protected void initView(View view) {
+        dialog = ProgressDialog.show(getContext(), "Загрузка...",
+                "Поиск заведений...", true, false);
         interractor().processSetActionBar(Actions.ACTION_FILTER);
         mapView.onCreate(null);
         mapView.getMapAsync(this);
@@ -128,9 +122,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     @Override
@@ -169,9 +160,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.setOnCameraIdleListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         googleMap.setOnInfoWindowClickListener(mClusterManager);
-        mClusterManager.setOnClusterClickListener(this);
-        mClusterManager.setOnClusterInfoWindowClickListener(this);
-        mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
 
         googleMap.setOnMyLocationButtonClickListener(() -> {
@@ -180,6 +168,11 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         });
 
         googleMap.setOnMapClickListener(latLng -> presenter.onGeocodeRequest(latLng));
+        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
+        Log.i("nearLeft", String.valueOf(visibleRegion.nearLeft.latitude));
+        Log.i("neartRight", String.valueOf(visibleRegion.nearRight.latitude));
+        Log.i("farLeft", String.valueOf(visibleRegion.farLeft.latitude));
+        Log.i("farRight", String.valueOf(visibleRegion.farRight.latitude));
 
         if (location != null) {
             setSingleMarker();
@@ -189,6 +182,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     private void setSingleMarker() {
+        showProgressBar(false);
         if (marker != null) marker.remove();
         MarkerOptions markerOptions = new MarkerOptions()
                 .title(location.getName())
@@ -201,7 +195,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
                 location.getLocation_lon()) , 15));
     }
 
-    private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
+        private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
         mClusterManager.setRenderer(new ClusterRender(getContext(), googleMap, mClusterManager));
         mClusterManager.addItems(restoLocations);
 
@@ -213,6 +207,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     protected void onLocationFound(Location location) {
+        showProgressBar(false);
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
         googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
@@ -221,24 +216,34 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         ), 14));
     }
 
-    public void showResult() {
+    @Override
+    public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
+        showProgressBar(false);
+        setMarker(restoLocations, true);
     }
 
     @Override
-    public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
-        setMarker(restoLocations, false);
+    public void showProgressBar(boolean show) {
+        if (show) {
+            dialog.show();
+        } else {
+            dialog.cancel();
+        }
     }
 
     @Override
     public void onBarAction(int id) {
         Intent intent = new Intent(getContext(), FilterMapActivity.class);
-        startActivity(intent);
+        getActivity().startActivityForResult(intent, REQUEST_CODE_MAP_RESULT);
     }
 
-    @Subscribe
-    public void onEvent(ShowRestoOnMapEvent event) {
-        googleMap.clear();
-        setMarker(event.getRestoLocationList(), true);
+    public void showResult(boolean isBeer, int checkBox) {
+        showProgressBar(true);
+        if (!isBeer) {
+            presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), checkBox);
+        } else {
+            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"),  checkBox);
+        }
     }
 
     @Override
@@ -250,22 +255,5 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         Intent intent = new Intent(getContext(), RestoDetailActivity.class);
         intent.putExtra(RESTO_ID, interest);
         startActivity(intent);
-    }
-
-    @Override
-    public boolean onClusterClick(Cluster<FilterRestoLocation> cluster) {
-        Log.i("clusterClik222", String.valueOf(cluster.getPosition()));
-        return false;
-    }
-
-    @Override
-    public void onClusterInfoWindowClick(Cluster<FilterRestoLocation> cluster) {
-        Log.i("clusterInfoClick111", String.valueOf(cluster.getPosition()));
-    }
-
-    @Override
-    public boolean onClusterItemClick(FilterRestoLocation filterRestoLocation) {
-        Log.i("clusterInfoClick111", String.valueOf(filterRestoLocation.getmName()));
-        return false;
     }
 }

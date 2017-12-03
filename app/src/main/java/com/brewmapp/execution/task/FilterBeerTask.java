@@ -5,7 +5,6 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -16,6 +15,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
+import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
 /**
  * Created by nixus on 02.12.2017.
@@ -32,7 +32,7 @@ public class FilterBeerTask extends BaseNetworkTask<FilterBeerPackage, List<Filt
     protected Observable<List<FilterRestoLocation>> prepareObservable(FilterBeerPackage beerPackage) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams params = new WrapperParams("");
+                RequestParams params = new RequestParams();
                 params.addParam(FilterKeys.BEER_COUNTRY, beerPackage.getBeerCountries() != null ? beerPackage.getBeerCountries() : "");
                 params.addParam(FilterKeys.BEER_TYPES, beerPackage.getBeerTypes() != null ? beerPackage.getBeerTypes() : "");
                 params.addParam(FilterKeys.BEER_POWER, beerPackage.getBeerStrengthes() != null ? beerPackage.getBeerStrengthes() : "");

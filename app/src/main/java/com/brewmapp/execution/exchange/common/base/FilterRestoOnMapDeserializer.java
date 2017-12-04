@@ -1,6 +1,6 @@
 package com.brewmapp.execution.exchange.common.base;
 
-import com.brewmapp.data.entity.FilterOnMapResto;
+import com.brewmapp.data.entity.FilterRestoOnMap;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 
 import ru.frosteye.ovsa.execution.serialization.AdapterItemDeserializer;
@@ -9,10 +9,10 @@ import ru.frosteye.ovsa.execution.serialization.AdapterItemDeserializer;
  * Created by nixus on 04.12.2017.
  */
 
-public class FilterLocationDeserializer extends AdapterItemDeserializer<FilterOnMapResto, FilterRestoLocationInfo> {
+public class FilterRestoOnMapDeserializer extends AdapterItemDeserializer<FilterRestoOnMap, FilterRestoLocationInfo> {
     @Override
-    protected Class<FilterOnMapResto> provideType() {
-        return FilterOnMapResto.class;
+    protected Class<FilterRestoOnMap> provideType() {
+        return FilterRestoOnMap.class;
     }
 
     @Override

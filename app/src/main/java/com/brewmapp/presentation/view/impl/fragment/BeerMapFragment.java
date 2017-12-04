@@ -3,16 +3,20 @@ package com.brewmapp.presentation.view.impl.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.FilterRestoOnMap;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.RestoLocation;
@@ -52,6 +56,7 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
+import ru.frosteye.ovsa.tool.UITools;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
@@ -110,9 +115,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     @Override
-    protected void initView(View view) {
-        dialog = ProgressDialog.show(getContext(), "Загрузка...",
-                "Поиск заведений...", true, false);
+    protected void initView(View fragmentView) {
         interractor().processSetActionBar(Actions.ACTION_FILTER);
 
         searchPackage = new FullSearchPackage();
@@ -128,10 +131,10 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
-//        list.setOnTouchListener((view, motionEvent) -> {
-//            UITools.hideKeyboard(getContext());
-//            return false;
-//        });
+        list.setOnTouchListener((view, motionEvent) -> {
+            UITools.hideKeyboard(getActivity());
+            return false;
+        });
 
         finder.setListener(this::prepareQuery);
 
@@ -145,6 +148,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         if (stringSearch.length() > 3) {
             presenter.sendQueryRestoSearch(searchPackage);
         } else if (stringSearch.length() == 0) {
+            UITools.hideKeyboard(getActivity());
             adapter.clear();
             list.setVisibility(View.GONE);
         }
@@ -201,6 +205,12 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mClusterManager = new ClusterManager<>(getContext(), googleMap);
 
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+            }
+        });
         googleMap.setOnCameraIdleListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         googleMap.setOnInfoWindowClickListener(mClusterManager);
@@ -251,10 +261,10 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     protected void onLocationFound(Location location) {
-        showProgressBar(false);
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
         googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
+        showProgressBar(false);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
                 location.getLatitude(), location.getLongitude()
         ), 14));
@@ -269,9 +279,12 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Override
     public void showProgressBar(boolean show) {
         if (show) {
-            dialog.show();
+            dialog = ProgressDialog.show(getContext(), "Загрузка...",
+                    "Поиск заведений...", true, false);
         } else {
-            dialog.cancel();
+            if (dialog != null) {
+                dialog.cancel();
+            }
         }
     }
 
@@ -302,20 +315,30 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     private void processAction(int action, Object payload) {
-        FilterRestoLocation filterRestoLocation = (FilterRestoLocation) payload;
-        Log.i("filterLoc:", filterRestoLocation.getmName());
+        UITools.hideKeyboard(getActivity());
+        FilterRestoOnMap filterOnMapResto = (FilterRestoOnMap) payload;
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
+                .appendQueryParameter("destination", filterOnMapResto.getLocationLat() + "," + filterOnMapResto.getLocationLon());
+        String url = builder.build().toString();
+        Log.d("Directions", url);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     @Override
     public void appendItems(List<IFlexible> restoList) {
+        adapter.clear();
+        if (restoList.size() > 5) {
+            list.getLayoutParams().height = 290;
+        } else {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            list.setLayoutParams(params);
+        }
         list.setVisibility(View.VISIBLE);
-//        if(searchPackage.getPage() == 0) {
-//            adapter.clear();
-//            scrollListener.reset();
-//            this.list.addOnScrollListener(scrollListener);
-//            list.setVisibility(View.GONE);
-//        }
         adapter.addItems(adapter.getItemCount(), restoList);
     }
-
 }

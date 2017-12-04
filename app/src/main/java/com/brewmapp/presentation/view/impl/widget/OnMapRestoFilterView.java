@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
-import com.brewmapp.data.entity.FilterOnMapResto;
-import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.FilterRestoOnMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +21,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by nixus on 04.12.2017.
  */
 
-public class OnMapRestoFilterView extends BaseLinearLayout implements InteractiveModelView<FilterOnMapResto> {
+public class OnMapRestoFilterView extends BaseLinearLayout implements InteractiveModelView<FilterRestoOnMap> {
 
     @BindView(R.id.title)
     TextView title;
@@ -30,7 +29,7 @@ public class OnMapRestoFilterView extends BaseLinearLayout implements Interactiv
     ImageView logo;
 
     private Listener listener;
-    private FilterOnMapResto model;
+    private FilterRestoOnMap model;
 
     public OnMapRestoFilterView(Context context) {
         super(context);
@@ -54,15 +53,15 @@ public class OnMapRestoFilterView extends BaseLinearLayout implements Interactiv
     }
 
     @Override
-    public FilterOnMapResto getModel() {
+    public FilterRestoOnMap getModel() {
         return model;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void setModel(FilterOnMapResto model) {
+    public void setModel(FilterRestoOnMap model) {
         this.model = model;
-        title.setText(model.getmName());
+        title.setText(model.getName());
         setOnClickListener(v -> listener.onModelAction(Actions.ACTION_RESTO, model));
     }
 

@@ -210,7 +210,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         searchOnMapTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);
             }
             @Override

@@ -55,6 +55,7 @@ import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
+import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.WrapperValues;
@@ -398,7 +399,5 @@ public interface Api {
 
     @POST("resto/getcoordinatesbytext")
     @FormUrlEncoded
-    Call<FilterRestoLocationTypes> searchOnMap(@Field("searchString") String searchString,
-                                               @Field(Keys.LIMIT_START) int start,
-                                               @Field(Keys.LIMIT_END) int end);
+    Call<ListResponse<FilterRestoLocationInfo>> searchOnMap(@FieldMap RequestParams requestParams);
 }

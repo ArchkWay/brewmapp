@@ -138,12 +138,12 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             @Override
             public void onError(Throwable e) {
                 showError(e.getMessage());
-                view.showProgressBar(false);
+                view.showDialogProgressBar(false);
             }
 
             @Override
             public void onNext(List<FilterRestoLocation> restoLocations) {
-                view.showProgressBar(false);
+                view.showDialogProgressBar(false);
                 if (restoLocations.size() == 0) {
                     view.showMessage("Не найдено ни одного заведения");
                 } else {
@@ -153,8 +153,8 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
             @Override
             public void onComplete() {
+                view.showDialogProgressBar(false);
                 super.onComplete();
-                view.showProgressBar(false);
             }
         });
     }
@@ -182,13 +182,13 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         filterBeerTask.execute(filterBeerPackage, new SimpleSubscriber<List<FilterRestoLocation>>() {
             @Override
             public void onError(Throwable e) {
+                view.showDialogProgressBar(false);
                 showError(e.getMessage());
-                view.showProgressBar(false);
             }
 
             @Override
             public void onNext(List<FilterRestoLocation> restoLocations) {
-                view.showProgressBar(false);
+                view.showDialogProgressBar(false);
                 if (restoLocations.size() == 0) {
                     view.showMessage("Не найдено ни одного заведения");
                 } else {
@@ -199,7 +199,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             @Override
             public void onComplete() {
                 super.onComplete();
-                view.showProgressBar(false);
+                view.showDialogProgressBar(false);
             }
         });
     }
@@ -210,11 +210,13 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         searchOnMapTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                view.hideProgressBar();
                 view.appendItems(iFlexibles);
             }
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                view.hideProgressBar();
                 view.showMessage(e.getMessage(),0);
             }
         });

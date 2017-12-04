@@ -2,10 +2,11 @@ package com.brewmapp.presentation.view.impl.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -25,8 +26,6 @@ public class OnMapRestoFilterView extends BaseLinearLayout implements Interactiv
 
     @BindView(R.id.title)
     TextView title;
-    @BindView(R.id.logo)
-    ImageView logo;
 
     private Listener listener;
     private FilterRestoOnMap model;
@@ -61,6 +60,7 @@ public class OnMapRestoFilterView extends BaseLinearLayout implements Interactiv
     @Override
     public void setModel(FilterRestoOnMap model) {
         this.model = model;
+        title.setTypeface(null, Typeface.BOLD_ITALIC);
         title.setText(model.getName());
         setOnClickListener(v -> listener.onModelAction(Actions.ACTION_RESTO, model));
     }

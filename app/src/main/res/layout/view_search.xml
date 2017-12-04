@@ -29,10 +29,18 @@
             android:id="@+id/view.finder.input"
             android:layout_weight="1"/>
 
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="24dp"
+            android:layout_height="24dp" >
+        </ProgressBar>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/view.finder.cancel"
+            android:id="@+id/finder_cancel"
             android:src="@drawable/ic_cancel"/>
     </LinearLayout>
     <ru.frosteye.ovsa.presentation.view.widget.Line

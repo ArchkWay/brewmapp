@@ -54,7 +54,6 @@ import java.util.List;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-
 public class EventsFragment extends BaseFragment implements EventsView, View.OnClickListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;

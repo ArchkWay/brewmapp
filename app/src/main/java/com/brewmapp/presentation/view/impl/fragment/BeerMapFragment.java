@@ -9,7 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import com.brewmapp.R;
@@ -146,11 +147,13 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         searchPackage.setPage(0);
         searchPackage.setStringSearch(stringSearch);
         if (stringSearch.length() > 3) {
+            showProgressBar();
             presenter.sendQueryRestoSearch(searchPackage);
         } else if (stringSearch.length() == 0) {
             UITools.hideKeyboard(getActivity());
             adapter.clear();
-            list.setVisibility(View.GONE);
+            hideProgressBar();
+            showLogicAnimation();
         }
     }
 
@@ -170,6 +173,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        UITools.hideKeyboard(getActivity());
     }
 
     @Override
@@ -205,12 +209,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mClusterManager = new ClusterManager<>(getContext(), googleMap);
 
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-            }
-        });
         googleMap.setOnCameraIdleListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         googleMap.setOnInfoWindowClickListener(mClusterManager);
@@ -236,7 +234,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     private void setSingleMarker() {
-        showProgressBar(false);
+        showDialogProgressBar(false);
         if (marker != null) marker.remove();
         MarkerOptions markerOptions = new MarkerOptions()
                 .title(location.getName())
@@ -264,7 +262,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
         googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
-        showProgressBar(false);
+        showDialogProgressBar(false);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
                 location.getLatitude(), location.getLongitude()
         ), 14));
@@ -272,20 +270,34 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
-        showProgressBar(false);
+        showDialogProgressBar(false);
         setMarker(restoLocations, true);
     }
 
     @Override
-    public void showProgressBar(boolean show) {
+    public void showDialogProgressBar(boolean show) {
         if (show) {
-            dialog = ProgressDialog.show(getContext(), "Загрузка...",
-                    "Поиск заведений...", true, false);
+            dialog = ProgressDialog.show(getContext(), getString(R.string.loading),
+                    getString(R.string.search_resto_map), true, false);
         } else {
             if (dialog != null) {
                 dialog.cancel();
             }
         }
+    }
+
+
+    @Override
+    public void showProgressBar() {
+        finder.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        finder.findViewById(R.id.finder_cancel).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
+        finder.findViewById(R.id.finder_cancel).setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -295,7 +307,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     public void showResult(boolean isBeer, int checkBox) {
-        showProgressBar(true);
+        showDialogProgressBar(true);
         if (!isBeer) {
             presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), checkBox);
         } else {
@@ -338,7 +350,19 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             list.setLayoutParams(params);
         }
-        list.setVisibility(View.VISIBLE);
+        showLogicAnimation();
         adapter.addItems(adapter.getItemCount(), restoList);
     }
+
+    private void showLogicAnimation() {
+        animFlowBrandList();
+    }
+
+    private void animFlowBrandList() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), list.isShown() ? R.anim.fadeout : R.anim.fadein);
+        list.startAnimation(animation);
+        list.setVisibility(list.isShown() ? View.GONE : View.VISIBLE);
+    }
+
+
 }

@@ -7,14 +7,12 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.brewmapp.R;
 import ru.frosteye.ovsa.presentation.view.widget.BaseFrameLayout;
 import ru.frosteye.ovsa.stub.impl.SimpleTextWatcher;
-import ru.frosteye.ovsa.tool.UITools;
 
 /**
  * Created by oleg on 06.08.17.
@@ -22,7 +20,7 @@ import ru.frosteye.ovsa.tool.UITools;
 
 public class FinderView extends BaseFrameLayout {
 
-    @BindView(R.id.view_finder_cancel) View cancel;
+    @BindView(R.id.finder_cancel) View cancel;
     @BindView(R.id.view_finder_input)  AutoCompleteTextView input;
 
     private String hintString;

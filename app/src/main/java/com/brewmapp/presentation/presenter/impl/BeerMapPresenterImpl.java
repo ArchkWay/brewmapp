@@ -145,7 +145,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             public void onNext(List<FilterRestoLocation> restoLocations) {
                 view.showDialogProgressBar(false);
                 if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено ни одного заведения");
+                    view.showMessage("Не найдено ни одного заведения",0);
                 } else {
                     view.showGeolocationResult(restoLocations);
                 }
@@ -190,7 +190,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             public void onNext(List<FilterRestoLocation> restoLocations) {
                 view.showDialogProgressBar(false);
                 if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено ни одного заведения");
+                    view.showMessage("Не найдено ни одного заведения",0);
                 } else {
                     view.showGeolocationResult(restoLocations);
                 }

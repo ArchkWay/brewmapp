@@ -54,29 +54,28 @@ public class DialogSelectCountryCity extends DialogFragment {
     ArrayAdapter<String> adapter;
     RefreshableSwipeRefreshLayout refreshableSwipeRefreshLayout;
     String[] players={};
-    TextView text_city;
-    User user;
     List<City> cityList;
+    private OnSelectCity onSelectCity;
 
     @Inject
     LoadCityTask loadCityTask;
 
 
     @SuppressLint("ValidFragment")
-    public DialogSelectCountryCity(Context context, FragmentManager supportManagerFragment, TextView text_city, User user){
+    public DialogSelectCountryCity(Context context, FragmentManager supportManagerFragment, OnSelectCity onSelectCity){
         this.context=context;
-        this.text_city=text_city;
-        this.user=user;
-
+        this.onSelectCity=onSelectCity;
 
         BeerMap.getAppComponent().plus(new PresenterModule((BaseActivity) getActivity())).inject(this);
         show(supportManagerFragment,"ssss");
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        getDialog().setTitle(R.string.title_dialog_search_city);
+
         // TODO Auto-generated method stub
         View rootView=inflater.inflate(R.layout.dialog_select_country, null);
 
@@ -95,12 +94,9 @@ public class DialogSelectCountryCity extends DialogFragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for(City s:cityList)
-                    if(s.getName().equals(((ListView) parent).getAdapter().getItem(position))) {
-                        text_city.setText("Россия,"+s.getName());
-                        user.setCityId(s.getId());
-                        user.setCountryId(1);
-                        getActivity().invalidateOptionsMenu();
+                for(City city:cityList)
+                    if(city.getName().equals(((ListView) parent).getAdapter().getItem(position))) {
+                        onSelectCity.onSelect(city);
                         dismiss();
                     }
 
@@ -140,7 +136,12 @@ public class DialogSelectCountryCity extends DialogFragment {
                             lv.setAdapter(adapter);
                             if (sv.getQuery().toString().length() > 0)
                                 adapter.getFilter().filter(sv.getQuery().toString());
+                        }
 
+                        @Override
+                        public void onComplete() {
+                            super.onComplete();
+                            refreshableSwipeRefreshLayout.setRefreshing(false);
                         }
                     });
                     refreshableSwipeRefreshLayout.setRefreshing(true);
@@ -164,5 +165,9 @@ public class DialogSelectCountryCity extends DialogFragment {
     public void onDestroy() {
         super.onDestroy();
         loadCityTask.cancel();
+    }
+
+    public interface OnSelectCity{
+        public void onSelect(City city);
     }
 }

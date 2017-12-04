@@ -28,15 +28,13 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     private FullSearchTask fullSearchTask;
     private QuickSearchTask quickSearchTask;
-    private LoadRestoDetailTask loadRestoDetailTask;
 
 
 
     @Inject
-    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,LoadRestoDetailTask loadRestoDetailTask){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
-        this.loadRestoDetailTask = loadRestoDetailTask;
 
     }
 
@@ -107,8 +105,4 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     }
 
-    @Override
-    public LoadRestoDetailTask getLoadRestoTask() {
-        return loadRestoDetailTask;
-    }
 }

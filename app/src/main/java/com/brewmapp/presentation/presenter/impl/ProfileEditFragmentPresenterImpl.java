@@ -13,6 +13,7 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.LoadProfileTask;
+import com.brewmapp.execution.task.LoadUsersTask;
 import com.brewmapp.execution.task.ProfileChangeTask;
 import com.brewmapp.execution.task.UploadAvatarTask;
 import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
@@ -24,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -46,25 +48,22 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     private Context context;
     private UserRepo userRepo;
     private LoadProfileTask loadProfileTask;
-    String[] checkListAll={"getGender","getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname","getThumbnail"};
-    String[] checkListWithoutPthoto={"getGender","getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname"};
+    private LoadUsersTask loadUsersTask;
+    String[] checkListAll={"getCountryId","getCityId","getGender","getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname","getThumbnail"};
+    String[] checkListWithoutPthoto={"getCountryId","getCityId","getGender","getGames","getSite","getSkype","getAdditionalPhone","getPhone","getInterests","getMusic","getBooks","getFilms","getFamilyStatus","getCountryId","getCityId","getBirthday","getFirstname","getStatus","getLastname"};
     String[] checkListPhoto={"getThumbnail"};
 
 
     @Inject
-    public ProfileEditFragmentPresenterImpl(Context context,UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadAvatarTask uploadAvatarTask,LoadProfileTask loadProfileTask){
+    public ProfileEditFragmentPresenterImpl(Context context,UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadAvatarTask uploadAvatarTask,LoadProfileTask loadProfileTask,LoadUsersTask loadUsersTask){
         this.context=context;
         user_old_data=userRepo.load();
-        user_new_data.setGender(user_old_data.getGender());
-        user_new_data.setBirthday(user_old_data.getBirthday());
-        user_new_data.setCityId(user_old_data.getCityId());
-        user_new_data.setCountryId(user_old_data.getCountryId());
-        user_new_data.setFamilyStatus(user_old_data.getFamilyStatus());
 
         this.profileChangeTask = profileChangeTask;
         this.uploadAvatarTask = uploadAvatarTask;
         this.loadProfileTask = loadProfileTask;
         this.userRepo = userRepo;
+        this.loadUsersTask = loadUsersTask;
     }
 
     @Override
@@ -75,7 +74,32 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     @Override
     public void onAttach(ProfileEditFragmentView profileEditFragmentView) {
         super.onAttach(profileEditFragmentView);
-        view.refreshProfile(user_old_data);
+
+        loadUsersTask.execute(user_old_data.getId(),new SimpleSubscriber<ArrayList<User>>(){
+            @Override
+            public void onNext(ArrayList<User> users) {
+                super.onNext(users);
+                try {
+                    user_old_data=users.get(0);
+                    user_new_data.setGender(user_old_data.getGender());
+                    user_new_data.setBirthday(user_old_data.getBirthday());
+                    user_new_data.setCityId(user_old_data.getCityId());
+                    user_new_data.setCountryId(user_old_data.getCountryId());
+                    user_new_data.setFamilyStatus(user_old_data.getFamilyStatus());
+
+                    view.refreshProfile(user_old_data);
+                }catch (Exception e){
+                    view.commonError(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
+
     }
 
     @Override

@@ -4,6 +4,7 @@
     <dimen name="height_min_button">48dp</dimen>
     <dimen name="height_min_input_lesser">42dp</dimen>
     <dimen name="size_icon_24">24dp</dimen>
+    <dimen name="size_icon_36">36dp</dimen>
     <dimen name="size_icon_72">72dp</dimen>
     <dimen name="size_avatar">72dp</dimen>
     <dimen name="size_avatar_bigger">90dp</dimen>

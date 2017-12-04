@@ -199,10 +199,6 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
 
     }
 
-    @Override
-    public LoadRestoDetailTask getLoadRestoTask() {
-        return presenter.getLoadRestoTask();
-    }
 
     private void processAction(int action, Object payload) {
         switch (action){

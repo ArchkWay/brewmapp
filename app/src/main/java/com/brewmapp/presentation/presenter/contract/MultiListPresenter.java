@@ -20,5 +20,4 @@ public interface MultiListPresenter extends LivePresenter<MultiListView> {
 
     void sentQueryQuickSearch(FullSearchPackage fullSearchPackage);
 
-    LoadRestoDetailTask getLoadRestoTask();
 }

@@ -26,7 +26,7 @@ public class User {
     private String fb;
 
 //    @SerializedName("1.03"==SERVER_API_VER?"relations":"")
-    //private Relations relations;
+    private Relations relations_fix_bugs_backend;
 
     private int subscriptionsCount;
 
@@ -85,13 +85,13 @@ public class User {
     @SerializedName(Keys.GET_THUMB)
     private String thumbnail;
 
-//    public Relations getRelations() {
-//        return relations;
-//    }
-//
-//    public void setRelations(Relations relations) {
-//        this.relations = relations;
-//    }
+    public Relations getRelations_fix_bugs_backend() {
+        return relations_fix_bugs_backend;
+    }
+
+    public void setRelations_fix_bugs_backend(Relations relations_fix_bugs_backend) {
+        this.relations_fix_bugs_backend = relations_fix_bugs_backend;
+    }
 
     public String getFormattedName() {
         return String.format("%s %s", firstname, lastname);
@@ -419,11 +419,11 @@ public class User {
     }
 
     public String getCountryCityFormated() {
-//        try {
-//            return String.format("%s,%s",getRelations().getmCountry().getName(),getRelations().getmCity().getName());
-//        }catch (Exception e){
+        try {
+            return String.format("%s,%s",getRelations_fix_bugs_backend().getmCountry().getName(),getRelations_fix_bugs_backend().getmCity().getName());
+        }catch (Exception e){
             return null;
-//        }
+        }
     }
 
     public static class Counts {

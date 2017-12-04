@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
@@ -128,19 +129,6 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         this.model = model;
 
         class FillContent {
-            SimpleSubscriber subscriber=new SimpleSubscriber<RestoDetail>() {
-                @Override public void onNext(RestoDetail restoDetail) {
-                    super.onNext(restoDetail);
-                    try {
-                        Related_model_data related_model_data=new Related_model_data();
-                        related_model_data.setGetThumb(restoDetail.getResto().getThumb());
-                        set_avatar(related_model_data);
-                    } catch (Exception e){}
-                }
-                @Override public void onError(Throwable e) {
-                    super.onError(e);
-                }
-            };
 
             String photoUrl=null;
             int photoWidth=0;
@@ -170,25 +158,39 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
             private void texts() {
                 new HashTagHelper2(text,model.getText());
                 date.setText(model.getDateFormated());
-                try {author.setText(model.getRelated_model_data().getName());}catch (Exception e){}
             }
 
-            private void avatar() {
+            private void check_related_model_data() {
                 if(model.getRelated_model_data()==null){
                     if(getContext() instanceof MultiListActivity&&Keys.CAP_RESTO.equals(model.getRelated_model())){
-                        LoadRestoDetailTask loadRestoDetailTask=((MultiListActivity)getContext()).getLoadRestoTask();
-                        LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
-                        loadRestoDetailPackage.setId(String.valueOf(model.getRelated_id()));
-                        loadRestoDetailTask.execute(loadRestoDetailPackage, subscriber);
+                                LoadRestoDetailTask loadRestoDetailTask=new LoadRestoDetailTask(BeerMap.getAppComponent().mainThread(),BeerMap.getAppComponent().executor(),BeerMap.getAppComponent().api());
+                                LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
+                                loadRestoDetailPackage.setId(String.valueOf(model.getRelated_id()));
+                                loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
+                                    @Override
+                                    public void onNext(RestoDetail restoDetail) {
+                                        super.onNext(restoDetail);
+                                        try {
+                                            Related_model_data related_model_data=new Related_model_data();
+                                            related_model_data.setGetThumb(restoDetail.getResto().getThumb());
+                                            related_model_data.setName(restoDetail.getResto().getName());
+                                            set_related_model_data(related_model_data);
+                                        } catch (Exception e){}
+                                    }
 
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        super.onError(e);
+                                    }
+                                });
                     }
                 }else {
-                    set_avatar(model.getRelated_model_data());
+                    set_related_model_data(model.getRelated_model_data());
                 }
 
             }
 
-            private void set_avatar(Related_model_data related_model_data) {
+            private void set_related_model_data(Related_model_data related_model_data) {
                 String avatarLoad = null;
                 try {
                     avatarLoad = related_model_data.getGetThumb();
@@ -199,6 +201,8 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                     Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
                 else
                     Picasso.with(getContext()).load(avatarLoad).fit().centerCrop().into(avatar);
+
+                try {author.setText(related_model_data.getName());}catch (Exception e){}
 
             }
 
@@ -239,7 +243,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
             public void fill() {
                 shareLikeView.setiLikeable(model);
                 repost();
-                avatar();
+                check_related_model_data();
                 texts();
                 image();
             }

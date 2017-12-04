@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.User;
 
 import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
@@ -109,7 +110,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public CharSequence getTitle() {
-        return presenter.getTitle();
+        return getActivity().getString(R.string.title_edit_profile);
     }
 
     @Override
@@ -135,7 +136,12 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         layout_birthday.setOnClickListener(presenter.getOnClickBirthday(getActivity(),user,text_birthday));
         avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.SELECT_PHOTO))));
         layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);invalidateOptionsMenu();}));
-        layout_city.setOnClickListener(v -> new DialogSelectCountryCity(getActivity(),getActivity().getSupportFragmentManager(),text_city,user));
+        layout_city.setOnClickListener(v -> new DialogSelectCountryCity(getActivity(),getActivity().getSupportFragmentManager(), city -> {
+                    text_city.setText("Россия,"+city.getName());
+                    user.setCityId(city.getId());
+                    user.setCountryId(Integer.valueOf(city.getCountryId()));
+                    getActivity().invalidateOptionsMenu();
+        }));
 
         registerTextChangeListeners(s ->{user.setPhone(edit_text_phone.getRawText());invalidateOptionsMenu();},edit_text_phone);
         registerTextChangeListeners(s ->{user.setAdditionalPhone(edit_text_phone_dop.getRawText());invalidateOptionsMenu();},edit_text_phone_dop);
@@ -204,7 +210,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         edit_interest.setText(user.getInterests());
         edit_music.setText(user.getMusic());
         edit_game.setText(user.getGames());
-
+        text_city.setText(user.getCountryCityFormated());
     }
 
     @Override

@@ -95,10 +95,11 @@
                 android:id="@+id/activity.sale.details.photo"
                 android:layout_marginBottom="@dimen/common_block_space_double"
                 />
-
+            <include layout="@layout/view_share_like" />
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 
-    <include layout="@layout/view_share_like" />
+
 
 </LinearLayout>

@@ -48,8 +48,8 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:layout_width="@dimen/size_icon_24"
-                                android:layout_height="@dimen/size_icon_24"
+                                android:layout_width="@dimen/size_icon_36"
+                                android:layout_height="@dimen/size_icon_36"
                                 android:adjustViewBounds="true"
                                 android:src="@drawable/ic_add"
                                 />
@@ -122,7 +122,9 @@
                         android:orientation="horizontal"
                         segmentedgroup:sc_border_width="2dp"
                         segmentedgroup:sc_tint_color="@color/colorGrayControls"
-                        segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big">
+                        segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big"
+
+                        >
 
                         <RadioButton
                             android:id="@+id/fragment.profile.edit.man"
@@ -130,7 +132,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/gender_man"
-                            style="@style/RadioButton" />
+                            style="@style/RadioButton"
+                            android:enabled="false"
+                            />
 
                         <RadioButton
                             android:id="@+id/fragment.profile.edit.woman"
@@ -138,7 +142,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/gender_woman"
-                            style="@style/RadioButton" />
+                            style="@style/RadioButton"
+                            android:enabled="false"/>
                     </info.hoang8f.android.segmented.SegmentedGroup>
                 </LinearLayout>
 
@@ -218,7 +223,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -227,7 +232,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -251,14 +257,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -272,7 +279,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -283,7 +290,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:id="@+id/fragment.profile.edit.layout_city"
-                        >
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -305,14 +312,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
 
                 </android.support.constraint.ConstraintLayout>
 
@@ -329,7 +337,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -338,7 +346,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -360,14 +369,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -407,7 +417,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -417,7 +427,7 @@
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        >
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -445,14 +455,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -468,7 +479,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -477,7 +488,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -504,14 +516,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -527,7 +540,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -536,7 +549,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -559,14 +573,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -582,7 +597,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -591,7 +606,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -613,14 +629,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -661,7 +678,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -670,7 +687,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -693,14 +711,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -716,7 +735,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -725,7 +744,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -748,14 +768,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -771,7 +792,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -780,7 +801,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -802,14 +824,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
 
@@ -826,7 +849,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -835,7 +858,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -857,14 +881,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -880,7 +905,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -889,7 +914,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -911,14 +937,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line
@@ -934,7 +961,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
@@ -943,7 +970,8 @@
                         android:paddingRight="@dimen/common_block_space_double_semi"
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="8dp">
 
                         <TextView
                             style="@style/AppTheme.Text.H4"
@@ -966,14 +994,15 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/arrow_right_width"
-                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="364dp" />
                 </android.support.constraint.ConstraintLayout>
 
                 <ru.frosteye.ovsa.presentation.view.widget.Line

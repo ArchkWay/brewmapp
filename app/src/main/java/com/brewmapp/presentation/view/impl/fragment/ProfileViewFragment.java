@@ -102,7 +102,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public CharSequence getTitle() {
-        return presenter.getTitle();
+        return getString(R.string.title_view_profile);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         String tmpStr;
 
         if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail())) {
-            Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);
+            Picasso.with(getContext()).load(user.getThumbnail()).fit().centerCrop().into(avatar);
         }else {
             Picasso.with(getContext()).load(user.getGender()==1?R.drawable.ic_user_man:R.drawable.ic_user_woman).fit().into(avatar);
         }

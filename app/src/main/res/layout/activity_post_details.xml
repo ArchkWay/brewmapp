@@ -142,9 +142,9 @@
                     android:layout_marginLeft="@dimen/common_block_space_double_semi"
                     />
             </LinearLayout>
-
+            <include layout="@layout/view_share_like" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    <include layout="@layout/view_share_like" />
+
 </LinearLayout>

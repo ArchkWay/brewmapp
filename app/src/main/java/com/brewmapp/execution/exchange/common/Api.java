@@ -363,4 +363,8 @@ public interface Api {
     @FormUrlEncoded
     Call<Object> deleteFriend(@FieldMap WrapperParams params);
 
+    @POST("user/user")
+    @FormUrlEncoded
+    Call<Users> getUsers(@FieldMap RequestParams params);
+
 }

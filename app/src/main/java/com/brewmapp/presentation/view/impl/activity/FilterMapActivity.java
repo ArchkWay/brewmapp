@@ -469,10 +469,4 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         setResult(RESULT_OK, returnIntent);
         finish();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Paper.book().destroy();
-    }
 }

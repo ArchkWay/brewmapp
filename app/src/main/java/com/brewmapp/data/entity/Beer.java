@@ -3,13 +3,13 @@ package com.brewmapp.data.entity;
 import com.brewmapp.BuildConfig;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by xpusher on 10/20/2017.
  */
 
 public class Beer implements Serializable {
+
     private String id;
     private String country_id;
     private String brand_id;
@@ -229,8 +229,6 @@ public class Beer implements Serializable {
             getThumb = BuildConfig.SERVER_ROOT_URL + getThumb;
         }
         return getThumb;
-
-
     }
 
     public void setGetThumb(String getThumb) {

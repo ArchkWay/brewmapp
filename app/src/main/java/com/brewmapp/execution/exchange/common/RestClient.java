@@ -6,30 +6,58 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
+import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
+import com.brewmapp.data.entity.wrapper.BeerColorInfo;
+import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
+import com.brewmapp.data.entity.wrapper.BeerIbuInfo;
+import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
+import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
+import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
+import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.CityInfo;
+import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
+import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
+import com.brewmapp.data.entity.wrapper.RegionInfo;
 import com.brewmapp.data.entity.wrapper.RestoDetailInfo;
 import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
+import com.brewmapp.execution.exchange.common.base.BeerAftertasteDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerBrandDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerColorDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerDensityDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerIbuDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerPackDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerPowerDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerSmellDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerTasteDeserializer;
+import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
+import com.brewmapp.execution.exchange.common.base.CityDeserializer;
+import com.brewmapp.execution.exchange.common.base.CountryDeserializer;
 import com.brewmapp.data.entity.wrapper.UserInfo;
 import com.brewmapp.execution.exchange.common.base.EventsDeserializer;
 import com.brewmapp.execution.exchange.common.base.FeatureDeserializer;
 import com.brewmapp.execution.exchange.common.base.FilterBeerDeserializer;
+import com.brewmapp.execution.exchange.common.base.FilterRestoOnMapDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestByUsersDeserializer;
 import com.brewmapp.execution.exchange.common.base.InterestDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.KitchenDeserializer;
 import com.brewmapp.execution.exchange.common.base.PriceRangeDeserializer;
 import com.brewmapp.execution.exchange.common.base.QuickSearchDeserializer;
+import com.brewmapp.execution.exchange.common.base.RegionDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
@@ -109,6 +137,20 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(FilterBeerInfo.class, new FilterBeerDeserializer())
                 .registerTypeAdapter(InterestInfoByUsers.class, new InterestByUsersDeserializer())
                 .registerTypeAdapter(Models.class, new QuickSearchDeserializer())
+                .registerTypeAdapter(BeerTypeInfo.class, new BeerTypesDeserializer())
+                .registerTypeAdapter(BeerPackInfo.class, new BeerPackDeserializer())
+                .registerTypeAdapter(BeerBrandInfo.class, new BeerBrandDeserializer())
+                .registerTypeAdapter(BeerColorInfo.class, new BeerColorDeserializer())
+                .registerTypeAdapter(BeerTasteInfo.class, new BeerTasteDeserializer())
+                .registerTypeAdapter(BeerSmellInfo.class, new BeerSmellDeserializer())
+                .registerTypeAdapter(BeerAftertasteInfo.class, new BeerAftertasteDeserializer())
+                .registerTypeAdapter(BeerPowerInfo.class, new BeerPowerDeserializer())
+                .registerTypeAdapter(BeerDensityInfo.class, new BeerDensityDeserializer())
+                .registerTypeAdapter(BeerIbuInfo.class, new BeerIbuDeserializer())
+                .registerTypeAdapter(CountryInfo.class, new CountryDeserializer())
+                .registerTypeAdapter(RegionInfo.class, new RegionDeserializer())
+                .registerTypeAdapter(CityInfo.class, new CityDeserializer())
+                .registerTypeAdapter(FilterRestoLocationInfo.class, new FilterRestoOnMapDeserializer())
                 .registerTypeAdapter(UserInfo.class, new UserDeserializer())
                 ;
     }

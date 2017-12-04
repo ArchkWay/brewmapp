@@ -1,5 +1,6 @@
 package com.brewmapp.execution.task;
 
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
@@ -17,7 +18,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by nlbochas on 21/10/2017.
  */
 
-public class LoadRestoLocationTask extends BaseNetworkTask<Integer, List<RestoLocation>> {
+public class LoadRestoLocationTask extends BaseNetworkTask<Integer, List<FilterRestoLocation>> {
 
     @Inject
     public LoadRestoLocationTask(MainThread mainThread,
@@ -27,10 +28,10 @@ public class LoadRestoLocationTask extends BaseNetworkTask<Integer, List<RestoLo
     }
 
     @Override
-    protected Observable<List<RestoLocation>> prepareObservable(Integer params) {
+    protected Observable<List<FilterRestoLocation>> prepareObservable(Integer params) {
         return Observable.create(subscriber -> {
             try {
-                ListResponse<RestoLocation> response = executeCall(getApi().loadRestoLocationInCity(params));
+                ListResponse<FilterRestoLocation> response = executeCall(getApi().loadRestoLocationInCity(params));
                 subscriber.onNext(response.getModels());
                 subscriber.onComplete();
             } catch (Exception e) {

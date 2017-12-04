@@ -17,8 +17,6 @@ public class RestoDetail implements Serializable{
     private List<RestoType> resto_type=new ArrayList<>();
     private List<RestoWorkTime> resto_work_tyoe=new ArrayList<>();
 
-
-
     public void setResto_kitchen(List<Kitchen> resto_kitchen) {
         this.resto_kitchen = resto_kitchen;
     }

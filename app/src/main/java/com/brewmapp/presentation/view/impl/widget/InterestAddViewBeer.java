@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.squareup.picasso.Picasso;
@@ -77,7 +77,7 @@ public class InterestAddViewBeer extends BaseLinearLayout implements Interactive
             setOnClickListener(v -> listener.onModelAction(VIEW_MODEL, beer));
             arrow_right.setOnClickListener(v -> listener.onModelAction(SELECT_MODEL, beer));
         }else {
-            setOnClickListener(v -> listener.onModelAction(FilterActions.BEER, beer));
+            setOnClickListener(v -> listener.onModelAction(FilterRestoField.BEER, beer));
         }
     }
 

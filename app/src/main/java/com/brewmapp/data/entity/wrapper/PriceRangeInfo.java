@@ -2,11 +2,7 @@ package com.brewmapp.data.entity.wrapper;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.PriceRange;
-import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.presentation.view.impl.widget.PriceRangeView;
-import com.brewmapp.presentation.view.impl.widget.TypeView;
-
-import java.io.Serializable;
 
 import eu.davidea.flexibleadapter.items.IFilterable;
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
@@ -17,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> implements IFilterable {
 
+    public PriceRangeInfo(PriceRange model) {
+        super(model);
+    }
+
+    public PriceRangeInfo() {
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.view_price_range;
@@ -25,9 +28,5 @@ public class PriceRangeInfo extends AdapterItem<PriceRange, PriceRangeView> impl
     @Override
     public boolean filter(String constraint) {
         return getModel().getName().toLowerCase().contains(constraint);
-    }
-
-    public boolean isSelected() {
-        return getModel().isSelected();
     }
 }

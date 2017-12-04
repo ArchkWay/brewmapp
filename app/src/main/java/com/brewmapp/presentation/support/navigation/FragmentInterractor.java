@@ -1,8 +1,6 @@
 package com.brewmapp.presentation.support.navigation;
 
-import android.content.Context;
 import android.content.Intent;
-
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 /**
@@ -14,6 +12,5 @@ public interface FragmentInterractor {
     void processSpinnerTitleSubtitle(String subtitle);
     void processStartActivityWithRefresh(Intent intent,int requestCode);
     void processSetActionBar(int position);
-
     void processShowDrawer(boolean show, boolean smooth);
 }

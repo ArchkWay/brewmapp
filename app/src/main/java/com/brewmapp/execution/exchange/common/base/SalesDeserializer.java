@@ -1,8 +1,6 @@
 package com.brewmapp.execution.exchange.common.base;
 
-import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Sale;
-import com.brewmapp.data.entity.wrapper.EventInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
 
 import ru.frosteye.ovsa.execution.serialization.AdapterItemDeserializer;

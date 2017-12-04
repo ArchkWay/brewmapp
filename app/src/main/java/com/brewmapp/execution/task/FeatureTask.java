@@ -4,6 +4,7 @@ import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.PriceRangeTypes;
+import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -35,6 +36,9 @@ public class FeatureTask extends BaseNetworkTask<Feature, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 FeatureTypes response = executeCall(getApi().loadFeature());
+                List<FeatureInfo> featureInfos = new ArrayList<>();
+                featureInfos.add(0, new FeatureInfo(new Feature("Не имеют значения  ")));
+                featureInfos.addAll(response.getModels());
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

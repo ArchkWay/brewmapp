@@ -11,11 +11,13 @@ public class Region {
     @SerializedName("country_id")
     private String mCountryId;
     @SerializedName("id")
-    private String mId;
+    private int mId;
     @SerializedName("name")
     private String mName;
     @SerializedName("name_en")
-    private String mNameEn;
+    private Object mNameEn;
+    @SerializedName("relations")
+    private Relations mRelations;
 
     public String getCountryId() {
         return mCountryId;
@@ -25,11 +27,11 @@ public class Region {
         mCountryId = countryId;
     }
 
-    public String getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         mId = id;
     }
 
@@ -41,12 +43,20 @@ public class Region {
         mName = name;
     }
 
-    public String getNameEn() {
+    public Object getNameEn() {
         return mNameEn;
     }
 
-    public void setNameEn(String nameEn) {
+    public void setNameEn(Object nameEn) {
         mNameEn = nameEn;
+    }
+
+    public Relations getRelations() {
+        return mRelations;
+    }
+
+    public void setRelations(Relations relations) {
+        mRelations = relations;
     }
 
 }

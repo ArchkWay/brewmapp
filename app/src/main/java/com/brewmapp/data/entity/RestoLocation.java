@@ -17,7 +17,6 @@ public class RestoLocation implements ICommonItem, Serializable {
     private int metro_id;
     private String metro_name;
 
-
     @SerializedName(Keys.GET_THUMB)
     private String thumb;
 

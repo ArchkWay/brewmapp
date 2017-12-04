@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.KitchenTypes;
+import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -33,7 +34,10 @@ public class KitchenTask extends BaseNetworkTask<Kitchen, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 KitchenTypes response = executeCall(getApi().loadKitchenTypes());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<KitchenInfo> kitchenInfos = new ArrayList<>();
+                kitchenInfos.add(0, new KitchenInfo(new Kitchen("Любая  ")));
+                kitchenInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(kitchenInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

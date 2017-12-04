@@ -1,75 +1,163 @@
+
 package com.brewmapp.data.entity;
 
-import java.io.Serializable;
+import javax.annotation.Generated;
 
-/**
- * Created by xpusher on 10/30/2017.
- */
+import com.brewmapp.BuildConfig;
+import com.google.gson.annotations.SerializedName;
 
-public class BeerBrand implements Serializable {
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
+public class BeerBrand {
 
-    private String brewery_id;
-    private String country_id;
-    private String id;
-    private String image;
-    private String name;
-    private String name_ru;
-    private String timestamp;
+    @SerializedName("brewery_id")
+    private Object BreweryId;
+    @SerializedName("country_id")
+    private Object CountryId;
+    @SerializedName("dis_like")
+    private String DisLike;
+    @SerializedName("getThumb")
+    private String getThumb;
+    @SerializedName("id")
+    private String Id;
+    @SerializedName("image")
+    private String Image;
+    @SerializedName("interested")
+    private String Interested;
+    @SerializedName("like")
+    private String Like;
+    @SerializedName("name")
+    private String Name;
+    @SerializedName("name_ru")
+    private Object NameRu;
+    @SerializedName("no_interested")
+    private String NoInterested;
+    @SerializedName("relations")
+    private com.brewmapp.data.entity.Relations Relations;
+    @SerializedName("timestamp")
+    private Object Timestamp;
 
-    public String getBrewery_id() {
-        return brewery_id;
+    private boolean selected;
+
+    public BeerBrand(String name) {
+        Name = name;
     }
 
-    public void setBrewery_id(String brewery_id) {
-        this.brewery_id = brewery_id;
+    public Object getBreweryId() {
+        return BreweryId;
     }
 
-    public String getCountry_id() {
-        return country_id;
+    public void setBreweryId(Object breweryId) {
+        BreweryId = breweryId;
     }
 
-    public void setCountry_id(String country_id) {
-        this.country_id = country_id;
+    public Object getCountryId() {
+        return CountryId;
+    }
+
+    public void setCountryId(Object countryId) {
+        CountryId = countryId;
+    }
+
+    public String getDisLike() {
+        return DisLike;
+    }
+
+    public void setDisLike(String disLike) {
+        DisLike = disLike;
+    }
+
+    public String getGetThumb() {
+        if(getThumb != null && !getThumb.startsWith("http")) {
+            getThumb = BuildConfig.SERVER_ROOT_URL + getThumb;
+        }
+        return getThumb;
+    }
+
+    public void setGetThumb(String getThumb) {
+        this.getThumb = getThumb;
     }
 
     public String getId() {
-        return id;
+        return Id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        Id = id;
     }
 
     public String getImage() {
-        return image;
+        return Image;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        Image = image;
+    }
+
+    public String getInterested() {
+        return Interested;
+    }
+
+    public void setInterested(String interested) {
+        Interested = interested;
+    }
+
+    public String getLike() {
+        return Like;
+    }
+
+    public void setLike(String like) {
+        Like = like;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
-    public String getName_ru() {
-        return name_ru;
+    public Object getNameRu() {
+        return NameRu;
     }
 
-    public void setName_ru(String name_ru) {
-        this.name_ru = name_ru;
+    public void setNameRu(Object nameRu) {
+        NameRu = nameRu;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getNoInterested() {
+        return NoInterested;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setNoInterested(String noInterested) {
+        NoInterested = noInterested;
     }
+
+    public com.brewmapp.data.entity.Relations getRelations() {
+        return Relations;
+    }
+
+    public void setRelations(com.brewmapp.data.entity.Relations relations) {
+        Relations = relations;
+    }
+
+    public Object getTimestamp() {
+        return Timestamp;
+    }
+
+    public void setTimestamp(Object timestamp) {
+        Timestamp = timestamp;
+    }
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
 
 }

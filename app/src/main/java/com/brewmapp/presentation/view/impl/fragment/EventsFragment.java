@@ -54,7 +54,6 @@ import java.util.List;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-
 public class EventsFragment extends BaseFragment implements EventsView, View.OnClickListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
@@ -73,9 +72,9 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     private EndlessRecyclerOnScrollListener scrollListener;
     private List<FilteredTitle> dropdownItems;
 
-    public static final int TAB_EVENT=0;
-    public static final int TAB_SALE=1;
-    public static final int TAB_POST=2;
+    public static final int TAB_EVENT = 0;
+    public static final int TAB_SALE = 1;
+    public static final int TAB_POST = 2;
 
     private final String MODE_DEFAULT="default";
     private final String MODE_ONLY_BY_RESTO="by_resto";
@@ -97,7 +96,7 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         if(getArguments()==null){
             mode=MODE_DEFAULT;
         }else  if(getArguments().get(Keys.RELATED_MODEL)!=null&&getArguments().get(Keys.RELATED_ID)!=null){
-            mode=MODE_ONLY_BY_RESTO;
+            mode = MODE_ONLY_BY_RESTO;
         }else {
             mode=MODE_DEFAULT;
         }

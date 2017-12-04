@@ -13,6 +13,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class RestoTypeInfo extends AdapterItem<RestoType, TypeView> implements IFilterable {
 
+    public RestoTypeInfo(RestoType model) {
+        super(model);
+    }
+
+    public RestoTypeInfo() {
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.view_type;

@@ -2,6 +2,8 @@
 package com.brewmapp.data.entity;
 
 import javax.annotation.Generated;
+
+import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
@@ -10,6 +12,10 @@ public class Country {
 
     @SerializedName("country_code")
     private String mCountryCode;
+    @SerializedName("getThumb")
+    private String mGetThumb;
+    @SerializedName("getThumbOriginal")
+    private String mGetThumbOriginal;
     @SerializedName("id")
     private String mId;
     @SerializedName("image")
@@ -18,6 +24,30 @@ public class Country {
     private String mName;
     @SerializedName("name_en")
     private String mNameEn;
+    private boolean selected;
+
+    public Country(String mName) {
+        this.mName = mName;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getGetThumb() {
+        if(mGetThumb != null && !mGetThumb.startsWith("http")) {
+            mGetThumb = BuildConfig.SERVER_ROOT_URL + mGetThumb;
+        }
+        return mGetThumb;
+    }
+
+    public void setGetThumb(String getThumb) {
+        this.mGetThumb = getThumb;
+    }
 
     public String getCountryCode() {
         return mCountryCode;
@@ -25,6 +55,14 @@ public class Country {
 
     public void setCountryCode(String countryCode) {
         mCountryCode = countryCode;
+    }
+
+    public String getGetThumbOriginal() {
+        return mGetThumbOriginal;
+    }
+
+    public void setGetThumbOriginal(String getThumbOriginal) {
+        mGetThumbOriginal = getThumbOriginal;
     }
 
     public String getId() {

@@ -127,7 +127,7 @@ public class Keys {
     public static final String EVLUATION_VALUE = "evaluation_value";
     public static final String FILTER_CATEGORY = "filter_category";
 
-    //Filter keys
+    //Filter resto keys
     public static final String RESTO_CITY = "restoCity";
     public static final String RESTO_TYPE = "restoTypes";
     public static final String RESTO_METRO = "restoMetroes";
@@ -141,6 +141,10 @@ public class Keys {
     public static final String COORD_START = "coordStart";
     public static final String COORD_END = "coordEnd";
     public static final String ORDER_SORT = "restoOrderSort";
+
+    //Filter beer keys
+    public static final String BEER_TYPES = "beerTypes";
+    public static final String SEARCH = "search";
 
     public static final String menuBeer="menuBeer";
     public static final String BIRTHDAY = "birthday";

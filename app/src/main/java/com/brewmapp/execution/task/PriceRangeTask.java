@@ -4,6 +4,7 @@ import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.PriceRangeTypes;
 
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
+import com.brewmapp.data.pojo.PriceRangeType;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -21,7 +22,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by nixus on 03.11.2017.
  */
 
-public class PriceRangeTask extends BaseNetworkTask<PriceRange, List<IFlexible>> {
+public class PriceRangeTask extends BaseNetworkTask<PriceRangeType, List<IFlexible>> {
 
     @Inject
     public PriceRangeTask(MainThread mainThread,
@@ -31,11 +32,14 @@ public class PriceRangeTask extends BaseNetworkTask<PriceRange, List<IFlexible>>
     }
 
     @Override
-    protected Observable<List<IFlexible>> prepareObservable(PriceRange priceRange) {
+    protected Observable<List<IFlexible>> prepareObservable(PriceRangeType priceRange) {
         return Observable.create(subscriber -> {
             try {
-                PriceRangeTypes response = executeCall(getApi().loadPriceRanges());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                PriceRangeTypes response = executeCall(getApi().loadPriceRanges(priceRange.getType()));
+                List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
+                priceRangeInfos.add(0, new PriceRangeInfo(new PriceRange("Не имеет значения  ")));
+                priceRangeInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(priceRangeInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

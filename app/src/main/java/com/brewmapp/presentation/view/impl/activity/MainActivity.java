@@ -49,15 +49,15 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+
 import com.transitionseverywhere.TransitionManager;
 
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_REFRESH;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
-
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
@@ -84,7 +84,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private @MenuRes int menuToShow;
 
     public static final String KEY_FIRST_FRAGMENT ="first_fragment";
-
     public static final String MODE_DEFAULT="default";
     public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";
     public static final String MODE_ONLY_MAP_FRAGMENT="map_fragment";
@@ -310,17 +309,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_REFRESH_ITEMS) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_REFRESH_ITEMS) {
                 refreshItems();
-            }
-        } else if(requestCode == REQUEST_CODE_REFRESH_STATE){
-            if(requestCode==RESULT_OK){
+            } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
                 refreshState();
+            } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
+                showMapResult(data.getBooleanExtra("isBeer", false),
+                        data.getIntExtra("checkBox", 0));
             }
-        } else if (requestCode == REQUEST_CODE_MAP_REFRESH) {
-            Log.i("sdfdsf", "okresult");
-            showResultOnMap();
         }
     }
 
@@ -355,9 +352,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @SuppressLint("RestrictedApi")
     public void showResultOnMap() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if (fragment instanceof BeerMapFragment)
-                ((BeerMapFragment) fragment).showResult();
-            else if(fragment instanceof ProfileFragment)
+            if(fragment instanceof ProfileFragment)
                 ((ProfileFragment) fragment).refreshItems();
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void showMapResult(boolean isBeer, int checkBox) {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof BeerMapFragment) {
+                ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
+    }
     }
 }

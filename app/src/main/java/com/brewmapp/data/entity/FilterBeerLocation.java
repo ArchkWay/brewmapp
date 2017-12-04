@@ -1,12 +1,14 @@
 package com.brewmapp.data.entity;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
+import com.google.maps.android.clustering.ClusterItem;
 
 /**
  * Created by nixus on 27.11.2017.
  */
 
-public class FilterBeerLocation {
+public class FilterBeerLocation implements ClusterItem {
 
     @SerializedName("beer_id")
     private String mBeerId;
@@ -49,5 +51,19 @@ public class FilterBeerLocation {
         mRestoId = restoId;
     }
 
+    @Override
+    public LatLng getPosition() {
+        return null;
+    }
+
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public String getSnippet() {
+        return null;
+    }
 }
 

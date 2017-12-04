@@ -99,6 +99,7 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
 
     }
 
+
     public ILikeable getiLikeable() {
         return iLikeable;
     }

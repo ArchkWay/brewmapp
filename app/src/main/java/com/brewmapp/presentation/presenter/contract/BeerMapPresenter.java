@@ -1,7 +1,12 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 import ru.frosteye.ovsa.data.entity.SimpleLocation;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -15,4 +20,7 @@ public interface BeerMapPresenter extends LivePresenter<BeerMapView> {
     void onGeocodeRequest(LatLng latLng);
     void onLoadedRestoGeo(int cityId);
     void onLoadedCity(String cityName);
+    void loadRestoCoordinates(List<FilterRestoField> fieldList, int specialOffer);
+    void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer);
+    void sendQueryRestoSearch(FullSearchPackage fullSearchPackage);
 }

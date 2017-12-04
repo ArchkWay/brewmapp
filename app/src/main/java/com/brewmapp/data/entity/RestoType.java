@@ -1,9 +1,6 @@
 
 package com.brewmapp.data.entity;
 
-import android.widget.Filter;
-import android.widget.Filterable;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Generated;
@@ -28,6 +25,10 @@ public class RestoType implements Serializable, IFilterable {
     @SerializedName("relations")
     private List<Relations> Relations;
     private boolean selected;
+
+    public RestoType(String name) {
+        Name = name;
+    }
 
     public String getGetThumb() {
         if(getThumb != null && !getThumb.startsWith("http")) {

@@ -15,7 +15,6 @@ public class BeerType implements Serializable {
     private String name_wheel;
     private String parent_id;
 
-
     public String getId() {
         return id;
     }

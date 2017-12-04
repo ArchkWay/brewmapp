@@ -1,6 +1,7 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -12,20 +13,29 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
-import com.brewmapp.data.entity.BeerBrand;
+import com.brewmapp.data.entity.BeerAftertasteTypes;
+import com.brewmapp.data.entity.BeerBrandTypes;
+import com.brewmapp.data.entity.BeerColorTypes;
+import com.brewmapp.data.entity.BeerDensityTypes;
+import com.brewmapp.data.entity.BeerIbuTypes;
 import com.brewmapp.data.entity.BeerLocation;
+import com.brewmapp.data.entity.BeerPackTypes;
+import com.brewmapp.data.entity.BeerPowerTypes;
+import com.brewmapp.data.entity.BeerSmellTypes;
+import com.brewmapp.data.entity.BeerTasteTypes;
+import com.brewmapp.data.entity.BeerTypesModel;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.CityTypes;
+import com.brewmapp.data.entity.CountryTypes;
 import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.FilterBeerLocation;
-import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
-import com.brewmapp.data.entity.Models;
 import com.brewmapp.data.entity.PriceRangeTypes;
+import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -35,6 +45,7 @@ import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.FilterBeer;
+import com.brewmapp.data.entity.container.FilterRestoLocationTypes;
 import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.InterestsByUser;
 import com.brewmapp.data.entity.container.Posts;
@@ -45,7 +56,7 @@ import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.container.Users;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
-import com.brewmapp.data.pojo.BeerTypes;
+import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.WrapperValues;
@@ -221,11 +232,15 @@ public interface Api {
     Call<ListResponse<BeerLocation.LocationInfo>> loadLocationById(@FieldMap WrapperParams params);
 
     @GET("resto/allrestoincity")
-    Call<ListResponse<RestoLocation>> loadRestoLocationInCity(@Query(Keys.CITY_ID) int cityId);
+    Call<ListResponse<FilterRestoLocation>> loadRestoLocationInCity(@Query(Keys.CITY_ID) int cityId);
 
     @POST("geo/city")
     @FormUrlEncoded
     Call<ListResponse<City>> loadCity(@FieldMap WrapperParams params);
+
+    @POST("geo/city")
+    @FormUrlEncoded
+    Call<CityTypes> loadCityFilter(@FieldMap WrapperParams params);
 
 //    @GET("geocode/json")
 //    Call<GeoСodeResponse> getLocation(
@@ -256,14 +271,18 @@ public interface Api {
     @FormUrlEncoded
     Call<RestoDetails> getRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
 
+    @POST("resto/restodata")
+    @FormUrlEncoded
+    Call<ListResponse<RestoDetails>> getMultiRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
+
     @GET("resto/type")
     Call<RestoTypes> loadRestoTypes();
 
     @GET("resto/kitchen")
     Call<KitchenTypes> loadKitchenTypes();
 
-    @GET("resto/pricerange")
-    Call<PriceRangeTypes> loadPriceRanges();
+    @GET("{type}/pricerange")
+    Call<PriceRangeTypes> loadPriceRanges(@Path("type") String type);
 
     @GET("resto/feature")
     Call<FeatureTypes> loadFeature();
@@ -305,11 +324,11 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams requestParams);
+    Call<ListResponse<FilterRestoLocation>> loadRestoLocation(@FieldMap RequestParams params);
 
     @POST("beer/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<FilterBeerLocation>> loadBeerLocation(@FieldMap RequestParams requestParams);
+    Call<ListResponse<FilterRestoLocation>> loadBeerLocation(@FieldMap RequestParams params);
 
     @POST("profile")
     @FormUrlEncoded
@@ -332,14 +351,56 @@ public interface Api {
     @GET("quick_search/{query}")
     Call<QuickSearchResponse> quickSearch(@Path("query") String query, @Query("hashtagonly") int end);
 
-
     @POST("beer/type")
     @FormUrlEncoded
-    Call<BeerTypes> loadBeerTypes();
+    Call<BeerTypesModel> loadBeerTypes(@FieldMap WrapperParams params);
 
-    @POST("beer/type")
+    @POST("beer/packing")
     @FormUrlEncoded
-    Call<com.brewmapp.data.pojo.BeerBrand> loadBeerBrands();
+    Call<BeerPackTypes> loadBeerPack(@FieldMap WrapperParams params);
+
+    @POST("beer/brand")
+    @FormUrlEncoded
+    Call<BeerBrandTypes> loadBeerBrands(@FieldMap WrapperParams params);
+
+    @POST("beer/color")
+    @FormUrlEncoded
+    Call<BeerColorTypes> loadBeerColors(@FieldMap WrapperParams params);
+
+    @POST("beer/taste")
+    @FormUrlEncoded
+    Call<BeerTasteTypes> loadBeerTaste(@FieldMap WrapperParams params);
+
+    @POST("beer/fragrance")
+    @FormUrlEncoded
+    Call<BeerSmellTypes> loadBeerSmell(@FieldMap WrapperParams params);
+
+    @POST("beer/aftertaste")
+    @FormUrlEncoded
+    Call<BeerAftertasteTypes> loadBeerAfterTaste(@FieldMap WrapperParams params);
+
+    @POST("beer/strength")
+    @FormUrlEncoded
+    Call<BeerPowerTypes> loadBeerPower(@FieldMap WrapperParams params);
+
+    @POST("beer/density")
+    @FormUrlEncoded
+    Call<BeerDensityTypes> loadBeerDensity(@FieldMap WrapperParams params);
+
+    @GET("beer/ibu")
+    Call<BeerIbuTypes> loadBeerIbu();
+
+    @POST("geo/country")
+    @FormUrlEncoded
+    Call<CountryTypes> loadCountries(@FieldMap RequestParams requestParams);
+
+    @POST("geo/region")
+    @FormUrlEncoded
+    Call<RegionTypes> loadRegions(@FieldMap WrapperParams params);
+
+    @POST("resto/getcoordinatesbytext")
+    @FormUrlEncoded
+    Call<ListResponse<FilterRestoLocationInfo>> searchOnMap(@FieldMap RequestParams requestParams);
 
     @POST("full_search/{query}")
     @FormUrlEncoded

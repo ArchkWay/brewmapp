@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.RestoTypes;
+import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -33,7 +34,10 @@ public class RestoTypeTask extends BaseNetworkTask<RestoType, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 RestoTypes response = executeCall(getApi().loadRestoTypes());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                List<RestoTypeInfo> restoTypeInfos = new ArrayList<>();
+                restoTypeInfos.add(0, new RestoTypeInfo(new RestoType("Любой  ")));
+                restoTypeInfos.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(restoTypeInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

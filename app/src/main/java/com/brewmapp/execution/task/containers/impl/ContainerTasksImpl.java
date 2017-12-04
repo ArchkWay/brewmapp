@@ -129,7 +129,5 @@ public class ContainerTasksImpl implements ContainerTasks {
         likesByBeerPackage.setRelated_id(beer_id);
         likesByBeerPackage.setRelated_model(Keys.CAP_BEER);
         loadLikesByBeerTask.execute(likesByBeerPackage,simpleSubscriber);
-
-
     }
 }

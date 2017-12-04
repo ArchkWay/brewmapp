@@ -2,7 +2,17 @@
 package com.brewmapp.data.pojo;
 
 import javax.annotation.Generated;
+
+import com.brewmapp.data.entity.BeerType;
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
+
+import java.lang.reflect.Type;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
@@ -13,7 +23,7 @@ public class BeerTypes {
     @SerializedName("id")
     private String mId;
     @SerializedName("image")
-    private Object mImage;
+    private String mImage;
     @SerializedName("name")
     private String mName;
     @SerializedName("name_en")
@@ -22,8 +32,32 @@ public class BeerTypes {
     private String mNameWheel;
     @SerializedName("parent_id")
     private String mParentId;
+
+    public BeerTypes(String mName) {
+        this.mName = mName;
+    }
+
+    public Object getmRelations() {
+        return mRelations;
+    }
+
+    public void setmRelations(Object mRelations) {
+        this.mRelations = mRelations;
+    }
+
     @SerializedName("relations")
-    private Relations mRelations;
+    private Object mRelations;
+    private com.brewmapp.data.entity.BeerType beerType;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    private boolean selected;
 
     public String getGetThumb() {
         return mGetThumb;
@@ -41,11 +75,11 @@ public class BeerTypes {
         mId = id;
     }
 
-    public Object getImage() {
+    public String getImage() {
         return mImage;
     }
 
-    public void setImage(Object image) {
+    public void setImage(String image) {
         mImage = image;
     }
 
@@ -81,12 +115,37 @@ public class BeerTypes {
         mParentId = parentId;
     }
 
-    public Relations getRelations() {
+    public Object getRelations() {
         return mRelations;
     }
 
-    public void setRelations(Relations relations) {
-        mRelations = relations;
+    public BeerType getBeerType() {
+        return beerType;
     }
 
+    public void setBeerType(BeerType beerType) {
+        this.beerType = beerType;
+    }
+
+    public static class DataStateDeserializer implements JsonDeserializer<BeerTypes> {
+
+        @Override
+        public BeerTypes deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            BeerTypes beerTypes = new Gson().fromJson(json, BeerTypes.class);
+            JsonObject jsonObject = json.getAsJsonObject();
+
+            if (jsonObject.has("relations")) {
+                JsonElement elem = jsonObject.get("relations");
+                if (elem != null && !elem.isJsonNull()) {
+                    if (elem.isJsonArray()) {
+                    } else {
+//                        beerTypes.setmRelations(new BeerType());
+                    }
+                }
+            }
+            return beerTypes;
+        }
+
+    }
 }

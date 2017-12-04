@@ -11,7 +11,7 @@ public class RequestCodes {
     public static final int REQUEST_PICK_POST_SETTINGS = 114;
     public static final int REQUEST_EDIT_ALBUM = 115;
     public static final int REQUEST_INTEREST = 116;
-    public static final int REQUEST_CODE_MAP_REFRESH = 3;
+    public static final int REQUEST_CODE_MAP_RESULT = 666;
     public static final int REQUEST_FILTER_CATEGORY = 122;
     public static final int REQUEST_CODE_REVIEW = 117;
     public static final int REQUEST_SHOW_EVENT_FRAGMENT = 118;

@@ -60,6 +60,4 @@ public abstract class BaseFragment extends NavigatorFragment<MainView> implement
         super.onBarAction(id);
     }
 
-
-
 }

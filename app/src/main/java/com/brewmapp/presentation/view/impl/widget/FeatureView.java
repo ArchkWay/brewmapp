@@ -5,15 +5,13 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.app.environment.Actions;
-import com.brewmapp.app.environment.FilterActions;
 import com.brewmapp.data.entity.Feature;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -72,12 +70,17 @@ public class FeatureView extends BaseLinearLayout implements InteractiveModelVie
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logoRestoType);
         }
-        if (model.isSelected()) {
-            restoTypeCheckbox.setChecked(true);
-        } else {
-            restoTypeCheckbox.setChecked(false);
-        }
-        setOnClickListener(v -> listener.onModelAction(FilterActions.FEATURES, model));
+        restoTypeCheckbox.setChecked(model.isSelected());
+
+        setOnClickListener(view -> {
+            if (!model.isSelected()) {
+                model.setSelected(true);
+                restoTypeCheckbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                restoTypeCheckbox.setChecked(false);
+            }
+        });
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
@@ -16,10 +17,12 @@ import com.google.android.gms.maps.model.Marker;
 
 public class RestoInfoWindow implements GoogleMap.InfoWindowAdapter {
     private final View markerView;
-    private final Location myLocation;
+    private Location myLocation;
+    private final Activity activity;
 
     public RestoInfoWindow(Activity activity, Location myLocation) {
         this.myLocation = myLocation;
+        this.activity = activity;
         markerView = activity.getLayoutInflater()
                 .inflate(R.layout.layout_info_window, null);
     }
@@ -36,18 +39,9 @@ public class RestoInfoWindow implements GoogleMap.InfoWindowAdapter {
 
     private void render(Marker marker, View view, Location myLocation) {
         TextView restoTitle = ((TextView) view.findViewById(R.id.title));
-        TextView distance = ((TextView) view.findViewById(R.id.distance));
+        TextView cityName = ((TextView) view.findViewById(R.id.city));
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(marker.getTitle());
-        distance.setText(calculateDistance(marker, myLocation));
+        cityName.setText(activity.getResources().getString(R.string.city, MapUtils.getCityName(myLocation, activity)));
     }
-
-    private String calculateDistance(Marker marker, Location myLocation) {
-        float[] distances = new float[1];
-        Location.distanceBetween(myLocation.getLatitude(), myLocation.getLongitude(),
-                marker.getPosition().latitude, marker.getPosition().longitude,
-                distances);
-        return String.valueOf(distances[0]);
-    }
-
 }

@@ -364,5 +364,9 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         list.setVisibility(list.isShown() ? View.GONE : View.VISIBLE);
     }
 
-
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+        if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
+    }
 }

@@ -21,15 +21,21 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Related_model_data;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -122,6 +128,19 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         this.model = model;
 
         class FillContent {
+            SimpleSubscriber subscriber=new SimpleSubscriber<RestoDetail>() {
+                @Override public void onNext(RestoDetail restoDetail) {
+                    super.onNext(restoDetail);
+                    try {
+                        Related_model_data related_model_data=new Related_model_data();
+                        related_model_data.setGetThumb(restoDetail.getResto().getThumb());
+                        set_avatar(related_model_data);
+                    } catch (Exception e){}
+                }
+                @Override public void onError(Throwable e) {
+                    super.onError(e);
+                }
+            };
 
             String photoUrl=null;
             int photoWidth=0;
@@ -155,18 +174,29 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
             }
 
             private void avatar() {
-                String avatarLoad=null;
-                try {avatarLoad=model.getRelated_model_data().getGetThumb();}catch (Exception e){}
-                int avatarError;
-                switch (model.getRelated_model()){
-                    case Keys.CAP_RESTO:
-                        avatarError=R.drawable.ic_default_resto;
-                        break;
-                    default:
-                        avatarError=R.drawable.ic_default_resto;
+                if(model.getRelated_model_data()==null){
+                    if(getContext() instanceof MultiListActivity&&Keys.CAP_RESTO.equals(model.getRelated_model())){
+                        LoadRestoDetailTask loadRestoDetailTask=((MultiListActivity)getContext()).getLoadRestoTask();
+                        LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
+                        loadRestoDetailPackage.setId(String.valueOf(model.getRelated_id()));
+                        loadRestoDetailTask.execute(loadRestoDetailPackage, subscriber);
+
+                    }
+                }else {
+                    set_avatar(model.getRelated_model_data());
                 }
-                if(avatarLoad==null)
-                    Picasso.with(getContext()).load(avatarError).fit().centerCrop().into(avatar);
+
+            }
+
+            private void set_avatar(Related_model_data related_model_data) {
+                String avatarLoad = null;
+                try {
+                    avatarLoad = related_model_data.getGetThumb();
+                } catch (Exception e) {
+                }
+
+                if (avatarLoad == null)
+                    Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
                 else
                     Picasso.with(getContext()).load(avatarLoad).fit().centerCrop().into(avatar);
 

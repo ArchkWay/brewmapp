@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.execution.task.LoadRestoDetailTask;
+
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -19,4 +21,6 @@ public interface MultiListView extends BasicView{
     void appendItems(List<IFlexible> s);
     void onError();
     void commonError(String... strings);
+
+    LoadRestoDetailTask getLoadRestoTask();
 }

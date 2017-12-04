@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.contract.MultiListView;
@@ -98,7 +99,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
                     String strRequest=getIntent().getData().toString().replace("#","").replace("\n","");
                     if(strRequest.length()>0) {
                         prepareQuery(strRequest);
-                        setTitle("Хэштаг - "+strRequest);
+                        setTitle("Хэштег - "+strRequest);
                     }
                     else
                         commonError();
@@ -196,6 +197,11 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
             showMessage(strings[0]);
         finish();
 
+    }
+
+    @Override
+    public LoadRestoDetailTask getLoadRestoTask() {
+        return presenter.getLoadRestoTask();
     }
 
     private void processAction(int action, Object payload) {

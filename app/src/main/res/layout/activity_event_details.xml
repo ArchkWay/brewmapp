@@ -69,10 +69,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical">
 
                         <ImageView
@@ -105,16 +108,6 @@
                             android:textColor="@color/colorButtonRedDark"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_common_biggest"
-                        style="@style/AppTheme.Text.Georgia.Italic"
-                        android:textColor="@color/colorAccent"
-                        android:layout_marginBottom="@dimen/common_block_space"
-                        android:id="@+id/activity.eventDetails.title"
-                        android:text="@string/text_view_value_not_found"
-                        />
 
                 </LinearLayout>
 
@@ -130,6 +123,17 @@
                     android:background="@drawable/bg_circle"
                     android:textColor="@color/colorWhite"/>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/activity.eventDetails.title"
+                android:text="@string/text_view_value_not_found"
+                style="@style/AppTheme.Text.Georgia.Italic.TitleResto"
+                android:paddingLeft="@dimen/common_block_space_double"
+                android:paddingRight="@dimen/common_block_space_double"
+                />
+
 
             <ru.frosteye.ovsa.presentation.view.widget.Line
                 android:layout_width="match_parent"

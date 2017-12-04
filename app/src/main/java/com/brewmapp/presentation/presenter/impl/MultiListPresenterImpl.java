@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.FullSearchTask;
+import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.QuickSearchTask;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.MultiListView;
@@ -27,13 +28,16 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     private FullSearchTask fullSearchTask;
     private QuickSearchTask quickSearchTask;
+    private LoadRestoDetailTask loadRestoDetailTask;
 
 
 
     @Inject
-    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,LoadRestoDetailTask loadRestoDetailTask){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
+        this.loadRestoDetailTask = loadRestoDetailTask;
+
     }
 
 
@@ -101,5 +105,10 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
             }
         });
 
+    }
+
+    @Override
+    public LoadRestoDetailTask getLoadRestoTask() {
+        return loadRestoDetailTask;
     }
 }

@@ -111,6 +111,14 @@ public class Event implements Serializable, ILikeable {
         return dateFrom;
     }
 
+    public String getDateFromFormated() {
+        try {
+            return android.text.format.DateFormat.format("dd MMMM yyyy",getDateFrom()).toString();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     public Date getDateTo() {
         return dateTo;
     }

@@ -32,9 +32,11 @@ public class HashTagHelper2 {
         try {
             String htmlStr=content.toString();
 
+            htmlStr=htmlStr.replace("<br>","");
+            htmlStr=htmlStr.replace("<p>","");
+            htmlStr=htmlStr.replace("</p>","");
             htmlStr=htmlStr.replaceAll(SHARP,"<"+SPAN_TAG+">"+SHARP);
             htmlStr=htmlStr.replaceAll(LINK,"<"+SPAN_TAG+">"+LINK);
-            htmlStr=htmlStr.replace("<br><br>","<br>");
 
 
             Spanned spannedText= Html.fromHtml(htmlStr,null,htmlTagHandler);

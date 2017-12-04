@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
@@ -13,7 +14,12 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Resto;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -35,12 +41,13 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     @BindView(R.id.view_event_name_resto) TextView name_resto;
     @BindView(R.id.view_event_text) TextView text;
     @BindView(R.id.view_event_location) TextView location;
-    @BindView(R.id.view_event_image) ImageView image;
+    @BindView(R.id.view_event_image)    RoundedImageView image;
     @BindView(R.id.view_event_container) View container;
     @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
 
 
     private Event model;
+    private Listener listener;
 
     public EventView(Context context) {
         super(context);
@@ -78,11 +85,27 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         shareLikeView.setiLikeable(model);
         name.setText(model.getName());
         new HashTagHelper2(text,model.getText());
+        text.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onModelAction(Actions.ACTION_SELECT_EVENT, model);
+            }
+        });
         location.setText(model.getLocation().getFormattedAddress());
-        date.setText(getString(R.string.pattern_event_start,
-                DateTools.formatDottedDate(model.getDateFrom()), model.getTimeFrom()));
-
-        try{name_resto.setText(model.getResto().getName());}catch (Exception e){}
+        date.setText(model.getDateFromFormated());
+        try{name_resto.setText(model.getResto().getName());
+            name_resto.setOnClickListener(v -> {
+                Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+                Interest interest=null;
+                try {
+                    interest=new Interest(new Resto(String.valueOf(model.getResto().getId()),model.getResto().getName()));
+                }catch (Exception e){}
+                if(interest!=null) {
+                    intent.putExtra(Keys.RESTO_ID, interest);
+                    getContext().startActivity(intent);
+                }
+            });
+        }catch (Exception e){}
         String urlImage=null;
         try{urlImage=model.getResto().getThumb();}catch (Exception e){}
         if(urlImage != null) {
@@ -94,7 +117,7 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
 
     @Override
     public void setListener(Listener listener) {
-        //this.listener = listener;
+        this.listener = listener;
         setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_EVENT, model));
 
     }

@@ -3,6 +3,7 @@ package com.brewmapp.presentation.presenter.contract;
 import android.content.Intent;
 
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.presentation.view.contract.MultiListView;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -18,4 +19,6 @@ public interface MultiListPresenter extends LivePresenter<MultiListView> {
     int parseIntent(Intent intent);
 
     void sentQueryQuickSearch(FullSearchPackage fullSearchPackage);
+
+    LoadRestoDetailTask getLoadRestoTask();
 }

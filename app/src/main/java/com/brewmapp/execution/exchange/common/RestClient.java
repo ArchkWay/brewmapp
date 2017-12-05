@@ -1,11 +1,6 @@
 package com.brewmapp.execution.exchange.common;
 
-import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Models;
-import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.User;
-import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
 import com.brewmapp.data.entity.wrapper.BeerColorInfo;
@@ -16,6 +11,7 @@ import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfo;
 import com.brewmapp.data.entity.wrapper.CityInfo;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.EventInfo;
@@ -44,6 +40,7 @@ import com.brewmapp.execution.exchange.common.base.BeerPowerDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerSmellDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
+import com.brewmapp.execution.exchange.common.base.BreweryDeserializer;
 import com.brewmapp.execution.exchange.common.base.CityDeserializer;
 import com.brewmapp.execution.exchange.common.base.CountryDeserializer;
 import com.brewmapp.data.entity.wrapper.UserInfo;
@@ -152,6 +149,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(CityInfo.class, new CityDeserializer())
                 .registerTypeAdapter(FilterRestoLocationInfo.class, new FilterRestoOnMapDeserializer())
                 .registerTypeAdapter(UserInfo.class, new UserDeserializer())
+                .registerTypeAdapter(BreweryInfo.class, new BreweryDeserializer())
                 ;
     }
 

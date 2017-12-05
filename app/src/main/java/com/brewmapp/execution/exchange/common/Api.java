@@ -24,6 +24,7 @@ import com.brewmapp.data.entity.BeerPowerTypes;
 import com.brewmapp.data.entity.BeerSmellTypes;
 import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
+import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
 import com.brewmapp.data.entity.CountryTypes;
@@ -386,6 +387,10 @@ public interface Api {
     @POST("beer/density")
     @FormUrlEncoded
     Call<BeerDensityTypes> loadBeerDensity(@FieldMap WrapperParams params);
+
+    @POST("brewery/shortdata")
+    @FormUrlEncoded
+    Call<BreweryTypes> loadBrewery(@FieldMap WrapperParams params);
 
     @GET("beer/ibu")
     Call<BeerIbuTypes> loadBeerIbu();

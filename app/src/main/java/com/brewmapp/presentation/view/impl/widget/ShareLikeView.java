@@ -99,6 +99,11 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
 
     }
 
+    @Override
+    public void showMessage(String message) {
+
+    }
+
 
     public ILikeable getiLikeable() {
         return iLikeable;

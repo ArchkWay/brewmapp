@@ -261,13 +261,22 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                     presenter.loadBeerDensity();
                 }
                 break;
-                case FilterBeerField.IBU:
+            case FilterBeerField.IBU:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_ibu);
                 if (getStoredFilterList(FilterKeys.BEER_IBU) != null) {
                     appendItems(getStoredFilterList(FilterKeys.BEER_IBU));
                 } else {
                     presenter.loadBeerIbu();
+                }
+                break;
+            case FilterBeerField.BREWERY:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_factory);
+                if (getStoredFilterList(FilterKeys.BEER_BREWERIES) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_BREWERIES));
+                } else {
+                    presenter.loadBrewery();
                 }
                 break;
                 default:break;
@@ -424,17 +433,18 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 goToBeerDetails(beer.getId());
                 break;
             case FilterRestoField.CITY:
-                if (getStoredFilterList(FilterKeys.COUNTRY) == null) {
-                   saveStoredFilter(FilterKeys.COUNTRY);
-                }
                 Country country = (Country) payload;
                 if (isBeer && filterCategory != FilterBeerField.PLACE) {
                     selectedItem = country.getName();
                     selectedItemId = country.getId();
                     goToFilterMap();
                     return;
+                } else if (!isBeer && country.getId() == null) {
+                    selectedItem = country.getName();
+                    selectedItemId = country.getId();
+                    goToFilterMap();
+                    return;
                 }
-
                 toolbarTitle.setText(R.string.select_region);
                 if (getStoredFilterList(FilterKeys.REGION) != null) {
                     appendItems(getStoredFilterList(FilterKeys.REGION));
@@ -540,6 +550,9 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         } else if (filterCategory == FilterBeerField.PLACE) {
             selectedFilter = FilterKeys.COUNTRY;
             saveStoredFilter(FilterKeys.COUNTRY);
+        } else if (filterCategory == FilterBeerField.BREWERY) {
+            selectedFilter = FilterKeys.BEER_BREWERIES;
+            saveStoredFilter(FilterKeys.BEER_BREWERIES);
         }
     }
 

@@ -40,7 +40,7 @@ public class CountryTask extends BaseNetworkTask<Country, List<IFlexible>> {
                 List<CountryInfo> countryInfos = new ArrayList<>();
                 countryInfos.add(0, new CountryInfo(new Country("Любой город  ")));
                 countryInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                subscriber.onNext(new ArrayList<>(countryInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

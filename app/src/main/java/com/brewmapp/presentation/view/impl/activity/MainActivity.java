@@ -12,8 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,7 +142,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void showFragment(BaseFragment fragment) {
         fragment.setArguments(presenter.prepareArguments(getIntent(),container));
-
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
@@ -159,22 +156,18 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar == null) return;
-        if(baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
-            toolbarDropdown.setVisibility(View.VISIBLE);
-            actionBar.setDisplayShowTitleEnabled(false);
-            toolbarTitle.setText(baseFragment.getTitle());
+        if (actionBar == null) return;
+        actionBar.setDisplayShowTitleEnabled(false);
+        toolbarTitle.setText(baseFragment.getTitle());
+        if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
+            toolbarSubTitle.setVisibility(View.VISIBLE);
             if(mode.equals(MODE_DEFAULT)) {
                 if (baseFragment instanceof View.OnClickListener) {
                     toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
                 }
-                toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
-            }else {
-                toolbarSubTitle.setVisibility(View.GONE);
             }
         } else {
-            toolbarDropdown.setVisibility(View.GONE);
-            actionBar.setDisplayShowTitleEnabled(true);
+            toolbarSubTitle.setVisibility(View.GONE);
         }
     }
 

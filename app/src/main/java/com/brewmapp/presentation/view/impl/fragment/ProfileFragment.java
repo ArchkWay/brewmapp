@@ -77,9 +77,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_transitions_container) ViewGroup transitions_container;
     @BindView(R.id.fragment_profile_scrollView) ScrollView scrollView;
 
-
-
-    @Inject    ProfilePresenter presenter;
+    @Inject ProfilePresenter presenter;
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<PostInfo> postAdapter;

@@ -39,7 +39,7 @@ public class FeatureTask extends BaseNetworkTask<Feature, List<IFlexible>> {
                 List<FeatureInfo> featureInfos = new ArrayList<>();
                 featureInfos.add(0, new FeatureInfo(new Feature("Не имеют значения  ")));
                 featureInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                subscriber.onNext(new ArrayList<>(featureInfos));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -127,7 +127,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-
+        swipe.setRefreshing(true);
         User user=presenter.getUserWithNewData();
         registerTextChangeListeners(s ->{user.setFirstname(TextTools.extractTrimmed(name));invalidateOptionsMenu();},name);
         registerTextChangeListeners(s ->{user.setStatus(TextTools.extractTrimmed(text_status));invalidateOptionsMenu();},text_status);
@@ -187,12 +187,13 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     }
 
     @Override
-    public void refreshProfile(User user) {
+    public void setContent(User user) {
+        swipe.setRefreshing(false);
+
         String tmpStr;
 
-        if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail())) {
-            Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);
-        }
+        try {Picasso.with(getContext()).load(user.getThumbnail()).fit().into(avatar);}catch (Exception e){}
+
         name.setText(user.getFirstname());
         lastName.setText(user.getLastname());
         try {segmentedGroup.check(user.getGender()==1?R.id.fragment_profile_edit_man:R.id.fragment_profile_edit_woman);}catch (Exception e){}

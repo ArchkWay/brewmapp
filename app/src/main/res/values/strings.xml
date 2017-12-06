@@ -404,5 +404,8 @@
     <string name="city">г. %s</string>
     <string name="search_resto_map">Поиск заведений...</string>
     <string name="loading">Загрузка...</string>
+    <string name="tittle_dialog_confirm_delete">Удалить ?</string>
+    <string name="message_while_not_album">Сюда можно добавить фотоальбом</string>
+    <string name="message_while_not_photo">Сюда можно добавить новые фотографии</string>
 
 </resources>

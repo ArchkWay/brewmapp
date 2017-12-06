@@ -2,10 +2,13 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +47,7 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
     @BindView(R.id.activity_album_list) RecyclerView list;
     @BindView(R.id.activity_album_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.common_toolbar) Toolbar toolbar;
+    @BindView(R.id.activity_album_text_empty) TextView textView;
 
     @Inject AlbumPresenter presenter;
 
@@ -89,17 +93,15 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_add) {
-            showSelect(this, R.array.avatar_options_mini, (text, position) -> {
-                switch (position) {
-                    case 0:
-                        takeFromGallery();
-                        break;
-                    case 1:
-                        takePhoto();
-                        break;
-                }
-            });
+        switch (item.getItemId()){
+            case R.id.action_add:
+                showSelect(this, R.array.avatar_options_mini, (text, position) -> {
+                    switch (position) {
+                        case 0:takeFromGallery(); break;
+                        case 1:takePhoto(); break;
+                    }
+                });
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,6 +156,9 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
     public void showPhotos(AlbumPhotos photos) {
         this.albumPhotos = photos;
         adapter.updateDataSet(photos.getModels());
+        textView.setVisibility(photos.getModels().size()!=0?View.GONE:View.VISIBLE);
+        list.setVisibility(photos.getModels().size()==0?View.GONE:View.VISIBLE);
+
     }
 
     @Override

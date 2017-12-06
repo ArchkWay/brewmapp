@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
                     android:orientation="vertical"
-                    android:id="@+id/fragment.profile.swipe">
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -43,7 +43,9 @@
                             android:paddingLeft="@dimen/common_block_space_double_semi"
                             android:paddingRight="@dimen/common_block_space_double_semi"
                             android:paddingTop="@dimen/common_block_space_double_semi"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical"
+                            android:id="@+id/fragment.profile.avatar_layout"
+                            >
 
                             <com.makeramen.roundedimageview.RoundedImageView
                                 android:layout_width="@dimen/size_avatar"
@@ -206,14 +208,15 @@
                     />
 
                 <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/fragment.profile.posts"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fragment.profile.posts"/>
 
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+
 
 
 </LinearLayout>

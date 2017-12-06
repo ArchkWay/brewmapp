@@ -87,7 +87,7 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
                     user_new_data.setCountryId(user_old_data.getCountryId());
                     user_new_data.setFamilyStatus(user_old_data.getFamilyStatus());
 
-                    view.refreshProfile(user_old_data);
+                    view.setContent(user_old_data);
                 }catch (Exception e){
                     view.commonError(e.getMessage());
                 }

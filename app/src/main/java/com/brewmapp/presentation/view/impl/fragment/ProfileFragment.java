@@ -50,6 +50,7 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static android.app.Activity.RESULT_OK;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
@@ -62,6 +63,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_PRO
 public class ProfileFragment extends BaseFragment implements ProfileView, FlexibleAdapter.OnItemClickListener {
 
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
+    @BindView(R.id.fragment_profile_avatar_layout) View avatar_layout;
     @BindView(R.id.fragment_profile_city) TextView city;
     @BindView(R.id.fragment_profile_app_bar)    AppBarLayout appBar;
     @BindView(R.id.fragment_profile_counter_friends) InfoCounter friendsCounter;
@@ -76,6 +78,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
     @BindView(R.id.fragment_profile_transitions_container) ViewGroup transitions_container;
     @BindView(R.id.fragment_profile_scrollView) ScrollView scrollView;
+
+
 
 
 
@@ -141,7 +145,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         posts_subs.setLayoutManager(manager);
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
-        //posts_subs.setAdapter(postAdapter);
+        avatar_layout.setOnClickListener(v->onBarAction(R.id.action_create));
         setHasOptionsMenu(true);
 
 
@@ -167,7 +171,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-
     }
 
     @Override
@@ -198,6 +201,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void setContent(UserProfile profile) {
+
         if(getActivity()==null) return;
         getActivity().setTitle(R.string.my_profile);
         Picasso.with(getActivity()).load(profile.getUser().getThumbnail()).fit().into(avatar);

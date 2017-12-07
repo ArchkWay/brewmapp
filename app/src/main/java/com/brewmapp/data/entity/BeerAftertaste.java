@@ -6,9 +6,11 @@ import javax.annotation.Generated;
 import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class BeerAftertaste {
+public class BeerAftertaste implements Serializable {
 
     @SerializedName("getThumb")
     private String mGetThumb;

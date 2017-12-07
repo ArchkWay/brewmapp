@@ -6,9 +6,11 @@ import javax.annotation.Generated;
 import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class BeerBrand {
+public class BeerBrand implements Serializable {
 
     @SerializedName("brewery_id")
     private Object BreweryId;

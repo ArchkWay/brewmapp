@@ -63,7 +63,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     @Override
     protected void initView() {
-        setSupportActionBar(toolbar);
+
         enableBackButton();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
@@ -220,9 +220,8 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case Keys.CAP_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), interest);
-                Beer beer=new Beer();
-                beer.setId("1");
-                intent.putExtra(getString(R.string.key_serializable_extra), new Interest(beer));
+//                Beer beer=new Beer();
+//                intent.putExtra(getString(R.string.key_serializable_extra), new Interest(beer));
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }
         }

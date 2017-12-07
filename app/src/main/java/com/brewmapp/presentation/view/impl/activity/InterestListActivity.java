@@ -63,6 +63,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     @Override
     protected void initView() {
+        setSupportActionBar(toolbar);
         enableBackButton();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);

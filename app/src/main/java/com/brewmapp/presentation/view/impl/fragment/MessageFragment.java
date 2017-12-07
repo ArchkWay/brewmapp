@@ -109,7 +109,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if(menu!=null) menu.clear();
-        inflater.inflate(R.menu.add,menu);
+        inflater.inflate(R.menu.search,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -131,7 +131,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     @Override
     public void onBarAction(int id) {
         switch (id){
-            case R.id.action_add:
+            case R.id.action_search:
                 startActivityForResult(
                         new Intent(
                                 Keys.CAP_USER_FRIENDS,

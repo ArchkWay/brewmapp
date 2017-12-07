@@ -16,9 +16,11 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
@@ -26,6 +28,8 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FriendsFragment extends BaseFragment implements FriendsView {
 
@@ -106,5 +110,37 @@ public class FriendsFragment extends BaseFragment implements FriendsView {
         super.prepareView(view);
         if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
     }
+
+    @Override
+    public void onBarAction(int id) {
+        switch (id){
+            case R.id.action_search:
+                startActivityForResult(
+                        new Intent(
+                                Keys.CAP_USER_FRIENDS,
+                                null,getActivity(),
+                                MultiListActivity.class),
+                        RequestCodes.REQUEST_INTEREST
+                );
+                break;
+            default:
+                super.onBarAction(id);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode){
+            case RequestCodes.REQUEST_INTEREST:
+                if(resultCode==RESULT_OK){
+                    presenter.requestNewFriend(data);
+                }
+                return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
 }

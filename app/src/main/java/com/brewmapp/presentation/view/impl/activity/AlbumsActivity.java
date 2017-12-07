@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -38,6 +40,7 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView, Flexible
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_list_list) RecyclerView list;
     @BindView(R.id.activity_list_swipe) SwipeRefreshLayout swipe;
+    @BindView(R.id.activity_album_text_empty)    TextView textView;
 
     @Inject AlbumsPresenter presenter;
 
@@ -121,6 +124,9 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView, Flexible
     @Override
     public void showAlbums(Albums albums) {
         adapter.updateDataSet(albums.getModels());
+        textView.setVisibility(albums.getModels().size()!=0? View.GONE:View.VISIBLE);
+        list.setVisibility(albums.getModels().size()==0?View.GONE:View.VISIBLE);
+
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.brewmapp.presentation.view.contract.SettingsView;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 
 import javax.inject.Inject;
 
@@ -66,17 +67,49 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         profile.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
         change_password.setOnClickListener(v -> presenter.setPassword(getActivity()));
         change_phone.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
-        simple_exit.setOnClickListener(v -> {presenterMain.onLogout();startActivity(new Intent(v.getContext(),StartActivity.class));getActivity().finish();});
-        all_devices_exit.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        simple_exit.setOnClickListener(v -> new DialogConfirm(getString(R.string.message_quit), getActivity().getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                presenterMain.onLogout();
+                startActivity(new Intent(v.getContext(),StartActivity.class));
+                getActivity().finish();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        }));
+        all_devices_exit.setOnClickListener(v -> new DialogConfirm(getString(R.string.message_quit_all_devices), getActivity().getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                showMessage(getString(R.string.message_develop));
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        }));
         auth_facebook.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        //delete_account.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
-        delete_account.setOnClickListener(v -> presenter.tmpLocation());
+
+        delete_account.setOnClickListener(v -> new DialogConfirm(getString(R.string.message_delete_account), getActivity().getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                showMessage(getString(R.string.message_develop));
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        }));
 
     }
 
     @Override
     protected void attachPresenter() {
-
+        presenter.onAttach(this);
     }
 
     @Override

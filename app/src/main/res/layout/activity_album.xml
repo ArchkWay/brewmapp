@@ -30,6 +30,7 @@
         android:id="@+id/activity.album.text_empty"
         style="@style/AppTheme.Text.H3"
         android:gravity="center"
+        android:visibility="gone"
         />
 
 </RelativeLayout>

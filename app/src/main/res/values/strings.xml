@@ -405,7 +405,12 @@
     <string name="search_resto_map">Поиск заведений...</string>
     <string name="loading">Загрузка...</string>
     <string name="tittle_dialog_confirm_delete">Удалить ?</string>
-    <string name="message_while_not_album">Сюда можно добавить фотоальбом</string>
-    <string name="message_while_not_photo">Сюда можно добавить новые фотографии</string>
+    <string name="message_while_not_album">Добавьте фотоальбом</string>
+    <string name="message_while_not_photo">Добавьте фотографии</string>
+    <string name="enter_old_password">Старый пароль</string>
+    <string name="title_confimation">Подтвеждение</string>
+    <string name="message_quit">Хотите выйти из этой учетной записи?</string>
+    <string name="message_quit_all_devices">Хотите выйти со всех устройств?</string>
+    <string name="message_delete_account">Хотите удалить этот аккаунт?</string>
 
 </resources>

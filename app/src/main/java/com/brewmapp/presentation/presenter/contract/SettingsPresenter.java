@@ -12,6 +12,4 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface SettingsPresenter extends LivePresenter<SettingsView> {
     void setPassword(FragmentActivity activity);
-
-    void tmpLocation();
 }

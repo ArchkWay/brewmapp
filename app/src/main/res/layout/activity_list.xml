@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,11 +11,24 @@
     <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/activity.list.swipe">
+        android:id="@+id/activity.list.swipe"
+        android:layout_below="@+id/common.toolbar"
+        >
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/activity.list.list"/>
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/message_while_not_album"
+        android:id="@+id/activity.album.text_empty"
+        style="@style/AppTheme.Text.H3"
+        android:gravity="center"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

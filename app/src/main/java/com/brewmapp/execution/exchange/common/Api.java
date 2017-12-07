@@ -428,4 +428,7 @@ public interface Api {
     @FormUrlEncoded
     Call<Users> getUsers(@FieldMap RequestParams params);
 
+    @POST("user/chkuser")
+    @FormUrlEncoded
+    Call<SingleResponse<User>> chkUser(@FieldMap RequestParams params);
 }

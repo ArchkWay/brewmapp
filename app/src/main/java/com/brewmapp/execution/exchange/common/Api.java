@@ -431,4 +431,8 @@ public interface Api {
     @POST("user/chkuser")
     @FormUrlEncoded
     Call<SingleResponse<User>> chkUser(@FieldMap RequestParams params);
+
+    @POST("user/delete")
+    @FormUrlEncoded
+    Call<Object>  deleteUser(@FieldMap RequestParams params);
 }

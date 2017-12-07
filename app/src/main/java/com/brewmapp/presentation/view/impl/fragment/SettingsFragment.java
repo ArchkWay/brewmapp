@@ -9,6 +9,12 @@ import android.view.View;
 import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.BeerMap;
+import com.brewmapp.data.entity.User;
+import com.brewmapp.execution.exchange.common.Api;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
+import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
@@ -19,10 +25,16 @@ import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.executor.MainThread;
+import ru.frosteye.ovsa.execution.network.request.RequestParams;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 /**
@@ -96,7 +108,45 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         delete_account.setOnClickListener(v -> new DialogConfirm(getString(R.string.message_delete_account), getActivity().getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
             @Override
             public void onOk() {
-                showMessage(getString(R.string.message_develop));
+                //showMessage(getString(R.string.message_develop));
+                class deleteUser extends BaseNetworkTask<Void, String>{
+
+                    public deleteUser(MainThread mainThread, Executor executor, Api api) {
+                        super(mainThread, executor, api);
+                    }
+
+                    @Override
+                    protected Observable<String> prepareObservable(Void v) {
+                        return Observable.create(subscriber -> {
+                            try {
+                                executeCall(getApi().deleteUser(new RequestParams()));
+                                subscriber.onNext("");
+                                subscriber.onComplete();
+                            } catch (Exception e) {
+                                subscriber.onError(e);
+                            }
+                        });
+                    }
+                }
+                new deleteUser(
+                        BeerMap.getAppComponent().mainThread(),
+                        BeerMap.getAppComponent().executor(),
+                        BeerMap.getAppComponent().api()
+                ).execute(null,new SimpleSubscriber<String>(){
+                    @Override
+                    public void onNext(String s) {
+                        super.onNext(s);
+                        presenterMain.onLogout();
+                        startActivity(new Intent(v.getContext(),StartActivity.class));
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showMessage(getString(R.string.error),0);
+                    }
+                });
             }
 
             @Override

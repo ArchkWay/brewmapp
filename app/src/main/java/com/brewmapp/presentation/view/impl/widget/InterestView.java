@@ -62,15 +62,29 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
         try {tmpStr=model.getInterest_info().getShort_text();}                          catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else tmpStr=null;
         if(tmpStr==null)
             try {tmpStr=Html.fromHtml(model.getInterest_info().getText()).toString();}  catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else tmpStr=null;
-        try {tmpStr=model.getInterest_info().getGetThumb();}                            catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) Picasso.with(getContext()).load(tmpStr).fit().centerInside().into(avatar); else tmpStr=null;
 
-        if(tmpStr==null)
-            switch (model.getRelated_model()){
+        try {tmpStr=model.getInterest_info().getGetThumb();}catch (Exception e){tmpStr=null;}
+
+        if(tmpStr==null) {
+            switch (model.getRelated_model()) {
                 case Keys.CAP_RESTO:
                     Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
                     break;
-                case Keys.CAP_BEER:Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);break;
+                case Keys.CAP_BEER:
+                    Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);
+                    break;
             }
+        }else {
+            switch (model.getRelated_model()) {
+                case Keys.CAP_RESTO:
+                    Picasso.with(getContext()).load(tmpStr).fit().centerCrop().into(avatar);
+                    break;
+                case Keys.CAP_BEER:
+                    Picasso.with(getContext()).load(tmpStr).fit().centerInside().into(avatar);
+                    break;
+            }
+
+        }
 
         setOnClickListener(v -> listener.onModelAction(
                 0,interest

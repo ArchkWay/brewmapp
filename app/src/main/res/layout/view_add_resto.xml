@@ -5,7 +5,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    >
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="2.5dp"
+        android:background="@android:color/transparent"/>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,15 +23,12 @@
             android:scaleType="fitCenter"
             app:riv_mutate_background="true"
             android:background="@android:color/transparent"
-            app:riv_oval="false"
-            android:layout_marginLeft="8dp"
+            app:riv_oval="true"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
             android:src="@drawable/ic_default_resto"
-            android:layout_marginStart="8dp" />
+            />
 
             <TextView
                 android:layout_width="0dp"
@@ -72,5 +74,13 @@
             android:layout_marginEnd="8dp" />
 
     </android.support.constraint.ConstraintLayout>
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="2.5dp"
+        android:background="@android:color/transparent"/>
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/colorSplitter"/>
 
 </com.brewmapp.presentation.view.impl.widget.InterestAddViewResto>

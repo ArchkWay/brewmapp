@@ -59,7 +59,7 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         if(TextUtils.isEmpty(resto.getThumb()))
             Picasso.with(getContext()).load(R.drawable.ic_default_resto).fit().centerCrop().into(avatar);
         else
-            Picasso.with(getContext()).load(resto.getThumb()).fit().centerInside().into(avatar);
+            Picasso.with(getContext()).load(resto.getThumb()).fit().centerCrop().into(avatar);
 
         title.setText(new StringBuilder().append(resto.getName()).toString());
 

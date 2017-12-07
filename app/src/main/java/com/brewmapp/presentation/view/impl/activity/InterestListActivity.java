@@ -253,6 +253,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     }
 
+
     @Override
     public void onError() {
         swipe.setRefreshing(false);

@@ -563,13 +563,13 @@ public class Resto implements ICommonItem, Serializable {
 
         return new StringBuilder()
                 .append(getLocation()==null?"":new StringBuilder()
-                        .append("(")
+
                         .append(getLocation().getCity_id())
                         .append(",")
                         .append(getLocation().getLocation().getStreet())
                         .append(",")
                         .append(getLocation().getLocation().getHouse())
-                        .append(")"))
+                        )
                 .toString()
                 ;
     }

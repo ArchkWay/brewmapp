@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Resto;
 
 import java.util.List;
 
@@ -16,5 +17,7 @@ public interface InterestListView extends BasicView {
     void onError();
     void refreshItems();
 
-    void addOneItem(Beer model);
+    void addOneItemBeer(Beer model);
+
+    void addOneItemResto(Resto resto);
 }

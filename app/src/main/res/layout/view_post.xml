@@ -20,7 +20,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_block_space_double_semi"
+            android:layout_marginLeft="@dimen/common_block_space_half"
+            android:layout_marginRight="@dimen/common_block_space_half"
+            android:layout_marginTop="@dimen/common_block_space_half"
             android:id="@+id/view.post.container.subcontainer"
             >
 
@@ -66,7 +68,6 @@
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph"
-            android:layout_marginBottom="@dimen/common_block_space_double"
             android:maxLines="@integer/init_max_lites_text_view"
             android:text="@string/text_view_value_not_found"
             />
@@ -75,7 +76,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/view.post.container.post.photo"
-            android:layout_marginBottom="@dimen/common_block_space_double"
             android:layout_marginRight="@dimen/common_block_space_double_semi"
             android:layout_marginLeft="@dimen/common_block_space_double_semi"
 
@@ -88,6 +88,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/view.post.container.repost"
         android:orientation="vertical"
+        android:visibility="gone"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -125,8 +126,4 @@
         android:layout_height="1dp"
         android:background="@color/colorBlockSplitterBorder"/>
 
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/common_block_space"
-        android:background="@color/colorBlockSplitter"/>
 </com.brewmapp.presentation.view.impl.widget.PostView>

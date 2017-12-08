@@ -35,7 +35,7 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
     @BindView(R.id.view_subscription_avatar)    ImageView avatar;
     @BindView(R.id.view_subscription_author)    TextView author;
     @BindView(R.id.view_subscription_date)    TextView date;
-    @BindView(R.id.view_subscription_text)    TextView text;
+
 
     private Subscription model;
     private Listener listener;

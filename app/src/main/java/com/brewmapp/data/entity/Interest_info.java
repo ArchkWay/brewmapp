@@ -64,6 +64,8 @@ public class Interest_info implements Serializable{
     public Interest_info(Resto resto) {
         setName(resto.getName());
         setId(String.valueOf(resto.getId()));
+        setText(resto.getText());
+        setGetThumb(resto.getThumb());
     }
 
     public String getAlias_whell() {

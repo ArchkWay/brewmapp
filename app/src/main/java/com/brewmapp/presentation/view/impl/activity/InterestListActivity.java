@@ -176,12 +176,10 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                             Serializable serializable = data.getSerializableExtra(getString(R.string.key_serializable_extra));
                             if (serializable instanceof Beer) {
                                 Beer beer = (Beer) serializable;
-                                presenter.requestBeer(beer.getId());
+                                presenter.requestOneBeer(beer.getId());
                             } else if (serializable instanceof Resto) {
                                 Resto resto = (Resto) serializable;
-                                hmAdd.put(resto, resto);
-                                adapter.addItem(new InterestInfo(resto));
-                                adapter.notifyDataSetChanged();
+                                presenter.requestOneResto(resto.getId());
                             } else {
                                 return;
                             }
@@ -229,10 +227,18 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     }
 
     @Override
-    public void addOneItem(Beer beer) {
+    public void addOneItemBeer(Beer beer) {
         hmAdd.put(beer, beer);
         adapter.addItem(new InterestInfo(beer));
         adapter.notifyDataSetChanged();
+        visibleTextSave();
+    }
+
+    @Override
+    public void addOneItemResto(Resto resto) {
+            hmAdd.put(resto, resto);
+            adapter.addItem(new InterestInfo(resto));
+            adapter.notifyDataSetChanged();
         visibleTextSave();
     }
 

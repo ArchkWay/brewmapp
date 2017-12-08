@@ -45,7 +45,8 @@ public class LoadInterestTask extends BaseNetworkTask<LoadInterestPackage,List<I
               WrapperParams params = new WrapperParams(Wrappers.USER_INTEREST);
               params.addParam(Keys.USER_ID, userRepo.load().getId());
               int start = loadInterestPackage.getPage() * step;
-              int end = loadInterestPackage.getPage() * step + step;
+              //int end = loadInterestPackage.getPage() * step + step;
+              int end = 1000;
               if(loadInterestPackage.getRelated_model()!=null&&loadInterestPackage.getRelated_id()!=null) {
                   params.addParam(Keys.RELATED_MODEL,loadInterestPackage.getRelated_model());
                   params.addParam(Keys.RELATED_ID,loadInterestPackage.getRelated_id());

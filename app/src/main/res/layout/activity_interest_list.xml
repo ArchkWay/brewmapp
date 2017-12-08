@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.brewmapp.presentation.view.impl.activity.PostDetailsActivity"
     android:orientation="vertical"
+
     >
     <include layout="@layout/view_toolbar" />
     <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
@@ -25,6 +26,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/activity.interest.list"
                 android:layout_weight="1"
+                android:padding="@dimen/common_block_space_half"
                 />
 
             <TextView

@@ -88,7 +88,8 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             @Override
             public void onNext(Subscriptions subscriptions) {
                 super.onNext(subscriptions);
-                enableControls(true);view.appendSubscriptions(subscriptions);
+                enableControls(true);
+                view.appendSubscriptions(subscriptions);
                 User user=userRepo.load();
                 user.setSubscriptionsCount(subscriptions.getModels().size());
                 userRepo.save(user);

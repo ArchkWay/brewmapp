@@ -75,6 +75,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.text_view_call_1)    TextView number_call;
     @BindView(R.id.text_view_call_2)    TextView number_cal2;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
+    @BindView(R.id.activity_resto_detail_text_view_place)    TextView text_view_place;
+
     @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
     @BindView(R.id.activity_restoDetails_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_resto_detail_layout_news)    ViewGroup layout_news;
@@ -197,6 +199,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
         switch (mode){
             case REFRESH_ALL:
+                try {text_view_place.setText(restoDetail.getResto().getAdressFormat());}catch (Exception e){}
                 setTitle(restoDetail.getResto().getName());
                 name.setText(restoDetail.getResto().getName());
                 photosResto.clear();

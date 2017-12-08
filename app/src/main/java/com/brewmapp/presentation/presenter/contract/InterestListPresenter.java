@@ -20,5 +20,7 @@ public interface InterestListPresenter extends LivePresenter<InterestListView> {
     void requestInterests(LoadInterestPackage loadInterestPackage);
     void storeInterest(HashMap<Serializable,Serializable> hmAdd, HashMap<Interest,Interest> hmRemove);
 
-    void requestBeer(String id);
+    void requestOneBeer(String id);
+
+    void requestOneResto(int id);
 }

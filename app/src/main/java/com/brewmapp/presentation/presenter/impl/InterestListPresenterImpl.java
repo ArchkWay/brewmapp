@@ -4,15 +4,18 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.LoadInterestTask;
 import com.brewmapp.execution.task.LoadProductTask;
+import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.RemoveInterestTask;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 
@@ -40,14 +43,16 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
     private RemoveInterestTask removeInterestTask;
     private UserRepo userRepo;
     private LoadProductTask loadProductTask;
+    private LoadRestoDetailTask loadRestoDetailTask;
 
     @Inject
-    public InterestListPresenterImpl(LoadInterestTask loadInterestTask, AddInterestTask addInterestTask, UserRepo userRepo, RemoveInterestTask removeInterestTask,LoadProductTask loadProductTask){
+    public InterestListPresenterImpl(LoadInterestTask loadInterestTask, AddInterestTask addInterestTask, UserRepo userRepo, RemoveInterestTask removeInterestTask,LoadProductTask loadProductTask,LoadRestoDetailTask loadRestoDetailTask){
         this.loadInterestTask =loadInterestTask;
         this.addInterestTask = addInterestTask;
         this.userRepo = userRepo;
         this.removeInterestTask = removeInterestTask;
         this.loadProductTask = loadProductTask;
+        this.loadRestoDetailTask = loadRestoDetailTask;
     }
 
     @Override
@@ -113,7 +118,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
     }
 
     @Override
-    public void requestBeer(String id) {
+    public void requestOneBeer(String id) {
         LoadProductPackage loadProductPackage=new LoadProductPackage();
         loadProductPackage.setId(id);
         loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
@@ -121,9 +126,24 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
                 try {
-                    view.addOneItem(((Beer)((BeerInfo)iFlexibles.iterator().next()).getModel()));
+                    view.addOneItemBeer(((Beer)((BeerInfo)iFlexibles.iterator().next()).getModel()));
                 }catch (Exception e){}
 
+            }
+        });
+    }
+
+    @Override
+    public void requestOneResto(int id) {
+        LoadRestoDetailPackage loadRestoDetailPackage=new LoadRestoDetailPackage();
+        loadRestoDetailPackage.setId(String.valueOf(id));
+        loadRestoDetailTask.execute(loadRestoDetailPackage,new SimpleSubscriber<RestoDetail>(){
+            @Override
+            public void onNext(RestoDetail restoDetail) {
+                super.onNext(restoDetail);
+                try {
+                    view.addOneItemResto(restoDetail.getResto());
+                }catch (Exception e){}
             }
         });
     }

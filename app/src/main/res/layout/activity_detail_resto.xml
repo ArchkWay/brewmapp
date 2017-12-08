@@ -374,7 +374,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/text_view_place"
+                    android:id="@+id/activity.resto.detail.text_view_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_place"

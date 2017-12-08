@@ -16,6 +16,7 @@ public interface MultiFragmentActivityView extends BasicView{
 
     String MODE_ABOUT="0";
     String MODE_WEBVIEW ="1";
+    String MODE_BEER_EDIT ="2";
 
     void showFragment(Fragment fragment);
 }

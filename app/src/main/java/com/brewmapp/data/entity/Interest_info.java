@@ -57,6 +57,8 @@ public class Interest_info implements Serializable{
     public Interest_info(Beer beer) {
         setTitle(beer.getTitle());
         setGetThumb(beer.getGetThumb());
+        setText(beer.getText());
+        setId(beer.getId());
     }
 
     public Interest_info(Resto resto) {

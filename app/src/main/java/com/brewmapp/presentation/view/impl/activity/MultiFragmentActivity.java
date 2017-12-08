@@ -10,6 +10,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
 
@@ -18,7 +19,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class MultiFragmentActivity extends BaseActivity implements MultiFragmentActivityView,AboutFragment.OnFragmentInteractionListener,WebViewFragment.OnFragmentInteractionListener  {
+public class MultiFragmentActivity extends BaseActivity implements MultiFragmentActivityView,
+        AboutFragment.OnFragmentInteractionListener,
+        WebViewFragment.OnFragmentInteractionListener ,
+        BeerEditFragment.OnFragmentInteractionListener
+{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.multiactivity_root)    ViewGroup root;
 

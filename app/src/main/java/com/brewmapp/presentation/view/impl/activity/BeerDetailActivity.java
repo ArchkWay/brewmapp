@@ -29,6 +29,7 @@ import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.daimajia.slider.library.SliderLayout;
@@ -49,7 +50,9 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,UiCustomControl {
 
@@ -80,6 +83,9 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
     @BindView(R.id.activity_beer_detaild_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_beer_details_recycler_resto)    RecyclerView recycler_resto;
     @BindView(R.id.activity_beer_details_recycler_interest)    RecyclerView recycler_interest;
+    @BindView(R.id.activity_beer_details_container_recycler_resto)    View container_recycler_resto;
+    @BindView(R.id.activity_beer_details_container_recycler_interest)    View container_recycler_interest;
+
     @BindViews({
             R.id.layout_like,
             R.id.layout_dislike,
@@ -91,6 +97,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
     private FlexibleAdapter adapter_review ;
     private FlexibleAdapter adapter_resto;
     private FlexibleAdapter adapter_interest;
+    private Beer beer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +109,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
     public void setModel(BeerDetail beerDetail,int mode) {
         switch (mode){
             case REFRESH_ALL:
-                Beer beer=beerDetail.getBeer();
+                beer=beerDetail.getBeer();
 
                 String tmpStr;
 
@@ -208,7 +215,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_edit:
-                showMessage(getString(R.string.message_develop),0);
+                startActivityForResult(new Intent(MultiFragmentActivityView.MODE_BEER_EDIT,Uri.parse(beer.getId()),this,MultiFragmentActivity.class),REQUEST_EDIT_BEER);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -241,15 +248,16 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
 
     @Override
     public void addItemsResto(ArrayList<IFlexible> iFlexibles) {
+        container_recycler_resto.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
         adapter_resto.clear();
-        adapter_resto.addItems(0,iFlexibles);
+        adapter_resto.addItems(0, iFlexibles);
         adapter_resto.notifyDataSetChanged();
         recycler_resto.setAdapter(adapter_resto);
-
     }
 
     @Override
     public void addItemsInterest(List<IFlexible> iFlexibles) {
+        container_recycler_interest.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
         adapter_interest.clear();
         adapter_interest.addItems(0,iFlexibles);
         adapter_interest.notifyDataSetChanged();

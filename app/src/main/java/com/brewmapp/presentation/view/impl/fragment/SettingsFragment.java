@@ -20,6 +20,7 @@ import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.SettingsView;
+import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
@@ -103,7 +104,7 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
 
             }
         }));
-        auth_facebook.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        //auth_facebook.setOnClickListener(v -> startActivity(new Intent(getActivity(), LoginActivity.class)));
 
         delete_account.setOnClickListener(v -> new DialogConfirm(getString(R.string.message_delete_account), getActivity().getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
             @Override

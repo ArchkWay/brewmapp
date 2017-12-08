@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.entity.Beer;
+
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -13,4 +15,6 @@ public interface InterestListView extends BasicView {
     void appendItems(List<IFlexible> iFlexibles);
     void onError();
     void refreshItems();
+
+    void addOneItem(Beer model);
 }

@@ -202,14 +202,14 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public synchronized void processShowDrawer(boolean show, boolean smooth) {
-//        if(smooth) {
-//            TransitionManager.getDefaultTransition().setDuration(250);
-//            TransitionManager.beginDelayedTransition(drawer);
-//        }
+        if(smooth) {
+            TransitionManager.getDefaultTransition().setDuration(250);
+            TransitionManager.beginDelayedTransition(drawer);
+        }
         container.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
-//        container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
-//        toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
     }
 
     @Override
@@ -357,7 +357,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             if(fragment instanceof ProfileFragment)
                 ((ProfileFragment) fragment).refreshItems();
     }
-
     @SuppressLint("RestrictedApi")
     public void showMapResult(boolean isBeer, int checkBox) {
         for (Fragment fragment : getSupportFragmentManager().getFragments())

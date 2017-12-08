@@ -20,7 +20,7 @@ public class RequestCodes {
     public static final int REQUEST_CODE_REFRESH_STATE=121;
     public static final int REQUEST_CODE_REFRESH_PROFILE=122;
     public static final int REQUEST_PROFILE_FRIEND = 123;
-
+    public static final int REQUEST_EDIT_BEER = 124;
 
     public static final String INTENT_EXTRAS = "extras";
 

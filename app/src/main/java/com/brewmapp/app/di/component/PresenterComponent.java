@@ -44,6 +44,7 @@ import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
 import dagger.Subcomponent;
 
+import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
@@ -68,6 +69,7 @@ public interface PresenterComponent {
     void inject(ProfileEditFragment fragment);
     void inject(ProfileViewFragment fragment);
     void inject(MessageFragment fragment);
+    void inject(BeerEditFragment fragment);
 
     void inject(BaseActivity activity);
     void inject(StartActivity activity);

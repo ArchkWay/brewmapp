@@ -4,12 +4,15 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
+import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.LoadInterestTask;
+import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.execution.task.RemoveInterestTask;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 
@@ -36,13 +39,15 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
     private AddInterestTask addInterestTask;
     private RemoveInterestTask removeInterestTask;
     private UserRepo userRepo;
+    private LoadProductTask loadProductTask;
 
     @Inject
-    public InterestListPresenterImpl(LoadInterestTask loadInterestTask, AddInterestTask addInterestTask, UserRepo userRepo, RemoveInterestTask removeInterestTask){
+    public InterestListPresenterImpl(LoadInterestTask loadInterestTask, AddInterestTask addInterestTask, UserRepo userRepo, RemoveInterestTask removeInterestTask,LoadProductTask loadProductTask){
         this.loadInterestTask =loadInterestTask;
         this.addInterestTask = addInterestTask;
         this.userRepo = userRepo;
         this.removeInterestTask = removeInterestTask;
+        this.loadProductTask = loadProductTask;
     }
 
     @Override
@@ -107,6 +112,22 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 storeAddedInterests(new ArrayList<>(hmAdd.keySet()),new ArrayList<>(hmRemove.keySet()));
     }
 
+    @Override
+    public void requestBeer(String id) {
+        LoadProductPackage loadProductPackage=new LoadProductPackage();
+        loadProductPackage.setId(id);
+        loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
+                try {
+                    view.addOneItem(((Beer)((BeerInfo)iFlexibles.iterator().next()).getModel()));
+                }catch (Exception e){}
+
+            }
+        });
+    }
+
 
     private void storeRemovedInterest(ArrayList<Interest> interests) {
         if(interests.size()>0){
@@ -155,7 +176,7 @@ public class InterestListPresenterImpl extends BasePresenter<InterestListView> i
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    serializableArrayList.remove(serializableExtra);
+                    serializableArrayList.remove(0);
                     storeAddedInterests(serializableArrayList, removeArrayList);
                 }
 

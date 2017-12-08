@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
+import com.brewmapp.presentation.presenter.contract.BeerEditFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
@@ -45,6 +46,7 @@ import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.BeerEditFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MessageFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiFragmentActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiListPresenterImpl;
@@ -315,4 +317,8 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
         return presenter;
     }
 
+    @Provides @PresenterScope
+    BeerEditFragmentPresenter provideBeerEditFragmentPresenter(BeerEditFragmentPresenterImpl presenter){
+        return presenter;
+    }
 }

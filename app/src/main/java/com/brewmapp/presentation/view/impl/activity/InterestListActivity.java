@@ -127,14 +127,14 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add, menu);
+        getMenuInflater().inflate(R.menu.search, menu);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_add:
+            case R.id.action_search:
                 startActivityForResult(new Intent(loadInterestPackage.getFilterInterest(),null,this, MultiListActivity.class), REQUEST_INTEREST);
             default:
                 return super.onOptionsItemSelected(item);
@@ -176,9 +176,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                             Serializable serializable = data.getSerializableExtra(getString(R.string.key_serializable_extra));
                             if (serializable instanceof Beer) {
                                 Beer beer = (Beer) serializable;
-                                hmAdd.put(beer, beer);
-                                adapter.addItem(new InterestInfo(beer));
-                                adapter.notifyDataSetChanged();
+                                presenter.requestBeer(beer.getId());
                             } else if (serializable instanceof Resto) {
                                 Resto resto = (Resto) serializable;
                                 hmAdd.put(resto, resto);
@@ -187,7 +185,6 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                             } else {
                                 return;
                             }
-                            visibleTextSave();
                             return;
                     }
                 }
@@ -220,8 +217,6 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case Keys.CAP_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), interest);
-//                Beer beer=new Beer();
-//                intent.putExtra(getString(R.string.key_serializable_extra), new Interest(beer));
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }
         }
@@ -231,6 +226,14 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     public void refreshItems() {
         swipe.setRefreshing(true);
         refreshInterests();
+    }
+
+    @Override
+    public void addOneItem(Beer beer) {
+        hmAdd.put(beer, beer);
+        adapter.addItem(new InterestInfo(beer));
+        adapter.notifyDataSetChanged();
+        visibleTextSave();
     }
 
     public void refreshInterests() {

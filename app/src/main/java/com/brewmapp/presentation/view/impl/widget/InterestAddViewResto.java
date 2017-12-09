@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
@@ -24,7 +25,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by Kras on 21.10.2017.
  */
 
-public class InterestAddViewResto extends BaseLinearLayout implements InteractiveModelView<Resto> {
+public class InterestAddViewResto extends BaseLinearLayout implements InteractiveModelView<Resto>{
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
@@ -68,8 +69,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         if(!TextUtils.isEmpty(tmpStr))      shot_text.setText(tmpStr);
 
         if(getContext() instanceof MultiListActivity) {
-            setOnClickListener(v -> listener.onModelAction(0, resto));
-            arrow_right.setOnClickListener(v -> listener.onModelAction(1, resto));
+            setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_MODEL, resto));
+            arrow_right.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_VIEW_MODEL, resto));
         }else {
             setOnClickListener(v -> listener.onModelAction(FilterRestoField.NAME, resto));
         }

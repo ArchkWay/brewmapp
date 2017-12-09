@@ -27,4 +27,6 @@ public interface RestoDetailView extends BasicView{
     void setFav(boolean b);
 
     void AverageEvaluation(List<AverageEvaluation> evaluations);
+
+    void scrollTo(Integer integer);
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
@@ -20,7 +21,6 @@ import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
-import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.contract.InterestListView;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
@@ -42,7 +42,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITE
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
 
-public class InterestListActivity extends BaseActivity implements InterestListView,UiCustomControl {
+public class InterestListActivity extends BaseActivity implements InterestListView{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_interest_list)  RecyclerView recyclerView;
     @BindView(R.id.activity_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
@@ -168,11 +168,11 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             case REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
                     switch (Integer.valueOf(data.getAction())){
-                        case VIEW_MODEL:
+                        case Actions.ACTION_VIEW_MODEL:
                             setResult(RESULT_OK);
                             refreshInterests();
                             return;
-                        case SELECT_MODEL:
+                        case Actions.ACTION_SELECT_MODEL:
                             Serializable serializable = data.getSerializableExtra(getString(R.string.key_serializable_extra));
                             if (serializable instanceof Beer) {
                                 Beer beer = (Beer) serializable;

@@ -15,6 +15,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
@@ -152,15 +153,18 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             case Actions.ACTION_LIKE_POST:
                 presenter.onLikePost(((Post) payload));
                 break;
-            case Actions.ACTION_START_DETAILS_ACTIVITY:
-                Interest interest=new Interest();
-                Interest_info interest_info=new Interest_info();
-                interest_info.setId((String)payload);
-                interest.setInterest_info(interest_info);
-                Intent intent=new Intent(getContext(), RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID,interest);
+            case Actions.ACTION_START_DETAILS_ACTIVITY: {
+                Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
-                break;
+            }break;
+            case Actions.ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS: {
+                Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
+                intent.setAction(String.valueOf(Actions.ACTION_SCROLL_TO_NEWS));
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+
+            }break;
         }
     }
 

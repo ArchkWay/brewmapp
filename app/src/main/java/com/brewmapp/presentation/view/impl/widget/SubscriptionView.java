@@ -35,6 +35,7 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
     @BindView(R.id.view_subscription_avatar)    ImageView avatar;
     @BindView(R.id.view_subscription_author)    TextView author;
     @BindView(R.id.view_subscription_date)    TextView date;
+    @BindView(R.id.view_subscription_arrow_right)    ImageView arrow_right;
 
 
     private Subscription model;
@@ -73,7 +74,8 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
             date.setText(getContext().getString(R.string.subscribed, DateTools.formatDottedDateWithTime(dashedDateFormat.parse(model.getCreated_at()))));
         }catch (Exception t){}
 
-        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY,this.model.getInformation().getId()));
+        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS,this.model.getInformation().getId()));
+        arrow_right.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY,this.model.getInformation().getId()));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.view.impl.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
@@ -31,7 +31,6 @@ import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
-import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
@@ -50,11 +49,10 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
-public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,UiCustomControl {
+public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_beer_detail_name)    TextView name;
@@ -108,7 +106,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
     @Override
     public void setModel(BeerDetail beerDetail,int mode) {
         switch (mode){
-            case REFRESH_ALL:
+            case Actions.MODE_REFRESH_ALL:
                 beer=beerDetail.getBeer();
 
                 String tmpStr;
@@ -151,7 +149,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView,
 
                     }
                 }
-            case REFRESH_ONLY_LIKE:
+            case Actions.MODE_REFRESH_ONLY_LIKE:
                 try {tmpStr=beerDetail.getBeer().getLike();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) like_counter.setText(tmpStr);
                 try {tmpStr=beerDetail.getBeer().getDis_like();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) dislike_counter.setText(tmpStr);
         }

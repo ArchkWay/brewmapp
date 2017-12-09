@@ -4,8 +4,6 @@ import android.content.Intent;
 
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
-import com.brewmapp.presentation.view.contract.UiCustomControl;
-import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
@@ -20,7 +18,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by xpusher on 11/20/2017.
  */
 
-public class MultiFragmentActivityPresenterImpl extends BasePresenter<MultiFragmentActivityView> implements MultiFragmentActivityPresenter,UiCustomControl{
+public class MultiFragmentActivityPresenterImpl extends BasePresenter<MultiFragmentActivityView> implements MultiFragmentActivityPresenter{
 
     @Inject    public MultiFragmentActivityPresenterImpl(){}
 

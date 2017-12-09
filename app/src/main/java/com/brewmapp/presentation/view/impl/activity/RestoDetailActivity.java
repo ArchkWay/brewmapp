@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Kitchen;
@@ -28,7 +30,6 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
-import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -54,7 +55,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 
 
-public class RestoDetailActivity extends BaseActivity implements RestoDetailView ,UiCustomControl {
+public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_resto_detail_name)    TextView name;
@@ -97,6 +98,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
     @BindView(R.id.activity_resto_detail_text_view_description_button)    Button button_more_description;
     @BindView(R.id.activity_resto_details_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.activity_resto_details_scroll)    ScrollView scroll;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -198,7 +200,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void setModel(RestoDetail restoDetail, int mode) {
 
         switch (mode){
-            case REFRESH_ALL:
+            case Actions.MODE_REFRESH_ALL:
                 try {text_view_place.setText(restoDetail.getResto().getAdressFormat());}catch (Exception e){}
                 setTitle(restoDetail.getResto().getName());
                 name.setText(restoDetail.getResto().getName());
@@ -264,7 +266,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
                 setTitleToButtonOfMoreDescription(false);
 
-            case REFRESH_ONLY_LIKE:
+            case Actions.MODE_REFRESH_ONLY_LIKE:
                 try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
                 try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
 
@@ -342,6 +344,17 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     }
 
     @Override
+    public void scrollTo(Integer integer) {
+        switch (integer){
+            case Actions.ACTION_SCROLL_TO_NEWS:
+                scroll.post(() -> scroll.scrollTo(0,layout_news.getBottom()));
+                break;
+        }
+
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
@@ -352,7 +365,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case RequestCodes.REQUEST_CODE_REVIEW:
                 if(resultCode==RESULT_OK) {
                     enableControls(false,ALL_CONTROL);
-                    presenter.refreshContent(REFRESH_ALL);
+                    presenter.refreshContent(Actions.MODE_REFRESH_ALL);
                 }
                 return;
         }

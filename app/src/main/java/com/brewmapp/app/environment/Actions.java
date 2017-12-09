@@ -20,4 +20,12 @@ public class Actions {
     public static final int ACTION_START_DETAILS_ACTIVITY = 13;
     public static final int ACTION_RESTO = 15;
 
+    public static final int ACTION_SELECT_MODEL =16;
+    public static final int ACTION_VIEW_MODEL =17;
+    public static final int MODE_REFRESH_ALL =18;
+    public static final int MODE_REFRESH_ONLY_LIKE =19;
+    public static final int ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS = 20;
+    public static final int ACTION_SCROLL_TO_NEWS = 21;
+
+
 }

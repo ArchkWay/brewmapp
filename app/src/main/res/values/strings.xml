@@ -310,7 +310,7 @@
     <string name="text_view_beer_after_taste">Послевкусие:</string>
     <string name="success_subscription">%s (подписка ON)</string>
     <string name="success_unsubscription">%s (подписка OFF)</string>
-    <string name="subscribed">Вы подписаны c %s</string>
+    <string name="subscribed">Вы подписались %s</string>
     <string name="text_view_news">Новости</string>
     <string name="text_view_cnt">0</string>
     <string name="text_view_bracket_from">(</string>

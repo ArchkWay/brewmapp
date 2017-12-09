@@ -9,15 +9,14 @@ import android.view.View;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
-import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
@@ -38,7 +37,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_PROFILE_FRIEND;
 
-public class MultiListActivity extends BaseActivity implements MultiListView,UiCustomControl {
+public class MultiListActivity extends BaseActivity implements MultiListView{
     @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
@@ -200,14 +199,14 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
 
     private void processAction(int action, Object payload) {
         switch (action){
-            case SELECT_MODEL: {
+            case Actions.ACTION_SELECT_MODEL: {
                 Intent intent = new Intent(this, InterestListActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
-                intent.setAction(String.valueOf(SELECT_MODEL));
+                intent.setAction(String.valueOf(Actions.ACTION_SELECT_MODEL));
                 setResult(RESULT_OK, intent);
                 finish();
             }break;
-            case VIEW_MODEL: {
+            case Actions.ACTION_VIEW_MODEL: {
                 if(payload instanceof Resto){
                     Interest interest=new Interest();
                     Interest_info interest_info=new Interest_info();
@@ -234,7 +233,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView,UiC
         switch (requestCode){
             case REQUEST_CODE_REFRESH_ITEMS:
                 if(resultCode==RESULT_OK)
-                    setResult(RESULT_OK,new Intent(String.valueOf(VIEW_MODEL)));
+                    setResult(RESULT_OK,new Intent(String.valueOf(Actions.ACTION_VIEW_MODEL)));
                 return;
             case REQUEST_PROFILE_FRIEND:
                 if(resultCode==RESULT_OK) {

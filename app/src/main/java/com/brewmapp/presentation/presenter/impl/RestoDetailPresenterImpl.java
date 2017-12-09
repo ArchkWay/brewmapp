@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.AverageEvaluation;
@@ -37,7 +38,6 @@ import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
-import com.brewmapp.presentation.view.contract.UiCustomControl;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
@@ -58,7 +58,7 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
  * Created by Kras on 26.10.2017.
  */
 
-public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter,UiCustomControl {
+public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter{
 
 
     private ContainerTasks containerTasks;
@@ -185,7 +185,11 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             view.commonError(e.getMessage());return;
         }
 
-        refreshContent(REFRESH_ALL);
+        try {
+            view.scrollTo(Integer.valueOf(intent.getAction()));
+        }catch (Exception e){}
+
+        refreshContent(Actions.MODE_REFRESH_ALL);
 
     }
 
@@ -219,7 +223,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 loadRestoDetails(mode);
             }
             private void loadRestoDetails(int mode){
-                if(mode== REFRESH_ALL ||mode== REFRESH_ONLY_LIKE) {
+                if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
                     LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                     loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
                     loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
@@ -231,7 +235,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadReviews(int mode) {
-                if(mode== REFRESH_ALL)
+                if(mode== Actions.MODE_REFRESH_ALL)
                     containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
                         @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
                         @Override public void onError(Throwable e) {super.onError(e);view.commonError(e.getMessage());}
@@ -240,7 +244,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     loadSubscriptions(mode);
             }
             private void loadSubscriptions(int mode) {
-                if(mode== REFRESH_ALL) {
+                if(mode== Actions.MODE_REFRESH_ALL) {
                     SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
                     subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
                     subscriptionPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -271,7 +275,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     }
             }
             private void loadCntSales(int mode) {
-                if(mode== REFRESH_ALL) {
+                if(mode== Actions.MODE_REFRESH_ALL) {
                     LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                     loadNewsPackage.setMode(EventsView.MODE_SALES);
                     loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
@@ -296,7 +300,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadCntNews(int mode) {
-                if(mode== REFRESH_ALL) {
+                if(mode== Actions.MODE_REFRESH_ALL) {
                     LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                     loadNewsPackage.setMode(EventsView.MODE_NEWS);
                     loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
@@ -322,7 +326,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
             }
             private void loadCntEvent(int mode) {
-                if(mode== REFRESH_ALL) {
+                if(mode== Actions.MODE_REFRESH_ALL) {
                     LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                     loadNewsPackage.setMode(EventsView.MODE_EVENTS);
                     loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
@@ -347,7 +351,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 }
             }
             private void loadFav(int mode) {
-                if(mode== REFRESH_ALL) {
+                if(mode== Actions.MODE_REFRESH_ALL) {
                     LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
                     loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
                     loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -385,7 +389,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
             }
             private void loadAvegagEvaluation(int mode) {
-                if(mode== REFRESH_ALL) {
+                if(mode== Actions.MODE_REFRESH_ALL) {
                 RestoAverageEvaluationPackage restoAverageEvaluationPackage=new RestoAverageEvaluationPackage();
                 restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
                 restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
@@ -443,7 +447,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             @Override
             public void onNext(MessageResponse messageResponse) {
                 super.onNext(messageResponse);
-                refreshContent(REFRESH_ONLY_LIKE);
+                refreshContent(Actions.MODE_REFRESH_ONLY_LIKE);
             }
         });
     }

@@ -160,7 +160,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     protected void initView() {
         enableBackButton();
         enableControls(false,0);
-        presenter.parseIntent(getIntent());
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
@@ -176,6 +175,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        presenter.parseIntent(getIntent());
     }
 
     @Override

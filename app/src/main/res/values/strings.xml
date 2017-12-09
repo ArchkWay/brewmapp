@@ -412,5 +412,6 @@
     <string name="message_quit">Хотите выйти из этой учетной записи?</string>
     <string name="message_quit_all_devices">Хотите выйти со всех устройств?</string>
     <string name="message_delete_account">Хотите удалить эту учетную запись?</string>
+    <string name="new_value">Новое значение</string>
 
 </resources>

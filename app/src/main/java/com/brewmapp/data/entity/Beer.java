@@ -242,4 +242,16 @@ public class Beer implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public Beer clone(){
+        Beer beer=new Beer();
+        beer.setId(getId());
+        beer.setTitle(getTitle());
+        beer.setCountry_id(getCountry_id());
+        beer.setBrand_id(getBrand_id());
+        beer.setType_id(getType_id());
+        beer.setBrewery_id(getBrewery_id());
+
+        return beer;
+    }
 }

@@ -157,4 +157,7 @@ public class Keys {
     public static final String GAMES = "games";
 
 
+    public static final String BRAND_ID = "brand_id";
+    public static final String TYPE_ID = "type_id";
+    public static final String BREWERY_ID = "brewery_id";
 }

@@ -12,12 +12,21 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
  */
 
 public class AddPhotoSliderView extends BaseSliderView {
+
+    private View.OnClickListener onClickListener;
+
     public AddPhotoSliderView(Context context) {
         super(context);
+    }
+    public AddPhotoSliderView(Context context, View.OnClickListener onClickListener) {
+        super(context);
+        this.onClickListener=onClickListener;
     }
 
     @Override
     public View getView() {
-        return LayoutInflater.from(getContext()).inflate(R.layout.view_add_event_photo, null);
+        View view=LayoutInflater.from(getContext()).inflate(R.layout.view_add_event_photo, null);
+        view.setOnClickListener(onClickListener);
+        return view;
     }
 }

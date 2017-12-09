@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.entity.Beer;
+
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -7,5 +9,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface BeerEditFragmentView  extends BasicView{
+    void commonError(String... strings);
 
+    void setContent(Beer model);
 }

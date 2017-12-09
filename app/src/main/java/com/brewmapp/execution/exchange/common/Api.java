@@ -13,6 +13,7 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerAftertasteTypes;
 import com.brewmapp.data.entity.BeerBrandTypes;
 import com.brewmapp.data.entity.BeerColorTypes;
@@ -435,4 +436,9 @@ public interface Api {
     @POST("user/delete")
     @FormUrlEncoded
     Call<Object>  deleteUser(@FieldMap RequestParams params);
+
+    @POST("beer/beer/edit")
+    @FormUrlEncoded
+    Call<SingleResponse<Beer>> editBeer(@FieldMap WrapperParams params);
+
 }

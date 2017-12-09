@@ -2,10 +2,122 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:text="QQQQQQQQQQQQQQQQQQQQ"
-    />
+    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment.edit.beer.swipe"
+        android:orientation="vertical"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment.edit.beer.scroll"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
+                >
+                <!--************Slider-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_event_slider"
+                    android:orientation="vertical"
+                    >
+                    <com.daimajia.slider.library.SliderLayout
+                        android:id="@+id/fragment.edit.beer.slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <com.daimajia.slider.library.Indicators.PagerIndicator
+                            android:id="@+id/fragment.edit.beer.indicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:background="@color/colorBlackSemi"
+                            android:layout_alignParentBottom="true"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="1/1"
+                                android:gravity="right"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_big_phone_bigger"
+                                android:id="@+id/fragment.edit.beer.photosCounter"
+                                />
+                        </com.daimajia.slider.library.Indicators.PagerIndicator>
+                    </com.daimajia.slider.library.SliderLayout>
+                </LinearLayout>
+                <!--************Title-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    >
+
+                    <TextView
+                        android:id="@+id/fragment.edit.beer.name"
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:text="@string/text_view_value_not_found"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_weight="1"
+
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/common_block_space_triple"
+                        android:layout_height="@dimen/common_block_space_triple"
+                        android:src="@drawable/ic_edit2"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/fragment.edit.beer.edit_name"
+                        />
+
+                </LinearLayout>
+                <!--************Brend-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    >
+
+                    <TextView
+                        android:id="@+id/fragment.edit.beer.name"
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:text="@string/text_view_value_not_found"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_weight="1"
+
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/common_block_space_triple"
+                        android:layout_height="@dimen/common_block_space_triple"
+                        android:src="@drawable/ic_edit2"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/fragment.edit.beer.edit_name"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 </LinearLayout>

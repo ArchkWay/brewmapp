@@ -64,12 +64,7 @@ public class DialogCheckOldPassword extends DialogFragment implements DialogInte
         alert.setTitle(R.string.enter_old_password);
         alert.setCancelable(false);
         alert.setPositiveButton(android.R.string.ok, (dialog, which) -> requestCheckUser());
-        alert.setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        alert.setNeutralButton(android.R.string.cancel, (dialog, which) -> {});
         return alert.create();
     }
 

@@ -251,6 +251,7 @@ public class Beer implements Serializable {
         beer.setBrand_id(getBrand_id());
         beer.setType_id(getType_id());
         beer.setBrewery_id(getBrewery_id());
+        beer.setRelations(relations.clone());
 
         return beer;
     }

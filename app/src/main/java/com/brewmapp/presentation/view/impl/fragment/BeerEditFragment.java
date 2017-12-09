@@ -2,6 +2,7 @@ package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,11 +15,13 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.BeerEditFragmentView;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogInput;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSearchBrand;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -47,6 +50,8 @@ public class BeerEditFragment extends BaseFragment  implements BeerEditFragmentV
     @BindView(R.id.fragment_edit_beer_photosCounter)    TextView photosCounter;
     @BindView(R.id.fragment_edit_beer_name)    TextView name;
     @BindView(R.id.fragment_edit_beer_edit_name)    ImageView edit_name;
+    @BindView(R.id.fragment_edit_beer_brand)    TextView brand;
+    @BindView(R.id.fragment_edit_beer_edit_brand)    ImageView edit_brand;
 
     @Inject    BeerEditFragmentPresenter presenter;
 
@@ -67,6 +72,19 @@ public class BeerEditFragment extends BaseFragment  implements BeerEditFragmentV
         sliderLayout.stopAutoCycle();
         registerTextChangeListeners(s -> {presenter.getBeer_new_data().setTitle(name.getText().toString());mListener.invalidateOptionsMenu();},name);
         edit_name.setOnClickListener(v -> new DialogInput().show(getActivity().getSupportFragmentManager(),R.string.new_value,name.getText().toString(), string -> name.setText(string)));
+        edit_brand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DialogSearchBrand().show(getActivity().getSupportFragmentManager(), new DialogSearchBrand.OnSelectBrand() {
+                    @Override
+                    public void onSelect(BeerBrand beerBrand) {
+                        brand.setText(beerBrand.getName());
+                        presenter.getBeer_new_data().setBrand_id(beerBrand.getId());
+                        mListener.invalidateOptionsMenu();
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -160,6 +178,9 @@ public class BeerEditFragment extends BaseFragment  implements BeerEditFragmentV
 
         private void fillTexts(Beer beer) {
             name.setText(beer.getTitle());
+            try {brand.setText(beer.getRelations().getBeerBrand().getName());}catch (Exception e){}
+
+
         }
 
         private void fillSlider(Beer beer) {

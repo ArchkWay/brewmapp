@@ -24,11 +24,13 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Kitchen;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -53,6 +55,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
 
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
@@ -113,6 +116,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     private final int ALL_CONTROL =0;
 
+    private Resto resto;
     private ArrayList<String> photosResto=new ArrayList<>();
     private FlexibleAdapter adapter_reviews;
 
@@ -201,6 +205,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
         switch (mode){
             case Actions.MODE_REFRESH_ALL:
+                resto=restoDetail.getResto();
                 try {text_view_place.setText(restoDetail.getResto().getAdressFormat());}catch (Exception e){}
                 setTitle(restoDetail.getResto().getName());
                 name.setText(restoDetail.getResto().getName());
@@ -383,7 +388,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_edit:
-                showMessage(getString(R.string.message_develop),0);
+                startActivityForResult(new Intent(MultiFragmentActivityView.MODE_RESTO_EDIT,Uri.parse(String.valueOf(resto.getId())),this,MultiFragmentActivity.class),REQUEST_EDIT_BEER);
                 return true;
         }
         return super.onOptionsItemSelected(item);

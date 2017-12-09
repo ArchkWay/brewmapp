@@ -17,4 +17,6 @@ public interface BeerEditFragmentPresenter extends LivePresenter<BeerEditFragmen
     Beer getBeer_new_data();
 
     void storeChanges();
+
+    Beer getBeer_old_data();
 }

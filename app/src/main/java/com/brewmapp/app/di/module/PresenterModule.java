@@ -39,6 +39,7 @@ import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
+import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
 import com.brewmapp.presentation.presenter.contract.SearchPresenter;
@@ -82,6 +83,7 @@ import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ProfileViewFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RestoDetailPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.RestoEditFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SaleDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SearchAllPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SearchPresenterImpl;
@@ -319,6 +321,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     BeerEditFragmentPresenter provideBeerEditFragmentPresenter(BeerEditFragmentPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    RestoEditFragmentPresenter provideRestoEditFragmentPresenter(RestoEditFragmentPresenterImpl presenter){
         return presenter;
     }
 }

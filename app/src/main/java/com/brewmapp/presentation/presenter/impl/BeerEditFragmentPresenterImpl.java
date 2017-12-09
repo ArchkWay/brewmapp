@@ -39,7 +39,7 @@ public class BeerEditFragmentPresenterImpl extends BasePresenter<BeerEditFragmen
     private LoadProductTask loadProductTask;
     private Beer beer_old_data=new Beer();
     private Beer beer_new_data=new Beer();
-    private String[] checkListAll={"getId","getTitle"};
+    private String[] checkListAll={"getBrand_id","getId","getTitle"};
 
     @Inject
     public BeerEditFragmentPresenterImpl(LoadProductTask loadProductTask){
@@ -95,6 +95,11 @@ public class BeerEditFragmentPresenterImpl extends BasePresenter<BeerEditFragmen
     @Override
     public Beer getBeer_new_data() {
         return beer_new_data;
+    }
+
+    @Override
+    public Beer getBeer_old_data() {
+        return beer_old_data;
     }
 
     @Override

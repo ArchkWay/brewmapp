@@ -90,26 +90,39 @@
                     android:layout_marginRight="@dimen/common_block_space"
                     android:layout_marginLeft="@dimen/common_block_space"
                     >
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_brand"
+                        android:layout_gravity="center_vertical"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_brand"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        />
 
                     <TextView
-                        android:id="@+id/fragment.edit.beer.name"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:id="@+id/fragment.edit.beer.brand"
+                        style="@style/AppTheme.Paragraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/common_block_space"
                         android:text="@string/text_view_value_not_found"
-                        android:textColor="@color/red_focused"
-                        android:textSize="@dimen/text_size_big_phone"
                         android:layout_weight="1"
-
+                        android:gravity="center_vertical"
                         />
                     <ImageView
                         android:layout_width="@dimen/common_block_space_triple"
                         android:layout_height="@dimen/common_block_space_triple"
                         android:src="@drawable/ic_edit2"
                         android:layout_gravity="center_vertical"
-                        android:id="@+id/fragment.edit.beer.edit_name"
+                        android:id="@+id/fragment.edit.beer.edit_brand"
                         />
 
                 </LinearLayout>

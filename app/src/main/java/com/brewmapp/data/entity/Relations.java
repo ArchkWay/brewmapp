@@ -182,4 +182,10 @@ public class Relations implements Serializable {
     public void setBeerBrand(com.brewmapp.data.entity.BeerBrand beerBrand) {
         BeerBrand = beerBrand;
     }
+
+    public Relations clone(){
+        Relations relations=new Relations();
+        relations.setBeerBrand(getBeerBrand());
+        return relations;
+    }
 }

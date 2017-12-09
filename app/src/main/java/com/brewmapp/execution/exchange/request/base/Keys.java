@@ -118,6 +118,7 @@ public class Keys {
     public static final String TYPE_BEER = "TYPE_BEER";
     public static final String TYPE_RESTO = "TYPE_RESTO";
     public static final String TYPE_USER="TYPE_USER";
+    public static final String TYPE_BEERBRAND="TYPE_BEERBRAND";
     public static final String RESTO_ID = "resto_id";
     public static final String EVLUATION_TYPE = "evaluation_type";
     public static final String EVLUATION_TYPE_INTERIOR = "1";

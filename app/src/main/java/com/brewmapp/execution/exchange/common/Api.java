@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerAftertasteTypes;
+import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerBrandTypes;
 import com.brewmapp.data.entity.BeerColorTypes;
 import com.brewmapp.data.entity.BeerDensityTypes;
@@ -44,6 +45,7 @@ import com.brewmapp.data.entity.container.AlbumPhotos;
 import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.data.entity.container.FilterRestoLocationTypes;
@@ -440,5 +442,15 @@ public interface Api {
     @POST("beer/beer/edit")
     @FormUrlEncoded
     Call<SingleResponse<Beer>> editBeer(@FieldMap WrapperParams params);
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<BeerBrands> fullSearchBeerBrand(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+
+    );
 
 }

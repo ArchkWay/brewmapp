@@ -1,6 +1,8 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
+import com.brewmapp.data.entity.BeerBrand;
+import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Users;
@@ -9,6 +11,7 @@ import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
 import java.util.ArrayList;
@@ -58,6 +61,11 @@ public class FullSearchTask extends BaseNetworkTask<FullSearchPackage,List<IFlex
                     case Keys.TYPE_USER:
                         Users users=executeCall(getApi().fullSearchUser(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(users.getModels()));
+                        subscriber.onComplete();
+                        break;
+                    case Keys.TYPE_BEERBRAND:
+                        BeerBrands beerBrands=executeCall(getApi().fullSearchBeerBrand(fullSearchPackage.getStringSearch(), start, end, params));
+                        subscriber.onNext(new ArrayList<>(beerBrands.getModels()));
                         subscriber.onComplete();
                         break;
                 }

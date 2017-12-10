@@ -34,4 +34,28 @@ public class Location implements Serializable {
     public void setMetro(Metro metro) {
         this.metro = metro;
     }
+
+    public String getFormatLocation(){
+        String city="";
+        String street="";
+        String house="";
+
+        city=city_id;
+        try {street=getLocation().getStreet();}catch (Exception e){};
+        try {house=getLocation().getHouse();}catch (Exception e){};
+        return new StringBuilder()
+                .append(city)
+                .append(", ул. ")
+                .append(street)
+                .append(", д.")
+                .append(house)
+                .toString();
+    }
+
+    public Location clone(){
+        Location location=new Location();
+        location.setCity_id(getCity_id());
+        setLocation(getLocation().clone());
+        return location;
+    }
 }

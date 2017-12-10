@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
@@ -9,6 +10,6 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface RestoEditFragmentView extends BasicView {
-    void setContent(Resto resto);
+    void setContent(RestoDetail restoDetail);
     void commonError(String... strings);
 }

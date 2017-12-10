@@ -1,6 +1,9 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -9,9 +12,11 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.RestoEditFragmentView;
-import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
+import com.brewmapp.presentation.view.impl.dialogs.DialogInput;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectAddress;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -39,6 +44,8 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     @BindView(R.id.fragment_edit_resto_edit_name)    ImageView edit_name;
     @BindView(R.id.fragment_edit_resto_avg_account)    TextView avg_account;
     @BindView(R.id.fragment_edit_resto_edit_avg_account)    ImageView edit_avg_account;
+    @BindView(R.id.fragment_edit_resto_place)    TextView place;
+    @BindView(R.id.fragment_edit_resto_edit_place)    ImageView edit_place;
 
 
     @Inject RestoEditFragmentPresenter presenter;
@@ -59,6 +66,22 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     protected void initView(View view) {
         setHasOptionsMenu(true);
         sliderLayout.stopAutoCycle();
+        edit_avg_account.setOnClickListener(v -> {new DialogInput().show(getActivity().getSupportFragmentManager(), R.string.new_value, avg_account.getText().toString(), new DialogInput.OnInputText() {
+            @Override
+            public void onOk(String string) {
+                try {
+                    presenter.getRestoDetail_new_data().getResto().setAvgCost(Integer.valueOf(string));
+                    avg_account.setText(string);
+                    mListener.invalidateOptionsMenu();
+                }catch (Exception e){ showMessage(e.getMessage());}
+            }
+        });});
+        edit_place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DialogSelectAddress().show(getActivity().getSupportFragmentManager(),"qqq");
+            }
+        });
 
     }
 
@@ -105,8 +128,25 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     }
 
     @Override
-    public void setContent(Resto resto) {
-        new FillContent(resto);
+    public void setContent(RestoDetail restoDetail) {
+        new FillContent(restoDetail);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.save,menu);
+        menu.findItem(R.id.action_save).setEnabled(presenter.isNeedSave());
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_save:
+                presenter.storeChanges();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -122,10 +162,10 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
 
     class FillContent {
 
-        public FillContent(Resto resto) {
-            getActivity().setTitle(resto.getName());
-            initSlider(resto);
-            fillTexts(resto);
+        public FillContent(RestoDetail restoDetail) {
+            getActivity().setTitle(restoDetail.getResto().getName());
+            initSlider(restoDetail.getResto());
+            fillTexts(restoDetail);
         }
 
         private void initSlider(Resto resto) {
@@ -142,8 +182,10 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
             presenter.loadAllPhoto(sliderLayout);
         }
 
-        private void fillTexts(Resto resto) {
-            name.setText(resto.getName());
+        private void fillTexts(RestoDetail restoDetail) {
+            name.setText(restoDetail.getResto().getName());
+            try {place.setText(restoDetail.getResto().getLocation().getFormatLocation());}catch (Exception e){}
+            avg_account.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
         }
     }
 }

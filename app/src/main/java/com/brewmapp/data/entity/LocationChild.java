@@ -127,4 +127,12 @@ public class LocationChild implements Serializable{
         this.timestamp = timestamp;
     }
 
+    public LocationChild clone(){
+        LocationChild locationChild=new LocationChild();
+        locationChild.setStreet(getStreet());
+        locationChild.setHouse(getHouse());
+        return locationChild;
+    }
+
+
 }

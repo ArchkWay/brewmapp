@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.view.contract.RestoEditFragmentView;
 import com.daimajia.slider.library.SliderLayout;
 
@@ -13,4 +14,10 @@ public interface RestoEditFragmentPresenter extends LivePresenter<RestoEditFragm
     void requestContent(String id_resto);
 
     void loadAllPhoto(SliderLayout sliderLayout);
+
+    boolean isNeedSave();
+
+    void storeChanges();
+
+    RestoDetail getRestoDetail_new_data();
 }

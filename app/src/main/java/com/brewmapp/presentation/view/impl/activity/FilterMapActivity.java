@@ -166,6 +166,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             Intent intent = new Intent(this, FilterByCategory.class);
             intent.putExtra(Keys.FILTER_CATEGORY, position);
             intent.putExtra(Keys.BEER_TYPES, tabsView.getTabs().getSelectedTabPosition());
+            intent.putExtra(Keys.SEARCH, true);
             startActivityForResult(intent, RequestCodes.REQUEST_FILTER_CATEGORY);
         }
         return false;
@@ -186,6 +187,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             }
         }
     }
+
     private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem, String countryId) {
         StringBuilder filter = new StringBuilder();
         StringBuilder filterId = new StringBuilder();

@@ -5,4 +5,7 @@ import com.brewmapp.presentation.view.contract.SearchView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface SearchPresenter extends LivePresenter<SearchView> {
+    void loadRestoList(int specialOffer);
+    void loadBeerList(int craftBeer, int filter);
+    void loadBrewery();
 }

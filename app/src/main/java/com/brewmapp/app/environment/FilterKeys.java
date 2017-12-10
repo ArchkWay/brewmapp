@@ -40,4 +40,10 @@ public class FilterKeys {
     public static final String BEER_CITY  = "beerCity";
     public static final String BEER_EVALUATION_TYPE = "productEvaluationType";
 
+    //BrewerySearch
+    public static final String BREWERY_COUNTRY = "country_id";
+    public static final String BREWERY_LOCATION = "location_id";
+    public static final String BREWERY_BEER_COUNTRY = "beer_country_id";
+    public static final String BREWERY_BEER_BRAND = "beer_brand_id";
+    public static final String BREWERY_BEER_TYPE = "beer_type_id";
 }

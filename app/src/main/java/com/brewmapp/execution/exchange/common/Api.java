@@ -54,6 +54,7 @@ import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Reviews;
+import com.brewmapp.data.entity.container.SearchBeerTypes;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.container.Users;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
@@ -222,6 +223,15 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<Resto>> findRestos(@QueryMap RequestParams query,
                                          @FieldMap RequestParams params);
+
+    @POST("search/resto")
+    @FormUrlEncoded
+    Call<Restos> loadRestos(@QueryMap RequestParams query,
+                            @FieldMap RequestParams params);
+
+    @POST("search/beer")
+    @FormUrlEncoded
+    Call<SearchBeerTypes> loadBeers(@FieldMap RequestParams params);
 
     @POST("subscription")
     @FormUrlEncoded

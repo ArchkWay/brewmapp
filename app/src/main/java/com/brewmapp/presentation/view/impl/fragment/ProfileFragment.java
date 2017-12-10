@@ -89,7 +89,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         return R.layout.fragment_profile;
     }
 
-
     @Override
     protected void initView(View view) {
         //if(getArguments().getBoolean(MainActivity.KEY_FIRST_FRAGMENT,false)){
@@ -190,8 +189,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
-
     }
 
     @Override
@@ -211,11 +208,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     public void appendPosts(Posts posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
-
         postAdapter.addItems(postAdapter.getItemCount(), posts.getModels());
-
         text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
-
         posts_subs.setAdapter(postAdapter);
     }
 

@@ -10,13 +10,8 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface ProfilePresenter extends LivePresenter<ProfileView> {
-
-
-
     void onLoadPosts(LoadPostsPackage loadPostsPackage);
     void onLikePost(Post post);
-
     void onLoadSubscription(LoadPostsPackage loadPostsPackage);
-
     void refreshProfile();
 }

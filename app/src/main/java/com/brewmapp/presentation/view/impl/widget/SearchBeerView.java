@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.SearchBeer;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -20,32 +20,38 @@ import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
 /**
- * Created by nixus on 17.11.2017.
+ * Created by nixus on 07.12.2017.
  */
 
-public class BeerView extends BaseLinearLayout implements InteractiveModelView<Beer> {
+public class SearchBeerView extends BaseLinearLayout implements InteractiveModelView<SearchBeer> {
 
-    @BindView(R.id.title)
+    @BindView(R.id.beer_title)
     TextView title;
-    @BindView(R.id.logo)
-    ImageView logo;
+    @BindView(R.id.beer_price)
+    TextView beerPrice;
+    @BindView(R.id.beer_craft)
+    TextView beerCraft;
+    @BindView(R.id.beer_short_text)
+    TextView shortDescription;
+    @BindView(R.id.ic_beer)
+    com.makeramen.roundedimageview.RoundedImageView logo;
     private Listener listener;
-    private Beer model;
+    private SearchBeer model;
 
-    public BeerView(Context context) {
+    public SearchBeerView(Context context) {
         super(context);
     }
 
-    public BeerView(Context context, AttributeSet attrs) {
+    public SearchBeerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BeerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SearchBeerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public BeerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SearchBeerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
     @Override
@@ -54,21 +60,26 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     }
 
     @Override
-    public Beer getModel() {
+    public SearchBeer getModel() {
         return model;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void setModel(Beer model) {
+    public void setModel(SearchBeer model) {
         this.model = model;
-        String titleRu = (model.getTitleRU() == null || TextUtils.isEmpty(model.getTitleRU()) ? "" : " (" + model.getTitleRU() + ")");
+        String titleRu = (model.getTitleRu() == null || TextUtils.isEmpty(model.getTitle()) ? "" : " (" + model.getTitleRu() + ")");
         title.setText(model.getTitle() + titleRu);
+        shortDescription.setVisibility((model.getShortText() != null && model.getShortText().isEmpty()) ? GONE : VISIBLE);
+        shortDescription.setText((model.getShortText() != null && model.getShortText().isEmpty()) ? "" : model.getShortText());
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
         } else {
-            logo.setVisibility(INVISIBLE);
+            Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(logo);
         }
+
+        beerPrice.setText(getResources().getString(R.string.beer_avg_price, model.getAvgPrices500()));
+        beerCraft.setVisibility(model.getCraft() == 1 ? VISIBLE : GONE);
 
         setOnClickListener(v -> listener.onModelAction(FilterRestoField.BEER, model));
 

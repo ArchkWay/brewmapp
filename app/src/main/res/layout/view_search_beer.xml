@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.brewmapp.presentation.view.impl.widget.SearchBeerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/ic_beer"
+            android:layout_width="@dimen/size_avatar_lesser"
+            android:layout_height="@dimen/size_avatar_lesser"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_default_beer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.077"
+            app:riv_mutate_background="true"
+            app:riv_oval="false" />
+
+        <TextView
+            android:id="@+id/beer_title"
+            style="@style/AppTheme.Text.Georgia.BoldItalic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:lines="1"
+            android:text="@string/text_view_value_not_found"
+            android:textSize="@dimen/text_size_medium_phone"
+            app:layout_constraintLeft_toRightOf="@+id/ic_beer"
+            app:layout_constraintRight_toLeftOf="@+id/ic_arrow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/beer_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:lines="1"
+            android:text="@string/text_view_value_not_found"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintLeft_toRightOf="@+id/ic_beer"
+            app:layout_constraintTop_toBottomOf="@+id/beer_title" />
+
+        <TextView
+            android:id="@+id/beer_craft"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:lines="1"
+            android:text="@string/beer_craft"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintLeft_toRightOf="@+id/ic_beer"
+            app:layout_constraintRight_toLeftOf="@+id/ic_arrow"
+            app:layout_constraintTop_toBottomOf="@+id/beer_price" />
+
+        <TextView
+            android:id="@+id/beer_short_text"
+            style="@style/AppTheme.Text.Georgia.BoldItalic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:maxLines="3"
+            android:textSize="@dimen/text_size_nano"
+            app:layout_constraintRight_toLeftOf="@+id/ic_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ic_beer" />
+
+
+        <TextView
+            android:layout_width="@dimen/size_icon_18"
+            android:layout_height="@dimen/size_icon_18"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle"
+            android:gravity="center"
+            android:text="@string/text_view_value_not_found"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.994"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/beer_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.114" />
+
+        <ImageView
+            android:id="@+id/ic_arrow"
+            android:layout_width="@dimen/arrow_right_width"
+            android:layout_height="@dimen/arrow_right_height"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.306" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</com.brewmapp.presentation.view.impl.widget.SearchBeerView>

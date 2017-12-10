@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
@@ -85,6 +87,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     private int filterCategory;
     private String selectedFilter = null;
     private boolean isBeer;
+    private boolean isBrewery;
+    private boolean isSearch;
 
     private EndlessRecyclerOnScrollListener scrollListener;
 
@@ -130,12 +134,56 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         });
 
         isBeer = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 1;
-        if (!isBeer) {
-            initRestoFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
-        } else {
-            initBeerFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
-        }
+        isBrewery = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 2;
+        isSearch = getIntent().getBooleanExtra(Keys.SEARCH, false);
+        initFilterCategory();
         initFilter();
+    }
+
+    private void initFilterCategory() {
+        if (isBeer) {
+            initBeerFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+        } else if (isBrewery) {
+            initBreweryFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+        } else {
+            initRestoFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+        }
+    }
+
+    private void initBreweryFilterByCategory(int filterId) {
+        this.filterCategory = filterId;
+        switch (filterId) {
+            case FilterBreweryField.COUNTRY:
+                showProgressBar(true);
+                okButton.setVisibility(View.GONE);
+                toolbarTitle.setText(R.string.select_country);
+                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
+                } else {
+                    presenter.loadCountries();
+                }
+                break;
+            case FilterBreweryField.BRAND:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_brand);
+                if (getStoredFilterList(FilterKeys.BEER_BRAND) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_BRAND));
+                } else {
+                    presenter.loadBeerBrand(fullSearchPackage);
+                }
+                break;
+            case FilterBreweryField.TYPE_BEER:
+                showProgressBar(true);
+                toolbarTitle.setText(R.string.search_beer_type);
+                if (getStoredFilterList(FilterKeys.BEER_TYPES) != null) {
+                    appendItems(getStoredFilterList(FilterKeys.BEER_TYPES));
+                } else {
+                    presenter.loadBeerTypes();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void initBeerFilterByCategory(int filterId) {
@@ -434,12 +482,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 break;
             case FilterRestoField.CITY:
                 Country country = (Country) payload;
-                if (isBeer && filterCategory != FilterBeerField.PLACE) {
-                    selectedItem = country.getName();
-                    selectedItemId = country.getId();
-                    goToFilterMap();
-                    return;
-                } else if (!isBeer && country.getId() == null) {
+                if (country.getId() == null) {
                     selectedItem = country.getName();
                     selectedItemId = country.getId();
                     goToFilterMap();
@@ -505,12 +548,27 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
 
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
-        if (!isBeer) {
-            restoFilterLogic();
-        } else {
+        if (isBrewery) {
+            breweryLogic();
+        } else if (isBeer) {
             beerFilterLogic();
+        } else {
+            restoFilterLogic();
         }
         goToFilterMap();
+    }
+
+    private void breweryLogic() {
+        if (filterCategory == FilterBreweryField.TYPE_BEER) {
+            selectedFilter = FilterKeys.BREWERY_BEER_TYPE;
+            saveStoredFilter(FilterKeys.BREWERY_BEER_TYPE);
+        } else if (filterCategory == FilterBreweryField.BRAND) {
+            selectedFilter = FilterKeys.BREWERY_BEER_BRAND;
+            saveStoredFilter(FilterKeys.BREWERY_BEER_BRAND);
+        } else if (filterCategory == FilterBreweryField.COUNTRY) {
+            selectedFilter = FilterKeys.BREWERY_BEER_COUNTRY;
+            saveStoredFilter(FilterKeys.BREWERY_BEER_COUNTRY);
+        }
     }
 
     private void beerFilterLogic() {

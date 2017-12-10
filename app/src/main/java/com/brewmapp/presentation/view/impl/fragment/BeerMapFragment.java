@@ -278,14 +278,13 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void showDialogProgressBar(boolean show) {
         if (show) {
             dialog = ProgressDialog.show(getContext(), getString(R.string.loading),
-                    getString(R.string.search_resto_map), true, false);
+                    getString(R.string.search_resto_message), true, false);
         } else {
             if (dialog != null) {
                 dialog.cancel();
             }
         }
     }
-
 
     @Override
     public void showProgressBar() {
@@ -297,7 +296,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     public void hideProgressBar() {
         finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
         finder.findViewById(R.id.finder_cancel).setVisibility(View.VISIBLE);
-
     }
 
     @Override

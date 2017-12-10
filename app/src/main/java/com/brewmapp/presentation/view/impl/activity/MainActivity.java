@@ -27,6 +27,7 @@ import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,6 +57,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_SEARCH_CODE;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
@@ -73,7 +75,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @BindView(R.id.activity_main_container) FrameLayout container;
     @BindView(R.id.activity_main_visible_container)    RelativeLayout visible_container;
 
-
     @Inject MainPresenter presenter;
     @Inject MainNavigator navigator;
 
@@ -81,10 +82,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private List<MenuField> menuItems;
     private @MenuRes int menuToShow;
 
-    public static final String KEY_FIRST_FRAGMENT ="first_fragment";
-    public static final String MODE_DEFAULT="default";
-    public static final String MODE_ONLY_EVENT_FRAGMENT="event_fragment";
-    public static final String MODE_ONLY_MAP_FRAGMENT="map_fragment";
+    public static final String KEY_FIRST_FRAGMENT = "first_fragment";
+    public static final String MODE_DEFAULT = "default";
+    public static final String MODE_ONLY_EVENT_FRAGMENT = "event_fragment";
+    public static final String MODE_ONLY_MAP_FRAGMENT = "map_fragment";
+    public static final String SEARCH_FRAGMENT = "search_fragment";
 
     DuoDrawerToggle drawerToggle;
     private String mode;
@@ -99,7 +101,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void initView() {
         setTitle("");
-        mode=presenter.parseMode(getIntent());
+        mode = presenter.parseMode(getIntent());
    }
 
     private void setDrawer() {
@@ -141,15 +143,30 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
+        if (fragment instanceof SearchFragment) {
+            mode = SEARCH_FRAGMENT;
+        } else {
+            mode = presenter.parseMode(getIntent());
+        }
         fragment.setArguments(presenter.prepareArguments(getIntent(),container));
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
-        if(menuToShow ==0 )        processSetActionBar(0);
+        if(menuToShow == 0) processSetActionBar(0);
         navigator.setActionBarItemDelegate(fragment);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_main_container, fragment)
+                .commit();
+    }
+
+    @Override
+    public void showFilterFragment(BaseFragment searchFragment) {
+        navigator.setActionBarItemDelegate(searchFragment);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.activity_main_container, searchFragment)
+                .addToBackStack(SearchFragment.class.getSimpleName())
                 .commit();
     }
 
@@ -187,10 +204,19 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             menuToShow = R.menu.search_add;
         } else if (position == Actions.ACTION_FILTER) {
             menuToShow = R.menu.filter;
-        } else
+        } else {
             menuToShow = R.menu.search;
+        }
 
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void processSetFilterFragmentActionBar(SearchFragment searchFragment) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) return;
+        actionBar.setDisplayShowTitleEnabled(false);
+        toolbarTitle.setText(searchFragment.getTitle());
     }
 
     @Override
@@ -216,17 +242,13 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void successCheckEnvironment(User user, List<MenuField> fields) {
-
         check_connection.setVisibility(View.GONE);
-
         Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
         userName.setText(user.getFormattedName());
-
         this.menuItems = fields;
         adapter = new FlexibleAdapter<>(fields, this);
         menu.setLayoutManager(new LinearLayoutManager(this));
         menu.setAdapter(adapter);
-
 
         switch (mode){
             case MODE_DEFAULT:
@@ -247,11 +269,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 break;
         }
 
-
         navigator.onAttachView(this);
         navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
         navigator.onDrawerClosed();
-
     }
 
     @Override
@@ -262,7 +282,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 break;
             case MODE_ONLY_EVENT_FRAGMENT:
             case MODE_ONLY_MAP_FRAGMENT:
-                if(menu!=null) menu.clear();getMenuInflater().inflate(R.menu.stub, menu);
+                if (menu!=null) menu.clear();
+                getMenuInflater().inflate(R.menu.stub, menu);
+                break;
+            case SEARCH_FRAGMENT:
+                if (menu!=null) menu.clear();
+                getMenuInflater().inflate(R.menu.stub, menu);
                 break;
         }
         return super.onCreateOptionsMenu(menu);
@@ -310,6 +335,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
                 showMapResult(data.getBooleanExtra("isBeer", false),
                         data.getIntExtra("checkBox", 0));
+            } else if (requestCode == REQUEST_SEARCH_CODE) {
+                showSearchFilter(data);
             }
         }
     }
@@ -354,6 +381,27 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof BeerMapFragment) {
                 ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
+            }
     }
+
+    @SuppressLint("RestrictedApi")
+    public void showSearchFilter(Intent data) {
+        for (Fragment fragment : getSupportFragmentManager().getFragments())
+            if (fragment instanceof SearchFragment) {
+                ((SearchFragment) fragment).showResult(data);
+            }
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        Log.i("size", String.valueOf(getSupportFragmentManager().getFragments().size()));
+//        if (getSupportFragmentManager().getFragments().size() > 1) {
+//            for (Fragment fragment : getSupportFragmentManager().getFragments())
+//                if (fragment instanceof SearchFragment) {
+//                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+//                }
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 }

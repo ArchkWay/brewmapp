@@ -29,6 +29,7 @@ import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
+import com.brewmapp.data.entity.wrapper.SearchBeerInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.common.base.BeerAftertasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerBrandDeserializer;
@@ -60,6 +61,7 @@ import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoTypeDeserializer;
 import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
+import com.brewmapp.execution.exchange.common.base.SearchBeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.SubscriptionDeserializer;
 import com.brewmapp.execution.exchange.common.base.UserDeserializer;
 import com.google.gson.GsonBuilder;
@@ -150,6 +152,7 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(FilterRestoLocationInfo.class, new FilterRestoOnMapDeserializer())
                 .registerTypeAdapter(UserInfo.class, new UserDeserializer())
                 .registerTypeAdapter(BreweryInfo.class, new BreweryDeserializer())
+                .registerTypeAdapter(SearchBeerInfo.class, new SearchBeerDeserializer())
                 ;
     }
 

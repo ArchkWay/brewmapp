@@ -19,6 +19,7 @@ public class FilterRestoPackage {
     private String coordStart;
     private String coordEnd;
     private String restoOrderSort;
+    private int page;
 
     public FilterRestoPackage(String restoCity, String restoTypes, String restoMetroes, String restoKitchens,
                               String restoFeatures, String menuBeer, String restoPrices, String restoAveragepriceRange,
@@ -143,5 +144,13 @@ public class FilterRestoPackage {
 
     public void setRestoOrderSort(String restoOrderSort) {
         this.restoOrderSort = restoOrderSort;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }

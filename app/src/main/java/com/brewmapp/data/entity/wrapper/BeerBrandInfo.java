@@ -17,6 +17,9 @@ public class BeerBrandInfo extends AdapterItem<BeerBrand, BeerBrandView> impleme
         super(model);
     }
 
+    public BeerBrandInfo() {
+    }
+
     @Override
     public int getLayoutRes() {return R.layout.view_beer_brand;}
 

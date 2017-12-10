@@ -5,6 +5,8 @@ import java.util.List;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
+
 import ru.frosteye.ovsa.presentation.navigation.NavigatorView;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
@@ -18,5 +20,6 @@ public interface MainView extends BasicView, NavigatorView {
     void showDrawer(boolean shown);
     void successCheckEnvironment(User load, List<MenuField> aDefault);
     void commonError(String... strings);
+    void showFilterFragment(BaseFragment searchFragment);
 
 }

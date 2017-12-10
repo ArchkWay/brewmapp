@@ -11,10 +11,13 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 
 import com.brewmapp.R;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,18 +33,21 @@ import java.util.List;
 public class DialogSelectAddress extends DialogFragment {
     private MapView mapView;
     public DialogSelectAddress(){
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         View rootView=inflater.inflate(R.layout.dialog_select_address, null);
         mapView= (MapView) rootView.findViewById(R.id.fragment_dialog_map);
         mapView.onCreate(null);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+                GoogleMapOptions googleMapsOptions = new GoogleMapOptions();
+                googleMapsOptions.zOrderOnTop( true );
+
                 googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);

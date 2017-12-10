@@ -35,6 +35,7 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
@@ -452,5 +453,9 @@ public interface Api {
             @FieldMap WrapperParams params
 
     );
+
+    @POST("photo")
+    @FormUrlEncoded
+    Call<ListResponse<Photo>> loadPhotosResto(@FieldMap WrapperParams params);
 
 }

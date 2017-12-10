@@ -104,26 +104,6 @@ public class Photo implements ILikeable {
         dislike++;
     }
 
-    public static class Thumb {
-        private String url;
-
-        @SerializedName(Keys.URL_PREVIEW)
-        private String thumbUrl;
-
-        public String getUrl() {
-            if(url != null && !url.startsWith("http")) {
-                url = BuildConfig.SERVER_ROOT_URL + url;
-            }
-            return url;
-        }
-
-        public String getThumbUrl() {
-            if(thumbUrl != null && !thumbUrl.startsWith("http")) {
-                thumbUrl = BuildConfig.SERVER_ROOT_URL + url;
-            }
-            return thumbUrl;
-        }
-    }
 
     public static class Size {
         @SerializedName("0")

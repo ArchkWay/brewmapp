@@ -100,20 +100,6 @@
                         app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
                         style="@style/AppTheme.Text.Georgia.Italic.TitleResto"
                         />
-                    <!--<TextView-->
-                        <!--android:id="@+id/activity.resto.detail.name"-->
-
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:layout_margin="@dimen/common_block_space"-->
-                        <!--android:text="@string/text_view_value_not_found"-->
-                        <!--style="@style/AppTheme.Text.Georgia.Italic"-->
-                        <!--android:textColor="@color/colorButtonRed"-->
-                        <!--android:textSize="@dimen/text_size_big_phone_bigger"-->
-                        <!--app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"-->
-
-                        <!--/>-->
 
                     <include layout="@layout/view_like_dislike_fav" />
 

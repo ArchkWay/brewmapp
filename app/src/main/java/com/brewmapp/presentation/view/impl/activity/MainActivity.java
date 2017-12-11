@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -174,17 +175,21 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
-        actionBar.setDisplayShowTitleEnabled(false);
-        toolbarTitle.setText(baseFragment.getTitle());
         if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
-            toolbarSubTitle.setVisibility(View.VISIBLE);
+            toolbarDropdown.setVisibility(View.VISIBLE);
+            actionBar.setDisplayShowTitleEnabled(false);
+            toolbarTitle.setText(baseFragment.getTitle());
             if(mode.equals(MODE_DEFAULT)) {
                 if (baseFragment instanceof View.OnClickListener) {
                     toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
                 }
+                toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
+            }else {
+                toolbarSubTitle.setVisibility(View.GONE);
             }
         } else {
             toolbarSubTitle.setVisibility(View.GONE);
+            actionBar.setDisplayShowTitleEnabled(true);
         }
     }
 

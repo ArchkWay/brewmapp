@@ -83,7 +83,7 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
                 presenter.DialogSelectAddress().showDialod(getActivity().getSupportFragmentManager(), new DialogSelectAddress.OnSelectAddress() {
                     @Override
                     public void onOk(Location location) {
-
+                        place.setText(location.getFormatLocation());
                     }
                 });
             }

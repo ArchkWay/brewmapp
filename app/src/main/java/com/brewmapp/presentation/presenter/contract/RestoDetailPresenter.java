@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
+import com.daimajia.slider.library.SliderLayout;
 
 import java.util.ArrayList;
 
@@ -37,4 +38,6 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void clickFav();
 
     void startMapFragment(RestoDetailActivity restoDetailActivity);
+
+    void loadAllPhoto(SliderLayout slider);
 }

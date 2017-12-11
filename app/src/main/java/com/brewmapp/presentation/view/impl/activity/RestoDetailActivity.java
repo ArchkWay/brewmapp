@@ -38,6 +38,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -186,7 +187,21 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void enableControls(boolean enabled, int code) {
-        swipe.setRefreshing(!enabled);
+
+        if(enabled){
+            swipe.setRefreshing(!enabled);
+            swipe.setEnabled(!enabled);
+        }else{
+            swipe.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setEnabled(!enabled);
+                    swipe.setRefreshing(!enabled);
+                }
+            },2000);
+        }
+
+
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
             if(code == ALL_CONTROL) {
                 view.setEnabled(enabled);
@@ -223,17 +238,23 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                         photosResto.add(kitchen.getGetThumb());
 
                 for(String imgUrl:photosResto){
-                    if(imgUrl!=null)
-                        slider.addSlider(new DefaultSliderView(this)
-                                .setScaleType(BaseSliderView.ScaleType.CenterCrop)
-                                .image(imgUrl)
-                                .setOnSliderClickListener(slider1 -> {
+                    if(imgUrl!=null) {
+
+                        DefaultSliderView defaultSliderView=new DefaultSliderView(this);
+                        defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
+                        defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
+                        defaultSliderView.image(imgUrl);
+                        defaultSliderView.setOnSliderClickListener(slider1 -> {
                                     Intent intent = new Intent(this, PhotoSliderActivity.class);
                                     String[] urls = {imgUrl};
                                     intent.putExtra(Keys.PHOTOS, urls);
                                     startActivity(intent);
-                                }));
+                                });
+                        slider.addSlider(defaultSliderView);
+                    }
                 }
+
+                presenter.loadAllPhoto(slider);
                 if(photosResto.size()>0) {
                     photosCounter.setText(String.format("%d/%d", 1, photosResto.size()));
                     slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
@@ -270,7 +291,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
                 button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
                 setTitleToButtonOfMoreDescription(false);
-
+                try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
             case Actions.MODE_REFRESH_ONLY_LIKE:
                 try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
                 try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
@@ -352,7 +373,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void scrollTo(Integer integer) {
         switch (integer){
             case Actions.ACTION_SCROLL_TO_NEWS:
-                scroll.post(() -> scroll.scrollTo(0,layout_news.getBottom()));
+                scroll.post(() -> scroll.scrollTo(0,layout_news.getTop()));
+                getIntent().setAction(null);
                 break;
         }
 

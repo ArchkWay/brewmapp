@@ -62,7 +62,9 @@ public class DialogSelectAddress extends DialogFragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //location.setCity_id();
+                location.setCity_id(address.getLocality());
+                location.getLocation().setStreet(address.getThoroughfare());
+                location.getLocation().setHouse(address.getSubThoroughfare());
                 onSelectAddress.onOk(location);
                 dismiss();
             }

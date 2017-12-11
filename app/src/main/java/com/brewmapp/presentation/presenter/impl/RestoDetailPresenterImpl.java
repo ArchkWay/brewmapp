@@ -5,10 +5,12 @@ import android.content.Intent;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
@@ -20,9 +22,13 @@ import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
 import com.brewmapp.data.pojo.SubscriptionPackage;
+import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.AddInterestTask;
 import com.brewmapp.execution.task.LoadRestoAverageEvaluationTask;
@@ -42,13 +48,21 @@ import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
+import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.reactivex.Observable;
+import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -185,9 +199,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             view.commonError(e.getMessage());return;
         }
 
-        try {
-            view.scrollTo(Integer.valueOf(intent.getAction()));
-        }catch (Exception e){}
+//        try {
+//            view.scrollTo(Integer.valueOf(intent.getAction()));
+//        }catch (Exception e){}
 
         refreshContent(Actions.MODE_REFRESH_ALL);
 
@@ -506,6 +520,73 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         Intent intent=new Intent(MainActivity.MODE_ONLY_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
         intent.putExtra(Keys.LOCATION,restoLocation);
         restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
+
+    }
+
+    @Override
+    public void loadAllPhoto(SliderLayout sliderLayout) {
+        class LoadPhotoResto extends BaseNetworkTask<String, List<Photo>> {
+
+            public LoadPhotoResto(MainThread mainThread, Executor executor, Api api) {
+                super(mainThread, executor, api);
+            }
+
+            @Override
+            protected Observable<List<Photo>> prepareObservable(String resto_id) {
+                return Observable.create(subscriber -> {
+                    try {
+                        WrapperParams wrapperParams=new WrapperParams(Wrappers.PHOTO);
+                        wrapperParams.addParam(Keys.RELATED_MODEL,Keys.CAP_RESTO);
+                        wrapperParams.addParam(Keys.RELATED_ID,resto_id);
+                        ListResponse<Photo> listResponse= executeCall(getApi().loadPhotosResto(wrapperParams));
+                        subscriber.onNext(listResponse.getModels());
+                        subscriber.onComplete();
+                    } catch (Exception e) {
+                        subscriber.onError(e);
+                    }
+                });
+            }
+        }
+        new LoadPhotoResto(
+                BeerMap.getAppComponent().mainThread(),
+                BeerMap.getAppComponent().executor(),
+                BeerMap.getAppComponent().api()
+        ).execute(
+                String.valueOf(restoDetail.getResto().getId()),
+                new SimpleSubscriber<List<Photo>>(){
+                    @Override
+                    public void onNext(List<Photo> photos) {
+                        super.onNext(photos);
+                        Iterator<Photo> iterator=photos.iterator();
+                        while (iterator.hasNext())
+                            try {
+                                Photo photo=iterator.next();
+                                String strThumbUrl  =photo.getThumb().getThumbUrl();
+                                String strUrl       =photo.getThumb().getUrl();
+                                sliderLayout.addSlider(
+                                        new DefaultSliderView(sliderLayout.getContext())
+                                                .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                                                .image(strThumbUrl)
+                                                .setOnSliderClickListener(slider1 -> {
+                                                    //showMessage(sliderLayout.getContext().getString(R.string.message_develop));
+
+                                                    Intent intent = new Intent(sliderLayout.getContext(), PhotoSliderActivity.class);
+                                                    String[] urls = {strUrl};
+                                                    intent.putExtra(Keys.PHOTOS, urls);
+                                                    sliderLayout.getContext().startActivity(intent);
+
+                                                })
+                                );
+                            }catch (Exception e){};
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+                }
+        );
 
     }
 

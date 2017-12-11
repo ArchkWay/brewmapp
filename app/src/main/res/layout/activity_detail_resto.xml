@@ -30,8 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_event_slider"
                 android:orientation="vertical"
-                android:layout_marginRight="@dimen/common_block_space"
-                android:layout_marginLeft="@dimen/common_block_space"
                 >
 
                 <com.daimajia.slider.library.SliderLayout
@@ -59,20 +57,6 @@
                     </com.daimajia.slider.library.Indicators.PagerIndicator>
                 </com.daimajia.slider.library.SliderLayout>
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:background="@color/colorBlackSemi"-->
-                    <!--android:gravity="right">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/activity.restoDetails.photosCounter"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textColor="@color/colorWhite"-->
-                        <!--android:textSize="@dimen/text_size_common" />-->
-                <!--</LinearLayout>-->
             </LinearLayout>
 
             <LinearLayout

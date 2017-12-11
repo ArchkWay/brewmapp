@@ -1,7 +1,5 @@
 package com.brewmapp.presentation.support.navigation;
 
-import android.support.v4.app.Fragment;
-
 import javax.inject.Inject;
 
 import com.brewmapp.app.di.scope.PresenterScope;
@@ -47,7 +45,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 fragmentToShow = new EventsFragment();
                 break;
             case MenuField.SEARCH:
-                fragmentToShow = new SearchFragment();
+                fragmentToShow = SearchFragment.newInstance();
                 break;
             case MenuField.MAP:
                 fragmentToShow = new BeerMapFragment();
@@ -74,7 +72,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
     }
 
     public void onDrawerClosed() {
-        if(fragmentToShow != null) {
+        if (fragmentToShow != null) {
             getView().showFragment(fragmentToShow);
             fragmentToShow = null;
         }

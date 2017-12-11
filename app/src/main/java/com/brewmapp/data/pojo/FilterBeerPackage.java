@@ -29,6 +29,7 @@ public class FilterBeerPackage {
     private String coordEnd;
     private String beerIBU;
     private String beerOrderSort;
+    private int page;
 
     public String getBeerCountries() {
         return beerCountries;
@@ -212,5 +213,13 @@ public class FilterBeerPackage {
 
     public void setBeerOrderSort(String beerOrderSort) {
         this.beerOrderSort = beerOrderSort;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }

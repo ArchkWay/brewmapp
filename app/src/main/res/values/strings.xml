@@ -151,15 +151,21 @@
         <item>Настройки</item>
     </string-array>
 
-    <string-array name="search_beer">
-        <item>Пиво</item>
+    <string-array name="full_search">
         <item>Заведения</item>
+        <item>Пиво</item>
         <item>Пивоварни</item>
     </string-array>
 
     <string-array name="filter_search">
         <item>Заведения</item>
         <item>Пиво</item>
+    </string-array>
+
+    <string-array name="search_title">
+        <item>Поиск заведения</item>
+        <item>Поиск пива</item>
+        <item>Поиск пивоварни</item>
     </string-array>
 
     <string-array name="filter_title_search">
@@ -293,6 +299,9 @@
     <string name="search_beer_factory">Пивоварня</string>
     <string name="search_beer_price">Цена</string>
 
+    //Brewery filter strings
+    <string name="search_brewery_name">Поиск по названию пивоварни</string>
+
     <string name="text_view_flavor">Аромат:</string>
     <string name="text_view_taste">Вкус:</string>
     <string name="text_view_quality_color">Цвет:</string>
@@ -376,6 +385,7 @@
     <string name="filter_search_resto">Для поиска введите название заведения</string>
     <string name="special_offer">Специальные предложения</string>
     <string name="craft_beer">Показывать крафтовое пиво</string>
+    <string name="filter_beer">Показывать фильтрованное пиво</string>
     <string name="cancel">Отмена</string>
     <string name="title_activity_edit_profile">Настройки профиля</string>
     <string name="country">Страна</string>
@@ -402,7 +412,9 @@
     <string name="title_dialog_search_city">Поиск города</string>
     <string name="title_edit_profile">Профиль(изм.)</string>
     <string name="city">г. %s</string>
-    <string name="search_resto_map">Поиск заведений...</string>
+    <string name="search_resto_message">Поиск заведений...</string>
+    <string name="search_beer_message">Поиск пива...</string>
+    <string name="search_brewery_message">Поиск пивоварен...</string>
     <string name="loading">Загрузка...</string>
     <string name="tittle_dialog_confirm_delete">Удалить ?</string>
     <string name="message_while_not_album">Добавьте фотоальбом</string>
@@ -416,5 +428,8 @@
     <string name="title_dialog_brand">Поиск бренда</string>
     <string name="text_start_search">Начните вводить текст</string>
     <string name="txt_hint_dialog_select_address">Для выбора адреса тапните на карте, затем нажните ОК</string>
+    <string name="search_result">Результаты поиска</string>
+    <string name="beer_avg_price">Средняя цена: 500мл / %s /U+20BD</string>
+    <string name="beer_craft">Крафтовое пиво</string>
 
 </resources>

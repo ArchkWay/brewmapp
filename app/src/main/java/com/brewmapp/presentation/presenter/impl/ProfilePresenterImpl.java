@@ -27,12 +27,10 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements ProfilePresenter {
 
-
     private UserRepo userRepo;
     private LoadPostsTask loadPostsTask;
     private LoadSubscriptionsItemsTask loadSubscriptionsItemsTask;
     private LoadProfileTask loadProfileTask;
-
     private LikeTask likeTask;
 
     @Inject
@@ -67,7 +65,6 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
         likeTask.cancel();
     }
 
-
     @Override
     public void onLoadPosts(LoadPostsPackage loadPostsPackage) {
         loadPostsTask.execute(loadPostsPackage, new SimpleSubscriber<Posts>() {
@@ -95,7 +92,6 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
                 userRepo.save(user);
                 refreshProfile();
             }
-
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
@@ -120,5 +116,4 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
             }
         });
     }
-
 }

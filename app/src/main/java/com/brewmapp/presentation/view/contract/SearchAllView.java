@@ -1,5 +1,13 @@
 package com.brewmapp.presentation.view.contract;
 
+import android.content.Intent;
+
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterBreweryField;
+import com.brewmapp.data.entity.FilterRestoField;
+
+import java.util.List;
+
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -7,4 +15,9 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface SearchAllView extends BasicView {
+    void showRestoFilters(List<FilterRestoField> fieldList);
+    void showBeerFilters(List<FilterBeerField> fieldList);
+    void showBreweryFilters(List<FilterBreweryField> fieldList);
+    void setTabActive(int i);
+    void showResult(Intent data);
 }

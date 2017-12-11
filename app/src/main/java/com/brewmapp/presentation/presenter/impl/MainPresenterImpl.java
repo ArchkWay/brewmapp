@@ -42,7 +42,6 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     @Override
     public void onAttach(MainView mainView) {
         super.onAttach(mainView);
-
         loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileInfoPackage>() {
             @Override
             public void onNext(ProfileInfoPackage pack) {
@@ -55,14 +54,10 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
                 view.commonError(e.getMessage());
             }
         });
-
-
-
     }
 
     @Override
     public void onDestroy() {
-
     }
 
     @Override
@@ -88,8 +83,8 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
 
     @Override
     public Bundle prepareArguments(Intent intent, FrameLayout container) {
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(MainActivity.KEY_FIRST_FRAGMENT,container.getChildCount()==0);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(MainActivity.KEY_FIRST_FRAGMENT, container.getChildCount()==0);
 
         switch (parseMode(intent)){
             case MainActivity.MODE_ONLY_EVENT_FRAGMENT:

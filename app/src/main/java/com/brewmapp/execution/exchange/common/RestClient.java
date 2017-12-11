@@ -1,11 +1,6 @@
 package com.brewmapp.execution.exchange.common;
 
-import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Models;
-import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.User;
-import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
 import com.brewmapp.data.entity.wrapper.BeerColorInfo;
@@ -16,6 +11,7 @@ import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfo;
 import com.brewmapp.data.entity.wrapper.CityInfo;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.EventInfo;
@@ -33,6 +29,7 @@ import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
+import com.brewmapp.data.entity.wrapper.SearchBeerInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.common.base.BeerAftertasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerBrandDeserializer;
@@ -44,6 +41,7 @@ import com.brewmapp.execution.exchange.common.base.BeerPowerDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerSmellDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTasteDeserializer;
 import com.brewmapp.execution.exchange.common.base.BeerTypesDeserializer;
+import com.brewmapp.execution.exchange.common.base.BreweryDeserializer;
 import com.brewmapp.execution.exchange.common.base.CityDeserializer;
 import com.brewmapp.execution.exchange.common.base.CountryDeserializer;
 import com.brewmapp.data.entity.wrapper.UserInfo;
@@ -63,6 +61,7 @@ import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoTypeDeserializer;
 import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
+import com.brewmapp.execution.exchange.common.base.SearchBeerDeserializer;
 import com.brewmapp.execution.exchange.common.base.SubscriptionDeserializer;
 import com.brewmapp.execution.exchange.common.base.UserDeserializer;
 import com.google.gson.GsonBuilder;
@@ -152,6 +151,8 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(CityInfo.class, new CityDeserializer())
                 .registerTypeAdapter(FilterRestoLocationInfo.class, new FilterRestoOnMapDeserializer())
                 .registerTypeAdapter(UserInfo.class, new UserDeserializer())
+                .registerTypeAdapter(BreweryInfo.class, new BreweryDeserializer())
+                .registerTypeAdapter(SearchBeerInfo.class, new SearchBeerDeserializer())
                 ;
     }
 

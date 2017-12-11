@@ -115,10 +115,10 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static List<FilterBeerField> createDefault(Context context) {
         List<FilterBeerField> out = new ArrayList<>();
         out.add(new FilterBeerField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_beer_name), "Любое"));
-        out.add(new FilterBeerField(COUNTRY, R.drawable.ic_country, context.getString(R.string.search_beer_country), "Любая"));
+        out.add(new FilterBeerField(COUNTRY, R.drawable.ic_country, context.getString(R.string.search_beer_country), "Не имеет значения"));
         out.add(new FilterBeerField(TYPE, R.drawable.ic_beer_type, context.getString(R.string.search_beer_type), "Любой"));
         out.add(new FilterBeerField(BRAND, R.drawable.ic_brand, context.getString(R.string.search_beer_brand), "Любой"));
-        out.add(new FilterBeerField(PLACE, R.drawable.ic_city, context.getString(R.string.search_beer_place), "Любой город"));
+        out.add(new FilterBeerField(PLACE, R.drawable.ic_city, context.getString(R.string.search_beer_place), "Не имеет значения"));
         out.add(new FilterBeerField(POWER, R.drawable.ic_power, context.getString(R.string.search_beer_power), "Любая"));
         out.add(new FilterBeerField(BEER_FILTER, R.drawable.ic_filter_beer, context.getString(R.string.search_beer_filter), "Все виды"));
         out.add(new FilterBeerField(DENSITY, R.drawable.ic_broj, context.getString(R.string.search_beer_type_broj), "Любой"));
@@ -128,7 +128,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
         out.add(new FilterBeerField(SMELL, R.drawable.ic_beer, context.getString(R.string.search_beer_smell), "Любой"));
         out.add(new FilterBeerField(TASTE, R.drawable.ic_taste, context.getString(R.string.search_beer_taste), "Любой"));
         out.add(new FilterBeerField(AFTER_TASTE, R.drawable.ic_beer_aftertaste, context.getString(R.string.search_beer_after_taste), "Любое"));
-        out.add(new FilterBeerField(BREWERY, R.drawable.ic_brewery, context.getString(R.string.search_beer_factory), "Любая"));
+        out.add(new FilterBeerField(BREWERY, R.drawable.ic_brewery, context.getString(R.string.search_beer_factory), "Не имеет значения"));
         out.add(new FilterBeerField(PRICE_BEER, R.drawable.ic_price_range, context.getString(R.string.search_beer_price), "Любая"));
         return out;
     }

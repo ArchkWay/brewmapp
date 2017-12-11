@@ -52,7 +52,6 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-
     @Override
     public void setModel(Resto resto) {
         this.resto =resto;

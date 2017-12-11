@@ -26,6 +26,7 @@ import com.brewmapp.data.entity.BeerPowerTypes;
 import com.brewmapp.data.entity.BeerSmellTypes;
 import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
+import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
 import com.brewmapp.data.entity.CountryTypes;
@@ -57,6 +58,7 @@ import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.container.Reviews;
+import com.brewmapp.data.entity.container.SearchBeerTypes;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.container.Users;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
@@ -226,6 +228,15 @@ public interface Api {
     Call<ListResponse<Resto>> findRestos(@QueryMap RequestParams query,
                                          @FieldMap RequestParams params);
 
+    @POST("search/resto")
+    @FormUrlEncoded
+    Call<Restos> loadRestos(@QueryMap RequestParams query,
+                            @FieldMap RequestParams params);
+
+    @POST("search/beer")
+    @FormUrlEncoded
+    Call<SearchBeerTypes> loadBeers(@FieldMap RequestParams params);
+
     @POST("subscription")
     @FormUrlEncoded
     Call<ListResponse<Subscription>> loadUserSubscriptionsList(@FieldMap WrapperParams params);
@@ -390,6 +401,10 @@ public interface Api {
     @POST("beer/density")
     @FormUrlEncoded
     Call<BeerDensityTypes> loadBeerDensity(@FieldMap WrapperParams params);
+
+    @POST("brewery/shortdata")
+    @FormUrlEncoded
+    Call<BreweryTypes> loadBrewery(@FieldMap WrapperParams params);
 
     @GET("beer/ibu")
     Call<BeerIbuTypes> loadBeerIbu();

@@ -119,7 +119,7 @@ public class ContainerTasksImpl implements ContainerTasks {
     @Override
     public void loadRestoByBeer(String beer_id, SimpleSubscriber<ListResponse<Resto>> simpleSubscriber) {
         SearchPackage searchPackage = new SearchPackage("");
-        searchPackage.getAdditionalFields().put(Keys.menuBeer,beer_id);
+        searchPackage.getAdditionalFields().put(Keys.menuBeer, beer_id);
         searchRestosTask.execute(searchPackage, simpleSubscriber);
     }
 

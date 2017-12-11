@@ -146,6 +146,7 @@ public class Keys {
     //Filter beer keys
     public static final String BEER_TYPES = "beerTypes";
     public static final String SEARCH = "search";
+    public static final String BREWERY = "brewery";
 
     public static final String menuBeer="menuBeer";
     public static final String BIRTHDAY = "birthday";
@@ -156,6 +157,10 @@ public class Keys {
     public static final String BOOKS = "books";
     public static final String FILMS = "films";
     public static final String GAMES = "games";
+
+    public static final String SEARCH_RESULT = "search_result";
+
+
 
 
     public static final String BRAND_ID = "brand_id";

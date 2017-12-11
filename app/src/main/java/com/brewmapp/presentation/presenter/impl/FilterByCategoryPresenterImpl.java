@@ -2,6 +2,9 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
 
+import com.brewmapp.app.environment.FilterKeys;
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.PriceRangeType;
@@ -16,6 +19,7 @@ import com.brewmapp.execution.task.BeerPowerTask;
 import com.brewmapp.execution.task.BeerSmellTask;
 import com.brewmapp.execution.task.BeerTasteTask;
 import com.brewmapp.execution.task.BeerTypesTask;
+import com.brewmapp.execution.task.BreweryTask;
 import com.brewmapp.execution.task.CountryTask;
 import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.FullSearchFilterTask;
@@ -32,6 +36,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -52,6 +57,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     private CountryTask countryTask;
     private RegionTask regionTask;
     private LoadCityTaskFilter cityTask;
+    private BreweryTask breweryTask;
 
     //Beer filter queries
     private BeerTypesTask beerTypesTask;
@@ -83,7 +89,8 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
                                          BeerIbuTask beerIbuTask,
                                          CountryTask countryTask,
                                          RegionTask regionTask,
-                                         LoadCityTaskFilter cityTask) {
+                                         LoadCityTaskFilter cityTask,
+                                         BreweryTask breweryTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
@@ -103,11 +110,13 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         this.countryTask = countryTask;
         this.regionTask = regionTask;
         this.cityTask = cityTask;
+        this.breweryTask = breweryTask;
     }
 
     @Override
     public void onAttach(FilterByCategoryView filterByCategoryView) {
         super.onAttach(filterByCategoryView);
+        Paper.init(context);
     }
 
     @Override
@@ -130,6 +139,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
         countryTask.cancel();
         regionTask.cancel();
         cityTask.cancel();
+        breweryTask.cancel();
     }
 
     @Override
@@ -144,6 +154,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.RESTO_TYPE, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -162,6 +173,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.KITCHEN, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -181,6 +193,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.PRICE_RANGE, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -199,6 +212,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.FEATURES, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -236,6 +250,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_TYPES, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -254,6 +269,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_PACK, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -272,6 +288,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_BRAND, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -290,6 +307,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_COLOR, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -308,6 +326,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_TASTE, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -326,6 +345,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_SMELL, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -344,6 +364,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_AFTER_TASTE, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -362,6 +383,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_POWER, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -380,6 +402,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_DENSITY, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -398,6 +421,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_IBU, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -416,6 +440,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.COUNTRY, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -434,6 +459,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.REGION, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
@@ -452,9 +478,33 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.CITY, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
+    }
+
+    @Override
+    public void loadBrewery() {
+        breweryTask.cancel();
+        breweryTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                view.showProgressBar(false);
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                saveStoredFilter(FilterKeys.BEER_BREWERIES, iFlexibles);
+                view.showProgressBar(false);
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    private void saveStoredFilter(String filterKey, List<IFlexible> storeList) {
+        Paper.book().write(filterKey, storeList);
     }
 }

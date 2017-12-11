@@ -29,8 +29,8 @@ import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
-import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
@@ -166,6 +166,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             Intent intent = new Intent(this, FilterByCategory.class);
             intent.putExtra(Keys.FILTER_CATEGORY, position);
             intent.putExtra(Keys.BEER_TYPES, tabsView.getTabs().getSelectedTabPosition());
+            intent.putExtra(Keys.SEARCH, true);
             startActivityForResult(intent, RequestCodes.REQUEST_FILTER_CATEGORY);
         }
         return false;
@@ -186,6 +187,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
             }
         }
     }
+
     private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem, String countryId) {
         StringBuilder filter = new StringBuilder();
         StringBuilder filterId = new StringBuilder();
@@ -206,6 +208,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(priceRangeInfo.getModel().getId()).append(",");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(priceRangeInfos.get(0).getModel().getName());
+                    }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_PACK)) {
                 List<BeerPackInfo> beerPackInfos = new ArrayList<>();
@@ -220,6 +225,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(beerPackInfo.getModel().getName()).append(", ");
                             filterId.append(beerPackInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(beerPackInfos.get(0).getModel().getName());
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_TYPES)) {
@@ -236,6 +244,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerTypeInfo.getModel().getId()).append("|");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(beerTypeInfos.get(0).getModel().getName());
+                    }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BRAND)) {
                 List<BeerBrandInfo> beerBrandInfos = new ArrayList<>();
@@ -250,6 +261,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(beerBrandInfo.getModel().getName()).append(", ");
                             filterId.append(beerBrandInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(beerBrandInfos.get(0).getModel().getName());
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_COLOR)) {
@@ -266,6 +280,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerColorInfo.getModel().getId()).append("|");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(beerColorInfos.get(0).getModel().getName());
+                    }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_POWER)) {
                 List<BeerPowerInfo> beerPowers = new ArrayList<>();
@@ -280,6 +297,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(beerPowerInfo.getModel().getName()).append(", ");
                             filterId.append(beerPowerInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(beerPowers.get(0).getModel().getName());
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_SMELL)) {
@@ -296,6 +316,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerSmellInfo.getModel().getId()).append("|");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(beerSmellInfos.get(0).getModel().getName());
+                    }
                 }
             }  else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_TASTE)) {
                 List<BeerTasteInfo> beerTasteInfos = new ArrayList<>();
@@ -310,6 +333,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(beerTasteInfo.getModel().getName()).append(", ");
                             filterId.append(beerTasteInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(beerTasteInfos.get(0).getModel().getName());
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_AFTER_TASTE)) {
@@ -326,6 +352,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerAftertasteInfo.getModel().getId()).append("|");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(beerAftertasteInfos.get(0).getModel().getName());
+                    }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_DENSITY)) {
                 List<BeerDensityInfo> beerDensityInfos = new ArrayList<>();
@@ -341,6 +370,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(beerDensityInfo.getModel().getId()).append("|");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(beerDensityInfos.get(0).getModel().getName());
+                    }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_IBU)) {
                 List<BeerIbuInfo> beerIbuInfos = new ArrayList<>();
@@ -355,6 +387,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(beerIbuInfo.getModel().getName()).append(", ");
                             filterId.append(beerIbuInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(beerIbuInfos.get(0).getModel().getName());
                     }
                 }
             }
@@ -394,6 +429,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(restoTypeInfos.get(i).getModel().getId()).append("|");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(restoTypeInfos.get(0).getModel().getName());
+                    }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.KITCHEN)) {
                 List<KitchenInfo> kitchenInfos = new ArrayList<>();
@@ -408,6 +446,9 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(kitchenInfo.getModel().getName()).append(", ");
                             filterId.append(kitchenInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(kitchenInfos.get(0).getModel().getName());
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_RANGE)) {
@@ -424,7 +465,11 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filterId.append(priceRangeInfo.getModel().getId()).append(",");
                         }
                     }
+                    if (!notEmpty) {
+                        filter.append(priceRangeInfos.get(0).getModel().getName());
+                    }
                 }
+
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.FEATURES)) {
                 List<FeatureInfo> featureInfos = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.FEATURES);
@@ -438,6 +483,27 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                             filter.append(featureInfo.getModel().getName()).append(", ");
                             filterId.append(featureInfo.getModel().getId()).append("|");
                         }
+                    }
+                    if (!notEmpty) {
+                        filter.append(featureInfos.get(0).getModel().getName());
+                    }
+                }
+            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BREWERIES)) {
+                List<BreweryInfo> breweryInfos = new ArrayList<>();
+                tempList = Paper.book().read(FilterKeys.BEER_BREWERIES);
+                if (tempList != null) {
+                    for (Object o : tempList) {
+                        breweryInfos.add((BreweryInfo) o);
+                    }
+                    for (BreweryInfo breweryInfo : breweryInfos) {
+                        if (breweryInfo.getModel().isSelected()) {
+                            notEmpty = true;
+                            filter.append(breweryInfo.getModel().getName()).append(", ");
+                            filterId.append(breweryInfo.getModel().getId()).append(",");
+                        }
+                    }
+                    if (!notEmpty) {
+                        filter.append(breweryInfos.get(0).getModel().getName());
                     }
                 }
             }

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,25 +8,68 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:id="@+id/fragment.search.tabs"/>
+        android:id="@+id/fragment.events.tabs"/>
 
-    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/fragment.search.swipe" >
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment.search.list"/>
-    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/AppTheme.Button.Green.Solid.Square"
-        android:id="@+id/activity.search.more"
-        android:textAllCaps="true"
-        android:textSize="@dimen/text_size_common"
-        android:text="@string/search"/>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/filter_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/filter_list"
+                android:layout_marginStart="3dp"
+                android:orientation="vertical"
+                android:id="@+id/lyt_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <CheckBox
+                android:visibility="gone"
+                android:id="@+id/offer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/special_offer" />
+
+            <CheckBox
+                android:visibility="gone"
+                android:id="@+id/craft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/craft_beer" />
+
+            <CheckBox
+                android:visibility="gone"
+                android:id="@+id/filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/filter_beer" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/accept.filter"
+                style="@style/AppTheme.Button.Green.Solid.Square"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="6dp"
+                android:layout_below="@+id/lyt_option"
+                android:text="@string/search"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_common" />
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 </LinearLayout>

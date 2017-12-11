@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Location;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
@@ -79,7 +80,12 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
         edit_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DialogSelectAddress().show(getActivity().getSupportFragmentManager(),"qqq");
+                presenter.DialogSelectAddress().showDialod(getActivity().getSupportFragmentManager(), new DialogSelectAddress.OnSelectAddress() {
+                    @Override
+                    public void onOk(Location location) {
+
+                    }
+                });
             }
         });
 

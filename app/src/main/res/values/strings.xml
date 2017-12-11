@@ -415,5 +415,6 @@
     <string name="new_value">Новое значение</string>
     <string name="title_dialog_brand">Поиск бренда</string>
     <string name="text_start_search">Начните вводить текст</string>
+    <string name="txt_hint_dialog_select_address">Для выбора адреса тапните на карте, затем нажните ОК</string>
 
 </resources>

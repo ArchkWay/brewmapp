@@ -2,6 +2,7 @@ package com.brewmapp.presentation.presenter.contract;
 
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.view.contract.RestoEditFragmentView;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectAddress;
 import com.daimajia.slider.library.SliderLayout;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -20,4 +21,6 @@ public interface RestoEditFragmentPresenter extends LivePresenter<RestoEditFragm
     void storeChanges();
 
     RestoDetail getRestoDetail_new_data();
+
+    DialogSelectAddress DialogSelectAddress();
 }

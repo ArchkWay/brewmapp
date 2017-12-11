@@ -1,21 +1,25 @@
 package com.brewmapp.presentation.view.impl.dialogs;
 
-import android.content.DialogInterface;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
+
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.data.entity.Location;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
@@ -32,51 +36,64 @@ import java.util.List;
 
 public class DialogSelectAddress extends DialogFragment {
     private MapView mapView;
+    private TextView textView;
+    private Location location;
+    private Button button;
+    private OnSelectAddress onSelectAddress;
+    private Address address;
+
     public DialogSelectAddress(){
+
     }
+
+    public void showDialod(FragmentManager fragmentManager, OnSelectAddress onSelectAddress){
+        this.onSelectAddress=onSelectAddress;
+        show(fragmentManager,"qqq");
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View rootView=inflater.inflate(R.layout.dialog_select_address, null);
+        textView= (TextView) rootView.findViewById(R.id.fragment_dialog_text);
+        button= (Button) rootView.findViewById(R.id.fragment_dialog_button_ok);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //location.setCity_id();
+                onSelectAddress.onOk(location);
+                dismiss();
+            }
+        });
         mapView= (MapView) rootView.findViewById(R.id.fragment_dialog_map);
         mapView.onCreate(null);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+
                 GoogleMapOptions googleMapsOptions = new GoogleMapOptions();
                 googleMapsOptions.zOrderOnTop( true );
+                getDialog().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
                 googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                try {
+                    Double lat=Double.valueOf(location.getMetro().getLat());
+                    Double lon=Double.valueOf(location.getMetro().getLon());
+                    if(lat!=0.0&&lon!=0.0)
+                        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lon) , 14.0f) );
+                }   catch (Exception e){}
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng latLng) {
-                        List<Address> addresses;
                         Geocoder geocoder = new Geocoder(getActivity());
                         try {
-                            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 10);
-                            if(addresses.size()>0) {
-                                AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-                                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
-                                Iterator<Address> iterator=addresses.iterator();
-                                while (iterator.hasNext()) {
-                                    Address address=iterator.next();
-                                    StringBuilder sb = new StringBuilder();
-                                    sb.append(address.getAddressLine(0));
-                                    arrayAdapter.add(sb.toString());
-                                }
-                                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                });
-                                builderSingle.show();
-                            }
-
+                            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                            address=addresses.get(0);
+                            textView.setText(address.getAddressLine(0));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -87,7 +104,6 @@ public class DialogSelectAddress extends DialogFragment {
 
         return rootView;
     }
-
 
 
     @Override
@@ -101,4 +117,15 @@ public class DialogSelectAddress extends DialogFragment {
         super.onResume();
         mapView.onResume();
     }
+
+
+    public DialogSelectAddress setLocation(Location location) {
+        this.location = location;
+        return this;
+    }
+
+    public interface OnSelectAddress{
+        void onOk(Location location);
+    }
+
 }

@@ -17,6 +17,7 @@ import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.RestoEditFragmentView;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectAddress;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -158,6 +159,11 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
     @Override
     public RestoDetail getRestoDetail_new_data() {
         return restoDetail_new_data;
+    }
+
+    @Override
+    public DialogSelectAddress DialogSelectAddress() {
+        return new DialogSelectAddress().setLocation(restoDetail_old_data.getResto().getLocation());
     }
 
     private boolean isNeedSaveField(String getMethod_name, Object oldObject, Object newObject) {

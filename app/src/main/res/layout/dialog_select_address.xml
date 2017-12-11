@@ -4,13 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     >
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sssssssssssssssssssssssssssssss"
-        />
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Text.H4"
+            android:id="@+id/fragment.dialog.text"
+            android:paddingLeft="@dimen/common_block_space"
+            android:paddingRight="@dimen/common_block_space"
+            android:layout_weight="1"
+            android:hint="@string/txt_hint_dialog_select_address"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/yes"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_gravity="top"
+            android:id="@+id/fragment.dialog.button_ok"
+            />
+    </LinearLayout>
     <com.google.android.gms.maps.MapView
         android:id="@+id/fragment.dialog.map"
         android:layout_width="match_parent"

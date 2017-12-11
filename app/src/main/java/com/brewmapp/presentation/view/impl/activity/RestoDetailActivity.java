@@ -24,6 +24,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Kitchen;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LikeDislikePackage;
@@ -44,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,6 +55,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
@@ -64,6 +67,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_resto_detail_name)    TextView name;
     @BindView(R.id.activity_restoDetails_slider)    SliderLayout slider;
+    @BindView(R.id.activity_restoDetails_container_slider)    View container_slider;
     @BindView(R.id.activity_restoDetails_indicator)    PagerIndicator pagerIndicator;
     @BindView(R.id.activity_restoDetails_slider_photosCounter)    TextView photosCounter;
     @BindView(R.id.activity_resto_detail_text_view_site)    TextView site;
@@ -119,7 +123,16 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     private Resto resto;
     private ArrayList<String> photosResto=new ArrayList<>();
+    private ArrayList<String> photosRestoPreview=new ArrayList<>();
     private FlexibleAdapter adapter_reviews;
+    private  Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+            swipe.setEnabled(true);
+            swipe.setRefreshing(true);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +162,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
+        slider.setVisibility(View.INVISIBLE);
     }
 
     private void setTitleToButtonOfMoreDescription(boolean click) {
@@ -189,16 +203,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void enableControls(boolean enabled, int code) {
 
         if(enabled){
-            swipe.setRefreshing(!enabled);
-            swipe.setEnabled(!enabled);
+            swipe.removeCallbacks(runnable);
+            swipe.setRefreshing(false);
+            swipe.setEnabled(false);
         }else{
-            swipe.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    swipe.setEnabled(!enabled);
-                    swipe.setRefreshing(!enabled);
-                }
-            },2000);
+            swipe.postDelayed(runnable,2000);
         }
 
 
@@ -224,50 +233,84 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 try {text_view_place.setText(restoDetail.getResto().getAdressFormat());}catch (Exception e){}
                 setTitle(restoDetail.getResto().getName());
                 name.setText(restoDetail.getResto().getName());
-                photosResto.clear();
-                if(restoDetail.getResto().getThumb()==null) {
-                    slider.addSlider(new DefaultSliderView(this)
-                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                            .image(R.drawable.ic_default_resto)
-                    );
-                }else {
-                    photosResto.add(restoDetail.getResto().getThumb());
-                }
-                for (Kitchen kitchen:restoDetail.getResto_kitchen())
-                    if(kitchen.getGetThumb()!=null)
-                        photosResto.add(kitchen.getGetThumb());
+                //fill photos
+                presenter.loadAllPhoto(new SimpleSubscriber<List<Photo>>(){
 
-                for(String imgUrl:photosResto){
-                    if(imgUrl!=null) {
-
-                        DefaultSliderView defaultSliderView=new DefaultSliderView(this);
-                        defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
-                        defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
-                        defaultSliderView.image(imgUrl);
-                        defaultSliderView.setOnSliderClickListener(slider1 -> {
-                                    Intent intent = new Intent(this, PhotoSliderActivity.class);
-                                    String[] urls = {imgUrl};
-                                    intent.putExtra(Keys.PHOTOS, urls);
-                                    startActivity(intent);
-                                });
-                        slider.addSlider(defaultSliderView);
-                    }
-                }
-
-                presenter.loadAllPhoto(slider);
-                if(photosResto.size()>0) {
-                    photosCounter.setText(String.format("%d/%d", 1, photosResto.size()));
-                    slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
-                        @Override
-                        public void onPageSelected(int position) {
-                            photosCounter.setText(String.format("%d/%d", position + 1, photosResto.size()));
+                    @Override
+                    public void onNext(List<Photo> photos) {
+                        super.onNext(photos);
+                        Iterator<Photo> iterator=photos.iterator();
+                        while (iterator.hasNext()) {
+                            Photo photo=iterator.next();
+                            photosResto.add(photo.getThumb().getUrl());
+                            photosRestoPreview.add(photo.getThumb().getThumbUrl());
                         }
-                    });
-                    cnt_photo.setText(String.valueOf(photosResto.size()));
-                }else {
-                    pagerIndicator.setVisibility(View.GONE);
-                    photosCounter.setText("0/0");
-                }
+                        fillSlider();
+                    }
+
+                    private void fillSlider() {
+                        if(restoDetail.getResto().getThumb()==null&&photosRestoPreview.size()==0) {
+                            slider.addSlider(new DefaultSliderView(RestoDetailActivity.this)
+                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                    .image(R.drawable.ic_default_resto)
+                            );
+                        }else {
+
+                            photosRestoPreview.add(restoDetail.getResto().getThumb());
+                            photosResto.add(restoDetail.getResto().getThumb());
+
+                            for (Kitchen kitchen:restoDetail.getResto_kitchen())
+                                if(kitchen.getGetThumb()!=null) {
+                                    photosRestoPreview.add(kitchen.getGetThumb());
+                                    photosResto.add(kitchen.getGetThumb());
+                                }
+
+                            for(String imgUrl:photosRestoPreview){
+                                if(imgUrl!=null) {
+                                    DefaultSliderView defaultSliderView=new DefaultSliderView(RestoDetailActivity.this);
+                                    defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
+                                    defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
+                                    defaultSliderView.image(imgUrl);
+                                    defaultSliderView.setOnSliderClickListener(slider1 -> {
+                                        Intent intent = new Intent(RestoDetailActivity.this, PhotoSliderActivity.class);
+                                        String[] stringsPhoto=new String[photosResto.size()];
+                                        photosResto.toArray(stringsPhoto);
+                                        intent.putExtra(Keys.PHOTOS, stringsPhoto);
+                                        startActivity(intent);
+                                    });
+                                    slider.addSlider(defaultSliderView);
+                                }
+                            }
+                        }
+
+                        if(photosRestoPreview.size()>0) {
+                            photosCounter.setText(String.format("%d/%d", 1, photosRestoPreview.size()));
+                            slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+                                @Override
+                                public void onPageSelected(int position) {
+                                    photosCounter.setText(String.format("%d/%d", position + 1, photosRestoPreview.size()));
+                                }
+                            });
+                            cnt_photo.setText(String.valueOf(photosRestoPreview.size()));
+                            slider.setVisibility(View.VISIBLE);
+                        }else {
+                            container_slider.setVisibility(View.GONE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        fillSlider();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        fillSlider();
+                    }
+                });
 
                 site.setText(restoDetail.getResto().getSite());
                 String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();

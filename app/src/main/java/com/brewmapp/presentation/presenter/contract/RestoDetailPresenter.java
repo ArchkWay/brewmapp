@@ -2,12 +2,14 @@ package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
 
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
-import com.daimajia.slider.library.SliderLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 /**
@@ -39,5 +41,5 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
     void startMapFragment(RestoDetailActivity restoDetailActivity);
 
-    void loadAllPhoto(SliderLayout slider);
+    void loadAllPhoto(SimpleSubscriber<List<Photo>> slider);
 }

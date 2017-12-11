@@ -48,13 +48,8 @@ import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
-import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -524,7 +519,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     }
 
     @Override
-    public void loadAllPhoto(SliderLayout sliderLayout) {
+    public void loadAllPhoto(SimpleSubscriber<List<Photo>> simpleSubscriber) {
         class LoadPhotoResto extends BaseNetworkTask<String, List<Photo>> {
 
             public LoadPhotoResto(MainThread mainThread, Executor executor, Api api) {
@@ -553,39 +548,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 BeerMap.getAppComponent().api()
         ).execute(
                 String.valueOf(restoDetail.getResto().getId()),
-                new SimpleSubscriber<List<Photo>>(){
-                    @Override
-                    public void onNext(List<Photo> photos) {
-                        super.onNext(photos);
-                        Iterator<Photo> iterator=photos.iterator();
-                        while (iterator.hasNext())
-                            try {
-                                Photo photo=iterator.next();
-                                String strThumbUrl  =photo.getThumb().getThumbUrl();
-                                String strUrl       =photo.getThumb().getUrl();
-                                sliderLayout.addSlider(
-                                        new DefaultSliderView(sliderLayout.getContext())
-                                                .setScaleType(BaseSliderView.ScaleType.CenterCrop)
-                                                .image(strThumbUrl)
-                                                .setOnSliderClickListener(slider1 -> {
-                                                    //showMessage(sliderLayout.getContext().getString(R.string.message_develop));
-
-                                                    Intent intent = new Intent(sliderLayout.getContext(), PhotoSliderActivity.class);
-                                                    String[] urls = {strUrl};
-                                                    intent.putExtra(Keys.PHOTOS, urls);
-                                                    sliderLayout.getContext().startActivity(intent);
-
-                                                })
-                                );
-                            }catch (Exception e){};
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                    }
-                }
+                simpleSubscriber
         );
 
     }

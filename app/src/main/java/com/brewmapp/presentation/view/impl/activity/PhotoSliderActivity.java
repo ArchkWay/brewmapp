@@ -51,8 +51,13 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
         enableBackButton();
         slider.stopAutoCycle();
         String[] urls = getIntent().getStringArrayExtra(Keys.PHOTOS);
-        for(String url: urls) {
-            slider.addSlider(new CustomSliderView(this, url));
+        try {
+            for(String url: urls) {
+                slider.addSlider(new CustomSliderView(this, url));
+            }
+        }catch (Exception e){
+            showMessage(getString(R.string.enter));
+            finish();
         }
     }
 

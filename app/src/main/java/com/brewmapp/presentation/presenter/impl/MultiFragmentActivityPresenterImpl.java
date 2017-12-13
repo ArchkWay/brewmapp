@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
+import com.brewmapp.presentation.view.impl.fragment.ChatFragment.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
@@ -43,6 +44,9 @@ public class MultiFragmentActivityPresenterImpl extends BasePresenter<MultiFragm
                     break;
                 case MultiFragmentActivityView.MODE_RESTO_EDIT:
                     view.showFragment(new RestoEditFragment());
+                    break;
+                case MultiFragmentActivityView.MODE_CHAT:
+                    view.showFragment(new ChatFragment());
                     break;
                 default:
                     view.commonError();return;

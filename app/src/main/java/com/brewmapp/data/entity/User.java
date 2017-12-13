@@ -3,6 +3,7 @@ package com.brewmapp.data.entity;
 import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -15,7 +16,7 @@ import static com.brewmapp.BuildConfig.SERVER_API_VER;
  * Created by oleg on 15.07.17.
  */
 
-public class User {
+public class User implements Serializable {
     private int id;
     private String phone;
     private String code;

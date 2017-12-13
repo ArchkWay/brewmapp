@@ -11,6 +11,7 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
+import com.brewmapp.presentation.view.impl.fragment.ChatFragment.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
 import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
@@ -24,7 +25,8 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
         AboutFragment.OnFragmentInteractionListener,
         WebViewFragment.OnFragmentInteractionListener ,
         BeerEditFragment.OnFragmentInteractionListener,
-        RestoEditFragment.OnFragmentInteractionListener
+        RestoEditFragment.OnFragmentInteractionListener,
+        ChatFragment.OnFragmentInteractionListener
 
 {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -22,7 +23,11 @@ import com.brewmapp.execution.task.AllowFriend;
 import com.brewmapp.execution.task.DeleteFriend;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
+import com.brewmapp.presentation.view.impl.activity.StartActivity;
 
 import javax.inject.Inject;
 
@@ -44,6 +49,7 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
     final int MODE_DELETE_REQUEST_CONTACT=1;
     final int MODE_DELETE_FRIEND_CONTACT =2;
     final int MODE_ACCEPT_REQUEST_CONTACT=3;
+
 
     @Inject    DeleteFriend deleteFriend;
     @Inject    AllowFriend allowFriend;
@@ -71,8 +77,8 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
                     mode=MODE_DELETE_REQUEST_CONTACT;
                     break;
                 case 1:
-                    mode= MODE_DELETE_FRIEND_CONTACT;
-                    break;
+                    //mode= MODE_DELETE_FRIEND_CONTACT;
+                    return;
                 case 2:
                     mode=MODE_ACCEPT_REQUEST_CONTACT;
                     break;

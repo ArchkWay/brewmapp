@@ -166,4 +166,10 @@ public class Keys {
     public static final String BRAND_ID = "brand_id";
     public static final String TYPE_ID = "type_id";
     public static final String BREWERY_ID = "brewery_id";
+
+    public static final String CHAT_EVENT_AUTH = "auth";
+    public static final String CHAT_EVENT_AUTH_SUCCESS = "auth/success";
+    public static final String CHAT_EVENT_AUTH_ERROR = "auth/error";
+    public static final String CHAT_EVENT_ROOMS = "rooms";
+    public static final String CHAT_EVENT_ROOMS_SUCCESS = "rooms/success";
 }

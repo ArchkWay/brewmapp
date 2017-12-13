@@ -21,21 +21,11 @@ import io.socket.client.Socket;
 public class BeerMap extends Application {
 
     public static final String OLD_API_ACTION = "brewmap.OLD_API";
-    public static final String CHAT_SERVER_URL = "https://chat.brewmapp.com:8443";
 
     private static AppComponent appComponent;
 
     public static AppComponent getAppComponent() {
         return appComponent;
-    }
-
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket(CHAT_SERVER_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -51,16 +41,10 @@ public class BeerMap extends Application {
 
     private BroadcastReceiver oldApiReceiver = new BroadcastReceiver() {
 
-
-
         @Override
         public void onReceive(Context context, Intent intent) {
 
         }
     };
-
-    public Socket getSocket() {
-        return mSocket;
-    }
 
 }

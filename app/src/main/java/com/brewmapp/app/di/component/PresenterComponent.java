@@ -55,6 +55,7 @@ import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
+import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.ChatFragment.ChatFragment;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 @PresenterScope
@@ -72,6 +73,7 @@ public interface PresenterComponent {
     void inject(MessageFragment fragment);
     void inject(BeerEditFragment fragment);
     void inject(RestoEditFragment fragment);
+    void inject(ChatFragment fragment);
 
     void inject(BaseActivity activity);
     void inject(StartActivity activity);

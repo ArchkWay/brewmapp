@@ -172,4 +172,8 @@ public class Keys {
     public static final String CHAT_EVENT_AUTH_ERROR = "auth/error";
     public static final String CHAT_EVENT_ROOMS = "rooms";
     public static final String CHAT_EVENT_ROOMS_SUCCESS = "rooms/success";
+    public static final String CHAT_EVENT_LOAD_SUCCESS = "load/success";
+    public static final String CHAT_EVENT_LOAD_ERROR = "load/error";
+    public static final String CHAT_EVENT_LOAD = "load";
+    public static final String CHAT_KEY_LAST_MSG = "last_msg";
 }

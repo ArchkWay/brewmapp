@@ -12,6 +12,8 @@ import dagger.Component;
 
 import com.brewmapp.app.di.module.ShareModule;
 import com.brewmapp.execution.exchange.common.Api;
+
+import io.socket.client.Socket;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
 @Component(modules = {AppModule.class, RepoModule.class, ShareModule.class})
@@ -22,4 +24,5 @@ public interface AppComponent {
     MainThread mainThread();
     Executor executor();
     Api api();
+    Socket getSocket();
 }

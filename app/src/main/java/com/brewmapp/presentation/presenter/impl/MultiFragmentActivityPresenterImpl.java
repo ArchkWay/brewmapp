@@ -5,10 +5,10 @@ import android.content.Intent;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.ChatFragment.ChatFragment;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.AboutFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 
 import javax.inject.Inject;
 

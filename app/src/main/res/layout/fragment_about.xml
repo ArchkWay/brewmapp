@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment">
+    tools:context="com.brewmapp.presentation.view.impl.fragment.Simple.AboutFragment">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

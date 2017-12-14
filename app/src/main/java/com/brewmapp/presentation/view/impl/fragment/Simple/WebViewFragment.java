@@ -1,4 +1,4 @@
-package com.brewmapp.presentation.view.impl.fragment.SimpleFragment;
+package com.brewmapp.presentation.view.impl.fragment.Simple;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
-import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 
 public class WebViewFragment extends Fragment {

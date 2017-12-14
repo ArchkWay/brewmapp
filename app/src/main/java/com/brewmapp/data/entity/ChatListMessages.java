@@ -13,4 +13,43 @@ public class ChatListMessages {
     private User fromUser;
     private int pageCount;
 
+    public List<ChatMessage> getData() {
+        return data;
+    }
+
+    public void setData(List<ChatMessage> data) {
+        this.data = data;
+    }
+
+    public ChatQuery getQuery() {
+        return query;
+    }
+
+    public void setQuery(ChatQuery query) {
+        this.query = query;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
 }

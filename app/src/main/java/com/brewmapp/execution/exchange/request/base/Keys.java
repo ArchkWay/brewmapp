@@ -175,5 +175,11 @@ public class Keys {
     public static final String CHAT_EVENT_LOAD_SUCCESS = "load/success";
     public static final String CHAT_EVENT_LOAD_ERROR = "load/error";
     public static final String CHAT_EVENT_LOAD = "load";
+    public static final String CHAT_EVENT_SEND = "send";
+    public static final String CHAT_EVENT_SEND_SUCCESS = "send/success";
+    public static final String CHAT_EVENT_SEND_ERROR = "send/error";
     public static final String CHAT_KEY_LAST_MSG = "last_msg";
+    public static final String CHAT_KEY_MSG_TEXT = "msg_text";
+    public static final String CHAT_DIR_INPUT = "in";
+    public static final String CHAT_DIR_OUTPUT = "out";
 }

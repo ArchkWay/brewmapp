@@ -1,7 +1,8 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
 
@@ -13,4 +14,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface ChatFragmentPresenter extends LivePresenter<ChatFragmentView> {
     void connectToChat(Intent activity);
+
+        void attemptSend(TextView editText);
 }

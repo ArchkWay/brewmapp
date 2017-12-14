@@ -5,10 +5,10 @@ package com.brewmapp.data.entity;
  */
 
 public class ChatDialog {
-    int id;
-    int unread;
-    User user;
-    ChatInfoMessage lastMessage;
+    private int id;
+    private int unread;
+    private User user;
+    private ChatInfoMessage lastMessage;
 
     public int getId() {
         return id;

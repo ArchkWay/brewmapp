@@ -55,7 +55,7 @@ import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.ChatFragment.ChatFragment;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 @PresenterScope

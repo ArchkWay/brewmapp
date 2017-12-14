@@ -431,5 +431,8 @@
     <string name="search_result">Результаты поиска</string>
     <string name="beer_avg_price">Средняя цена: 500мл / %s /U+20BD</string>
     <string name="beer_craft">Крафтовое пиво</string>
+    <string name="prompt_message">Message</string>
+    <string name="action_send">Send</string>
+    <string name="user_action_typing">is typing</string>
 
 </resources>

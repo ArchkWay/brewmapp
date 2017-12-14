@@ -15,5 +15,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public interface ChatFragmentPresenter extends LivePresenter<ChatFragmentView> {
     void connectToChat(Intent activity);
 
-        void attemptSend(TextView editText);
+        void send(TextView editText);
 }

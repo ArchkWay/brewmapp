@@ -29,8 +29,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layout = -1;
         switch (viewType) {
-            case Message.TYPE_MESSAGE:
-                layout = R.layout.item_chat_message;
+            case Message.TYPE_MESSAGE_INPUT:
+                layout = R.layout.item_chat_message_input;
+                break;
+            case Message.TYPE_MESSAGE_OUTPUT:
+                layout = R.layout.item_chat_message_output;
                 break;
             case Message.TYPE_LOG:
                 layout = R.layout.item_chat_log;
@@ -38,6 +41,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             case Message.TYPE_ACTION:
                 layout = R.layout.item_chat_action;
                 break;
+            default:
+                layout = R.layout.item_chat_error;
         }
         View v = LayoutInflater
                 .from(parent.getContext())
@@ -50,6 +55,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = mMessages.get(position);
         viewHolder.setMessage(message.getMessage());
         viewHolder.setUsername(message.getUsername());
+
     }
 
     @Override
@@ -65,6 +71,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mUsernameView;
         private TextView mMessageView;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

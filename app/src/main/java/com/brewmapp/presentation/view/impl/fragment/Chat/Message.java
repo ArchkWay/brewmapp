@@ -6,13 +6,15 @@ package com.brewmapp.presentation.view.impl.fragment.Chat;
 
 public class Message {
 
-    public static final int TYPE_MESSAGE = 0;
+    public static final int TYPE_MESSAGE_INPUT = 0;
+    public static final int TYPE_MESSAGE_OUTPUT = 3;
     public static final int TYPE_LOG = 1;
     public static final int TYPE_ACTION = 2;
 
     private int mType;
     private String mMessage;
     private String mUsername;
+    private String mDirection;
 
     private Message() {}
 
@@ -28,6 +30,13 @@ public class Message {
         return mUsername;
     };
 
+    public String getmDirection() {
+        return mDirection;
+    }
+
+    public void setmDirection(String mDirection) {
+        this.mDirection = mDirection;
+    }
 
     public static class Builder {
         private final int mType;
@@ -47,6 +56,7 @@ public class Message {
             mMessage = message;
             return this;
         }
+
 
         public Message build() {
             Message message = new Message();

@@ -1,5 +1,7 @@
 package com.brewmapp.app.di.component;
 
+import android.app.Service;
+
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
@@ -61,6 +63,9 @@ import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 @PresenterScope
 @Subcomponent(modules = PresenterModule.class)
 public interface PresenterComponent {
+
+    void inject(Service service);
+
     void inject(BaseFragment baseFragment);
     void inject(ProfileFragment fragment);
     void inject(FriendsFragment fragment);

@@ -1,5 +1,6 @@
 package com.brewmapp.app.di.module;
 
+import android.app.Service;
 import android.view.View;
 
 import com.brewmapp.app.di.scope.PresenterScope;
@@ -101,13 +102,17 @@ import dagger.Provides;
 import ru.frosteye.ovsa.di.module.BasePresenterModule;
 
 @Module
-public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragment> {
+public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragment, Service> {
     public PresenterModule(View view) {
         super(view);
     }
 
     public PresenterModule(BaseActivity activity) {
         super(activity);
+    }
+
+    public PresenterModule(Service service) {
+        super(service);
     }
 
     public PresenterModule(BaseFragment fragment) {

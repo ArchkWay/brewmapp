@@ -42,7 +42,10 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     private UserRepo userRepo;
 
     @Inject
-    public ChatFragmentPresenterImpl(UserRepo userRepo){this.userRepo = userRepo;}
+    public ChatFragmentPresenterImpl(UserRepo userRepo, Socket socket){
+        this.userRepo = userRepo;
+        this.mSocket=socket;
+    }
 
     @Override
     public void onAttach(ChatFragmentView chatFragmentView) {
@@ -51,8 +54,6 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
     @Override
     public void connectToChat(Intent intent) {
-
-        mSocket=BeerMap.getAppComponent().getSocket();
 
         chatSwap.setHandlers();
 

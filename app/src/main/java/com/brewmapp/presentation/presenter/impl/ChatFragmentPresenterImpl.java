@@ -54,15 +54,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
         mSocket=BeerMap.getAppComponent().getSocket();
 
-        chatSwap.setHandlersErrors();
-
-        mSocket.on(Keys.CHAT_EVENT_AUTH_SUCCESS, args -> view.getActivity().runOnUiThread(()->chatSwap.requestDialogs()));
-        mSocket.on(Socket.EVENT_CONNECT,args ->  view.getActivity().runOnUiThread(()->chatSwap.authorization()));
-        mSocket.on(Keys.CHAT_EVENT_ROOMS_SUCCESS, args -> view.getActivity().runOnUiThread(()->chatSwap.loadDialogs(args)));
-        mSocket.on(Keys.CHAT_EVENT_LOAD_SUCCESS, args -> view.getActivity().runOnUiThread(()->chatSwap.loadMessages(args)));
-        mSocket.on(Keys.CHAT_EVENT_SEND_SUCCESS, args -> view.getActivity().runOnUiThread(()->view.sendSuccess()));
-        mSocket.on(Socket.EVENT_MESSAGE, args -> view.getActivity().runOnUiThread(()->chatSwap.receive(args)));
-
+        chatSwap.setHandlers();
 
         try {
             friend = (User) intent.getSerializableExtra(RequestCodes.INTENT_EXTRAS);
@@ -74,32 +66,13 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     }
 
     @Override
-    public void send(TextView editText) {
-        String string_send=editText.getText().toString().trim();
-
-        view.addMessage(
-                new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
-                        .username(userRepo.load().getFormattedName())
-                        .message(string_send)
-                        .build()
-                    );
-
-        try {
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put(Keys.USER_ID,friend.getId());
-            jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,chatSwap.escapeUnicodeText(string_send));
-            mSocket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
-        } catch (JSONException e) {
-            view.commonError(e.getMessage());
-        }
-
-    }
+    public void send(TextView textView) {chatSwap.send(textView.getText().toString());}
 
     @Override
     public void onDestroy() {chatSwap.disconnect();}
 
     class ChatSwap{
-        //Start
+        //Start/stop
         public void authorization() {
             if(!isConnected) {
                 isConnected = true;
@@ -114,6 +87,10 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 }
             }
         }
+        public void disconnect() {
+            mSocket.disconnect();
+            mSocket.off();
+        }
         //Dialogs
         public void requestDialogs() {
             mSocket.emit(Keys.CHAT_EVENT_ROOMS);
@@ -125,7 +102,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     requestMessages(chatDialog);
                 }
         }
-        //Messages
+        //Load old messages
         private void requestMessages(ChatDialog chatDialog) {
             JSONObject jsonObject=new JSONObject();
             try {
@@ -204,19 +181,42 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 view.getActivity().runOnUiThread(() -> view.addMessage(message));
             }
         }
-        //Errors
-        public void setHandlersErrors() {
+        public void send(String string_send) {
+
+            view.addMessage(
+                    new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
+                            .username(userRepo.load().getFormattedName())
+                            .message(string_send)
+                            .build()
+            );
+
+            try {
+                JSONObject jsonObject=new JSONObject();
+                jsonObject.put(Keys.USER_ID,friend.getId());
+                jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,chatSwap.escapeUnicodeText(string_send));
+                mSocket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
+            } catch (JSONException e) {
+                view.commonError(e.getMessage());
+            }
+
+        }
+        //Handlers
+        public void setHandlers() {
+            //Errors
             mSocket.on(Socket.EVENT_DISCONNECT,args -> view.getActivity().runOnUiThread(()->view.commonError()));
             mSocket.on(Socket.EVENT_CONNECT_ERROR, args -> view.getActivity().runOnUiThread(()->view.commonError()));
             mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> view.getActivity().runOnUiThread(()->view.commonError()));
             mSocket.on(Keys.CHAT_EVENT_AUTH_ERROR, args -> view.getActivity().runOnUiThread(()->view.commonError()));
             mSocket.on(Keys.CHAT_EVENT_LOAD_ERROR, args -> view.getActivity().runOnUiThread(()->view.commonError()));
             mSocket.on(Keys.CHAT_EVENT_SEND_ERROR, args -> view.getActivity().runOnUiThread(()->view.commonError()));
-        }
-        //Disconnect
-        public void disconnect() {
-            mSocket.disconnect();
-            mSocket.off();
+            //Swap
+            mSocket.on(Keys.CHAT_EVENT_AUTH_SUCCESS, args -> view.getActivity().runOnUiThread(()->requestDialogs()));
+            mSocket.on(Socket.EVENT_CONNECT,args ->  view.getActivity().runOnUiThread(()->authorization()));
+            mSocket.on(Keys.CHAT_EVENT_ROOMS_SUCCESS, args -> view.getActivity().runOnUiThread(()->loadDialogs(args)));
+            mSocket.on(Keys.CHAT_EVENT_LOAD_SUCCESS, args -> view.getActivity().runOnUiThread(()->loadMessages(args)));
+            mSocket.on(Keys.CHAT_EVENT_SEND_SUCCESS, args -> view.getActivity().runOnUiThread(()->view.sendSuccess()));
+            mSocket.on(Socket.EVENT_MESSAGE, args -> view.getActivity().runOnUiThread(()->receive(args)));
+
         }
     }
 

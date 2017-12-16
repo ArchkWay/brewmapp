@@ -129,6 +129,19 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     String string = resultData.getString(ChatService.EXTRA_PARAM2);
                     loadMessages(string);
                 }break;
+                case ChatService.ACTION_RECIEVE_MESSAGE: {
+                    String string = resultData.getString(ChatService.EXTRA_PARAM2);
+                    ChatReceiveMessage chatReceiveMessage=new Gson().fromJson(string.replace("\\\\","\\"), ChatReceiveMessage.class);
+                    if(Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
+                        Message message=new Message
+                                .Builder(Message.TYPE_MESSAGE_INPUT)
+                                .message(chatReceiveMessage.getText())
+                                .username(chatReceiveMessage.getFrom().getFormattedName())
+                                .build();
+                        view.getActivity().runOnUiThread(() -> view.addMessage(message));
+            }
+
+                }break;
             }
         }
         void loadMessages(String string) {

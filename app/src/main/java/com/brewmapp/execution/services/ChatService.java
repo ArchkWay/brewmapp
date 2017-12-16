@@ -29,6 +29,7 @@ public class ChatService extends Service {
     private InnerThis innerThis;
 
     public static final String ACTION_SEND_MESSAGE = "com.brewmapp.execution.services.action.ACTION_SEND__MESSAGE";
+    public static final String ACTION_RECIEVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION__RECIEVE_MESSAGE";
     public static final String ACTION_REQUEST_MESSAGES = "com.brewmapp.execution.services.action.ACTION__MESSAGES";
     public static final String ACTION_REQUEST_DIALOGS = "com.brewmapp.execution.services.action.REQUEST_DIALOGS";
     public static final String ACTION_AUTHORIZATION = "com.brewmapp.execution.services.action.AUTHORIZATION";
@@ -129,7 +130,10 @@ public class ChatService extends Service {
         }
 
         private void receiveMessage(Object[] args) {
-
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1, ACTION_RECIEVE_MESSAGE);
+            bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
+            sendStatus(STATUS_COMPLEATE,bundle);
         }
 
         private void sentError(Object[] args) {
@@ -191,11 +195,13 @@ public class ChatService extends Service {
             stopForeground(true);
         }
         void sendStatus(int status, Object... object) {
-            if(object.length>0 && object[0] instanceof Bundle)
-                receiver.send(status, (Bundle) object[0]);
-            else {
-                receiver.send(status, Bundle.EMPTY);
-                stopSelf();
+            if(receiver!=null) {
+                if (object.length > 0 && object[0] instanceof Bundle)
+                    receiver.send(status, (Bundle) object[0]);
+                else {
+                    receiver.send(status, Bundle.EMPTY);
+                    stopSelf();
+                }
             }
         }
         void setIntent(Intent intent) {

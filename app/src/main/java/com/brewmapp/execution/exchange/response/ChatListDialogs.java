@@ -2,6 +2,7 @@ package com.brewmapp.execution.exchange.response;
 
 import com.brewmapp.data.entity.ChatDialog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

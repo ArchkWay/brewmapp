@@ -4,6 +4,7 @@ import android.app.Service;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
+import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
@@ -65,6 +66,7 @@ import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 public interface PresenterComponent {
 
     void inject(Service service);
+    void inject(ChatService service);
 
     void inject(BaseFragment baseFragment);
     void inject(ProfileFragment fragment);

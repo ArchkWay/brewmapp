@@ -4,9 +4,11 @@ package com.brewmapp.data.entity;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Region {
+public class Region implements Serializable {
 
     @SerializedName("country_id")
     private String mCountryId;

@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by xpusher on 12/13/2017.
  */
 
-public class ChatDialog {
+public class ChatDialog implements Serializable{
     private int id;
     private int unread;
     private User user;

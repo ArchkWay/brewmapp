@@ -1,12 +1,13 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by xpusher on 12/13/2017.
  */
 
-public class ChatInfoMessage {
+public class ChatInfoMessage implements Serializable {
     String text;
     String date;
     String dir;

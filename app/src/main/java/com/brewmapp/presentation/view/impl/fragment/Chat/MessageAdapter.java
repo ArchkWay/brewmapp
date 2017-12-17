@@ -54,7 +54,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Message message = mMessages.get(position);
         viewHolder.setMessage(message.getMessage());
-        viewHolder.setUsername(message.getUsername());
 
     }
 
@@ -68,23 +67,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return mMessages.get(position).getType();
     }
 
+    public List<Message> getmMessages() {
+        return mMessages;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView mUsernameView;
         private TextView mMessageView;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mUsernameView = (TextView) itemView.findViewById(R.id.username);
             mMessageView = (TextView) itemView.findViewById(R.id.message);
         }
 
-        public void setUsername(String username) {
-            if (null == mUsernameView) return;
-            mUsernameView.setText(username);
-            mUsernameView.setTextColor(getUsernameColor(username));
-        }
 
         public void setMessage(String message) {
             if (null == mMessageView) return;

@@ -1,26 +1,35 @@
 package com.brewmapp.presentation.view.impl.fragment.Chat;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 /**
  * Created by Kras on 13.12.2017.
@@ -32,9 +41,8 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     @BindView(R.id.fragment_chat_message_input) EditText mInputMessageView;
     @BindView(R.id.fragment_chat_send_button)    ImageButton send_button;
 
-    private RecyclerView.Adapter mAdapter;
+    private MessageAdapter mAdapter;
     private List<Message> mMessages = new ArrayList<Message>();
-
     private OnFragmentInteractionListener mListener;
 
     @Inject ChatFragmentPresenter presenter;
@@ -44,17 +52,62 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
 
     @Override
     protected void initView(View view) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        setHasOptionsMenu(true);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager );
         mAdapter = new MessageAdapter(getActivity(), mMessages);
         recyclerView.setAdapter(mAdapter);
         mInputMessageView.setOnEditorActionListener((v, id, event) -> {presenter.send(v);return true;});
-        send_button.setOnClickListener(v -> presenter.send(mInputMessageView));
+        send_button.setOnClickListener(v -> {presenter.send(mInputMessageView);mInputMessageView.setText("");});
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            boolean needCalcDownload=false;
+            int countCommonItems=0;
+            int numberPositionDownload=3;
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if(countCommonItems!=manager.getItemCount()) {
+                    countCommonItems = manager.getItemCount();
+                    needCalcDownload=true;
+                }
+
+                if(needCalcDownload){
+                    if(manager.findFirstVisibleItemPosition()<=numberPositionDownload){
+                        needCalcDownload=false;
+                        //startDownload
+                        if(mAdapter.getItemCount()>0)
+                            presenter.nextPage(mAdapter.getmMessages().get(0));
+                    }
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         presenter.connectToChat(getActivity().getIntent());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.photo,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_photo:
+                showMessage(getString(R.string.message_develop));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -97,21 +150,26 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     public void commonError(String... messages) {getActivity().runOnUiThread(()->mListener.commonError(messages));}
 
     @Override
-    public void addMessage(Message message) {
-        mMessages.add(message);
-        mAdapter.notifyItemInserted(mMessages.size() - 1);
-        scrollToBottom();
+    public void addMessages(List<Message> messages, boolean insert) {
+        if(insert){
+            int size=mMessages.size();
+            for (int i=0;i<messages.size();i++) {
+                mMessages.add(0, messages.get(i));
+                mAdapter.notifyItemInserted(i);
+            }
+            if(size==0)
+                scrollToBottom();
+        }else {
+            mMessages.addAll(messages);
+            mAdapter.notifyItemInserted(mMessages.size() - 1);
+            scrollToBottom();
+        }
     }
 
-    @Override
-    public void sendSuccess() {
-        mInputMessageView.setText("");
-    }
 
     @Override
-    public void insertMessage(Message message) {
-        mMessages.add(0,message);
-        scrollToBottom();
+    public void setFriend(User friend) {
+        mListener.setTitle(friend.getFormattedName());
     }
 
     private void scrollToBottom() {
@@ -121,6 +179,8 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void commonError(String... message);
+
+        void setTitle(CharSequence title);
     }
 
 

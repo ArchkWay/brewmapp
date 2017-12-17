@@ -86,7 +86,6 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
 
     }
 
-
     @Override
     protected Toolbar findActionBar() {
         return toolbar;

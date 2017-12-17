@@ -15,8 +15,13 @@ public class Message {
     private String mMessage;
     private String mUsername;
     private String mDirection;
+    private int mId;
 
     private Message() {}
+
+    public int getmId() {
+        return mId;
+    }
 
     public int getType() {
         return mType;
@@ -42,6 +47,7 @@ public class Message {
         private final int mType;
         private String mUsername;
         private String mMessage;
+        private int id;
 
         public Builder(int type) {
             mType = type;
@@ -63,7 +69,13 @@ public class Message {
             message.mType = mType;
             message.mUsername = mUsername;
             message.mMessage = mMessage;
+            message.mId = id;
             return message;
+        }
+
+        public Builder setId(int id) {
+            this.id = id;
+            return this;
         }
     }
 }

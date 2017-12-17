@@ -3,7 +3,10 @@ package com.brewmapp.presentation.view.contract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
+
+import java.util.List;
 
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
@@ -16,9 +19,7 @@ public interface ChatFragmentView extends BasicView {
 
     FragmentActivity getActivity();
 
-    void addMessage(Message message);
+    void addMessages(List<Message> messages, boolean insert);
 
-    void sendSuccess();
-
-    void insertMessage(Message message);
+    void setFriend(User friend);
 }

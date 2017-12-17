@@ -79,7 +79,6 @@ public class ChatService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -219,13 +218,15 @@ public class ChatService extends Service {
         }
         void requestMessages() {
             int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
+            int page=intent.getIntExtra(EXTRA_PARAM2,0);
+
             if(friend_id==0){
                 sendStatus(STATUS_ERROR);
             }else {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put(Keys.USER_ID, friend_id);
-                    jsonObject.put(Keys.CHAT_KEY_LAST_MSG, "*");
+                    jsonObject.put(Keys.CHAT_KEY_LAST_MSG, page==0?"*":page);
                     socket.emit(Keys.CHAT_EVENT_LOAD, jsonObject);
                 } catch (JSONException e) {
                     sendStatus(STATUS_ERROR);

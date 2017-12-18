@@ -96,6 +96,7 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.photo,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }

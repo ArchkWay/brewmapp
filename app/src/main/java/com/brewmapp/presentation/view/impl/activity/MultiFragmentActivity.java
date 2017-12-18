@@ -1,14 +1,13 @@
 package com.brewmapp.presentation.view.impl.activity;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -36,6 +35,9 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
 {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.multiactivity_root)    ViewGroup root;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
 
 
 
@@ -50,6 +52,10 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     @Override
     protected void initView() {
         enableBackButton();
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
+
     }
 
     @Override
@@ -104,33 +110,12 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     @Override
     public void setTitleActionBar(int title) {
         setTitle(title);
-//// Get the ActionBar
-//        ActionBar ab = getSupportActionBar();
-//
-//        // Create a TextView programmatically.
-//        TextView tv = new TextView(getApplicationContext());
-//
-//        // Create a LayoutParams for TextView
-//        ViewGroup.LayoutParams lp = new RelativeLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT, // Width of TextView
-//                ViewGroup.LayoutParams.WRAP_CONTENT); // Height of TextView
-//
-//        // Apply the layout parameters to TextView widget
-//        tv.setLayoutParams(lp);
-//
-//        // Set text to display in TextView
-//        tv.setText(ab.getTitle());
-//
-//        // Set the text color of TextView
-//        tv.setTextColor(Color.BLACK);
-//
-//        // Set TextView text alignment to center
-//        tv.setGravity(Gravity.CENTER);
-//
-//        // Set the ActionBar display option
-//        ab.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//
-//        // Finally, set the newly created TextView as ActionBar custom view
-//        ab.setCustomView(tv);
+        toolbarTitle.setText(getTitle());
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
     }
 }

@@ -185,7 +185,8 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(menu!=null) menu.clear();
+        menu.clear();
+        inflater.inflate(R.menu.stub,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

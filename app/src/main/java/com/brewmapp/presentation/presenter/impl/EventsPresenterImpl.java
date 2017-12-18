@@ -55,7 +55,6 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     @Override
     public void onAttach(EventsView eventsView) {
         super.onAttach(eventsView);
-        eventsView.setTabActive(uiSettingRepo.getnActiveTabEventFragment());
     }
 
     @Override
@@ -103,6 +102,11 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
             likeDislikePackage.setModel(Keys.CAP_NEWS, ((Post)iLikeable).getId());
 
         likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
+    }
+
+    @Override
+    public int getStoredActiveTab() {
+        return uiSettingRepo.getnActiveTabEventFragment();
     }
 
     class LikeSubscriber extends SimpleSubscriber<MessageResponse> {

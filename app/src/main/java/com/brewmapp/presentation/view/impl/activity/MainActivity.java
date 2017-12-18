@@ -101,7 +101,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     protected void initView() {
-        setTitle("");
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
         mode = presenter.parseMode(getIntent());
    }
 
@@ -175,22 +176,21 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
+
         if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
-            toolbarDropdown.setVisibility(View.VISIBLE);
-            actionBar.setDisplayShowTitleEnabled(false);
-            toolbarTitle.setText(baseFragment.getTitle());
             if(mode.equals(MODE_DEFAULT)) {
                 if (baseFragment instanceof View.OnClickListener) {
                     toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
                 }
-                toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
+                toolbarSubTitle.setVisibility(View.VISIBLE);
             }else {
                 toolbarSubTitle.setVisibility(View.GONE);
             }
         } else {
             toolbarSubTitle.setVisibility(View.GONE);
-            actionBar.setDisplayShowTitleEnabled(true);
         }
+
+        toolbarTitle.setText(baseFragment.getTitle());
     }
 
     @Override
@@ -220,7 +220,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void processSetFilterFragmentActionBar(SearchFragment searchFragment) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
-        actionBar.setDisplayShowTitleEnabled(false);
         toolbarTitle.setText(searchFragment.getTitle());
     }
 

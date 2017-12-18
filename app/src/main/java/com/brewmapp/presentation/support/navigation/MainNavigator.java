@@ -56,7 +56,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 break;
             case MenuField.MESSAGES:
                 fragmentToShow = new MessageFragment();
-                //storeCodeActiveFragment(action.code());
+                storeCodeActiveFragment(action.code());
                 break;
             default:
                 fragmentToShow = new FriendsFragment();

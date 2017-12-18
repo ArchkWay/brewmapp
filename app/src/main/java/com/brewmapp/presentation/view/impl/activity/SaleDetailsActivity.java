@@ -19,7 +19,7 @@ import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
 import com.brewmapp.presentation.view.contract.SaleDetailsView;
 import butterknife.BindView;
@@ -115,7 +115,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
 
                 String urlAvatar=null;
                 try {urlAvatar=sale.getParent().getThumb();}catch (Exception e){}
-                avatar(avatar,urlAvatar,R.drawable.ic_sale);
+                avatar(avatar,urlAvatar,R.drawable.ic_default_resto);
 
                 Photo new_photo=null;try {new_photo=sale.getPhotos().get(0);}catch (Exception e){}
                 photo(photo,new_photo,R.drawable.ic_default_image);
@@ -159,7 +159,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
             private void texts() {
                 setTitle(R.string.text_view_sale);
                 try {resto_name.setText(sale.getParent().getName());}catch (Exception e){}
-                new HashTagHelper2(text,sale.getText());
+                new Text2TextWithHashTag(text,sale.getText());
                 date.setText(sale.getDateStartFormated());
             }
         }

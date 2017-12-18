@@ -3,10 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/common_block_space"
-    android:layout_marginRight="@dimen/common_block_space"
-    android:layout_marginLeft="@dimen/common_block_space"
-    android:layout_marginTop="@dimen/common_block_space"
+    android:layout_marginBottom="@dimen/common_block_space_half_bigger"
+    android:layout_marginRight="@dimen/common_block_space_half_bigger"
+    android:layout_marginLeft="@dimen/common_block_space_half_bigger"
+    android:layout_marginTop="@dimen/common_block_space_half_bigger"
     android:id="@+id/root_view_share_like"
     >
 

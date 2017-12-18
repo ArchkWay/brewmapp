@@ -8,9 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +21,7 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.ClaimPackage;
 import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.EventDetailsView;
@@ -196,7 +194,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
                 likes.setText(String.valueOf(event.getLike()));
                 dislikes.setText(String.valueOf(event.getDislike()));
                 rating.setText(String.valueOf(event.getBall().getRating()));
-                new HashTagHelper2(text,event.getText());
+                new Text2TextWithHashTag(text,event.getText());
             }
 
         }

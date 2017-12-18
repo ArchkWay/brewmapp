@@ -4,91 +4,88 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite">
-
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBlockSplitterBorder"/>
-
+    android:background="@color/colorWhite"
+    >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_block_space_double_semi"
-        android:id="@+id/view.sale.container"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/common_block_space_half_bigger"
+        android:layout_marginLeft="@dimen/common_block_space_half_bigger"
+        android:layout_marginRight="@dimen/common_block_space_half_bigger"
         >
-
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:id="@+id/view.sale.avatar"
-            android:scaleType="fitCenter"
-            app:riv_border_width="1dp"
-            android:src="@drawable/ic_default_beer"
-            app:riv_border_color="@color/colorSplitter"
-            android:layout_marginRight="@dimen/common_block_space_double_semi"
-            app:riv_mutate_background="true"
-            android:background="@color/colorGrayLight"
-            app:riv_oval="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginRight="@dimen/common_block_space_double_semi"
+            android:id="@+id/view.sale.container"
+            >
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="@dimen/size_avatar_lesser"
+                android:layout_height="@dimen/size_avatar_lesser"
+                android:id="@+id/view.sale.avatar"
+                android:scaleType="fitCenter"
+                app:riv_border_width="1dp"
+                android:src="@drawable/ic_default_beer"
+                app:riv_border_color="@color/colorSplitter"
+                android:layout_marginRight="@dimen/common_block_space_double_semi"
+                app:riv_mutate_background="true"
+                android:background="@color/colorGrayLight"
+                app:riv_oval="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/view.sale.author"
-                android:textSize="@dimen/text_size_big_phone"
-                android:layout_marginBottom="@dimen/common_block_space_half"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"
-                android:text="@string/text_view_value_not_found"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/common_block_space_half"
-                android:id="@+id/view.sale.date"
-                android:textColor="@color/colorProfileCounter"
-                android:textSize="@dimen/text_size_common"
-                android:text="@string/text_view_value_not_found"
-                />
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view.sale.author"
+                    android:textSize="@dimen/text_size_big_phone"
+                    android:layout_marginBottom="@dimen/common_block_space_half"
+                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    android:text="@string/text_view_value_not_found"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/common_block_space_half"
+                    android:id="@+id/view.sale.date"
+                    android:textColor="@color/colorProfileCounter"
+                    android:textSize="@dimen/text_size_common"
+                    android:text="@string/text_view_value_not_found"
+                    />
+            </LinearLayout>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.sale.text"
+            style="@style/AppTheme.Paragraph"
+            android:layout_marginBottom="@dimen/common_block_space"
+            android:text="@string/text_view_value_not_found"
+            android:maxLines="@integer/init_max_lites_text_view"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.sale.preview"
+            android:background="@color/colorGrayExtraLight"
+            android:adjustViewBounds="true"/>
+
+        <include layout="@layout/view_share_like" />
+
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view.sale.text"
-        style="@style/AppTheme.Paragraph"
-        android:layout_marginLeft="@dimen/common_block_space_double_semi"
-        android:layout_marginRight="@dimen/common_block_space_double_semi"
-        android:layout_marginBottom="@dimen/common_block_space"
-        android:text="@string/text_view_value_not_found"
-        android:maxLines="@integer/init_max_lites_text_view"
-        />
-
-    <ImageView
-        android:layout_marginLeft="@dimen/common_block_space_double_semi"
-        android:layout_marginRight="@dimen/common_block_space_double_semi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view.sale.preview"
-        android:layout_marginBottom="@dimen/common_block_space"
-        android:background="@color/colorGrayExtraLight"
-        android:adjustViewBounds="true"/>
-
-    <include layout="@layout/view_share_like" />
-
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="5dp"
         android:background="@color/colorBlockSplitterBorder"/>
 
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/common_block_space"
-        android:background="@color/colorBlockSplitter"/>
 </com.brewmapp.presentation.view.impl.widget.SaleView>

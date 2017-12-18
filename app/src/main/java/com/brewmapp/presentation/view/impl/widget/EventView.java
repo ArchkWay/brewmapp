@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -17,7 +15,7 @@ import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
@@ -26,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
-import ru.frosteye.ovsa.tool.DateTools;
 
 import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
 
@@ -84,13 +81,8 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
         this.model = model;
         shareLikeView.setiLikeable(model);
         name.setText(model.getName());
-        new HashTagHelper2(text,model.getText());
-        text.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onModelAction(Actions.ACTION_SELECT_EVENT, model);
-            }
-        });
+        new Text2TextWithHashTag(text,model.getText());
+        text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_EVENT, model));
         location.setText(model.getLocation().getFormattedAddress());
         date.setText(model.getDateFromFormated());
         try{name_resto.setText(model.getResto().getName());

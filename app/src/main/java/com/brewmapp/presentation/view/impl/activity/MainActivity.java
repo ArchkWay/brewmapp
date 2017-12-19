@@ -37,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import io.paperdb.Paper;
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.widgets.CustomDrawerArrowDrawable;
 import nl.psdcompany.duonavigationdrawer.widgets.CustomDuoDrawerToggle;
@@ -96,7 +97,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
-        processShowDrawer(false,false);
+        processShowDrawer(false,true);
+        Paper.init(this);
+        Paper.book().destroy();
     }
 
     @Override
@@ -113,6 +116,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close, navigator::onDrawerClosed);
         drawer.setDrawerListener(drawerToggle);
+        drawer.computeScroll();
         drawerToggle.syncState();
         profileHeader.setOnClickListener(v -> {
             MenuField.unselectAll(menuItems);
@@ -175,21 +179,17 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
+        actionBar.setDisplayShowTitleEnabled(false);
+        toolbarTitle.setText(baseFragment.getTitle());
         if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
-            toolbarDropdown.setVisibility(View.VISIBLE);
-            actionBar.setDisplayShowTitleEnabled(false);
-            toolbarTitle.setText(baseFragment.getTitle());
+            toolbarSubTitle.setVisibility(View.VISIBLE);
             if(mode.equals(MODE_DEFAULT)) {
                 if (baseFragment instanceof View.OnClickListener) {
                     toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
                 }
-                toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
-            }else {
-                toolbarSubTitle.setVisibility(View.GONE);
             }
         } else {
             toolbarSubTitle.setVisibility(View.GONE);
-            actionBar.setDisplayShowTitleEnabled(true);
         }
     }
 
@@ -227,9 +227,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public synchronized void processShowDrawer(boolean show, boolean smooth) {
         if(smooth) {
-            TransitionManager.getDefaultTransition().setDuration(250);
-            TransitionManager.beginDelayedTransition(drawer);
+
         }
+
+        TransitionManager.getDefaultTransition().setDuration(100);
+        TransitionManager.beginDelayedTransition(drawer);
+
         container.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
         container.setVisibility(show?View.VISIBLE:View.INVISIBLE);

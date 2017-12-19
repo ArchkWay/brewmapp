@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
@@ -29,7 +28,6 @@ import com.brewmapp.data.entity.Region;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
-import com.brewmapp.data.pojo.ScrollPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
 import com.brewmapp.presentation.view.contract.FilterByCategoryView;
@@ -67,7 +65,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     @BindView(R.id.filter_toolbar_cancel)
     TextView cancel;
     @BindView(R.id.categoryList)
-    RecyclerView list;
+    RecyclerView filterList;
     @BindView(R.id.activity_search_search)
     FinderView finder;
     @BindView(R.id.lyt_empty_view)
@@ -80,6 +78,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     LinearLayout lytProgressBar;
 
     private FlexibleModelAdapter<IFlexible> adapter;
+    private EndlessRecyclerOnScrollListener scrollListener;
     private FullSearchPackage fullSearchPackage;
     private String selectedItem;
     private String selectedItemId;
@@ -88,9 +87,6 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     private String selectedFilter = null;
     private boolean isBeer;
     private boolean isBrewery;
-    private boolean isSearch;
-
-    private EndlessRecyclerOnScrollListener scrollListener;
 
     @Inject
     FilterByCategoryPresenter presenter;
@@ -116,26 +112,35 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     protected void initView() {
         Paper.init(this);
         fullSearchPackage = new FullSearchPackage();
-            LinearLayoutManager manager = new LinearLayoutManager(this);
-            scrollListener = new EndlessRecyclerOnScrollListener(manager) {
-                @Override
-                public void onLoadMore(int currentPage) {
-                    fullSearchPackage.setPage(currentPage - 1);
+        fullSearchPackage.setPage(0);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                fullSearchPackage.setPage(manager.getItemCount());
+                if (isBrewery) {
+                    presenter.loadBreweryCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                } else if (isBeer) {
+                    presenter.loadBeerCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                } else {
+                    presenter.loadRestoCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                }
             }
         };
-        list.addOnScrollListener(scrollListener);
-        list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
-        list.setLayoutManager(manager);
+        filterList.addOnScrollListener(scrollListener);
+        filterList.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
+        filterList.setLayoutManager(manager);
+
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
-        list.setAdapter(adapter);
-        list.setOnTouchListener((view, motionEvent) -> {
+        filterList.setAdapter(adapter);
+
+        filterList.setOnTouchListener((view, motionEvent) -> {
             UITools.hideKeyboard(this);
             return false;
         });
 
         isBeer = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 1;
         isBrewery = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 2;
-        isSearch = getIntent().getBooleanExtra(Keys.SEARCH, false);
         initFilterCategory();
         initFilter();
     }
@@ -153,6 +158,15 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     private void initBreweryFilterByCategory(int filterId) {
         this.filterCategory = filterId;
         switch (filterId) {
+            case FilterBreweryField.NAME:
+                okButton.setVisibility(View.GONE);
+                fullSearchPackage.setType(Keys.TYPE_BREWERY);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                emptyTitle.setText(getString(R.string.filter_search_brewery));
+                filterList.setVisibility(View.GONE);
+                toolbarTitle.setText(R.string.search_brewery_name);
+                break;
             case FilterBreweryField.COUNTRY:
                 showProgressBar(true);
                 okButton.setVisibility(View.GONE);
@@ -178,7 +192,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 if (getStoredFilterList(FilterKeys.BEER_TYPES) != null) {
                     appendItems(getStoredFilterList(FilterKeys.BEER_TYPES));
                 } else {
-                    presenter.loadBeerTypes();
+                    presenter.loadBeerTypes(fullSearchPackage);
                 }
                 break;
             default:
@@ -196,7 +210,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_beer));
-                list.setVisibility(View.GONE);
+                filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_beer_name);
                 break;
             case FilterBeerField.COUNTRY:
@@ -215,17 +229,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 if (getStoredFilterList(FilterKeys.BEER_TYPES) != null) {
                     appendItems(getStoredFilterList(FilterKeys.BEER_TYPES));
                 } else {
-                    presenter.loadBeerTypes();
-                }
-                break;
-            case FilterBeerField.PLACE:
-                showProgressBar(true);
-                okButton.setVisibility(View.GONE);
-                toolbarTitle.setText(R.string.select_country);
-                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
-                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
-                } else {
-                    presenter.loadCountries();
+                    presenter.loadBeerTypes(fullSearchPackage);
                 }
                 break;
             case FilterBeerField.PRICE_BEER:
@@ -340,7 +344,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_resto));
-                list.setVisibility(View.GONE);
+                filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_resto_name);
                 break;
             case FilterRestoField.TYPE:
@@ -358,7 +362,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_beer));
-                list.setVisibility(View.GONE);
+                filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_beer_name);
                 break;
             case FilterRestoField.KITCHEN:
@@ -423,8 +427,8 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
     @Override
     public void appendItems(List<IFlexible> list) {
         showProgressBar(false);
-        this.original = list;
         adapter.clear();
+        this.original = list;
         adapter.updateDataSet(list);
     }
 
@@ -451,12 +455,12 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         fullSearchPackage.setStringSearch(stringSearch);
         if (stringSearch.length() > 3) {
             emptyView.setVisibility(View.GONE);
-            list.setVisibility(View.VISIBLE);
+            filterList.setVisibility(View.VISIBLE);
             sendQuery();
         } else if (stringSearch.length() == 0) {
             adapter.clear();
             emptyView.setVisibility(View.VISIBLE);
-            list.setVisibility(View.GONE);
+            filterList.setVisibility(View.GONE);
         }
     }
 
@@ -482,7 +486,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
                 break;
             case FilterRestoField.CITY:
                 Country country = (Country) payload;
-                if (country.getId() == null) {
+                if (country.getId() == null || isBeer || isBrewery) {
                     selectedItem = country.getName();
                     selectedItemId = country.getId();
                     goToFilterMap();
@@ -605,7 +609,7 @@ public class FilterByCategory extends BaseActivity implements FilterByCategoryVi
         }  else if (filterCategory == FilterBeerField.IBU) {
             selectedFilter = FilterKeys.BEER_IBU;
             saveStoredFilter(FilterKeys.BEER_IBU);
-        } else if (filterCategory == FilterBeerField.PLACE) {
+        } else if (filterCategory == FilterBeerField.COUNTRY) {
             selectedFilter = FilterKeys.COUNTRY;
             saveStoredFilter(FilterKeys.COUNTRY);
         } else if (filterCategory == FilterBeerField.BREWERY) {

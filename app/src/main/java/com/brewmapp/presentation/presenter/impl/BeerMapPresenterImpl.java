@@ -168,7 +168,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         filterBeerPackage.setBeerStrengthes(fieldList.get(FilterBeerField.POWER).getSelectedItemId());
         filterBeerPackage.setBeerPacks(fieldList.get(FilterBeerField.BEER_PACK).getSelectedItemId());
         filterBeerPackage.setBeerBreweries(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
-        filterBeerPackage.setBeerCity(fieldList.get(FilterBeerField.PLACE).getSelectedItemId());
         filterBeerPackage.setCraft(craftBeer);
         filterBeerPackage.setBeerDensity(fieldList.get(FilterBeerField.DENSITY).getSelectedItemId());
 //        filterBeerPackage.setBeerFiltered(fieldList.get(FilterBeerField.COUNTRY).getSelectedItemId());

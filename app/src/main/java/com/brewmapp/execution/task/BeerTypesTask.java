@@ -1,8 +1,12 @@
 package com.brewmapp.execution.task;
 
+import android.util.Log;
+
+import com.brewmapp.R;
 import com.brewmapp.data.entity.BeerTypesModel;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.pojo.BeerTypes;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
@@ -21,24 +25,30 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by nixus on 27.11.2017.
  */
 
-public class BeerTypesTask extends BaseNetworkTask<BeerTypes, List<IFlexible>> {
+public class BeerTypesTask extends BaseNetworkTask<FullSearchPackage, List<IFlexible>> {
+
+    private int step;
+    private List<BeerTypeInfo> beerTypeInfos;
 
     @Inject
     public BeerTypesTask(MainThread mainThread,
                          Executor executor,
                          Api api) {
         super(mainThread, executor, api);
+        this.step = 30;
     }
 
     @Override
-    protected Observable<List<IFlexible>> prepareObservable(BeerTypes beerTypes) {
+    protected Observable<List<IFlexible>> prepareObservable(FullSearchPackage fullSearchPackage) {
         return Observable.create(subscriber -> {
             try {
-
                 WrapperParams params = new WrapperParams("");
-                BeerTypesModel response = executeCall(getApi().loadBeerTypes(params));
-                List<BeerTypeInfo> beerTypeInfos = new ArrayList<>();
-                beerTypeInfos.add(0, new BeerTypeInfo(new BeerTypes("Любой  ")));
+                int end = fullSearchPackage.getPage() + step;
+                BeerTypesModel response = executeCall(getApi().loadBeerTypes(fullSearchPackage.getPage(), end, params));
+                if (beerTypeInfos == null) {
+                    beerTypeInfos = new ArrayList<>();
+                    beerTypeInfos.add(0, new BeerTypeInfo(new BeerTypes("Любой  ")));
+                }
                 beerTypeInfos.addAll(response.getModels());
                 subscriber.onNext(new ArrayList<>(beerTypeInfos));
                 subscriber.onComplete();

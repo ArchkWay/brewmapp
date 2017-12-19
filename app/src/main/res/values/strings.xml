@@ -383,6 +383,7 @@
 
     <string name="filter_search_beer">Для поиска введите название пива</string>
     <string name="filter_search_resto">Для поиска введите название заведения</string>
+    <string name="filter_search_brewery">Для поиска введите название пивоварни</string>
     <string name="special_offer">Специальные предложения</string>
     <string name="craft_beer">Показывать крафтовое пиво</string>
     <string name="filter_beer">Показывать фильтрованное пиво</string>

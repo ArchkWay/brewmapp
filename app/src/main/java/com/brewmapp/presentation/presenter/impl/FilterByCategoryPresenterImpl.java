@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
@@ -239,9 +240,9 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     }
 
     @Override
-    public void loadBeerTypes() {
+    public void loadBeerTypes(FullSearchPackage fullSearchPackage) {
         beerTypesTask.cancel();
-        beerTypesTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
+        beerTypesTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 view.showProgressBar(false);
@@ -288,6 +289,7 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+
                 saveStoredFilter(FilterKeys.BEER_BRAND, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
@@ -502,6 +504,105 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
                 view.appendItems(iFlexibles);
             }
         });
+    }
+
+    @Override
+    public void loadBreweryCategoryItem(int filterCategory, FullSearchPackage searchPackage) {
+        switch (filterCategory) {
+            case FilterBreweryField.NAME:
+                sendQueryFullSearch(searchPackage);
+                break;
+            case FilterBreweryField.COUNTRY:
+                loadCountries();
+                break;
+            case FilterBreweryField.BRAND:
+                 loadBeerBrand(searchPackage);
+                break;
+            case FilterBreweryField.TYPE_BEER:
+                loadBeerTypes(searchPackage);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void loadRestoCategoryItem(int filterCategory, FullSearchPackage searchPackage) {
+        switch (filterCategory) {
+            case FilterRestoField.NAME:
+                sendQueryFullSearch(searchPackage);
+                break;
+            case FilterRestoField.TYPE:
+                loadRestoTypes();
+                break;
+            case FilterRestoField.BEER:
+                sendQueryFullSearch(searchPackage);
+                break;
+            case FilterRestoField.KITCHEN:
+                loadKitchenTypes();
+                break;
+            case FilterRestoField.PRICE:
+                loadPriceRangeTypes("resto");
+                break;
+            case FilterRestoField.CITY:
+                loadCountries();
+                break;
+            case FilterRestoField.METRO:
+                ///
+                break;
+            case FilterRestoField.FEATURES:
+                loadFeatureTypes();
+                break;
+            default:break;
+        }
+    }
+
+    @Override
+    public void loadBeerCategoryItem(int filterCategory, FullSearchPackage searchPackage) {
+        switch (filterCategory) {
+            case FilterBeerField.NAME:
+                sendQueryFullSearch(searchPackage);
+                break;
+            case FilterBeerField.COUNTRY:
+                loadCountries();
+                break;
+            case FilterBeerField.TYPE:
+                loadBeerTypes(searchPackage);
+                break;
+            case FilterBeerField.PRICE_BEER:
+                loadPriceRangeTypes("beer");
+                break;
+            case FilterBeerField.BEER_PACK:
+                loadBeerPack();
+                break;
+            case FilterBeerField.BRAND:
+                loadBeerBrand(searchPackage);
+                break;
+            case FilterBeerField.COLOR:
+                loadBeerColor();
+                break;
+            case FilterBeerField.TASTE:
+                loadBeerTaste();
+                break;
+            case FilterBeerField.SMELL:
+                loadBeerSmell();
+                break;
+            case FilterBeerField.AFTER_TASTE:
+                loadBeerAfterTaste();
+                break;
+            case FilterBeerField.POWER:
+                loadBeerPower();
+                break;
+            case FilterBeerField.DENSITY:
+                loadBeerDensity();
+                break;
+            case FilterBeerField.IBU:
+                loadBeerIbu();
+            case FilterBeerField.BREWERY:
+                loadBrewery();
+                break;
+            default:break;
+        }
     }
 
     private void saveStoredFilter(String filterKey, List<IFlexible> storeList) {

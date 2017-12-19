@@ -1,6 +1,5 @@
 package com.brewmapp.execution.task;
 
-import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.container.SearchBeerTypes;
 import com.brewmapp.data.pojo.FilterBeerPackage;
@@ -16,7 +15,6 @@ import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
-import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
@@ -31,7 +29,7 @@ public class SearchBeerTask extends BaseNetworkTask<FilterBeerPackage, List<IFle
     @Inject
     public SearchBeerTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = 30;
     }
 
     @Override
@@ -39,8 +37,7 @@ public class SearchBeerTask extends BaseNetworkTask<FilterBeerPackage, List<IFle
         return Observable.create(subscriber -> {
             try {
                 RequestParams params = new RequestParams();
-                int start = beerPackage.getPage() * step;
-                int end = beerPackage.getPage() * step + step;
+                int end = beerPackage.getPage() + step;
                 params.addParam(FilterKeys.BEER_COUNTRY, beerPackage.getBeerCountries() != null ? beerPackage.getBeerCountries() : "");
                 params.addParam(FilterKeys.BEER_TYPES, beerPackage.getBeerTypes() != null ? beerPackage.getBeerTypes() : "");
                 params.addParam(FilterKeys.BEER_POWER, beerPackage.getBeerStrengthes() != null ? beerPackage.getBeerStrengthes() : "");
@@ -65,7 +62,7 @@ public class SearchBeerTask extends BaseNetworkTask<FilterBeerPackage, List<IFle
                 params.addParam(Keys.COORD_START , beerPackage.getCoordStart() != null ? beerPackage.getCoordStart() : "");
                 params.addParam(Keys.COORD_END , beerPackage.getCoordEnd() != null ? beerPackage.getCoordEnd() : "");
                 params.addParam(FilterKeys.BEER_IBU , beerPackage.getBeerIBU() != null ? beerPackage.getBeerIBU() : "");
-                SearchBeerTypes response = executeCall(getApi().loadBeers(params));
+                SearchBeerTypes response = executeCall(getApi().loadBeers(beerPackage.getPage(), end, params));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

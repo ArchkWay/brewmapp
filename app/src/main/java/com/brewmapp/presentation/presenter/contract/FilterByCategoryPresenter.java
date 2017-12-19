@@ -16,7 +16,7 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void loadPriceRangeTypes(String type);
     void loadFeatureTypes();
     void sendQueryFullSearch(FullSearchPackage fullSearchPackage);
-    void loadBeerTypes();
+    void loadBeerTypes(FullSearchPackage fullSearchPackage);
     void loadBeerPack();
     void loadBeerBrand(FullSearchPackage fullSearchPackage);
     void loadBeerColor();
@@ -30,4 +30,7 @@ public interface FilterByCategoryPresenter extends LivePresenter<FilterByCategor
     void loadRegions(GeoPackage geoPackage);
     void loadCity(GeoPackage geoPackage);
     void loadBrewery();
+    void loadBreweryCategoryItem(int filterCategory, FullSearchPackage searchPackage);
+    void loadRestoCategoryItem(int filterCategory, FullSearchPackage searchPackage);
+    void loadBeerCategoryItem(int filterCategory, FullSearchPackage searchPackage);
 }

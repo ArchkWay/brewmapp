@@ -10,6 +10,7 @@ import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.pojo.BreweryPackage;
 import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.task.RestosSearchTask;
 import com.brewmapp.execution.task.SearchBeerTask;
 import com.brewmapp.execution.task.SearchBreweryTask;
@@ -53,10 +54,11 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
     }
 
     @Override
-    public void loadRestoList(int specialOffer) {
+    public void loadRestoList(int specialOffer, FullSearchPackage searchPackage) {
         loadRestosList.cancel();
         List<FilterRestoField> filterRestoFields = Paper.book().read("restoCategoryList");
         FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
+        filterRestoPackage.setPage(searchPackage.getPage());
         filterRestoPackage.setRestoCity(filterRestoFields.get(FilterRestoField.CITY).getSelectedItemId());
         filterRestoPackage.setRestoTypes(filterRestoFields.get(FilterRestoField.TYPE).getSelectedItemId());
         filterRestoPackage.setMenuBeer(filterRestoFields.get(FilterRestoField.BEER).getSelectedItemId());
@@ -90,7 +92,7 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
     }
 
     @Override
-    public void loadBeerList(int craftBeer, int filter) {
+    public void loadBeerList(int craftBeer, int filter, FullSearchPackage searchPackage) {
         loadBeerTask.cancel();
         List<FilterBeerField> fieldList = Paper.book().read("beerCategoryList");
         FilterBeerPackage filterBeerPackage = new FilterBeerPackage();
@@ -99,7 +101,7 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
         filterBeerPackage.setBeerStrengthes(fieldList.get(FilterBeerField.POWER).getSelectedItemId());
         filterBeerPackage.setBeerPacks(fieldList.get(FilterBeerField.BEER_PACK).getSelectedItemId());
         filterBeerPackage.setBeerBreweries(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
-        filterBeerPackage.setBeerCity(fieldList.get(FilterBeerField.PLACE).getSelectedItemId());
+        filterBeerPackage.setPage(searchPackage.getPage());
         filterBeerPackage.setCraft(craftBeer);
         filterBeerPackage.setBeerFiltered(filter);
         filterBeerPackage.setBeerDensity(fieldList.get(FilterBeerField.DENSITY).getSelectedItemId());
@@ -138,13 +140,14 @@ public class SearchPresenterImpl extends BasePresenter<SearchView> implements Se
     }
 
     @Override
-    public void loadBrewery() {
+    public void loadBrewery(FullSearchPackage searchPackage) {
         loadBreweryTask.cancel();
         List<FilterBreweryField> fieldList = Paper.book().read("breweryCategoryList");
         BreweryPackage breweryPackage = new BreweryPackage();
         breweryPackage.setCountryId(fieldList.get(FilterBreweryField.COUNTRY).getSelectedItemId());
         breweryPackage.setBeerBrandId(fieldList.get(FilterBreweryField.BRAND).getSelectedItemId());
         breweryPackage.setBeerTypeId(fieldList.get(FilterBreweryField.TYPE_BEER).getSelectedItemId());
+        breweryPackage.setPage(searchPackage.getPage());
         loadBreweryTask.execute(breweryPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {

@@ -18,18 +18,27 @@ import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
+import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import io.socket.client.Socket;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
+import ru.frosteye.ovsa.stub.listener.SelectListener;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by xpusher on 12/13/2017.
@@ -63,19 +72,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
     @Override
     public void sendMessage(TextView textView) {
-        String text_send=textView.getText().toString();
-        if(text_send.length()>0) {
-            List<Message> list=new ArrayList<>();
-            list.add(
-                    new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
-                            .username(userRepo.load().getFormattedName())
-                            .message(text_send)
-                            .stateSending(true)
-                            .build()
-            );
-            view.addMessages(list,false);
-            innerWorker.commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,innerWorker.escapeUnicodeText(text_send));
-        }
+        innerWorker.sendMessage(textView.getText().toString());
     }
 
     @Override
@@ -85,9 +82,16 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     }
 
     @Override
+    public SelectListener getSelectListenerPhoto(ChatFragment chatFragment) {
+        return (text, position) -> innerWorker.selectPhoto(chatFragment,position);
+    }
+
+    @Override
     public void onDestroy() {
         innerWorker.commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
+
+
 
     class InnerWorker {
         //main
@@ -126,6 +130,9 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     case ChatService.ACTION_SEND_MESSAGE:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         intent.putExtra(ChatService.EXTRA_PARAM2,(String)args[1]);
+                        break;
+                    case ChatService.ACTION_SEND_IMAGE:
+                        intent.putExtra(ChatService.EXTRA_PARAM1,(File)args[0]);
                         break;
                     case ChatService.ACTION_CLEAR_RECEIVER:
                         resultReceiver=null;
@@ -245,6 +252,66 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 e.printStackTrace();
             }
             return text;
+        }
+        void selectPhoto(ChatFragment baseFragment, int position) {
+            switch (position) {
+                case 0:
+                    RxPaparazzo.single(baseFragment.getActivity())
+                            .usingGallery()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(response -> {
+                                if (response.resultCode() != RESULT_OK) return;
+                                sendPhoto(response.data().getFile());
+                            });
+
+                    break;
+                case 1:
+                    RxPaparazzo.single(baseFragment.getActivity())
+                            .usingCamera()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(response -> {
+                                if (response.resultCode() != RESULT_OK) return;
+                                sendPhoto(response.data().getFile());
+                            });
+
+                    break;
+                case 2:
+                    ((ProfileEditFragmentView)baseFragment).selectedPhoto(null);
+                    break;
+            }
+
+        }
+        void sendPhoto(File file) {
+            if(file!=null&&file.exists()) {
+                List<Message> list=new ArrayList<>();
+                list.add(
+                        new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
+                                .username(userRepo.load().getFormattedName())
+                                .message(file.getAbsolutePath())
+                                .stateSending(true)
+                                .setImage(file.getAbsolutePath())
+                                .build()
+                );
+                view.addMessages(list,false);
+                commandToChatService(ChatService.ACTION_SEND_IMAGE, file);
+            }
+        }
+        void sendMessage(String text_send) {
+            if(text_send.length()>0) {
+                List<Message> list=new ArrayList<>();
+                list.add(
+                        new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
+                                .username(userRepo.load().getFormattedName())
+                                .message(text_send)
+                                .stateSending(true)
+                                .build()
+                );
+                view.addMessages(list,false);
+                innerWorker.commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,innerWorker.escapeUnicodeText(text_send));
+            }
+
         }
     }
     class ChatResultReceiver extends ResultReceiver {

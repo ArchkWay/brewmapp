@@ -15,12 +15,20 @@ import com.brewmapp.execution.services.base.BaseService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.socket.client.Socket;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 
 public class ChatService extends BaseService{
@@ -30,6 +38,7 @@ public class ChatService extends BaseService{
     private InnerWorker innerWorker =new InnerWorker();
 
     public static final String ACTION_SEND_MESSAGE = "com.brewmapp.execution.services.action.ACTION_SEND_MESSAGE";
+    public static final String ACTION_SEND_IMAGE = "com.brewmapp.execution.services.action.ACTION_SEND_IMAGE";
     public static final String ACTION_RECEIVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION_RECEIVE_MESSAGE";
     public static final String ACTION_REQUEST_DIALOG_CONTENT = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOG_CONTENT";
     public static final String ACTION_REQUEST_DIALOGS = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOGS";
@@ -66,9 +75,11 @@ public class ChatService extends BaseService{
                 innerWorker.disconnect();
                 break;
             default: {
+                boolean HandleQueueNow=innerWorker.queue.size()==0;
                 innerWorker.addQueue(innerWorker.getAction(intent), intent);
                 if(innerWorker.isAuthorized)
-                    innerWorker.handleQueue();
+                    if(HandleQueueNow)
+                        innerWorker.handleQueue();
             }
         }
 
@@ -84,8 +95,7 @@ public class ChatService extends BaseService{
     class InnerWorker {
         ResultReceiver receiver;
         boolean isAuthorized =false;
-        List<Action> queue= new ArrayList<>();
-
+        List<ActionQueue> queue= new ArrayList<>();
         void initSocket() {
             socket.on(Socket.EVENT_DISCONNECT,args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Socket.EVENT_CONNECT_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
@@ -104,6 +114,48 @@ public class ChatService extends BaseService{
 
             socket.connect();
         }
+        void handleQueue() {
+
+            if(queue.size()>0) {
+                String action=queue.get(0).getAction();
+                Intent intent=queue.get(0).getIntent();
+                switch (action) {
+                    case ACTION_SEND_IMAGE:
+                        innerWorker.sendImage(intent);
+                        break;
+                    case ACTION_SEND_MESSAGE:
+                        innerWorker.sendMessages(intent);
+                        break;
+                    case ACTION_REQUEST_DIALOG_CONTENT:
+                        innerWorker.requestMessages(intent);
+                        break;
+                    case ACTION_REQUEST_DIALOGS:
+                        innerWorker.requestListDialogs();
+                        break;
+                    case ACTION_INIT_DIALOG:
+                        returnResult(RESULT_OK,intent.getExtras());
+                        break;
+                    case ACTION_SET_RECEIVER:
+                        innerWorker.setReceiver(intent);
+                        break;
+                    case ACTION_CLEAR_RECEIVER:
+                        innerWorker.setReceiver(null);
+                        break;
+                }
+            }
+        }
+
+        private void sendImage(Intent intent) {
+
+            File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
+//            FileUploadService service =
+//                    ServiceGenerator.createService(FileUploadService.class);
+
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
+            returnResult(RESULT_OK,bundle);
+        }
+
         void requestListDialogs() {
             socket.emit(Keys.CHAT_EVENT_ROOMS);
         }
@@ -150,33 +202,6 @@ public class ChatService extends BaseService{
             intent.putExtras(bundle);
             addQueue(ACTION_INIT_DIALOG,intent);
             handleQueue();
-        }
-        void handleQueue() {
-
-            if(queue.size()>0) {
-                String action=queue.get(0).getAction();
-                Intent intent=queue.get(0).getIntent();
-                switch (action) {
-                    case ACTION_SEND_MESSAGE:
-                        innerWorker.sendMessages(intent);
-                        break;
-                    case ACTION_REQUEST_DIALOG_CONTENT:
-                        innerWorker.requestMessages(intent);
-                        break;
-                    case ACTION_REQUEST_DIALOGS:
-                        innerWorker.requestListDialogs();
-                        break;
-                    case ACTION_INIT_DIALOG:
-                        returnResult(RESULT_OK,intent.getExtras());
-                        break;
-                    case ACTION_SET_RECEIVER:
-                        innerWorker.setReceiver(intent);
-                        break;
-                    case ACTION_CLEAR_RECEIVER:
-                        innerWorker.setReceiver(null);
-                        break;
-                }
-            }
         }
         void disconnect() {
             isAuthorized = false;
@@ -227,7 +252,7 @@ public class ChatService extends BaseService{
             }
 
         }
-        private void removeQueue() {
+        void removeQueue() {
                 queue.remove(0);
         }
         String getAction(Intent intent) {
@@ -281,14 +306,14 @@ public class ChatService extends BaseService{
             }
         }
         void addQueue(String action, Intent intent) {
-            queue.add(new Action(action,intent));
+            queue.add(new ActionQueue(action,intent));
         }
     }
-    class Action{
+    class ActionQueue {
         private String action;
         private Intent intent;
 
-        public Action(String action, Intent intent) {
+        public ActionQueue(String action, Intent intent) {
             setAction(action);
             setIntent(intent);
         }
@@ -309,4 +334,13 @@ public class ChatService extends BaseService{
             this.intent = intent;
         }
     }
+    public interface FileUploadService {
+        @Multipart
+        @POST("upload")
+        Call<ResponseBody> upload(
+                @Part("description") RequestBody description,
+                @Part MultipartBody.Part file
+        );
+    }
+
 }

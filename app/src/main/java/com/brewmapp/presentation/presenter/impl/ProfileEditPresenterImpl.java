@@ -60,15 +60,10 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
-                            if (response.resultCode() != RESULT_OK) {
-                                return;
-                            }
+                            if (response.resultCode() != RESULT_OK) return;
                             ((ProfileEditFragmentView)baseFragment).selectedPhoto(response.data().getFile());
                         });
 
-                break;
-            case 2:
-                ((ProfileEditFragmentView)baseFragment).selectedPhoto(null);
                 break;
         }
     }

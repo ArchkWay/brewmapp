@@ -17,8 +17,17 @@ public class Message {
     private String mDirection;
     private int mId;
     private boolean mStateSending=false;
+    private String image;
 
     private Message() {}
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public boolean ismStateSending() {
         return mStateSending;
@@ -62,6 +71,9 @@ public class Message {
         private String mMessage;
         private int id;
         private boolean mStateSending=false;
+        private String image;
+
+
 
         public Builder(int type) {
             mType = type;
@@ -82,6 +94,11 @@ public class Message {
             return this;
         }
 
+        public Builder setImage(String path) {
+            image = path;
+            return this;
+        }
+
         public Message build() {
             Message message = new Message();
             message.mType = mType;
@@ -89,6 +106,7 @@ public class Message {
             message.mMessage = mMessage;
             message.mId = id;
             message.mStateSending = mStateSending;
+            message.image=image;
             return message;
         }
 

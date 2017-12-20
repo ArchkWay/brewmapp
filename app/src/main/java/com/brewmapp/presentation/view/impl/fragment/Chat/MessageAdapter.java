@@ -5,11 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.List;
+
+import io.socket.client.Url;
 
 /**
  * Created by Kras on 14.12.2017.
@@ -55,6 +61,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = mMessages.get(position);
         viewHolder.setMessage(message.getMessage());
         viewHolder.setStatus(message.ismStateSending());
+        viewHolder.setImage(message.getImage());
 
     }
 
@@ -75,6 +82,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mMessageView;
         private TextView mStatusSendingView;
+        private ImageView mImageView;
 
 
         public ViewHolder(View itemView) {
@@ -82,6 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
             mMessageView = (TextView) itemView.findViewById(R.id.message);
             mStatusSendingView = (TextView) itemView.findViewById(R.id.status);
+            mImageView = (ImageView) itemView.findViewById(R.id.image);
         }
 
 
@@ -102,6 +111,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public void setStatus(boolean b) {
             if(mStatusSendingView!=null)
                 mStatusSendingView.setVisibility(b?View.VISIBLE:View.GONE);
+        }
+
+        public void setImage(String path){
+            if (path!=null){
+                    Picasso.with(mImageView.getContext()).load(new File(path)).fit().centerCrop().into(mImageView);
+                    mImageView.setVisibility(View.VISIBLE);
+            }else {
+                mImageView.setVisibility(View.GONE);
+            }
         }
     }
 }

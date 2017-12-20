@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.stub.listener.SelectListener;
 
 public class MultiFragmentActivity extends BaseActivity implements MultiFragmentActivityView,
         AboutFragment.OnFragmentInteractionListener,
@@ -117,5 +118,10 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     public void setTitle(CharSequence title) {
         super.setTitle(title);
         toolbarTitle.setText(getTitle());
+    }
+
+    @Override
+    public void selectPhoto(SelectListener selectListener) {
+        showSelect(this, R.array.avatar_options, selectListener);
     }
 }

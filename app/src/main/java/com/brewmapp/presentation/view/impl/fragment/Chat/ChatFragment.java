@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.fragment.Chat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
+import ru.frosteye.ovsa.stub.listener.SelectListener;
 
 /**
  * Created by Kras on 13.12.2017.
@@ -106,7 +108,7 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_photo:
-                showMessage(getString(R.string.message_develop));
+                mListener.selectPhoto(presenter.getSelectListenerPhoto(this));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -192,6 +194,11 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void scrollToBottom() {
         recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
@@ -201,6 +208,8 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         void commonError(String... message);
 
         void setTitle(CharSequence title);
+
+        void selectPhoto(SelectListener selectListener);
     }
 
 

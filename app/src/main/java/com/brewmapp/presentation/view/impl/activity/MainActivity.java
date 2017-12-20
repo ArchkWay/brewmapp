@@ -196,7 +196,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
             toolbarSubTitle.setVisibility(View.VISIBLE);
             toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
-
         } else {
             toolbarSubTitle.setVisibility(View.GONE);
         }

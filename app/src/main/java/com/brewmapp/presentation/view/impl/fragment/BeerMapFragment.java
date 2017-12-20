@@ -210,11 +210,11 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mClusterManager = new ClusterManager<>(getContext(), googleMap);
 
+        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity()));
         googleMap.setOnCameraIdleListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         googleMap.setOnInfoWindowClickListener(mClusterManager);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
-
         googleMap.setOnMyLocationButtonClickListener(() -> {
             lookForLocation();
             return true;
@@ -260,7 +260,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     protected void onLocationFound(Location location) {
-        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
         showDialogProgressBar(false);

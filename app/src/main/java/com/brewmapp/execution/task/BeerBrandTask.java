@@ -1,7 +1,5 @@
 package com.brewmapp.execution.task;
 
-import android.util.Log;
-
 import com.brewmapp.R;
 import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerBrandTypes;
@@ -44,17 +42,7 @@ public class BeerBrandTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params = new WrapperParams("");
-                int start;
-                if (fullSearchPackage.getPage() == 0) {
-                    start = fullSearchPackage.getPage() * step;
-                } else {
-                    start = (fullSearchPackage.getPage() * step) + 1;
-                }
-                int end = fullSearchPackage.getPage() * step + step;
-                Log.i("fullSearch", String.valueOf(fullSearchPackage.getPage()));
-                Log.i("start", String.valueOf(start));
-                Log.i("end", String.valueOf(end));
-                BeerBrandTypes response = executeCall(getApi().loadBeerBrands(start, end, params));
+                BeerBrandTypes response = executeCall(getApi().loadBeerBrands(params));
                 if (beerBrandInfos == null) {
                     beerBrandInfos = new ArrayList<>();
                     beerBrandInfos.add(0, new BeerBrandInfo(new BeerBrand("Любой  ")));

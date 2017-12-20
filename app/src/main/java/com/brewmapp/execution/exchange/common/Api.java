@@ -392,9 +392,7 @@ public interface Api {
 
     @POST("beer/brand")
     @FormUrlEncoded
-    Call<BeerBrandTypes> loadBeerBrands(@Query(Keys.LIMIT_START) int start,
-                                        @Query(Keys.LIMIT_END) int end,
-                                        @FieldMap WrapperParams params);
+    Call<BeerBrandTypes> loadBeerBrands(@FieldMap WrapperParams params);
 
     @POST("beer/color")
     @FormUrlEncoded

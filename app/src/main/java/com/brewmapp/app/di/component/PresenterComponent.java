@@ -1,7 +1,10 @@
 package com.brewmapp.app.di.component;
 
+import android.app.Service;
+
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
+import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
@@ -55,11 +58,16 @@ import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 @PresenterScope
 @Subcomponent(modules = PresenterModule.class)
 public interface PresenterComponent {
+
+    void inject(Service service);
+    void inject(ChatService service);
+
     void inject(BaseFragment baseFragment);
     void inject(ProfileFragment fragment);
     void inject(FriendsFragment fragment);
@@ -72,6 +80,7 @@ public interface PresenterComponent {
     void inject(MessageFragment fragment);
     void inject(BeerEditFragment fragment);
     void inject(RestoEditFragment fragment);
+    void inject(ChatFragment fragment);
 
     void inject(BaseActivity activity);
     void inject(StartActivity activity);

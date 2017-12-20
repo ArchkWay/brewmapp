@@ -21,6 +21,11 @@ import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.common.ApiClient;
 import com.brewmapp.execution.exchange.common.RestClient;
 import com.brewmapp.execution.social.SocialManager;
+
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
 import ru.frosteye.ovsa.di.module.BaseAppModule;
 import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -63,7 +68,6 @@ public class AppModule extends BaseAppModule<BeerMap> {
 
     @Provides @ApiUrl
     String provideApiUrl() {
-        //return context.getString(R.string.config_api_url);
         return SERVER_API_URL;
     }
 
@@ -76,4 +80,16 @@ public class AppModule extends BaseAppModule<BeerMap> {
     SocialManager provideSocialManager() {
         return new SocialManager(context);
     }
+
+    @Provides @Singleton
+    Socket getSocket() {
+        Socket mSocket=null;
+        try {
+            mSocket = IO.socket("https://chat.brewmapp.com:8443");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        return mSocket;
+    }
+
 }

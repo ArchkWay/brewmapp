@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
@@ -21,7 +19,7 @@ import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -30,8 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
-import ru.frosteye.ovsa.tool.DateTools;
-import ru.frosteye.ovsa.tool.TextTools;
 
 /**
  * Created by oleg on 16.08.17.
@@ -120,7 +116,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
 
                 String urlAvatar=null;
                 try {urlAvatar=model.getParent().getThumb();}catch (Exception e){}
-                avatar(avatar,urlAvatar,R.drawable.ic_sale);
+                avatar(avatar,urlAvatar,R.drawable.ic_default_resto);
 
                 Photo new_photo=null;try {new_photo=model.getPhotos().get(0);}catch (Exception e){}
                 photo(preview,new_photo,R.drawable.ic_default_image);
@@ -160,7 +156,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
             private void texts() {
                 try {author.setText(model.getParent().getName());}catch (Exception e){};
                 date.setText(model.getDateStartFormated());
-                new HashTagHelper2(text,model.getText());
+                new Text2TextWithHashTag(text,model.getText());
             }
 
             private void avatar(ImageView imageView, String urlAvatar, int ic_default_resto) {
@@ -172,31 +168,6 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
         }
 
         new FillContent().fill();
-//        shareLikeView.setiLikeable(model);
-//        this.model = model;
-//        author.setText(model.getParent().getName());
-//        new HashTagHelper2(text,model.getText());
-//        //text.setText(model.getText() != null ? TextTools.cut(Html.fromHtml(model.getText()).toString(), 250) : null);
-//        date.setText(DateTools.formatDottedDate(model.getDateStart()));
-//
-//        if(model.getPhotos() != null && !model.getPhotos().isEmpty()) {
-//            Photo photo = model.getPhotos().get(0);
-//            if(photo.getSize() == null) {
-//                preview.setVisibility(GONE);
-//                return;
-//            }
-//            preview.setVisibility(VISIBLE);
-//            float ratio = (float)photo.getSize().getWidth() / photo.getSize().getHeight();
-//            preview.post(() -> {
-//                LayoutParams params = ((LayoutParams) preview.getLayoutParams());
-//                params.height = (int) (preview.getMeasuredWidth()/ratio);
-//                preview.setLayoutParams(params);
-//                Picasso.with(getContext()).load(photo.getUrl()).fit().centerCrop().into(preview);
-//            });
-//
-//        } else {
-//            preview.setVisibility(GONE);
-//        }
     }
 
     @Override

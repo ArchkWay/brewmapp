@@ -3,30 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
 
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBlockSplitterBorder"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/ovsa_bg_selector_simple_white"
-        android:id="@+id/view.event.container">
+        android:id="@+id/view.event.container"
+        android:layout_marginTop="@dimen/common_block_space_half_bigger"
+        android:layout_marginLeft="@dimen/common_block_space_half_bigger"
+        android:layout_marginRight="@dimen/common_block_space_half_bigger"
+
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_block_space_double_semi"
-            android:layout_marginLeft="@dimen/common_block_space_double_semi"
-            android:layout_marginRight="@dimen/common_block_space_double_semi">
+            android:gravity="center_vertical"
+            >
 
             <com.makeramen.roundedimageview.RoundedImageView
-                android:layout_width="@dimen/size_avatar"
-                android:layout_height="@dimen/size_avatar"
+                android:layout_width="@dimen/size_avatar_lesser"
+                android:layout_height="@dimen/size_avatar_lesser"
                 android:id="@+id/view.event.image"
                 android:layout_marginRight="@dimen/common_block_space"
                 android:adjustViewBounds="true"
@@ -107,8 +108,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/view.event.text"
-            android:layout_marginLeft="@dimen/common_block_space_double_semi"
-            android:layout_marginRight="@dimen/common_block_space_double_semi"
             style="@style/AppTheme.Paragraph.Italic"
             android:text="@string/text_view_value_not_found"
 
@@ -118,12 +117,8 @@
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="5dp"
         android:background="@color/colorBlockSplitterBorder"/>
 
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/common_block_space"
-        android:background="@color/colorBlockSplitter"/>
 
 </com.brewmapp.presentation.view.impl.widget.EventView>

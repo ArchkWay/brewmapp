@@ -10,5 +10,5 @@ public interface EventsView extends BasicView, RefreshableView{
     int MODE_SALES = 1;
     int MODE_NEWS = 2;
     void appendItems(List<IFlexible> list);
-    void setTabActive(int i);
+
 }

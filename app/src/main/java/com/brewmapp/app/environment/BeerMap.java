@@ -10,7 +10,12 @@ import com.brewmapp.app.di.component.AppComponent;
 import com.brewmapp.app.di.component.DaggerAppComponent;
 import com.brewmapp.app.di.module.AppModule;
 import com.crashlytics.android.Crashlytics;
+
+import java.net.URISyntaxException;
+
 import io.fabric.sdk.android.Fabric;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 
 public class BeerMap extends Application {
@@ -36,11 +41,10 @@ public class BeerMap extends Application {
 
     private BroadcastReceiver oldApiReceiver = new BroadcastReceiver() {
 
-
-
         @Override
         public void onReceive(Context context, Intent intent) {
 
         }
     };
+
 }

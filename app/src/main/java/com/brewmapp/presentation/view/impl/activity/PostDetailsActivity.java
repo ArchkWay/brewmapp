@@ -3,7 +3,6 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -18,19 +17,16 @@ import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.view.contract.PostDetailsView;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.tool.DateTools;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -172,7 +168,7 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
 
                 title.setText(post.getRelated_model_data().getName());
                 date.setText(post.getDateFormated());
-                new HashTagHelper2(text,post.getText());
+                new Text2TextWithHashTag(text,post.getText());
 
             }
 

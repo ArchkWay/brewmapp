@@ -9,6 +9,7 @@
     >
 
     <include layout="@layout/view_toolbar" />
+    <!--<include layout="@layout/view_toolbar_center_title_with_back_button" />-->
         <FrameLayout
             android:id="@+id/multiactivity_сontainer"
             android:layout_width="match_parent"

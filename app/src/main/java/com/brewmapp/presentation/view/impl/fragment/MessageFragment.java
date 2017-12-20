@@ -11,9 +11,12 @@ import android.view.View;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Contact;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -68,7 +71,21 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         });
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> new DialogManageContact(getActivity(),getActivity().getSupportFragmentManager(),payload,presenter));
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
+            try {
+                switch (((Contact) payload).getStatus()) {
+                    case 1:
+                        Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, getActivity(), MultiFragmentActivity.class);
+                        intent.putExtra(RequestCodes.INTENT_EXTRAS,((Contact) payload).getUser());
+                        startActivity(intent);
+                        break;
+                    default:
+                        new DialogManageContact(getActivity(), getActivity().getSupportFragmentManager(), payload, presenter);
+                }
+
+            }catch (Exception e){}
+        }
+            );
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);

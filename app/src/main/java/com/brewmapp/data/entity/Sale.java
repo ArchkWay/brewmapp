@@ -134,7 +134,7 @@ public class Sale implements Serializable, ILikeable {
 
     public String getDateStartFormated() {
         try {
-            return android.text.format.DateFormat.format("dd MMMM yyyy",getDateStart()).toString();
+            return android.text.format.DateFormat.format("dd.MM.yyyy HH:mm",getDateStart()).toString();
         }catch (Exception e){
             return null;
         }

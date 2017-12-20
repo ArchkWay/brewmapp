@@ -43,7 +43,6 @@ import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.SaleDetailsActivity;
-import com.brewmapp.presentation.view.impl.activity.SearchActivity;
 
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
@@ -76,10 +75,10 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     public static final int TAB_SALE = 1;
     public static final int TAB_POST = 2;
 
-    private final String MODE_DEFAULT="default";
-    private final String MODE_ONLY_BY_RESTO="by_resto";
+    private final String MODE_DEFAULT="0";
+    private final String MODE_TABS_INVISIBLE ="1";
 
-    private String mode;
+    private String mode=MODE_DEFAULT;
 
     @Override
     protected int getFragmentLayout() {
@@ -93,16 +92,10 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
 
     @Override
     protected void initView(View view) {
-        if(getArguments()==null){
-            mode=MODE_DEFAULT;
-        }else  if(getArguments().get(Keys.RELATED_MODEL)!=null&&getArguments().get(Keys.RELATED_ID)!=null){
-            mode = MODE_ONLY_BY_RESTO;
-        }else {
-            mode=MODE_DEFAULT;
-        }
+        if(getArguments().get(Keys.RELATED_MODEL)!=null&&getArguments().get(Keys.RELATED_ID)!=null)
+            mode = MODE_TABS_INVISIBLE;
 
-        if(mode.equals(MODE_DEFAULT))
-            interractor().processSetActionBar(0);
+        interractor().processSetActionBar(0);
 
         tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
             @Override
@@ -137,6 +130,10 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(() -> refreshItems(false));
+        //setActiveTab
+        tabsView.post(() -> tabsView.getTabs().getTabAt(presenter.getStoredActiveTab()).select());
+        tabsView.setVisibility(mode.equals(MODE_TABS_INVISIBLE)?View.GONE:View.VISIBLE);
+
     }
 
     private void fillDropDownList() {
@@ -226,12 +223,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
 
     }
 
-    @Override
-    public void setTabActive(int i) {
-       tabsView.getTabs().getTabAt(i).select();
-       if(mode.equals(MODE_ONLY_BY_RESTO))
-            tabsView.setVisibility(View.GONE);
-    }
 
     private void setEmpty(boolean empty) {
         if(!empty) {
@@ -274,7 +265,8 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     public void onBarAction(int id) {
         switch (id) {
             case R.id.action_search:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
+                //startActivity(new Intent(getActivity(), SearchActivity.class));
+                showMessage(getString(R.string.message_develop));
                 break;
             case R.id.action_add:
                 interractor().processStartActivityWithRefresh(new Intent(getActivity(), NewPostActivity.class), REQUEST_CODE_REFRESH_ITEMS);

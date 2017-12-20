@@ -22,13 +22,13 @@ import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
  * Created by xpusher on 11/24/2017.
  */
 
-public class HashTagHelper2 {
+public class Text2TextWithHashTag {
     public static final String LINK = " http";
     public static final String SHARP = "#";
     public static final String SPAN_TAG = "tmp";
     Context context;
 
-    public HashTagHelper2(TextView textView, String content){
+    public Text2TextWithHashTag(TextView textView, String content){
         try {
             String htmlStr=content.toString();
 

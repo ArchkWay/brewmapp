@@ -28,7 +28,7 @@ import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
-import com.brewmapp.execution.tool.HashTagHelper2;
+import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
@@ -85,7 +85,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         if(isInEditMode()) return;
         ButterKnife.bind(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        subcontainer.setOnClickListener(v ->{
+        avatar.setOnClickListener(v ->{
             Intent intent = new Intent(getContext(), RestoDetailActivity.class);
             Interest interest=null;
             try {
@@ -100,6 +100,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                 getContext().startActivity(intent);
             }
         } );
+        subcontainer.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         post_photo.setOnClickListener(v -> {
@@ -156,7 +157,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
             }
 
             private void texts() {
-                new HashTagHelper2(text,model.getText());
+                new Text2TextWithHashTag(text,model.getText());
                 date.setText(model.getDateFormated());
             }
 

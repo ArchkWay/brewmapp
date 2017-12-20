@@ -1,10 +1,12 @@
 package com.brewmapp.app.di.module;
 
+import android.app.Service;
 import android.view.View;
 
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.BeerEditFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
@@ -48,6 +50,7 @@ import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.BeerEditFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ChatFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MessageFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiFragmentActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiListPresenterImpl;
@@ -99,13 +102,17 @@ import dagger.Provides;
 import ru.frosteye.ovsa.di.module.BasePresenterModule;
 
 @Module
-public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragment> {
+public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragment, Service> {
     public PresenterModule(View view) {
         super(view);
     }
 
     public PresenterModule(BaseActivity activity) {
         super(activity);
+    }
+
+    public PresenterModule(Service service) {
+        super(service);
     }
 
     public PresenterModule(BaseFragment fragment) {
@@ -326,6 +333,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     RestoEditFragmentPresenter provideRestoEditFragmentPresenter(RestoEditFragmentPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    ChatFragmentPresenter provideChatFragmentPresenter(ChatFragmentPresenterImpl presenter){
         return presenter;
     }
 }

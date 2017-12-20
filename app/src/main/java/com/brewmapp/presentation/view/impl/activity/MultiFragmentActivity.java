@@ -4,16 +4,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.AboutFragment;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.AboutFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 
 import javax.inject.Inject;
 
@@ -24,11 +29,15 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
         AboutFragment.OnFragmentInteractionListener,
         WebViewFragment.OnFragmentInteractionListener ,
         BeerEditFragment.OnFragmentInteractionListener,
-        RestoEditFragment.OnFragmentInteractionListener
+        RestoEditFragment.OnFragmentInteractionListener,
+        ChatFragment.OnFragmentInteractionListener
 
 {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.multiactivity_root)    ViewGroup root;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
 
 
 
@@ -43,6 +52,10 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     @Override
     protected void initView() {
         enableBackButton();
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
+
     }
 
     @Override
@@ -84,7 +97,6 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
 
     }
 
-
     @Override
     protected Toolbar findActionBar() {
         return toolbar;
@@ -98,5 +110,12 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     @Override
     public void setTitleActionBar(int title) {
         setTitle(title);
+        toolbarTitle.setText(getTitle());
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
     }
 }

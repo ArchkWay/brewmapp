@@ -1,9 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,19 +13,16 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerBrand;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.BeerEditFragmentView;
-import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogInput;
 import com.brewmapp.presentation.view.impl.dialogs.DialogSearchBrand;
-import com.brewmapp.presentation.view.impl.fragment.SimpleFragment.WebViewFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.ArrayList;
 

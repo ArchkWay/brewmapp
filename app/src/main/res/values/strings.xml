@@ -434,5 +434,6 @@
     <string name="prompt_message">Написать сообщение</string>
     <string name="action_send">Send</string>
     <string name="user_action_typing">is typing</string>
+    <string name="status_sending">Отправка...</string>
 
 </resources>

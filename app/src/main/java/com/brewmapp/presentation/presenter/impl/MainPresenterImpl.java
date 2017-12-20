@@ -12,6 +12,7 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.pojo.ProfileInfoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.LoadProfileAndPostsTask;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.view.contract.MainView;
@@ -47,6 +48,7 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
             public void onNext(ProfileInfoPackage pack) {
                 userRepo.save(pack.getUserProfile().getUser());
                 view.successCheckEnvironment(userRepo.load(),MenuField.createDefault(context));
+                context.startService(new Intent(ChatService.ACTION_INIT_CHAT_SERVICE, null, context, ChatService.class));
             }
 
             @Override

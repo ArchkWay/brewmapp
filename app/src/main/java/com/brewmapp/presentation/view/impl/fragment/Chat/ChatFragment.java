@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
@@ -57,8 +58,8 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         recyclerView.setLayoutManager(manager );
         mAdapter = new MessageAdapter(getActivity(), mMessages);
         recyclerView.setAdapter(mAdapter);
-        mInputMessageView.setOnEditorActionListener((v, id, event) -> {presenter.send(v);return true;});
-        send_button.setOnClickListener(v -> {presenter.send(mInputMessageView);mInputMessageView.setText("");});
+        mInputMessageView.setOnEditorActionListener((v, id, event) -> {presenter.sendMessage(v);return true;});
+        send_button.setOnClickListener(v -> {presenter.sendMessage(mInputMessageView);mInputMessageView.setText("");});
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean needCalcDownload=false;
             int countCommonItems=0;
@@ -167,10 +168,28 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         }
     }
 
-
     @Override
     public void setFriend(User friend) {
         mListener.setTitle(friend.getFormattedName());
+    }
+
+    @Override
+    public void clearMessages() {
+        mMessages.clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setStatusMessage(ChatReceiveMessage chatReceiveMessage) {
+        for (Message message:mMessages){
+            if(message.getmId()==0&&message.getMessage().equals(chatReceiveMessage.getText())){
+                message.setmStateSending(false);
+                message.setmId(Integer.valueOf(chatReceiveMessage.getId()));
+                mAdapter.notifyDataSetChanged();
+                return;
+            }
+
+        }
     }
 
     private void scrollToBottom() {

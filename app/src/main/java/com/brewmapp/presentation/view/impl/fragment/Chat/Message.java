@@ -16,8 +16,21 @@ public class Message {
     private String mUsername;
     private String mDirection;
     private int mId;
+    private boolean mStateSending=false;
 
     private Message() {}
+
+    public boolean ismStateSending() {
+        return mStateSending;
+    }
+
+    public void setmStateSending(boolean mStateSending) {
+        this.mStateSending = mStateSending;
+    }
+
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
 
     public int getmId() {
         return mId;
@@ -48,6 +61,7 @@ public class Message {
         private String mUsername;
         private String mMessage;
         private int id;
+        private boolean mStateSending=false;
 
         public Builder(int type) {
             mType = type;
@@ -63,6 +77,10 @@ public class Message {
             return this;
         }
 
+        public Builder stateSending(boolean state) {
+            mStateSending = state;
+            return this;
+        }
 
         public Message build() {
             Message message = new Message();
@@ -70,6 +88,7 @@ public class Message {
             message.mUsername = mUsername;
             message.mMessage = mMessage;
             message.mId = id;
+            message.mStateSending = mStateSending;
             return message;
         }
 

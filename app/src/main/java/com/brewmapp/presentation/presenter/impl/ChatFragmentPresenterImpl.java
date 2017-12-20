@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.data.entity.ChatListMessages;
 import com.brewmapp.data.entity.ChatMessage;
 import com.brewmapp.data.entity.ChatReceiveMessage;
@@ -40,14 +41,14 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     private Boolean isConnected = false;
     private User friend;
     private UserRepo userRepo;
-    private InnerThis innerThis;
+    private InnerWorker innerWorker;
     private ResultReceiver resultReceiver;
 
     @Inject
     public ChatFragmentPresenterImpl(UserRepo userRepo, Socket socket){
         this.userRepo = userRepo;
         //this.mSocket=socket;
-        innerThis=new InnerThis();
+        innerWorker =new InnerWorker();
     }
 
     @Override
@@ -57,12 +58,11 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
     @Override
     public void connectToChat(Intent intent) {
-        innerThis.init(intent);
+        innerWorker.init(intent);
     }
 
     @Override
-    public void send(TextView textView) {
-        innerThis.commandToChatService(ChatService.ACTION_REQUEST_DIALOGS,friend);
+    public void sendMessage(TextView textView) {
         String text_send=textView.getText().toString();
         if(text_send.length()>0) {
             List<Message> list=new ArrayList<>();
@@ -70,31 +70,34 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
                             .username(userRepo.load().getFormattedName())
                             .message(text_send)
+                            .stateSending(true)
                             .build()
             );
             view.addMessages(list,false);
-            innerThis.send(text_send);
+            innerWorker.commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,innerWorker.escapeUnicodeText(text_send));
         }
     }
 
     @Override
     public void nextPage(Message message) {
-        innerThis.requestMessages(message.getmId());
+        if(message.getmId()>0)
+            innerWorker.requestDialogContents(message.getmId());
     }
 
     @Override
-    public void onDestroy() {view.getActivity().stopService(new Intent(view.getActivity(),ChatService.class));}
+    public void onDestroy() {
+        innerWorker.commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
+    }
 
-    class InnerThis{
-        ChatListDialogs chatListDialogs;
-
+    class InnerWorker {
+        //main
         void init(Intent intent) {
             try {
                 friend = (User) intent.getSerializableExtra(RequestCodes.INTENT_EXTRAS);
                 if(friend ==null)
                     view.commonError();
                 else {
-                    innerThis.commandToChatService(ChatService.ACTION_AUTHORIZATION);
+                    innerWorker.commandToChatService(ChatService.ACTION_SET_RECEIVER);
                     view.setFriend(friend);
                 }
             }catch (Exception e){
@@ -102,24 +105,30 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
         }
         void commandToChatService(String command, Object... args) {
+
+            if(view.getActivity()==null) return;
+
             Intent intent=new Intent(command,null,view.getActivity(), ChatService.class);
             //prepare arguments
             try {
                 switch (command){
+                    case ChatService.ACTION_SET_RECEIVER:
+                        resultReceiver=new ChatResultReceiver(new Handler(view.getActivity().getMainLooper()));
+                        intent.putExtra(ChatService.RECEIVER,resultReceiver);
+                        break;
                     case ChatService.ACTION_REQUEST_DIALOGS:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         break;
-                    case ChatService.ACTION_REQUEST_MESSAGES:
+                    case ChatService.ACTION_REQUEST_DIALOG_CONTENT:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         intent.putExtra(ChatService.EXTRA_PARAM2,((int)args[1]));
-                        break;
-                    case ChatService.ACTION_AUTHORIZATION:
-                        resultReceiver=new ChatResultReceiver(new Handler(view.getActivity().getMainLooper()));
-                        intent.putExtra(ChatService.RECEIVER,resultReceiver);
                         break;
                     case ChatService.ACTION_SEND_MESSAGE:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         intent.putExtra(ChatService.EXTRA_PARAM2,(String)args[1]);
+                        break;
+                    case ChatService.ACTION_CLEAR_RECEIVER:
+                        resultReceiver=null;
                         break;
                 }
             }catch (Exception e){
@@ -132,37 +141,55 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
         }
         void handleResult(Bundle resultData) {
             String action=resultData.getString(ChatService.EXTRA_PARAM1);
-            switch (action){
-                case ChatService.ACTION_AUTHORIZATION: {
-                    commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
-                }break;
-                case ChatService.ACTION_REQUEST_DIALOGS: {
-                    String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                    chatListDialogs = new GsonBuilder().create().fromJson(string.replace("\\\\", "\\"), ChatListDialogs.class);
-                    requestMessages(0);
-                }break;
-                case ChatService.ACTION_REQUEST_MESSAGES: {
-                    String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                    loadMessages(string);
-                }break;
-                case ChatService.ACTION_RECIEVE_MESSAGE: {
-                    String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                    ChatReceiveMessage chatReceiveMessage=new Gson().fromJson(string.replace("\\\\","\\"), ChatReceiveMessage.class);
-                    if(Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
-                        Message message=new Message
-                                .Builder(Message.TYPE_MESSAGE_INPUT)
-                                .message(chatReceiveMessage.getText())
-                                .username(chatReceiveMessage.getFrom().getFormattedName())
-                                .build();
-                        List<Message> list=new ArrayList<>();
-                        list.add(message);
-                        view.addMessages(list,false);
-            }
+            if(action!=null) {
+                switch (action) {
+                    case ChatService.ACTION_SET_RECEIVER: {
+                        commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
+                    }break;
+                    case ChatService.ACTION_INIT_DIALOG: {
+                        view.clearMessages();
+                        commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
+                    }break;
+                    case ChatService.ACTION_REQUEST_DIALOGS: {
+                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
+                        ChatListDialogs chatListDialogs = new GsonBuilder().create().fromJson(string.replace("\\\\", "\\"), ChatListDialogs.class);
+                        for (ChatDialog chatDialog:chatListDialogs)
+                            if(chatDialog.getUser().getId()==friend.getId())
+                                requestDialogContents(0);
+                    }break;
+                    case ChatService.ACTION_REQUEST_DIALOG_CONTENT: {
+                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
+                        showDialogContent(string);
+                    }break;
+                    case ChatService.ACTION_RECEIVE_MESSAGE: {
+                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
+                        ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(string.replace("\\\\", "\\"), ChatReceiveMessage.class);
+                        if (Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
+                            Message message = new Message
+                                    .Builder(Message.TYPE_MESSAGE_INPUT)
+                                    .message(chatReceiveMessage.getText())
+                                    .username(chatReceiveMessage.getFrom().getFormattedName())
+                                    .build();
+                            List<Message> list = new ArrayList<>();
+                            list.add(message);
+                            view.addMessages(list, false);
+                        }
 
-                }break;
+                    }break;
+                    case ChatService.ACTION_SEND_MESSAGE:{
+                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
+                        ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(string.replace("\\\\", "\\"), ChatReceiveMessage.class);
+                        view.setStatusMessage(chatReceiveMessage);
+
+                    }break;
+                }
             }
         }
-        void loadMessages(String string) {
+        void requestDialogContents(int idLastMessage) {
+            commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,idLastMessage);
+        }
+        void showDialogContent(String string) {
+
             ChatListMessages listMessages=new GsonBuilder().create().fromJson(string.replace("\\\\","\\"), ChatListMessages.class);
             List<Message> list=new ArrayList<>();
 
@@ -190,6 +217,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
             view.addMessages(list,true);
         }
+        //other
         String escapeUnicodeText(String input) {
 
             StringBuilder b = new StringBuilder(input.length());
@@ -218,12 +246,6 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
             return text;
         }
-        public void send(String string_send) {
-            commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,escapeUnicodeText(string_send));
-        }
-        void requestMessages(int idLastMessage) {
-            commandToChatService(ChatService.ACTION_REQUEST_MESSAGES, chatListDialogs.get(0).getUser(),idLastMessage);
-        }
     }
     class ChatResultReceiver extends ResultReceiver {
 
@@ -234,10 +256,10 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             switch (resultCode){
-                case ChatService.STATUS_COMPLEATE:{
-                    innerThis.handleResult(resultData);
+                case ChatService.RESULT_OK:{
+                    innerWorker.handleResult(resultData);
                 }break;
-                case ChatService.STATUS_ERROR:{
+                case ChatService.RESULT_ERROR:{
                     view.commonError();
                 }break;
 

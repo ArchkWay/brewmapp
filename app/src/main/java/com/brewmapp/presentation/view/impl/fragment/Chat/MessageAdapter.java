@@ -54,6 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Message message = mMessages.get(position);
         viewHolder.setMessage(message.getMessage());
+        viewHolder.setStatus(message.ismStateSending());
 
     }
 
@@ -73,12 +74,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mMessageView;
+        private TextView mStatusSendingView;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             mMessageView = (TextView) itemView.findViewById(R.id.message);
+            mStatusSendingView = (TextView) itemView.findViewById(R.id.status);
         }
 
 
@@ -94,6 +97,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             }
             int index = Math.abs(hash % mUsernameColors.length);
             return mUsernameColors[index];
+        }
+
+        public void setStatus(boolean b) {
+            if(mStatusSendingView!=null)
+                mStatusSendingView.setVisibility(b?View.VISIBLE:View.GONE);
         }
     }
 }

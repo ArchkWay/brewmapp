@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.contract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
 
@@ -22,4 +23,8 @@ public interface ChatFragmentView extends BasicView {
     void addMessages(List<Message> messages, boolean insert);
 
     void setFriend(User friend);
+
+    void clearMessages();
+
+    void setStatusMessage(ChatReceiveMessage chatReceiveMessage);
 }

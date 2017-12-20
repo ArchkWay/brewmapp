@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
     <application
         android:name=".app.environment.BeerMap"
         android:allowBackup="true"
@@ -40,7 +42,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.StartActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.LoginActivity"
             android:label="@string/entrance"
@@ -179,7 +181,17 @@
 
         <service
             android:name=".execution.services.ChatService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <receiver
+            android:name=".execution.tool.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

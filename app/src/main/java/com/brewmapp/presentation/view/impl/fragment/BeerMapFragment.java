@@ -260,9 +260,9 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     protected void onLocationFound(Location location) {
+        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
-        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
         showDialogProgressBar(false);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
                 location.getLatitude(), location.getLongitude()

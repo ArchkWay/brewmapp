@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +41,7 @@ import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.widgets.CustomDrawerArrowDrawable;
 import nl.psdcompany.duonavigationdrawer.widgets.CustomDuoDrawerToggle;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
+
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.MenuField;
@@ -64,25 +64,40 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_SEARCH_CODE;
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
 
-    @BindView(R.id.common_toolbar) Toolbar toolbar;
-    @BindView(R.id.common_toolbar_dropdown) LinearLayout toolbarDropdown;
-    @BindView(R.id.common_toolbar_title) TextView toolbarTitle;
-    @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
-    @BindView(R.id.activity_main_drawer) DuoDrawerLayout drawer;
-    @BindView(R.id.activity_main_menu) RecyclerView menu;
-    @BindView(R.id.activity_main_userName) TextView userName;
-    @BindView(R.id.activity_main_text_view_check_connection) TextView check_connection;
-    @BindView(R.id.activity_main_avatar) ImageView avatar;
-    @BindView(R.id.activity_main_profileHeader) View profileHeader;
-    @BindView(R.id.activity_main_container) FrameLayout container;
-    @BindView(R.id.activity_main_visible_container)    RelativeLayout visible_container;
+    @BindView(R.id.common_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.common_toolbar_dropdown)
+    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)
+    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)
+    TextView toolbarSubTitle;
+    @BindView(R.id.activity_main_drawer)
+    DuoDrawerLayout drawer;
+    @BindView(R.id.activity_main_menu)
+    RecyclerView menu;
+    @BindView(R.id.activity_main_userName)
+    TextView userName;
+    @BindView(R.id.activity_main_text_view_check_connection)
+    TextView check_connection;
+    @BindView(R.id.activity_main_avatar)
+    ImageView avatar;
+    @BindView(R.id.activity_main_profileHeader)
+    View profileHeader;
+    @BindView(R.id.activity_main_container)
+    FrameLayout container;
+    @BindView(R.id.activity_main_visible_container)
+    RelativeLayout visible_container;
 
-    @Inject MainPresenter presenter;
-    @Inject MainNavigator navigator;
+    @Inject
+    MainPresenter presenter;
+    @Inject
+    MainNavigator navigator;
 
     private FlexibleAdapter<MenuField> adapter;
     private List<MenuField> menuItems;
-    private @MenuRes int menuToShow;
+    private @MenuRes
+    int menuToShow;
 
     public static final String KEY_FIRST_FRAGMENT = "first_fragment";
     public static final String MODE_DEFAULT = "default";
@@ -97,17 +112,15 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
-        processShowDrawer(false,true);
+        processShowDrawer(false, true);
         Paper.init(this);
         Paper.book().destroy();
     }
 
     @Override
     protected void initView() {
-        toolbarDropdown.setVisibility(View.VISIBLE);
-        toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
         mode = presenter.parseMode(getIntent());
-   }
+    }
 
     private void setDrawer() {
         drawer.setMarginFactor(0.5f);
@@ -153,11 +166,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         } else {
             mode = presenter.parseMode(getIntent());
         }
-        fragment.setArguments(presenter.prepareArguments(getIntent(),container));
+        fragment.setArguments(presenter.prepareArguments(getIntent(), container));
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(fragment, 0);
-        if(menuToShow == 0) processSetActionBar(0);
+        if (menuToShow == 0) processSetActionBar(0);
         navigator.setActionBarItemDelegate(fragment);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -179,27 +192,14 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
-
-        if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
         actionBar.setDisplayShowTitleEnabled(false);
-        toolbarTitle.setText(baseFragment.getTitle());
         if (baseFragment.getTitleDropDown() != null && !baseFragment.getTitleDropDown().isEmpty()) {
             toolbarSubTitle.setVisibility(View.VISIBLE);
-            if(mode.equals(MODE_DEFAULT)) {
-                if (baseFragment instanceof View.OnClickListener) {
-                    toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
-                }
-                toolbarSubTitle.setVisibility(View.VISIBLE);
-            }else {
-                toolbarSubTitle.setVisibility(View.GONE);
-            }
-        } else {
-            toolbarSubTitle.setVisibility(View.GONE);
-            }
+            toolbarSubTitle.setOnClickListener(((View.OnClickListener) baseFragment));
+
         } else {
             toolbarSubTitle.setVisibility(View.GONE);
         }
-
         toolbarTitle.setText(baseFragment.getTitle());
     }
 
@@ -235,24 +235,24 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public synchronized void processShowDrawer(boolean show, boolean smooth) {
-        if(smooth) {
+        if (smooth) {
             TransitionManager.getDefaultTransition().setDuration(250);
             TransitionManager.beginDelayedTransition(drawer);
         }
         container.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
-        container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
-        toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        container.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        toolbar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     public void showDrawer(boolean shown) {
-        if(shown)
+        if (shown)
             drawer.openDrawer();
         else
             drawer.post(() -> {
                 drawer.closeDrawer();
-                processShowDrawer(false,true);
+                processShowDrawer(false, true);
             });
     }
 
@@ -266,7 +266,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         menu.setLayoutManager(new LinearLayoutManager(this));
         menu.setAdapter(adapter);
 
-        switch (mode){
+        switch (mode) {
             case MODE_DEFAULT:
                 setDrawer();
                 break;
@@ -274,7 +274,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 enableBackButton();
                 navigator.storeCodeActiveFragment(MenuField.EVENTS);
                 navigator.storeCodeTebEventFragment(
-                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT)
+                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS, EventsFragment.TAB_EVENT)
                 );
                 setResult(RESULT_OK);
                 break;
@@ -292,17 +292,17 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        switch (mode){
+        switch (mode) {
             case MODE_DEFAULT:
-                if(menuToShow != 0)  getMenuInflater().inflate(menuToShow, menu);
+                if (menuToShow != 0) getMenuInflater().inflate(menuToShow, menu);
                 break;
             case MODE_ONLY_EVENT_FRAGMENT:
             case MODE_ONLY_MAP_FRAGMENT:
-                if (menu!=null) menu.clear();
+                if (menu != null) menu.clear();
                 getMenuInflater().inflate(R.menu.stub, menu);
                 break;
             case SEARCH_FRAGMENT:
-                if (menu!=null) menu.clear();
+                if (menu != null) menu.clear();
                 getMenuInflater().inflate(R.menu.stub, menu);
                 break;
         }
@@ -311,18 +311,18 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 return super.onOptionsItemSelected(item);
             default:
-              return navigator.onOptionsItemSelected(item);
+                return navigator.onOptionsItemSelected(item);
         }
     }
 
     @Override
     public boolean onItemClick(int position) {
         MenuField field = adapter.getItem(position);
-        if(field.getId() == MenuField.LOGOUT) {
+        if (field.getId() == MenuField.LOGOUT) {
             presenter.onLogout();
             startActivityAndClearTask(StartActivity.class);
             finish();
@@ -364,7 +364,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void commonError(String... strings) {
-        if(strings.length==0)
+        if (strings.length == 0)
             showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
@@ -376,21 +376,24 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshState();
-            else if(fragment instanceof ProfileFragment)
+            else if (fragment instanceof ProfileFragment)
                 ((ProfileFragment) fragment).refreshState();
     }
+
     @SuppressLint("RestrictedApi")
     public void refreshItems() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems(false);
     }
+
     @SuppressLint("RestrictedApi")
     public void showResultOnMap() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if(fragment instanceof ProfileFragment)
+            if (fragment instanceof ProfileFragment)
                 ((ProfileFragment) fragment).refreshItems();
     }
+
     @SuppressLint("RestrictedApi")
     public void showMapResult(boolean isBeer, int checkBox) {
         for (Fragment fragment : getSupportFragmentManager().getFragments())

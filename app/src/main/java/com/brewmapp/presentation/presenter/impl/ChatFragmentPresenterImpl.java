@@ -1,11 +1,14 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.widget.TextView;
 
+import com.brewmapp.app.di.qualifier.ChatUrl;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.ChatDialog;
@@ -24,6 +27,10 @@ import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -46,17 +53,18 @@ import static android.app.Activity.RESULT_OK;
 
 public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> implements ChatFragmentPresenter {
 
-    //private Socket mSocket;
+
     private Boolean isConnected = false;
     private User friend;
     private UserRepo userRepo;
     private InnerWorker innerWorker;
     private ResultReceiver resultReceiver;
+    private String chatUrl;
 
     @Inject
-    public ChatFragmentPresenterImpl(UserRepo userRepo, Socket socket){
+    public ChatFragmentPresenterImpl(UserRepo userRepo,@ChatUrl String chatUrl){
         this.userRepo = userRepo;
-        //this.mSocket=socket;
+        this.chatUrl = chatUrl;
         innerWorker =new InnerWorker();
     }
 
@@ -154,7 +162,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     case ChatService.ACTION_SET_RECEIVER: {
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
                     }break;
-                    case ChatService.ACTION_INIT_DIALOG: {
+                    case ChatService.ACTION_RELOAD_DIALOG: {
                         view.clearMessages();
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
                     }break;
@@ -173,10 +181,27 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         String string = resultData.getString(ChatService.EXTRA_PARAM2);
                         ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(string.replace("\\\\", "\\"), ChatReceiveMessage.class);
                         if (Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
+                            String url=null;
+                            int imageHeight=0;
+                            int imageWidth=0;
+                            try {
+                                JSONArray jsonArray=new JSONArray(chatReceiveMessage.getMsg_file());
+                                if(jsonArray.length()>0) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                    url =chatUrl + "/files/" + jsonObject.getString("url");
+                                    imageHeight=jsonObject.getJSONObject("info").getInt("height");
+                                    imageWidth=jsonObject.getJSONObject("info").getInt("width");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             Message message = new Message
                                     .Builder(Message.TYPE_MESSAGE_INPUT)
                                     .message(chatReceiveMessage.getText())
                                     .username(chatReceiveMessage.getFrom().getFormattedName())
+                                    .setImage(url)
+                                    .setImageHeight(imageHeight)
+                                    .setImageWidth(imageWidth)
                                     .build();
                             List<Message> list = new ArrayList<>();
                             list.add(message);
@@ -201,7 +226,21 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             ChatListMessages listMessages=new GsonBuilder().create().fromJson(string.replace("\\\\","\\"), ChatListMessages.class);
             List<Message> list=new ArrayList<>();
 
+            String image=null;
+            int imageHeight=0;
+            int imageWidth=0;
             for (ChatMessage chatMessage:listMessages.getData()) {
+                try {
+                    JSONArray images=new JSONArray(chatMessage.getMsg_file());
+                    if(images.length()>0) {
+                        image = chatUrl + "/files/" + images.getJSONObject(0).getString("url");
+                        imageHeight=images.getJSONObject(0).getJSONObject("info").getInt("height");
+                        imageWidth=images.getJSONObject(0).getJSONObject("info").getInt("width");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 switch (chatMessage.getDir()){
                     case Keys.CHAT_DIR_INPUT:
                         list.add(
@@ -209,6 +248,9 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                         .username(getUnicodeString(chatMessage.getUser().getFormattedName()))
                                         .message(chatMessage.getText())
                                         .setId(chatMessage.getId())
+                                        .setImage(image)
+                                        .setImageHeight(imageHeight)
+                                        .setImageWidth(imageWidth)
                                         .build()
                         );
                         break;
@@ -218,6 +260,9 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                         .username(getUnicodeString(userRepo.load().getFormattedName()))
                                         .message(chatMessage.getText())
                                         .setId(chatMessage.getId())
+                                        .setImage(image)
+                                        .setImageHeight(imageHeight)
+                                        .setImageWidth(imageWidth)
                                         .build()
                         );
                         break;
@@ -263,7 +308,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
                                 if (response.resultCode() != RESULT_OK) return;
-                                sendPhoto(response.data().getFile());
+                                sendImage(response.data().getFile());
                             });
 
                     break;
@@ -274,7 +319,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
                                 if (response.resultCode() != RESULT_OK) return;
-                                sendPhoto(response.data().getFile());
+                                sendImage(response.data().getFile());
                             });
 
                     break;
@@ -284,8 +329,12 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
 
         }
-        void sendPhoto(File file) {
+        void sendImage(File file) {
             if(file!=null&&file.exists()) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds=true;
+                BitmapFactory.decodeFile(file.getAbsolutePath(),options);
+
                 List<Message> list=new ArrayList<>();
                 list.add(
                         new Message.Builder(Message.TYPE_MESSAGE_OUTPUT)
@@ -293,6 +342,8 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .message(file.getAbsolutePath())
                                 .stateSending(true)
                                 .setImage(file.getAbsolutePath())
+                                .setImageHeight(options.outHeight)
+                                .setImageWidth(options.outWidth)
                                 .build()
                 );
                 view.addMessages(list,false);

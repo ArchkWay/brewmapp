@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -62,6 +64,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         viewHolder.setMessage(message.getMessage());
         viewHolder.setStatus(message.ismStateSending());
         viewHolder.setImage(message.getImage());
+        viewHolder.setImageHeight(message.getImageHeight());
+        viewHolder.setImageWidth(message.getImageWidth());
 
     }
 
@@ -83,6 +87,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         private TextView mMessageView;
         private TextView mStatusSendingView;
         private ImageView mImageView;
+        private int imageHeight;
+        private int imageWidth;
 
 
         public ViewHolder(View itemView) {
@@ -93,6 +99,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             mImageView = (ImageView) itemView.findViewById(R.id.image);
         }
 
+        public void setImageHeight(int imageHeight) {
+            this.imageHeight = imageHeight;
+        }
+
+        public void setImageWidth(int imageWidth) {
+            this.imageWidth = imageWidth;
+        }
 
         public void setMessage(String message) {
             if (null == mMessageView) return;
@@ -115,8 +128,29 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         public void setImage(String path){
             if (path!=null){
-                    Picasso.with(mImageView.getContext()).load(new File(path)).fit().centerCrop().into(mImageView);
-                    mImageView.setVisibility(View.VISIBLE);
+                mImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        //resize
+                        float ratio=(float) mImageView.getWidth()/(float) imageWidth;
+                        LinearLayout.LayoutParams p= (LinearLayout.LayoutParams) mImageView.getLayoutParams();
+                        p.height=(int) (imageHeight*ratio);
+                        mImageView.setLayoutParams(p);
+                        //load
+                        mImageView.post(() -> {
+                            //Picasso.with(mImageView.getContext()).load(path).into(mImageView);
+                            if(path.startsWith("http"))
+                                Picasso.with(mImageView.getContext()).load(path).fit().centerCrop().into(mImageView);
+                            else
+                                Picasso.with(mImageView.getContext()).load(new File(path)).fit().centerCrop().into(mImageView);
+
+                        });
+
+                        return true;
+                    }
+                });
+                mImageView.setVisibility(View.VISIBLE);
             }else {
                 mImageView.setVisibility(View.GONE);
             }

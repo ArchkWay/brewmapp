@@ -1,13 +1,12 @@
 package com.brewmapp.execution.services;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.util.Log;
 
-import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.db.contract.UserRepo;
@@ -52,11 +51,11 @@ public class ChatService extends BaseService{
     public static final String ACTION_RECEIVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION_RECEIVE_MESSAGE";
     public static final String ACTION_REQUEST_DIALOG_CONTENT = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOG_CONTENT";
     public static final String ACTION_REQUEST_DIALOGS = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOGS";
-    public static final String ACTION_INIT_DIALOG = "com.brewmapp.execution.services.action.ACTION_INIT_DIALOG";
+    public static final String ACTION_RELOAD_DIALOG = "com.brewmapp.execution.services.action.ACTION_RELOAD_DIALOG";
     public static final String ACTION_SET_RECEIVER = "com.brewmapp.execution.services.action.ACTION_SET_RECEIVER";
     public static final String ACTION_CLEAR_RECEIVER = "com.brewmapp.execution.services.action.ACTION_CLEAR_RECEIVER";
-    public static final String ACTION_INIT_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_INIT_CHAT_SERVICE";
-    public static final String ACTION_INTERNET_OFF = "com.brewmapp.execution.services.action.ACTION_INTERNET_OFF";
+    public static final String ACTION_OPEN_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_OPEN_CHAT_SERVICE";
+    public static final String ACTION_CLOSE_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_CLOSE_CHAT_SERVICE";
     public static final String EXTRA_PARAM1 = "com.brewmapp.execution.services.extra.PARAM1";
     public static final String EXTRA_PARAM2 = "com.brewmapp.execution.services.extra.PARAM2";
     public static final String RECEIVER = "com.brewmapp.execution.services.extra.RECEIVER";
@@ -78,15 +77,15 @@ public class ChatService extends BaseService{
         String action=intent.getAction();
 
         switch (action){
-            case ACTION_INIT_CHAT_SERVICE:
-                innerWorker.initSocket();
+            case ACTION_OPEN_CHAT_SERVICE:
+                innerWorker.openSocket();
                 break;
-            case ACTION_INTERNET_OFF:
-                innerWorker.onDisconnect();
+            case ACTION_CLOSE_CHAT_SERVICE:
+                innerWorker.closeSocket();
                 break;
             default: {
                 boolean HandleQueueNow=innerWorker.queue.size()==0;
-                innerWorker.addQueue(innerWorker.getAction(intent), intent);
+                innerWorker.queue.add(intent);
                 if(innerWorker.isAuthorized)
                     if(HandleQueueNow)
                         innerWorker.handleQueue();
@@ -99,14 +98,15 @@ public class ChatService extends BaseService{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        innerWorker.onDisconnect();
+        innerWorker.closeSocket();
     }
 
     class InnerWorker {
         ResultReceiver receiver;
         boolean isAuthorized =false;
-        List<ActionQueue> queue= new ArrayList<>();
-        void initSocket() {
+        List<Intent> queue= new ArrayList<>();
+
+        void openSocket() {
             socket.on(Socket.EVENT_DISCONNECT,args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Socket.EVENT_CONNECT_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
@@ -120,15 +120,17 @@ public class ChatService extends BaseService{
             socket.on(Keys.CHAT_EVENT_LOAD_SUCCESS, this::receiveMessages);
             socket.on(Keys.CHAT_EVENT_SEND_SUCCESS, this::receiveSendMessageSuccess);
             socket.on(Keys.CHAT_EVENT_SEND_ERROR, this::onError);
-            socket.on(Socket.EVENT_MESSAGE, this::receiveMessage);
+            socket.on(Socket.EVENT_MESSAGE, this::onIncomingMessage);
 
             socket.connect();
         }
         void handleQueue() {
 
             if(queue.size()>0) {
-                String action=queue.get(0).getAction();
-                Intent intent=queue.get(0).getIntent();
+
+                Intent intent=queue.get(0);
+                String action=intent.getAction();
+                Log.i("QQQQ",action);
                 switch (action) {
                     case ACTION_SEND_IMAGE:
                         innerWorker.requestSendImage(intent);
@@ -142,7 +144,7 @@ public class ChatService extends BaseService{
                     case ACTION_REQUEST_DIALOGS:
                         innerWorker.requestListDialogs();
                         break;
-                    case ACTION_INIT_DIALOG:
+                    case ACTION_RELOAD_DIALOG:
                         returnResult(RESULT_OK,intent.getExtras());
                         break;
                     case ACTION_SET_RECEIVER:
@@ -153,6 +155,15 @@ public class ChatService extends BaseService{
                         break;
                 }
             }
+        }
+        void closeSocket() {
+            isAuthorized = false;
+            socket.off();
+            socket.disconnect();
+            socket.close();
+        }
+        void onError(Object[] args) {
+            returnResult(RESULT_ERROR,Bundle.EMPTY);
         }
 
         void requestListDialogs() {
@@ -210,6 +221,7 @@ public class ChatService extends BaseService{
                     super.onNext(jsonObject);
                     try {
                         jsonObject.put(Keys.USER_ID,friend_id);
+                        jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,file.getAbsolutePath());
                         socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -223,9 +235,9 @@ public class ChatService extends BaseService{
                 }
             });
 
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
-            returnResult(RESULT_OK,bundle);
+//            Bundle bundle=new Bundle();
+//            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
+//            returnResult(RESULT_OK,bundle);
         }
 
         void receiveListDialogs(Object[] args) {
@@ -237,12 +249,6 @@ public class ChatService extends BaseService{
             }catch (Exception e){
                 returnResult(RESULT_ERROR,Bundle.EMPTY);
             }
-        }
-        void receiveMessage(Object[] args) {
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
-            bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
-            returnResult(RESULT_OK,bundle);
         }
         void receiveMessages(Object[] args) {
             try {
@@ -264,28 +270,29 @@ public class ChatService extends BaseService{
             isAuthorized = true;
             Intent intent=new Intent();
             Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1,ACTION_INIT_DIALOG);
+            bundle.putString(EXTRA_PARAM1, ACTION_RELOAD_DIALOG);
             intent.putExtras(bundle);
-            addQueue(ACTION_INIT_DIALOG,intent);
+            intent.setAction(ACTION_RELOAD_DIALOG);
+            queue.add(intent);
             handleQueue();
         }
 
-        void onError(Object[] args) {
-            returnResult(RESULT_ERROR,Bundle.EMPTY);
+        void onIncomingMessage(Object[] args) {
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
+            bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
+            returnResult(RESULT_OK,bundle);
         }
-        void onDisconnect() {
-            isAuthorized = false;
-            socket.off();
-            socket.disconnect();
-            socket.close();
-        }
+
         void returnResult(int status, Bundle bundle) {
 
             if(status==RESULT_ERROR) {
-
+                if (receiver != null)
+                    receiver.send(status, bundle);
+                queue.clear();
             }else if(status==RESULT_OK) {
                 if(queue.size()>0){
-                    removeQueue();
+                    queue.remove(0);
                     if (receiver != null)
                         receiver.send(status, bundle);
                     handleQueue();
@@ -295,16 +302,6 @@ public class ChatService extends BaseService{
                 }
             }
 
-        }
-        void removeQueue() {
-                queue.remove(0);
-        }
-        String getAction(Intent intent) {
-            try {
-                return intent.getAction();
-            }catch (Exception e) {
-                return null;
-            }
         }
         void setReceiver(Intent intent) {
             if(intent==null){
@@ -319,35 +316,7 @@ public class ChatService extends BaseService{
                 returnResult(RESULT_OK, bundle);
             }
         }
-        void addQueue(String action, Intent intent) {
-            queue.add(new ActionQueue(action,intent));
-        }
 
-    }
-    class ActionQueue {
-        private String action;
-        private Intent intent;
-
-        public ActionQueue(String action, Intent intent) {
-            setAction(action);
-            setIntent(intent);
-        }
-
-        public String getAction() {
-            return action;
-        }
-
-        public void setAction(String action) {
-            this.action = action;
-        }
-
-        public Intent getIntent() {
-            return intent;
-        }
-
-        public void setIntent(Intent intent) {
-            this.intent = intent;
-        }
     }
     class UploadChatImageImpl {
 
@@ -426,7 +395,7 @@ public class ChatService extends BaseService{
                             JSONObject jsonObject=new JSONObject();
                             try {
                                 jsonObject.put(Keys.USER_ID,"");
-                                jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,"IMAGE");
+                                jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,"");
                                 jsonObject.put(Keys.CHAT_KEY_MSG_FILE,jsonArray);
 
                             } catch (JSONException e) {

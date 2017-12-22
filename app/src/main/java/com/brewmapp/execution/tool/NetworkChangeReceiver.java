@@ -13,9 +13,9 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(isOnline(context)) {
-            context.startService(new Intent(ChatService.ACTION_INIT_CHAT_SERVICE, null, context, ChatService.class));
+            context.startService(new Intent(ChatService.ACTION_OPEN_CHAT_SERVICE, null, context, ChatService.class));
         }else {
-            context.startService(new Intent(ChatService.ACTION_INTERNET_OFF, null, context, ChatService.class));
+            context.startService(new Intent(ChatService.ACTION_CLOSE_CHAT_SERVICE, null, context, ChatService.class));
         }
     }
 

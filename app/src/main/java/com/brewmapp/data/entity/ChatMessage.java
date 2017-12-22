@@ -11,6 +11,15 @@ public class ChatMessage {
     private String date;
     private String dir;
     private int read;
+    private String msg_file;
+
+    public String getMsg_file() {
+        return msg_file;
+    }
+
+    public void setMsg_file(String msg_file) {
+        this.msg_file = msg_file;
+    }
 
     public User getUser() {
         return user;

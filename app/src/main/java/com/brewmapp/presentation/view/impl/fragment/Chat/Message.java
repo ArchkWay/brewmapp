@@ -18,8 +18,26 @@ public class Message {
     private int mId;
     private boolean mStateSending=false;
     private String image;
+    private int imageHeight;
+    private int imageWidth;
 
     private Message() {}
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+    }
 
     public String getImage() {
         return image;
@@ -72,8 +90,27 @@ public class Message {
         private int id;
         private boolean mStateSending=false;
         private String image;
+        private int imageHeight;
+        private int imageWidth;
 
 
+        public int getImageHeight() {
+            return imageHeight;
+        }
+
+        public Builder setImageHeight(int imageHeight) {
+            this.imageHeight = imageHeight;
+            return this;
+        }
+
+        public int getImageWidth() {
+            return imageWidth;
+        }
+
+        public Builder setImageWidth(int imageWidth) {
+            this.imageWidth = imageWidth;
+            return this;
+        }
 
         public Builder(int type) {
             mType = type;
@@ -107,6 +144,9 @@ public class Message {
             message.mId = id;
             message.mStateSending = mStateSending;
             message.image=image;
+            message.imageHeight=imageHeight;
+            message.imageWidth=imageWidth;
+
             return message;
         }
 

@@ -48,7 +48,7 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
             public void onNext(ProfileInfoPackage pack) {
                 userRepo.save(pack.getUserProfile().getUser());
                 view.successCheckEnvironment(userRepo.load(),MenuField.createDefault(context));
-                context.startService(new Intent(ChatService.ACTION_INIT_CHAT_SERVICE, null, context, ChatService.class));
+                context.startService(new Intent(ChatService.ACTION_OPEN_CHAT_SERVICE, null, context, ChatService.class));
             }
 
             @Override

@@ -133,6 +133,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         break;
                     case ChatService.ACTION_SEND_IMAGE:
                         intent.putExtra(ChatService.EXTRA_PARAM1,(File)args[0]);
+                        intent.putExtra(ChatService.EXTRA_PARAM2,((User)args[1]).getId());
                         break;
                     case ChatService.ACTION_CLEAR_RECEIVER:
                         resultReceiver=null;
@@ -295,7 +296,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .build()
                 );
                 view.addMessages(list,false);
-                commandToChatService(ChatService.ACTION_SEND_IMAGE, file);
+                commandToChatService(ChatService.ACTION_SEND_IMAGE, file,friend);
             }
         }
         void sendMessage(String text_send) {

@@ -1,0 +1,30 @@
+package com.brewmapp.execution.exchange.common;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * Created by Kras on 20.12.2017.
+ */
+
+public class ChatImage {
+
+    private static final String BASE_URL = "https://chat.brewmapp.com:8443/";
+
+    private static Retrofit.Builder builder =
+            new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+
+                    .addConverterFactory(GsonConverterFactory.create());
+
+    private static Retrofit retrofit = builder.build();
+
+    private static OkHttpClient.Builder httpClient =
+            new OkHttpClient.Builder();
+
+    public static <S> S createService(
+            Class<S> serviceClass) {
+        return retrofit.create(serviceClass);
+    }
+}

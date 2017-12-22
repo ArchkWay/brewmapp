@@ -2,33 +2,47 @@ package com.brewmapp.execution.services;
 
 import android.app.Notification;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.util.Base64;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.execution.exchange.common.ChatImage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.services.base.BaseService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.socket.client.Socket;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 
 
 public class ChatService extends BaseService{
@@ -144,18 +158,6 @@ public class ChatService extends BaseService{
                 }
             }
         }
-
-        private void sendImage(Intent intent) {
-
-            File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
-//            FileUploadService service =
-//                    ServiceGenerator.createService(FileUploadService.class);
-
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
-            returnResult(RESULT_OK,bundle);
-        }
-
         void requestListDialogs() {
             socket.emit(Keys.CHAT_EVENT_ROOMS);
         }
@@ -308,6 +310,34 @@ public class ChatService extends BaseService{
         void addQueue(String action, Intent intent) {
             queue.add(new ActionQueue(action,intent));
         }
+
+        private void sendImage(Intent intent) {
+            int friend_id=intent.getIntExtra(EXTRA_PARAM2,0);
+            File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
+            new UploadChatImageImpl(file,new SimpleSubscriber<JSONObject>(){
+                @Override
+                public void onNext(JSONObject jsonObject) {
+                    super.onNext(jsonObject);
+                    try {
+                        jsonObject.put(Keys.USER_ID,friend_id);
+                        socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                }
+            });
+
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
+            returnResult(RESULT_OK,bundle);
+        }
+
     }
     class ActionQueue {
         private String action;
@@ -334,13 +364,115 @@ public class ChatService extends BaseService{
             this.intent = intent;
         }
     }
-    public interface FileUploadService {
+    class UploadChatImageImpl {
+
+        int MAX_PHOTO=1300;
+
+        int imageHeight ;
+        int imageWidth ;
+
+        public UploadChatImageImpl(File file, SimpleSubscriber<JSONObject> stringSimpleSubscriber) {
+            try {
+
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+
+                Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath(),options);
+                imageHeight = options.outHeight;
+                imageWidth = options.outWidth;
+                boolean needResize=false;
+                if(imageHeight>MAX_PHOTO){
+                    float ratio=(float) MAX_PHOTO / (float)imageHeight;
+                    imageWidth= (int) (imageWidth*ratio);
+                    needResize=true;
+                }
+                if(imageWidth>MAX_PHOTO){
+                    float ratio=(float) MAX_PHOTO / (float)imageWidth;
+                    imageHeight= (int) (imageHeight*ratio);
+                    needResize=true;
+                }
+                if(needResize)
+                    bmp=Bitmap.createScaledBitmap(bmp, imageWidth, imageHeight, false);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+                UploadChatImage service =ChatImage.createService(UploadChatImage.class);
+                RequestBody requestFile =RequestBody.create(MediaType.parse("image/png"),byteArray);
+                MultipartBody.Part body =MultipartBody.Part.createFormData("sampleFile", "image.png", requestFile);
+
+                Call<ResponseBody> call = service.upload(body);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call,
+                                           Response<ResponseBody> response) {
+
+                        if(response.isSuccessful()) {
+                            String body=((Buffer)response.body().source()).toString();
+                            String file_name=body
+                                    .replace("[text=","")
+                                    .replace("]","")
+                                    ;
+
+
+                            JSONObject size=new JSONObject();
+                            try {
+                                size.put(Keys.WIDTH,imageWidth);
+                                size.put(Keys.HEIGHT,imageHeight);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                stringSimpleSubscriber.onError(e);
+                            }
+
+
+                            JSONArray jsonArray=new JSONArray();
+                            try {
+                                JSONObject image=new JSONObject();
+                                image.put(Keys.TYPE,"image");
+                                image.put(Keys.URL,file_name);
+                                image.put(Keys.INFO,size);
+                                jsonArray.put(image);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            JSONObject jsonObject=new JSONObject();
+                            try {
+                                jsonObject.put(Keys.USER_ID,"");
+                                jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,"IMAGE");
+                                jsonObject.put(Keys.CHAT_KEY_MSG_FILE,jsonArray);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                stringSimpleSubscriber.onError(e);
+                            }
+                            stringSimpleSubscriber.onNext(jsonObject);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        stringSimpleSubscriber.onError(t);
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                stringSimpleSubscriber.onError(e);
+            }
+
+        }
+    }
+    interface UploadChatImage {
+
         @Multipart
         @POST("upload")
         Call<ResponseBody> upload(
-                @Part("description") RequestBody description,
                 @Part MultipartBody.Part file
         );
     }
+
 
 }

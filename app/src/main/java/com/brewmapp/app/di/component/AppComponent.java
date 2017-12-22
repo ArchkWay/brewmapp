@@ -24,5 +24,5 @@ public interface AppComponent {
     MainThread mainThread();
     Executor executor();
     Api api();
-    Socket getSocket();
+
 }

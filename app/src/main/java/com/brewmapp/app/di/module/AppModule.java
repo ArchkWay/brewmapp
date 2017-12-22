@@ -1,5 +1,7 @@
 package com.brewmapp.app.di.module;
 
+import com.brewmapp.app.di.qualifier.ChatUrl;
+import com.brewmapp.execution.exchange.common.ChatClient;
 import com.brewmapp.execution.tool.HashTagHelper;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -81,15 +83,12 @@ public class AppModule extends BaseAppModule<BeerMap> {
         return new SocialManager(context);
     }
 
-    @Provides @Singleton
-    Socket getSocket() {
-        Socket mSocket=null;
-        try {
-            mSocket = IO.socket("https://chat.brewmapp.com:8443");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        return mSocket;
+    @Provides @ChatUrl
+    String provideChatUrl() {
+        return "https://chat.brewmapp.com:8443";
     }
+
+    @Provides @Singleton
+    Socket provideChatSocket(ChatClient chatClient) {return chatClient.getSocket();}
 
 }

@@ -180,6 +180,10 @@ public class Keys {
     public static final String CHAT_EVENT_SEND_ERROR = "send/error";
     public static final String CHAT_KEY_LAST_MSG = "last_msg";
     public static final String CHAT_KEY_MSG_TEXT = "msg_text";
+    public static final String CHAT_KEY_MSG_FILE = "msg_file";
     public static final String CHAT_DIR_INPUT = "in";
     public static final String CHAT_DIR_OUTPUT = "out";
+    public static final String INFO = "info";
+    public static final String WIDTH = "width";
+    public static final String HEIGHT = "height";
 }

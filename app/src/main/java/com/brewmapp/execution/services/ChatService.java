@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Base64;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
@@ -22,9 +21,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +82,7 @@ public class ChatService extends BaseService{
                 innerWorker.initSocket();
                 break;
             case ACTION_INTERNET_OFF:
-                innerWorker.disconnect();
+                innerWorker.onDisconnect();
                 break;
             default: {
                 boolean HandleQueueNow=innerWorker.queue.size()==0;
@@ -103,7 +99,7 @@ public class ChatService extends BaseService{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        innerWorker.disconnect();
+        innerWorker.onDisconnect();
     }
 
     class InnerWorker {
@@ -118,12 +114,12 @@ public class ChatService extends BaseService{
             socket.on(Keys.CHAT_EVENT_LOAD_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Keys.CHAT_EVENT_SEND_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             //Swap
-            socket.on(Socket.EVENT_CONNECT, this::authorization);
-            socket.on(Keys.CHAT_EVENT_AUTH_SUCCESS, this::successAuthorisation);
-            socket.on(Keys.CHAT_EVENT_ROOMS_SUCCESS, this::loadDialogs);
-            socket.on(Keys.CHAT_EVENT_LOAD_SUCCESS, this::loadMessages);
-            socket.on(Keys.CHAT_EVENT_SEND_SUCCESS, this::sentSuccess);
-            socket.on(Keys.CHAT_EVENT_SEND_ERROR, this::sentError);
+            socket.on(Socket.EVENT_CONNECT, this::requestAuthorization);
+            socket.on(Keys.CHAT_EVENT_AUTH_SUCCESS, this::receiveAuthorisationSuccess);
+            socket.on(Keys.CHAT_EVENT_ROOMS_SUCCESS, this::receiveListDialogs);
+            socket.on(Keys.CHAT_EVENT_LOAD_SUCCESS, this::receiveMessages);
+            socket.on(Keys.CHAT_EVENT_SEND_SUCCESS, this::receiveSendMessageSuccess);
+            socket.on(Keys.CHAT_EVENT_SEND_ERROR, this::onError);
             socket.on(Socket.EVENT_MESSAGE, this::receiveMessage);
 
             socket.connect();
@@ -135,10 +131,10 @@ public class ChatService extends BaseService{
                 Intent intent=queue.get(0).getIntent();
                 switch (action) {
                     case ACTION_SEND_IMAGE:
-                        innerWorker.sendImage(intent);
+                        innerWorker.requestSendImage(intent);
                         break;
                     case ACTION_SEND_MESSAGE:
-                        innerWorker.sendMessages(intent);
+                        innerWorker.requestSendMessage(intent);
                         break;
                     case ACTION_REQUEST_DIALOG_CONTENT:
                         innerWorker.requestMessages(intent);
@@ -158,10 +154,81 @@ public class ChatService extends BaseService{
                 }
             }
         }
+
         void requestListDialogs() {
             socket.emit(Keys.CHAT_EVENT_ROOMS);
         }
-        void loadDialogs(Object[] args) {
+        void requestMessages(Intent intent) {
+            int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
+            int page=intent.getIntExtra(EXTRA_PARAM2,0);
+
+            if(friend_id==0){
+                returnResult(RESULT_ERROR,Bundle.EMPTY);
+            }else {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put(Keys.USER_ID, friend_id);
+                    jsonObject.put(Keys.CHAT_KEY_LAST_MSG, page==0?"*":page);
+                    socket.emit(Keys.CHAT_EVENT_LOAD, jsonObject);
+                } catch (JSONException e) {
+                    returnResult(RESULT_ERROR,Bundle.EMPTY);
+                }
+            }
+        }
+        void requestSendMessage(Intent intent) {
+            int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
+            String text_message=intent.getStringExtra(EXTRA_PARAM2);
+
+            try {
+                JSONObject jsonObject=new JSONObject();
+                jsonObject.put(Keys.USER_ID,friend_id);
+                jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,text_message);
+                socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
+            } catch (JSONException e) {
+                returnResult(RESULT_ERROR,Bundle.EMPTY);
+            }
+        }
+        void requestAuthorization(Object[] args) {
+            if(!isAuthorized) {
+                try {
+                    JSONObject jsonObject=new JSONObject();
+                    jsonObject.put(Keys.ID, userRepo.load().getId());
+                    jsonObject.put(Keys.TOKEN, userRepo.load().getToken());
+                    socket.emit(Keys.CHAT_EVENT_AUTH,jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    returnResult(RESULT_ERROR,Bundle.EMPTY);
+                }
+            }
+        }
+        void requestSendImage(Intent intent) {
+            int friend_id=intent.getIntExtra(EXTRA_PARAM2,0);
+            File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
+            new UploadChatImageImpl(file,new SimpleSubscriber<JSONObject>(){
+                @Override
+                public void onNext(JSONObject jsonObject) {
+                    super.onNext(jsonObject);
+                    try {
+                        jsonObject.put(Keys.USER_ID,friend_id);
+                        socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                }
+            });
+
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
+            returnResult(RESULT_OK,bundle);
+        }
+
+        void receiveListDialogs(Object[] args) {
             try {
                 Bundle bundle=new Bundle();
                 bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DIALOGS);
@@ -177,16 +244,7 @@ public class ChatService extends BaseService{
             bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
             returnResult(RESULT_OK,bundle);
         }
-        void sentError(Object[] args) {
-            returnResult(RESULT_ERROR,Bundle.EMPTY);
-        }
-        void sentSuccess(Object[] args) {
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1, ACTION_SEND_MESSAGE);
-            bundle.putString(EXTRA_PARAM2, ((JSONObject) args[0]).toString());
-            returnResult(RESULT_OK,bundle);
-        }
-        void loadMessages(Object[] args) {
+        void receiveMessages(Object[] args) {
             try {
                 Bundle bundle=new Bundle();
                 bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DIALOG_CONTENT);
@@ -196,7 +254,13 @@ public class ChatService extends BaseService{
                 returnResult(RESULT_ERROR,Bundle.EMPTY);
             }
         }
-        void successAuthorisation(Object[] args) {
+        void receiveSendMessageSuccess(Object[] args) {
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1, ACTION_SEND_MESSAGE);
+            bundle.putString(EXTRA_PARAM2, ((JSONObject) args[0]).toString());
+            returnResult(RESULT_OK,bundle);
+        }
+        void receiveAuthorisationSuccess(Object[] args) {
             isAuthorized = true;
             Intent intent=new Intent();
             Bundle bundle=new Bundle();
@@ -205,37 +269,15 @@ public class ChatService extends BaseService{
             addQueue(ACTION_INIT_DIALOG,intent);
             handleQueue();
         }
-        void disconnect() {
+
+        void onError(Object[] args) {
+            returnResult(RESULT_ERROR,Bundle.EMPTY);
+        }
+        void onDisconnect() {
             isAuthorized = false;
             socket.off();
             socket.disconnect();
             socket.close();
-        }
-        void authorization(Object[] args) {
-            if(!isAuthorized) {
-                try {
-                    JSONObject jsonObject=new JSONObject();
-                    jsonObject.put(Keys.ID, userRepo.load().getId());
-                    jsonObject.put(Keys.TOKEN, userRepo.load().getToken());
-                    socket.emit(Keys.CHAT_EVENT_AUTH,jsonObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    returnResult(RESULT_ERROR,Bundle.EMPTY);
-                }
-            }
-        }
-        void foregroundON(){
-            Notification.Builder builder = new Notification.Builder(getBaseContext())
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setTicker("Your Ticker") // use something from something from R.string
-                    .setContentTitle("Your content title") // use something from something from
-                    .setContentText("Your content text") // use something from something from
-                    .setProgress(0, 0, true); // display indeterminate progress
-
-            startForeground(1,builder.build());
-        }
-        void foregroundOFF(){
-            stopForeground(true);
         }
         void returnResult(int status, Bundle bundle) {
 
@@ -277,65 +319,8 @@ public class ChatService extends BaseService{
                 returnResult(RESULT_OK, bundle);
             }
         }
-        void requestMessages(Intent intent) {
-            int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
-            int page=intent.getIntExtra(EXTRA_PARAM2,0);
-
-            if(friend_id==0){
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
-            }else {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put(Keys.USER_ID, friend_id);
-                    jsonObject.put(Keys.CHAT_KEY_LAST_MSG, page==0?"*":page);
-                    socket.emit(Keys.CHAT_EVENT_LOAD, jsonObject);
-                } catch (JSONException e) {
-                    returnResult(RESULT_ERROR,Bundle.EMPTY);
-                }
-            }
-        }
-        void sendMessages(Intent intent) {
-            int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
-            String text_message=intent.getStringExtra(EXTRA_PARAM2);
-
-            try {
-                JSONObject jsonObject=new JSONObject();
-                jsonObject.put(Keys.USER_ID,friend_id);
-                jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,text_message);
-                socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
-            } catch (JSONException e) {
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
-            }
-        }
         void addQueue(String action, Intent intent) {
             queue.add(new ActionQueue(action,intent));
-        }
-
-        private void sendImage(Intent intent) {
-            int friend_id=intent.getIntExtra(EXTRA_PARAM2,0);
-            File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
-            new UploadChatImageImpl(file,new SimpleSubscriber<JSONObject>(){
-                @Override
-                public void onNext(JSONObject jsonObject) {
-                    super.onNext(jsonObject);
-                    try {
-                        jsonObject.put(Keys.USER_ID,friend_id);
-                        socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    super.onError(e);
-                }
-            });
-
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
-            returnResult(RESULT_OK,bundle);
         }
 
     }

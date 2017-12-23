@@ -12,7 +12,9 @@ import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.execution.exchange.common.ChatImage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.base.BaseService;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +48,7 @@ public class ChatService extends BaseService{
 
     private InnerWorker innerWorker =new InnerWorker();
 
+    public static final String ACTION_REQUEST_DELETE_DIALOG = "com.brewmapp.execution.services.action.ACTION_REQUEST_DELETE_DIALOG";
     public static final String ACTION_SEND_MESSAGE = "com.brewmapp.execution.services.action.ACTION_SEND_MESSAGE";
     public static final String ACTION_SEND_IMAGE = "com.brewmapp.execution.services.action.ACTION_SEND_IMAGE";
     public static final String ACTION_RECEIVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION_RECEIVE_MESSAGE";
@@ -119,7 +122,9 @@ public class ChatService extends BaseService{
             socket.on(Keys.CHAT_EVENT_ROOMS_SUCCESS, this::receiveListDialogs);
             socket.on(Keys.CHAT_EVENT_LOAD_SUCCESS, this::receiveMessages);
             socket.on(Keys.CHAT_EVENT_SEND_SUCCESS, this::receiveSendMessageSuccess);
+            socket.on(Keys.CHAT_DELETE_DIALOG_SUCCESS, this::receiveDeleteDialogSuccess);
             socket.on(Keys.CHAT_EVENT_SEND_ERROR, this::onError);
+            socket.on(Keys.CHAT_DELETE_DIALOG_ERROR, this::onError);
             socket.on(Socket.EVENT_MESSAGE, this::onIncomingMessage);
 
             socket.connect();
@@ -130,7 +135,7 @@ public class ChatService extends BaseService{
 
                 Intent intent=queue.get(0);
                 String action=intent.getAction();
-                Log.i("QQQQ",action);
+                Log.i("QQQQ",action+"("+queue.size()+")");
                 switch (action) {
                     case ACTION_SEND_IMAGE:
                         innerWorker.requestSendImage(intent);
@@ -153,6 +158,12 @@ public class ChatService extends BaseService{
                     case ACTION_CLEAR_RECEIVER:
                         innerWorker.setReceiver(null);
                         break;
+                    case ACTION_REQUEST_DELETE_DIALOG:
+                        innerWorker.requestDeleteDialog(intent);
+                        break;
+                    default:
+                        onError(null);
+
                 }
             }
         }
@@ -162,8 +173,15 @@ public class ChatService extends BaseService{
             socket.disconnect();
             socket.close();
         }
+
         void onError(Object[] args) {
             returnResult(RESULT_ERROR,Bundle.EMPTY);
+        }
+        void onIncomingMessage(Object[] args) {
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
+            bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
+            returnResult(RESULT_OK,bundle);
         }
 
         void requestListDialogs() {
@@ -234,17 +252,25 @@ public class ChatService extends BaseService{
                     super.onError(e);
                 }
             });
+        }
+        void requestDeleteDialog(Intent intent) {
+            int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put(Keys.USER_ID, friend_id);
+                socket.emit(Keys.CHAT_DELETE_DIALOG,jsonObject);
+            }catch (Exception e){
+                returnResult(RESULT_ERROR,Bundle.EMPTY);
+            }
 
-//            Bundle bundle=new Bundle();
-//            bundle.putString(EXTRA_PARAM1,ACTION_SEND_IMAGE);
-//            returnResult(RESULT_OK,bundle);
         }
 
         void receiveListDialogs(Object[] args) {
             try {
                 Bundle bundle=new Bundle();
                 bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DIALOGS);
-                bundle.putString(EXTRA_PARAM2,String.valueOf(args[0]));
+                ChatListDialogs chatListDialogs = new GsonBuilder().create().fromJson(String.valueOf(args[0]).replace("\\\\", "\\"), ChatListDialogs.class);
+                bundle.putSerializable(EXTRA_PARAM2,chatListDialogs );
                 returnResult(RESULT_OK,bundle);
             }catch (Exception e){
                 returnResult(RESULT_ERROR,Bundle.EMPTY);
@@ -276,13 +302,13 @@ public class ChatService extends BaseService{
             queue.add(intent);
             handleQueue();
         }
-
-        void onIncomingMessage(Object[] args) {
+        private void receiveDeleteDialogSuccess(Object[] args) {
             Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
-            bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
+            bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DELETE_DIALOG);
             returnResult(RESULT_OK,bundle);
         }
+
+
 
         void returnResult(int status, Bundle bundle) {
 

@@ -35,6 +35,7 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.Presenter;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_NEUTRAL;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 /**
@@ -64,11 +65,7 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
             Contact model= (Contact) payload;
 
             try {
-                if(model.getStatus()==0) {
                     userShow=model.getFriend_info();
-                }else {
-                    userShow=model.getUser();
-                }
             }catch (Exception e){return;};
 
             model= (Contact) payload;
@@ -77,8 +74,8 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
                     mode=MODE_DELETE_REQUEST_CONTACT;
                     break;
                 case 1:
-                    //mode= MODE_DELETE_FRIEND_CONTACT;
-                    return;
+                    mode= MODE_DELETE_FRIEND_CONTACT;
+                    break;
                 case 2:
                     mode=MODE_ACCEPT_REQUEST_CONTACT;
                     break;
@@ -159,6 +156,8 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
                                 super.onError(e);
                             }
                         });
+                    }else if(i==BUTTON_NEUTRAL){
+                        refreshParentContent();
                     }
                     break;
                 case MODE_ACCEPT_REQUEST_CONTACT:
@@ -192,6 +191,8 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
                                 super.onError(e);
                             }
                         });
+                    }else if(i==BUTTON_NEUTRAL){
+                        refreshParentContent();
                     }
                     break;
             }

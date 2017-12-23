@@ -65,11 +65,7 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
 
         User userShow;
         try {
-            if(model.getStatus()==0) {
                 userShow=model.getFriend_info();
-            }else {
-                userShow=model.getUser();
-            }
         }catch (Exception e){return;};
 
         username.setText(userShow.getFormattedName());

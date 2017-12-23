@@ -20,6 +20,7 @@ import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 
@@ -84,6 +85,7 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+
     }
 
     @Override

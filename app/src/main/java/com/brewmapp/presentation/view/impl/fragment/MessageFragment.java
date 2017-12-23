@@ -12,10 +12,12 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Contact;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
@@ -54,7 +56,6 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         return R.layout.fragment_message;
     }
 
-
     @Override
     public void enableControls(boolean enabled, int code) {
         swipe.setRefreshing(!enabled);
@@ -72,23 +73,20 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
-            try {
-                switch (((Contact) payload).getStatus()) {
-                    case 1:
                         Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, getActivity(), MultiFragmentActivity.class);
-                        intent.putExtra(RequestCodes.INTENT_EXTRAS,((Contact) payload).getUser());
+                        User user=((Contact) payload).getFriend_info();
+                        User friend=new User();
+                        friend.setId(user.getId());
+                        friend.setFirstname(user.getFirstname());
+                        friend.setLastname(user.getLastname());
+                        intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
                         startActivity(intent);
-                        break;
-                    default:
-                        new DialogManageContact(getActivity(), getActivity().getSupportFragmentManager(), payload, presenter);
-                }
-
-            }catch (Exception e){}
-        }
+                    }
             );
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
+        presenter.setItemTouchHelper(list);
     }
 
     @Override
@@ -124,9 +122,14 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     }
 
     @Override
+    public void commonError(String... messages) {
+        getActivity().runOnUiThread(()->((MainActivity)getActivity()).commonError(messages));
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if(menu!=null) menu.clear();
-        inflater.inflate(R.menu.search,menu);
+        inflater.inflate(R.menu.stub,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -145,22 +148,22 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onBarAction(int id) {
-        switch (id){
-            case R.id.action_search:
-                startActivityForResult(
-                        new Intent(
-                                Keys.CAP_USER_FRIENDS,
-                                null,getActivity(),
-                                MultiListActivity.class),
-                        RequestCodes.REQUEST_INTEREST
-                );
-                break;
-                default:
-                    super.onBarAction(id);
-        }
-    }
+//    @Override
+//    public void onBarAction(int id) {
+//        switch (id){
+//            case R.id.action_search:
+//                startActivityForResult(
+//                        new Intent(
+//                                Keys.CAP_USER_FRIENDS,
+//                                null,getActivity(),
+//                                MultiListActivity.class),
+//                        RequestCodes.REQUEST_INTEREST
+//                );
+//                break;
+//                default:
+//                    super.onBarAction(id);
+//        }
+//    }
 
     @Override
     protected void prepareView(View view) {

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
 
@@ -10,4 +11,6 @@ public interface MessageFragmentPresenter extends LivePresenter<MessageFragmentV
     void loadFriends(boolean subscribers);
 
     void requestNewFriend(Intent data);
+
+    void setItemTouchHelper(RecyclerView list);
 }

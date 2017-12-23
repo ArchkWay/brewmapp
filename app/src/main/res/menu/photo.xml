@@ -4,6 +4,11 @@
     <item
         android:id="@+id/action.photo"
         android:icon="@drawable/brew_camera"
-        app:showAsAction="always"
-        android:title="@string/create"/>
+        app:showAsAction="ifRoom"
+        android:title="@string/add_photo"
+        >
+
+    </item>
+
+
 </menu>

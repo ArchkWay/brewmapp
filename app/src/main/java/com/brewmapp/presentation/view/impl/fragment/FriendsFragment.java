@@ -16,10 +16,14 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Contact;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -67,10 +71,22 @@ public class FriendsFragment extends BaseFragment implements FriendsView {
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
         //adapter = new FlexibleAdapter<>(new ArrayList<>());
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> new DialogManageContact(getActivity(),getActivity().getSupportFragmentManager(),payload,presenter));
+        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
+            //new DialogManageContact(getActivity(),getActivity().getSupportFragmentManager(),payload,presenter);
+            Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, getActivity(), MultiFragmentActivity.class);
+            User user=((Contact) payload).getFriend_info();
+            User friend=new User();
+            friend.setId(user.getId());
+            friend.setFirstname(user.getFirstname());
+            friend.setLastname(user.getLastname());
+            intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
+            startActivity(intent);
+
+        });
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
+
     }
 
     @Override

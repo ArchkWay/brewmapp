@@ -435,5 +435,7 @@
     <string name="action_send">Send</string>
     <string name="user_action_typing">is typing</string>
     <string name="status_sending">Отправка...</string>
+    <string name="delete_dialog">Удалить диалог</string>
+    <string name="is_delete_dialog">Удалить всю переписку c %s ?</string>
 
 </resources>

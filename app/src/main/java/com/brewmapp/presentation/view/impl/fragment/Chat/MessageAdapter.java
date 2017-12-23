@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -139,11 +140,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         mImageView.setLayoutParams(p);
                         //load
                         mImageView.post(() -> {
-                            //Picasso.with(mImageView.getContext()).load(path).into(mImageView);
+                            //.networkPolicy(NetworkPolicy.OFFLINE)
                             if(path.startsWith("http"))
                                 Picasso.with(mImageView.getContext()).load(path).fit().centerCrop().into(mImageView);
                             else
-                                Picasso.with(mImageView.getContext()).load(new File(path)).fit().centerCrop().into(mImageView);
+                                Picasso.with(mImageView.getContext()).load(new File(path)).fit().centerCrop().networkPolicy(NetworkPolicy.OFFLINE).into(mImageView);
 
                         });
 

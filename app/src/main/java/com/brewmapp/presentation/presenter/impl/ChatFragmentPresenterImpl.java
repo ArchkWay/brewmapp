@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +22,7 @@ import com.brewmapp.presentation.view.contract.ChatFragmentView;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,7 +41,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.socket.client.Socket;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import ru.frosteye.ovsa.stub.listener.SelectListener;
 
@@ -95,6 +95,11 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     }
 
     @Override
+    public void deleteDialog() {
+        innerWorker.commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
+    }
+
+    @Override
     public void onDestroy() {
         innerWorker.commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
@@ -125,10 +130,23 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             try {
                 switch (command){
                     case ChatService.ACTION_SET_RECEIVER:
-                        resultReceiver=new ChatResultReceiver(new Handler(view.getActivity().getMainLooper()));
+                        resultReceiver=new ChatResultReceiver(new Handler(view.getActivity().getMainLooper()),new SimpleSubscriber<Bundle>(){
+                            @Override
+                            public void onNext(Bundle bundle) {
+                                super.onNext(bundle);
+                                innerWorker.handleResult(bundle);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                view.commonError();
+                            }
+                        });
                         intent.putExtra(ChatService.RECEIVER,resultReceiver);
                         break;
                     case ChatService.ACTION_REQUEST_DIALOGS:
+                    case ChatService.ACTION_REQUEST_DELETE_DIALOG:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         break;
                     case ChatService.ACTION_REQUEST_DIALOG_CONTENT:
@@ -162,13 +180,13 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     case ChatService.ACTION_SET_RECEIVER: {
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
                     }break;
-                    case ChatService.ACTION_RELOAD_DIALOG: {
+                    case ChatService.ACTION_RELOAD_DIALOG:
+                    case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
                         view.clearMessages();
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
                     }break;
                     case ChatService.ACTION_REQUEST_DIALOGS: {
-                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                        ChatListDialogs chatListDialogs = new GsonBuilder().create().fromJson(string.replace("\\\\", "\\"), ChatListDialogs.class);
+                        ChatListDialogs chatListDialogs = (ChatListDialogs) resultData.getSerializable(ChatService.EXTRA_PARAM2);
                         for (ChatDialog chatDialog:chatListDialogs)
                             if(chatDialog.getUser().getId()==friend.getId())
                                 requestDialogContents(0);
@@ -218,6 +236,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 }
             }
         }
+
         void requestDialogContents(int idLastMessage) {
             commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,idLastMessage);
         }
@@ -226,10 +245,10 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             ChatListMessages listMessages=new GsonBuilder().create().fromJson(string.replace("\\\\","\\"), ChatListMessages.class);
             List<Message> list=new ArrayList<>();
 
-            String image=null;
-            int imageHeight=0;
-            int imageWidth=0;
             for (ChatMessage chatMessage:listMessages.getData()) {
+                String image=null;
+                int imageHeight=0;
+                int imageWidth=0;
                 try {
                     JSONArray images=new JSONArray(chatMessage.getMsg_file());
                     if(images.length()>0) {
@@ -270,7 +289,6 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
             view.addMessages(list,true);
         }
-        //other
         String escapeUnicodeText(String input) {
 
             StringBuilder b = new StringBuilder(input.length());
@@ -364,25 +382,6 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 innerWorker.commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,innerWorker.escapeUnicodeText(text_send));
             }
 
-        }
-    }
-    class ChatResultReceiver extends ResultReceiver {
-
-        public ChatResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            switch (resultCode){
-                case ChatService.RESULT_OK:{
-                    innerWorker.handleResult(resultData);
-                }break;
-                case ChatService.RESULT_ERROR:{
-                    view.commonError();
-                }break;
-
-            }
         }
     }
 

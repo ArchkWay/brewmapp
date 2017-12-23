@@ -22,4 +22,6 @@ public interface ChatFragmentPresenter extends LivePresenter<ChatFragmentView> {
     void nextPage(Message message);
 
     SelectListener getSelectListenerPhoto(ChatFragment chatFragment);
+
+    void deleteDialog();
 }

@@ -437,5 +437,6 @@
     <string name="status_sending">Отправка...</string>
     <string name="delete_dialog">Удалить диалог</string>
     <string name="is_delete_dialog">Удалить всю переписку c %s ?</string>
+    <string name="while_messages_no">Сообщений пока нет</string>
 
 </resources>

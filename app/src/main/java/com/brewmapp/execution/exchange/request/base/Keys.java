@@ -184,6 +184,8 @@ public class Keys {
     public static final String CHAT_DIR_INPUT = "in";
     public static final String CHAT_DIR_OUTPUT = "out";
     public static final String CHAT_DELETE_DIALOG = "delete";
+    public static final String CHAT_MARK_ESTIMATED = "mark";
+    public static final String CHAT_MARK_ESTIMATED_SUCCESS = "mark/success";
     public static final String CHAT_DELETE_DIALOG_SUCCESS = "delete/success";
     public static final String CHAT_DELETE_DIALOG_ERROR = "delete/error";
     public static final String INFO = "info";

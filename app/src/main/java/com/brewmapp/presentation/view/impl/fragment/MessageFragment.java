@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -42,6 +43,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     @BindView(R.id.fragment_friends_search) FinderView search;
     @BindView(R.id.fragment_friends_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.fragment_friends_list) RecyclerView list;
+    @BindView(R.id.fragment_friends_text)    TextView textView;
 
     @Inject    MessageFragmentPresenter presenter;
 
@@ -115,11 +117,13 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     public void showDialogs(List<IFlexible> list) {
         original = list;
         adapter.updateDataSet(list);
+        textView.setVisibility(list.size()==0?View.VISIBLE:View.GONE);
+        this.list.setVisibility(list.size()==0?View.GONE:View.VISIBLE);
     }
 
     @Override
     public void commonError(String... messages) {
-        getActivity().runOnUiThread(()->((MainActivity)getActivity()).commonError(messages));
+            ((MainActivity)getActivity()).commonError(messages);
     }
 
     @Override

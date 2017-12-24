@@ -54,10 +54,8 @@ import static android.app.Activity.RESULT_OK;
 public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> implements ChatFragmentPresenter {
 
 
-    private Boolean isConnected = false;
     private User friend;
     private UserRepo userRepo;
-    private InnerWorker innerWorker;
     private ResultReceiver resultReceiver;
     private String chatUrl;
 
@@ -65,7 +63,6 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     public ChatFragmentPresenterImpl(UserRepo userRepo,@ChatUrl String chatUrl){
         this.userRepo = userRepo;
         this.chatUrl = chatUrl;
-        innerWorker =new InnerWorker();
     }
 
     @Override
@@ -75,53 +72,50 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
     @Override
     public void connectToChat(Intent intent) {
-        innerWorker.init(intent);
+        init(intent);
     }
 
     @Override
     public void sendMessage(TextView textView) {
-        innerWorker.sendMessage(textView.getText().toString());
+        sendMessage(textView.getText().toString());
     }
 
     @Override
     public void nextPage(Message message) {
         if(message.getmId()>0)
-            innerWorker.requestDialogContents(message.getmId());
+            commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,message.getmId());
     }
 
     @Override
     public SelectListener getSelectListenerPhoto(ChatFragment chatFragment) {
-        return (text, position) -> innerWorker.selectPhoto(chatFragment,position);
+        return (text, position) -> selectPhoto(chatFragment,position);
     }
 
     @Override
     public void deleteDialog() {
-        innerWorker.commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
+        commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
     }
 
     @Override
     public void onDestroy() {
-        innerWorker.commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
+        commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
 
-
-
-    class InnerWorker {
-        //main
-        void init(Intent intent) {
+    //************************************************************************
+    private void init(Intent intent) {
             try {
                 friend = (User) intent.getSerializableExtra(RequestCodes.INTENT_EXTRAS);
                 if(friend ==null)
                     view.commonError();
                 else {
-                    innerWorker.commandToChatService(ChatService.ACTION_SET_RECEIVER);
+                    commandToChatService(ChatService.ACTION_SET_RECEIVER);
                     view.setFriend(friend);
                 }
             }catch (Exception e){
                 view.commonError(e.getMessage());
             }
         }
-        void commandToChatService(String command, Object... args) {
+    private void commandToChatService(String command, Object... args) {
 
             if(view.getActivity()==null) return;
 
@@ -134,7 +128,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                             @Override
                             public void onNext(Bundle bundle) {
                                 super.onNext(bundle);
-                                innerWorker.handleResult(bundle);
+                                handleResult(bundle);
                             }
 
                             @Override
@@ -147,6 +141,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         break;
                     case ChatService.ACTION_REQUEST_DIALOGS:
                     case ChatService.ACTION_REQUEST_DELETE_DIALOG:
+                    case ChatService.ACTION_MARK_MESSAGE_ESTIMATED:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         break;
                     case ChatService.ACTION_REQUEST_DIALOG_CONTENT:
@@ -173,7 +168,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             view.getActivity().startService(intent);
 
         }
-        void handleResult(Bundle resultData) {
+    private void handleResult(Bundle resultData) {
             String action=resultData.getString(ChatService.EXTRA_PARAM1);
             if(action!=null) {
                 switch (action) {
@@ -189,7 +184,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         ChatListDialogs chatListDialogs = (ChatListDialogs) resultData.getSerializable(ChatService.EXTRA_PARAM2);
                         for (ChatDialog chatDialog:chatListDialogs)
                             if(chatDialog.getUser().getId()==friend.getId())
-                                requestDialogContents(0);
+                                commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,0);
                     }break;
                     case ChatService.ACTION_REQUEST_DIALOG_CONTENT: {
                         String string = resultData.getString(ChatService.EXTRA_PARAM2);
@@ -237,10 +232,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
         }
 
-        void requestDialogContents(int idLastMessage) {
-            commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,idLastMessage);
-        }
-        void showDialogContent(String string) {
+    private void showDialogContent(String string) {
 
             ChatListMessages listMessages=new GsonBuilder().create().fromJson(string.replace("\\\\","\\"), ChatListMessages.class);
             List<Message> list=new ArrayList<>();
@@ -288,36 +280,9 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 }
             }
             view.addMessages(list,true);
+            commandToChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED,friend);
         }
-        String escapeUnicodeText(String input) {
-
-            StringBuilder b = new StringBuilder(input.length());
-
-            java.util.Formatter f = new java.util.Formatter(b);
-
-            for (char c : input.toCharArray()) {
-                if (c < 128) {
-                    b.append(c);
-                } else {
-                    f.format("\\u%04x", (int) c);
-                }
-            }
-
-            return b.toString();
-        }
-        String getUnicodeString(String myString) {
-            String text = "";
-            try {
-
-                byte[] utf8Bytes = myString.getBytes("UTF8");
-                text = new String(utf8Bytes, "UTF8");
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            return text;
-        }
-        void selectPhoto(ChatFragment baseFragment, int position) {
+    private void selectPhoto(ChatFragment baseFragment, int position) {
             switch (position) {
                 case 0:
                     RxPaparazzo.single(baseFragment.getActivity())
@@ -347,7 +312,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
 
         }
-        void sendImage(File file) {
+    private void sendImage(File file) {
             if(file!=null&&file.exists()) {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds=true;
@@ -368,7 +333,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 commandToChatService(ChatService.ACTION_SEND_IMAGE, file,friend);
             }
         }
-        void sendMessage(String text_send) {
+    private void sendMessage(String text_send) {
             if(text_send.length()>0) {
                 List<Message> list=new ArrayList<>();
                 list.add(
@@ -379,10 +344,38 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .build()
                 );
                 view.addMessages(list,false);
-                innerWorker.commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,innerWorker.escapeUnicodeText(text_send));
+                commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,escapeUnicodeText(text_send));
             }
 
         }
+
+    private String escapeUnicodeText(String input) {
+
+        StringBuilder b = new StringBuilder(input.length());
+
+        java.util.Formatter f = new java.util.Formatter(b);
+
+        for (char c : input.toCharArray()) {
+            if (c < 128) {
+                b.append(c);
+            } else {
+                f.format("\\u%04x", (int) c);
+            }
+        }
+
+        return b.toString();
+    }
+    private String getUnicodeString(String myString) {
+        String text = "";
+        try {
+
+            byte[] utf8Bytes = myString.getBytes("UTF8");
+            text = new String(utf8Bytes, "UTF8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return text;
     }
 
 }

@@ -44,21 +44,25 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 
 public class ChatService extends BaseService{
 
-
-    public static final String ACTION_REQUEST_DELETE_DIALOG = "com.brewmapp.execution.services.action.ACTION_REQUEST_DELETE_DIALOG";
+    //********ACTION incoming and outgoing
+    public static final String ACTION_REQUEST_DELETE_DIALOG = "com.brewmapp.execution.services.action.ACTION_IN_REQUEST_DELETE_DIALOG";
     public static final String ACTION_SEND_MESSAGE = "com.brewmapp.execution.services.action.ACTION_SEND_MESSAGE";
     public static final String ACTION_SEND_IMAGE = "com.brewmapp.execution.services.action.ACTION_SEND_IMAGE";
-    public static final String ACTION_RECEIVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION_RECEIVE_MESSAGE";
     public static final String ACTION_REQUEST_DIALOG_CONTENT = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOG_CONTENT";
     public static final String ACTION_REQUEST_DIALOGS = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOGS";
-    public static final String ACTION_RELOAD_DIALOG = "com.brewmapp.execution.services.action.ACTION_RELOAD_DIALOG";
     public static final String ACTION_SET_RECEIVER = "com.brewmapp.execution.services.action.ACTION_SET_RECEIVER";
     public static final String ACTION_CLEAR_RECEIVER = "com.brewmapp.execution.services.action.ACTION_CLEAR_RECEIVER";
     public static final String ACTION_OPEN_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_OPEN_CHAT_SERVICE";
     public static final String ACTION_CLOSE_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_CLOSE_CHAT_SERVICE";
+    public static final String ACTION_MARK_MESSAGE_ESTIMATED = "com.brewmapp.execution.services.action.ACTION_MARK_MESSAGE_ESTIMATED";
+    //********ACTION outgoing
+    public static final String ACTION_RELOAD_DIALOG = "com.brewmapp.execution.services.action.ACTION_RELOAD_DIALOG";
+    public static final String ACTION_RECEIVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION_RECEIVE_MESSAGE";
+    //********KEY PARAM
     public static final String EXTRA_PARAM1 = "com.brewmapp.execution.services.extra.PARAM1";
     public static final String EXTRA_PARAM2 = "com.brewmapp.execution.services.extra.PARAM2";
     public static final String RECEIVER = "com.brewmapp.execution.services.extra.RECEIVER";
+    //********KEY RESULT
     public static final int RESULT_OK = 0;
     public static final int RESULT_ERROR = 1;
 
@@ -122,10 +126,13 @@ public class ChatService extends BaseService{
             socket.on(Keys.CHAT_DELETE_DIALOG_SUCCESS, this::receiveDeleteDialogSuccess);
             socket.on(Keys.CHAT_EVENT_SEND_ERROR, this::onError);
             socket.on(Keys.CHAT_DELETE_DIALOG_ERROR, this::onError);
+            socket.on(Keys.CHAT_MARK_ESTIMATED_SUCCESS, this::receiveMarkEstimatedSuccess);
             socket.on(Socket.EVENT_MESSAGE, this::onIncomingMessage);
 
             socket.connect();
         }
+
+
     private void closeSocket() {
             isAuthorized = false;
             socket.off();
@@ -138,7 +145,7 @@ public class ChatService extends BaseService{
 
         Intent intent=queue.get(0);
         String action=intent.getAction();
-        //Log.i("QQQQ",action+"("+queue.size()+")");
+        Log.i("QQQQ",action+"("+queue.size()+")");
         switch (action) {
             case ACTION_SEND_IMAGE:
                 requestSendImage(intent);
@@ -155,6 +162,9 @@ public class ChatService extends BaseService{
             case ACTION_RELOAD_DIALOG:
                 returnResult(RESULT_OK,intent.getExtras());
                 break;
+            case ACTION_RECEIVE_MESSAGE:
+                returnResult(RESULT_OK,intent.getExtras());
+                break;
             case ACTION_SET_RECEIVER:
                 setReceiver(intent);
                 break;
@@ -164,21 +174,30 @@ public class ChatService extends BaseService{
             case ACTION_REQUEST_DELETE_DIALOG:
                 requestDeleteDialog(intent);
                 break;
+            case ChatService.ACTION_MARK_MESSAGE_ESTIMATED:
+                requestMarkEstimated(intent);
+                break;
             default:
                 onError(null);
 
         }
     }
 
+
     private void onError(Object[] args) {
             returnResult(RESULT_ERROR,Bundle.EMPTY);
         }
     private void onIncomingMessage(Object[] args) {
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
-            bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
-            returnResult(RESULT_OK,bundle);
-        }
+        Intent intent=new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
+        bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
+        intent.putExtras(bundle);
+        intent.setAction(ACTION_RECEIVE_MESSAGE);
+        queue.add(intent);
+        handleQueue();
+
+    }
 
     private void requestListDialogs() {
             socket.emit(Keys.CHAT_EVENT_ROOMS);
@@ -258,8 +277,17 @@ public class ChatService extends BaseService{
             }catch (Exception e){
                 returnResult(RESULT_ERROR,Bundle.EMPTY);
             }
-
         }
+    private void requestMarkEstimated(Intent intent) {
+        int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(Keys.USER_ID, friend_id);
+            socket.emit(Keys.CHAT_MARK_ESTIMATED,jsonObject);
+        }catch (Exception e){
+            returnResult(RESULT_ERROR,Bundle.EMPTY);
+        }
+    }
 
     private void receiveListDialogs(Object[] args) {
             try {
@@ -303,26 +331,25 @@ public class ChatService extends BaseService{
             bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DELETE_DIALOG);
             returnResult(RESULT_OK,bundle);
         }
+    private void receiveMarkEstimatedSuccess(Object[] args) {
+        Bundle bundle=new Bundle();
+        bundle.putString(EXTRA_PARAM1, ACTION_MARK_MESSAGE_ESTIMATED);
+        returnResult(RESULT_OK,bundle);
+    }
 
     private void returnResult(int status, Bundle bundle) {
 
-            if(status==RESULT_ERROR) {
-                if (receiver != null)
-                    receiver.send(status, bundle);
-                queue.clear();
-            }else if(status==RESULT_OK) {
-                if(queue.size()>0){
-                    queue.remove(0);
-                    if (receiver != null)
-                        receiver.send(status, bundle);
-                    handleQueue();
-                }else {
-                    if (receiver != null)
-                        receiver.send(status, bundle);
-                }
-            }
+        if (receiver != null)
+            receiver.send(status, bundle);
 
+        if(status==RESULT_OK) {
+            queue.remove(0);
+            handleQueue();
+        }else if(status==RESULT_ERROR) {
+            queue.clear();
         }
+
+    }
     private void setReceiver(Intent intent) {
             if(intent==null){
                 receiver=null;

@@ -53,12 +53,13 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
     @Override
     public void onDestroy() {
         listFriendsTask.cancel();
+        toChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
 
     @Override
     public void loadDialogs(boolean subscribers) {
         enableControls(false);
-        commandToChatService(ChatService.ACTION_SET_RECEIVER);
+        toChatService(ChatService.ACTION_SET_RECEIVER);
     }
 
     @Override
@@ -103,12 +104,12 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                         new DialogConfirm.OnConfirm() {
                                     @Override
                                     public void onOk() {
-                                        commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
+                                        toChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
                                     }
 
                                     @Override
                                     public void onCancel() {
-                                        commandToChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
+                                        toChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
                                     }
                                 });
             }
@@ -118,7 +119,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
     }
 
     //*********************************************************************
-    private void commandToChatService(String command, Object... args) {
+    private void toChatService(String command, Object... args) {
 
         if(view.getActivity()==null) return;
 
@@ -136,7 +137,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                             @Override
                             public void onNext(Bundle bundle) {
                                 super.onNext(bundle);
-                                handleResult(bundle);
+                                fromChatService(bundle);
                             }
 
                             @Override
@@ -150,7 +151,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
         }
         view.getActivity().startService(intent);
     }
-    private void handleResult(Bundle resultData) {
+    private void fromChatService(Bundle resultData) {
         String action = resultData.getString(ChatService.EXTRA_PARAM1);
         switch (action) {
             case ChatService.ACTION_REQUEST_DIALOGS: {
@@ -158,10 +159,10 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                 loadUserDetails(chatListDialogs,new ArrayList<>());
             }break;
             case ChatService.ACTION_SET_RECEIVER:{
-                commandToChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
+                toChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
             }break;
             case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
-                commandToChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
+                toChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
             }break;
 
         }

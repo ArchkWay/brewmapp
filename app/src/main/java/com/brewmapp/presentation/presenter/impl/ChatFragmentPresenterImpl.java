@@ -173,6 +173,9 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             if(action!=null) {
                 switch (action) {
                     case ChatService.ACTION_SET_RECEIVER: {
+                        commandToChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED,friend);
+                    }break;
+                    case ChatService.ACTION_MARK_MESSAGE_ESTIMATED: {
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
                     }break;
                     case ChatService.ACTION_RELOAD_DIALOG:
@@ -222,10 +225,8 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
                     }break;
                     case ChatService.ACTION_SEND_MESSAGE:{
-                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                        ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(string.replace("\\\\", "\\"), ChatReceiveMessage.class);
+                        ChatReceiveMessage chatReceiveMessage  = (ChatReceiveMessage) resultData.getSerializable(ChatService.EXTRA_PARAM2);
                         view.setStatusMessage(chatReceiveMessage);
-
                     }break;
                 }
             }
@@ -279,7 +280,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                 }
             }
             view.addMessages(list,true);
-            commandToChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED,friend);
+
         }
     private void selectPhoto(ChatFragment baseFragment, int position) {
             switch (position) {

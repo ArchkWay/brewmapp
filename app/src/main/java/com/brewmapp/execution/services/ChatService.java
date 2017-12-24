@@ -85,22 +85,33 @@ public class ChatService extends BaseService{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        String action=intent.getAction();
+        String action=null;
+        try {
+            action=intent.getAction();
+        }catch (Exception e){}
 
-        switch (action){
-            case ACTION_OPEN_CHAT_SERVICE:
-                openSocket();
-                break;
-            case ACTION_CLOSE_CHAT_SERVICE:
-                closeSocket();
-                break;
-            default: {
-                boolean HandleQueueNow=queue.size()==0;
-                queue.add(intent);
-                if(isAuthorized)
-                    if(HandleQueueNow)
-                        handleQueue();
-            }
+        if(action!=null)
+            switch (action){
+                case ACTION_OPEN_CHAT_SERVICE:
+                    openSocket();
+                    break;
+                case ACTION_CLOSE_CHAT_SERVICE:
+                    closeSocket();
+                    break;
+                case ACTION_SET_RECEIVER:
+                    setReceiver(intent);
+                    break;
+                case ACTION_CLEAR_RECEIVER:
+                    removeReceiver();
+                    break;
+                default: {
+                    boolean HandleQueueNow=queue.size()==0;
+                    queue.add(intent);
+                    Log.i("QQQQ",action+"("+queue.size()+")+");
+                    if(isAuthorized)
+                        if(HandleQueueNow)
+                            handleQueue();
+                }
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -151,7 +162,7 @@ public class ChatService extends BaseService{
 
         Intent intent=queue.get(0);
         String action=intent.getAction();
-        Log.i("QQQQ",action+"("+queue.size()+")");
+        Log.i("QQQQ",action+"("+queue.size()+")go...");
         switch (action) {
             case ACTION_SEND_IMAGE:
                 requestSendImage(intent);
@@ -165,17 +176,8 @@ public class ChatService extends BaseService{
             case ACTION_REQUEST_DIALOGS:
                 requestListDialogs();
                 break;
-            case ACTION_RELOAD_DIALOG:
-                returnResult(RESULT_OK,intent.getExtras());
-                break;
             case ACTION_RECEIVE_MESSAGE:
                 returnResult(RESULT_OK,intent.getExtras());
-                break;
-            case ACTION_SET_RECEIVER:
-                setReceiver(intent);
-                break;
-            case ACTION_CLEAR_RECEIVER:
-                removeReceiver();
                 break;
             case ACTION_REQUEST_DELETE_DIALOG:
                 requestDeleteDialog(intent);
@@ -258,27 +260,28 @@ public class ChatService extends BaseService{
             }
         }
     private void requestSendImage(Intent intent) {
-            int friend_id=intent.getIntExtra(EXTRA_PARAM2,0);
-            File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
-            new UploadChatImageImpl(file,new SimpleSubscriber<JSONObject>(){
-                @Override
-                public void onNext(JSONObject jsonObject) {
-                    super.onNext(jsonObject);
-                    try {
-                        jsonObject.put(Keys.USER_ID,friend_id);
-                        jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,file.getAbsolutePath());
-                        socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
+        int friend_id=intent.getIntExtra(EXTRA_PARAM2,0);
+        File file= (File) intent.getSerializableExtra(EXTRA_PARAM1);
+        new UploadChatImageImpl(file,new SimpleSubscriber<JSONObject>(){
+            @Override
+            public void onNext(JSONObject jsonObject) {
+                super.onNext(jsonObject);
+                try {
+                    jsonObject.put(Keys.USER_ID,friend_id);
+                    jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,file.getAbsolutePath());
+                    socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onError(Throwable e) {
-                    super.onError(e);
-                }
-            });
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+        });
         }
     private void requestDeleteDialog(Intent intent) {
             int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
@@ -323,19 +326,21 @@ public class ChatService extends BaseService{
             }
         }
     private void receiveSendMessageSuccess(Object[] args) {
-            Bundle bundle=new Bundle();
+
+        ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(args[0].toString().replace("\\\\", "\\"), ChatReceiveMessage.class);
+        Bundle bundle=new Bundle();
+        if(chatReceiveMessage.getMsg_file().equals("[]"))
             bundle.putString(EXTRA_PARAM1, ACTION_SEND_MESSAGE);
-            bundle.putString(EXTRA_PARAM2, ((JSONObject) args[0]).toString());
-            returnResult(RESULT_OK,bundle);
+        else
+            bundle.putString(EXTRA_PARAM1, ACTION_SEND_IMAGE);
+        bundle.putSerializable(EXTRA_PARAM2, chatReceiveMessage);
+        returnResult(RESULT_OK,bundle);
         }
     private void receiveAuthorisationSuccess(Object[] args) {
             isAuthorized = true;
-            Intent intent=new Intent();
-            Bundle bundle=new Bundle();
-            bundle.putString(EXTRA_PARAM1, ACTION_RELOAD_DIALOG);
-            intent.putExtras(bundle);
-            intent.setAction(ACTION_RELOAD_DIALOG);
-            queue.add(intent);
+//            Bundle bundle=new Bundle();
+//            bundle.putString(EXTRA_PARAM1, ACTION_RELOAD_DIALOG);
+//            returnResult(RESULT_OK,bundle);
             handleQueue();
         }
     private void receiveDeleteDialogSuccess(Object[] args) {
@@ -355,8 +360,25 @@ public class ChatService extends BaseService{
             receiver.send(status, bundle);
 
         if(status==RESULT_OK) {
-            queue.remove(0);
-            handleQueue();
+            String action=bundle.getString(EXTRA_PARAM1);
+            switch (action){
+                case ACTION_CLEAR_RECEIVER:
+                case ACTION_SET_RECEIVER:
+                case ACTION_RELOAD_DIALOG:
+                    break;
+                    default: {
+                        for(int i=0;i<queue.size();i++) {
+                            if (action.equals(queue.get(i).getAction())) {
+                                queue.remove(i);
+                                Log.i("QQQQ", action + "(" + queue.size() + ")-");
+                                i = queue.size();
+                            }
+                        }
+                        handleQueue();
+                    }
+            }
+
+
         }else if(status==RESULT_ERROR) {
             queue.clear();
         }

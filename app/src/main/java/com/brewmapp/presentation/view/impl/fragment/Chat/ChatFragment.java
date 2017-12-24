@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -59,8 +60,14 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         setHasOptionsMenu(true);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager );
-        mAdapter = new MessageAdapter(getActivity(), mMessages);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mAdapter = new MessageAdapter(getActivity(), mMessages,recyclerView.getWidth());
+                recyclerView.setAdapter(mAdapter);
+            }
+        });
         mInputMessageView.setOnEditorActionListener((v, id, event) -> {presenter.sendMessage(v);return true;});
         send_button.setOnClickListener(v -> {presenter.sendMessage(mInputMessageView);mInputMessageView.setText("");});
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -166,7 +173,7 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
             if(size==0)
                 scrollToBottom();
         }else {
-            mMessages.addAll(messages);
+            mMessages.add(messages.get(0));
             mAdapter.notifyItemInserted(mMessages.size() - 1);
             scrollToBottom();
         }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -23,11 +22,7 @@ import com.brewmapp.execution.task.AllowFriend;
 import com.brewmapp.execution.task.DeleteFriend;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
-import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
-import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
-import com.brewmapp.presentation.view.impl.activity.StartActivity;
 
 import javax.inject.Inject;
 
@@ -200,7 +195,7 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
 
     private void refreshParentContent() {
         if(presenter instanceof MessageFragmentPresenter)
-            ((MessageFragmentPresenter)presenter).loadFriends(false);
+            ((MessageFragmentPresenter)presenter).loadDialogs(false);
         else if(presenter instanceof FriendsPresenter)
             ((FriendsPresenter)presenter).loadFriends(false);
     }

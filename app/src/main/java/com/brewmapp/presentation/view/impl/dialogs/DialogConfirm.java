@@ -15,7 +15,7 @@ import com.brewmapp.R;
  * Created by Kras on 07.12.2017.
  */
 @SuppressLint("ValidFragment")
-public class DialogConfirm extends DialogFragment {
+public class DialogConfirm extends DialogFragment implements DialogInterface.OnCancelListener {
 
     private OnConfirm onConfirm;
     private String text;
@@ -24,6 +24,7 @@ public class DialogConfirm extends DialogFragment {
         this.text = text;
         this.onConfirm = onConfirm;
         show(supportManagerFragment,"sss");
+
     }
 
     @NonNull
@@ -32,13 +33,15 @@ public class DialogConfirm extends DialogFragment {
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setTitle(R.string.title_confimation);
         alert.setMessage(text);
-        alert.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            onConfirm.onOk();
-        });
-        alert.setNegativeButton(android.R.string.no,((dialog, which) -> {
-            onConfirm.onCancel();
-        }));
+        alert.setPositiveButton(android.R.string.yes, (dialog, which) -> onConfirm.onOk());
+        alert.setNegativeButton(android.R.string.no,((dialog, which) ->onConfirm.onCancel()));
         return alert.create();
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        onConfirm.onCancel();
     }
 
     public interface OnConfirm {

@@ -21,6 +21,14 @@ public class Contact implements IPerson {
 
     private User friend_info;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public User getFriend_info() {
         return friend_info;
     }

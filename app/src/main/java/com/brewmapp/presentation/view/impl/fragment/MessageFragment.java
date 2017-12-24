@@ -13,14 +13,11 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.User;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
-import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
-import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
@@ -71,7 +68,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
             adapter.filterItems(original);
         });
 
-        swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
+        swipe.setOnRefreshListener(() -> presenter.loadDialogs(false));
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
                         Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, getActivity(), MultiFragmentActivity.class);
                         User user=((Contact) payload).getFriend_info();
@@ -81,8 +78,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
                         friend.setLastname(user.getLastname());
                         intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
                         startActivity(intent);
-                    }
-            );
+                    });
         list.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
@@ -92,7 +88,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.loadFriends(false);
+        presenter.loadDialogs(false);
     }
 
     @Override
@@ -116,7 +112,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     }
 
     @Override
-    public void showFriends(List<IFlexible> list) {
+    public void showDialogs(List<IFlexible> list) {
         original = list;
         adapter.updateDataSet(list);
     }
@@ -133,7 +129,6 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -147,23 +142,6 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-//    @Override
-//    public void onBarAction(int id) {
-//        switch (id){
-//            case R.id.action_search:
-//                startActivityForResult(
-//                        new Intent(
-//                                Keys.CAP_USER_FRIENDS,
-//                                null,getActivity(),
-//                                MultiListActivity.class),
-//                        RequestCodes.REQUEST_INTEREST
-//                );
-//                break;
-//                default:
-//                    super.onBarAction(id);
-//        }
-//    }
 
     @Override
     protected void prepareView(View view) {

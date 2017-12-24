@@ -1,8 +1,11 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -10,4 +13,8 @@ public interface FriendsPresenter extends LivePresenter<FriendsView> {
     void loadFriends(boolean subscribers);
 
     void requestNewFriend(Intent data);
+
+    void setItemTouchHelper(RecyclerView list);
+
+    void onClickItem(int code, Object payload, FragmentActivity fragmentActivity);
 }

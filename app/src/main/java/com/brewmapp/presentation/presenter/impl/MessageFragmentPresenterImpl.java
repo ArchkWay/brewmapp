@@ -9,7 +9,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
@@ -26,11 +25,8 @@ import com.brewmapp.presentation.view.contract.MessageFragmentView;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.widget.ContactView;
-import com.brewmapp.presentation.view.impl.widget.FriendsTitleView;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -60,23 +56,9 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
     }
 
     @Override
-    public void loadFriends(boolean subscribers) {
+    public void loadDialogs(boolean subscribers) {
         enableControls(false);
         commandToChatService(ChatService.ACTION_SET_RECEIVER);
-//        listFriendsTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
-//            @Override
-//            public void onError(Throwable e) {
-//                enableControls(true);
-//                showMessage(e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(List<IFlexible> result) {
-//                enableControls(true);
-//                innerWorker.commandToChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
-//                view.showFriends(result);
-//            }
-//        });
     }
 
     @Override
@@ -88,7 +70,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    loadFriends(true);
+                    loadDialogs(true);
                 }
 
                 @Override
@@ -121,7 +103,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                         new DialogConfirm.OnConfirm() {
                                     @Override
                                     public void onOk() {
-                                        deleteDialog(friend);
+                                        commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
                                     }
 
                                     @Override
@@ -133,7 +115,6 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(list);
-
     }
 
     //*********************************************************************
@@ -195,7 +176,9 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                     chatListDialogs.remove(0);
                     ContactInfo contactInfo = new ContactInfo();
                     Contact contact = new Contact();
+                    contact.setId(users.get(0).getId());
                     contact.setFriend_info(users.get(0));
+                    contact.setUser(users.get(0));
                     contactInfo.setModel(contact);
                     arrayList.add(contactInfo);
                     loadUserDetails(chatListDialogs, arrayList);
@@ -209,11 +192,8 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                 }
             });
         }else {
-            view.showFriends(arrayList);
+            view.showDialogs(arrayList);
             enableControls(true);
         }
-    }
-    private void deleteDialog(User friend) {
-        commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
     }
 }

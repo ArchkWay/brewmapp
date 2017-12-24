@@ -1,6 +1,9 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 import java.util.List;
 
@@ -8,16 +11,28 @@ import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 
+import com.brewmapp.R;
+import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Contact;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.AddFriend;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.presentation.view.contract.FriendsView;
 
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
+import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
+import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
+import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
+import com.brewmapp.presentation.view.impl.widget.ContactView;
 
 public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements FriendsPresenter {
 
@@ -72,6 +87,50 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
             });
 
         }catch (Exception e){showMessage(e.getMessage());}
+
+    }
+
+    @Override
+    public void setItemTouchHelper(RecyclerView list) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                FragmentActivity fragmentActivity= (FragmentActivity) list.getContext();
+                if(fragmentActivity==null) return;
+                Contact contact=((ContactView) ((ModelViewHolder) viewHolder).view).getModel();
+                new DialogManageContact(fragmentActivity,fragmentActivity.getSupportFragmentManager(),contact,FriendsPresenterImpl.this);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(list);
+
+    }
+
+    @Override
+    public void onClickItem(int code, Object payload, FragmentActivity fragmentActivity) {
+        Contact contact=((Contact) payload);
+        switch (contact.getStatus()){
+            case 2:
+            case 0:
+                new DialogManageContact(fragmentActivity,fragmentActivity.getSupportFragmentManager(),contact,FriendsPresenterImpl.this);
+                break;
+                default:{
+                    Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, fragmentActivity, MultiFragmentActivity.class);
+                    User user=contact.getFriend_info();
+                    User friend=new User();
+                    friend.setId(user.getId());
+                    friend.setFirstname(user.getFirstname());
+                    friend.setLastname(user.getLastname());
+                    intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
+                    fragmentActivity.startActivity(intent);
+                }
+        }
 
     }
 }

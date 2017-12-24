@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,10 +14,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.List;
-
-import io.socket.client.Url;
 
 /**
  * Created by Kras on 14.12.2017.
@@ -28,10 +24,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private List<Message> mMessages;
     private int[] mUsernameColors;
+    private int widthImage =480;
 
-    public MessageAdapter(Context context, List<Message> messages) {
+    public MessageAdapter(Context context, List<Message> messages, int widthRecycler) {
         mMessages = messages;
         mUsernameColors = context.getResources().getIntArray(R.array.username_colors);
+        this.widthImage = (int) (widthRecycler*0.7f);
     }
 
     @Override
@@ -64,9 +62,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = mMessages.get(position);
         viewHolder.setMessage(message.getMessage());
         viewHolder.setStatus(message.ismStateSending());
-        viewHolder.setImage(message.getImage());
         viewHolder.setImageHeight(message.getImageHeight());
         viewHolder.setImageWidth(message.getImageWidth());
+        viewHolder.setImage(message.getImage());
 
     }
 
@@ -129,18 +127,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         public void setImage(String path){
             if (path!=null){
-                mImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        //resize
-                        float ratio=(float) mImageView.getWidth()/(float) imageWidth;
+                        float ratio=(float) widthImage /(float) imageWidth;
                         LinearLayout.LayoutParams p= (LinearLayout.LayoutParams) mImageView.getLayoutParams();
                         p.height=(int) (imageHeight*ratio);
-                        mImageView.setLayoutParams(p);
-                        //load
+                        p.width= widthImage;
                         mImageView.post(() -> {
                             //.networkPolicy(NetworkPolicy.OFFLINE)
+                            mImageView.setLayoutParams(p);
                             if(path.startsWith("http"))
                                 Picasso.with(mImageView.getContext()).load(path).fit().centerCrop().into(mImageView);
                             else
@@ -148,12 +141,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
                         });
 
-                        return true;
-                    }
-                });
                 mImageView.setVisibility(View.VISIBLE);
+                mMessageView.setVisibility(View.GONE);
             }else {
                 mImageView.setVisibility(View.GONE);
+                mMessageView.setVisibility(View.VISIBLE);
             }
         }
     }

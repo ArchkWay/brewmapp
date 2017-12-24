@@ -17,6 +17,7 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -64,12 +65,10 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     protected void initView(View view) {
 
         setHasOptionsMenu(true);
-
         search.setListener(string -> {
             adapter.setSearchText(string);
             adapter.filterItems(original);
         });
-
         swipe.setOnRefreshListener(() -> presenter.loadDialogs(false));
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), (code, payload) -> {
                         Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, getActivity(), MultiFragmentActivity.class);
@@ -85,12 +84,15 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
         presenter.setItemTouchHelper(list);
+
     }
 
     @Override
     protected void attachPresenter() {
+
         presenter.onAttach(this);
         presenter.loadDialogs(false);
+
     }
 
     @Override

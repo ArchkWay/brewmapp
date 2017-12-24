@@ -1,8 +1,12 @@
 package com.brewmapp.execution.services;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
@@ -10,10 +14,13 @@ import android.util.Log;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.execution.exchange.common.ChatImage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.base.BaseService;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
@@ -109,6 +116,7 @@ public class ChatService extends BaseService{
     private ResultReceiver receiver;
     private boolean isAuthorized =false;
     private List<Intent> queue= new ArrayList<>();
+    private List<ResultReceiver> chatResultReceivers= new ArrayList<>();
 
     private void openSocket() {
             socket.on(Socket.EVENT_DISCONNECT,args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
@@ -131,8 +139,6 @@ public class ChatService extends BaseService{
 
             socket.connect();
         }
-
-
     private void closeSocket() {
             isAuthorized = false;
             socket.off();
@@ -169,7 +175,7 @@ public class ChatService extends BaseService{
                 setReceiver(intent);
                 break;
             case ACTION_CLEAR_RECEIVER:
-                setReceiver(null);
+                removeReceiver();
                 break;
             case ACTION_REQUEST_DELETE_DIALOG:
                 requestDeleteDialog(intent);
@@ -184,18 +190,24 @@ public class ChatService extends BaseService{
     }
 
 
-    private void onError(Object[] args) {
+    private void onError(Object... args) {
             returnResult(RESULT_ERROR,Bundle.EMPTY);
         }
     private void onIncomingMessage(Object[] args) {
         Intent intent=new Intent();
         Bundle bundle=new Bundle();
         bundle.putString(EXTRA_PARAM1, ACTION_RECEIVE_MESSAGE);
-        bundle.putString(EXTRA_PARAM2, String.valueOf(args[0]));
-        intent.putExtras(bundle);
-        intent.setAction(ACTION_RECEIVE_MESSAGE);
-        queue.add(intent);
-        handleQueue();
+        try {
+            String string = String.valueOf(args[0]);
+            ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(string.replace("\\\\", "\\"), ChatReceiveMessage.class);
+            bundle.putSerializable(EXTRA_PARAM2, chatReceiveMessage);
+            intent.putExtras(bundle);
+            intent.setAction(ACTION_RECEIVE_MESSAGE);
+            queue.add(intent);
+            handleQueue();
+        }catch (Exception e){
+            onError(e.getMessage());
+        }
 
     }
 
@@ -351,18 +363,22 @@ public class ChatService extends BaseService{
 
     }
     private void setReceiver(Intent intent) {
-            if(intent==null){
-                receiver=null;
-                Bundle bundle = new Bundle();
-                bundle.putString(EXTRA_PARAM1, ACTION_CLEAR_RECEIVER);
-                returnResult(RESULT_OK, bundle);
-            }else {
-                receiver = intent.getParcelableExtra(RECEIVER);
-                Bundle bundle = new Bundle();
-                bundle.putString(EXTRA_PARAM1, ACTION_SET_RECEIVER);
-                returnResult(RESULT_OK, bundle);
-            }
+            receiver = intent.getParcelableExtra(RECEIVER);
+            chatResultReceivers.add(0,receiver);
+            Bundle bundle = new Bundle();
+            bundle.putString(EXTRA_PARAM1, ACTION_SET_RECEIVER);
+            returnResult(RESULT_OK, bundle);
         }
+    private void removeReceiver() {
+        chatResultReceivers.remove(0);
+        if(chatResultReceivers.size()>0)
+            receiver=chatResultReceivers.get(0);
+        else
+            receiver=null;
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_PARAM1, ACTION_CLEAR_RECEIVER);
+        returnResult(RESULT_OK, bundle);
+    }
 
 
     class UploadChatImageImpl {

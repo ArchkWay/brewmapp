@@ -37,14 +37,13 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentView> implements MessageFragmentPresenter {
 
-    private ListFriendsTask listFriendsTask;
+
     private AddFriend addFriend;
     private UserRepo userRepo;
     private LoadUsersTask loadUsersTask;
 
     @Inject
-    public MessageFragmentPresenterImpl(ListFriendsTask listFriendsTask,AddFriend addFriend,UserRepo userRepo,LoadUsersTask loadUsersTask) {
-        this.listFriendsTask = listFriendsTask;
+    public MessageFragmentPresenterImpl(AddFriend addFriend,UserRepo userRepo,LoadUsersTask loadUsersTask) {
         this.addFriend = addFriend;
         this.userRepo = userRepo;
         this.loadUsersTask = loadUsersTask;
@@ -52,14 +51,13 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
 
     @Override
     public void onDestroy() {
-        listFriendsTask.cancel();
-        toChatService(ChatService.ACTION_CLEAR_RECEIVER);
+
     }
 
     @Override
     public void loadDialogs(boolean subscribers) {
         enableControls(false);
-        toChatService(ChatService.ACTION_SET_RECEIVER);
+
     }
 
     @Override
@@ -116,6 +114,18 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(list);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        toChatService(ChatService.ACTION_SET_RECEIVER);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        toChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
 
     //*********************************************************************

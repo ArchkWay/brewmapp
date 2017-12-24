@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -13,4 +14,5 @@ public interface MessageFragmentPresenter extends LivePresenter<MessageFragmentV
     void requestNewFriend(Intent data);
 
     void setItemTouchHelper(RecyclerView list);
+
 }

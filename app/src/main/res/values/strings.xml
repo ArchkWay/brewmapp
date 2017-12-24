@@ -438,5 +438,6 @@
     <string name="delete_dialog">Удалить диалог</string>
     <string name="is_delete_dialog">Удалить всю переписку c %s ?</string>
     <string name="while_messages_no">Сообщений пока нет</string>
+    <string name="chat_new_message_text">\n(сообщение %s) </string>
 
 </resources>

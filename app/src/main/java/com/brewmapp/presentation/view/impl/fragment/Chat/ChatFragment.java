@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,19 +20,16 @@ import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
-import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.listener.SelectListener;
 
 /**
@@ -103,7 +99,7 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.connectToChat(getActivity().getIntent());
+        presenter.parseIntent(getActivity().getIntent());
     }
 
     @Override

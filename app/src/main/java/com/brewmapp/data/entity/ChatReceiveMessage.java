@@ -1,12 +1,13 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by xpusher on 12/14/2017.
  */
 
-public class ChatReceiveMessage {
+public class ChatReceiveMessage implements Serializable{
     private String id;
     private User from;
     private User to;

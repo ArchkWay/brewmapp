@@ -71,8 +71,9 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     }
 
     @Override
-    public void connectToChat(Intent intent) {
-        init(intent);
+    public void parseIntent(Intent intent) {
+        friend = (User) intent.getSerializableExtra(RequestCodes.INTENT_EXTRAS);
+        view.setFriend(friend);
     }
 
     @Override
@@ -98,23 +99,22 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
     @Override
     public void onDestroy() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        commandToChatService(ChatService.ACTION_SET_RECEIVER);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
 
     //************************************************************************
-    private void init(Intent intent) {
-            try {
-                friend = (User) intent.getSerializableExtra(RequestCodes.INTENT_EXTRAS);
-                if(friend ==null)
-                    view.commonError();
-                else {
-                    commandToChatService(ChatService.ACTION_SET_RECEIVER);
-                    view.setFriend(friend);
-                }
-            }catch (Exception e){
-                view.commonError(e.getMessage());
-            }
-        }
     private void commandToChatService(String command, Object... args) {
 
             if(view.getActivity()==null) return;
@@ -191,8 +191,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         showDialogContent(string);
                     }break;
                     case ChatService.ACTION_RECEIVE_MESSAGE: {
-                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                        ChatReceiveMessage chatReceiveMessage = new Gson().fromJson(string.replace("\\\\", "\\"), ChatReceiveMessage.class);
+                        ChatReceiveMessage chatReceiveMessage = (ChatReceiveMessage) resultData.getSerializable(ChatService.EXTRA_PARAM2);
                         if (Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
                             String url=null;
                             int imageHeight=0;

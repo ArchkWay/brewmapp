@@ -5,10 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.widget.Toast;
 
 import com.brewmapp.app.di.component.AppComponent;
 import com.brewmapp.app.di.component.DaggerAppComponent;
 import com.brewmapp.app.di.module.AppModule;
+import com.brewmapp.execution.services.ChatService;
+import com.brewmapp.presentation.view.impl.activity.SplashActivity;
 import com.crashlytics.android.Crashlytics;
 
 import java.net.URISyntaxException;
@@ -24,6 +27,8 @@ public class BeerMap extends Application {
 
     private static AppComponent appComponent;
 
+    private static Context appContext;
+
     public static AppComponent getAppComponent() {
         return appComponent;
     }
@@ -31,12 +36,22 @@ public class BeerMap extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        appContext=getBaseContext();
         Fabric.with(this, new Crashlytics());
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
 
         registerReceiver(oldApiReceiver, new IntentFilter(OLD_API_ACTION));
+
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                RestartApp();
+            }
+        });
+
     }
 
     private BroadcastReceiver oldApiReceiver = new BroadcastReceiver() {
@@ -46,5 +61,12 @@ public class BeerMap extends Application {
 
         }
     };
+
+    public static void RestartApp(){
+        appContext.stopService(new Intent(appContext, ChatService.class));
+        appContext.startActivity(new Intent(appContext, SplashActivity.class));
+        System.exit(2);
+    }
+
 
 }

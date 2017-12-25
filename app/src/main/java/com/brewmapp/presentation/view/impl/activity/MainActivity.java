@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
@@ -88,6 +89,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public static final String MODE_ONLY_EVENT_FRAGMENT = "event_fragment";
     public static final String MODE_ONLY_MAP_FRAGMENT = "map_fragment";
     public static final String SEARCH_FRAGMENT = "search_fragment";
+
 
     DuoDrawerToggle drawerToggle;
     private String mode;
@@ -355,10 +357,17 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void commonError(String... strings) {
         if(strings.length==0)
-            showMessage(getString(R.string.error));
+            showMessage(getString(R.string.connection_error));
         else
             showMessage(strings[0]);
-        finish();
+        navigator.storeCodeActiveFragment(MenuField.PROFILE);
+        toolbar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BeerMap.RestartApp();
+            }
+        },5000);
+
     }
 
     @SuppressLint("RestrictedApi")

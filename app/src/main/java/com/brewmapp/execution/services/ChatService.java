@@ -85,35 +85,38 @@ public class ChatService extends BaseService{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        String action=null;
-        try {
-            action=intent.getAction();
-        }catch (Exception e){}
+        if(intent!=null) {
 
-        if(action!=null)
-            switch (action){
-                case ACTION_OPEN_CHAT_SERVICE:
-                    openSocket();
-                    break;
-                case ACTION_CLOSE_CHAT_SERVICE:
-                    closeSocket();
-                    break;
-                case ACTION_SET_RECEIVER:
-                    setReceiver(intent);
-                    break;
-                case ACTION_CLEAR_RECEIVER:
-                    removeReceiver();
-                    break;
-                default: {
-                    boolean HandleQueueNow=queue.size()==0;
-                    queue.add(intent);
-                    Log.i("QQQQ",action+"("+queue.size()+")+");
-                    if(isAuthorized)
-                        if(HandleQueueNow)
-                            handleQueue();
+            String action = null;
+            try {
+                action = intent.getAction();
+            } catch (Exception e) {
+            }
+
+            if (action != null)
+                switch (action) {
+                    case ACTION_OPEN_CHAT_SERVICE:
+                        openSocket();
+                        break;
+                    case ACTION_CLOSE_CHAT_SERVICE:
+                        closeSocket();
+                        break;
+                    case ACTION_SET_RECEIVER:
+                        setReceiver(intent);
+                        break;
+                    case ACTION_CLEAR_RECEIVER:
+                        removeReceiver();
+                        break;
+                    default: {
+                        boolean HandleQueueNow = queue.size() == 0;
+                        queue.add(intent);
+                        Log.i("QQQQ", action + "(" + queue.size() + ")+");
+                        if (isAuthorized)
+                            if (HandleQueueNow)
+                                handleQueue();
+                    }
                 }
         }
-
         return super.onStartCommand(intent, flags, startId);
     }
 

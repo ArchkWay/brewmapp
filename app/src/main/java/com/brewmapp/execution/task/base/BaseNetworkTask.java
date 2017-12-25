@@ -1,6 +1,7 @@
 package com.brewmapp.execution.task.base;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.BeerMap;
 import com.google.gson.Gson;
 
 import java.io.IOException;

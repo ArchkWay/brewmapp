@@ -25,6 +25,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.view.contract.RefreshableView;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
 import java.util.List;
@@ -135,7 +136,8 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         @Override
         public void onError(Throwable e) {
             enableControls(true);
-            showMessage(e.getMessage());
+            //showMessage(e.getMessage());
+            ((MainActivity)view.getActivity()).commonError(e.getMessage());
         }
 
         @Override

@@ -156,7 +156,9 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     }
 
     @Override
-    public void commonError(String... messages) {getActivity().runOnUiThread(()->mListener.commonError(messages));}
+    public void commonError(String... messages) {
+        mListener.commonError(messages);
+    }
 
     @Override
     public void addMessages(List<Message> messages, boolean insert) {

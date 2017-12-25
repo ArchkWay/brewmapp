@@ -1,6 +1,8 @@
 package com.brewmapp.app.environment;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +38,7 @@ public class BeerMap extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        appContext=getBaseContext();
+        appContext=getApplicationContext();
         Fabric.with(this, new Crashlytics());
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
@@ -63,9 +65,16 @@ public class BeerMap extends Application {
     };
 
     public static void RestartApp(){
+
         appContext.stopService(new Intent(appContext, ChatService.class));
-        appContext.startActivity(new Intent(appContext, SplashActivity.class));
-        System.exit(2);
+
+        Intent mStartActivity = new Intent(appContext, SplashActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(appContext, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)appContext.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+        //System.exit(2);
     }
 
 

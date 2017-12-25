@@ -124,6 +124,8 @@ public class ChatService extends BaseService{
     private List<ResultReceiver> chatResultReceivers= new ArrayList<>();
 
     private void openSocket() {
+        socket.off();
+
             socket.on(Socket.EVENT_DISCONNECT,args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Socket.EVENT_CONNECT_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
@@ -409,12 +411,12 @@ public class ChatService extends BaseService{
             if(lifetime>1000){
                 reloadDialog(intent);
             }else {
-                Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
                 queue.add(intent);
+                Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
             }
         }else {
-            Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
             queue.add(intent);
+            Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
         }
 
     }

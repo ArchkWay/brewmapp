@@ -164,16 +164,15 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
     private void fromChatService(Bundle resultData) {
         String action = resultData.getString(ChatService.EXTRA_PARAM1);
         switch (action) {
-            case ChatService.ACTION_REQUEST_DIALOGS: {
+            case ChatService.ACTION_REQUEST_DIALOGS:
                 ChatListDialogs chatListDialogs  = (ChatListDialogs) resultData.getSerializable(ChatService.EXTRA_PARAM2);
                 loadUserDetails(chatListDialogs,new ArrayList<>());
-            }break;
-            case ChatService.ACTION_SET_RECEIVER:{
+            break;
+            case ChatService.ACTION_SET_RECEIVER:
+            case ChatService.ACTION_REQUEST_DELETE_DIALOG:
+            case ChatService.ACTION_RELOAD_DIALOG:
                 toChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
-            }break;
-            case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
-                toChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
-            }break;
+            break;
 
         }
     }

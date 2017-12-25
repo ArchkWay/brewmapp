@@ -1,12 +1,8 @@
 package com.brewmapp.execution.services;
 
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
@@ -19,7 +15,6 @@ import com.brewmapp.execution.exchange.common.ChatImage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.base.BaseService;
-import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -52,23 +47,24 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 public class ChatService extends BaseService{
 
     //********ACTION incoming and outgoing
-    public static final String ACTION_REQUEST_DELETE_DIALOG = "com.brewmapp.execution.services.action.ACTION_IN_REQUEST_DELETE_DIALOG";
-    public static final String ACTION_SEND_MESSAGE = "com.brewmapp.execution.services.action.ACTION_SEND_MESSAGE";
-    public static final String ACTION_SEND_IMAGE = "com.brewmapp.execution.services.action.ACTION_SEND_IMAGE";
-    public static final String ACTION_REQUEST_DIALOG_CONTENT = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOG_CONTENT";
-    public static final String ACTION_REQUEST_DIALOGS = "com.brewmapp.execution.services.action.ACTION_REQUEST_DIALOGS";
-    public static final String ACTION_SET_RECEIVER = "com.brewmapp.execution.services.action.ACTION_SET_RECEIVER";
-    public static final String ACTION_CLEAR_RECEIVER = "com.brewmapp.execution.services.action.ACTION_CLEAR_RECEIVER";
-    public static final String ACTION_OPEN_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_OPEN_CHAT_SERVICE";
-    public static final String ACTION_CLOSE_CHAT_SERVICE = "com.brewmapp.execution.services.action.ACTION_CLOSE_CHAT_SERVICE";
-    public static final String ACTION_MARK_MESSAGE_ESTIMATED = "com.brewmapp.execution.services.action.ACTION_MARK_MESSAGE_ESTIMATED";
+    public static final String ACTION_REQUEST_DELETE_DIALOG = "ACTION_IN_REQUEST_DELETE_DIALOG";
+    public static final String ACTION_SEND_MESSAGE = "ACTION_SEND_MESSAGE";
+    public static final String ACTION_SEND_IMAGE = "ACTION_SEND_IMAGE";
+    public static final String ACTION_REQUEST_DIALOG_CONTENT = "ACTION_REQUEST_DIALOG_CONTENT";
+    public static final String ACTION_REQUEST_DIALOGS = "ACTION_REQUEST_DIALOGS";
+    public static final String ACTION_SET_RECEIVER = "ACTION_SET_RECEIVER";
+    public static final String ACTION_CLEAR_RECEIVER = "ACTION_CLEAR_RECEIVER";
+    public static final String ACTION_OPEN_CHAT_SERVICE = "ACTION_OPEN_CHAT_SERVICE";
+    public static final String ACTION_CLOSE_CHAT_SERVICE = "ACTION_CLOSE_CHAT_SERVICE";
+    public static final String ACTION_MARK_MESSAGE_ESTIMATED = "ACTION_MARK_MESSAGE_ESTIMATED";
     //********ACTION outgoing
-    public static final String ACTION_RELOAD_DIALOG = "com.brewmapp.execution.services.action.ACTION_RELOAD_DIALOG";
-    public static final String ACTION_RECEIVE_MESSAGE = "com.brewmapp.execution.services.action.ACTION_RECEIVE_MESSAGE";
+    public static final String ACTION_RELOAD_DIALOG = "ACTION_RELOAD_DIALOG";
+    public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     //********KEY PARAM
     public static final String EXTRA_PARAM1 = "com.brewmapp.execution.services.extra.PARAM1";
     public static final String EXTRA_PARAM2 = "com.brewmapp.execution.services.extra.PARAM2";
     public static final String RECEIVER = "com.brewmapp.execution.services.extra.RECEIVER";
+    private static final String KEY_TIME_ADD_TO_QUEUE = "com.brewmapp.execution.services.extra.KEY_TIME_ADD_TO_QUEUE";
     //********KEY RESULT
     public static final int RESULT_OK = 0;
     public static final int RESULT_ERROR = 1;
@@ -87,11 +83,7 @@ public class ChatService extends BaseService{
 
         if(intent!=null) {
 
-            String action = null;
-            try {
-                action = intent.getAction();
-            } catch (Exception e) {
-            }
+            String action =intent.getAction();
 
             if (action != null)
                 switch (action) {
@@ -109,8 +101,7 @@ public class ChatService extends BaseService{
                         break;
                     default: {
                         boolean HandleQueueNow = queue.size() == 0;
-                        queue.add(intent);
-                        Log.i("QQQQ", action + "(" + queue.size() + ")+");
+                        addToQueue(intent);
                         if (isAuthorized)
                             if (HandleQueueNow)
                                 handleQueue();
@@ -139,7 +130,7 @@ public class ChatService extends BaseService{
             socket.on(Keys.CHAT_EVENT_AUTH_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Keys.CHAT_EVENT_LOAD_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
             socket.on(Keys.CHAT_EVENT_SEND_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
-            //Swap
+
             socket.on(Socket.EVENT_CONNECT, this::requestAuthorization);
             socket.on(Keys.CHAT_EVENT_AUTH_SUCCESS, this::receiveAuthorisationSuccess);
             socket.on(Keys.CHAT_EVENT_ROOMS_SUCCESS, this::receiveListDialogs);
@@ -193,7 +184,37 @@ public class ChatService extends BaseService{
 
         }
     }
+    private void returnResult(int status, Bundle bundle) {
 
+        if (receiver != null)
+            receiver.send(status, bundle);
+
+        if(status==RESULT_OK) {
+            String action=bundle.getString(EXTRA_PARAM1);
+            switch (action){
+                case ACTION_CLEAR_RECEIVER:
+                case ACTION_SET_RECEIVER:
+                case ACTION_RELOAD_DIALOG:
+                    break;
+                default: {
+                    if(queue.size()>0) {
+                        queue.remove(0);
+                        Log.i("QQQQ", action + "(" + queue.size() + ")-");
+                        handleQueue();
+                    }else {
+                        Intent intent=new Intent();
+                        intent.setAction(action);
+                        reloadDialog(intent);
+                    }
+                }
+
+                }
+
+        }else if(status==RESULT_ERROR) {
+            queue.clear();
+        }
+
+    }
 
     private void onError(Object... args) {
             returnResult(RESULT_ERROR,Bundle.EMPTY);
@@ -217,9 +238,11 @@ public class ChatService extends BaseService{
     }
 
     private void requestListDialogs() {
-            socket.emit(Keys.CHAT_EVENT_ROOMS);
+
+        socket.emit(Keys.CHAT_EVENT_ROOMS);
         }
     private void requestMessages(Intent intent) {
+
             int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
             int page=intent.getIntExtra(EXTRA_PARAM2,0);
 
@@ -308,6 +331,7 @@ public class ChatService extends BaseService{
     }
 
     private void receiveListDialogs(Object[] args) {
+
             try {
                 Bundle bundle=new Bundle();
                 bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DIALOGS);
@@ -357,36 +381,6 @@ public class ChatService extends BaseService{
         returnResult(RESULT_OK,bundle);
     }
 
-    private void returnResult(int status, Bundle bundle) {
-
-        if (receiver != null)
-            receiver.send(status, bundle);
-
-        if(status==RESULT_OK) {
-            String action=bundle.getString(EXTRA_PARAM1);
-            switch (action){
-                case ACTION_CLEAR_RECEIVER:
-                case ACTION_SET_RECEIVER:
-                case ACTION_RELOAD_DIALOG:
-                    break;
-                    default: {
-                        for(int i=0;i<queue.size();i++) {
-                            if (action.equals(queue.get(i).getAction())) {
-                                queue.remove(i);
-                                Log.i("QQQQ", action + "(" + queue.size() + ")-");
-                                i = queue.size();
-                            }
-                        }
-                        handleQueue();
-                    }
-            }
-
-
-        }else if(status==RESULT_ERROR) {
-            queue.clear();
-        }
-
-    }
     private void setReceiver(Intent intent) {
             receiver = intent.getParcelableExtra(RECEIVER);
             chatResultReceivers.add(0,receiver);
@@ -404,7 +398,34 @@ public class ChatService extends BaseService{
         bundle.putString(EXTRA_PARAM1, ACTION_CLEAR_RECEIVER);
         returnResult(RESULT_OK, bundle);
     }
+    private void addToQueue(Intent intent) {
 
+        long currTime=System.currentTimeMillis();
+        intent.putExtra(KEY_TIME_ADD_TO_QUEUE,currTime);
+
+        if(queue.size()>0){
+            Intent prevIntent=queue.get(0);
+            long lifetime=currTime-prevIntent.getLongExtra(KEY_TIME_ADD_TO_QUEUE,0);
+            if(lifetime>1000){
+                reloadDialog(intent);
+            }else {
+                Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
+                queue.add(intent);
+            }
+        }else {
+            Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
+            queue.add(intent);
+        }
+
+    }
+    private void reloadDialog(Intent intent) {
+        Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! backEndError !!!!!!!");
+        queue.clear();
+        Bundle bundle=new Bundle();
+        bundle.putString(EXTRA_PARAM1,ACTION_RELOAD_DIALOG);
+        returnResult(RESULT_OK,bundle);
+
+    }
 
     class UploadChatImageImpl {
 

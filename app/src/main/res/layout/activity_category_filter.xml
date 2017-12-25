@@ -49,6 +49,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:scrollbars="vertical"
         android:visibility="visible"
         android:id="@+id/categoryList"
         android:layout_width="match_parent"

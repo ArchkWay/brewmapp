@@ -201,7 +201,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
         if(enabled){
             swipe.removeCallbacks(runnable);
             swipe.setRefreshing(false);
@@ -209,7 +208,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         }else{
             swipe.postDelayed(runnable,2000);
         }
-
 
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
             if(code == ALL_CONTROL) {

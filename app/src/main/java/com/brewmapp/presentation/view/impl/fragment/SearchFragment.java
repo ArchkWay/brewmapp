@@ -118,7 +118,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         tabsView.setItems(Arrays.asList(searchContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                searchFragmentPackage.setMode(tab.getPosition());
+                 searchFragmentPackage.setMode(tab.getPosition());
                 presenter.storeTabActive(tab.getPosition());
                 offer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 0 ? View.VISIBLE : View.GONE);
                 craft.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 1 ? View.VISIBLE : View.GONE);
@@ -126,8 +126,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
                 interractor().processSetFilterFragmentActionBar(SearchFragment.this);
             }
         });
-
-
     }
 
     @Override

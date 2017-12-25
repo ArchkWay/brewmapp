@@ -24,18 +24,17 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static final int COUNTRY = 1;
     public static final int TYPE = 2;
     public static final int BRAND = 3;
-    public static final int PLACE = 4;
-    public static final int POWER = 5;
-    public static final int BEER_FILTER = 6;
-    public static final int DENSITY = 7;
-    public static final int IBU = 8;
-    public static final int BEER_PACK = 9;
-    public static final int COLOR = 10;
-    public static final int SMELL = 11;
-    public static final int TASTE = 12;
-    public static final int AFTER_TASTE = 13;
-    public static final int BREWERY = 14;
-    public static final int PRICE_BEER = 15;
+    public static final int POWER = 4;
+    public static final int BEER_FILTER = 5;
+    public static final int DENSITY = 6;
+    public static final int IBU = 7;
+    public static final int BEER_PACK = 8;
+    public static final int COLOR = 9;
+    public static final int SMELL = 10;
+    public static final int TASTE = 11;
+    public static final int AFTER_TASTE = 12;
+    public static final int BREWERY = 13;
+    public static final int PRICE_BEER = 14;
 
     private int id;
     private String selectedItemId;
@@ -118,7 +117,6 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
         out.add(new FilterBeerField(COUNTRY, R.drawable.ic_country, context.getString(R.string.search_beer_country), "Не имеет значения"));
         out.add(new FilterBeerField(TYPE, R.drawable.ic_beer_type, context.getString(R.string.search_beer_type), "Любой"));
         out.add(new FilterBeerField(BRAND, R.drawable.ic_brand, context.getString(R.string.search_beer_brand), "Любой"));
-        out.add(new FilterBeerField(PLACE, R.drawable.ic_city, context.getString(R.string.search_beer_place), "Не имеет значения"));
         out.add(new FilterBeerField(POWER, R.drawable.ic_power, context.getString(R.string.search_beer_power), "Любая"));
         out.add(new FilterBeerField(BEER_FILTER, R.drawable.ic_filter_beer, context.getString(R.string.search_beer_filter), "Все виды"));
         out.add(new FilterBeerField(DENSITY, R.drawable.ic_broj, context.getString(R.string.search_beer_type_broj), "Любой"));

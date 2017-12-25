@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.brewmapp.R;
@@ -209,11 +210,11 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mClusterManager = new ClusterManager<>(getContext(), googleMap);
 
+        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity()));
         googleMap.setOnCameraIdleListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         googleMap.setOnInfoWindowClickListener(mClusterManager);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
-
         googleMap.setOnMyLocationButtonClickListener(() -> {
             lookForLocation();
             return true;
@@ -261,7 +262,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     protected void onLocationFound(Location location) {
         presenter.onLocationChanged(new SimpleLocation(location));
         presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
-        googleMap.setInfoWindowAdapter(new RestoInfoWindow(getActivity(), location));
         showDialogProgressBar(false);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
                 location.getLatitude(), location.getLongitude()

@@ -1,6 +1,6 @@
 package com.brewmapp.execution.task;
 
-import com.brewmapp.R;
+import com.brewmapp.data.entity.container.Breweries;
 import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -18,7 +18,6 @@ import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
-import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
 /**
@@ -32,7 +31,7 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
     @Inject
     public FullSearchFilterTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = 30;
     }
 
     @Override
@@ -41,17 +40,21 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
             try {
                 WrapperParams params = new WrapperParams(Wrappers.SEARCH_TYPE);
                 params.addParam(Keys.TYPE, fullSearchPackage.getType());
-                int start = fullSearchPackage.getPage() * step;
-                int end = fullSearchPackage.getPage() * step + step;
+                int end = fullSearchPackage.getPage() + step;
                 switch (fullSearchPackage.getType()) {
                     case Keys.TYPE_BEER:
-                        FilterBeer filterBeer = executeCall(getApi().filterSearchBeer(fullSearchPackage.getStringSearch(), start, end, params));
+                        FilterBeer filterBeer = executeCall(getApi().filterSearchBeer(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
                         subscriber.onNext(new ArrayList<>(filterBeer.getModels()));
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_RESTO:
-                        Restos restos = executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), start, end, params));
+                        Restos restos = executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
                         subscriber.onNext(new ArrayList<>(restos.getModels()));
+                        subscriber.onComplete();
+                        break;
+                    case Keys.TYPE_BREWERY:
+                        Breweries breweries = executeCall(getApi().fullSearchBrewery(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
+                        subscriber.onNext(new ArrayList<>(breweries.getModels()));
                         subscriber.onComplete();
                         break;
                 }

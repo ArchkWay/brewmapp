@@ -1,5 +1,7 @@
 package com.brewmapp.execution.task;
 
+import android.util.Log;
+
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.container.Restos;
@@ -35,15 +37,14 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
                        Api api, UserRepo userRepo) {
         super(mainThread, executor, api);
         this.userRepo = userRepo;
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = 30;
     }
 
     @Override
     protected Observable<List<IFlexible>> prepareObservable(FilterRestoPackage restoPackage) {
         return Observable.create(subscriber -> {
             try {
-                int start = restoPackage.getPage() * step;
-                int end = restoPackage.getPage() * step + step;
+                int end = restoPackage.getPage() + step;
                 RequestParams params = new RequestParams();
                 RequestParams queryParams = new RequestParams();
                 params.addParam(Keys.RESTO_CITY, restoPackage.getRestoCity() != null ? restoPackage.getRestoCity() : "");
@@ -58,7 +59,7 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
                 params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
 
                 queryParams.addParam(Keys.USER_ID, userRepo.load().getId());
-                Restos response = executeCall(getApi().loadRestos(queryParams, params));
+                Restos response = executeCall(getApi().loadRestos(queryParams, restoPackage.getPage(), end, params));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

@@ -38,10 +38,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import io.paperdb.Paper;
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.widgets.CustomDrawerArrowDrawable;
 import nl.psdcompany.duonavigationdrawer.widgets.CustomDuoDrawerToggle;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
+
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.MenuField;
@@ -64,25 +66,40 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_SEARCH_CODE;
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
         FragmentInterractor {
 
-    @BindView(R.id.common_toolbar) Toolbar toolbar;
-    @BindView(R.id.common_toolbar_dropdown) LinearLayout toolbarDropdown;
-    @BindView(R.id.common_toolbar_title) TextView toolbarTitle;
-    @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
-    @BindView(R.id.activity_main_drawer) DuoDrawerLayout drawer;
-    @BindView(R.id.activity_main_menu) RecyclerView menu;
-    @BindView(R.id.activity_main_userName) TextView userName;
-    @BindView(R.id.activity_main_text_view_check_connection) TextView check_connection;
-    @BindView(R.id.activity_main_avatar) ImageView avatar;
-    @BindView(R.id.activity_main_profileHeader) View profileHeader;
-    @BindView(R.id.activity_main_container) FrameLayout container;
-    @BindView(R.id.activity_main_visible_container)    RelativeLayout visible_container;
+    @BindView(R.id.common_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.common_toolbar_dropdown)
+    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)
+    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)
+    TextView toolbarSubTitle;
+    @BindView(R.id.activity_main_drawer)
+    DuoDrawerLayout drawer;
+    @BindView(R.id.activity_main_menu)
+    RecyclerView menu;
+    @BindView(R.id.activity_main_userName)
+    TextView userName;
+    @BindView(R.id.activity_main_text_view_check_connection)
+    TextView check_connection;
+    @BindView(R.id.activity_main_avatar)
+    ImageView avatar;
+    @BindView(R.id.activity_main_profileHeader)
+    View profileHeader;
+    @BindView(R.id.activity_main_container)
+    FrameLayout container;
+    @BindView(R.id.activity_main_visible_container)
+    RelativeLayout visible_container;
 
-    @Inject MainPresenter presenter;
-    @Inject MainNavigator navigator;
+    @Inject
+    MainPresenter presenter;
+    @Inject
+    MainNavigator navigator;
 
     private FlexibleAdapter<MenuField> adapter;
     private List<MenuField> menuItems;
-    private @MenuRes int menuToShow;
+    private @MenuRes
+    int menuToShow;
 
     public static final String KEY_FIRST_FRAGMENT = "first_fragment";
     public static final String MODE_DEFAULT = "default";
@@ -98,7 +115,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
-        processShowDrawer(false,false);
+        processShowDrawer(false, true);
+        Paper.init(this);
+        Paper.book().destroy();
     }
 
     @Override
@@ -106,7 +125,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
         mode = presenter.parseMode(getIntent());
-   }
+    }
 
     private void setDrawer() {
         drawer.setMarginFactor(0.5f);
@@ -357,7 +376,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     public void commonError(String... strings) {
         if(strings.length==0)
-            showMessage(getString(R.string.connection_error));
+            showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
         navigator.storeCodeActiveFragment(MenuField.PROFILE);

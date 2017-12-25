@@ -1,75 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <com.brewmapp.presentation.view.impl.widget.TabsView
+        android:id="@+id/fragment.events.tabs"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:id="@+id/fragment.events.tabs"/>
+        android:background="@color/colorPrimary" />
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/filter_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/accept.filter"
+        android:layout_below="@+id/fragment.events.tabs" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/lyt_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filter_list"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/filter_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <CheckBox
+            android:id="@+id/offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/special_offer"
+            android:visibility="gone" />
 
-            <LinearLayout
-                android:layout_marginTop="5dp"
-                android:layout_below="@+id/filter_list"
-                android:layout_marginStart="3dp"
-                android:orientation="vertical"
-                android:id="@+id/lyt_option"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <CheckBox
+            android:id="@+id/craft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/craft_beer"
+            android:visibility="gone" />
 
-            <CheckBox
-                android:visibility="gone"
-                android:id="@+id/offer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/special_offer" />
+        <CheckBox
+            android:id="@+id/filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/filter_beer"
+            android:visibility="gone" />
 
-            <CheckBox
-                android:visibility="gone"
-                android:id="@+id/craft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/craft_beer" />
+    </LinearLayout>
 
-            <CheckBox
-                android:visibility="gone"
-                android:id="@+id/filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/filter_beer" />
+    <Button
+        android:id="@+id/accept.filter"
+        style="@style/AppTheme.Button.Green.Solid.Square"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="6dp"
+        android:text="@string/search"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_size_common" />
 
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/accept.filter"
-                style="@style/AppTheme.Button.Green.Solid.Square"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="6dp"
-                android:layout_below="@+id/lyt_option"
-                android:text="@string/search"
-                android:textAllCaps="true"
-                android:textSize="@dimen/text_size_common" />
-
-        </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
-
-</LinearLayout>
+</RelativeLayout>

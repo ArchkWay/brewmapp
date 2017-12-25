@@ -63,6 +63,11 @@ public class FullSearchTask extends BaseNetworkTask<FullSearchPackage,List<IFlex
                         subscriber.onNext(new ArrayList<>(users.getModels()));
                         subscriber.onComplete();
                         break;
+//                    case Keys.TYPE_BREWERY:
+//                        Users users = executeCall(getApi().fullSearchUser(fullSearchPackage.getStringSearch(), start, end, params));
+//                        subscriber.onNext(new ArrayList<>(users.getModels()));
+//                        subscriber.onComplete();
+//                        break;
                     case Keys.TYPE_BEERBRAND:
                         BeerBrands beerBrands=executeCall(getApi().fullSearchBeerBrand(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(beerBrands.getModels()));

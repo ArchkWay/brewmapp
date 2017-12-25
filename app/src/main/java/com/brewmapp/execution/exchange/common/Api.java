@@ -48,6 +48,7 @@ import com.brewmapp.data.entity.container.Albums;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.BeerBrands;
+import com.brewmapp.data.entity.container.Breweries;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.data.entity.container.FilterRestoLocationTypes;
@@ -231,11 +232,15 @@ public interface Api {
     @POST("search/resto")
     @FormUrlEncoded
     Call<Restos> loadRestos(@QueryMap RequestParams query,
+                            @Query(Keys.LIMIT_START) int start,
+                            @Query(Keys.LIMIT_END) int end,
                             @FieldMap RequestParams params);
 
     @POST("search/beer")
     @FormUrlEncoded
-    Call<SearchBeerTypes> loadBeers(@FieldMap RequestParams params);
+    Call<SearchBeerTypes> loadBeers(@Query(Keys.LIMIT_START) int start,
+                                    @Query(Keys.LIMIT_END) int end,
+                                    @FieldMap RequestParams params);
 
     @POST("subscription")
     @FormUrlEncoded
@@ -276,6 +281,15 @@ public interface Api {
     @POST("full_search/{query}")
     @FormUrlEncoded
     Call<Restos> fullSearchResto(
+            @Path("query") String query,
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap WrapperParams params
+    );
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
+    Call<Breweries> fullSearchBrewery(
             @Path("query") String query,
             @Query(Keys.LIMIT_START) int start,
             @Query(Keys.LIMIT_END) int end,
@@ -368,7 +382,9 @@ public interface Api {
 
     @POST("beer/type")
     @FormUrlEncoded
-    Call<BeerTypesModel> loadBeerTypes(@FieldMap WrapperParams params);
+    Call<BeerTypesModel> loadBeerTypes(@Query(Keys.LIMIT_START) int start,
+                                       @Query(Keys.LIMIT_END) int end,
+                                       @FieldMap WrapperParams params);
 
     @POST("beer/packing")
     @FormUrlEncoded
@@ -404,7 +420,9 @@ public interface Api {
 
     @POST("brewery/shortdata")
     @FormUrlEncoded
-    Call<BreweryTypes> loadBrewery(@FieldMap WrapperParams params);
+    Call<BreweryTypes> loadBrewery(@Query(Keys.LIMIT_START) int start,
+                                   @Query(Keys.LIMIT_END) int end,
+                                    @FieldMap WrapperParams params);
 
     @GET("beer/ibu")
     Call<BeerIbuTypes> loadBeerIbu();

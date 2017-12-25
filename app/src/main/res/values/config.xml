@@ -17,4 +17,5 @@
     </string-array>
 
     <integer name="config_posts_pack_size">8</integer>
+    <integer name="filter_pack_size">30</integer>
 </resources>

@@ -12,7 +12,7 @@
         android:id="@+id/activity.search.search"/>
 
     <android.support.v7.widget.RecyclerView
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/restoList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

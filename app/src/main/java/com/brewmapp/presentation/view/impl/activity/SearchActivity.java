@@ -20,6 +20,7 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.SearchBeer;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SearchPresenter;
 import com.brewmapp.presentation.view.contract.SearchView;
@@ -50,6 +51,7 @@ public class SearchActivity extends BaseActivity implements SearchView {
     TextView titleToolbar;
 
     private FlexibleModelAdapter<IFlexible> adapter;
+    private FullSearchPackage searchPackage;
     private int selectedTab;
     private EndlessRecyclerOnScrollListener scrollListener;
     private ProgressDialog dialog;
@@ -76,6 +78,8 @@ public class SearchActivity extends BaseActivity implements SearchView {
     @Override
     protected void initView() {
         enableBackButton();
+        searchPackage = new FullSearchPackage();
+        searchPackage.setPage(0);
         if (getIntent().getExtras() != null) {
             selectedTab = getIntent().getExtras().getInt(Keys.SEARCH_RESULT, 0);
             craftBeer = getIntent().getExtras().getInt("craft", 0);
@@ -91,7 +95,8 @@ public class SearchActivity extends BaseActivity implements SearchView {
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-//                fullSearchPackage.setPage(currentPage - 1);
+                searchPackage.setPage(manager.getItemCount());
+                loadResult(searchPackage);
             }
         };
         list.addOnScrollListener(scrollListener);
@@ -99,22 +104,22 @@ public class SearchActivity extends BaseActivity implements SearchView {
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
-        loadResult();
+        loadResult(searchPackage);
     }
 
-    private void loadResult() {
+    private void loadResult(FullSearchPackage searchPackage) {
         switch (selectedTab) {
             case 0:
                 showDialogProgressBar(R.string.search_resto_message);
-                presenter.loadRestoList(offer);
+                presenter.loadRestoList(offer, searchPackage);
                 break;
             case 1:
                 showDialogProgressBar(R.string.search_beer_message);
-                presenter.loadBeerList(craftBeer, filterBeer);
+                presenter.loadBeerList(craftBeer, filterBeer, searchPackage);
                 break;
             case 2:
                 showDialogProgressBar(R.string.search_brewery_message);
-                presenter.loadBrewery();
+                presenter.loadBrewery(searchPackage);
                 break;
             default: break;
         }
@@ -184,7 +189,6 @@ public class SearchActivity extends BaseActivity implements SearchView {
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        adapter.clear();
         adapter.updateDataSet(list);
     }
 }

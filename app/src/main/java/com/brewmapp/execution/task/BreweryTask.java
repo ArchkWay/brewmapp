@@ -38,7 +38,7 @@ public class BreweryTask extends BaseNetworkTask<BreweryShort, List<IFlexible>> 
                 params.addParam("id", "");    //it's backend style :)
                 params.addParam("country_id", "");
                 params.addParam("location_id", "");
-                BreweryTypes response = executeCall(getApi().loadBrewery(params));
+                BreweryTypes response = executeCall(getApi().loadBrewery(0, 30, params));
                 List<BreweryInfo> breweryInfos = new ArrayList<>();
                 breweryInfos.add(0, new BreweryInfo(new BreweryShort("Не имеет значения  ")));
                 breweryInfos.addAll(response.getModels());

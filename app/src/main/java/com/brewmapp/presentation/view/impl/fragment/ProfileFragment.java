@@ -94,18 +94,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     @Override
     protected void initView(View view) {
-        //if(getArguments().getBoolean(MainActivity.KEY_FIRST_FRAGMENT,false)){
-//            scrollView.setVisibility(View.INVISIBLE);
-//            transitions_container.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    TransitionManager.getDefaultTransition().setDuration(1000);
-//                    TransitionManager.beginDelayedTransition(transitions_container);
-//                    scrollView.setVisibility(View.VISIBLE);
-//                }
-//            },0);
-        //}
-
 
         menuAdapter = new FlexibleAdapter<>(CardMenuField.createProfileItems(getActivity()), this);
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -134,7 +122,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
             }
         });
-        segment.check(R.id.fragment_profile_posts_subscription);
 
         postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         subscriptionAdapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
@@ -170,6 +157,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+
+        segment.check(R.id.fragment_profile_posts_subscription);
+
     }
 
     @Override

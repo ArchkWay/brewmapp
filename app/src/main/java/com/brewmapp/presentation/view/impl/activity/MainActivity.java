@@ -80,8 +80,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     RecyclerView menu;
     @BindView(R.id.activity_main_userName)
     TextView userName;
-    @BindView(R.id.activity_main_text_view_check_connection)
-    TextView check_connection;
     @BindView(R.id.activity_main_avatar)
     ImageView avatar;
     @BindView(R.id.activity_main_profileHeader)
@@ -246,30 +244,32 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public synchronized void processShowDrawer(boolean show, boolean smooth) {
-        if(smooth) {
-            TransitionManager.getDefaultTransition().setDuration(250);
-            TransitionManager.beginDelayedTransition(drawer);
-        }
-        container.setVisibility(View.VISIBLE);
-        toolbar.setVisibility(View.VISIBLE);
-        container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
-        toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        container.post(new Runnable() {
+            @Override
+            public void run() {
+                if(smooth) {
+                    TransitionManager.getDefaultTransition().setDuration(250);
+                    TransitionManager.beginDelayedTransition(drawer);
+                }
+                container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+                toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+
+            }
+        });
     }
 
     @Override
     public void showDrawer(boolean shown) {
         if(shown)
             drawer.openDrawer();
-        else
-            drawer.post(() -> {
-                drawer.closeDrawer();
-                processShowDrawer(false,true);
-            });
+        else {
+            drawer.closeDrawer();
+            processShowDrawer(false, true);
+        }
     }
 
     @Override
     public void successCheckEnvironment(User user, List<MenuField> fields) {
-        check_connection.setVisibility(View.GONE);
         Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
         userName.setText(user.getFormattedName());
         this.menuItems = fields;
@@ -379,13 +379,10 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
-        navigator.storeCodeActiveFragment(MenuField.PROFILE);
-        toolbar.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                BeerMap.RestartApp();
-            }
-        },5000);
+        MenuField.unselectAll(menuItems);
+        adapter.notifyDataSetChanged();
+        navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
+        navigator.onDrawerClosed();
 
     }
 

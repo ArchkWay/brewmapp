@@ -18,6 +18,8 @@ public class StartActivity extends BaseActivity implements StartView {
 
     @BindView(R.id.activity_start_enter) View enter;
     @BindView(R.id.activity_start_register) View register;
+    @BindView(R.id.activity_start_container) View container;
+    @BindView(R.id.activity_start_check_connection) View check_connection;
 
     @Inject StartPresenter presenter;
 
@@ -30,7 +32,8 @@ public class StartActivity extends BaseActivity implements StartView {
 
     @Override
     public void enableControls(boolean enabled, int code) {
-
+        container.setVisibility(enabled?View.VISIBLE:View.GONE);
+        check_connection.setVisibility(enabled?View.GONE:View.VISIBLE);
     }
 
     @Override

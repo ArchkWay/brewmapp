@@ -1,7 +1,11 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
+
 import javax.inject.Inject;
 
+import com.brewmapp.R;
+import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
@@ -32,17 +36,23 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     private LoadSubscriptionsItemsTask loadSubscriptionsItemsTask;
     private LoadProfileTask loadProfileTask;
     private LikeTask likeTask;
+    private UiSettingRepo uiSettingRepo;
+    private Context context;
 
     @Inject
     public ProfilePresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
                                 LoadProfileTask loadProfileTask,
                                 LikeTask likeTask,
-                                LoadSubscriptionsItemsTask loadSubscriptionsItemsTask) {
+                                LoadSubscriptionsItemsTask loadSubscriptionsItemsTask,
+                                UiSettingRepo uiSettingRepo,
+                                Context context) {
         this.userRepo = userRepo;
         this.loadPostsTask = loadPostsTask;
         this.loadProfileTask = loadProfileTask;
         this.likeTask = likeTask;
         this.loadSubscriptionsItemsTask = loadSubscriptionsItemsTask;
+        this.uiSettingRepo = uiSettingRepo;
+        this.context = context;
     }
 
     @Override
@@ -67,36 +77,48 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
 
     @Override
     public void onLoadPosts(LoadPostsPackage loadPostsPackage) {
-        loadPostsTask.execute(loadPostsPackage, new SimpleSubscriber<Posts>() {
-            @Override
-            public void onError(Throwable e) {
-                enableControls(true);showMessage(e.getMessage());view.onError();
-            }
-            @Override
-            public void onNext(Posts posts) {
-                enableControls(true);view.appendPosts(posts);
-            }
-        });
+        if(uiSettingRepo.isOnLine())
+            loadPostsTask.execute(loadPostsPackage, new SimpleSubscriber<Posts>() {
+                @Override
+                public void onNext(Posts posts) {
+                    view.appendPosts(posts);
+                }
+                @Override
+                public void onError(Throwable e) {
+                    showMessage(e.getMessage());
+                    view.onError();
+                }
+            });
+        else {
+            showMessage(context.getString(R.string.connection_error));
+            view.onError();
+        }
     }
 
     @Override
     public void onLoadSubscription(LoadPostsPackage loadPostsPackage) {
-        loadSubscriptionsItemsTask.execute(0,new SimpleSubscriber<Subscriptions>(){
-            @Override
-            public void onNext(Subscriptions subscriptions) {
-                super.onNext(subscriptions);
-                enableControls(true);
-                view.appendSubscriptions(subscriptions);
-                User user=userRepo.load();
-                user.setSubscriptionsCount(subscriptions.getModels().size());
-                userRepo.save(user);
-                refreshProfile();
-            }
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-            }
-        });
+        if(uiSettingRepo.isOnLine())
+            loadSubscriptionsItemsTask.execute(0,new SimpleSubscriber<Subscriptions>(){
+                @Override
+                public void onNext(Subscriptions subscriptions) {
+                    super.onNext(subscriptions);
+                    view.appendSubscriptions(subscriptions);
+                    User user=userRepo.load();
+                    user.setSubscriptionsCount(subscriptions.getModels().size());
+                    userRepo.save(user);
+                    refreshProfile();
+                }
+                @Override
+                public void onError(Throwable e) {
+                    showMessage(e.getMessage());
+                    view.onError();
+                    super.onError(e);
+                }
+            });
+        else {
+            showMessage(context.getString(R.string.connection_error));
+            view.onError();
+        }
     }
 
     @Override

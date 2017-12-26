@@ -35,15 +35,6 @@
             android:layout_below="@+id/common.toolbar"
             >
          </FrameLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/text_view_check_connection"
-            android:layout_centerInParent="true"
-            android:id="@+id/activity.main.text.view.check_connection"
-            />
-
     </RelativeLayout>
 
 </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>

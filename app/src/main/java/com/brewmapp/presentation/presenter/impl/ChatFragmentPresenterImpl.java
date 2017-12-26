@@ -24,7 +24,6 @@ import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
@@ -178,7 +177,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                     case ChatService.ACTION_MARK_MESSAGE_ESTIMATED: {
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
                     }break;
-                    case ChatService.ACTION_RELOAD_DIALOG:
+                    case ChatService.ACTION_RESTART_SWAP:
                     case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
                         view.clearMessages();
                         commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);

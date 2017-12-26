@@ -18,7 +18,6 @@ import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.AddFriend;
-import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.execution.task.LoadUsersTask;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
@@ -170,7 +169,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
             break;
             case ChatService.ACTION_SET_RECEIVER:
             case ChatService.ACTION_REQUEST_DELETE_DIALOG:
-            case ChatService.ACTION_RELOAD_DIALOG:
+            case ChatService.ACTION_RESTART_SWAP:
                 toChatService(ChatService.ACTION_REQUEST_DIALOGS,userRepo.load());
             break;
 

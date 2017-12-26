@@ -40,6 +40,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
         switch (action.code()) {
             case MenuField.PROFILE:
                 fragmentToShow = new ProfileFragment();
+                storeCodeActiveFragment(action.code());
                 break;
             case MenuField.EVENTS:
                 fragmentToShow = new EventsFragment();

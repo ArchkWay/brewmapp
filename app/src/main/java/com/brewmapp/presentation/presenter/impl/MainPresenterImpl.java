@@ -30,36 +30,18 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     private UserRepo userRepo;
     private Context context;
     private UiSettingRepo uiSettingRepo;
-    private LoadProfileAndPostsTask loadProfilePostsTask;
 
     @Inject
     public MainPresenterImpl(UiSettingRepo uiSettingRepo, UserRepo userRepo, Context context,LoadProfileAndPostsTask loadProfilePostsTask) {
         this.userRepo = userRepo;
         this.context = context;
         this.uiSettingRepo = uiSettingRepo;
-        this.loadProfilePostsTask = loadProfilePostsTask;
     }
 
     @Override
     public void onAttach(MainView mainView) {
         super.onAttach(mainView);
-        context.startService(new Intent(ChatService.ACTION_OPEN_CHAT_SERVICE, null, context, ChatService.class));
-        if(getActiveFragment()!=MenuField.PROFILE) {
-            loadProfilePostsTask.execute(null, new SimpleSubscriber<ProfileInfoPackage>() {
-                @Override
-                public void onNext(ProfileInfoPackage pack) {
-                    userRepo.save(pack.getUserProfile().getUser());
-                    view.successCheckEnvironment(userRepo.load(), MenuField.createDefault(context));
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    view.commonError(e.getMessage());
-                }
-            });
-        }else {
-            view.successCheckEnvironment(userRepo.load(), MenuField.createDefault(context));
-        }
+        view.successCheckEnvironment(userRepo.load(), MenuField.createDefault(context));
     }
 
     @Override

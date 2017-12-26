@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
+import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.execution.exchange.common.ChatImage;
@@ -54,11 +55,11 @@ public class ChatService extends BaseService{
     public static final String ACTION_REQUEST_DIALOGS = "ACTION_REQUEST_DIALOGS";
     public static final String ACTION_SET_RECEIVER = "ACTION_SET_RECEIVER";
     public static final String ACTION_CLEAR_RECEIVER = "ACTION_CLEAR_RECEIVER";
-    public static final String ACTION_OPEN_CHAT_SERVICE = "ACTION_OPEN_CHAT_SERVICE";
-    public static final String ACTION_CLOSE_CHAT_SERVICE = "ACTION_CLOSE_CHAT_SERVICE";
+    public static final String ACTION_SET_ONLINE = "ACTION_SET_ONLINE";
+    public static final String ACTION_SET_OFFLINE = "ACTION_SET_OFFLINE";
     public static final String ACTION_MARK_MESSAGE_ESTIMATED = "ACTION_MARK_MESSAGE_ESTIMATED";
     //********ACTION outgoing
-    public static final String ACTION_RELOAD_DIALOG = "ACTION_RELOAD_DIALOG";
+    public static final String ACTION_RESTART_SWAP = "ACTION_RESTART_SWAP";
     public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
     //********KEY PARAM
     public static final String EXTRA_PARAM1 = "com.brewmapp.execution.services.extra.PARAM1";
@@ -71,6 +72,7 @@ public class ChatService extends BaseService{
 
     @Inject public Socket socket;
     @Inject public UserRepo userRepo;
+    @Inject public UiSettingRepo uiSettingRepo;
 
     @Override
     public void onCreate() {
@@ -87,11 +89,11 @@ public class ChatService extends BaseService{
 
             if (action != null)
                 switch (action) {
-                    case ACTION_OPEN_CHAT_SERVICE:
-                        openSocket();
+                    case ACTION_SET_ONLINE:
+                        openSocket();uiSettingRepo.setIsOnLine(true);
                         break;
-                    case ACTION_CLOSE_CHAT_SERVICE:
-                        closeSocket();
+                    case ACTION_SET_OFFLINE:
+                        closeSocket();uiSettingRepo.setIsOnLine(false);
                         break;
                     case ACTION_SET_RECEIVER:
                         setReceiver(intent);
@@ -196,10 +198,10 @@ public class ChatService extends BaseService{
             switch (action){
                 case ACTION_CLEAR_RECEIVER:
                 case ACTION_SET_RECEIVER:
-                case ACTION_RELOAD_DIALOG:
+                case ACTION_RESTART_SWAP:
                     break;
                 default: {
-                    if(queue.size()>0) {
+                    if(queue.size()>0 && action.equals(queue.get(0).getAction())) {
                         queue.remove(0);
                         Log.i("QQQQ", action + "(" + queue.size() + ")-");
                         handleQueue();
@@ -209,8 +211,7 @@ public class ChatService extends BaseService{
                         reloadDialog(intent);
                     }
                 }
-
-                }
+            }
 
         }else if(status==RESULT_ERROR) {
             queue.clear();
@@ -367,9 +368,6 @@ public class ChatService extends BaseService{
         }
     private void receiveAuthorisationSuccess(Object[] args) {
             isAuthorized = true;
-//            Bundle bundle=new Bundle();
-//            bundle.putString(EXTRA_PARAM1, ACTION_RELOAD_DIALOG);
-//            returnResult(RESULT_OK,bundle);
             handleQueue();
         }
     private void receiveDeleteDialogSuccess(Object[] args) {
@@ -412,11 +410,11 @@ public class ChatService extends BaseService{
                 reloadDialog(intent);
             }else {
                 queue.add(intent);
-                Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
+                //Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
             }
         }else {
             queue.add(intent);
-            Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
+            //Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
         }
 
     }
@@ -424,7 +422,7 @@ public class ChatService extends BaseService{
         Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! backEndError !!!!!!!");
         queue.clear();
         Bundle bundle=new Bundle();
-        bundle.putString(EXTRA_PARAM1,ACTION_RELOAD_DIALOG);
+        bundle.putString(EXTRA_PARAM1, ACTION_RESTART_SWAP);
         returnResult(RESULT_OK,bundle);
 
     }

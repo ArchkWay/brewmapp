@@ -10,12 +10,16 @@ import com.brewmapp.execution.services.ChatService;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
+    public NetworkChangeReceiver(){
+
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(isOnline(context)) {
-            context.startService(new Intent(ChatService.ACTION_OPEN_CHAT_SERVICE, null, context, ChatService.class));
+            context.startService(new Intent(ChatService.ACTION_SET_ONLINE, null, context, ChatService.class));
         }else {
-            context.startService(new Intent(ChatService.ACTION_CLOSE_CHAT_SERVICE, null, context, ChatService.class));
+            context.startService(new Intent(ChatService.ACTION_SET_OFFLINE, null, context, ChatService.class));
         }
     }
 

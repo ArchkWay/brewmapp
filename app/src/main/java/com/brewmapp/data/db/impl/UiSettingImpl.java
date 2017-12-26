@@ -51,4 +51,17 @@ public class UiSettingImpl extends BaseRepo<UiSettingContainer> implements UiSet
     public int getnActiveTabEventFragment() {
         return uiSettingContainer.getnActiveTabEventFragment();
     }
+
+    @Override
+    public void setIsOnLine(boolean online) {
+        uiSettingContainer.setOnline(online);
+        save(uiSettingContainer);
+    }
+
+    @Override
+    public boolean isOnLine() {
+        return uiSettingContainer.isOnline();
+    }
+
+
 }

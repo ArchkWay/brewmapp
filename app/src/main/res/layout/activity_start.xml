@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    >
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:paddingLeft="@dimen/common_block_space_triple"
     android:paddingRight="@dimen/common_block_space_triple"
-    android:paddingTop="?attr/actionBarSize"
+    android:orientation="vertical"
     android:background="@drawable/bg_start"
-    android:orientation="vertical">
+    android:paddingTop="?attr/actionBarSize"
+    android:id="@+id/activity.start.container"
+    >
+
 
     <ImageView
         android:layout_width="@dimen/size_start_logo"
@@ -44,3 +51,13 @@
         style="@style/AppTheme.Button.Green"
         android:text="@string/enter"/>
 </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/text_view_check_connection"
+        android:layout_centerInParent="true"
+        android:id="@+id/activity.start.check_connection"
+        />
+
+</RelativeLayout>

@@ -13,4 +13,6 @@ public interface UiSettingRepo extends Repo<UiSettingContainer> {
     void setActiveFragment(int nActiveFragment);
     void setnActiveTabEventFragment(int nActiveTabEventFragment );
     int getnActiveTabEventFragment();
+    void setIsOnLine(boolean online);
+    boolean isOnLine();
 }

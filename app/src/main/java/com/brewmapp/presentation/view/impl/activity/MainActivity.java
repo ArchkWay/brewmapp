@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
-        processShowDrawer(false, true);
+        processShowDrawer(false, false);
         Paper.init(this);
         Paper.book().destroy();
     }
@@ -244,18 +244,21 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public synchronized void processShowDrawer(boolean show, boolean smooth) {
-        container.post(new Runnable() {
-            @Override
-            public void run() {
-                if(smooth) {
-                    TransitionManager.getDefaultTransition().setDuration(250);
-                    TransitionManager.beginDelayedTransition(drawer);
-                }
-                container.setVisibility(show?View.VISIBLE:View.INVISIBLE);
-                toolbar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
-
+        if((show&&container.getVisibility()==View.INVISIBLE)||(!show&&container.getVisibility()==View.VISIBLE))
+            if(smooth) {
+                container.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        TransitionManager.getDefaultTransition().setDuration(250);
+                        TransitionManager.beginDelayedTransition(drawer);
+                        container.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+                        toolbar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+                    }
+                });
+            }else {
+                container.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+                toolbar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             }
-        });
     }
 
     @Override

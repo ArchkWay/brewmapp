@@ -94,7 +94,7 @@ public class ChatService extends BaseService{
                         uiSettingRepo.setIsOnLine(true);
                         break;
                     case ACTION_SET_OFFLINE:
-                        //closeSocket();
+                        closeSocket();
                         uiSettingRepo.setIsOnLine(false);
                         break;
                     case ACTION_SET_RECEIVER:
@@ -218,7 +218,7 @@ public class ChatService extends BaseService{
             }
 
         }else if(status==RESULT_ERROR) {
-            queue.clear();
+            //queue.clear();
             closeSocket();
         }
 

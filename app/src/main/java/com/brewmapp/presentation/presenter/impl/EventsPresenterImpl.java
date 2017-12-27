@@ -68,6 +68,7 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         loadEventsTask.cancel();
         loadSalesTask.cancel();
         likeTask.cancel();
+        deleteNewsTask.cancel();
     }
 
     @Override

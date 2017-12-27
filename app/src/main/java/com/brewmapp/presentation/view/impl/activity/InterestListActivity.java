@@ -47,6 +47,8 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     @BindView(R.id.activity_interest_list)  RecyclerView recyclerView;
     @BindView(R.id.activity_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_interest_text_save)    TextView text_save_intesest;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
     @Inject    InterestListPresenter presenter;
 
@@ -116,6 +118,9 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
         text_save_intesest.setOnClickListener(v->{
             presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();
         });
+
+        toolbarTitle.setText(getSupportActionBar().getTitle());
+        toolbarSubTitle.setVisibility(View.GONE);
 
         refreshInterests();
     }

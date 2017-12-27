@@ -73,6 +73,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
         loadPostsTask.cancel();
         loadProfileTask.cancel();
         likeTask.cancel();
+        loadSubscriptionsItemsTask.cancel();
     }
 
     @Override

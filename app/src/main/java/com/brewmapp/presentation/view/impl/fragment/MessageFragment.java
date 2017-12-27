@@ -126,6 +126,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
 
     @Override
     public void commonError(String... messages) {
+        if(getActivity()!=null)
             ((MainActivity)getActivity()).commonError(messages);
     }
 

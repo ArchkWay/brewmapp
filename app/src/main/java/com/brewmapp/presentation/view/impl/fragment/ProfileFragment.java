@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
@@ -157,9 +158,18 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        segment.post(new Runnable() {
+            @Override
+            public void run() {
+                segment.check(R.id.fragment_profile_posts_subscription);
+            }
+        });
 
-        segment.check(R.id.fragment_profile_posts_subscription);
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override

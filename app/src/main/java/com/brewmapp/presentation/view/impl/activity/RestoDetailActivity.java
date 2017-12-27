@@ -107,6 +107,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_description_button)    Button button_more_description;
     @BindView(R.id.activity_resto_details_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_resto_details_scroll)    ScrollView scroll;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -163,6 +165,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
         slider.setVisibility(View.INVISIBLE);
+
+
     }
 
     private void setTitleToButtonOfMoreDescription(boolean click) {
@@ -457,4 +461,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getSupportActionBar().getTitle());
+        toolbarSubTitle.setVisibility(View.GONE);
+
+    }
 }

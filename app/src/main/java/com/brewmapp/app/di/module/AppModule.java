@@ -44,7 +44,7 @@ public class AppModule extends BaseAppModule<BeerMap> {
         VKSdk.initialize(context);
         Twitter.initialize(context);
         Fresco.initialize(context);
-        Fabric.with(context, new Crashlytics());
+        //Fabric.with(context, new Crashlytics());
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/regular.otf")
                 .setFontAttrId(R.attr.fontPath)

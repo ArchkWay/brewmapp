@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/common.toolbar.dropdown"
         android:layout_gravity="center_horizontal"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <TextView

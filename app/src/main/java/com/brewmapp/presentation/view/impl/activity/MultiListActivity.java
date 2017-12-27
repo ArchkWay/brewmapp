@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -43,6 +45,8 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     @BindView(R.id.activity_search_search)    FinderView finder;
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
     @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
     @Inject    MultiListPresenter presenter;
 
@@ -60,6 +64,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     @Override
     protected void initView() {
         enableBackButton();
+
         mode=presenter.parseIntent(getIntent());
         fullSearchPackage = new FullSearchPackage();
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -109,43 +114,12 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
             default:
                 commonError();
         }
-
+        toolbarTitle.setText(getSupportActionBar().getTitle());
+        toolbarSubTitle.setVisibility(View.GONE);
         swipe.setOnRefreshListener(this::refreshItems);
         recyclerview.setLayoutManager(manager);
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         recyclerview.setAdapter(adapter);
-    }
-
-    private void prepareQuery(String stringSearch) {
-        fullSearchPackage.setPage(0);
-        fullSearchPackage.setStringSearch(stringSearch);
-        sendQuery();
-    }
-
-    private void sendQuery() {
-        if(fullSearchPackage.getStringSearch().length() == 0){
-            fullSearchPackage.setPage(0);
-            appendItems(new ArrayList<>());
-        }else {
-            swipe.setRefreshing(true);
-            switch (mode){
-                case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
-                case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
-                case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
-                    presenter.sendQueryFullSearch(fullSearchPackage);
-                    break;
-                case MODE_ACTIVTY_SHOW_HASHTAG:
-                    presenter.sentQueryQuickSearch(fullSearchPackage);
-                    break;
-                default:
-                    commonError();
-            }
-
-        }
-    }
-
-    private void refreshItems() {
-        sendQuery();
     }
 
     @Override
@@ -182,6 +156,13 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.stub,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public void onError() {
         swipe.setRefreshing(false);
     }
@@ -196,7 +177,53 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK)
+                    setResult(RESULT_OK,new Intent(String.valueOf(Actions.ACTION_VIEW_MODEL)));
+                return;
+            case REQUEST_PROFILE_FRIEND:
+                if(resultCode==RESULT_OK) {
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+                return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
+    //***************************************
+    private void prepareQuery(String stringSearch) {
+        fullSearchPackage.setPage(0);
+        fullSearchPackage.setStringSearch(stringSearch);
+        sendQuery();
+    }
+    private void sendQuery() {
+        if(fullSearchPackage.getStringSearch().length() == 0){
+            fullSearchPackage.setPage(0);
+            appendItems(new ArrayList<>());
+        }else {
+            swipe.setRefreshing(true);
+            switch (mode){
+                case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
+                case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
+                case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
+                    presenter.sendQueryFullSearch(fullSearchPackage);
+                    break;
+                case MODE_ACTIVTY_SHOW_HASHTAG:
+                    presenter.sentQueryQuickSearch(fullSearchPackage);
+                    break;
+                default:
+                    commonError();
+            }
+
+        }
+    }
+    private void refreshItems() {
+        sendQuery();
+    }
     private void processAction(int action, Object payload) {
         switch (action){
             case Actions.ACTION_SELECT_MODEL: {
@@ -228,20 +255,4 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case REQUEST_CODE_REFRESH_ITEMS:
-                if(resultCode==RESULT_OK)
-                    setResult(RESULT_OK,new Intent(String.valueOf(Actions.ACTION_VIEW_MODEL)));
-                return;
-            case REQUEST_PROFILE_FRIEND:
-                if(resultCode==RESULT_OK) {
-                    setResult(RESULT_OK, data);
-                    finish();
-                }
-                return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 }

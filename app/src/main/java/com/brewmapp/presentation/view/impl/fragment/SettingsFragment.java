@@ -193,7 +193,6 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     @Override
     protected void prepareView(View view) {
         super.prepareView(view);
-        if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
     }
 
     @Override

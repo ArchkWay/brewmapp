@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
-import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
@@ -52,8 +51,6 @@ import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
-
-import com.transitionseverywhere.TransitionManager;
 
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -113,7 +110,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //getIntent().getData().getPath()
-        processShowDrawer(false, false);
         Paper.init(this);
         Paper.book().destroy();
     }
@@ -243,23 +239,13 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
-    public synchronized void processShowDrawer(boolean show, boolean smooth) {
-        if((show&&container.getVisibility()==View.INVISIBLE)||(!show&&container.getVisibility()==View.VISIBLE))
-            if(smooth) {
-                container.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        TransitionManager.getDefaultTransition().setDuration(250);
-                        TransitionManager.beginDelayedTransition(drawer);
-                        container.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-                        toolbar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-                    }
-                });
-            }else {
-                container.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-                toolbar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-            }
+    public void processChengeFragment(int id) {
+        MenuField.unselectAll(menuItems);
+        adapter.notifyDataSetChanged();
+        navigator.onNavigatorAction(new SimpleNavAction(id));
+        navigator.onDrawerClosed();
     }
+
 
     @Override
     public void showDrawer(boolean shown) {
@@ -267,7 +253,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             drawer.openDrawer();
         else {
             drawer.closeDrawer();
-            processShowDrawer(false, true);
         }
     }
 
@@ -378,15 +363,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void commonError(String... strings) {
-        if(strings.length==0)
+        if(strings!=null && strings.length==0)
             showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
-        MenuField.unselectAll(menuItems);
-        adapter.notifyDataSetChanged();
-        navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
-        navigator.onDrawerClosed();
-
+        processChengeFragment(MenuField.PROFILE);
     }
 
     @SuppressLint("RestrictedApi")

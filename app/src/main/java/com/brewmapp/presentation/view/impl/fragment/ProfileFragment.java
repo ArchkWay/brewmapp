@@ -293,6 +293,5 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void prepareView(View view) {
         super.prepareView(view);
-        if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
     }
 }

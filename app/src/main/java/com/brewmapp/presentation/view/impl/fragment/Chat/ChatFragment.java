@@ -45,6 +45,7 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     private MessageAdapter mAdapter;
     private List<Message> mMessages = new ArrayList<Message>();
     private OnFragmentInteractionListener mListener;
+    private RecyclerView.OnScrollListener onScrollListener;
 
     @Inject ChatFragmentPresenter presenter;
 
@@ -66,28 +67,31 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         });
         mInputMessageView.setOnEditorActionListener((v, id, event) -> {presenter.sendMessage(v);return true;});
         send_button.setOnClickListener(v -> {presenter.sendMessage(mInputMessageView);mInputMessageView.setText("");});
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        onScrollListener=new RecyclerView.OnScrollListener() {
             boolean needCalcDownload=false;
             int countCommonItems=0;
             int numberPositionDownload=3;
+            int pageSize=25;
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if(countCommonItems!=manager.getItemCount()) {
                     countCommonItems = manager.getItemCount();
-                    needCalcDownload=true;
+                        needCalcDownload=true;
                 }
 
                 if(needCalcDownload){
-                    if(manager.findFirstVisibleItemPosition()<=numberPositionDownload){
-                        needCalcDownload=false;
-                        //startDownload
-                        if(mAdapter.getItemCount()>0)
-                            presenter.nextPage(mAdapter.getmMessages().get(0));
-                    }
+                    int firstVisibleItemPosition=manager.findFirstVisibleItemPosition();
+                        if(firstVisibleItemPosition<=numberPositionDownload&&countCommonItems>=pageSize){
+                            needCalcDownload=false;
+                            //startDownload
+                            if(mAdapter.getItemCount()>0)
+                                presenter.nextPage(mAdapter.getmMessages().get(0));
+                        }
                 }
                 super.onScrolled(recyclerView, dx, dy);
             }
-        });
+        };
+        recyclerView.addOnScrollListener(onScrollListener);
 
     }
 
@@ -165,11 +169,12 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
         if(insert){
             int size=mMessages.size();
             for (int i=0;i<messages.size();i++) {
-                mMessages.add(0, messages.get(i));
+                mMessages.add( 0,messages.get(i));
                 mAdapter.notifyItemInserted(i);
             }
-            if(size==0)
+            if(size==0) {
                 scrollToBottom();
+            }
         }else {
             mMessages.add(messages.get(0));
             mAdapter.notifyItemInserted(mMessages.size() - 1);

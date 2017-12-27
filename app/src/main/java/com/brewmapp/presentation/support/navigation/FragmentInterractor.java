@@ -14,5 +14,6 @@ public interface FragmentInterractor {
     void processStartActivityWithRefresh(Intent intent,int requestCode);
     void processSetActionBar(int position);
     void processSetFilterFragmentActionBar(SearchFragment searchFragment);
-    void processShowDrawer(boolean show, boolean smooth);
+
+    void processChengeFragment(int id);
 }

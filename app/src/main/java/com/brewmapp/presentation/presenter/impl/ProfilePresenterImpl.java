@@ -90,7 +90,6 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
                 }
             });
         else {
-            showMessage(context.getString(R.string.connection_error));
             view.onError();
         }
     }
@@ -110,13 +109,11 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
                 }
                 @Override
                 public void onError(Throwable e) {
-                    showMessage(e.getMessage());
                     view.onError();
                     super.onError(e);
                 }
             });
         else {
-            showMessage(context.getString(R.string.connection_error));
             view.onError();
         }
     }

@@ -121,29 +121,29 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         }
 
         @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-        }
-
-        @Override
         public void onNext(MessageResponse messageResponse) {
             iLikeable.increaseLikes();
             refreshableView.refreshState();
         }
-    }
-
-    class NewsSubscriber extends SimpleSubscriber<List<IFlexible>> {
         @Override
         public void onError(Throwable e) {
-            enableControls(true);
-            //showMessage(e.getMessage());
+            super.onError(e);
             ((MainActivity)view.getActivity()).commonError(e.getMessage());
         }
 
+    }
+
+    class NewsSubscriber extends SimpleSubscriber<List<IFlexible>> {
         @Override
         public void onNext(List<IFlexible> iFlexibles) {
             enableControls(true);
             view.appendItems(iFlexibles);
         }
+        @Override
+        public void onError(Throwable e) {
+            enableControls(true);
+            ((MainActivity)view.getActivity()).commonError(e.getMessage());
+        }
+
     }
 }

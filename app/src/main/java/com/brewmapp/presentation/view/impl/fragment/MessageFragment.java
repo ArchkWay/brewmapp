@@ -13,11 +13,11 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Contact;
+import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.view.contract.MessageFragmentView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
-import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -84,6 +84,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
         presenter.setItemTouchHelper(list);
+        textView.setOnClickListener(v -> interractor().processChengeFragment(MenuField.FRIENDS));
 
     }
 
@@ -152,7 +153,6 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
     @Override
     protected void prepareView(View view) {
         super.prepareView(view);
-        if(interractor()!=null)   view.post(() -> interractor().processShowDrawer(true,true));
     }
 
 }

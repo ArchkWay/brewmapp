@@ -133,7 +133,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                             @Override
                             public void onError(Throwable e) {
                                 super.onError(e);
-                                view.commonError();
+                                view.commonError(e.getMessage());
                             }
                         });
                         intent.putExtra(ChatService.RECEIVER,resultReceiver);

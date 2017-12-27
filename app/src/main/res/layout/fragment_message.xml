@@ -32,6 +32,7 @@
         android:text="@string/while_messages_no"
         android:layout_centerInParent="true"
         android:id="@+id/fragment.friends.text"
+        android:textColor="#3b88eb"
         />
 
 </RelativeLayout>

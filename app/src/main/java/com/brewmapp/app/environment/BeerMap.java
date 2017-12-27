@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.brewmapp.app.di.component.AppComponent;
@@ -50,6 +51,7 @@ public class BeerMap extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                Log.i("QQQQ",paramThrowable.getMessage());
                 RestartApp();
             }
         });

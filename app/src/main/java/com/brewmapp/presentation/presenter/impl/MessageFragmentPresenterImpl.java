@@ -152,7 +152,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                             @Override
                             public void onError(Throwable e) {
                                 super.onError(e);
-                                view.commonError();
+                                view.commonError(e.getMessage());
                             }
                         })
                 );

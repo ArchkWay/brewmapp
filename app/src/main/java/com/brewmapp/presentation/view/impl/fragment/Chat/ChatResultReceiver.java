@@ -28,7 +28,14 @@ public class ChatResultReceiver extends ResultReceiver {
                 simpleSubscriber.onNext(resultData);
             }break;
             case ChatService.RESULT_ERROR:{
-                simpleSubscriber.onError(null);
+                Exception e=null;
+                if(resultData!=null)
+                    e=new Exception(resultData.getString(ChatService.EXTRA_PARAM1));
+                else
+                    e=new Exception("Не известная ошибка ChatResultReceiver");
+                simpleSubscriber.onError(e);
+
+
             }break;
         }
     }

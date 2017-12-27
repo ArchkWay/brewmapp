@@ -90,10 +90,12 @@ public class ChatService extends BaseService{
             if (action != null)
                 switch (action) {
                     case ACTION_SET_ONLINE:
-                        openSocket();uiSettingRepo.setIsOnLine(true);
+                        //openSocket();
+                        uiSettingRepo.setIsOnLine(true);
                         break;
                     case ACTION_SET_OFFLINE:
-                        closeSocket();uiSettingRepo.setIsOnLine(false);
+                        //closeSocket();
+                        uiSettingRepo.setIsOnLine(false);
                         break;
                     case ACTION_SET_RECEIVER:
                         setReceiver(intent);
@@ -102,11 +104,12 @@ public class ChatService extends BaseService{
                         removeReceiver();
                         break;
                     default: {
-                        boolean HandleQueueNow = queue.size() == 0;
-                        addToQueue(intent);
-                        if (isAuthorized)
-                            if (HandleQueueNow)
+                        if (addToQueue(intent))
+                            if (isAuthorized)
                                 handleQueue();
+                            else
+                                openSocket();
+
                     }
                 }
         }
@@ -128,12 +131,12 @@ public class ChatService extends BaseService{
     private void openSocket() {
         socket.off();
 
-            socket.on(Socket.EVENT_DISCONNECT,args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
-            socket.on(Socket.EVENT_CONNECT_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
-            socket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
-            socket.on(Keys.CHAT_EVENT_AUTH_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
-            socket.on(Keys.CHAT_EVENT_LOAD_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
-            socket.on(Keys.CHAT_EVENT_SEND_ERROR, args -> returnResult(RESULT_ERROR,Bundle.EMPTY));
+            socket.on(Socket.EVENT_DISCONNECT,args -> onError(args));
+            socket.on(Socket.EVENT_CONNECT_ERROR, args -> onError(args));
+            socket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> onError(args));
+            socket.on(Keys.CHAT_EVENT_AUTH_ERROR, args -> onError(args));
+            socket.on(Keys.CHAT_EVENT_LOAD_ERROR, args -> onError(args));
+            socket.on(Keys.CHAT_EVENT_SEND_ERROR, args -> onError(args));
 
             socket.on(Socket.EVENT_CONNECT, this::requestAuthorization);
             socket.on(Keys.CHAT_EVENT_AUTH_SUCCESS, this::receiveAuthorisationSuccess);
@@ -206,21 +209,26 @@ public class ChatService extends BaseService{
                         Log.i("QQQQ", action + "(" + queue.size() + ")-");
                         handleQueue();
                     }else {
-                        Intent intent=new Intent();
-                        intent.setAction(action);
-                        reloadDialog(intent);
+//                        Intent intent=new Intent();
+//                        intent.setAction(action);
+//                        reloadDialog(intent);
+//                        Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! timeout queue !!!!!!!");
                     }
                 }
             }
 
         }else if(status==RESULT_ERROR) {
             queue.clear();
+            closeSocket();
         }
 
     }
 
     private void onError(Object... args) {
-            returnResult(RESULT_ERROR,Bundle.EMPTY);
+        closeSocket();
+        Bundle bundle=new Bundle();
+        bundle.putString(EXTRA_PARAM1,"SocketError");
+        returnResult(RESULT_ERROR,bundle);
         }
     private void onIncomingMessage(Object[] args) {
         Intent intent=new Intent();
@@ -249,18 +257,16 @@ public class ChatService extends BaseService{
             int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
             int page=intent.getIntExtra(EXTRA_PARAM2,0);
 
-            if(friend_id==0){
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
-            }else {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put(Keys.USER_ID, friend_id);
                     jsonObject.put(Keys.CHAT_KEY_LAST_MSG, page==0?"*":page);
                     socket.emit(Keys.CHAT_EVENT_LOAD, jsonObject);
                 } catch (JSONException e) {
-                    returnResult(RESULT_ERROR,Bundle.EMPTY);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(EXTRA_PARAM1,"requestMessagesError");
+                    returnResult(RESULT_ERROR,bundle);
                 }
-            }
         }
     private void requestSendMessage(Intent intent) {
             int friend_id=intent.getIntExtra(EXTRA_PARAM1,0);
@@ -272,7 +278,9 @@ public class ChatService extends BaseService{
                 jsonObject.put(Keys.CHAT_KEY_MSG_TEXT,text_message);
                 socket.emit(Keys.CHAT_EVENT_SEND,jsonObject);
             } catch (JSONException e) {
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
+                Bundle bundle=new Bundle();
+                bundle.putString(EXTRA_PARAM1,"requestSendMessageError");
+                returnResult(RESULT_ERROR,bundle);
             }
         }
     private void requestAuthorization(Object[] args) {
@@ -284,7 +292,9 @@ public class ChatService extends BaseService{
                     socket.emit(Keys.CHAT_EVENT_AUTH,jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    returnResult(RESULT_ERROR,Bundle.EMPTY);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(EXTRA_PARAM1,"requestAuthorizationError");
+                    returnResult(RESULT_ERROR,bundle);
                 }
             }
         }
@@ -319,7 +329,9 @@ public class ChatService extends BaseService{
                 jsonObject.put(Keys.USER_ID, friend_id);
                 socket.emit(Keys.CHAT_DELETE_DIALOG,jsonObject);
             }catch (Exception e){
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
+                Bundle bundle=new Bundle();
+                bundle.putString(EXTRA_PARAM1,"requestDeleteDialog");
+                returnResult(RESULT_ERROR,bundle);
             }
         }
     private void requestMarkEstimated(Intent intent) {
@@ -329,7 +341,9 @@ public class ChatService extends BaseService{
             jsonObject.put(Keys.USER_ID, friend_id);
             socket.emit(Keys.CHAT_MARK_ESTIMATED,jsonObject);
         }catch (Exception e){
-            returnResult(RESULT_ERROR,Bundle.EMPTY);
+            Bundle bundle=new Bundle();
+            bundle.putString(EXTRA_PARAM1,"requestMarkEstimatedError");
+            returnResult(RESULT_ERROR,bundle);
         }
     }
 
@@ -342,7 +356,9 @@ public class ChatService extends BaseService{
                 bundle.putSerializable(EXTRA_PARAM2,chatListDialogs );
                 returnResult(RESULT_OK,bundle);
             }catch (Exception e){
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
+                Bundle bundle=new Bundle();
+                bundle.putString(EXTRA_PARAM1,"receiveListDialogsError");
+                returnResult(RESULT_ERROR,bundle);
             }
         }
     private void receiveMessages(Object[] args) {
@@ -352,7 +368,9 @@ public class ChatService extends BaseService{
                 bundle.putString(EXTRA_PARAM2,String.valueOf(args[0]));
                 returnResult(RESULT_OK,bundle);
             }catch (Exception e){
-                returnResult(RESULT_ERROR,Bundle.EMPTY);
+                Bundle bundle=new Bundle();
+                bundle.putString(EXTRA_PARAM1,"receiveMessagesError");
+                returnResult(RESULT_ERROR,bundle);
             }
         }
     private void receiveSendMessageSuccess(Object[] args) {
@@ -398,7 +416,7 @@ public class ChatService extends BaseService{
         bundle.putString(EXTRA_PARAM1, ACTION_CLEAR_RECEIVER);
         returnResult(RESULT_OK, bundle);
     }
-    private void addToQueue(Intent intent) {
+    private boolean addToQueue(Intent intent) {
 
         long currTime=System.currentTimeMillis();
         intent.putExtra(KEY_TIME_ADD_TO_QUEUE,currTime);
@@ -407,20 +425,22 @@ public class ChatService extends BaseService{
             Intent prevIntent=queue.get(0);
             long lifetime=currTime-prevIntent.getLongExtra(KEY_TIME_ADD_TO_QUEUE,0);
             if(lifetime>1000){
+                Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! old command !!!!!!!");
                 reloadDialog(intent);
+                return false;
             }else {
                 queue.add(intent);
-                //Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
+                return true;
             }
         }else {
             queue.add(intent);
-            //Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")+");
+            return true;
         }
-
     }
     private void reloadDialog(Intent intent) {
-        Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! backEndError !!!!!!!");
+        closeSocket();
         queue.clear();
+        Log.i("QQQQ", "size" + queue.size() );
         Bundle bundle=new Bundle();
         bundle.putString(EXTRA_PARAM1, ACTION_RESTART_SWAP);
         returnResult(RESULT_OK,bundle);

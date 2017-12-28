@@ -46,6 +46,7 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 
 
 public class ChatService extends BaseService{
+    private String LogTag="ChatService";
 
     //********ACTION incoming and outgoing
     public static final String ACTION_REQUEST_DELETE_DIALOG = "ACTION_IN_REQUEST_DELETE_DIALOG";
@@ -86,7 +87,7 @@ public class ChatService extends BaseService{
         if(intent!=null) {
 
             String action =intent.getAction();
-
+            Log.i(LogTag,action+"(receive)");
             if (action != null)
                 switch (action) {
                     case ACTION_SET_ONLINE:
@@ -101,7 +102,7 @@ public class ChatService extends BaseService{
                         setReceiver(intent);
                         break;
                     case ACTION_CLEAR_RECEIVER:
-                        removeReceiver();
+                        clearReceiver();
                         break;
                     default: {
                         if (addToQueue(intent))
@@ -126,7 +127,6 @@ public class ChatService extends BaseService{
     private ResultReceiver receiver;
     private boolean isAuthorized =false;
     private List<Intent> queue= new ArrayList<>();
-    private List<ResultReceiver> chatResultReceivers= new ArrayList<>();
 
     private void openSocket() {
         socket.off();
@@ -156,6 +156,7 @@ public class ChatService extends BaseService{
             socket.off();
             socket.disconnect();
             socket.close();
+            queue.clear();
         }
     private void handleQueue() {
 
@@ -163,7 +164,7 @@ public class ChatService extends BaseService{
 
         Intent intent=queue.get(0);
         String action=intent.getAction();
-        Log.i("QQQQ",action+"("+queue.size()+")go...");
+        Log.i(LogTag,action+"(go...)");
         switch (action) {
             case ACTION_SEND_IMAGE:
                 requestSendImage(intent);
@@ -187,7 +188,7 @@ public class ChatService extends BaseService{
                 requestMarkEstimated(intent);
                 break;
             default:
-                onError(null);
+                onError();
 
         }
     }
@@ -206,19 +207,13 @@ public class ChatService extends BaseService{
                 default: {
                     if(queue.size()>0 && action.equals(queue.get(0).getAction())) {
                         queue.remove(0);
-                        Log.i("QQQQ", action + "(" + queue.size() + ")-");
+                        Log.i(LogTag, action + "remove queue");
                         handleQueue();
-                    }else {
-//                        Intent intent=new Intent();
-//                        intent.setAction(action);
-//                        reloadDialog(intent);
-//                        Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! timeout queue !!!!!!!");
                     }
                 }
             }
 
         }else if(status==RESULT_ERROR) {
-            //queue.clear();
             closeSocket();
         }
 
@@ -400,18 +395,13 @@ public class ChatService extends BaseService{
     }
 
     private void setReceiver(Intent intent) {
-            receiver = intent.getParcelableExtra(RECEIVER);
-            chatResultReceivers.add(0,receiver);
-            Bundle bundle = new Bundle();
-            bundle.putString(EXTRA_PARAM1, ACTION_SET_RECEIVER);
-            returnResult(RESULT_OK, bundle);
-        }
-    private void removeReceiver() {
-        chatResultReceivers.remove(0);
-        if(chatResultReceivers.size()>0)
-            receiver=chatResultReceivers.get(0);
-        else
-            receiver=null;
+        receiver = intent.getParcelableExtra(RECEIVER);
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_PARAM1, ACTION_SET_RECEIVER);
+        returnResult(RESULT_OK, bundle);
+    }
+    private void clearReceiver() {
+        receiver=null;
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_PARAM1, ACTION_CLEAR_RECEIVER);
         returnResult(RESULT_OK, bundle);
@@ -420,27 +410,25 @@ public class ChatService extends BaseService{
 
         long currTime=System.currentTimeMillis();
         intent.putExtra(KEY_TIME_ADD_TO_QUEUE,currTime);
-
         if(queue.size()>0){
             Intent prevIntent=queue.get(0);
             long lifetime=currTime-prevIntent.getLongExtra(KEY_TIME_ADD_TO_QUEUE,0);
             if(lifetime>1000){
-                Log.i("QQQQ", intent.getAction() + "(" + queue.size() + ")!!!!!!! old command !!!!!!!");
                 reloadDialog(intent);
-                return false;
             }else {
+                Log.i(LogTag,intent.getAction()+"(add to queue)");
                 queue.add(intent);
-                return true;
             }
+            return false;
         }else {
+            Log.i(LogTag,intent.getAction()+"(add to queue)");
             queue.add(intent);
             return true;
         }
     }
     private void reloadDialog(Intent intent) {
         closeSocket();
-        queue.clear();
-        Log.i("QQQQ", "size" + queue.size() );
+        Log.i(LogTag, intent.getAction() +"(restart dialog)");
         Bundle bundle=new Bundle();
         bundle.putString(EXTRA_PARAM1, ACTION_RESTART_SWAP);
         returnResult(RESULT_OK,bundle);
@@ -448,6 +436,7 @@ public class ChatService extends BaseService{
     }
 
     class UploadChatImageImpl {
+        boolean sent=false;
 
         int MAX_RESOLUTION =1300;
         int imageHeight ;
@@ -455,7 +444,7 @@ public class ChatService extends BaseService{
 
         public UploadChatImageImpl(File file, SimpleSubscriber<JSONObject> stringSimpleSubscriber) {
             try {
-
+                sent=false;
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -491,6 +480,7 @@ public class ChatService extends BaseService{
                                            Response<ResponseBody> response) {
 
                         if(response.isSuccessful()) {
+
                             String body=((Buffer)response.body().source()).toString();
                             String file_name=body
                                     .replace("[text=","")
@@ -530,7 +520,12 @@ public class ChatService extends BaseService{
                                 e.printStackTrace();
                                 stringSimpleSubscriber.onError(e);
                             }
-                            stringSimpleSubscriber.onNext(jsonObject);
+                            if(!sent) {
+                                sent=true;
+                                stringSimpleSubscriber.onNext(jsonObject);
+                                stringSimpleSubscriber.onComplete();
+
+                            }
                         }
                     }
 

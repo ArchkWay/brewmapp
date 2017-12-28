@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.qualifier.ChatUrl;
@@ -52,11 +53,13 @@ import static android.app.Activity.RESULT_OK;
 
 public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> implements ChatFragmentPresenter {
 
+    private String LogTag="ChatFragmentPresenterImpl";
 
     private User friend;
     private UserRepo userRepo;
     private ResultReceiver resultReceiver;
     private String chatUrl;
+    private boolean dialogContentLoaded=false;
 
     @Inject
     public ChatFragmentPresenterImpl(UserRepo userRepo,@ChatUrl String chatUrl){
@@ -83,17 +86,17 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     @Override
     public void nextPage(Message message) {
         if(message.getmId()>0)
-            commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,message.getmId());
+            toChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,message.getmId());
     }
 
     @Override
     public SelectListener getSelectListenerPhoto(ChatFragment chatFragment) {
-        return (text, position) -> selectPhoto(chatFragment,position);
+        return (text, position) -> selectPhoto(chatFragment, position);
     }
 
     @Override
     public void deleteDialog() {
-        commandToChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
+        toChatService(ChatService.ACTION_REQUEST_DELETE_DIALOG,friend);
     }
 
     @Override
@@ -104,17 +107,17 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
     @Override
     public void onResume() {
         super.onResume();
-        commandToChatService(ChatService.ACTION_SET_RECEIVER);
+        toChatService(ChatService.ACTION_SET_RECEIVER);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        commandToChatService(ChatService.ACTION_CLEAR_RECEIVER);
+        toChatService(ChatService.ACTION_CLEAR_RECEIVER);
     }
 
     //************************************************************************
-    private void commandToChatService(String command, Object... args) {
+    private void toChatService(String command, Object... args) {
 
             if(view.getActivity()==null) return;
 
@@ -127,7 +130,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                             @Override
                             public void onNext(Bundle bundle) {
                                 super.onNext(bundle);
-                                handleResult(bundle);
+                                fromChatService(bundle);
                             }
 
                             @Override
@@ -165,71 +168,75 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
             }
 
             view.getActivity().startService(intent);
+            Log.i(LogTag,"ToChatService -"+intent.getAction());
 
         }
-    private void handleResult(Bundle resultData) {
-            String action=resultData.getString(ChatService.EXTRA_PARAM1);
-            if(action!=null) {
-                switch (action) {
-                    case ChatService.ACTION_SET_RECEIVER: {
-                        commandToChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED,friend);
-                    }break;
-                    case ChatService.ACTION_MARK_MESSAGE_ESTIMATED: {
-                        commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
-                    }break;
-                    case ChatService.ACTION_RESTART_SWAP:
-                    case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
-                        view.clearMessages();
-                        commandToChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
-                    }break;
-                    case ChatService.ACTION_REQUEST_DIALOGS: {
-                        ChatListDialogs chatListDialogs = (ChatListDialogs) resultData.getSerializable(ChatService.EXTRA_PARAM2);
-                        for (ChatDialog chatDialog:chatListDialogs)
-                            if(chatDialog.getUser().getId()==friend.getId())
-                                commandToChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,0);
-                    }break;
-                    case ChatService.ACTION_REQUEST_DIALOG_CONTENT: {
-                        String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                        showDialogContent(string);
-                    }break;
-                    case ChatService.ACTION_RECEIVE_MESSAGE: {
-                        ChatReceiveMessage chatReceiveMessage = (ChatReceiveMessage) resultData.getSerializable(ChatService.EXTRA_PARAM2);
-                        if (Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
-                            String url=null;
-                            int imageHeight=0;
-                            int imageWidth=0;
-                            try {
-                                JSONArray jsonArray=new JSONArray(chatReceiveMessage.getMsg_file());
-                                if(jsonArray.length()>0) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                    url =chatUrl + "/files/" + jsonObject.getString("url");
-                                    imageHeight=jsonObject.getJSONObject("info").getInt("height");
-                                    imageWidth=jsonObject.getJSONObject("info").getInt("width");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Message message = new Message
-                                    .Builder(Message.TYPE_MESSAGE_INPUT)
-                                    .message(chatReceiveMessage.getText())
-                                    .username(chatReceiveMessage.getFrom().getFormattedName())
-                                    .setImage(url)
-                                    .setImageHeight(imageHeight)
-                                    .setImageWidth(imageWidth)
-                                    .build();
-                            List<Message> list = new ArrayList<>();
-                            list.add(message);
-                            view.addMessages(list, false);
+    private void fromChatService(Bundle resultData) {
+        String action=resultData.getString(ChatService.EXTRA_PARAM1);
+        Log.i(LogTag,"FromChatService -"+action);
+        switch (action) {
+            case ChatService.ACTION_SET_RECEIVER: {
+                if(!dialogContentLoaded)
+                    toChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED,friend);
+            }break;
+            case ChatService.ACTION_MARK_MESSAGE_ESTIMATED: {
+                toChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
+            }break;
+            case ChatService.ACTION_RESTART_SWAP:
+            case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
+                view.clearMessages();
+                dialogContentLoaded=false;
+                toChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED, friend);
+            }break;
+            case ChatService.ACTION_REQUEST_DIALOGS: {
+                ChatListDialogs chatListDialogs = (ChatListDialogs) resultData.getSerializable(ChatService.EXTRA_PARAM2);
+                for (ChatDialog chatDialog:chatListDialogs)
+                    if(chatDialog.getUser().getId()==friend.getId())
+                        toChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,0);
+            }break;
+            case ChatService.ACTION_REQUEST_DIALOG_CONTENT: {
+                String string = resultData.getString(ChatService.EXTRA_PARAM2);
+                showDialogContent(string);
+                dialogContentLoaded=true;
+            }break;
+            case ChatService.ACTION_RECEIVE_MESSAGE: {
+                ChatReceiveMessage chatReceiveMessage = (ChatReceiveMessage) resultData.getSerializable(ChatService.EXTRA_PARAM2);
+                if (Keys.CHAT_DIR_INPUT.equals(chatReceiveMessage.getDir())) {
+                    String url=null;
+                    int imageHeight=0;
+                    int imageWidth=0;
+                    try {
+                        JSONArray jsonArray=new JSONArray(chatReceiveMessage.getMsg_file());
+                        if(jsonArray.length()>0) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(0);
+                            url =chatUrl + "/files/" + jsonObject.getString("url");
+                            imageHeight=jsonObject.getJSONObject("info").getInt("height");
+                            imageWidth=jsonObject.getJSONObject("info").getInt("width");
                         }
-
-                    }break;
-                    case ChatService.ACTION_SEND_MESSAGE:{
-                        ChatReceiveMessage chatReceiveMessage  = (ChatReceiveMessage) resultData.getSerializable(ChatService.EXTRA_PARAM2);
-                        view.setStatusMessage(chatReceiveMessage);
-                    }break;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Message message = new Message
+                            .Builder(Message.TYPE_MESSAGE_INPUT)
+                            .message(chatReceiveMessage.getText())
+                            .username(chatReceiveMessage.getFrom().getFormattedName())
+                            .setImage(url)
+                            .setImageHeight(imageHeight)
+                            .setImageWidth(imageWidth)
+                            .build();
+                    List<Message> list = new ArrayList<>();
+                    list.add(message);
+                    view.addMessages(list, false);
                 }
-            }
+
+            }break;
+            case ChatService.ACTION_SEND_MESSAGE:
+            case ChatService.ACTION_SEND_IMAGE:{
+                ChatReceiveMessage chatReceiveMessage  = (ChatReceiveMessage) resultData.getSerializable(ChatService.EXTRA_PARAM2);
+                view.setStatusMessage(chatReceiveMessage);
+            }break;
         }
+    }
 
     private void showDialogContent(String string) {
 
@@ -329,7 +336,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .build()
                 );
                 view.addMessages(list,false);
-                commandToChatService(ChatService.ACTION_SEND_IMAGE, file,friend);
+                toChatService(ChatService.ACTION_SEND_IMAGE, file,friend);
             }
         }
     private void sendMessage(String text_send) {
@@ -343,7 +350,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .build()
                 );
                 view.addMessages(list,false);
-                commandToChatService(ChatService.ACTION_SEND_MESSAGE,friend,escapeUnicodeText(text_send));
+                toChatService(ChatService.ACTION_SEND_MESSAGE,friend,escapeUnicodeText(text_send));
             }
 
         }

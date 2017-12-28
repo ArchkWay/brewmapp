@@ -440,5 +440,6 @@
     <string name="is_delete_dialog">Удалить всю переписку c %s ?</string>
     <string name="while_messages_no">Найти друзей</string>
     <string name="chat_new_message_text">\n(сообщение %s) </string>
+    <string name="exit_from_app">Выйти из приложения %s ?</string>
 
 </resources>

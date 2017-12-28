@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
@@ -406,16 +407,19 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Log.i("size", String.valueOf(getSupportFragmentManager().getFragments().size()));
-//        if (getSupportFragmentManager().getFragments().size() > 1) {
-//            for (Fragment fragment : getSupportFragmentManager().getFragments())
-//                if (fragment instanceof SearchFragment) {
-//                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-//                }
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+        new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                finish();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+    }
 }

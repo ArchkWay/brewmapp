@@ -27,7 +27,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -38,15 +37,17 @@ public class DialogSelectAddress extends DialogFragment {
     private MapView mapView;
     private TextView textView;
     private Location location;
-    private Button button;
+    private Button buttonOk;
+    private Button buttonCancel;
     private OnSelectAddress onSelectAddress;
     private Address address;
+    private LatLng latLng;
 
     public DialogSelectAddress(){
 
     }
 
-    public void showDialod(FragmentManager fragmentManager, OnSelectAddress onSelectAddress){
+    public void showDialog(FragmentManager fragmentManager, OnSelectAddress onSelectAddress){
         this.onSelectAddress=onSelectAddress;
         show(fragmentManager,"qqq");
     }
@@ -58,17 +59,22 @@ public class DialogSelectAddress extends DialogFragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View rootView=inflater.inflate(R.layout.dialog_select_address, null);
         textView= (TextView) rootView.findViewById(R.id.fragment_dialog_text);
-        button= (Button) rootView.findViewById(R.id.fragment_dialog_button_ok);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        buttonOk = (Button) rootView.findViewById(R.id.fragment_dialog_button_ok);
+        buttonOk.setOnClickListener(view -> {
+            if(address!=null) {
                 location.setCity_id(address.getLocality());
                 location.getLocation().setStreet(address.getThoroughfare());
                 location.getLocation().setHouse(address.getSubThoroughfare());
+                if(latLng!=null) {
+                    location.getLocation().setLat(latLng.latitude);
+                    location.getLocation().setLon(latLng.longitude);
+                }
                 onSelectAddress.onOk(location);
-                dismiss();
             }
+            dismiss();
         });
+        buttonCancel=(Button) rootView.findViewById(R.id.fragment_dialog_button_cancel);
+        buttonCancel.setOnClickListener(v -> dismiss());
         mapView= (MapView) rootView.findViewById(R.id.fragment_dialog_map);
         mapView.onCreate(null);
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -83,19 +89,24 @@ public class DialogSelectAddress extends DialogFragment {
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 try {
-                    Double lat=Double.valueOf(location.getMetro().getLat());
-                    Double lon=Double.valueOf(location.getMetro().getLon());
+                    Double lat=Double.valueOf(location.getLocation().getLat());
+                    Double lon=Double.valueOf(location.getLocation().getLon());
                     if(lat!=0.0&&lon!=0.0)
                         googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lon) , 14.0f) );
                 }   catch (Exception e){}
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
-                    public void onMapClick(LatLng latLng) {
+                    public void onMapClick(LatLng _latLng) {
+                        latLng=_latLng;
                         Geocoder geocoder = new Geocoder(getActivity());
                         try {
-                            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                            List<Address> addresses = geocoder.getFromLocation(_latLng.latitude, _latLng.longitude, 1);
                             address=addresses.get(0);
-                            textView.setText(address.getAddressLine(0));
+                            if(address.getMaxAddressLineIndex()>0)
+                                textView.setText(String.format("%s, %s",address.getAddressLine(1),address.getAddressLine(0)));
+                            else
+                                textView.setText(address.getAddressLine(0));
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

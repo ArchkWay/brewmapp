@@ -22,15 +22,23 @@ public class DialogInput extends DialogFragment {
     private OnInputText onInputText;
     private int tittle;
     private String old_text;
+    int type;
 
     public DialogInput(){
 
     }
 
-    public void show(FragmentManager supportManagerFragment, int tittle,String old_text,OnInputText onInputText){
+    public void show(FragmentManager supportManagerFragment, int tittle,Object old_val,OnInputText onInputText){
         this.onInputText=onInputText;
         this.tittle=tittle;
-        this.old_text=old_text;
+        this.old_text=String.valueOf(old_val);
+        if(old_val instanceof String)
+            type=InputType.TYPE_CLASS_TEXT;
+        else if(old_val instanceof Integer)
+            type=InputType.TYPE_CLASS_NUMBER;
+        else
+            return;
+
         show(supportManagerFragment,"qqq");
     }
 
@@ -40,7 +48,7 @@ public class DialogInput extends DialogFragment {
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         input = new EditText(getActivity());
         input.setGravity(Gravity.CENTER);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setInputType(type);
         input.setText(old_text);
         alert.setView(input);
         alert.setTitle(tittle);

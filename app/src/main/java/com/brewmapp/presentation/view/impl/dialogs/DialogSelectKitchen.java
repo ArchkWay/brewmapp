@@ -34,6 +34,7 @@ public class DialogSelectKitchen extends DialogFragment {
     private ArrayList<Kitchen> arrayKitchen=new ArrayList<>();
     private OnSelectKitchens onSelectKitchens;
     private DialogFragmentWait dialogFragmentWait;
+    private List<Kitchen> resto_kitchen;
 
     public void showDialog(FragmentManager fragmentManager,OnSelectKitchens onSelectKitchens){
         this.onSelectKitchens=onSelectKitchens;
@@ -51,6 +52,13 @@ public class DialogSelectKitchen extends DialogFragment {
                     dialogFragmentWait.dismiss();
                     show(fragmentManager, "qqq");
             }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                dialogFragmentWait.dismiss();
+                dismiss();
+            }
         });
         dialogFragmentWait=new DialogFragmentWait();
         dialogFragmentWait.show(fragmentManager,"111");
@@ -63,6 +71,15 @@ public class DialogSelectKitchen extends DialogFragment {
         String[] strings=new String[arrayAdapter.size()];
         arrayAdapter.toArray(strings);
         booleans=new boolean[arrayAdapter.size()];
+        if(resto_kitchen!=null)
+            for (int i=0;i<arrayKitchen.size();i++){
+                for (int j=0;j<resto_kitchen.size();j++){
+                    try {
+                        if(arrayKitchen.get(i).getName().toLowerCase().equals(resto_kitchen.get(j).getName().toLowerCase()))
+                            booleans[i]=true;
+                    }catch (Exception e){}
+                }
+            }
         adb.setMultiChoiceItems(strings, booleans, (dialog, which, isChecked) -> {});
         adb.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             int cnt=0;
@@ -74,9 +91,18 @@ public class DialogSelectKitchen extends DialogFragment {
                     resultKitchen.add(kitchen);
             }
             onSelectKitchens.onSelect(resultKitchen);
+            dismiss();
+        });
+        adb.setNeutralButton(android.R.string.cancel, (dialog, which) -> {
+            dismiss();
         });
 
         return adb.create();
+    }
+
+    public DialogSelectKitchen setKitchen(List<Kitchen> resto_kitchen) {
+        this.resto_kitchen=resto_kitchen;
+        return this;
     }
 
     public interface OnSelectKitchens{

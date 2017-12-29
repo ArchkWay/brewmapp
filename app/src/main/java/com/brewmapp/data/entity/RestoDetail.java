@@ -76,6 +76,10 @@ public class RestoDetail implements Serializable{
         restoDetail.getResto().setAvgCost(getResto().getAvgCost());
         restoDetail.getResto().setId(getResto().getId());
         restoDetail.getResto().setLocation(getResto().getLocation().clone());
+        ArrayList<Kitchen> kitchenArrayList=new ArrayList<>();
+        for (Kitchen kitchen:resto_kitchen)
+            kitchenArrayList.add(kitchen.clone());
+        restoDetail.setResto_kitchen(kitchenArrayList);
 
         return restoDetail;
     }

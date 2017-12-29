@@ -129,6 +129,13 @@ public class LocationChild implements Serializable{
 
     public LocationChild clone(){
         LocationChild locationChild=new LocationChild();
+        locationChild.setLat(getLat());
+        locationChild.setLon(getLon());
+        locationChild.setId(getId());
+        locationChild.setName(getName());
+        locationChild.setBy_user_id(getBy_user_id());
+        locationChild.setMetro_id(getMetro_id());
+
         locationChild.setStreet(getStreet());
         locationChild.setHouse(getHouse());
         return locationChild;

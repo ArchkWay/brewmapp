@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.RestoEditFragmentView;
 import com.brewmapp.presentation.view.impl.dialogs.DialogInput;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectAddress;
 import com.brewmapp.presentation.view.impl.dialogs.DialogSelectKitchen;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -69,19 +69,58 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     protected void initView(View view) {
         setHasOptionsMenu(true);
         sliderLayout.stopAutoCycle();
-        edit_avg_account.setOnClickListener(v -> {new DialogInput().show(getActivity().getSupportFragmentManager(), R.string.new_value, avg_account.getText().toString(), string -> {
-            try {
-                presenter.getRestoDetail_new_data().getResto().setAvgCost(Integer.valueOf(string));
-                avg_account.setText(string);
-                mListener.invalidateOptionsMenu();
-            }catch (Exception e){ showMessage(e.getMessage());}
-        });});
-        edit_place.setOnClickListener(v -> presenter.DialogSelectAddress().showDialod(getActivity().getSupportFragmentManager(), location -> place.setText(location.getFormatLocation())));
-        edit_kitchen.setOnClickListener(v -> new DialogSelectKitchen().showDialog(getActivity().getSupportFragmentManager(), kitchenArrayList -> {
-            presenter.getRestoDetail_new_data().setResto_kitchen(kitchenArrayList);
-            kitchen.setText(presenter.getRestoDetail_new_data().getFormattedKitchen());
-            mListener.invalidateOptionsMenu();
-        }));
+        edit_name.setOnClickListener(v->
+                new DialogInput()
+                        .show(getActivity()
+                                .getSupportFragmentManager(),
+                                R.string.new_value,
+                                name.getText().toString(),
+                                string -> {
+                                    try {
+                                        presenter.getRestoDetail_new_data().getResto().setName(string);
+                                        name.setText(string);
+                                        mListener.invalidateOptionsMenu();
+                                    }catch (Exception e){ showMessage(e.getMessage());}
+                                }
+                        )
+        );
+        edit_avg_account.setOnClickListener(v ->
+                new DialogInput()
+                        .show(getActivity()
+                                .getSupportFragmentManager(),
+                                R.string.new_value,
+                                Integer.valueOf(avg_account.getText().toString()),
+                                string -> {
+                                        try {
+                                            presenter.getRestoDetail_new_data().getResto().setAvgCost(Integer.valueOf(string));
+                                            avg_account.setText(string);
+                                            mListener.invalidateOptionsMenu();
+                                        }catch (Exception e){ showMessage(e.getMessage());}
+                                            }
+                                )
+        );
+        edit_place.setOnClickListener(v ->
+                new DialogSelectAddress().setLocation(presenter.getRestoDetail_new_data().getResto().getLocation())
+                        .showDialog(
+                                getActivity().getSupportFragmentManager(),
+                                location -> {
+                                    presenter.getRestoDetail_new_data().getResto().setLocation(location);
+                                    place.setText(location.getFormatLocation());
+                                    mListener.invalidateOptionsMenu();
+                                })
+        );
+
+        edit_kitchen.setOnClickListener(v ->
+                new DialogSelectKitchen()
+                        .setKitchen(presenter.getRestoDetail_new_data().getResto_kitchen())
+                        .showDialog(
+                                getActivity().getSupportFragmentManager(),
+                                kitchenArrayList -> {
+                                    presenter.getRestoDetail_new_data().setResto_kitchen(kitchenArrayList);
+                                    kitchen.setText(presenter.getRestoDetail_new_data().getFormattedKitchen());
+                                    mListener.invalidateOptionsMenu();
+                                })
+        );
 
     }
 
@@ -154,12 +193,14 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
         mListener.commonError(strings);
     }
 
+    //****************************************************
+
+
     public interface OnFragmentInteractionListener {
         void commonError(String... message);
 
         void invalidateOptionsMenu();
     }
-
     class FillContent {
 
         public FillContent(RestoDetail restoDetail) {

@@ -25,6 +25,5 @@ public interface RestoEditFragmentPresenter extends LivePresenter<RestoEditFragm
 
     RestoDetail getRestoDetail_new_data();
 
-    DialogSelectAddress DialogSelectAddress();
 
 }

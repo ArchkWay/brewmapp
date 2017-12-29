@@ -45,7 +45,7 @@ public class Location implements Serializable {
         try {house=getLocation().getHouse();}catch (Exception e){};
         return new StringBuilder()
                 .append(city)
-                .append(", ул. ")
+                .append(", ")
                 .append(street)
                 .append(", д.")
                 .append(house)
@@ -55,7 +55,7 @@ public class Location implements Serializable {
     public Location clone(){
         Location location=new Location();
         location.setCity_id(getCity_id());
-        setLocation(getLocation().clone());
+        location.setLocation(getLocation().clone());
         return location;
     }
 }

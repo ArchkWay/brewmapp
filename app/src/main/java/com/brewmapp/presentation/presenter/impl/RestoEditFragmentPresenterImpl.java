@@ -47,10 +47,11 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
     private LoadRestoDetailTask loadRestoDetailTask;
     private LoadRestoDetailPackage loadRestoDetailPackage=new LoadRestoDetailPackage();
     private String[] checkListRestoDetails={"getFormattedKitchen"};
-    private String[] checkListResto={"getAvgCost"};
-    private String[] checkListLocation={};
+    private String[] checkListResto={"getAvgCost","getName"};
+    private String[] checkListLocation={"getFormatLocation"};
     private RestoDetail restoDetail_old_data=new RestoDetail();
     private RestoDetail restoDetail_new_data=new RestoDetail();
+
 
 
     @Inject
@@ -143,12 +144,18 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
 
     @Override
     public boolean isNeedSave() {
-        for (String s:checkListResto)
-            if(isNeedSaveField(s,restoDetail_old_data.getResto(),restoDetail_new_data.getResto()))
-                return true;
-        for (String s:checkListRestoDetails)
-            if(isNeedSaveField(s,restoDetail_old_data,restoDetail_new_data))
-                return true;
+        try {
+            for (String s:checkListResto)
+                if(isNeedSaveField(s,restoDetail_old_data.getResto(),restoDetail_new_data.getResto()))
+                    return true;
+            for (String s:checkListRestoDetails)
+                if(isNeedSaveField(s,restoDetail_old_data,restoDetail_new_data))
+                    return true;
+            for (String s:checkListLocation)
+                if(isNeedSaveField(s,restoDetail_old_data.getResto().getLocation(),restoDetail_new_data.getResto().getLocation()))
+                    return true;
+
+        }catch (Exception e){}
 
 
         return false;
@@ -164,10 +171,6 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
         return restoDetail_new_data;
     }
 
-    @Override
-    public DialogSelectAddress DialogSelectAddress() {
-        return new DialogSelectAddress().setLocation(restoDetail_old_data.getResto().getLocation());
-    }
 
     private boolean isNeedSaveField(String getMethod_name, Object oldObject, Object newObject) {
         try {

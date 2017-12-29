@@ -78,4 +78,15 @@ public class Kitchen implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+
+    public Kitchen clone(){
+        Kitchen kitchen=new Kitchen(getName().toString());
+        kitchen.setId(getId());
+        try {
+            kitchen.setGetThumb(getGetThumb().toString());
+        }catch (Exception e){}
+        kitchen.setRelations(getRelations());
+        return kitchen;
+    }
 }

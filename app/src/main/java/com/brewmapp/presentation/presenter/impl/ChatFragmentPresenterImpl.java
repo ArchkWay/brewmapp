@@ -25,7 +25,6 @@ import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
-import com.google.gson.GsonBuilder;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import org.json.JSONArray;
@@ -143,7 +142,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         break;
                     case ChatService.ACTION_REQUEST_DIALOGS:
                     case ChatService.ACTION_REQUEST_DELETE_DIALOG:
-                    case ChatService.ACTION_MARK_MESSAGE_ESTIMATED:
+                    case ChatService.ACTION_MARK_MESSAGE_READ:
                         intent.putExtra(ChatService.EXTRA_PARAM1,((User)args[0]).getId());
                         break;
                     case ChatService.ACTION_REQUEST_DIALOG_CONTENT:
@@ -177,16 +176,16 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
         switch (action) {
             case ChatService.ACTION_SET_RECEIVER: {
                 if(!dialogContentLoaded)
-                    toChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED,friend);
+                    toChatService(ChatService.ACTION_MARK_MESSAGE_READ,friend);
             }break;
-            case ChatService.ACTION_MARK_MESSAGE_ESTIMATED: {
+            case ChatService.ACTION_MARK_MESSAGE_READ: {
                 toChatService(ChatService.ACTION_REQUEST_DIALOGS, friend);
             }break;
             case ChatService.ACTION_RESTART_SWAP:
             case ChatService.ACTION_REQUEST_DELETE_DIALOG:{
                 view.clearMessages();
                 dialogContentLoaded=false;
-                toChatService(ChatService.ACTION_MARK_MESSAGE_ESTIMATED, friend);
+                toChatService(ChatService.ACTION_MARK_MESSAGE_READ, friend);
             }break;
             case ChatService.ACTION_REQUEST_DIALOGS: {
                 ChatListDialogs chatListDialogs = (ChatListDialogs) resultData.getSerializable(ChatService.EXTRA_PARAM2);
@@ -195,8 +194,8 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                         toChatService(ChatService.ACTION_REQUEST_DIALOG_CONTENT, friend,0);
             }break;
             case ChatService.ACTION_REQUEST_DIALOG_CONTENT: {
-                String string = resultData.getString(ChatService.EXTRA_PARAM2);
-                showDialogContent(string);
+                ChatListMessages listMessages = (ChatListMessages) resultData.getSerializable(ChatService.EXTRA_PARAM2);
+                showDialogContent(listMessages);
                 dialogContentLoaded=true;
             }break;
             case ChatService.ACTION_RECEIVE_MESSAGE: {
@@ -238,9 +237,8 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
         }
     }
 
-    private void showDialogContent(String string) {
+    private void showDialogContent(ChatListMessages listMessages) {
 
-            ChatListMessages listMessages=new GsonBuilder().create().fromJson(string.replace("\\\\","\\"), ChatListMessages.class);
             List<Message> list=new ArrayList<>();
 
             for (ChatMessage chatMessage:listMessages.getData()) {

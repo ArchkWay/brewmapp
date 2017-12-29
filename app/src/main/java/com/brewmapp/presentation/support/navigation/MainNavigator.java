@@ -86,4 +86,5 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
     public void storeCodeTebEventFragment(int tabPost) {
         uiSettingRepo.setnActiveTabEventFragment(tabPost);
     }
+
 }

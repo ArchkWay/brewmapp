@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.MenuRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -24,9 +25,13 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.ChatDialog;
+import com.brewmapp.execution.exchange.response.ChatListDialogs;
+import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
+import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
@@ -53,6 +58,7 @@ import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -125,10 +131,43 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     private void setDrawer() {
         drawer.setMarginFactor(0.5f);
         Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.ic_menu_toggle)).getBitmap();
-        drawerToggle = new CustomDuoDrawerToggle(this, toolbar, drawer,
+        drawerToggle = new CustomDuoDrawerToggle(
+                this,
+                toolbar,
+                drawer,
                 new CustomDrawerArrowDrawable(getResources(), bitmap),
                 R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close, navigator::onDrawerClosed);
+                R.string.navigation_drawer_close,
+                new CustomDuoDrawerToggle.Listener() {
+                    @Override
+                    public void onDrawerClosed() {
+                        navigator.onDrawerClosed();
+                    }
+                    @Override
+                    public void onDrawerOpen() {
+                        Intent intent=new Intent(ChatService.ACTION_REQUEST_DIALOGS,null,MainActivity.this,ChatService.class);
+                        intent.putExtra(
+                                ChatService.RECEIVER,
+                                new ChatResultReceiver(
+                                        new Handler(MainActivity.this.getMainLooper()),
+                                        new SimpleSubscriber<Bundle>(){
+                                            @Override
+                                            public void onNext(Bundle bundle) {
+                                                super.onNext(bundle);
+                                                ChatListDialogs chatListDialogs = (ChatListDialogs) bundle.getSerializable(ChatService.EXTRA_PARAM2);
+                                                int cntUnread=0;
+                                                for (ChatDialog chatDialog:chatListDialogs)
+                                                    cntUnread+=chatDialog.getUnread();
+                                                TextView textView= (TextView) menu.getLayoutManager().getChildAt(MenuField.MESSAGES).findViewById(R.id.view_menuField_badget);
+                                                textView.setVisibility(cntUnread==0?View.GONE:View.VISIBLE);
+                                                textView.setText(String.valueOf(cntUnread));
+
+                                                }
+                                        })
+                        );
+                        startService(intent);
+                    }
+                });
         drawer.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
         profileHeader.setOnClickListener(v -> {
@@ -246,7 +285,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         navigator.onNavigatorAction(new SimpleNavAction(id));
         navigator.onDrawerClosed();
     }
-
 
     @Override
     public void showDrawer(boolean shown) {
@@ -409,7 +447,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void onBackPressed() {
-        new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+        if(mode.equals(MODE_DEFAULT))
+            new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
             @Override
             public void onOk() {
                 finish();
@@ -420,6 +459,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
             }
         });
+        else
+            finish();
 
     }
 }

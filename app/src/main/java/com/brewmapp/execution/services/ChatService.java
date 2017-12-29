@@ -1,21 +1,29 @@
 package com.brewmapp.execution.services;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.ChatListMessages;
 import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.execution.exchange.common.ChatImage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.base.BaseService;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -58,7 +66,8 @@ public class ChatService extends BaseService{
     public static final String ACTION_CLEAR_RECEIVER = "ACTION_CLEAR_RECEIVER";
     public static final String ACTION_SET_ONLINE = "ACTION_SET_ONLINE";
     public static final String ACTION_SET_OFFLINE = "ACTION_SET_OFFLINE";
-    public static final String ACTION_MARK_MESSAGE_ESTIMATED = "ACTION_MARK_MESSAGE_ESTIMATED";
+    public static final String ACTION_MARK_MESSAGE_READ = "ACTION_MARK_MESSAGE_READ";
+    public static final String ACTION_COUNT_MESSAGE_UNREAD = "ACTION_COUNT_MESSAGE_UNREAD";
     //********ACTION outgoing
     public static final String ACTION_RESTART_SWAP = "ACTION_RESTART_SWAP";
     public static final String ACTION_RECEIVE_MESSAGE = "ACTION_RECEIVE_MESSAGE";
@@ -91,7 +100,7 @@ public class ChatService extends BaseService{
             if (action != null)
                 switch (action) {
                     case ACTION_SET_ONLINE:
-                        //openSocket();
+                        openSocket();
                         uiSettingRepo.setIsOnLine(true);
                         break;
                     case ACTION_SET_OFFLINE:
@@ -126,7 +135,7 @@ public class ChatService extends BaseService{
     //************************************************************************
     private ResultReceiver receiver;
     private boolean isAuthorized =false;
-    private List<Intent> queue= new ArrayList<>();
+    private List<ChatCommand> queue= new ArrayList<>();
 
     private void openSocket() {
         socket.off();
@@ -162,7 +171,7 @@ public class ChatService extends BaseService{
 
         if(queue.size()==0) return;
 
-        Intent intent=queue.get(0);
+        Intent intent=queue.get(0).getIntent();
         String action=intent.getAction();
         Log.i(LogTag,action+"(go...)");
         switch (action) {
@@ -184,7 +193,7 @@ public class ChatService extends BaseService{
             case ACTION_REQUEST_DELETE_DIALOG:
                 requestDeleteDialog(intent);
                 break;
-            case ChatService.ACTION_MARK_MESSAGE_ESTIMATED:
+            case ChatService.ACTION_MARK_MESSAGE_READ:
                 requestMarkEstimated(intent);
                 break;
             default:
@@ -194,26 +203,35 @@ public class ChatService extends BaseService{
     }
     private void returnResult(int status, Bundle bundle) {
 
-        if (receiver != null)
-            receiver.send(status, bundle);
-
         if(status==RESULT_OK) {
             String action=bundle.getString(EXTRA_PARAM1);
             switch (action){
                 case ACTION_CLEAR_RECEIVER:
                 case ACTION_SET_RECEIVER:
                 case ACTION_RESTART_SWAP:
+                    if (receiver != null)
+                        receiver.send(status, bundle);
                     break;
+                case ACTION_RECEIVE_MESSAGE:
+                    if(receiver==null)
+                        showNotification(bundle);
                 default: {
-                    if(queue.size()>0 && action.equals(queue.get(0).getAction())) {
+                    if(queue.size()>0 && action.equals(queue.get(0).getIntent().getAction())) {
+                        ResultReceiver receiver=queue.get(0).getReceiver();
+                        if(receiver!=null)
+                            receiver.send(status, bundle);
+                        else if (this.receiver != null)
+                            this.receiver.send(status, bundle);
                         queue.remove(0);
-                        Log.i(LogTag, action + "remove queue");
+                        Log.i(LogTag, action + "(remove queue)");
                         handleQueue();
                     }
                 }
             }
 
         }else if(status==RESULT_ERROR) {
+            if (receiver != null)
+                receiver.send(status, bundle);
             closeSocket();
         }
 
@@ -235,7 +253,7 @@ public class ChatService extends BaseService{
             bundle.putSerializable(EXTRA_PARAM2, chatReceiveMessage);
             intent.putExtras(bundle);
             intent.setAction(ACTION_RECEIVE_MESSAGE);
-            queue.add(intent);
+            queue.add(new ChatCommand(intent));
             handleQueue();
         }catch (Exception e){
             onError(e.getMessage());
@@ -360,7 +378,8 @@ public class ChatService extends BaseService{
             try {
                 Bundle bundle=new Bundle();
                 bundle.putString(EXTRA_PARAM1, ACTION_REQUEST_DIALOG_CONTENT);
-                bundle.putString(EXTRA_PARAM2,String.valueOf(args[0]));
+                ChatListMessages chatListMessages=new GsonBuilder().create().fromJson(String.valueOf(args[0]).replace("\\\\","\\"), ChatListMessages.class);String.valueOf(args[0]);
+                bundle.putSerializable(EXTRA_PARAM2,chatListMessages) ;
                 returnResult(RESULT_OK,bundle);
             }catch (Exception e){
                 Bundle bundle=new Bundle();
@@ -390,7 +409,7 @@ public class ChatService extends BaseService{
         }
     private void receiveMarkEstimatedSuccess(Object[] args) {
         Bundle bundle=new Bundle();
-        bundle.putString(EXTRA_PARAM1, ACTION_MARK_MESSAGE_ESTIMATED);
+        bundle.putString(EXTRA_PARAM1, ACTION_MARK_MESSAGE_READ);
         returnResult(RESULT_OK,bundle);
     }
 
@@ -411,18 +430,18 @@ public class ChatService extends BaseService{
         long currTime=System.currentTimeMillis();
         intent.putExtra(KEY_TIME_ADD_TO_QUEUE,currTime);
         if(queue.size()>0){
-            Intent prevIntent=queue.get(0);
+            Intent prevIntent=queue.get(0).getIntent();
             long lifetime=currTime-prevIntent.getLongExtra(KEY_TIME_ADD_TO_QUEUE,0);
             if(lifetime>1000){
                 reloadDialog(intent);
             }else {
                 Log.i(LogTag,intent.getAction()+"(add to queue)");
-                queue.add(intent);
+                queue.add(new ChatCommand(intent,(ResultReceiver)intent.getSerializableExtra(RECEIVER)));
             }
             return false;
         }else {
             Log.i(LogTag,intent.getAction()+"(add to queue)");
-            queue.add(intent);
+            queue.add(new ChatCommand(intent,(ResultReceiver)intent.getParcelableExtra(RECEIVER)));
             return true;
         }
     }
@@ -432,6 +451,29 @@ public class ChatService extends BaseService{
         Bundle bundle=new Bundle();
         bundle.putString(EXTRA_PARAM1, ACTION_RESTART_SWAP);
         returnResult(RESULT_OK,bundle);
+
+    }
+    private void showNotification(Bundle bundle) {
+        ChatReceiveMessage chatReceiveMessage= (ChatReceiveMessage) bundle.getSerializable(EXTRA_PARAM2);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(chatReceiveMessage.getFrom().getFormattedName())
+                        .setContentText(chatReceiveMessage.getText());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+        mNotificationManager.notify(000012345, mBuilder.build());
 
     }
 
@@ -549,6 +591,34 @@ public class ChatService extends BaseService{
         Call<ResponseBody> upload(
                 @Part MultipartBody.Part file
         );
+    }
+    class ChatCommand{
+        Intent intent;
+        ResultReceiver receiver;
+
+        public ChatCommand(Intent intent) {
+            this.intent=intent;
+        }
+        public ChatCommand(Intent intent,ResultReceiver receiver) {
+            this.intent=intent;
+            this.receiver=receiver;
+        }
+
+        public Intent getIntent() {
+            return intent;
+        }
+
+        public void setIntent(Intent intent) {
+            this.intent = intent;
+        }
+
+        public ResultReceiver getReceiver() {
+            return receiver;
+        }
+
+        public void setReceiver(ResultReceiver receiver) {
+            this.receiver = receiver;
+        }
     }
 
 

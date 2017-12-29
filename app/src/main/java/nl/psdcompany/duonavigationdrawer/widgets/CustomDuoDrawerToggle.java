@@ -16,6 +16,7 @@ public class CustomDuoDrawerToggle extends DuoDrawerToggle {
 
     public interface Listener {
         void onDrawerClosed();
+        void onDrawerOpen();
     }
 
     private Listener listener;
@@ -32,5 +33,11 @@ public class CustomDuoDrawerToggle extends DuoDrawerToggle {
     public void onDrawerClosed(View drawerView) {
         super.onDrawerClosed(drawerView);
         listener.onDrawerClosed();
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        super.onDrawerOpened(drawerView);
+        listener.onDrawerOpen();
     }
 }

@@ -1,12 +1,13 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by xpusher on 12/13/2017.
  */
 
-public class ChatListMessages {
+public class ChatListMessages implements Serializable{
     private List<ChatMessage> data;
     private ChatQuery query;
     private int count;

@@ -42,4 +42,6 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void startMapFragment(RestoDetailActivity restoDetailActivity);
 
     void loadAllPhoto(SimpleSubscriber<List<Photo>> slider);
+
+    void startChat(String user_id);
 }

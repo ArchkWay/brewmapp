@@ -160,7 +160,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
         layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);});
-        private_message.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
+        private_message.setOnClickListener(v -> presenter.startChat(resto.getUser_id()));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
@@ -244,8 +244,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                         Iterator<Photo> iterator=photos.iterator();
                         while (iterator.hasNext()) {
                             Photo photo=iterator.next();
-                            photosResto.add(photo.getThumb().getUrl());
-                            photosRestoPreview.add(photo.getThumb().getThumbUrl());
+                            try {
+                                photosResto.add(photo.getThumb().getUrl());
+                                photosRestoPreview.add(photo.getThumb().getThumbUrl());
+                            }catch (Exception e){}
                         }
                         fillSlider();
                     }

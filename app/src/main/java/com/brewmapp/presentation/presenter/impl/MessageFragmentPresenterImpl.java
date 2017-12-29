@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,12 +41,14 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
     private AddFriend addFriend;
     private UserRepo userRepo;
     private LoadUsersTask loadUsersTask;
+    private Context context;
 
     @Inject
-    public MessageFragmentPresenterImpl(AddFriend addFriend,UserRepo userRepo,LoadUsersTask loadUsersTask) {
+    public MessageFragmentPresenterImpl(AddFriend addFriend,UserRepo userRepo,LoadUsersTask loadUsersTask,Context context) {
         this.addFriend = addFriend;
         this.userRepo = userRepo;
         this.loadUsersTask = loadUsersTask;
+        this.context = context;
     }
 
     @Override
@@ -182,14 +185,19 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                 @Override
                 public void onNext(ArrayList<User> users) {
                     super.onNext(users);
+                    if(users.size()>0) {
+                        ContactInfo contactInfo = new ContactInfo();
+                        Contact contact = new Contact();
+                        contact.setId(users.get(0).getId());
+                        contact.setFriend_info(users.get(0));
+                        contact.setUser(users.get(0));
+                        contactInfo.setModel(contact);
+                        arrayList.add(contactInfo);
+                        loadUserDetails(chatListDialogs, arrayList);
+                    }else {
+                        view.showMessage(context.getString(R.string.error_user_chat_not_found,String.valueOf(chatListDialogs.get(0).getUser().getId())),0);
+                    }
                     chatListDialogs.remove(0);
-                    ContactInfo contactInfo = new ContactInfo();
-                    Contact contact = new Contact();
-                    contact.setId(users.get(0).getId());
-                    contact.setFriend_info(users.get(0));
-                    contact.setUser(users.get(0));
-                    contactInfo.setModel(contact);
-                    arrayList.add(contactInfo);
                     loadUserDetails(chatListDialogs, arrayList);
                 }
 

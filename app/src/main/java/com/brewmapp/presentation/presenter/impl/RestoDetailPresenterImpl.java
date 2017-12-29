@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.Subscription;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
@@ -28,6 +29,7 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.LoadUsersTask;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.AddInterestTask;
@@ -43,9 +45,11 @@ import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
@@ -61,6 +65,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
@@ -87,6 +92,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private LoadSubscriptionsListTask loadSubscriptionsListTask;
     private String IdSubscription=null;
     private TempDataHolder tempDataHolder =new TempDataHolder();
+    private LoadUsersTask loadUsersTask;
 
     public void setRestoDetail(RestoDetail restoDetail) {
         this.restoDetail = restoDetail;
@@ -107,7 +113,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             LoadInterestTask loadInterestTask,
             RemoveInterestTask removeInterestTask,
             LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask,
-            ContainerTasks containerTasks){
+            ContainerTasks containerTasks,
+            LoadUsersTask loadUsersTask){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -122,6 +129,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.removeInterestTask=removeInterestTask;
         this.loadRestoAverageEvaluationTask=loadRestoAverageEvaluationTask;
         this.containerTasks = containerTasks;
+        this.loadUsersTask = loadUsersTask;
     }
 
     @Override
@@ -236,7 +244,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                     loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
                     loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
-                        @Override public void onNext(RestoDetail restoDetail) {super.onNext(restoDetail);setRestoDetail(restoDetail);view.setModel(restoDetail,mode); loadReviews(mode);}
+                        @Override public void onNext(RestoDetail restoDetail) {
+                            super.onNext(restoDetail);setRestoDetail(restoDetail);view.setModel(restoDetail,mode); loadReviews(mode);
+                        }
                         @Override public void onError(Throwable e) {super.onError(e); view.commonError(e.getMessage()); }
                     });
                 }else {
@@ -551,6 +561,27 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 simpleSubscriber
         );
 
+    }
+
+    @Override
+    public void startChat(String user_id) {
+
+        loadUsersTask.execute(Integer.valueOf(user_id),new SimpleSubscriber<ArrayList<User>>(){
+            @Override
+            public void onNext(ArrayList<User> users) {
+                super.onNext(users);
+                if(users.size()==0) return;
+                Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, context, MultiFragmentActivity.class);
+                User friend=new User();
+                friend.setId(users.get(0).getId());
+                friend.setFirstname(users.get(0).getFirstname());
+                friend.setLastname(users.get(0).getLastname());
+                intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     class TempDataHolder {

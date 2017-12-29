@@ -45,19 +45,8 @@ public abstract class BaseActivity extends PresenterActivity {
                 switch (action){
                     case ChatService.ACTION_RECEIVE_MESSAGE:
                         ChatReceiveMessage chatReceiveMessage = (ChatReceiveMessage) bundle.getSerializable(ChatService.EXTRA_PARAM2);
-                        View view=getWindow().getDecorView().findViewById(android.R.id.content);
-                        if(view!=null) {
-                            String text=chatReceiveMessage.getText()+getString(R.string.chat_new_message_text,chatReceiveMessage.getFrom().getFormattedName());
-                            Snackbar snackbar=Snackbar.make(view, text, Snackbar.LENGTH_INDEFINITE);
-                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
-                            snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    snackbar.dismiss();
-                                }
-                            });
-                            snackbar.show();
-                        }
+                        String text=chatReceiveMessage.getText()+getString(R.string.chat_new_message_text,chatReceiveMessage.getFrom().getFormattedName());
+                        showSnackbar(text);
                         break;
                 }
             }
@@ -67,6 +56,21 @@ public abstract class BaseActivity extends PresenterActivity {
                 super.onError(e);
             }
         });
+    }
+
+    public void showSnackbar(String text) {
+        View view=getWindow().getDecorView().findViewById(android.R.id.content);
+        if(view!=null) {
+            Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
+//                            snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    snackbar.dismiss();
+//                                }
+//                            });
+            snackbar.show();
+        }
     }
 
     protected abstract void inject(PresenterComponent component);

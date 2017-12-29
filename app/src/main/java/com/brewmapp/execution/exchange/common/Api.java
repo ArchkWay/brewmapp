@@ -40,6 +40,7 @@ import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -490,5 +491,9 @@ public interface Api {
     @POST("photo")
     @FormUrlEncoded
     Call<ListResponse<Photo>> loadPhotosResto(@FieldMap WrapperParams params);
+
+    @POST("resto/resto/edit")
+    @FormUrlEncoded
+    Call<SingleResponse<RestoDetail>> editResto(@FieldMap WrapperParams params);
 
 }

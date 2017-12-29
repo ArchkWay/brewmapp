@@ -1,11 +1,15 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.BeerMap;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Photo;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.exchange.common.Api;
@@ -13,6 +17,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
@@ -51,12 +56,13 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
     private String[] checkListLocation={"getFormatLocation"};
     private RestoDetail restoDetail_old_data=new RestoDetail();
     private RestoDetail restoDetail_new_data=new RestoDetail();
-
+    private Context context;
 
 
     @Inject
-    public RestoEditFragmentPresenterImpl(LoadRestoDetailTask loadRestoDetailTask){
+    public RestoEditFragmentPresenterImpl(LoadRestoDetailTask loadRestoDetailTask,Context context){
         this.loadRestoDetailTask=loadRestoDetailTask;
+        this.context=context;
     }
 
     @Override
@@ -163,6 +169,49 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
 
     @Override
     public void storeChanges() {
+        class EditRestoTask  extends BaseNetworkTask<Void, RestoDetail> {
+
+            @Inject
+            public EditRestoTask(MainThread mainThread, Executor executor, Api api) {
+                super(mainThread, executor, api);
+            }
+
+            @Override
+            protected Observable<RestoDetail> prepareObservable(Void aVoid) {
+                return Observable.create(subscriber -> {
+                    try {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.RESTO);
+                        wrapperParams.addParam(Keys.ID,restoDetail_new_data.getResto().getId());
+                        wrapperParams.addParam(Keys.RESTO_TYPE,restoDetail_new_data.getResto_type_RestFormat());
+                        if(isNeedSaveField("getName",restoDetail_old_data.getResto(),restoDetail_new_data.getResto()))
+                            wrapperParams.addParam(Keys.NAME, restoDetail_new_data.getResto().getName());
+
+                        SingleResponse<RestoDetail> response=executeCall(getApi().editResto(wrapperParams));
+                        subscriber.onNext(response.getData());
+                        subscriber.onComplete();
+                    } catch (Exception e) {
+                        subscriber.onError(e);
+                    }
+                });
+            }
+        }
+        new EditRestoTask(
+                BeerMap.getAppComponent().mainThread(),
+                BeerMap.getAppComponent().executor(),
+                BeerMap.getAppComponent().api()
+        ).execute(null,new SimpleSubscriber<RestoDetail>(){
+            @Override
+            public void onNext(RestoDetail restoDetail) {
+                super.onNext(restoDetail);
+                view.DataSent();
+                restoDetail_old_data=restoDetail_new_data.clone();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+        });
 
     }
 

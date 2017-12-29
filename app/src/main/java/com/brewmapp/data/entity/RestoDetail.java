@@ -76,6 +76,7 @@ public class RestoDetail implements Serializable{
         restoDetail.getResto().setAvgCost(getResto().getAvgCost());
         restoDetail.getResto().setId(getResto().getId());
         restoDetail.getResto().setLocation(getResto().getLocation().clone());
+        restoDetail.setResto_type(getResto_type());
         ArrayList<Kitchen> kitchenArrayList=new ArrayList<>();
         for (Kitchen kitchen:resto_kitchen)
             kitchenArrayList.add(kitchen.clone());
@@ -93,4 +94,13 @@ public class RestoDetail implements Serializable{
             return result;
     }
 
+    public Object getResto_type_RestFormat() {
+        StringBuilder stringBuilder=new StringBuilder();
+        for (RestoType restoType:getResto_type())
+            stringBuilder
+                    .append(restoType.getId())
+                    .append(",");
+
+        return stringBuilder.toString().trim().replaceAll("[,]$", "");
+    }
 }

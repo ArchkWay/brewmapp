@@ -193,8 +193,13 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
         mListener.commonError(strings);
     }
 
-    //****************************************************
+    @Override
+    public void DataSent() {
+        showSnackbar(getString(R.string.data_sent));
+        mListener.invalidateOptionsMenu();
+    }
 
+    //****************************************************
 
     public interface OnFragmentInteractionListener {
         void commonError(String... message);

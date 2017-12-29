@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.contract.MainView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 
 import java.util.List;
 
@@ -58,6 +59,14 @@ public abstract class BaseFragment extends NavigatorFragment<MainView> implement
     @Override
     public void onBarAction(int id) {
         super.onBarAction(id);
+    }
+
+    public void showSnackbar(String text) {
+        try {
+            BaseActivity baseActivity= (BaseActivity) getActivity();
+            baseActivity.showSnackbar(text);
+
+        }catch (Exception e){}
     }
 
 }

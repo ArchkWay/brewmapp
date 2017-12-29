@@ -80,4 +80,13 @@ public class RestoDetail implements Serializable{
         return restoDetail;
     }
 
+    public String getFormattedKitchen(){
+        StringBuilder stringBuilder=new StringBuilder();
+        for (Kitchen kitchen:getResto_kitchen())
+            stringBuilder.append(kitchen.getName()).append(", ");
+        String result=stringBuilder.toString();
+        result=result.trim().replaceAll("[,]$", "");
+            return result;
+    }
+
 }

@@ -11,13 +11,13 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.Location;
+import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
 import com.brewmapp.presentation.view.contract.RestoEditFragmentView;
 import com.brewmapp.presentation.view.impl.dialogs.DialogInput;
-import com.brewmapp.presentation.view.impl.dialogs.DialogSelectAddress;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectKitchen;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -47,6 +47,8 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     @BindView(R.id.fragment_edit_resto_edit_avg_account)    ImageView edit_avg_account;
     @BindView(R.id.fragment_edit_resto_place)    TextView place;
     @BindView(R.id.fragment_edit_resto_edit_place)    ImageView edit_place;
+    @BindView(R.id.fragment_edit_resto_edit_kitchen)    ImageView edit_kitchen;
+    @BindView(R.id.fragment_edit_resto_kitchen)    TextView kitchen;
 
 
     @Inject RestoEditFragmentPresenter presenter;
@@ -67,27 +69,19 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     protected void initView(View view) {
         setHasOptionsMenu(true);
         sliderLayout.stopAutoCycle();
-        edit_avg_account.setOnClickListener(v -> {new DialogInput().show(getActivity().getSupportFragmentManager(), R.string.new_value, avg_account.getText().toString(), new DialogInput.OnInputText() {
-            @Override
-            public void onOk(String string) {
-                try {
-                    presenter.getRestoDetail_new_data().getResto().setAvgCost(Integer.valueOf(string));
-                    avg_account.setText(string);
-                    mListener.invalidateOptionsMenu();
-                }catch (Exception e){ showMessage(e.getMessage());}
-            }
+        edit_avg_account.setOnClickListener(v -> {new DialogInput().show(getActivity().getSupportFragmentManager(), R.string.new_value, avg_account.getText().toString(), string -> {
+            try {
+                presenter.getRestoDetail_new_data().getResto().setAvgCost(Integer.valueOf(string));
+                avg_account.setText(string);
+                mListener.invalidateOptionsMenu();
+            }catch (Exception e){ showMessage(e.getMessage());}
         });});
-        edit_place.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.DialogSelectAddress().showDialod(getActivity().getSupportFragmentManager(), new DialogSelectAddress.OnSelectAddress() {
-                    @Override
-                    public void onOk(Location location) {
-                        place.setText(location.getFormatLocation());
-                    }
-                });
-            }
-        });
+        edit_place.setOnClickListener(v -> presenter.DialogSelectAddress().showDialod(getActivity().getSupportFragmentManager(), location -> place.setText(location.getFormatLocation())));
+        edit_kitchen.setOnClickListener(v -> new DialogSelectKitchen().showDialog(getActivity().getSupportFragmentManager(), kitchenArrayList -> {
+            presenter.getRestoDetail_new_data().setResto_kitchen(kitchenArrayList);
+            kitchen.setText(presenter.getRestoDetail_new_data().getFormattedKitchen());
+            mListener.invalidateOptionsMenu();
+        }));
 
     }
 
@@ -192,6 +186,7 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
             name.setText(restoDetail.getResto().getName());
             try {place.setText(restoDetail.getResto().getLocation().getFormatLocation());}catch (Exception e){}
             avg_account.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
+            kitchen.setText(restoDetail.getFormattedKitchen());
         }
     }
 }

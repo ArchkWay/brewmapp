@@ -46,7 +46,7 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
 
     private LoadRestoDetailTask loadRestoDetailTask;
     private LoadRestoDetailPackage loadRestoDetailPackage=new LoadRestoDetailPackage();
-    private String[] checkListRestoDetails={};
+    private String[] checkListRestoDetails={"getFormattedKitchen"};
     private String[] checkListResto={"getAvgCost"};
     private String[] checkListLocation={};
     private RestoDetail restoDetail_old_data=new RestoDetail();
@@ -146,6 +146,9 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
         for (String s:checkListResto)
             if(isNeedSaveField(s,restoDetail_old_data.getResto(),restoDetail_new_data.getResto()))
                 return true;
+        for (String s:checkListRestoDetails)
+            if(isNeedSaveField(s,restoDetail_old_data,restoDetail_new_data))
+                return true;
 
 
         return false;
@@ -172,7 +175,7 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
             String type=c.getMethod(getMethod_name).getGenericReturnType().toString();
             if(type.contains("String")){
                 Method m_get = c.getMethod(getMethod_name);
-                Method m_set = c.getMethod(new StringBuilder().append(getMethod_name).replace(0, 1, "s").toString(), String.class);
+                //Method m_set = c.getMethod(new StringBuilder().append(getMethod_name).replace(0, 1, "s").toString(), String.class);
 
                 String val_old = (String) m_get.invoke(oldObject);
                 String val_new = (String) m_get.invoke(newObject);

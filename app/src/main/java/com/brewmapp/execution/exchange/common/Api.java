@@ -1,7 +1,6 @@
 package com.brewmapp.execution.exchange.common;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -15,7 +14,6 @@ import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerAftertasteTypes;
-import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerBrandTypes;
 import com.brewmapp.data.entity.BeerColorTypes;
 import com.brewmapp.data.entity.BeerDensityTypes;
@@ -31,11 +29,11 @@ import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
 import com.brewmapp.data.entity.CountryTypes;
 import com.brewmapp.data.entity.Evaluation;
-import com.brewmapp.data.entity.FilterBeerLocation;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
+import com.brewmapp.data.entity.LocationChild;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
@@ -52,7 +50,6 @@ import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Breweries;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.FilterBeer;
-import com.brewmapp.data.entity.container.FilterRestoLocationTypes;
 import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.InterestsByUser;
 import com.brewmapp.data.entity.container.Posts;
@@ -495,5 +492,9 @@ public interface Api {
     @POST("resto/resto/edit")
     @FormUrlEncoded
     Call<SingleResponse<RestoDetail>> editResto(@FieldMap WrapperParams params);
+
+    @POST("geo/location/add")
+    @FormUrlEncoded
+    Call<SingleResponse<LocationChild>> addLocation(@FieldMap WrapperParams params);
 
 }

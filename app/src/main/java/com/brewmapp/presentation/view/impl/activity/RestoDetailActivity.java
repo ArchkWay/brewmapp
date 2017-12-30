@@ -127,13 +127,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private ArrayList<String> photosResto=new ArrayList<>();
     private ArrayList<String> photosRestoPreview=new ArrayList<>();
     private FlexibleAdapter adapter_reviews;
-    private  Runnable runnable=new Runnable() {
-        @Override
-        public void run() {
-            swipe.setEnabled(true);
-            swipe.setRefreshing(true);
-        }
-    };
+    private  swipeDelayed swipeDelayed=new swipeDelayed();
 
 
     @Override
@@ -206,11 +200,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void enableControls(boolean enabled, int code) {
         if(enabled){
-            swipe.removeCallbacks(runnable);
+            swipeDelayed.cancel();
             swipe.setRefreshing(false);
             swipe.setEnabled(false);
         }else{
-            swipe.postDelayed(runnable,2000);
+            swipe.postDelayed(swipeDelayed,2000);
         }
 
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
@@ -468,6 +462,20 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.setTitle(title);
         toolbarTitle.setText(getSupportActionBar().getTitle());
         toolbarSubTitle.setVisibility(View.GONE);
+
+    }
+
+    class swipeDelayed implements Runnable {
+        private boolean cancel=false;
+        public void cancel(){
+            cancel=true;
+        }
+        @Override
+        public void run() {
+            if(cancel) return;
+            swipe.setEnabled(true);
+            swipe.setRefreshing(true);
+        }
 
     }
 }

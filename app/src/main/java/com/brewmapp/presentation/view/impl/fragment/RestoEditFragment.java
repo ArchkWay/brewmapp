@@ -73,7 +73,7 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
                 new DialogInput()
                         .show(getActivity()
                                 .getSupportFragmentManager(),
-                                R.string.new_value,
+                                0,//R.string.new_value,
                                 name.getText().toString(),
                                 string -> {
                                     try {
@@ -88,7 +88,7 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
                 new DialogInput()
                         .show(getActivity()
                                 .getSupportFragmentManager(),
-                                R.string.new_value,
+                                0,//R.string.new_value,
                                 Integer.valueOf(avg_account.getText().toString()),
                                 string -> {
                                         try {
@@ -194,7 +194,7 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     }
 
     @Override
-    public void DataSent() {
+    public void onDataSent() {
         showSnackbar(getString(R.string.data_sent));
         mListener.invalidateOptionsMenu();
     }
@@ -202,13 +202,17 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     //****************************************************
 
     public interface OnFragmentInteractionListener {
+
         void commonError(String... message);
 
         void invalidateOptionsMenu();
+
+        void setTitle(CharSequence name);
     }
     class FillContent {
 
         public FillContent(RestoDetail restoDetail) {
+            mListener.setTitle(restoDetail.getResto().getName());
             getActivity().setTitle(restoDetail.getResto().getName());
             initSlider(restoDetail.getResto());
             fillTexts(restoDetail);

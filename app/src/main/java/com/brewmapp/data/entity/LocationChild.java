@@ -20,7 +20,7 @@ public class LocationChild implements Serializable{
     private String name;
     private String region_id;
     private String street;
-    private String timestamp;
+    //private String timestamp;
 
 
     public String getAdditional() {
@@ -119,13 +119,13 @@ public class LocationChild implements Serializable{
         this.street = street;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+//    public String getTimestamp() {
+//        return timestamp;
+//    }
+//
+//    public void setTimestamp(String timestamp) {
+//        this.timestamp = timestamp;
+//    }
 
     public LocationChild clone(){
         LocationChild locationChild=new LocationChild();

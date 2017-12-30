@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 
@@ -33,7 +34,7 @@ public class DialogInput extends DialogFragment {
         this.tittle=tittle;
         this.old_text=String.valueOf(old_val);
         if(old_val instanceof String)
-            type=InputType.TYPE_CLASS_TEXT;
+            type=InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE;
         else if(old_val instanceof Integer)
             type=InputType.TYPE_CLASS_NUMBER;
         else
@@ -45,13 +46,22 @@ public class DialogInput extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         input = new EditText(getActivity());
         input.setGravity(Gravity.CENTER);
         input.setInputType(type);
         input.setText(old_text);
+
+//        TextView textView=new TextView(getActivity());
+//        textView.setText(tittle);
+//        textView.setTextColor(getResources().getColor(R.color.input_dialog_title_color));
+
+//        alert.setCustomTitle(textView);
         alert.setView(input);
-        alert.setTitle(tittle);
+        if(tittle!=0)
+            alert.setTitle(tittle);
+
         alert.setCancelable(false);
         alert.setPositiveButton(android.R.string.ok, (dialog, which) -> onInputText.onOk(input.getText().toString()));
         alert.setNeutralButton(android.R.string.cancel, (dialog, which) -> {});

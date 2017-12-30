@@ -15,5 +15,5 @@ public interface RestoEditFragmentView extends BasicView {
     void setContent(RestoDetail restoDetail);
     void commonError(String... strings);
 
-    void DataSent();
+    void onDataSent();
 }

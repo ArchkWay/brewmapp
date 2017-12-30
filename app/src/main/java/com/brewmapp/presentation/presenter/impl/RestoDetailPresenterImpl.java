@@ -94,9 +94,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private TempDataHolder tempDataHolder =new TempDataHolder();
     private LoadUsersTask loadUsersTask;
 
-    public void setRestoDetail(RestoDetail restoDetail) {
-        this.restoDetail = restoDetail;
-    }
 
     @Inject
     public RestoDetailPresenterImpl(
@@ -140,8 +137,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     @Override
     public void onAttach(RestoDetailView restoDetailView) {
         super.onAttach(restoDetailView);
-        setRestoDetail(null);
-
     }
 
 
@@ -202,10 +197,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             view.commonError(e.getMessage());return;
         }
 
-//        try {
-//            view.scrollTo(Integer.valueOf(intent.getAction()));
-//        }catch (Exception e){}
-
         refreshContent(Actions.MODE_REFRESH_ALL);
 
     }
@@ -244,10 +235,15 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                     LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                     loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
                     loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
-                        @Override public void onNext(RestoDetail restoDetail) {
-                            super.onNext(restoDetail);setRestoDetail(restoDetail);view.setModel(restoDetail,mode); loadReviews(mode);
+                        @Override public void onNext(RestoDetail _restoDetail) {
+                            super.onNext(_restoDetail);
+                            restoDetail=_restoDetail;
+                            view.setModel(_restoDetail,mode);
+                            loadReviews(mode);
                         }
-                        @Override public void onError(Throwable e) {super.onError(e); view.commonError(e.getMessage()); }
+                        @Override public void onError(Throwable e) {
+                            super.onError(e); view.commonError(e.getMessage());
+                        }
                     });
                 }else {
                     loadReviews(mode);

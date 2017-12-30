@@ -192,4 +192,6 @@ public class Keys {
     public static final String INFO = "info";
     public static final String WIDTH = "width";
     public static final String HEIGHT = "height";
+    public static final String STREED = "street";
+    public static final String HOUSE = "house";
 }

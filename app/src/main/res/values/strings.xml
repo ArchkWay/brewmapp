@@ -443,5 +443,7 @@
     <string name="exit_from_app">Выйти из приложения %s ?</string>
     <string name="error_user_chat_not_found">Пользователь чата не найден id %s</string>
     <string name="data_sent">Данные отправлены!</string>
+    <string name="error_prepare_data">Ошибка подготовки данных</string>
+    <string name="error_send_data">Ошибка отправки данных</string>
 
 </resources>

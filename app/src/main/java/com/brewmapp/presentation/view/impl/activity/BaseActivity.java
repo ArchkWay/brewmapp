@@ -82,7 +82,6 @@ public abstract class BaseActivity extends PresenterActivity {
         if(toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setElevation(0);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
 

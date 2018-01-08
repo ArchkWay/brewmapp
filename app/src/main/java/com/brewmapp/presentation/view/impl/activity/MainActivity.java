@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
         mode = presenter.parseMode(getIntent());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     private void setDrawer() {

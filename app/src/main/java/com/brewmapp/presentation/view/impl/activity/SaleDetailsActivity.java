@@ -160,7 +160,7 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
                 setTitle(R.string.text_view_sale);
                 try {resto_name.setText(sale.getParent().getName());}catch (Exception e){}
                 new Text2TextWithHashTag(text,sale.getText());
-                date.setText(sale.getDateStartFormated());
+                date.setText(sale.getPeriodFormated());
             }
         }
         new FillContent().fill();

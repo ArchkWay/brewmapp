@@ -142,7 +142,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
 
             private void texts() {
                 try {author.setText(model.getParent().getName());}catch (Exception e){};
-                date.setText(model.getDateStartFormated());
+                date.setText(model.getPeriodFormated());
                 new Text2TextWithHashTag(text,model.getText());
             }
 

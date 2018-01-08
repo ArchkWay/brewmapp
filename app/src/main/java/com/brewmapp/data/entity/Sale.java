@@ -132,11 +132,16 @@ public class Sale implements Serializable, ILikeable {
         dislike++;
     }
 
-    public String getDateStartFormated() {
+    public String getPeriodFormated() {
         try {
-            return android.text.format.DateFormat.format("dd.MM.yyyy HH:mm",getDateStart()).toString();
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder
+                    .append(android.text.format.DateFormat.format("dd.MM.yyyy",getDateStart()).toString())
+                    .append(" - ")
+                    .append(android.text.format.DateFormat.format("dd.MM.yyyy",getDateEnd()).toString());
+            return stringBuilder.toString();
         }catch (Exception e){
-            return null;
+            return "null - null";
         }
     }
 }

@@ -4,6 +4,7 @@ import com.brewmapp.BuildConfig;
 import com.brewmapp.data.model.ILikeable;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -12,7 +13,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
  * Created by oleg on 16.08.17.
  */
 
-public class Photo implements ILikeable {
+public class Photo implements ILikeable,Serializable{
     private int id;
     private int like;
 
@@ -31,6 +32,16 @@ public class Photo implements ILikeable {
     private User user;
 
     private String url;
+
+    private Info info;
+
+    public Info getInfo() {
+        return info;
+    }
+
+    public void setInfo(Info info) {
+        this.info = info;
+    }
 
     @SerializedName(Keys.GET_THUMB)
     private Thumb thumb;
@@ -105,7 +116,7 @@ public class Photo implements ILikeable {
     }
 
 
-    public static class Size {
+    public static class Size implements Serializable {
         @SerializedName("0")
         private int width;
         @SerializedName("1")

@@ -2,11 +2,14 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.view.contract.PhotoSliderView;
@@ -20,6 +23,10 @@ import com.brewmapp.presentation.view.impl.widget.CustomSliderView;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView {
 
@@ -51,9 +58,18 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
         enableBackButton();
         slider.stopAutoCycle();
         String[] urls = getIntent().getStringArrayExtra(Keys.PHOTOS);
+
+        ArrayList<Photo> photoArrayList = (ArrayList<Photo>) getIntent().getExtras().getSerializable(Keys.PHOTO_COUNT);
         try {
+            int i=0;
             for(String url: urls) {
-                slider.addSlider(new CustomSliderView(this, url));
+                CustomSliderView customSliderView;
+                if(photoArrayList==null)
+                    customSliderView=new CustomSliderView(this, url);
+                else
+                    customSliderView = new CustomSliderView(this, url,photoArrayList.get(i++));
+
+                slider.addSlider(customSliderView);
             }
         }catch (Exception e){
             showMessage(getString(R.string.enter));
@@ -75,4 +91,24 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+
+    //******************************
+    public static void startPhotoSliderActivity(List<Photo> photos, Context context) {
+        try {
+            String[] urls=new String[photos.size()];
+            for(int i=0;i<photos.size();i++)
+                urls[i]=photos.get(i).getUrl();
+            if(urls.length>0){
+                Intent intent = new Intent(context, PhotoSliderActivity.class);
+                intent.putExtra(Keys.PHOTOS, urls);
+                intent.putExtra(Keys.PHOTO_COUNT,  new ArrayList<>(photos));
+                context.startActivity(intent);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

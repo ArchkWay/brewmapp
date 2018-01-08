@@ -103,20 +103,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
         subcontainer.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
         repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
-        post_photo.setOnClickListener(v -> {
-            try {
-                String[] urls=new String[model.getPhoto().size()];
-               for(int i=0;i<model.getPhoto().size();i++)
-                   urls[i]=model.getPhoto().get(i).getUrl();
-               if(urls.length>0){
-                   Intent intent = new Intent(getContext(), PhotoSliderActivity.class);
-                    intent.putExtra(Keys.PHOTOS, urls);
-                    getContext().startActivity(intent);
-               }
-
-            }catch (Exception e){}
-
-        });
+        post_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(model.getPhoto(),getContext()));
 
     }
 

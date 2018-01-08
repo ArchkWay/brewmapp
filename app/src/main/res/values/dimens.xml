@@ -37,4 +37,5 @@
     <dimen name="button_height_type_0">30dp</dimen>
     <dimen name="arrow_right_width">20dp</dimen>
     <dimen name="arrow_right_height">20dp</dimen>
+    <dimen name="size_avatar_event_list">70dp</dimen>
 </resources>

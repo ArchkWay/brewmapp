@@ -81,20 +81,7 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
 
         });
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_SALE, model));
-        preview.setOnClickListener(v -> {
-            try {
-                String[] urls=new String[model.getPhotos().size()];
-                for(int i=0;i<model.getPhotos().size();i++)
-                    urls[i]=model.getPhotos().get(i).getUrl();
-                if(urls.length>0){
-                    Intent intent = new Intent(getContext(), PhotoSliderActivity.class);
-                    intent.putExtra(Keys.PHOTOS, urls);
-                    getContext().startActivity(intent);
-                }
-
-            }catch (Exception e){}
-
-        });
+        preview.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(model.getPhotos(),getContext()));
     }
 
     @Override

@@ -116,8 +116,8 @@ public class Event implements Serializable, ILikeable {
 
             return new StringBuilder()
                     .append(android.text.format.DateFormat.format("dd.MM.yyyy",getDateFrom()).toString())
-                    .append(" ")
-                    .append(getTimeFrom())
+                    //.append(" ")
+                    //.append(getTimeFrom())
                     .toString();
 
         }catch (Exception e){

@@ -14,62 +14,67 @@
         android:orientation="vertical"
         android:id="@+id/view.event.container"
         android:layout_marginTop="@dimen/common_block_space_half_bigger"
-        android:layout_marginLeft="@dimen/common_block_space_half_bigger"
-        android:layout_marginRight="@dimen/common_block_space_half_bigger"
 
         >
-
+        <!--header event-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             >
-
+            <!--header avatar-->
             <com.makeramen.roundedimageview.RoundedImageView
-                android:layout_width="@dimen/size_avatar_lesser"
-                android:layout_height="@dimen/size_avatar_lesser"
-                android:id="@+id/view.event.image"
-                android:layout_marginRight="@dimen/common_block_space"
+                android:layout_width="@dimen/size_avatar_event_list"
+                android:layout_height="@dimen/size_avatar_event_list"
+                android:id="@+id/view.event.avatar"
+                android:padding="@dimen/common_block_space_half"
                 android:adjustViewBounds="true"
                 app:riv_oval="true"
                 android:scaleType="fitCenter"
                 />
-
+            <!--header text-->
             <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                >
+                <!--resto-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/view.event.name_resto"
                     android:lines="1"
                     android:ellipsize="end"
-                    style="@style/AppTheme.Text.Georgia.Italic.TitleResto"
+                    style="@style/AppTheme.Text.Georgia.Italic.TitleResto.ListEvent"
                     android:text="@string/text_view_value_not_found"
+                    android:padding="@dimen/common_block_space_half_double"
                     />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/view.event.name"
-                        android:textSize="@dimen/text_size_common_bigger"
-                        android:lines="1"
-                        android:ellipsize="end"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
-                        android:text="@string/text_view_value_not_found"
-                        />
-
+                <!--gone-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view.event.name"
+                    android:textSize="@dimen/text_size_common_bigger"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    android:text="@string/text_view_value_not_found"
+                    android:visibility="gone"
+                    />
+                <!--container date-->
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/common_block_space_half_double"
+                        >
 
                         <ImageView
                             android:layout_width="@dimen/size_event_icon_mini"
                             android:layout_height="@dimen/size_event_icon_mini"
                             android:src="@drawable/ic_calendar"
-                            android:layout_marginRight="@dimen/common_block_space"/>
-
+                            android:layout_marginRight="@dimen/common_block_space"
+                            android:visibility="gone"
+                            />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -78,12 +83,16 @@
                             android:lines="1"
                             android:ellipsize="end"
                             android:textColor="@color/colorProfileCounter"
-                            android:textSize="@dimen/text_size_common" />
+                            android:textSize="@dimen/text_size_common"
+                            android:text="@string/text_view_value_not_found"
+                            />
                     </LinearLayout>
-
+                <!--gone-->
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        >
 
                         <ImageView
                             android:layout_width="@dimen/size_event_icon_mini"
@@ -104,14 +113,25 @@
                 </LinearLayout>
 
         </LinearLayout>
+        <!--text event-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/view.event.text"
             style="@style/AppTheme.Paragraph.Italic"
             android:text="@string/text_view_value_not_found"
+            android:paddingBottom="@dimen/common_block_space_half"
+            android:layout_marginLeft="@dimen/common_block_space_half_bigger"
+            android:layout_marginRight="@dimen/common_block_space_half_bigger"
+            />
+        <!--image event-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.event.image"
 
             />
+        <!--share_like event-->
         <include layout="@layout/view_share_like" />
     </LinearLayout>
 

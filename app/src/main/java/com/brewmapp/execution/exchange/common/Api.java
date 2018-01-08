@@ -35,6 +35,7 @@ import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
 import com.brewmapp.data.entity.LocationChild;
 import com.brewmapp.data.entity.Photo;
+import com.brewmapp.data.entity.PhotoDetails;
 import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
@@ -496,5 +497,9 @@ public interface Api {
     @POST("geo/location/add")
     @FormUrlEncoded
     Call<SingleResponse<LocationChild>> addLocation(@FieldMap WrapperParams params);
+
+    @POST("photo")
+    @FormUrlEncoded
+    Call<ListResponse<PhotoDetails>> getPhotos(@FieldMap WrapperParams params);
 
 }

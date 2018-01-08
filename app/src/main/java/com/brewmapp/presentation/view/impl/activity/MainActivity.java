@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -328,11 +329,14 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         navigator.onDrawerClosed();
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         switch (mode){
             case MODE_DEFAULT:
-                if(menuToShow != 0)  getMenuInflater().inflate(menuToShow, menu);
+                if(menuToShow != 0){
+                    getMenuInflater().inflate(menuToShow, menu);
+                }
                 break;
             case MODE_ONLY_EVENT_FRAGMENT:
             case MODE_ONLY_MAP_FRAGMENT:

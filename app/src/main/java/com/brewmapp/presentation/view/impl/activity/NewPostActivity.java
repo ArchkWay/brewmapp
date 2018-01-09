@@ -170,10 +170,7 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
             invalidateOptionsMenu();
         }, input, title);
         photos.setNestedScrollingEnabled(false);
-        attachLocation.setOnClickListener(v -> {
-            startActivityForResult(new Intent(this, PickLocationActivity.class),
-                    RequestCodes.REQUEST_PICK_LOCATION);
-        });
+        attachLocation.setOnClickListener(v -> startActivityForResult(new Intent(this, PickLocationActivity.class),RequestCodes.REQUEST_PICK_LOCATION));
         attachPhoto.setOnClickListener(v -> takePhoto());
         attactFile.setOnClickListener(v -> takeFromGallery());
         settings.setOnClickListener(v -> {

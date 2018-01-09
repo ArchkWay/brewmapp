@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.data.entity.Event;
@@ -65,6 +66,9 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
     @BindView(R.id.activity_newPost_inputTitle) EditText title;
     @BindView(R.id.activity_newPost_photos) RecyclerView photos;
     @BindView(R.id.activity_newPost_location) TextView location;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
 
     @Inject NewPostPresenter presenter;
     @Inject HashTagHelper hashTagHelper;
@@ -150,6 +154,14 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
+
+        title.setVisibility(View.GONE);
+        title.setText(R.string.without_tite);
+
         enableBackButton();
         registerTextChangeListeners(s -> {
             if(inputChangeLocked) return;

@@ -445,5 +445,6 @@
     <string name="data_sent">Данные отправлены!</string>
     <string name="error_prepare_data">Ошибка подготовки данных</string>
     <string name="error_send_data">Ошибка отправки данных</string>
+    <string name="without_tite">Без названия</string>
 
 </resources>

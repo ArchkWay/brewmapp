@@ -71,7 +71,10 @@ public class CustomSliderView extends BaseSliderView {
 
         try {
             WrapperParams wrapperParams=new WrapperParams(Wrappers.PHOTO);
-            wrapperParams.addParam(Keys.ID,photo.getInfo().getId());
+            if(photo.getInfo()!=null)
+                wrapperParams.addParam(Keys.ID,photo.getInfo().getId());
+            else
+                wrapperParams.addParam(Keys.ID,photo.getId());
             new LoadPhotoTask(
                     BeerMap.getAppComponent().mainThread(),
                     BeerMap.getAppComponent().executor(),

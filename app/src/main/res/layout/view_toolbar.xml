@@ -16,7 +16,9 @@
     android:contentInsetEnd="0dp"
     app:contentInsetRight="0dp"
     app:contentInsetEnd="0dp"
-    android:id="@+id/common.toolbar">
+    android:id="@+id/common.toolbar"
+    android:layout_gravity="center_horizontal"
+    >
 
     <LinearLayout
         android:layout_width="wrap_content"

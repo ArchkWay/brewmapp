@@ -31,8 +31,6 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
     void startShowMenu(RestoDetailActivity restoDetailActivity);
 
-    void startShowPhoto(RestoDetailActivity restoDetailActivity, ArrayList<String> photosResto);
-
     void refreshContent(int mode);
 
     void clickLikeDislike(int type_like);

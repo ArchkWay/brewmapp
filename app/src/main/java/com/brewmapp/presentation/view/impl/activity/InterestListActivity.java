@@ -9,6 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -49,6 +50,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     @BindView(R.id.activity_interest_text_save)    TextView text_save_intesest;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
 
     @Inject    InterestListPresenter presenter;
 
@@ -65,6 +67,9 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
 
         enableBackButton();
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -119,10 +124,15 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
             presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();
         });
 
-        toolbarTitle.setText(getSupportActionBar().getTitle());
-        toolbarSubTitle.setVisibility(View.GONE);
 
         refreshInterests();
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        super.setTitle(titleId);
+        toolbarTitle.setText(getTitle());
+
     }
 
     @Override

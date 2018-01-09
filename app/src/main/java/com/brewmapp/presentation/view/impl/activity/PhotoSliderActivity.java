@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.Photo;
@@ -31,9 +34,11 @@ import java.util.List;
 public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
-
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.activity_photos_indicator) PagerIndicator indicator;
     @BindView(R.id.activity_photos_slider) SliderLayout slider;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
     @Inject PhotoSliderPresenter presenter;
 
@@ -55,6 +60,11 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarTitle.setText(getTitle());
+        toolbarSubTitle.setVisibility(View.GONE);
+
         enableBackButton();
         slider.stopAutoCycle();
         String[] urls = getIntent().getStringArrayExtra(Keys.PHOTOS);
@@ -96,8 +106,11 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     public static void startPhotoSliderActivity(List<Photo> photos, Context context) {
         try {
             String[] urls=new String[photos.size()];
-            for(int i=0;i<photos.size();i++)
-                urls[i]=photos.get(i).getUrl();
+            for(int i=0;i<photos.size();i++) {
+                urls[i] = photos.get(i).getUrl();
+                if(urls[i]==null)
+                    urls[i]=photos.get(i).getThumb().getUrl();
+            }
             if(urls.length>0){
                 Intent intent = new Intent(context, PhotoSliderActivity.class);
                 intent.putExtra(Keys.PHOTOS, urls);

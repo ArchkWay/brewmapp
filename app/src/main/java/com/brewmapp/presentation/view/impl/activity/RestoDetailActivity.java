@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -85,7 +86,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.text_view_call_2)    TextView number_cal2;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
     @BindView(R.id.activity_resto_detail_text_view_place)    TextView text_view_place;
-
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
     @BindView(R.id.activity_restoDetails_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_resto_detail_layout_news)    ViewGroup layout_news;
@@ -128,7 +129,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private ArrayList<String> photosRestoPreview=new ArrayList<>();
     private FlexibleAdapter adapter_reviews;
     private  swipeDelayed swipeDelayed=new swipeDelayed();
-
+    private  ArrayList<Photo> photoArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +139,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
         enableBackButton();
         enableControls(false, ALL_CONTROL);
         slider.stopAutoCycle();
@@ -150,7 +154,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
         layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
-        layout_photo.setOnClickListener(v -> presenter.startShowPhoto(RestoDetailActivity.this,photosResto));
+        layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
         layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);});
@@ -235,6 +239,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                     @Override
                     public void onNext(List<Photo> photos) {
                         super.onNext(photos);
+                        photoArrayList=new ArrayList<>(photos);
+
                         Iterator<Photo> iterator=photos.iterator();
                         while (iterator.hasNext()) {
                             Photo photo=iterator.next();
@@ -269,13 +275,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                                     defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
                                     defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
                                     defaultSliderView.image(imgUrl);
-                                    defaultSliderView.setOnSliderClickListener(slider1 -> {
-                                        Intent intent = new Intent(RestoDetailActivity.this, PhotoSliderActivity.class);
-                                        String[] stringsPhoto=new String[photosResto.size()];
-                                        photosResto.toArray(stringsPhoto);
-                                        intent.putExtra(Keys.PHOTOS, stringsPhoto);
-                                        startActivity(intent);
-                                    });
+                                    defaultSliderView.setOnSliderClickListener(slider1 -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,RestoDetailActivity.this));
                                     slider.addSlider(defaultSliderView);
                                 }
                             }
@@ -460,9 +460,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
-        toolbarTitle.setText(getSupportActionBar().getTitle());
-        toolbarSubTitle.setVisibility(View.GONE);
-
+        toolbarTitle.setText(title);
     }
 
     class swipeDelayed implements Runnable {

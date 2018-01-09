@@ -4,11 +4,13 @@ import com.brewmapp.BuildConfig;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Kras on 10.12.2017.
  */
 
-public class Thumb {
+public class Thumb  implements Serializable{
     private String url;
 
     @SerializedName(Keys.URL_PREVIEW)

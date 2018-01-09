@@ -436,15 +436,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         view.showMessage(context.getString(R.string.message_develop),0);
     }
 
-    @Override
-    public void startShowPhoto(RestoDetailActivity restoDetailActivity, ArrayList<String> photosResto) {
-
-        Intent intent = new Intent(restoDetailActivity, PhotoSliderActivity.class);
-        String[] urls = new String[photosResto.size()];
-        photosResto.toArray(urls);
-        intent.putExtra(Keys.PHOTOS, urls);
-        restoDetailActivity.startActivity(intent);
-    }
 
     @Override
     public void refreshContent(int mode) {

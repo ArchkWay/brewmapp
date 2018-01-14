@@ -116,6 +116,10 @@ public class User implements Serializable {
         return counts;
     }
 
+    public void setCounts(Counts counts) {
+        this.counts = counts;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

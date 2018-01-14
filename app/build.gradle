@@ -57,20 +57,20 @@ android {
             signingConfig signingConfigs.config
             buildConfigField "String", "SERVER_ROOT_URL", "\"https://brewmapp.com/\""
             buildConfigField "String", "SERVER_API_URL", "\"https://brewmapp.com/api/\""
-            buildConfigField "String", "SERVER_API_VER", "\"1.02\""
+            buildConfigField "String", "SERVER_API_VER", "\"1.03\""
         }
         debug {
             signingConfig signingConfigs.config
             buildConfigField "String", "SERVER_ROOT_URL", "\"https://developer.brewmapp.com/\""
             buildConfigField "String", "SERVER_API_URL", "\"https://developer.brewmapp.com/api/\""
-            buildConfigField "String", "SERVER_API_VER", "\"1.03\""
+            buildConfigField "String", "SERVER_API_VER", "\"1.04\""
             debuggable true
         }
         debugProduction {
             signingConfig signingConfigs.config
             buildConfigField "String", "SERVER_ROOT_URL", "\"https://brewmapp.com/\""
             buildConfigField "String", "SERVER_API_URL", "\"https://brewmapp.com/api/\""
-            buildConfigField "String", "SERVER_API_VER", "\"1.02\""
+            buildConfigField "String", "SERVER_API_VER", "\"1.03\""
             debuggable true
         }
     }

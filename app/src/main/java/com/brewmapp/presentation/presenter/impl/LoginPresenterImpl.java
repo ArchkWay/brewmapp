@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import com.brewmapp.data.entity.User;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -109,6 +110,8 @@ public class LoginPresenterImpl extends BasePresenter<LoginView> implements Logi
 
         @Override
         public void onNext(UserResponse userResponse) {
+            userResponse.getUser().setCounts(new User.Counts());
+            userRepo.save(userResponse.getUser());
             view.proceed();
         }
     }

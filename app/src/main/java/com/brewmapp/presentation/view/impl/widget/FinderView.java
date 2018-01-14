@@ -83,4 +83,9 @@ public class FinderView extends BaseFrameLayout {
     public void setListener(Listener listener) {
         this.listener = listener;
     }
+
+    public void setHintString(String hintString) {
+        this.hintString = hintString;
+        input.setHint(hintString);
+    }
 }

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -142,14 +143,14 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search, menu);
+        getMenuInflater().inflate(R.menu.add, menu);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_search:
+            case R.id.action_add:
                 startActivityForResult(new Intent(loadInterestPackage.getFilterInterest(),null,this, MultiListActivity.class), REQUEST_INTEREST);
             default:
                 return super.onOptionsItemSelected(item);
@@ -214,7 +215,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     private void visibleTextSave() {
         if(hmAdd.size()==0&& hmRemove.size()==0)
-            text_save_intesest.setVisibility(View.INVISIBLE);
+            text_save_intesest.setVisibility(View.GONE);
         else
             text_save_intesest.setVisibility(View.VISIBLE);
     }

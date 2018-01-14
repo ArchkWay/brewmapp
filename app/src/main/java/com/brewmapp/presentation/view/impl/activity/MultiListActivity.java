@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -45,8 +46,10 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     @BindView(R.id.activity_search_search)    FinderView finder;
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
     @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.activity_add_interest_text_start_search)    TextView start_search;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
 
     @Inject    MultiListPresenter presenter;
 
@@ -63,6 +66,10 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+
         enableBackButton();
 
         mode=presenter.parseIntent(getIntent());
@@ -80,6 +87,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
             case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
+                finder.setHintString(getString(R.string.hint_find_beer));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
@@ -114,8 +122,6 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
             default:
                 commonError();
         }
-        toolbarTitle.setText(getSupportActionBar().getTitle());
-        toolbarSubTitle.setVisibility(View.GONE);
         swipe.setOnRefreshListener(this::refreshItems);
         recyclerview.setLayoutManager(manager);
         adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
@@ -148,19 +154,15 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        if(fullSearchPackage.getPage() == 0)
-            adapter.clear();
-        adapter.addItems(adapter.getItemCount(), list);
+
+        adapter.clear();
+        adapter.addItems(0,list);
         adapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
+
+        start_search.setVisibility(adapter.getItemCount()==0?View.VISIBLE:View.GONE);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.stub,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public void onError() {
@@ -192,6 +194,12 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        super.setTitle(titleId);
+        toolbarTitle.setText(getTitle());
     }
 
     //***************************************

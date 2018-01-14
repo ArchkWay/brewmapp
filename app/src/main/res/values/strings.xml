@@ -337,7 +337,7 @@
     <string name="message_develop">В разработке</string>
     <string name="assessment_has_already_been_taken">Ваша оценка уже была  принята ранее</string>
     <string name="action_find_resto">Поиск заведения</string>
-    <string name="action_find_beer">Поиск пива</string>
+    <string name="action_find_beer">Добавление</string>
     <string name="text_view_common_info">Общая информация</string>
     <string name="text_view_simple_country">Страна</string>
     <string name="text_view_simple_city">Город</string>
@@ -446,5 +446,8 @@
     <string name="error_prepare_data">Ошибка подготовки данных</string>
     <string name="error_send_data">Ошибка отправки данных</string>
     <string name="without_tite">Без названия</string>
+    <string name="text_craft_beer">Крафтовое пиво</string>
+    <string name="hint_find_beer">Поиск любимого пива</string>
+    <string name="text_hint_search">Для начала поиска начните вводить название</string>
 
 </resources>

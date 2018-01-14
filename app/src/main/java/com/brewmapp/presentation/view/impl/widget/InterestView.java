@@ -30,6 +30,7 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
+    @BindView(R.id.view_interest_craft)    TextView craft_text;
 
     private Interest interest;
     private Listener listener;
@@ -54,8 +55,11 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @Override
     public void setModel(Interest model) {
         this.interest=model;
+        try {
+            craft_text.setVisibility(model.getInterest_info().getCraft().equals("1")?VISIBLE:GONE);
+        }catch (Exception e){}
         String tmpStr;
-        try {tmpStr=model.getInterest_info().getTitle();}                               catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) title.setText(tmpStr);else tmpStr=null;
+        try {tmpStr=model.getInterest_info().getFormatedTitle();}                        catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) title.setText(tmpStr);else tmpStr=null;
         if(tmpStr==null)
             try {tmpStr=model.getInterest_info().getName();}                            catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) title.setText(tmpStr);else tmpStr=null;
 

@@ -41,6 +41,15 @@ public class Interest_info implements Serializable{
     String type_eng_id;
     String type_id;
     String user_getThumb;
+    Location location;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public String getName() {
         return name;

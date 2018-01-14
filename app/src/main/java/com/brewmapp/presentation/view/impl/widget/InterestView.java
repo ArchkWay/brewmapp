@@ -7,11 +7,13 @@ import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Location;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +33,10 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
     @BindView(R.id.view_interest_craft)    TextView craft_text;
+    @BindView(R.id.view_interest_container_distance)    View container_distance;
+    @BindView(R.id.view_interest_container_metro)    View container_metro;
+    @BindView(R.id.view_interest_text_distance)    TextView text_distance;
+    @BindView(R.id.view_interest_text_metro)    TextView text_metro;
 
     private Interest interest;
     private Listener listener;
@@ -55,9 +61,30 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @Override
     public void setModel(Interest model) {
         this.interest=model;
-        try {
-            craft_text.setVisibility(model.getInterest_info().getCraft().equals("1")?VISIBLE:GONE);
-        }catch (Exception e){}
+        container_distance.setVisibility(GONE);
+        container_metro.setVisibility(GONE);
+        switch (interest.getRelated_model()){
+            case Keys.CAP_RESTO:
+                Location location=interest.getInterest_info().getLocation();
+                try {
+                    text_metro.setText(location.getMetro().getName());
+                    container_metro.setVisibility(VISIBLE);
+                }catch (Exception e){}
+                try {
+                    text_distance.setText(String.format("%s м",location.getMetro().getDistance()));
+                    container_distance.setVisibility(VISIBLE);
+                }catch (Exception e){}
+
+
+
+                break;
+            case Keys.CAP_BEER:
+                try {craft_text.setVisibility(model.getInterest_info().getCraft().equals("1")?VISIBLE:GONE);}catch (Exception e){}
+                break;
+        }
+
+
+
         String tmpStr;
         try {tmpStr=model.getInterest_info().getFormatedTitle();}                        catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) title.setText(tmpStr);else tmpStr=null;
         if(tmpStr==null)

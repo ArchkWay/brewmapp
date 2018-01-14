@@ -93,7 +93,8 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 break;
             case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
-                setTitle(R.string.action_find_resto);
+                setTitle(R.string.action_find_beer);
+                finder.setHintString(getString(R.string.hint_find_resto));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 break;

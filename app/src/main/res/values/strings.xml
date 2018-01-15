@@ -450,5 +450,10 @@
     <string name="hint_find_beer">Поиск любимого пива</string>
     <string name="text_hint_search">Для начала поиска начните вводить название</string>
     <string name="hint_find_resto">Поиск любимого заведения</string>
+    <string name="text_view_rating">Рейтинг:</string>
+    <string name="text_view_i_hear_work">Я здесь работаю</string>
+    <string name="text_view_reviews">Отзывы</string>
+    <string name="text_view_i_owner">Я владелец</string>
+    <string name="text_view_favorites">Избранное</string>
 
 </resources>

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-
+            <!--slider-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_event_slider"
@@ -59,7 +59,7 @@
                 </com.daimajia.slider.library.SliderLayout>
 
             </LinearLayout>
-
+            <!--name-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,16 +67,9 @@
                 android:layout_marginRight="@dimen/common_block_space"
                 android:layout_marginLeft="@dimen/common_block_space"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    >
 
                     <TextView
                         android:id="@+id/activity.resto.detail.name"
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -84,22 +77,125 @@
                         android:text="@string/text_view_value_not_found"
                         app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
                         style="@style/AppTheme.Text.Georgia.Italic.TitleResto"
+                        android:layout_weight="1"
+                        android:lines="1"
+                        android:ellipsize="end"
                         />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_view_rating"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorBlack"
+                            android:layout_marginRight="@dimen/common_block_space"
+                            android:textSize="@dimen/text_size_common"
+                            />
+                        <TextView
+                            android:layout_width="@dimen/size_icon_36"
+                            android:layout_height="@dimen/size_icon_36"
+                            android:background="@drawable/bg_circle"
+                            android:layout_gravity="right|center_vertical"
+                            android:text="@string/text_view_value_not_found"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            />
 
-                    <include layout="@layout/view_like_dislike_fav" />
-
-                </LinearLayout>
-                <TextView
-                    android:layout_width="@dimen/size_icon_24"
-                    android:layout_height="@dimen/size_icon_24"
-                    android:background="@drawable/bg_circle"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="@string/text_view_value_not_found"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    />
+                    </LinearLayout>
             </LinearLayout>
 
+            <!--<include layout="@layout/view_like_dislike_fav" />-->
+            <!--panel-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/common_block_space_double"
+                android:layout_marginBottom="@dimen/common_block_space_double"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/common_block_space_triple"
+                        android:layout_height="@dimen/common_block_space_triple"
+                        android:src="@drawable/ic_i_work"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_i_hear_work"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/common_block_space_triple"
+                        android:layout_height="@dimen/common_block_space_triple"
+                        android:src="@drawable/ic_reviews"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_reviews"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/common_block_space_triple"
+                        android:layout_height="@dimen/common_block_space_triple"
+                        android:src="@drawable/ic_owner"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_i_owner"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/common_block_space_triple"
+                        android:layout_height="@dimen/common_block_space_triple"
+                        android:src="@drawable/ic_love_icon_green"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_favorites"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--buttons-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -157,7 +253,7 @@
                     android:layout_marginLeft="@dimen/common_block_space"
                     >
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_weight="1"
@@ -184,7 +280,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_weight="1"
@@ -222,7 +318,7 @@
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
@@ -244,7 +340,7 @@
                             />
                     </LinearLayout>
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:id="@+id/activity.resto.detail.rating.view.effect_linear_layout"
@@ -257,6 +353,7 @@
                             android:lines="1"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
+                            android:ellipsize="end"
                             />
                         <TextView
                             android:id="@+id/activity.resto.detail.text.view.common.effect"
@@ -264,6 +361,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/text_view_value_not_found"
                             android:gravity="center_vertical"
+                            android:lines="1"
                             />
 
                     </LinearLayout>
@@ -1094,5 +1192,6 @@
         </LinearLayout>
 
     </ScrollView>
+
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 </LinearLayout>

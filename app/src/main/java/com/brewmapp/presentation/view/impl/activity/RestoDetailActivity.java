@@ -94,17 +94,17 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_layout_sale)    ViewGroup layout_sale;
     @BindView(R.id.activity_resto_detail_layout_photo)    ViewGroup layout_photo;
     @BindView(R.id.activity_resto_detail_layout_menu)    ViewGroup layout_menu;
-    @BindView(R.id.layout_like)    ViewGroup layout_like;
-    @BindView(R.id.layout_dislike)    ViewGroup layout_dislike;
-    @BindView(R.id.layout_fav)    ViewGroup layout_fav;
-    @BindView(R.id.view_like_counter)    TextView like_counter;
-    @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
+//    @BindView(R.id.layout_like)    ViewGroup layout_like;
+//    @BindView(R.id.layout_dislike)    ViewGroup layout_dislike;
+//    @BindView(R.id.layout_fav)    ViewGroup layout_fav;
+//    @BindView(R.id.view_like_counter)    TextView like_counter;
+//    @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
     @BindView(R.id.activity_restoDetails_empty_text_reviews)    TextView empty_text_reviews;
     @BindView(R.id.activity_resto_detail_text_view_none8)    TextView cnt_sales;
     @BindView(R.id.activity_resto_detail_text_view_none3)    TextView cnt_news;
     @BindView(R.id.activity_resto_detail_text_view_none13)    TextView cnt_events;
     @BindView(R.id.activity_resto_detail_text_view_none23)    TextView cnt_photo;
-    @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
+//    @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
     @BindView(R.id.activity_resto_detail_text_view_description_button)    Button button_more_description;
     @BindView(R.id.activity_resto_details_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_resto_details_scroll)    ScrollView scroll;
@@ -155,9 +155,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
         layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
         layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
-        layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
-        layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
-        layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);});
+//        layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
+//        layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
+//        layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);});
         private_message.setOnClickListener(v -> presenter.startChat(resto.getUser_id()));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
@@ -334,8 +334,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 setTitleToButtonOfMoreDescription(false);
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
             case Actions.MODE_REFRESH_ONLY_LIKE:
-                try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
-                try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
+//                try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
+//                try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
 
         }
 
@@ -386,7 +386,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void setFav(boolean b) {
-        fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
+//        fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
     }
 
     @Override

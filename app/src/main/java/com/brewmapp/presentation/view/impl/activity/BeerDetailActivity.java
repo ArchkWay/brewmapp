@@ -71,10 +71,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.activity_beerDetails_slider)    SliderLayout slider;
     @BindView(R.id.layout_like)    ViewGroup layout_like;
     @BindView(R.id.layout_dislike)    ViewGroup layout_dislike;
-    @BindView(R.id.layout_fav)    ViewGroup layout_fav;
+    //@BindView(R.id.layout_fav)    ViewGroup layout_fav;
     @BindView(R.id.view_like_counter)    TextView like_counter;
     @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
-    @BindView(R.id.view_dislove_icon)    ImageView fav_icon;
+    @BindView(R.id.activity_beer_panel_favorite_icon)    ImageView fav_icon;
     @BindView(R.id.activity_beer_details_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_beer_detail_button_review)    Button button_review;
     @BindView(R.id.activity_beer_details_empty_text_reviews)    TextView empty_text_reviews;
@@ -166,7 +166,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         enableControls(false,0);
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
-        layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
+        fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_resto.setLayoutManager(new LinearLayoutManager(this));
@@ -234,7 +234,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @Override
     public void setFavorite(boolean b) {
-        fav_icon.setImageResource(b?R.drawable.ic_love_icon:R.drawable.ic_dislove);
+        fav_icon.setImageResource(b?R.drawable.ic_love_icon_green:R.drawable.ic_dislove);
         enableControls(true,0);
     }
 

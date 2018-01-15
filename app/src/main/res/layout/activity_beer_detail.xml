@@ -73,19 +73,131 @@
                                 <!--android:textSize="@dimen/text_size_common" />-->
                         <!--</LinearLayout>-->
                     </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/activity.beer.detail.name"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    <!--name-->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:text="@string/text_view_value_not_found"
-                        android:textColor="@color/red_focused"
-                        android:textSize="@dimen/text_size_big_phone"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:layout_marginLeft="@dimen/common_block_space">
 
-                        />
+                            <TextView
+                                android:id="@+id/activity.beer.detail.name"
+                                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_margin="@dimen/common_block_space"
+                                android:text="@string/text_view_value_not_found"
+                                android:textColor="@color/red_focused"
+                                android:textSize="@dimen/text_size_big_phone"
+                                android:layout_weight="1"
+                            />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center_vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_rating"
+                                    android:layout_gravity="center_vertical"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginRight="@dimen/common_block_space"
+                                    android:textSize="@dimen/text_size_common"
+                                    />
+                                <TextView
+                                    android:layout_width="@dimen/size_icon_36"
+                                    android:layout_height="@dimen/size_icon_36"
+                                    android:background="@drawable/bg_circle"
+                                    android:layout_gravity="right|center_vertical"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center"
+                                    android:textColor="@color/white"
+                                    />
+
+                            </LinearLayout>
+                </LinearLayout>
+                    <!--panel-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/common_block_space_double"
+                        android:layout_marginBottom="@dimen/common_block_space_double">
+                        <!--Я здесь-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:id="@+id/activity.beer.panel.map">
+                            <ImageView
+                                android:layout_width="@dimen/common_block_space_triple"
+                                android:layout_height="@dimen/common_block_space_triple"
+                                android:src="@drawable/ic_menu_map_red"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_map"
+                                android:gravity="center"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                />
+
+                        </LinearLayout>
+                        <!--Отзывы-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:id="@+id/activity.resto.panel.reviews">
+                            <ImageView
+                                android:layout_width="@dimen/common_block_space_triple"
+                                android:layout_height="@dimen/common_block_space_triple"
+                                android:src="@drawable/ic_reviews"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_reviews"
+                                android:gravity="center"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                />
+
+                        </LinearLayout>
+                        <!--Избранное-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:id="@+id/activity.beer.panel.favorite">
+                            <ImageView
+                                android:layout_width="@dimen/common_block_space_triple"
+                                android:layout_height="@dimen/common_block_space_triple"
+                                android:src="@drawable/ic_love_icon_green"
+                                android:id="@+id/activity.beer.panel.favorite.icon"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_favorites"
+                                android:gravity="center"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <ru.frosteye.ovsa.presentation.view.widget.Line
                         android:layout_width="match_parent"

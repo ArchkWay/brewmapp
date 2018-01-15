@@ -455,5 +455,6 @@
     <string name="text_view_reviews">Отзывы</string>
     <string name="text_view_i_owner">Я владелец</string>
     <string name="text_view_favorites">Избранное</string>
+    <string name="text_view_added_favorites">Добавили в избранное</string>
 
 </resources>

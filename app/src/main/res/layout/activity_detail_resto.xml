@@ -11,14 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/activity.resto.details.swipe"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/activity.resto.details.scroll"
-            >
+            android:id="@+id/activity.resto.details.scroll">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +24,7 @@
             android:orientation="vertical"
             >
             <!--slider-->
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_event_slider"
                 android:orientation="vertical"
@@ -57,17 +55,22 @@
                             />
                     </com.daimajia.slider.library.Indicators.PagerIndicator>
                 </com.daimajia.slider.library.SliderLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    >
+                    <include layout="@layout/view_like_dislike_fav" />
+                </RelativeLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
             <!--name-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginRight="@dimen/common_block_space"
-                android:layout_marginLeft="@dimen/common_block_space"
-                >
-
+                android:layout_marginLeft="@dimen/common_block_space">
                     <TextView
                         android:id="@+id/activity.resto.detail.name"
                         android:layout_width="match_parent"
@@ -107,23 +110,21 @@
 
                     </LinearLayout>
             </LinearLayout>
-
-            <!--<include layout="@layout/view_like_dislike_fav" />-->
             <!--panel-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/common_block_space_double"
-                android:layout_marginBottom="@dimen/common_block_space_double"
-                >
+                android:layout_marginBottom="@dimen/common_block_space_double">
+                <!--Я здесь-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center"
-                    >
+                    android:id="@+id/activity.resto.panel.i_here">
                     <ImageView
                         android:layout_width="@dimen/common_block_space_triple"
                         android:layout_height="@dimen/common_block_space_triple"
@@ -133,16 +134,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_i_hear_work"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        />
 
                 </LinearLayout>
+                <!--Отзывы-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center"
-                    >
+                    android:id="@+id/activity.resto.panel.reviews">
                     <ImageView
                         android:layout_width="@dimen/common_block_space_triple"
                         android:layout_height="@dimen/common_block_space_triple"
@@ -152,16 +157,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_reviews"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        />
 
                 </LinearLayout>
+                <!--Я владелец-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center"
-                    >
+                    android:id="@+id/activity.resto.panel.i_owner">
                     <ImageView
                         android:layout_width="@dimen/common_block_space_triple"
                         android:layout_height="@dimen/common_block_space_triple"
@@ -171,26 +180,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_i_owner"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        />
 
                 </LinearLayout>
+                <!--Избранное-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center"
-                    >
+                    android:id="@+id/activity.resto.panel.favorite">
                     <ImageView
                         android:layout_width="@dimen/common_block_space_triple"
                         android:layout_height="@dimen/common_block_space_triple"
                         android:src="@drawable/ic_love_icon_green"
+                        android:id="@+id/activity.resto.panel.favorite.icon"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_favorites"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        />
 
                 </LinearLayout>
 
@@ -1126,7 +1143,50 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     />
             </android.support.constraint.ConstraintLayout>
+            <!--Added favorites(container)-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
 
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/text_view_added_favorites"
+                    android:background="@color/colorGrayLightSemi"
+                    android:paddingLeft="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/message_develop"
+                        style="@style/AppTheme.Paragraph"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:gravity="center"
+
+                        />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/activity.restoDetails.recycler_added_favorites"
+
+                        >
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </RelativeLayout>
+            </LinearLayout>
+            <!--Reviews users(head)-->
             <TextView
 
                 android:layout_width="match_parent"
@@ -1141,7 +1201,7 @@
                 android:textSize="@dimen/text_size_big_phone_bigger"
 
                 />
-
+            <!--Reviews users(list)-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -436,7 +436,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         view.showMessage(context.getString(R.string.message_develop),0);
     }
 
-
     @Override
     public void refreshContent(int mode) {
         loadData(mode);

@@ -33,7 +33,7 @@
                     >
 
                     <!--************Slider-->
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/height_event_slider"
                         android:orientation="vertical">
@@ -50,6 +50,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
                         </com.daimajia.slider.library.SliderLayout>
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            >
+                            <include layout="@layout/view_like_dislike_fav" />
+                        </RelativeLayout>
 
                         <!--<LinearLayout-->
                             <!--android:layout_width="match_parent"-->
@@ -65,7 +72,7 @@
                                 <!--android:textColor="@color/colorWhite"-->
                                 <!--android:textSize="@dimen/text_size_common" />-->
                         <!--</LinearLayout>-->
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/activity.beer.detail.name"
@@ -79,10 +86,6 @@
                         android:textSize="@dimen/text_size_big_phone"
 
                         />
-
-
-                    <include layout="@layout/view_like_dislike_fav" />
-
 
                     <ru.frosteye.ovsa.presentation.view.widget.Line
                         android:layout_width="match_parent"

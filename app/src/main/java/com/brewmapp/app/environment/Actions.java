@@ -26,6 +26,7 @@ public class Actions {
     public static final int MODE_REFRESH_ONLY_LIKE =19;
     public static final int ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS = 20;
     public static final int ACTION_SCROLL_TO_NEWS = 21;
+    public static final int ACTION_SHOW_ALL_RESTO_BY_BEER = 22;
 
 
 }

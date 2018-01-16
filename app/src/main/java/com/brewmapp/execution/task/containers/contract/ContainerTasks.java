@@ -32,4 +32,6 @@ public interface ContainerTasks {
     void loadRestoByBeer(SearchPackage searchPackage, SimpleSubscriber<ListResponse<Resto>> objectSimpleSubscriber);
 
     void loadLikesByBeer(String beer_id, SimpleSubscriber<Object> simpleSubscriber);
+
+    void loadUsersByInteres(Integer interest_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
 }

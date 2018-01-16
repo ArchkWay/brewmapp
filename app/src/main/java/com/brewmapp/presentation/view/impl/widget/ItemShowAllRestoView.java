@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
@@ -16,6 +17,9 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  */
 
 public class ItemShowAllRestoView extends BaseLinearLayout implements InteractiveModelView<Void> {
+
+    private Listener listener;
+
     public ItemShowAllRestoView(Context context) {
         super(context);
     }
@@ -40,7 +44,7 @@ public class ItemShowAllRestoView extends BaseLinearLayout implements Interactiv
 
     @Override
     public void setModel(Void model) {
-        setOnClickListener(v->((BaseActivity)getContext()).showMessage(getContext().getString(R.string.message_develop)));
+        setOnClickListener(v->listener.onModelAction(Actions.ACTION_SHOW_ALL_RESTO_BY_BEER,null));
     }
 
     @Override
@@ -50,6 +54,6 @@ public class ItemShowAllRestoView extends BaseLinearLayout implements Interactiv
 
     @Override
     public void setListener(Listener listener) {
-
+        this.listener=listener;
     }
 }

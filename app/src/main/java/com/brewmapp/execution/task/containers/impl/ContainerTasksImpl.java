@@ -20,6 +20,7 @@ import com.brewmapp.execution.task.LoadLikesByBeerTask;
 import com.brewmapp.execution.task.LoadRestoGeoTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
 import com.brewmapp.execution.task.LoadReviewsTask;
+import com.brewmapp.execution.task.LoadUsersByInterestTask;
 import com.brewmapp.execution.task.RemoveInterestTask;
 import com.brewmapp.execution.task.SearchRestosTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
@@ -48,9 +49,10 @@ public class ContainerTasksImpl implements ContainerTasks {
     private LoadRestoGeoTask loadRestoGeoTask;
     private LoadLikesByBeerTask loadLikesByBeerTask;
     private SearchRestosTask searchRestosTask;
+    private LoadUsersByInterestTask loadUsersByInterestTask;
 
     @Inject
-    public ContainerTasksImpl(LikeTask likeTask,LoadInterestTask loadInterestTask,AddInterestTask addInterestTask,RemoveInterestTask removeInterestTask,LoadReviewsTask loadReviewsTask,AddReviewTask addReviewTask,LoadRestoGeoTask loadRestoGeoTask,LoadLikesByBeerTask loadLikesByBeerTask,SearchRestosTask searchRestosTask,LoadInterestByUsersTask loadInterestByUsersTask){
+    public ContainerTasksImpl(LikeTask likeTask,LoadInterestTask loadInterestTask,AddInterestTask addInterestTask,RemoveInterestTask removeInterestTask,LoadReviewsTask loadReviewsTask,AddReviewTask addReviewTask,LoadRestoGeoTask loadRestoGeoTask,LoadLikesByBeerTask loadLikesByBeerTask,SearchRestosTask searchRestosTask,LoadInterestByUsersTask loadInterestByUsersTask,LoadUsersByInterestTask loadUsersByInterestTask){
         this.likeTask=likeTask;
         this.loadInterestTask=loadInterestTask;
         this.addInterestTask=addInterestTask;
@@ -61,6 +63,7 @@ public class ContainerTasksImpl implements ContainerTasks {
         this.loadLikesByBeerTask=loadLikesByBeerTask;
         this.searchRestosTask=searchRestosTask;
         this.loadInterestByUsersTask=loadInterestByUsersTask;
+        this.loadUsersByInterestTask=loadUsersByInterestTask;
     }
 
     @Override
@@ -127,5 +130,10 @@ public class ContainerTasksImpl implements ContainerTasks {
         likesByBeerPackage.setRelated_id(beer_id);
         likesByBeerPackage.setRelated_model(Keys.CAP_BEER);
         loadLikesByBeerTask.execute(likesByBeerPackage,simpleSubscriber);
+    }
+
+    @Override
+    public void loadUsersByInteres(Integer interest_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber) {
+        loadUsersByInterestTask.execute(interest_id,objectSimpleSubscriber);
     }
 }

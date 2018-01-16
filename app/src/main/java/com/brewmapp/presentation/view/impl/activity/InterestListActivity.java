@@ -106,6 +106,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         swipe.setOnRefreshListener(this::refreshItems);
+
         loadInterestPackage =new LoadInterestPackage();
         loadInterestPackage.setPage(0);
         loadInterestPackage.setFilterInterest(getIntent().getAction());
@@ -121,10 +122,8 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
                 return;
             }
         }
-        text_save_intesest.setOnClickListener(v->{
-            presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();
-        });
 
+        text_save_intesest.setOnClickListener(v->{presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();});
 
         refreshInterests();
     }

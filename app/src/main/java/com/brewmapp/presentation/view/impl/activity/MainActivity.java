@@ -202,11 +202,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
-        if (fragment instanceof SearchFragment) {
-            mode = SEARCH_FRAGMENT;
-        } else {
-            mode = presenter.parseMode(getIntent());
-        }
+//        if (fragment instanceof SearchFragment) {
+//            mode = SEARCH_FRAGMENT;
+//        } else {
+//            mode = presenter.parseMode(getIntent());
+//        }
         fragment.setArguments(presenter.prepareArguments(getIntent(),container));
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
@@ -322,6 +322,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 enableBackButton();
                 navigator.storeCodeActiveFragment(MenuField.MAP);
                 setResult(RESULT_OK);
+                break;
+            case SEARCH_FRAGMENT:
+                navigator.storeCodeActiveFragment(MenuField.SEARCH);
                 break;
         }
 

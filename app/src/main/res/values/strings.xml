@@ -378,7 +378,7 @@
     <string name="text_view_menu_edit">Правка</string>
     <string name="no">Нет</string>
     <string name="text_view_beer_where_exist">Где наливают</string>
-    <string name="text_view_beer_who_likes">Кому нравится</string>
+    <string name="text_view_beer_who_likes">Добавили в избранное:</string>
     <string name="text_view_menu_save">Сохранить</string>
 
     <string name="filter_search_beer">Для поиска введите название пива</string>

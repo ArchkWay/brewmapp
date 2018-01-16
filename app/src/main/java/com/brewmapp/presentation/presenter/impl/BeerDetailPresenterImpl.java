@@ -47,6 +47,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
     private BeerDetail beerDetail;
     private Context context;
     private TempDataHolder tempDataHolder =new TempDataHolder();
+    private Interest interest;
 
 
     @Inject
@@ -78,7 +79,8 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
     @Override
     public void parseIntent(Intent intent) {
         try {
-            Beer beer=new Beer(); beer.setId(((Interest)intent.getSerializableExtra(context.getString(R.string.key_serializable_extra))).getInterest_info().getId());
+            interest=(Interest)intent.getSerializableExtra(context.getString(R.string.key_serializable_extra));
+            Beer beer=new Beer(); beer.setId(interest.getInterest_info().getId());
             beerDetail=new BeerDetail(beer);
             refreshContent(Actions.MODE_REFRESH_ALL);
         }catch (Exception e){
@@ -262,7 +264,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadWhoIsInterested(int mode) {
                 switch (mode) {
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadInteresByUsers(Keys.CAP_BEER, Integer.valueOf(beerDetail.getBeer().getId()), new SimpleSubscriber<List<IFlexible>>() {
+                        containerTasks.loadUsersByInteres(Integer.valueOf(interest.getId()), new SimpleSubscriber<List<IFlexible>>() {
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);

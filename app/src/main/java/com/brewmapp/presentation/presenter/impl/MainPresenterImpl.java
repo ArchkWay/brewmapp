@@ -64,6 +64,8 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
             return MainActivity.MODE_ONLY_EVENT_FRAGMENT;
         else if(MainActivity.MODE_ONLY_MAP_FRAGMENT.equals(intent.getAction()))
             return MainActivity.MODE_ONLY_MAP_FRAGMENT;
+        else if(MainActivity.SEARCH_FRAGMENT.equals(intent.getAction()))
+            return MainActivity.SEARCH_FRAGMENT;
         else
             return MainActivity.MODE_DEFAULT;
 

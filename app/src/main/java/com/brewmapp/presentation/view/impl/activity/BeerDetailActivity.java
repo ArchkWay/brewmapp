@@ -91,8 +91,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
-
-
     @BindViews({
             R.id.layout_like,
             R.id.layout_dislike,
@@ -170,20 +168,23 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarSubTitle.setVisibility(View.GONE);
-
-
         enableBackButton();
+
         enableControls(false,0);
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
+
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_resto.setLayoutManager(new LinearLayoutManager(this));
         recycler_interest.setLayoutManager(new LinearLayoutManager(this));
+
         adapter_resto =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
         adapter_interest=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
         adapter_review=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
+
+        recycler_resto.setAdapter(adapter_resto);
     }
 
     @Override
@@ -269,7 +270,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         if(iFlexibles.size()==3)
             adapter_resto.addItem(adapter_resto.getItemCount(),new ItemShowAllResto());
         adapter_resto.notifyDataSetChanged();
-        recycler_resto.setAdapter(adapter_resto);
+
     }
 
     @Override
@@ -290,6 +291,17 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
 
     private void processAction(int action, Object payload){
+
+
+        switch (action){
+            case Actions.ACTION_SHOW_ALL_RESTO_BY_BEER:{
+                Intent intent=new Intent(MainActivity.SEARCH_FRAGMENT,null,this,MainActivity.class);
+                startActivity(intent);
+                return;
+            }
+        }
+
+
         Interest interest;
         if(payload instanceof Resto) {
             interest = new Interest((Resto) payload);
@@ -312,10 +324,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
                         new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(interest.getUser_info().getId())), this, ProfileEditActivity.class),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );
-
-//                Intent intent = new Intent(this, UserProfileViewActivity.class);
-//                intent.putExtra(Keys.CAP_INTEREST, interest);
-//                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }
         }
     }

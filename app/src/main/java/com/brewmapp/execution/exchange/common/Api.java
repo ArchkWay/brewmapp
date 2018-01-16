@@ -502,4 +502,9 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<PhotoDetails>> getPhotos(@FieldMap WrapperParams params);
 
+
+    @POST("userinterest/search")
+    @FormUrlEncoded
+    Call<InterestsByUser> loadUsersByInterest(@FieldMap RequestParams params);
+
 }

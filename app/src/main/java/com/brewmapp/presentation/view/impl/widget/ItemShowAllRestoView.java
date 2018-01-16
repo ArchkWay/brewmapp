@@ -5,6 +5,9 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
+import com.brewmapp.R;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -37,7 +40,7 @@ public class ItemShowAllRestoView extends BaseLinearLayout implements Interactiv
 
     @Override
     public void setModel(Void model) {
-
+        setOnClickListener(v->((BaseActivity)getContext()).showMessage(getContext().getString(R.string.message_develop)));
     }
 
     @Override

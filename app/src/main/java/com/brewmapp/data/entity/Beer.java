@@ -136,6 +136,16 @@ public class Beer implements Serializable {
         return title==null?"":title;
     }
 
+    public String getFormatedTitle() {
+        String titleFormated=null;
+        if(getTitle()!=null)
+            titleFormated=getTitle();
+        if(getTitle_ru()!=null)
+            titleFormated=new StringBuilder().append(titleFormated).append(" (").append(getTitle_ru()).append(")").toString();
+
+        return titleFormated==null?"":titleFormated;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

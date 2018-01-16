@@ -86,6 +86,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.activity_beer_details_recycler_interest)    RecyclerView recycler_interest;
     @BindView(R.id.activity_beer_details_container_recycler_resto)    View container_recycler_resto;
     @BindView(R.id.activity_beer_details_container_recycler_interest)    View container_recycler_interest;
+    @BindView(R.id.activity_beer_details_container_reviews)    View container_reviews;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
@@ -119,7 +120,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
                 String tmpStr;
 
-                try {tmpStr=beer.getTitle();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) setTitle(beer.getTitle());
+                try {tmpStr=beer.getTitle();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) setTitle(beer.getFormatedTitle());
                 try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
                 try {tmpStr=beer.getTitle_ru();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) name.setText(tmpStr);
                 try {tmpStr=beer.getRelations().getBeerTaste().iterator().next().getName();}catch (Exception e){tmpStr=null;}if(!TextUtils.isEmpty(tmpStr)) taste.setText(tmpStr);
@@ -132,7 +133,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
                 try {tmpStr=beer.getRelations().getProductDensity().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) density.setText(tmpStr);
                 try {tmpStr=beer.getFiltered();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) filter_beer.setText(getString(tmpStr.equals("1")?R.string.yes:R.string.no));
                 try {tmpStr=beer.getRelations().getBeerAftertaste().iterator().next().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) after_taste.setText(tmpStr);
-                try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);
+                try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);else description.setLines(1);
 
                 slider.stopAutoCycle();
 
@@ -249,12 +250,15 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @Override
     public void setReviews(List<IFlexible> iFlexibles) {
-        empty_text_reviews.setVisibility(iFlexibles.size()==0?View.VISIBLE:View.GONE);
-        adapter_review.clear();
-        adapter_review.addItems(0,iFlexibles);
-        adapter_review.notifyDataSetChanged();
-        recycler_reviews.setAdapter(adapter_review);
-
+        if(iFlexibles.size()==0){
+            container_reviews.setVisibility(View.GONE);
+        }else {
+            empty_text_reviews.setVisibility(iFlexibles.size() == 0 ? View.VISIBLE : View.GONE);
+            adapter_review.clear();
+            adapter_review.addItems(0, iFlexibles);
+            adapter_review.notifyDataSetChanged();
+            recycler_reviews.setAdapter(adapter_review);
+        }
     }
 
     @Override

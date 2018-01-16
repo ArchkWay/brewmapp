@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.wrapper.RestoInfo;
@@ -25,4 +26,6 @@ public interface BeerDetailView extends BasicView {
     void addItemsResto(ArrayList<IFlexible> iFlexibles);
 
     void addItemsInterest(List<IFlexible> iFlexibles);
+
+    void setProductAverageValue(List<Averagevalue> models);
 }

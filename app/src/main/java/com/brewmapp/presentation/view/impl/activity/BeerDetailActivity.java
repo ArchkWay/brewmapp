@@ -21,6 +21,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
@@ -90,6 +91,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.activity_beer_panel2_aroma)    TextView panel2_aroma;
+    @BindView(R.id.activity_beer_panel2_aftertaste)    TextView panel2_aftertaste;
+    @BindView(R.id.activity_beer_panel2_color)    TextView panel2_color;
+    @BindView(R.id.activity_beer_panel2_taste)    TextView panel2_taste;
 
     @BindViews({
             R.id.layout_like,
@@ -283,13 +288,33 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     }
 
     @Override
+    public void setProductAverageValue(List<Averagevalue> models) {
+        try {
+            panel2_aroma.setText(String.valueOf(models.get(0).getAverage_value()));
+            panel2_aroma.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+        }catch (Exception e){}
+        try {
+            panel2_aftertaste.setText(String.valueOf(models.get(3).getAverage_value()));
+            panel2_aftertaste.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+        }catch (Exception e){}
+        try {
+            panel2_color.setText(String.valueOf(models.get(2).getAverage_value()));
+            panel2_color.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+        }catch (Exception e){}
+        try {
+            panel2_taste.setText(String.valueOf(models.get(1).getAverage_value()));
+            panel2_taste.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+        }catch (Exception e){}
+    }
+
+    @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
         toolbarTitle.setText(title);
 
     }
 
-
+    //************************
     private void processAction(int action, Object payload){
 
 
@@ -327,4 +352,14 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
             }
         }
     }
+    private int getUsernameColor(String username) {
+        int[] mUsernameColors=getResources().getIntArray(R.array.username_colors);
+        int hash = 7;
+        for (int i = 0, len = username.length(); i < len; i++) {
+            hash = username.codePointAt(i) + (hash << 5) - hash;
+        }
+        int index = Math.abs(hash % mUsernameColors.length);
+        return mUsernameColors[index];
+    }
+
 }

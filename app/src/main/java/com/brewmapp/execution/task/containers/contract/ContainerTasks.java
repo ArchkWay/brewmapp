@@ -1,5 +1,6 @@
 package com.brewmapp.execution.task.containers.contract;
 
+import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
@@ -34,4 +35,7 @@ public interface ContainerTasks {
     void loadLikesByBeer(String beer_id, SimpleSubscriber<Object> simpleSubscriber);
 
     void loadUsersByInteres(Integer interest_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
+
+    void loadProductAverageValue(String beer_id, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber);
+
 }

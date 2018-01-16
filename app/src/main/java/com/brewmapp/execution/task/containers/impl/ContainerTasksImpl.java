@@ -1,5 +1,6 @@
 package com.brewmapp.execution.task.containers.impl;
 
+import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
@@ -17,6 +18,7 @@ import com.brewmapp.execution.task.AddReviewTask;
 import com.brewmapp.execution.task.LoadInterestByUsersTask;
 import com.brewmapp.execution.task.LoadInterestTask;
 import com.brewmapp.execution.task.LoadLikesByBeerTask;
+import com.brewmapp.execution.task.LoadProductAverageValue;
 import com.brewmapp.execution.task.LoadRestoGeoTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
 import com.brewmapp.execution.task.LoadReviewsTask;
@@ -50,9 +52,10 @@ public class ContainerTasksImpl implements ContainerTasks {
     private LoadLikesByBeerTask loadLikesByBeerTask;
     private SearchRestosTask searchRestosTask;
     private LoadUsersByInterestTask loadUsersByInterestTask;
+    private LoadProductAverageValue loadProductAverageValue;
 
     @Inject
-    public ContainerTasksImpl(LikeTask likeTask,LoadInterestTask loadInterestTask,AddInterestTask addInterestTask,RemoveInterestTask removeInterestTask,LoadReviewsTask loadReviewsTask,AddReviewTask addReviewTask,LoadRestoGeoTask loadRestoGeoTask,LoadLikesByBeerTask loadLikesByBeerTask,SearchRestosTask searchRestosTask,LoadInterestByUsersTask loadInterestByUsersTask,LoadUsersByInterestTask loadUsersByInterestTask){
+    public ContainerTasksImpl(LikeTask likeTask,LoadInterestTask loadInterestTask,AddInterestTask addInterestTask,RemoveInterestTask removeInterestTask,LoadReviewsTask loadReviewsTask,AddReviewTask addReviewTask,LoadRestoGeoTask loadRestoGeoTask,LoadLikesByBeerTask loadLikesByBeerTask,SearchRestosTask searchRestosTask,LoadInterestByUsersTask loadInterestByUsersTask,LoadUsersByInterestTask loadUsersByInterestTask,LoadProductAverageValue loadProductAverageValue){
         this.likeTask=likeTask;
         this.loadInterestTask=loadInterestTask;
         this.addInterestTask=addInterestTask;
@@ -64,6 +67,7 @@ public class ContainerTasksImpl implements ContainerTasks {
         this.searchRestosTask=searchRestosTask;
         this.loadInterestByUsersTask=loadInterestByUsersTask;
         this.loadUsersByInterestTask=loadUsersByInterestTask;
+        this.loadProductAverageValue=loadProductAverageValue;
     }
 
     @Override
@@ -135,5 +139,10 @@ public class ContainerTasksImpl implements ContainerTasks {
     @Override
     public void loadUsersByInteres(Integer interest_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber) {
         loadUsersByInterestTask.execute(interest_id,objectSimpleSubscriber);
+    }
+
+    @Override
+    public void loadProductAverageValue(String beer_id, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber) {
+        loadProductAverageValue.execute(Integer.valueOf(beer_id),listResponseSimpleSubscriber);
     }
 }

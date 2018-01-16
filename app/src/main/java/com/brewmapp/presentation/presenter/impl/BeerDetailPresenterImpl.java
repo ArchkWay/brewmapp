@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
@@ -269,6 +270,38 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);
                                 view.addItemsInterest(iFlexibles);
+                                loadProductAverageValue(mode);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                view.commonError(e.getMessage());
+                            }
+                        });
+                        break;
+                        default:
+                            loadProductAverageValue(mode);
+                }
+//                containerTasks.loadLikesByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<Object>(){
+//                    @Override
+//                    public void onNext(Object o) {
+//                        super.onNext(o);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                    }
+//                });
+            }
+            private void loadProductAverageValue(int mode){//productaveragevalue
+                switch (mode){
+                    case Actions.MODE_REFRESH_ALL:
+                        containerTasks.loadProductAverageValue(beerDetail.getBeer().getId(),new SimpleSubscriber<ListResponse<Averagevalue>>(){
+                            @Override
+                            public void onNext(ListResponse<Averagevalue> averagevalueListResponse) {
+                                super.onNext(averagevalueListResponse);
+                                view.setProductAverageValue(averagevalueListResponse.getModels());
                             }
 
                             @Override
@@ -281,16 +314,6 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                         default:
                             //THE END
                 }
-//                containerTasks.loadLikesByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<Object>(){
-//                    @Override
-//                    public void onNext(Object o) {
-//                        super.onNext(o);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                    }
-//                });
             }
 
         }

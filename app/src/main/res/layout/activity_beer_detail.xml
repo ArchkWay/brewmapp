@@ -233,6 +233,7 @@
                                     android:lines="1"
                                     android:ellipsize="end"
                                     android:layout_margin="@dimen/common_block_space"
+                                    android:id="@+id/activity.beer.panel2.aroma"
                                     />
                             </LinearLayout>
                             <LinearLayout
@@ -257,6 +258,7 @@
                                     android:ellipsize="end"
                                     android:layout_marginLeft="@dimen/common_block_space"
                                     android:layout_marginRight="@dimen/common_block_space"
+                                    android:id="@+id/activity.beer.panel2.taste"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -285,6 +287,7 @@
                                     android:lines="1"
                                     android:ellipsize="end"
                                     android:layout_margin="@dimen/common_block_space"
+                                    android:id="@+id/activity.beer.panel2.color"
                                     />
                             </LinearLayout>
                             <LinearLayout
@@ -309,6 +312,7 @@
                                     android:ellipsize="end"
                                     android:layout_marginLeft="@dimen/common_block_space"
                                     android:layout_marginRight="@dimen/common_block_space"
+                                    android:id="@+id/activity.beer.panel2.aftertaste"
                                     />
                             </LinearLayout>
                         </LinearLayout>

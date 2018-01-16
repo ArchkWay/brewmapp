@@ -133,7 +133,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
                 try {tmpStr=beer.getRelations().getBeerAftertaste().iterator().next().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) after_taste.setText(tmpStr);
                 try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);else description.setLines(1);
 
-                slider.stopAutoCycle();
+
 
                 ArrayList<String> photos=new ArrayList<>();
                 if(beer.getGetThumb()!=null&&beer.getGetThumb().length()>0)
@@ -171,6 +171,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         enableBackButton();
 
         enableControls(false,0);
+        slider.stopAutoCycle();
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
@@ -206,7 +207,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @Override
     public void enableControls(boolean enabled, int code) {
+
         swipe.setRefreshing(!enabled);
+        swipe.setEnabled(!enabled);
+
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
                 view.setEnabled(enabled);
                 view.setClickable(enabled);
@@ -252,14 +256,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @Override
     public void setReviews(List<IFlexible> iFlexibles) {
-//        if(iFlexibles.size()==0){
-//            container_reviews.setVisibility(View.GONE);
-//        }else {
             empty_text_reviews.setVisibility(iFlexibles.size() == 0 ? View.VISIBLE : View.GONE);
             adapter_review.clear();
             adapter_review.addItems(0, iFlexibles);
             adapter_review.notifyDataSetChanged();
-//        }
     }
 
     @Override

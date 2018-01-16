@@ -314,7 +314,7 @@
     <string name="text_view_strength">Крепость:</string>
     <string name="text_view_density">Плотность:</string>
     <string name="text_view_ubi">UBI:</string>
-    <string name="text_view_filter_beer">Фильтрованное пиво:</string>
+    <string name="text_view_filter_beer">Не фильтрованное пиво:</string>
     <string name="text_view_beer_taste">Вкус:</string>
     <string name="text_view_beer_after_taste">Послевкусие:</string>
     <string name="success_subscription">%s (подписка ON)</string>

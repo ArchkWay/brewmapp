@@ -41,7 +41,7 @@ public class LoadReviewsTask extends BaseNetworkTask<ReviewPackage, List<IFlexib
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params = new WrapperParams(Wrappers.REVIEW);
-                params.addParam(Keys.USER_ID, userRepo.load().getId());
+                //params.addParam(Keys.USER_ID, userRepo.load().getId());
                 params.addParam(Keys.RELATED_MODEL, reviewPackage.getRelated_model());
                 params.addParam(Keys.RELATED_ID, reviewPackage.getRelated_id());
                 Reviews reviews = executeCall(getApi().loadReviews(params));

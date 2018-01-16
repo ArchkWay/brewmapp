@@ -85,7 +85,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.activity_beer_details_recycler_resto)    RecyclerView recycler_resto;
     @BindView(R.id.activity_beer_details_recycler_interest)    RecyclerView recycler_interest;
     @BindView(R.id.activity_beer_details_container_recycler_resto)    View container_recycler_resto;
-    @BindView(R.id.activity_beer_details_container_recycler_interest)    View container_recycler_interest;
+    @BindView(R.id.activity_beer_details_container_recycler_interest)    LinearLayout container_recycler_interest;
     @BindView(R.id.activity_beer_details_container_reviews)    View container_reviews;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
@@ -185,6 +185,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         adapter_review=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
 
         recycler_resto.setAdapter(adapter_resto);
+        recycler_reviews.setAdapter(adapter_review);
     }
 
     @Override
@@ -251,15 +252,14 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @Override
     public void setReviews(List<IFlexible> iFlexibles) {
-        if(iFlexibles.size()==0){
-            container_reviews.setVisibility(View.GONE);
-        }else {
+//        if(iFlexibles.size()==0){
+//            container_reviews.setVisibility(View.GONE);
+//        }else {
             empty_text_reviews.setVisibility(iFlexibles.size() == 0 ? View.VISIBLE : View.GONE);
             adapter_review.clear();
             adapter_review.addItems(0, iFlexibles);
             adapter_review.notifyDataSetChanged();
-            recycler_reviews.setAdapter(adapter_review);
-        }
+//        }
     }
 
     @Override

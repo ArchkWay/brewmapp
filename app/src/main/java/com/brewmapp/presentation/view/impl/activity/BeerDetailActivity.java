@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -25,6 +26,8 @@ import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Review;
+import com.brewmapp.data.entity.wrapper.ItemShowAllResto;
+import com.brewmapp.data.model.ICommonItem;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
@@ -83,6 +86,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.activity_beer_details_recycler_interest)    RecyclerView recycler_interest;
     @BindView(R.id.activity_beer_details_container_recycler_resto)    View container_recycler_resto;
     @BindView(R.id.activity_beer_details_container_recycler_interest)    View container_recycler_interest;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
@@ -162,6 +166,11 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+
+
         enableBackButton();
         enableControls(false,0);
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
@@ -253,6 +262,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         container_recycler_resto.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
         adapter_resto.clear();
         adapter_resto.addItems(0, iFlexibles);
+        if(iFlexibles.size()==3)
+            adapter_resto.addItem(adapter_resto.getItemCount(),new ItemShowAllResto());
         adapter_resto.notifyDataSetChanged();
         recycler_resto.setAdapter(adapter_resto);
     }
@@ -269,8 +280,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
-        toolbarTitle.setText(getSupportActionBar().getTitle());
-        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(title);
 
     }
 

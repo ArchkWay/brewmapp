@@ -15,6 +15,7 @@ import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
@@ -228,7 +229,12 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadResto(int mode){
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadRestoByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<ListResponse<Resto>>(){
+                        SearchPackage searchPackage = new SearchPackage("");
+                        searchPackage.getAdditionalFields().put(Keys.menuBeer, beerDetail.getBeer().getId());
+                        searchPackage.setStartLimit(0);
+                        searchPackage.setEndLimit(3);
+
+                        containerTasks.loadRestoByBeer(searchPackage,new SimpleSubscriber<ListResponse<Resto>>(){
                             @Override
                             public void onNext(ListResponse<Resto> listResponse) {
                                 super.onNext(listResponse);

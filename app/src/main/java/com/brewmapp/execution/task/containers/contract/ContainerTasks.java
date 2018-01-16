@@ -1,6 +1,7 @@
 package com.brewmapp.execution.task.containers.contract;
 
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 
@@ -28,7 +29,7 @@ public interface ContainerTasks {
 
     void addReviewTask(String relatedModel, String relatedId, String text, SimpleSubscriber<String> simpleSubscriber);
 
-    void loadRestoByBeer(String beer_id, SimpleSubscriber<ListResponse<Resto>> objectSimpleSubscriber);
+    void loadRestoByBeer(SearchPackage searchPackage, SimpleSubscriber<ListResponse<Resto>> objectSimpleSubscriber);
 
     void loadLikesByBeer(String beer_id, SimpleSubscriber<Object> simpleSubscriber);
 }

@@ -117,9 +117,7 @@ public class ContainerTasksImpl implements ContainerTasks {
     }
 
     @Override
-    public void loadRestoByBeer(String beer_id, SimpleSubscriber<ListResponse<Resto>> simpleSubscriber) {
-        SearchPackage searchPackage = new SearchPackage("");
-        searchPackage.getAdditionalFields().put(Keys.menuBeer, beer_id);
+    public void loadRestoByBeer(SearchPackage searchPackage, SimpleSubscriber<ListResponse<Resto>> simpleSubscriber) {
         searchRestosTask.execute(searchPackage, simpleSubscriber);
     }
 

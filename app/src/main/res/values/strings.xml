@@ -457,5 +457,6 @@
     <string name="text_view_favorites">Избранное</string>
     <string name="text_view_added_favorites">Добавили в избранное</string>
     <string name="text_view_map">Карта</string>
+    <string name="text_view_item_show_all_resto">Показать все заведения</string>
 
 </resources>

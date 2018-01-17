@@ -119,6 +119,15 @@
 
                             </LinearLayout>
                 </LinearLayout>
+                    <ru.frosteye.ovsa.presentation.view.widget.Line
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/common_block_space"
+                        android:layout_weight="1"
+                        android:background="@color/colorSplitter"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
                     <!--panel-->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -198,6 +207,15 @@
                         </LinearLayout>
 
                     </LinearLayout>
+                    <ru.frosteye.ovsa.presentation.view.widget.Line
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/common_block_space"
+                        android:layout_weight="1"
+                        android:background="@color/colorSplitter"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
                     <!--panel2-->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -215,7 +233,8 @@
                             >
                             <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -223,7 +242,10 @@
                                     android:textColor="@color/colorBlack"
                                     android:lines="1"
                                     android:ellipsize="end"
-                                    android:layout_margin="@dimen/common_block_space"
+                                    android:layout_marginLeft="@dimen/common_block_space"
+                                    android:layout_marginTop="@dimen/common_block_space"
+                                    android:layout_marginBottom="@dimen/common_block_space"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
                                     />
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -232,13 +254,15 @@
                                     android:textColor="@color/colorBlack"
                                     android:lines="1"
                                     android:ellipsize="end"
-                                    android:layout_margin="@dimen/common_block_space"
+
                                     android:id="@+id/activity.beer.panel2.aroma"
                                     />
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                >
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -247,7 +271,7 @@
                                     android:lines="1"
                                     android:ellipsize="end"
                                     android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
                                     />
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -256,8 +280,6 @@
                                     android:textColor="@color/colorBlack"
                                     android:lines="1"
                                     android:ellipsize="end"
-                                    android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space"
                                     android:id="@+id/activity.beer.panel2.taste"
                                     />
                             </LinearLayout>
@@ -269,7 +291,8 @@
                             android:orientation="vertical">
                             <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -277,7 +300,10 @@
                                     android:textColor="@color/colorBlack"
                                     android:lines="1"
                                     android:ellipsize="end"
-                                    android:layout_margin="@dimen/common_block_space"
+                                    android:layout_marginLeft="@dimen/common_block_space"
+                                    android:layout_marginTop="@dimen/common_block_space"
+                                    android:layout_marginBottom="@dimen/common_block_space"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
                                     />
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -286,7 +312,6 @@
                                     android:textColor="@color/colorBlack"
                                     android:lines="1"
                                     android:ellipsize="end"
-                                    android:layout_margin="@dimen/common_block_space"
                                     android:id="@+id/activity.beer.panel2.color"
                                     />
                             </LinearLayout>
@@ -301,7 +326,7 @@
                                     android:lines="1"
                                     android:ellipsize="end"
                                     android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
                                     />
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -310,15 +335,21 @@
                                     android:textColor="@color/colorBlack"
                                     android:lines="1"
                                     android:ellipsize="end"
-                                    android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space"
                                     android:id="@+id/activity.beer.panel2.aftertaste"
                                     />
                             </LinearLayout>
                         </LinearLayout>
 
                     </LinearLayout>
-
+                    <ru.frosteye.ovsa.presentation.view.widget.Line
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/common_block_space"
+                        android:layout_weight="1"
+                        android:background="@color/colorSplitter"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
@@ -840,7 +871,7 @@
                             <android.support.v7.widget.RecyclerView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/activity.beer.details.recycler_resto"
+                                android:id="@+id/activity.beer.details.recycler_where_they_pour"
                                 >
 
                             </android.support.v7.widget.RecyclerView>
@@ -853,7 +884,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorGrayLightSemi"
                         android:orientation="vertical"
-                        android:id="@+id/activity.beer.details.container_recycler_interest">
+                        android:id="@+id/activity.beer.details.container_added_to_favorite">
 
                         <TextView
                             style="@style/AppTheme.Text.Georgia.BoldItalic"
@@ -875,7 +906,7 @@
                             <android.support.v7.widget.RecyclerView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/activity.beer.details.recycler_interest">
+                                android:id="@+id/activity.beer.details.recycler_added_to_favorite">
 
                             </android.support.v7.widget.RecyclerView>
                         </RelativeLayout>

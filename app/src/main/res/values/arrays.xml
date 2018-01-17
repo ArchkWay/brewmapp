@@ -23,4 +23,12 @@
         <item>@color/username11</item>
     </array>
 
+    <array name="product_average_value">
+        <item>@color/username0</item>
+        <item>@color/username2</item>
+        <item>@color/username3</item>
+        <item>@color/username4</item>
+        <item>@color/username5</item>
+    </array>
+
 </resources>

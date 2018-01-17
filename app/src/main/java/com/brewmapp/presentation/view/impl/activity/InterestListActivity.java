@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -221,13 +220,13 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
     private void processAction(int action, Object payload) {
         Interest interest=(Interest)payload;
-        switch (interest.getRelated_model()){
-            case Keys.CAP_RESTO:{
+        switch (action){
+            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
                 Intent intent = new Intent(this, RestoDetailActivity.class);
                 intent.putExtra(Keys.RESTO_ID, interest);
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }break;
-            case Keys.CAP_BEER:{
+            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);
                 intent.putExtra(getString(R.string.key_serializable_extra), interest);
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);

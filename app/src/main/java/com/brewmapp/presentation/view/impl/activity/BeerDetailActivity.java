@@ -28,7 +28,6 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.entity.wrapper.ItemShowAllResto;
-import com.brewmapp.data.model.ICommonItem;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
@@ -83,10 +82,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.activity_beer_detail_button_review)    Button button_review;
     @BindView(R.id.activity_beer_details_empty_text_reviews)    TextView empty_text_reviews;
     @BindView(R.id.activity_beer_detaild_swipe)    RefreshableSwipeRefreshLayout swipe;
-    @BindView(R.id.activity_beer_details_recycler_resto)    RecyclerView recycler_resto;
-    @BindView(R.id.activity_beer_details_recycler_interest)    RecyclerView recycler_interest;
-    @BindView(R.id.activity_beer_details_container_recycler_resto)    View container_recycler_resto;
-    @BindView(R.id.activity_beer_details_container_recycler_interest)    LinearLayout container_recycler_interest;
+    @BindView(R.id.activity_beer_details_recycler_where_they_pour)    RecyclerView recycler_where_they_pour;
+    @BindView(R.id.activity_beer_details_recycler_added_to_favorite)    RecyclerView recycler_added_to_favorite;
+    @BindView(R.id.activity_beer_details_container_recycler_resto)    View container_where_they_pour;
+    @BindView(R.id.activity_beer_details_container_added_to_favorite)    LinearLayout container_added_to_favorite;
     @BindView(R.id.activity_beer_details_container_reviews)    View container_reviews;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
@@ -105,8 +104,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @Inject BeerDetailPresenter presenter;
 
     private FlexibleAdapter adapter_review ;
-    private FlexibleAdapter adapter_resto;
-    private FlexibleAdapter adapter_interest;
+    private FlexibleAdapter adapter_where_they_pour;
+    private FlexibleAdapter adapter_added_to_favorite;
     private Beer beer;
 
     @Override
@@ -183,14 +182,14 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
 
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
-        recycler_resto.setLayoutManager(new LinearLayoutManager(this));
-        recycler_interest.setLayoutManager(new LinearLayoutManager(this));
+        recycler_where_they_pour.setLayoutManager(new LinearLayoutManager(this));
+        recycler_added_to_favorite.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter_resto =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
-        adapter_interest=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
+        adapter_where_they_pour =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
+        adapter_added_to_favorite =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
         adapter_review=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
 
-        recycler_resto.setAdapter(adapter_resto);
+        recycler_where_they_pour.setAdapter(adapter_where_they_pour);
         recycler_reviews.setAdapter(adapter_review);
     }
 
@@ -268,42 +267,47 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     }
 
     @Override
-    public void addItemsResto(ArrayList<IFlexible> iFlexibles) {
-        container_recycler_resto.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
-        adapter_resto.clear();
-        adapter_resto.addItems(0, iFlexibles);
+    public void addItemsWhereTheyPour(ArrayList iFlexibles) {
+        container_where_they_pour.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
+        adapter_where_they_pour.clear();
+        adapter_where_they_pour.addItems(0, iFlexibles);
         if(iFlexibles.size()==3)
-            adapter_resto.addItem(adapter_resto.getItemCount(),new ItemShowAllResto());
-        adapter_resto.notifyDataSetChanged();
+            adapter_where_they_pour.addItem(adapter_where_they_pour.getItemCount(),new ItemShowAllResto());
+        adapter_where_they_pour.notifyDataSetChanged();
 
     }
 
     @Override
-    public void addItemsInterest(List<IFlexible> iFlexibles) {
-        container_recycler_interest.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
-        adapter_interest.clear();
-        adapter_interest.addItems(0,iFlexibles);
-        adapter_interest.notifyDataSetChanged();
-        recycler_interest.setAdapter(adapter_interest);
+    public void addItemsAddedToFavorite(List iFlexibles) {
+        container_added_to_favorite.setVisibility(iFlexibles.size()>0?View.VISIBLE:View.GONE);
+        adapter_added_to_favorite.clear();
+        adapter_added_to_favorite.addItems(0,iFlexibles);
+        adapter_added_to_favorite.notifyDataSetChanged();
+        recycler_added_to_favorite.setAdapter(adapter_added_to_favorite);
     }
 
     @Override
     public void setProductAverageValue(List<Averagevalue> models) {
+        double value=0;
         try {
-            panel2_aroma.setText(String.valueOf(models.get(0).getAverage_value()));
-            panel2_aroma.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+            value=models.get(0).getAverage_value();
+            panel2_aroma.setText(String.valueOf(value));
+            panel2_aroma.setTextColor(getValueColor(value));
         }catch (Exception e){}
         try {
-            panel2_aftertaste.setText(String.valueOf(models.get(3).getAverage_value()));
-            panel2_aftertaste.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+            value=models.get(3).getAverage_value();
+            panel2_aftertaste.setText(String.valueOf(value));
+            panel2_aftertaste.setTextColor(getValueColor(value));
         }catch (Exception e){}
         try {
-            panel2_color.setText(String.valueOf(models.get(2).getAverage_value()));
-            panel2_color.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+            value=models.get(2).getAverage_value();
+            panel2_color.setText(String.valueOf(value));
+            panel2_color.setTextColor(getValueColor(value));
         }catch (Exception e){}
         try {
-            panel2_taste.setText(String.valueOf(models.get(1).getAverage_value()));
-            panel2_taste.setTextColor(getUsernameColor(panel2_aroma.getText().toString()));
+            value=models.get(1).getAverage_value();
+            panel2_taste.setText(String.valueOf(value));
+            panel2_taste.setTextColor(getValueColor(value));
         }catch (Exception e){}
     }
 
@@ -322,44 +326,42 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
             case Actions.ACTION_SHOW_ALL_RESTO_BY_BEER:{
                 Intent intent=new Intent(MainActivity.SEARCH_FRAGMENT,null,this,MainActivity.class);
                 startActivity(intent);
-                return;
-            }
-        }
-
-
-        Interest interest;
-        if(payload instanceof Resto) {
-            interest = new Interest((Resto) payload);
-        }else if(payload instanceof Interest) {
-            interest = new Interest((Interest) payload);
-        }else if(payload instanceof Review) {
-            interest = new Interest((Review) payload);
-        }else
-         return;
-
-        switch (interest.getRelated_model()) {
-            case Keys.CAP_RESTO: {
+            }break;
+            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
                 Intent intent = new Intent(this, RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID, interest);
+                intent.putExtra(Keys.RESTO_ID, (Interest)payload);
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
-            }
-            break;
-            case Keys.CAP_USER:{
+            }break;
+            case Actions.ACTION_CLICK_ON_ITEM_USER: {
                 startActivityForResult(
-                        new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(interest.getUser_info().getId())), this, ProfileEditActivity.class),
+                        new Intent(
+                                String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                                Uri.parse(String.valueOf(((Interest) payload).getUser_info().getId())),
+                                this,
+                                ProfileEditActivity.class
+                        ),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );
-            }
+            }break;
+            case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:{
+                startActivityForResult(
+                        new Intent(
+                                String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                                Uri.parse(String.valueOf(((Review) payload).getUser_id())),
+                                this,
+                                ProfileEditActivity.class
+                        ),
+                        RequestCodes.REQUEST_CODE_REFRESH_ITEMS
+                );
+
+            }break;
         }
+
     }
-    private int getUsernameColor(String username) {
-        int[] mUsernameColors=getResources().getIntArray(R.array.username_colors);
-        int hash = 7;
-        for (int i = 0, len = username.length(); i < len; i++) {
-            hash = username.codePointAt(i) + (hash << 5) - hash;
-        }
-        int index = Math.abs(hash % mUsernameColors.length);
-        return mUsernameColors[index];
+    private int getValueColor(double value) {
+        int index=(int)Math.round(value);
+        int[] mValueColor=getResources().getIntArray(R.array.product_average_value);
+        return mValueColor[index>4?4:index];
     }
 
 }

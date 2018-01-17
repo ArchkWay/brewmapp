@@ -241,13 +241,17 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                             @Override
                             public void onNext(ListResponse<Resto> listResponse) {
                                 super.onNext(listResponse);
-                                ArrayList<RestoInfo> restoInfoArrayList=new ArrayList<>();
-                                for (Resto resto:listResponse.getModels()) {
-                                    RestoInfo restoInfo = new RestoInfo();
-                                    restoInfo.setModel(resto);
-                                    restoInfoArrayList.add(restoInfo);
-                                }
-                                view.addItemsResto(new ArrayList<>(new Restos(restoInfoArrayList).getModels()));
+//                                ArrayList<RestoInfo> restoInfoArrayList=new ArrayList<>();
+//                                for (Resto resto:listResponse.getModels()) {
+//                                    RestoInfo restoInfo = new RestoInfo();
+//                                    restoInfo.setModel(resto);
+//                                    restoInfoArrayList.add(restoInfo);
+//                                }
+//                                view.addItemsWhereTheyPour(new ArrayList<>(new Restos(restoInfoArrayList).getModels()));
+                                ArrayList<InterestInfo> interestInfos=new ArrayList<>();
+                                for (Resto resto:listResponse.getModels())
+                                    interestInfos.add(new InterestInfo(new Interest(resto)));
+                                view.addItemsWhereTheyPour(new ArrayList<>(interestInfos));
                                 loadWhoIsInterested(mode);
                             }
 
@@ -269,7 +273,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);
-                                view.addItemsInterest(iFlexibles);
+                                view.addItemsAddedToFavorite(iFlexibles);
                                 loadProductAverageValue(mode);
                             }
 

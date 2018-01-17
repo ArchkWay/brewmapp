@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Review;
 import com.squareup.picasso.Picasso;
@@ -68,7 +69,7 @@ public class WhoIsInterestedView extends BaseLinearLayout implements Interactive
 
     @Override
     public void setListener(Listener listener) {
-        setOnClickListener(view -> listener.onModelAction(0,model));
+        setOnClickListener(view -> listener.onModelAction(Actions.ACTION_CLICK_ON_ITEM_USER,model));
     }
 
     @Override

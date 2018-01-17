@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Review;
 import com.squareup.picasso.Picasso;
 
@@ -69,7 +70,7 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
 
     @Override
     public void setListener(Listener listener) {
-        setOnClickListener(v->listener.onModelAction(0,model));
+        setOnClickListener(v->listener.onModelAction(Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER,model));
     }
 
     @Override

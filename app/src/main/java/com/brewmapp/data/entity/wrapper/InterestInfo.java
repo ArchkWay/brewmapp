@@ -19,6 +19,10 @@ public class InterestInfo extends AdapterItem<Interest, InterestView> {
         setModel(new Interest(resto));
     }
 
+    public InterestInfo(Interest interest) {
+        setModel(interest);
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.view_interest;

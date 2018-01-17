@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,7 +55,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
-    private int mode;
+    private String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,41 +83,44 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         };
 
         switch (mode){
-            case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
+            case MODE_SHOW_AND_SELECT_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_beer));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
-            case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
+            case MODE_SHOW_AND_SELECT_RESTO:
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_resto));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
-            case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
+            case MODE_SHOW_AND_SELECT_FRIENDS:
                 setTitle(R.string.action_find_friends);
                 fullSearchPackage.setType(Keys.TYPE_USER);
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
-            case MODE_ACTIVTY_SHOW_HASHTAG:
+            case MODE_SHOW_HASHTAG:
                 fullSearchPackage.setType(Keys.HASHTAG);
-
                 toolbarSearch.setVisibility(View.GONE);
                 try{
                     String strRequest=getIntent().getData().toString().replace("#","").replace("\n","");
                     if(strRequest.length()>0) {
                         prepareQuery(strRequest);
                         setTitle("Хэштег - "+strRequest);
-                    }
-                    else
+                    }else
                         commonError();
                 }catch (Exception e){
                     commonError(e.getMessage());
                 }
+                break;
+            case MODE_SHOW_REVIEWS :
+                toolbarSearch.setVisibility(View.GONE);
+                start_search.setVisibility(View.GONE);
+                setTitle(R.string.action_text_title_reviews);
                 break;
             default:
                 commonError();
@@ -203,6 +205,12 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         toolbarTitle.setText(getTitle());
     }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
+    }
+
     //***************************************
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
@@ -216,12 +224,12 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         }else {
             swipe.setRefreshing(true);
             switch (mode){
-                case MODE_ACTIVTY_SHOW_AND_SELECT_BEER:
-                case MODE_ACTIVTY_SHOW_AND_SELECT_RESTO:
-                case MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS:
+                case MODE_SHOW_AND_SELECT_BEER:
+                case MODE_SHOW_AND_SELECT_RESTO:
+                case MODE_SHOW_AND_SELECT_FRIENDS:
                     presenter.sendQueryFullSearch(fullSearchPackage);
                     break;
-                case MODE_ACTIVTY_SHOW_HASHTAG:
+                case MODE_SHOW_HASHTAG:
                     presenter.sentQueryQuickSearch(fullSearchPackage);
                     break;
                 default:

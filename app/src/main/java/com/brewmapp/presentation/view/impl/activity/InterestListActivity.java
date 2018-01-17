@@ -23,6 +23,7 @@ import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.view.contract.InterestListView;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.impl.widget.InterestView;
 
 import java.io.Serializable;
@@ -149,7 +150,15 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:
-                startActivityForResult(new Intent(loadInterestPackage.getFilterInterest(),null,this, MultiListActivity.class), REQUEST_INTEREST);
+                switch (loadInterestPackage.getFilterInterest()){
+                    case Keys.CAP_BEER:
+                        startActivityForResult(new Intent(MultiListView.MODE_SHOW_AND_SELECT_BEER,null,this, MultiListActivity.class), REQUEST_INTEREST);
+                        break;
+                    case Keys.CAP_RESTO:
+                        startActivityForResult(new Intent(MultiListView.MODE_SHOW_AND_SELECT_RESTO,null,this, MultiListActivity.class), REQUEST_INTEREST);
+                        break;
+                }
+
             default:
                 return super.onOptionsItemSelected(item);
         }

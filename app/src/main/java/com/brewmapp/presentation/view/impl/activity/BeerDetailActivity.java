@@ -25,7 +25,6 @@ import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.entity.wrapper.ItemShowAllResto;
 import com.brewmapp.data.pojo.LikeDislikePackage;
@@ -33,6 +32,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -78,6 +78,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     @BindView(R.id.view_like_counter)    TextView like_counter;
     @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
     @BindView(R.id.activity_beer_panel_favorite_icon)    ImageView fav_icon;
+    @BindView(R.id.activity_beer_panel_map)    View panel_map;
+    @BindView(R.id.activity_beer_panel_reviews)    View panel_reviews;
     @BindView(R.id.activity_beer_details_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_beer_detail_button_review)    Button button_review;
     @BindView(R.id.activity_beer_details_empty_text_reviews)    TextView empty_text_reviews;
@@ -180,6 +182,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
+        panel_map.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MainActivity.MODE_MAP_FRAGMENT,null,BeerDetailActivity.this,MainActivity.class)));
+        panel_reviews.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS,Uri.parse(String.valueOf(beer.getId())),this,MultiListActivity.class)));
 
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_where_they_pour.setLayoutManager(new LinearLayoutManager(this));
@@ -191,6 +195,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
         recycler_where_they_pour.setAdapter(adapter_where_they_pour);
         recycler_reviews.setAdapter(adapter_review);
+
+
     }
 
     @Override
@@ -324,7 +330,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
         switch (action){
             case Actions.ACTION_SHOW_ALL_RESTO_BY_BEER:{
-                Intent intent=new Intent(MainActivity.SEARCH_FRAGMENT,null,this,MainActivity.class);
+                Intent intent=new Intent(MainActivity.MODE_SEARCH_FRAGMENT,null,this,MainActivity.class);
                 startActivity(intent);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{

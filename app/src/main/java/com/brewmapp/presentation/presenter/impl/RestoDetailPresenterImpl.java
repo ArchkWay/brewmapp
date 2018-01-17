@@ -50,7 +50,6 @@ import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
-import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
 import java.util.ArrayList;
@@ -206,7 +205,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         tempDataHolder.storeUiSetting();
         //set mode EventsFragment
         Intent intent=new Intent(
-                MainActivity.MODE_ONLY_EVENT_FRAGMENT,
+                MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
                 null,
                 restoDetailActivity,
                 MainActivity.class);
@@ -508,7 +507,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         );
 
         tempDataHolder.storeUiSetting();
-        Intent intent=new Intent(MainActivity.MODE_ONLY_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
+        Intent intent=new Intent(MainActivity.MODE_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
         intent.putExtra(Keys.LOCATION,restoLocation);
         restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
 

@@ -16,7 +16,7 @@ public interface MultiListPresenter extends LivePresenter<MultiListView> {
 
     void sendQueryFullSearch(FullSearchPackage fullSearchPackage);
 
-    int parseIntent(Intent intent);
+    String parseIntent(Intent intent);
 
     void sentQueryQuickSearch(FullSearchPackage fullSearchPackage);
 

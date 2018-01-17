@@ -13,8 +13,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,9 +104,9 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     public static final String KEY_FIRST_FRAGMENT = "first_fragment";
     public static final String MODE_DEFAULT = "default";
-    public static final String MODE_ONLY_EVENT_FRAGMENT = "event_fragment";
-    public static final String MODE_ONLY_MAP_FRAGMENT = "map_fragment";
-    public static final String SEARCH_FRAGMENT = "search_fragment";
+    public static final String MODE_EVENT_FRAGMENT_WITHOUT_TABS = "event_fragment";
+    public static final String MODE_MAP_FRAGMENT = "map_fragment";
+    public static final String MODE_SEARCH_FRAGMENT = "search_fragment";
 
 
     DuoDrawerToggle drawerToggle;
@@ -117,7 +115,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); //getIntent().getData().getPath()
+        setContentView(R.layout.activity_main);
         Paper.init(this);
         Paper.book().destroy();
     }
@@ -202,11 +200,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public void showFragment(BaseFragment fragment) {
-//        if (fragment instanceof SearchFragment) {
-//            mode = SEARCH_FRAGMENT;
-//        } else {
-//            mode = presenter.parseMode(getIntent());
-//        }
         fragment.setArguments(presenter.prepareArguments(getIntent(),container));
         menuToShow = fragment.getMenuToInflate();
         invalidateOptionsMenu();
@@ -310,7 +303,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             case MODE_DEFAULT:
                 setDrawer();
                 break;
-            case MODE_ONLY_EVENT_FRAGMENT:
+            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
                 enableBackButton();
                 navigator.storeCodeActiveFragment(MenuField.EVENTS);
                 navigator.storeCodeTebEventFragment(
@@ -318,12 +311,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 );
                 setResult(RESULT_OK);
                 break;
-            case MODE_ONLY_MAP_FRAGMENT:
+            case MODE_MAP_FRAGMENT:
                 enableBackButton();
                 navigator.storeCodeActiveFragment(MenuField.MAP);
                 setResult(RESULT_OK);
                 break;
-            case SEARCH_FRAGMENT:
+            case MODE_SEARCH_FRAGMENT:
                 navigator.storeCodeActiveFragment(MenuField.SEARCH);
                 break;
         }
@@ -333,7 +326,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         navigator.onDrawerClosed();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         switch (mode){
@@ -342,12 +334,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                     getMenuInflater().inflate(menuToShow, menu);
                 }
                 break;
-            case MODE_ONLY_EVENT_FRAGMENT:
-            case MODE_ONLY_MAP_FRAGMENT:
+            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
+            case MODE_MAP_FRAGMENT:
                 if (menu!=null) menu.clear();
                 getMenuInflater().inflate(R.menu.stub, menu);
                 break;
-            case SEARCH_FRAGMENT:
+            case MODE_SEARCH_FRAGMENT:
                 if (menu!=null) menu.clear();
                 getMenuInflater().inflate(R.menu.stub, menu);
                 break;

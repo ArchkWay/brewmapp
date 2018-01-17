@@ -5,7 +5,6 @@ import android.content.Intent;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.FullSearchTask;
-import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.task.QuickSearchTask;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.MultiListView;
@@ -72,16 +71,18 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     }
 
     @Override
-    public int parseIntent(Intent intent) {
+    public String parseIntent(Intent intent) {
         switch (intent.getAction()) {
-            case Keys.CAP_BEER:
-                return MultiListView.MODE_ACTIVTY_SHOW_AND_SELECT_BEER;
-            case Keys.CAP_RESTO:
-                return MultiListView.MODE_ACTIVTY_SHOW_AND_SELECT_RESTO;
+            case MultiListView.MODE_SHOW_AND_SELECT_BEER:
+                return MultiListView.MODE_SHOW_AND_SELECT_BEER;
+            case MultiListView.MODE_SHOW_AND_SELECT_RESTO:
+                return MultiListView.MODE_SHOW_AND_SELECT_RESTO;
+            case MultiListView.MODE_SHOW_REVIEWS:
+                return MultiListView.MODE_SHOW_REVIEWS;
             case Keys.HASHTAG:
-                return MultiListView.MODE_ACTIVTY_SHOW_HASHTAG;
+                return MultiListView.MODE_SHOW_HASHTAG;
             case Keys.CAP_USER_FRIENDS:
-                return MultiListView.MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS;
+                return MultiListView.MODE_SHOW_AND_SELECT_FRIENDS;
             default:
                 return MultiListView.MODE_ACTIVTY_ERROR;
         }

@@ -12,11 +12,12 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface MultiListView extends BasicView{
-    int MODE_ACTIVTY_SHOW_AND_SELECT_BEER=0;
-    int MODE_ACTIVTY_SHOW_AND_SELECT_RESTO=1;
-    int MODE_ACTIVTY_SHOW_HASHTAG=2;
-    int MODE_ACTIVTY_ERROR=3;
-    int MODE_ACTIVTY_SHOW_AND_SELECT_FRIENDS =4;
+    String MODE_SHOW_AND_SELECT_BEER ="0";
+    String MODE_SHOW_AND_SELECT_RESTO ="1";
+    String MODE_SHOW_HASHTAG ="2";
+    String MODE_ACTIVTY_ERROR="3";
+    String MODE_SHOW_AND_SELECT_FRIENDS ="4";
+    String MODE_SHOW_REVIEWS ="5";
 
     void appendItems(List<IFlexible> s);
     void onError();

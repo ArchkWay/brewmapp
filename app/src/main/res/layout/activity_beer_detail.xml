@@ -165,7 +165,7 @@
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:gravity="center"
-                            android:id="@+id/activity.resto.panel.reviews">
+                            android:id="@+id/activity.beer.panel.reviews">
                             <ImageView
                                 android:layout_width="@dimen/common_block_space_triple"
                                 android:layout_height="@dimen/common_block_space_triple"

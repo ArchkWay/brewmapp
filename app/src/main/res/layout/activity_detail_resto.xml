@@ -231,6 +231,7 @@
                     android:layout_weight="1"
                     android:lines="1"
                     android:text="@string/message_send"
+                    android:ellipsize="end"
                     />
 
                 <Button

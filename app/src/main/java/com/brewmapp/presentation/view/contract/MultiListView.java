@@ -17,7 +17,8 @@ public interface MultiListView extends BasicView{
     String MODE_SHOW_HASHTAG ="2";
     String MODE_ACTIVTY_ERROR="3";
     String MODE_SHOW_AND_SELECT_FRIENDS ="4";
-    String MODE_SHOW_REVIEWS ="5";
+    String MODE_SHOW_REVIEWS_BEER ="5";
+    String MODE_SHOW_REVIEWS_RESTO ="6";
 
     void appendItems(List<IFlexible> s);
     void onError();

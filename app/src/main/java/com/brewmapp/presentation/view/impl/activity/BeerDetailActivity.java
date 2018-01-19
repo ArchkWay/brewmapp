@@ -183,7 +183,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
         panel_map.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MainActivity.MODE_MAP_FRAGMENT,null,BeerDetailActivity.this,MainActivity.class)));
-        panel_reviews.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS,Uri.parse(String.valueOf(beer.getId())),this,MultiListActivity.class)));
+        panel_reviews.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_BEER,Uri.parse(String.valueOf(beer.getId())),this,MultiListActivity.class)));
 
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_where_they_pour.setLayoutManager(new LinearLayoutManager(this));
@@ -265,7 +265,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     }
 
     @Override
-    public void setReviews(List<IFlexible> iFlexibles) {
+    public void addItemsReviews(List<IFlexible> iFlexibles) {
             empty_text_reviews.setVisibility(iFlexibles.size() == 0 ? View.VISIBLE : View.GONE);
             adapter_review.clear();
             adapter_review.addItems(0, iFlexibles);

@@ -158,14 +158,14 @@ public class BeerEditFragment extends BaseFragment  implements BeerEditFragmentV
 
     public interface OnFragmentInteractionListener {
         void commonError(String... message);
-
         void invalidateOptionsMenu();
+        void setTitle(CharSequence name);
     }
 
     class FillContent{
 
         public FillContent(Beer beer) {
-            getActivity().setTitle(beer.getTitle());
+            mListener.setTitle(beer.getTitle());
             fillSlider(beer);
             fillTexts(beer);
         }

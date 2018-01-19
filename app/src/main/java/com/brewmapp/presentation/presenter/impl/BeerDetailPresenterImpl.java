@@ -11,10 +11,8 @@ import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
-import com.brewmapp.data.entity.container.Restos;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -218,7 +216,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                     case Actions.MODE_REFRESH_ALL:
                         containerTasks.loadReviewsTask(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
                             @Override public void onNext(List<IFlexible> iFlexibles ) {
-                                super.onNext(iFlexibles);view.setReviews(iFlexibles);loadResto(mode);
+                                super.onNext(iFlexibles);view.addItemsReviews(iFlexibles);loadResto(mode);
                             }
                             @Override public void onError(Throwable e) {
                                 super.onError(e);view.commonError(e.getMessage());

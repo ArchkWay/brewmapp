@@ -6,6 +6,7 @@ import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.QuickSearchTask;
+import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.MultiListView;
 
@@ -27,13 +28,14 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     private FullSearchTask fullSearchTask;
     private QuickSearchTask quickSearchTask;
-
+    private ContainerTasks containerTasks;
 
 
     @Inject
-    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
+        this.containerTasks = containerTasks;
 
     }
 
@@ -77,8 +79,10 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                 return MultiListView.MODE_SHOW_AND_SELECT_BEER;
             case MultiListView.MODE_SHOW_AND_SELECT_RESTO:
                 return MultiListView.MODE_SHOW_AND_SELECT_RESTO;
-            case MultiListView.MODE_SHOW_REVIEWS:
-                return MultiListView.MODE_SHOW_REVIEWS;
+            case MultiListView.MODE_SHOW_REVIEWS_BEER:
+                return MultiListView.MODE_SHOW_REVIEWS_BEER;
+            case MultiListView.MODE_SHOW_REVIEWS_RESTO:
+                return MultiListView.MODE_SHOW_REVIEWS_RESTO;
             case Keys.HASHTAG:
                 return MultiListView.MODE_SHOW_HASHTAG;
             case Keys.CAP_USER_FRIENDS:
@@ -104,6 +108,32 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
             }
         });
 
+    }
+
+    @Override
+    public void loadReviewsResto(int id_resto) {
+        containerTasks.loadReviewsTask(Keys.CAP_RESTO,id_resto,new SimpleSubscriber<List<IFlexible>>(){
+            @Override public void onNext(List<IFlexible> iFlexibles ) {
+                super.onNext(iFlexibles);
+                view.appendItems(iFlexibles);
+            }
+            @Override public void onError(Throwable e) {
+                super.onError(e);view.commonError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void loadReviewsBeer(int id_beer) {
+        containerTasks.loadReviewsTask(Keys.CAP_BEER,id_beer,new SimpleSubscriber<List<IFlexible>>(){
+            @Override public void onNext(List<IFlexible> iFlexibles ) {
+                super.onNext(iFlexibles);
+                view.appendItems(iFlexibles);
+            }
+            @Override public void onError(Throwable e) {
+                super.onError(e);view.commonError(e.getMessage());
+            }
+        });
     }
 
 }

@@ -213,7 +213,6 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
 
         public FillContent(RestoDetail restoDetail) {
             mListener.setTitle(restoDetail.getResto().getName());
-            getActivity().setTitle(restoDetail.getResto().getName());
             initSlider(restoDetail.getResto());
             fillTexts(restoDetail);
         }

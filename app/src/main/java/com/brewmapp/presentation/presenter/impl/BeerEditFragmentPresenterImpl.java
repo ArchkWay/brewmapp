@@ -64,13 +64,9 @@ public class BeerEditFragmentPresenterImpl extends BasePresenter<BeerEditFragmen
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
-                try {
                     beer_old_data=((BeerInfo)iFlexibles.get(0)).getModel();
                     beer_new_data=beer_old_data.clone();
                     view.setContent(beer_old_data);
-                }catch (Exception e){
-                    view.commonError(e.getMessage());
-                }
             }
 
             @Override

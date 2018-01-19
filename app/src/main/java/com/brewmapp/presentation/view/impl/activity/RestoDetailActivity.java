@@ -33,6 +33,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -162,7 +163,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
-        //layout_fav.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);});
         private_message.setOnClickListener(v -> presenter.startChat(resto.getUser_id()));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
@@ -171,7 +171,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
         panel_favorite.setOnClickListener(v->{presenter.clickFav();setResult(RESULT_OK);});
         panel_i_owner.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
-        panel_reviews.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
+        panel_reviews.setOnClickListener(v->RestoDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_RESTO,Uri.parse(String.valueOf(resto.getId())),this,MultiListActivity.class)));
         added_favorites.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
 
 

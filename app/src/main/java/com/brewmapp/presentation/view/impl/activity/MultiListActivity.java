@@ -71,7 +71,6 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
         enableBackButton();
 
-        mode=presenter.parseIntent(getIntent());
         fullSearchPackage = new FullSearchPackage();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
@@ -82,6 +81,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
             }
         };
 
+        mode=presenter.parseIntent(getIntent());
         switch (mode){
             case MODE_SHOW_AND_SELECT_BEER:
                 fullSearchPackage.setType(Keys.TYPE_BEER);
@@ -117,10 +117,28 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                     commonError(e.getMessage());
                 }
                 break;
-            case MODE_SHOW_REVIEWS :
+            case MODE_SHOW_REVIEWS_BEER:
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_reviews);
+                try {
+                    int id_beer=Integer.valueOf(getIntent().getData().toString());
+                    if(id_beer!=0)
+                        presenter.loadReviewsBeer(id_beer);
+                    else
+                        commonError();
+                }catch (Exception e){commonError(e.getMessage());}
+
+                break;
+            case MODE_SHOW_REVIEWS_RESTO:
+                toolbarSearch.setVisibility(View.GONE);
+                start_search.setVisibility(View.GONE);
+                setTitle(R.string.action_text_title_reviews);
+                try {
+                    int id_resto=Integer.valueOf(getIntent().getData().toString());
+                    presenter.loadReviewsResto(id_resto);
+                }catch (Exception e){commonError(e.getMessage());}
+
                 break;
             default:
                 commonError();
@@ -165,7 +183,6 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
         start_search.setVisibility(adapter.getItemCount()==0?View.VISIBLE:View.GONE);
     }
-
 
     @Override
     public void onError() {

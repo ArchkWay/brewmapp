@@ -75,6 +75,8 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     @Override
     public String parseIntent(Intent intent) {
         switch (intent.getAction()) {
+            case MultiListView.MODE_SHOW_ALL_MY_RATING:
+                return MultiListView.MODE_SHOW_ALL_MY_RATING;
             case MultiListView.MODE_SHOW_AND_SELECT_BEER:
                 return MultiListView.MODE_SHOW_AND_SELECT_BEER;
             case MultiListView.MODE_SHOW_AND_SELECT_RESTO:

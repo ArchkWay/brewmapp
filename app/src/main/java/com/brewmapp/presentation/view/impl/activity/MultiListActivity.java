@@ -140,6 +140,11 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 }catch (Exception e){commonError(e.getMessage());}
 
                 break;
+            case MODE_SHOW_ALL_MY_RATING:
+                toolbarSearch.setVisibility(View.GONE);
+                start_search.setVisibility(View.GONE);
+
+                break;
             default:
                 commonError();
         }

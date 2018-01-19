@@ -25,7 +25,7 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
     public static final int NEW_POST = 0;
     public static final int ADD_PHOTO = 1;
     public static final int FAVORITE_BEER = 2;
-    public static final int FAVORITE_BARS = 3;
+    public static final int FAVORITE_RESTO = 3;
     public static final int MY_RATINGS = 4;
 
     public static final int EVENT_DATE = 5;
@@ -104,7 +104,7 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         out.add(new CardMenuField(NEW_POST, R.drawable.ic_new_post, context.getString(R.string.new_post)));
         out.add(new CardMenuField(ADD_PHOTO, R.drawable.ic_new_photo, context.getString(R.string.add_photo)));
         out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_bar, context.getString(R.string.fav_beer)));
-        out.add(new CardMenuField(FAVORITE_BARS, R.drawable.ic_fav_bar, context.getString(R.string.fav_bars)));
+        out.add(new CardMenuField(FAVORITE_RESTO, R.drawable.ic_fav_bar, context.getString(R.string.fav_bars)));
         out.add(new CardMenuField(MY_RATINGS, R.drawable.ic_fav_bar, context.getString(R.string.my_ratings)));
 
 

@@ -20,6 +20,7 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
@@ -225,20 +226,21 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     public boolean onItemClick(int position) {
         switch (position) {
-            case 0:
+            case CardMenuField.NEW_POST:
                 startActivityForResult(new Intent(getActivity(), NewPostActivity.class),REQUEST_CODE_REFRESH_ITEMS);
                 break;
-            case 1:
+            case CardMenuField.ADD_PHOTO:
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
                 break;
-            case 2:
+            case CardMenuField.FAVORITE_BEER:
                 startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListActivity.class));
                 break;
-            case 3:
+            case CardMenuField.FAVORITE_RESTO:
                 startActivityForResult(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class),REQUEST_CODE_REFRESH_ITEMS);
                 break;
-            case 4:
-                startActivity(new Intent(getActivity(), AssessmentsActivity.class));
+            case CardMenuField.MY_RATINGS :
+                //startActivity(new Intent(getActivity(), AssessmentsActivity.class));
+                Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_RATING);
                 break;
         }
         return false;

@@ -13,8 +13,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.container.Subscriptions;
@@ -28,23 +28,22 @@ import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.UserProfile;
-import com.brewmapp.data.entity.container.Posts;
-import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
 import com.brewmapp.presentation.view.contract.ProfileView;
 import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
-import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 
@@ -52,7 +51,6 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
-import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import static android.app.Activity.RESULT_OK;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
@@ -84,7 +82,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Inject    ProfilePresenter presenter;
 
     private FlexibleAdapter<CardMenuField> menuAdapter;
-    private FlexibleModelAdapter<PostInfo> postAdapter;
+    private FlexibleModelAdapter<IFlexible> postAdapter;
     private FlexibleModelAdapter<SubscriptionInfo> subscriptionAdapter;
     private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
 
@@ -101,12 +99,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         menu.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         menu.setAdapter(menuAdapter);
         photosCounter.setOnClickListener(v -> startActivity(new Intent(getActivity(), AlbumsActivity.class)));
-        friendsCounter.setOnClickListener(v -> startActivity(new Intent(getActivity(), FriendsActivity.class)));
-        friendsCounter.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), FriendsActivity.class);
-            intent.putExtra(Keys.SUBSCRIBERS, true);
-            startActivity(intent);
-        });
+        friendsCounter.setOnClickListener(v -> Starter.StartFriendsActivity(getActivity(),true));
 
         segment.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId){
@@ -124,8 +117,8 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
             }
         });
 
-        postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
-        subscriptionAdapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        postAdapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::onClickItem);
+        subscriptionAdapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::onClickItem);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         posts_subs.setLayoutManager(manager);
         posts_subs.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
@@ -135,7 +128,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     }
 
-    private void processAction(int action, Object payload) {
+    private void onClickItem(int action, Object payload) {
         switch (action) {
             case Actions.ACTION_LIKE_POST:
                 presenter.onLikePost(((Post) payload));
@@ -158,13 +151,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        segment.post(new Runnable() {
-            @Override
-            public void run() {
-                segment.check(R.id.fragment_profile_posts_subscription);
-            }
-        });
-
+        segment.post(() -> segment.check(R.id.fragment_profile_posts_subscription));
     }
 
     @Override
@@ -211,9 +198,9 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     }
 
     @Override
-    public void appendPosts(Posts posts) {
+    public void appendPosts(List<IFlexible> posts) {
         if(loadPostsPackage.getPage() == 0) postAdapter.clear();
-        postAdapter.addItems(postAdapter.getItemCount(), posts.getModels());
+        postAdapter.addItems(postAdapter.getItemCount(), posts);
         text_no_record.setVisibility(postAdapter.getItemCount()==0?View.VISIBLE:View.GONE);
         posts_subs.setAdapter(postAdapter);
     }

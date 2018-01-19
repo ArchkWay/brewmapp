@@ -8,6 +8,7 @@ public class ReviewPackage {
     private String related_model;
     private String related_id;
     private String text;
+    private String user_id;
 
     public String getText() {
         return text;
@@ -31,5 +32,13 @@ public class ReviewPackage {
 
     public void setRelated_model(String related_model) {
         this.related_model = related_model;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

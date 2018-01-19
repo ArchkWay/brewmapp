@@ -21,6 +21,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
@@ -182,8 +183,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
-        panel_map.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MainActivity.MODE_MAP_FRAGMENT,null,BeerDetailActivity.this,MainActivity.class)));
-        panel_reviews.setOnClickListener(v->BeerDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_BEER,Uri.parse(String.valueOf(beer.getId())),this,MultiListActivity.class)));
+        panel_map.setOnClickListener(v->Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,null));
+        panel_reviews.setOnClickListener(v-> Starter.MultiListActivity(this,MultiListView.MODE_SHOW_REVIEWS_BEER,beer.getId()));
 
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_where_they_pour.setLayoutManager(new LinearLayoutManager(this));
@@ -195,8 +196,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
         recycler_where_they_pour.setAdapter(adapter_where_they_pour);
         recycler_reviews.setAdapter(adapter_review);
-
-
     }
 
     @Override

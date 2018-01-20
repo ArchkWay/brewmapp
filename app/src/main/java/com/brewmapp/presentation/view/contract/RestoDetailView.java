@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.AverageEvaluation;
-import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.entity.RestoDetail;
 
 import java.util.List;

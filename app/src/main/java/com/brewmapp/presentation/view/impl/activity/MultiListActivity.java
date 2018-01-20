@@ -140,10 +140,12 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 }catch (Exception e){commonError(e.getMessage());}
 
                 break;
-            case MODE_SHOW_ALL_MY_RATING:
+            case MODE_SHOW_ALL_MY_EVALUATION:
+                swipe.setEnabled(false);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
-
+                setTitle(R.string.action_text_title_my_evaluation);
+                presenter.loadMyEvaluation();
                 break;
             default:
                 commonError();
@@ -240,24 +242,28 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         sendQuery();
     }
     private void sendQuery() {
-        if(fullSearchPackage.getStringSearch().length() == 0){
-            fullSearchPackage.setPage(0);
-            appendItems(new ArrayList<>());
-        }else {
-            swipe.setRefreshing(true);
-            switch (mode){
-                case MODE_SHOW_AND_SELECT_BEER:
-                case MODE_SHOW_AND_SELECT_RESTO:
-                case MODE_SHOW_AND_SELECT_FRIENDS:
-                    presenter.sendQueryFullSearch(fullSearchPackage);
-                    break;
-                case MODE_SHOW_HASHTAG:
-                    presenter.sentQueryQuickSearch(fullSearchPackage);
-                    break;
-                default:
-                    commonError();
-            }
+        try {
+            if(fullSearchPackage.getStringSearch().length() == 0){
+                fullSearchPackage.setPage(0);
+                appendItems(new ArrayList<>());
+            }else {
+                swipe.setRefreshing(true);
+                switch (mode){
+                    case MODE_SHOW_AND_SELECT_BEER:
+                    case MODE_SHOW_AND_SELECT_RESTO:
+                    case MODE_SHOW_AND_SELECT_FRIENDS:
+                        presenter.sendQueryFullSearch(fullSearchPackage);
+                        break;
+                    case MODE_SHOW_HASHTAG:
+                        presenter.sentQueryQuickSearch(fullSearchPackage);
+                        break;
+                    default:
+                        commonError();
+                }
 
+            }
+        }catch (Exception e){
+            showMessage(e.getMessage());
         }
     }
     private void refreshItems() {

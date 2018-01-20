@@ -29,7 +29,7 @@ import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
 import com.brewmapp.data.entity.CountryTypes;
-import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
@@ -331,7 +331,7 @@ public interface Api {
 
     @POST("/api/resto/restoevaluation")
     @FormUrlEncoded
-    Call<ListResponse<Evaluation>> getRestoEvaluation(@FieldMap WrapperParams params);
+    Call<ListResponse<EvaluationResto>> getRestoEvaluation(@FieldMap WrapperParams params);
 
     @POST("/api/resto/restoaveragevalue")
     @FormUrlEncoded

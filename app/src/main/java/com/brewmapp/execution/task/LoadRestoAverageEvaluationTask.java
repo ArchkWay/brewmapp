@@ -1,9 +1,7 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.AverageEvaluation;
-import com.brewmapp.data.entity.Evaluation;
 import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
-import com.brewmapp.data.pojo.RestoEvaluationPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -11,7 +9,6 @@ import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 

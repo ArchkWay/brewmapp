@@ -1,6 +1,7 @@
 package com.brewmapp.app.di.component;
 
 import android.app.Service;
+import android.view.View;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
@@ -59,6 +60,7 @@ import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
+import com.brewmapp.presentation.view.impl.widget.ItemEvaluationView;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 @PresenterScope
@@ -121,4 +123,5 @@ public interface PresenterComponent {
     void inject(AddReviewBeerActivity addReviewBeerActivity);
     void inject(MultiFragmentActivity multiFragmentActivity);
     void inject(DialogManageContact dialogManageContact);
+    void inject(ItemEvaluationView itemEvaluationView);
 }

@@ -5,10 +5,9 @@ import android.widget.RatingBar;
 
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.RestoEvaluationPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddReviewTask;
@@ -33,7 +32,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoView> implements AddReviewRestoPresenter {
 
     private RestoDetail restoDetail;
-    private List<Evaluation> evaluationList=new ArrayList<>();
+    private List<EvaluationResto> evaluationRestoList =new ArrayList<>();
     private LoadRestoEvaluationTask loadRestoEvaluationTask;
     private SetRestoEvaluationTask setRestoEvaluationTask;
     private AddReviewTask addReviewTask;
@@ -86,7 +85,7 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
         restoEvaluationPackageBeer.setResto_id(String.valueOf(restoDetail.getResto().getId()));
 
         //load
-        loadRestoEvaluationTask.execute(restoEvaluationPackage,new SimpleSubscriber<List<Evaluation>>(){
+        loadRestoEvaluationTask.execute(restoEvaluationPackage,new SimpleSubscriber<List<EvaluationResto>>(){
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
@@ -94,10 +93,10 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
             }
 
             @Override
-            public void onNext(List<Evaluation> evaluations) {
-                evaluationList.clear();
-                evaluationList.addAll(evaluations);
-                view.setEvaluation(evaluationList);
+            public void onNext(List<EvaluationResto> evaluationRestos) {
+                evaluationRestoList.clear();
+                evaluationRestoList.addAll(evaluationRestos);
+                view.setEvaluation(evaluationRestoList);
             }
         });
     }
@@ -130,7 +129,7 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
 
     @Override
     public void sendReview(Post post) {
-        //Evaluation
+        //EvaluationSend
             setRestoEvaluationTask.execute(restoEvaluationPackageInterior,new SimpleSubscriber<String>(){
                 @Override
                 public void onNext(String s) {

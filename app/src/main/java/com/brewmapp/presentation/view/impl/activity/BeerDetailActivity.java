@@ -333,9 +333,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
                 startActivity(intent);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
-                Intent intent = new Intent(this, RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID, (Interest)payload);
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+                Starter.RestoDetailActivityForResult(this,(Interest)payload,REQUEST_CODE_REFRESH_ITEMS);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_USER: {
                 startActivityForResult(

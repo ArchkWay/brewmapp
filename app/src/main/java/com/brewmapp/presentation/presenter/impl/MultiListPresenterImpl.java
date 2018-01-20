@@ -2,19 +2,31 @@ package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
 
+import com.brewmapp.data.entity.BaseEvaluation;
+import com.brewmapp.data.entity.EvaluationResto;
+import com.brewmapp.data.entity.wrapper.EvaluationData;
+import com.brewmapp.data.entity.wrapper.EvaluationItem;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.RestoEvaluationPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.task.FullSearchTask;
+import com.brewmapp.execution.task.LoadRestoEvaluationTask;
 import com.brewmapp.execution.task.QuickSearchTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.MultiListView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
+import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
@@ -29,13 +41,16 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     private FullSearchTask fullSearchTask;
     private QuickSearchTask quickSearchTask;
     private ContainerTasks containerTasks;
+    private LoadRestoEvaluationTask loadRestoEvaluationTask;
 
 
     @Inject
-    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks,LoadRestoEvaluationTask loadRestoEvaluationTask
+    ){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
         this.containerTasks = containerTasks;
+        this.loadRestoEvaluationTask = loadRestoEvaluationTask;
 
     }
 
@@ -75,8 +90,8 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     @Override
     public String parseIntent(Intent intent) {
         switch (intent.getAction()) {
-            case MultiListView.MODE_SHOW_ALL_MY_RATING:
-                return MultiListView.MODE_SHOW_ALL_MY_RATING;
+            case MultiListView.MODE_SHOW_ALL_MY_EVALUATION:
+                return MultiListView.MODE_SHOW_ALL_MY_EVALUATION;
             case MultiListView.MODE_SHOW_AND_SELECT_BEER:
                 return MultiListView.MODE_SHOW_AND_SELECT_BEER;
             case MultiListView.MODE_SHOW_AND_SELECT_RESTO:
@@ -135,6 +150,44 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
             @Override public void onError(Throwable e) {
                 super.onError(e);view.commonError(e.getMessage());
             }
+        });
+    }
+
+    @Override
+    public void loadMyEvaluation() {
+        RestoEvaluationPackage restoEvaluationPackage=new RestoEvaluationPackage(Wrappers.RESTO_EVALUATION);
+        loadRestoEvaluationTask.execute(restoEvaluationPackage,new SimpleSubscriber<List<EvaluationResto>>(){
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+
+            @Override
+            public void onNext(List<EvaluationResto> evaluationRestos) {
+                super.onNext(evaluationRestos);
+                //collect by id_resto
+                String id_resto=null;
+                HashMap<String,EvaluationData> hashMap=new HashMap<>();
+                for (EvaluationResto evaluationResto:evaluationRestos){
+                    id_resto=evaluationResto.getResto_id();
+                    EvaluationData evaluationData=null;
+                    if(hashMap.containsKey(id_resto))
+                        evaluationData=hashMap.get(id_resto);
+                    else
+                        evaluationData=new EvaluationData(id_resto,Keys.CAP_RESTO);
+                    evaluationData.add(evaluationResto);
+                    hashMap.put(id_resto,evaluationData);
+                }
+
+                ArrayList<IFlexible> itemArrayList=new ArrayList<>();
+                Iterator<EvaluationData> iterator=hashMap.values().iterator();
+                while (iterator.hasNext())
+                    itemArrayList.add(new EvaluationItem(iterator.next()));
+
+                view.appendItems(itemArrayList);
+            }
+
         });
     }
 

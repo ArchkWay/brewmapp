@@ -11,5 +11,5 @@ import java.io.Serializable;
 class EightHundred implements Serializable {
     private User user;
     @SerializedName("evaluation")
-    private Evaluation1 evaluation1;
+    private EvaluationBeer evaluationBeer;
 }

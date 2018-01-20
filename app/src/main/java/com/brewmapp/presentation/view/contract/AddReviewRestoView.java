@@ -1,6 +1,6 @@
 package com.brewmapp.presentation.view.contract;
 
-import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.User;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 
 public interface AddReviewRestoView  extends BasicView {
 
-    void setEvaluation(List<Evaluation> restoDetail);
+    void setEvaluation(List<EvaluationResto> restoDetail);
     void commonError(String... strings);
 
     void setUser(User restoDetail);

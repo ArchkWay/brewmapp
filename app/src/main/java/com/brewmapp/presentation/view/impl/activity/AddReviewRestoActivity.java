@@ -10,8 +10,7 @@ import android.widget.RatingBar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.app.environment.RequestCodes;
-import com.brewmapp.data.entity.Evaluation;
+import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -108,29 +107,29 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
     }
 
     @Override
-    public void setEvaluation(List<Evaluation> evaluationList) {
+    public void setEvaluation(List<EvaluationResto> evaluationRestoList) {
 
         quality_beer.setOnRatingBarChangeListener(presenter.getRatingListener());
         interior.setOnRatingBarChangeListener(presenter.getRatingListener());
         common_effect.setOnRatingBarChangeListener(presenter.getRatingListener());
         service.setOnRatingBarChangeListener(presenter.getRatingListener());
 
-        for (Evaluation evaluation:evaluationList)
-            switch (evaluation.getEvaluation_type()){
+        for (EvaluationResto evaluationResto : evaluationRestoList)
+            switch (evaluationResto.getEvaluation_type()){
                 case Keys.EVLUATION_TYPE_BEER:
-                    quality_beer.setRating(Float.valueOf(evaluation.getEvaluation_value()));
+                    quality_beer.setRating(Float.valueOf(evaluationResto.getEvaluation_value()));
                     quality_beer.setOnRatingBarChangeListener(null);
                     break;
                 case Keys.EVLUATION_TYPE_EFFECT:
-                    common_effect.setRating(Float.valueOf(evaluation.getEvaluation_value()));
+                    common_effect.setRating(Float.valueOf(evaluationResto.getEvaluation_value()));
                     common_effect.setOnRatingBarChangeListener(null);
                     break;
                 case Keys.EVLUATION_TYPE_INTERIOR:
-                    interior.setRating(Float.valueOf(evaluation.getEvaluation_value()));
+                    interior.setRating(Float.valueOf(evaluationResto.getEvaluation_value()));
                     interior.setOnRatingBarChangeListener(null);
                     break;
                 case Keys.EVLUATION_TYPE_SERVICE:
-                    service.setRating(Float.valueOf(evaluation.getEvaluation_value()));
+                    service.setRating(Float.valueOf(evaluationResto.getEvaluation_value()));
                     service.setOnRatingBarChangeListener(null);
                     break;
             }

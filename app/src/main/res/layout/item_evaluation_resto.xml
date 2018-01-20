@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.brewmapp.presentation.view.impl.widget.ItemEvaluationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/common_block_space">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="@dimen/size_avatar_lesser"
+                android:layout_height="@dimen/size_avatar_lesser"
+                android:id="@+id/view.evaluation.avatar"
+                android:scaleType="fitCenter"
+                app:riv_mutate_background="true"
+                android:background="@android:color/transparent"
+                app:riv_oval="true"
+                android:layout_marginLeft="@dimen/common_block_space"
+                android:layout_gravity="top"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="top"
+                android:layout_marginLeft="@dimen/common_block_space"
+                android:layout_marginRight="@dimen/common_block_space"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_value_not_found"
+                    android:textSize="@dimen/text_size_common_biggest"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/view.evaluation.title"
+                    app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+
+                            >
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_interior"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/view.evaluation.interior"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                android:id="@+id/activity.resto.detail.rating.view.service_linear_layout"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_service"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/view.evaluation.service"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:id="@+id/activity.resto.detail.rating.view.beer_linear_layout"
+                            android:layout_marginLeft="@dimen/common_block_space"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_quality_beer"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:id="@+id/view.evaluation.beer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:id="@+id/activity.resto.detail.rating.view.effect_linear_layout"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_common_effect"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:id="@+id/view.evaluation.effect"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    android:lines="1"
+                                    />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="top"
+                >
+                <TextView
+                    android:layout_width="@dimen/common_block_space_triple"
+                    android:layout_height="@dimen/common_block_space_triple"
+                    android:text="@string/text_view_value_not_found"
+                    android:background="@drawable/bg_circle"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    />
+                <ImageView
+                    android:layout_width="@dimen/common_block_space_double"
+                    android:layout_height="@dimen/common_block_space_double"
+                    android:src="@drawable/ic_cell_arrow"
+                    android:layout_marginTop="@dimen/common_block_space"
+                    android:layout_gravity="right"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:background="@color/colorBlockSplitterBorder"/>
+
+</com.brewmapp.presentation.view.impl.widget.ItemEvaluationView>

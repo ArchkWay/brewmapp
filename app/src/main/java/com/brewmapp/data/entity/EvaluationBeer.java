@@ -1,16 +1,15 @@
 package com.brewmapp.data.entity;
 
+import java.io.Serializable;
+
 /**
- * Created by xpusher on 11/3/2017.
+ * Created by Kras on 16.01.2018.
  */
 
-public class Evaluation {
-    private String id;
-    private String resto_id;
-    private String user_id;
-    private String evaluation_type;
-    private String evaluation_value;
-    private String created_at;
+public class EvaluationBeer extends BaseEvaluation implements Serializable{
+
+    private String product_model;
+    private String product_id;
 
     public String getId() {
         return id;
@@ -20,12 +19,20 @@ public class Evaluation {
         this.id = id;
     }
 
-    public String getResto_id() {
-        return resto_id;
+    public String getProduct_model() {
+        return product_model;
     }
 
-    public void setResto_id(String resto_id) {
-        this.resto_id = resto_id;
+    public void setProduct_model(String product_model) {
+        this.product_model = product_model;
+    }
+
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
     }
 
     public String getUser_id() {
@@ -59,4 +66,5 @@ public class Evaluation {
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
+
 }

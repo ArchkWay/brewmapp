@@ -459,5 +459,6 @@
     <string name="text_view_map">Карта</string>
     <string name="text_view_item_show_all_resto">Показать все заведения</string>
     <string name="action_text_title_reviews">Отзывы</string>
+    <string name="action_text_title_my_evaluation">Мои оценки</string>
 
 </resources>

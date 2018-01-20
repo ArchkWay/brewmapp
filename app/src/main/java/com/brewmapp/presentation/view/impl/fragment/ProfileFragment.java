@@ -22,7 +22,6 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
-import com.brewmapp.presentation.view.impl.activity.AssessmentsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
@@ -240,7 +239,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 break;
             case CardMenuField.MY_RATINGS :
                 //startActivity(new Intent(getActivity(), AssessmentsActivity.class));
-                Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_RATING);
+                Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
                 break;
         }
         return false;

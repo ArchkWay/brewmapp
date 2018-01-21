@@ -28,4 +28,6 @@ public interface RestoDetailView extends BasicView{
     void AverageEvaluation(List<AverageEvaluation> evaluations);
 
     void scrollTo(Integer integer);
+
+    void addItemsAddedToFavorite(List<IFlexible> iFlexibles);
 }

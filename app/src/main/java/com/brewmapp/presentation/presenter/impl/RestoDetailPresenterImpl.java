@@ -29,6 +29,7 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.task.LoadUsersByInterestTask;
 import com.brewmapp.execution.task.LoadUsersTask;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
@@ -58,6 +59,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
@@ -92,7 +94,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private String IdSubscription=null;
     private TempDataHolder tempDataHolder =new TempDataHolder();
     private LoadUsersTask loadUsersTask;
-
+    private LoadUsersByInterestTask loadUsersByInterestTask;
+    private Interest interest;
 
     @Inject
     public RestoDetailPresenterImpl(
@@ -110,7 +113,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             RemoveInterestTask removeInterestTask,
             LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask,
             ContainerTasks containerTasks,
-            LoadUsersTask loadUsersTask){
+            LoadUsersTask loadUsersTask,
+            LoadUsersByInterestTask loadUsersByInterestTask){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -126,6 +130,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.loadRestoAverageEvaluationTask=loadRestoAverageEvaluationTask;
         this.containerTasks = containerTasks;
         this.loadUsersTask = loadUsersTask;
+        this.loadUsersByInterestTask = loadUsersByInterestTask;
     }
 
     @Override
@@ -137,7 +142,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     public void onAttach(RestoDetailView restoDetailView) {
         super.onAttach(restoDetailView);
     }
-
 
     @Override
     public void changeSubscription() {
@@ -176,16 +180,14 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
     }
 
-
     @Override
     public void parseIntent(Intent intent) {
         //stub
         restoDetail=new RestoDetail();
         restoDetail.setResto(new Resto());
         try {
-            String id=((Interest) intent.getSerializableExtra(RESTO_ID)).getInterest_info().getId();
-            if(id==null || id.length()==0) {view.commonError();return;}
-            restoDetail.getResto().setId(Integer.valueOf(id));
+            interest=(Interest) intent.getSerializableExtra(RESTO_ID);
+            restoDetail.getResto().setId(Integer.valueOf(interest.getInterest_info().getId()));
         } catch (Exception e){
             view.commonError(e.getMessage());return;
         }
@@ -217,213 +219,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         tempDataHolder.restoreUiSetting();
     }
 
-    private void loadData(int mode) {
-
-        class LoadersAttributes {
-            public LoadersAttributes(int mode) {
-                loadRestoDetails(mode);
-            }
-            private void loadRestoDetails(int mode){
-                if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
-                    LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
-                    loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
-                    loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
-                        @Override public void onNext(RestoDetail _restoDetail) {
-                            super.onNext(_restoDetail);
-                            restoDetail=_restoDetail;
-                            view.setModel(_restoDetail,mode);
-                            loadReviews(mode);
-                        }
-                        @Override public void onError(Throwable e) {
-                            super.onError(e); view.commonError(e.getMessage());
-                        }
-                    });
-                }else {
-                    loadReviews(mode);
-                }
-            }
-            private void loadReviews(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL)
-                    containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
-                        @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
-                        @Override public void onError(Throwable e) {super.onError(e);view.commonError(e.getMessage());}
-                    });
-                else
-                    loadSubscriptions(mode);
-            }
-            private void loadSubscriptions(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL) {
-                    SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
-                    subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
-                    subscriptionPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
-                    loadSubscriptionsListTask.execute(subscriptionPackage,new SimpleSubscriber<ListResponse<Subscription>>(){
-                        @Override
-                        public void onNext(ListResponse<Subscription> subscriptionListResponse) {
-                            super.onNext(subscriptionListResponse);
-                            loadCntSales(mode);
-                            for (Subscription s:subscriptionListResponse.getModels())
-                                if(s.getInformation().getId().equals(String.valueOf(restoDetail.getResto().getId()))) {
-                                    view.SubscriptionExist(true);
-                                    IdSubscription=s.getId();
-                                    return;
-                                }
-                            view.SubscriptionExist(false);
-                            IdSubscription=null;
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);view.commonError();
-                        }
-                    });
-                    }else {
-                        loadCntSales(mode);
-
-                    }
-            }
-            private void loadCntSales(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL) {
-                    LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
-                    loadNewsPackage.setMode(EventsView.MODE_SALES);
-                    loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
-                    loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                    loadSalesTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
-                        @Override
-                        public void onNext(List<IFlexible> flexibleList) {
-                            super.onNext(flexibleList);
-                            view.setCnt(flexibleList.size(),EventsView.MODE_SALES);
-                            loadCntNews(mode);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            view.commonError(e.getMessage());
-                        }
-                    });
-                }else {
-                    loadCntNews(mode);
-
-                }
-            }
-            private void loadCntNews(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL) {
-                    LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
-                    loadNewsPackage.setMode(EventsView.MODE_NEWS);
-                    loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
-                    loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                    loadNewsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
-                        @Override
-                        public void onNext(List<IFlexible> flexibleList) {
-                            super.onNext(flexibleList);
-                            view.setCnt(flexibleList.size(), EventsView.MODE_NEWS);
-                            loadCntEvent(mode);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            view.commonError(e.getMessage());
-                        }
-                    });
-                }else {
-                    loadCntEvent(mode);
-
-                }
-
-            }
-            private void loadCntEvent(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL) {
-                    LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
-                    loadNewsPackage.setMode(EventsView.MODE_EVENTS);
-                    loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
-                    loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                    loadEventsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
-                        @Override
-                        public void onNext(List<IFlexible> flexibleList) {
-                            super.onNext(flexibleList);
-                            view.setCnt(flexibleList.size(), EventsView.MODE_EVENTS);
-                            loadFav(mode);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            view.commonError(e.getMessage());
-                        }
-                    });
-                }else {
-                    loadFav(mode);
-
-                }
-            }
-            private void loadFav(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL) {
-                    LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
-                    loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
-                    loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
-                    loadInterestTask.execute(loadInterestPackage ,new SimpleSubscriber<List<IFlexible>>(){
-                        @Override
-                        public void onNext(List<IFlexible> iFlexibles) {
-                            super.onNext(iFlexibles);
-                            if(iFlexibles.size()==1){
-                                try {
-                                    tempDataHolder.setId_interest(((InterestInfo) iFlexibles.get(0)).getModel().getId());
-                                    tempDataHolder.setFavResto(true);
-                                    view.setFav(true);
-                                }catch (Exception e){
-                                    view.commonError(e.getMessage());
-                                }
-                            }else if(iFlexibles.size()==0){
-                                tempDataHolder.setFavResto(false);
-                                view.setFav(false);
-                            }else {
-                                view.commonError();
-                            }
-
-                            loadAvegagEvaluation(mode);
-                        }
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            view.commonError(e.getMessage());
-                        }
-                    });
-                }else {
-                    loadAvegagEvaluation(mode);
-
-                }
-
-            }
-            private void loadAvegagEvaluation(int mode) {
-                if(mode== Actions.MODE_REFRESH_ALL) {
-                RestoAverageEvaluationPackage restoAverageEvaluationPackage=new RestoAverageEvaluationPackage();
-                restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                loadRestoAverageEvaluationTask.execute(restoAverageEvaluationPackage,new SimpleSubscriber<List<AverageEvaluation>>(){
-                    @Override
-                    public void onNext(List<AverageEvaluation> evaluations) {
-                        super.onNext(evaluations);
-                        view.AverageEvaluation(evaluations);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        view.commonError(e.getMessage());
-                    }
-                });
-                }else {
-                    //THE END
-                }
-            }
-        }
-
-        new LoadersAttributes(mode);
-
-    }
-
     @Override
     public void startShowMenu(RestoDetailActivity restoDetailActivity) {
         view.showMessage(context.getString(R.string.message_develop),0);
@@ -431,7 +226,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void refreshContent(int mode) {
-        loadData(mode);
+        new LoadersAttributes(mode);
     }
 
     @Override
@@ -568,6 +363,228 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         return restoDetail;
     }
 
+    //*****************************************
+    class LoadersAttributes {
+        public LoadersAttributes(int mode) {
+            loadRestoDetails(mode);
+        }
+        private void loadRestoDetails(int mode){
+            if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
+                LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
+                loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
+                loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
+                    @Override public void onNext(RestoDetail _restoDetail) {
+                        super.onNext(_restoDetail);
+                        restoDetail=_restoDetail;
+                        view.setModel(_restoDetail,mode);
+                        loadReviews(mode);
+                    }
+                    @Override public void onError(Throwable e) {
+                        super.onError(e); view.commonError(e.getMessage());
+                    }
+                });
+            }else {
+                loadReviews(mode);
+            }
+        }
+        private void loadReviews(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL)
+                containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
+                    @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
+                    @Override public void onError(Throwable e) {super.onError(e);view.commonError(e.getMessage());}
+                });
+            else
+                loadSubscriptions(mode);
+        }
+        private void loadSubscriptions(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
+                subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
+                subscriptionPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+                loadSubscriptionsListTask.execute(subscriptionPackage,new SimpleSubscriber<ListResponse<Subscription>>(){
+                    @Override
+                    public void onNext(ListResponse<Subscription> subscriptionListResponse) {
+                        super.onNext(subscriptionListResponse);
+                        loadCntSales(mode);
+                        for (Subscription s:subscriptionListResponse.getModels())
+                            if(s.getInformation().getId().equals(String.valueOf(restoDetail.getResto().getId()))) {
+                                view.SubscriptionExist(true);
+                                IdSubscription=s.getId();
+                                return;
+                            }
+                        view.SubscriptionExist(false);
+                        IdSubscription=null;
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);view.commonError();
+                    }
+                });
+            }else {
+                loadCntSales(mode);
+
+            }
+        }
+        private void loadCntSales(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+                loadNewsPackage.setMode(EventsView.MODE_SALES);
+                loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadSalesTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> flexibleList) {
+                        super.onNext(flexibleList);
+                        view.setCnt(flexibleList.size(),EventsView.MODE_SALES);
+                        loadCntNews(mode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }else {
+                loadCntNews(mode);
+
+            }
+        }
+        private void loadCntNews(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+                loadNewsPackage.setMode(EventsView.MODE_NEWS);
+                loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadNewsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> flexibleList) {
+                        super.onNext(flexibleList);
+                        view.setCnt(flexibleList.size(), EventsView.MODE_NEWS);
+                        loadCntEvent(mode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }else {
+                loadCntEvent(mode);
+
+            }
+
+        }
+        private void loadCntEvent(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+                loadNewsPackage.setMode(EventsView.MODE_EVENTS);
+                loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
+                loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadEventsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> flexibleList) {
+                        super.onNext(flexibleList);
+                        view.setCnt(flexibleList.size(), EventsView.MODE_EVENTS);
+                        loadFav(mode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }else {
+                loadFav(mode);
+
+            }
+        }
+        private void loadFav(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
+                loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
+                loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+                loadInterestTask.execute(loadInterestPackage ,new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> iFlexibles) {
+                        super.onNext(iFlexibles);
+                        if(iFlexibles.size()==1){
+                            try {
+                                tempDataHolder.setId_interest(((InterestInfo) iFlexibles.get(0)).getModel().getId());
+                                tempDataHolder.setFavResto(true);
+                                view.setFav(true);
+                            }catch (Exception e){
+                                view.commonError(e.getMessage());
+                            }
+                        }else if(iFlexibles.size()==0){
+                            tempDataHolder.setFavResto(false);
+                            view.setFav(false);
+                        }else {
+                            view.commonError();
+                        }
+
+                        loadAvegagEvaluation(mode);
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }else {
+                loadAvegagEvaluation(mode);
+
+            }
+
+        }
+        private void loadAvegagEvaluation(int mode) {
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                RestoAverageEvaluationPackage restoAverageEvaluationPackage=new RestoAverageEvaluationPackage();
+                restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+                loadRestoAverageEvaluationTask.execute(restoAverageEvaluationPackage,new SimpleSubscriber<List<AverageEvaluation>>(){
+                    @Override
+                    public void onNext(List<AverageEvaluation> evaluations) {
+                        super.onNext(evaluations);
+                        view.AverageEvaluation(evaluations);
+                        loadInterests(mode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }else {
+                loadInterests(mode);
+            }
+        }
+
+        private void loadInterests(int mode) {
+            if(interest.getId()==null)
+                view.addItemsAddedToFavorite(new ArrayList<>());
+            else
+                loadUsersByInterestTask.execute(Integer.valueOf(interest.getId()),new SimpleSubscriber<List<IFlexible>>(){
+                    @Override
+                    public void onNext(List<IFlexible> iFlexibles) {
+                        super.onNext(iFlexibles);
+                        view.addItemsAddedToFavorite(iFlexibles);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+
+        }
+    }
     class TempDataHolder {
         private boolean favResto;
         private String id_interest;

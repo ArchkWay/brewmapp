@@ -115,6 +115,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_description_button)    Button button_more_description;
     @BindView(R.id.activity_resto_details_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_resto_details_scroll)    ScrollView scroll;
+    @BindView(R.id.activity_resto_details_container_added_to_favorite)    View container_added_to_favorite;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
@@ -134,6 +135,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private Resto resto;
     private ArrayList<String> photosResto=new ArrayList<>();
     private ArrayList<String> photosRestoPreview=new ArrayList<>();
+    private FlexibleAdapter adapter_favorites;
     private FlexibleAdapter adapter_reviews;
     private  swipeDelayed swipeDelayed=new swipeDelayed();
     private  ArrayList<Photo> photoArrayList;
@@ -156,6 +158,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> Starter.AddReviewRestoActivityForResult(RestoDetailActivity.this,presenter.getRestoDetails(),RequestCodes.REQUEST_CODE_REVIEW));
         adapter_reviews =new FlexibleAdapter<>(new ArrayList<>());
+        adapter_favorites=new FlexibleAdapter<>(new ArrayList<>());
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
@@ -173,7 +176,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         panel_favorite.setOnClickListener(v->{presenter.clickFav();setResult(RESULT_OK);});
         panel_i_owner.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
         panel_reviews.setOnClickListener(v->RestoDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_RESTO,Uri.parse(String.valueOf(resto.getId())),this,MultiListActivity.class)));
-        added_favorites.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
+        added_favorites.setLayoutManager(new LinearLayoutManager(this));
+        added_favorites.setAdapter(adapter_favorites);
 
 
     }
@@ -376,6 +380,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         adapter_reviews.notifyDataSetChanged();
         recycler_reviews.setAdapter(adapter_reviews);
 
+
     }
 
     @Override
@@ -430,6 +435,15 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 break;
         }
 
+
+    }
+
+    @Override
+    public void addItemsAddedToFavorite(List<IFlexible> iFlexibles) {
+        container_added_to_favorite.setVisibility(iFlexibles.size()==0?View.GONE:View.VISIBLE);
+        adapter_favorites.clear();
+        adapter_favorites.addItems(0,iFlexibles);
+        adapter_favorites.notifyDataSetChanged();
 
     }
 

@@ -264,22 +264,26 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             }
             private void loadWhoIsInterested(int mode) {
                 switch (mode) {
-//                    case Actions.MODE_REFRESH_ALL:
-//                        containerTasks.loadUsersByInteres(Integer.valueOf(interest.getId()), new SimpleSubscriber<List<IFlexible>>() {
-//                            @Override
-//                            public void onNext(List<IFlexible> iFlexibles) {
-//                                super.onNext(iFlexibles);
-//                                view.addItemsAddedToFavorite(iFlexibles);
-//                                loadProductAverageValue(mode);
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                                super.onError(e);
-//                                view.commonError(e.getMessage());
-//                            }
-//                        });
-//                        break;
+                    case Actions.MODE_REFRESH_ALL:
+                        if(interest.getId()==null) {
+                            loadProductAverageValue(mode);
+                            view.addItemsAddedToFavorite(new ArrayList<>());
+                        }else
+                            containerTasks.loadUsersByInteres(Integer.valueOf(interest.getId()), new SimpleSubscriber<List<IFlexible>>() {
+                                @Override
+                                public void onNext(List<IFlexible> iFlexibles) {
+                                    super.onNext(iFlexibles);
+                                    view.addItemsAddedToFavorite(iFlexibles);
+                                    loadProductAverageValue(mode);
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    view.commonError(e.getMessage());
+                                }
+                            });
+                        break;
                         default:
                             loadProductAverageValue(mode);
                 }

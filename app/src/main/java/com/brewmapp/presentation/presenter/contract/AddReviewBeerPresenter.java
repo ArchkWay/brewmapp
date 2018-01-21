@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
+import android.widget.RatingBar;
 
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.presentation.view.contract.AddReviewBeerView;
@@ -16,4 +17,6 @@ public interface AddReviewBeerPresenter extends LivePresenter<AddReviewBeerView>
     void sendReview(Post post);
 
     void parseIntent(Intent intent);
+
+    RatingBar.OnRatingBarChangeListener getRatingBarChangeListener();
 }

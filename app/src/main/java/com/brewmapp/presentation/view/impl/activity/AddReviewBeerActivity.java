@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.RatingBar;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -24,9 +25,16 @@ import ru.frosteye.ovsa.tool.TextTools;
 public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeerView {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.addreviewactivity_review_edit_text)    EditText review_edit_text;
+
+    @BindView(R.id.addreviewactivitybeer_rating_aftertaste)    RatingBar aftertaste;
+    @BindView(R.id.addreviewactivitybeer_rating_color)    RatingBar color;
+    @BindView(R.id.addreviewactivitybeer_rating_flavor)    RatingBar flavor;
+    @BindView(R.id.addreviewactivitybeer_rating_taste)    RatingBar taste;
+
     @Inject    AddReviewBeerPresenter presenter;
 
     private Post post = new Post();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,10 @@ public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeer
         setTitle(R.string.title_activity_add_review);
         enableControls(false, 0);
         registerTextChangeListeners(s -> {post.setText(TextTools.extractTrimmed(review_edit_text)); invalidateOptionsMenu();},review_edit_text);
+        aftertaste.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
+        color.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
+        flavor.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
+        taste.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
 
     }
 

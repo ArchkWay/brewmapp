@@ -4,12 +4,12 @@ package com.brewmapp.data.pojo;
  * Created by xpusher on 11/3/2017.
  */
 
-public class RestoEvaluationPackage {
-    private String resto_id;
+public class EvaluationPackage {
+    private String model_id;
     private String ealuation_type;
     private String ealuation_value;
 
-    public RestoEvaluationPackage(String ealuation_type){
+    public EvaluationPackage(String ealuation_type){
         setEaluation_type(ealuation_type);
     }
 
@@ -29,11 +29,11 @@ public class RestoEvaluationPackage {
         this.ealuation_value = ealuation_value;
     }
 
-    public String getResto_id() {
-        return resto_id;
+    public String getModel_id() {
+        return model_id;
     }
 
-    public void setResto_id(String resto_id) {
-        this.resto_id = resto_id;
+    public void setModel_id(String model_id) {
+        this.model_id = model_id;
     }
 }

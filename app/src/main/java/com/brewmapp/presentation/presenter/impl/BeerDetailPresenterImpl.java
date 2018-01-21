@@ -128,12 +128,10 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
         }
     }
 
-    @Override
-    public void startAddReviewRestoActivity(BeerDetailActivity beerDetailActivity) {
-        Intent intent=new Intent(beerDetailActivity, AddReviewBeerActivity.class);
-        intent.putExtra(Keys.CAP_BEER,beerDetail.getBeer().getId());
-        beerDetailActivity.startActivityForResult(intent, RequestCodes.REQUEST_CODE_REVIEW);
 
+    @Override
+    public BeerDetail getBeerDetail() {
+        return beerDetail;
     }
 
     private void loadData(int mode) {

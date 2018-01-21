@@ -2,6 +2,7 @@ package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
 
+import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 
@@ -21,5 +22,5 @@ public interface BeerDetailPresenter extends LivePresenter<BeerDetailView> {
 
     void clickFav();
 
-    void startAddReviewRestoActivity(BeerDetailActivity beerDetailActivity);
+    BeerDetail getBeerDetail();
 }

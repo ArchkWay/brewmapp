@@ -176,12 +176,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
     }
 
-    @Override
-    public void startAddReviewRestoActivity(RestoDetailActivity restoDetailActivity) {
-        Intent intent=new Intent(restoDetailActivity, AddReviewRestoActivity.class);
-        intent.putExtra(Keys.RESTO_ID,restoDetail);
-        restoDetailActivity.startActivityForResult(intent, RequestCodes.REQUEST_CODE_REVIEW);
-    }
 
     @Override
     public void parseIntent(Intent intent) {
@@ -567,6 +561,11 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
             }
         });
+    }
+
+    @Override
+    public RestoDetail getRestoDetails() {
+        return restoDetail;
     }
 
     class TempDataHolder {

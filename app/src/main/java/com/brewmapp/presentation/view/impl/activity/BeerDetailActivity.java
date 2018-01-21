@@ -182,7 +182,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         layout_like.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLike(LikeDislikePackage.TYPE_DISLIKE));
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
-        button_review.setOnClickListener(view -> presenter.startAddReviewRestoActivity(BeerDetailActivity.this));
+        button_review.setOnClickListener(view -> Starter.AddReviewBeerActivityForResult(BeerDetailActivity.this,presenter.getBeerDetail().getBeer().getId(),RequestCodes.REQUEST_CODE_REVIEW));
         panel_map.setOnClickListener(v->Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,null));
         panel_reviews.setOnClickListener(v-> Starter.MultiListActivity(this,MultiListView.MODE_SHOW_REVIEWS_BEER,beer.getId()));
 

@@ -29,6 +29,7 @@ import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
 import com.brewmapp.data.entity.CountryTypes;
+import com.brewmapp.data.entity.EvaluationBeer;
 import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
@@ -511,5 +512,13 @@ public interface Api {
     @POST("beer/productaveragevalue")
     @FormUrlEncoded
     Call<ListResponse<Averagevalue>> loadProductAverageValue(@FieldMap RequestParams params);
+
+    @POST("/api/beer/productevaluation")
+    @FormUrlEncoded
+    Call<ListResponse<EvaluationBeer>> getBeerEvaluation(@FieldMap WrapperParams params);
+
+    @POST("/api/beer/productevaluation/add")
+    @FormUrlEncoded
+    Call<Object> setBeerEvaluation(@FieldMap WrapperParams params);
 
 }

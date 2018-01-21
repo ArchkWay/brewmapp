@@ -8,7 +8,10 @@ import android.support.v4.app.FragmentActivity;
 
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
+import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
@@ -39,14 +42,28 @@ public class Starter {
         activity.startActivity(new Intent(action,null,activity,MainActivity.class));
     }
 
-    public static void RestoDetailActivityForResult(Activity activity, Interest payload, int requestCodeRefreshItems) {
+    public static void RestoDetailActivityForResult(Activity activity, Interest interest, int requestCode) {
         Intent intent = new Intent(activity, RestoDetailActivity.class);
-        intent.putExtra(Keys.RESTO_ID, (Interest)payload);
-        activity.startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+        intent.putExtra(Keys.RESTO_ID, interest);
+        activity.startActivityForResult(intent, requestCode);
     }
     public static void RestoDetailActivity(Context context, String id_resto) {
         Intent intent = new Intent(context, RestoDetailActivity.class);
         intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto,"")));
         context.startActivity(intent);
+    }
+
+    public static void AddReviewRestoActivityForResult(Activity activity, RestoDetail restoDetails, int requestCodeReview) {
+        Intent intent=new Intent(activity, AddReviewRestoActivity.class);
+        intent.putExtra(Keys.RESTO_ID,restoDetails);
+        activity.startActivityForResult(intent, requestCodeReview);
+
+    }
+
+    public static void AddReviewBeerActivityForResult(Activity activity, String id_beer, int requestCode) {
+        Intent intent=new Intent(activity, AddReviewBeerActivity.class);
+        intent.putExtra(Keys.CAP_BEER,id_beer);
+        activity.startActivityForResult(intent, requestCode);
+
     }
 }

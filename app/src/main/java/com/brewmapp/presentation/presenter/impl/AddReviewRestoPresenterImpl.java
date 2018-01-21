@@ -8,7 +8,7 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.pojo.RestoEvaluationPackage;
+import com.brewmapp.data.pojo.EvaluationPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddReviewTask;
 import com.brewmapp.execution.task.LoadRestoEvaluationTask;
@@ -39,11 +39,11 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
     private UserRepo userRepo;
     private ContainerTasks containerTasks;
 
-    private RestoEvaluationPackage restoEvaluationPackage =new RestoEvaluationPackage(null);
-    private RestoEvaluationPackage restoEvaluationPackageInterior =new RestoEvaluationPackage(Keys.EVLUATION_TYPE_INTERIOR);
-    private RestoEvaluationPackage restoEvaluationPackageService =new RestoEvaluationPackage(Keys.EVLUATION_TYPE_SERVICE);
-    private RestoEvaluationPackage restoEvaluationPackageCommonEffect =new RestoEvaluationPackage(Keys.EVLUATION_TYPE_EFFECT);
-    private RestoEvaluationPackage restoEvaluationPackageBeer =new RestoEvaluationPackage(Keys.EVLUATION_TYPE_BEER);
+    private EvaluationPackage evaluationPackage =new EvaluationPackage(null);
+    private EvaluationPackage evaluationPackageInterior =new EvaluationPackage(Keys.EVLUATION_TYPE_INTERIOR);
+    private EvaluationPackage evaluationPackageService =new EvaluationPackage(Keys.EVLUATION_TYPE_SERVICE);
+    private EvaluationPackage evaluationPackageCommonEffect =new EvaluationPackage(Keys.EVLUATION_TYPE_EFFECT);
+    private EvaluationPackage evaluationPackageBeer =new EvaluationPackage(Keys.EVLUATION_TYPE_BEER);
 
     @Inject
     public AddReviewRestoPresenterImpl(LoadRestoEvaluationTask loadRestoEvaluationTask,SetRestoEvaluationTask setRestoEvaluationTask,UserRepo userRepo,AddReviewTask addReviewTask,ContainerTasks containerTasks){
@@ -78,14 +78,14 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
         //prepare post
         view.setUser(userRepo.load());
         //prepare load
-        restoEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-        restoEvaluationPackageInterior.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-        restoEvaluationPackageService.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-        restoEvaluationPackageCommonEffect.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-        restoEvaluationPackageBeer.setResto_id(String.valueOf(restoDetail.getResto().getId()));
+        evaluationPackage.setModel_id(String.valueOf(restoDetail.getResto().getId()));
+        evaluationPackageInterior.setModel_id(String.valueOf(restoDetail.getResto().getId()));
+        evaluationPackageService.setModel_id(String.valueOf(restoDetail.getResto().getId()));
+        evaluationPackageCommonEffect.setModel_id(String.valueOf(restoDetail.getResto().getId()));
+        evaluationPackageBeer.setModel_id(String.valueOf(restoDetail.getResto().getId()));
 
         //load
-        loadRestoEvaluationTask.execute(restoEvaluationPackage,new SimpleSubscriber<List<EvaluationResto>>(){
+        loadRestoEvaluationTask.execute(evaluationPackage,new SimpleSubscriber<List<EvaluationResto>>(){
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
@@ -108,16 +108,16 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 switch (ratingBar.getId()){
                     case R.id.addreviewactivity_rating_interior:
-                        restoEvaluationPackageInterior.setEaluation_value(String.valueOf(v));
+                        evaluationPackageInterior.setEaluation_value(String.valueOf(v));
                         break;
                     case R.id.addreviewactivity_rating_common_effect:
-                        restoEvaluationPackageCommonEffect.setEaluation_value(String.valueOf(v));
+                        evaluationPackageCommonEffect.setEaluation_value(String.valueOf(v));
                         break;
                     case R.id.addreviewactivity_rating_quality_beer:
-                        restoEvaluationPackageBeer.setEaluation_value(String.valueOf(v));
+                        evaluationPackageBeer.setEaluation_value(String.valueOf(v));
                         break;
                     case R.id.addreviewactivity_rating_service:
-                        restoEvaluationPackageService.setEaluation_value(String.valueOf(v));
+                        evaluationPackageService.setEaluation_value(String.valueOf(v));
                         break;
                     default:
                             return;
@@ -130,19 +130,19 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
     @Override
     public void sendReview(Post post) {
         //EvaluationSend
-            setRestoEvaluationTask.execute(restoEvaluationPackageInterior,new SimpleSubscriber<String>(){
+            setRestoEvaluationTask.execute(evaluationPackageInterior,new SimpleSubscriber<String>(){
                 @Override
                 public void onNext(String s) {
                     super.onNext(s);
-                    setRestoEvaluationTask.execute(restoEvaluationPackageCommonEffect,new SimpleSubscriber<String>(){
+                    setRestoEvaluationTask.execute(evaluationPackageCommonEffect,new SimpleSubscriber<String>(){
                         @Override
                         public void onNext(String s) {
                             super.onNext(s);
-                            setRestoEvaluationTask.execute(restoEvaluationPackageBeer,new SimpleSubscriber<String>(){
+                            setRestoEvaluationTask.execute(evaluationPackageBeer,new SimpleSubscriber<String>(){
                                 @Override
                                 public void onNext(String s) {
                                     super.onNext(s);
-                                    setRestoEvaluationTask.execute(restoEvaluationPackageService);
+                                    setRestoEvaluationTask.execute(evaluationPackageService);
                                 }
                             });
                         }

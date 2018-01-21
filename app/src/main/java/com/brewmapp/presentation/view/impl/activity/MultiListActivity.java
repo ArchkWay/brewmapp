@@ -145,7 +145,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_my_evaluation);
-                presenter.loadMyEvaluation();
+                presenter.loadMyEvaluation(0);
                 break;
             default:
                 commonError();

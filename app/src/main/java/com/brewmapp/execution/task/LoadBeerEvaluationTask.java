@@ -1,7 +1,6 @@
 package com.brewmapp.execution.task;
 
-import com.brewmapp.data.entity.EvaluationResto;
-import com.brewmapp.data.pojo.EvaluationPackage;
+import com.brewmapp.data.entity.EvaluationBeer;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -18,24 +17,24 @@ import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
 /**
- * Created by xpusher on 11/3/2017.
+ * Created by Kras on 21.01.2018.
  */
 
-public class LoadRestoEvaluationTask extends BaseNetworkTask<EvaluationPackage, List<EvaluationResto>> {
+public class LoadBeerEvaluationTask  extends BaseNetworkTask<Integer, List<EvaluationBeer>> {
 
     @Inject
-    public LoadRestoEvaluationTask(MainThread mainThread, Executor executor, Api api) {
+    public LoadBeerEvaluationTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
     }
 
     @Override
-    protected Observable<List<EvaluationResto>> prepareObservable(EvaluationPackage evaluationPackage) {
+    protected Observable<List<EvaluationBeer>> prepareObservable(Integer beer_id) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams params=new WrapperParams(Wrappers.RESTO_EVALUATION);
-                if(evaluationPackage.getModel_id()!=null)
-                    params.addParam(Keys.RESTO_ID, evaluationPackage.getModel_id());
-                ListResponse<EvaluationResto> listResponse= executeCall(getApi().getRestoEvaluation(params));
+                WrapperParams params=new WrapperParams(Wrappers.PRODUCT_EVALUATION);
+                params.addParam(Keys.PRODUCT_MODEL, Keys.CAP_BEER);
+                //params.addParam(Keys.PRODUCT_ID, beer_id);
+                ListResponse<EvaluationBeer> listResponse= executeCall(getApi().getBeerEvaluation(params));
                 subscriber.onNext(listResponse.getModels());
                 subscriber.onComplete();
             } catch (Exception e) {

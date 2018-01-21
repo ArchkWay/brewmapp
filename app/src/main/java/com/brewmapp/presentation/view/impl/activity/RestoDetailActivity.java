@@ -23,6 +23,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Photo;
@@ -153,7 +154,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         slider.stopAutoCycle();
         place.setOnClickListener(v -> presenter.startMapFragment(RestoDetailActivity.this));
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
-        button_revew.setOnClickListener(view -> presenter.startAddReviewRestoActivity(RestoDetailActivity.this));
+        button_revew.setOnClickListener(view -> Starter.AddReviewRestoActivityForResult(RestoDetailActivity.this,presenter.getRestoDetails(),RequestCodes.REQUEST_CODE_REVIEW));
         adapter_reviews =new FlexibleAdapter<>(new ArrayList<>());
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));

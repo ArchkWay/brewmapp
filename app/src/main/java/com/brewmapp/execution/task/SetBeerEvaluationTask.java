@@ -15,13 +15,13 @@ import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
 /**
- * Created by xpusher on 11/3/2017.
+ * Created by Kras on 21.01.2018.
  */
 
-public class SetRestoEvaluationTask extends BaseNetworkTask<EvaluationPackage, String> {
+public class SetBeerEvaluationTask extends BaseNetworkTask<EvaluationPackage, String> {
 
     @Inject
-    public SetRestoEvaluationTask(MainThread mainThread, Executor executor, Api api) {
+    public SetBeerEvaluationTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
     }
 
@@ -29,12 +29,13 @@ public class SetRestoEvaluationTask extends BaseNetworkTask<EvaluationPackage, S
     protected Observable<String> prepareObservable(EvaluationPackage evaluationPackage) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams params=new WrapperParams(Wrappers.RESTO_EVALUATION);
+                WrapperParams params=new WrapperParams(Wrappers.PRODUCT_EVALUATION);
                 if(evaluationPackage.getEaluation_value()!=null) {
-                    params.addParam(Keys.RESTO_ID, evaluationPackage.getModel_id());
+                    params.addParam(Keys.PRODUCT_MODEL, Keys.CAP_BEER);
+                    params.addParam(Keys.PRODUCT_ID, evaluationPackage.getModel_id());
                     params.addParam(Keys.EVLUATION_TYPE, evaluationPackage.getEaluation_type());
                     params.addParam(Keys.EVLUATION_VALUE, evaluationPackage.getEaluation_value());
-                    Object o = executeCall(getApi().setRestoEvaluation(params));
+                    Object o = executeCall(getApi().setBeerEvaluation(params));
                 }
                 subscriber.onNext("");
                 subscriber.onComplete();

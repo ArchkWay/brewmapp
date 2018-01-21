@@ -26,4 +26,5 @@ public class Wrappers {
     public static final String REVIEW = "Review";
     public static final String AVERAGE_EVALUATION = "Average";
 
+    public static final String PRODUCT_EVALUATION = "ProductEvaluation";
 }

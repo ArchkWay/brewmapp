@@ -11,10 +11,153 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                        <!--flavor-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:background="@color/colorGrayLightSemi"
+                            android:gravity="center_vertical"
+                            >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_flavor"
+                                    android:layout_marginLeft="@dimen/common_block_space"
+                                    style="@style/AppTheme.Text.Georgia.Italic"
+                                    android:textColor="@color/colorButtonRed"
+                                    android:textSize="@dimen/text_size_big_phone_bigger"
+                                    />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            >
+                                <RatingBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:numStars="5"
+                                    android:rating="0.5"
+                                    android:stepSize="0.5"
+                                    android:id="@+id/addreviewactivitybeer.rating.flavor"
+
+                                    />
+
+
+                        </LinearLayout>
+                        <!--taste-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:background="@color/colorGrayLightSemi"
+                            android:gravity="center_vertical"
+                            >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_taste"
+                                    android:layout_marginLeft="@dimen/common_block_space"
+                                    style="@style/AppTheme.Text.Georgia.Italic"
+                                    android:textColor="@color/colorButtonRed"
+                                    android:textSize="@dimen/text_size_big_phone_bigger"
+
+                                    />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            >
+                                <RatingBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:numStars="5"
+                                    android:rating="0.5"
+                                    android:stepSize="0.5"
+                                    android:id="@+id/addreviewactivitybeer.rating.taste"
+                                    />
+
+
+                        </LinearLayout>
+                        <!--color-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:background="@color/colorGrayLightSemi"
+                            android:gravity="center_vertical"
+                            >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_quality_color"
+                                    android:layout_marginLeft="@dimen/common_block_space"
+                                    style="@style/AppTheme.Text.Georgia.Italic"
+                                    android:textColor="@color/colorButtonRed"
+                                    android:textSize="@dimen/text_size_big_phone_bigger"
+
+                                    />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            >
+                                <RatingBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:numStars="5"
+                                    android:rating="0.5"
+                                    android:stepSize="0.5"
+                                    android:id="@+id/addreviewactivitybeer.rating.color"
+                                    />
+
+
+                        </LinearLayout>
+                        <!--aftertaste-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:background="@color/colorGrayLightSemi"
+                            android:gravity="center_vertical"
+                            >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_aftertaste"
+                                    android:layout_marginLeft="@dimen/common_block_space"
+                                    style="@style/AppTheme.Text.Georgia.Italic"
+                                    android:textColor="@color/colorButtonRed"
+                                    android:textSize="@dimen/text_size_big_phone_bigger"
+
+                                    />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            >
+                                <RatingBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:numStars="5"
+                                    android:rating="0.5"
+                                    android:stepSize="0.5"
+                                    android:id="@+id/addreviewactivitybeer.rating.aftertaste"
+                                    />
+
+
+                        </LinearLayout>
+
 
                         <LinearLayout
                             android:layout_width="match_parent"

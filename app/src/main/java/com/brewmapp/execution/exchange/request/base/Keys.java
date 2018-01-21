@@ -194,4 +194,6 @@ public class Keys {
     public static final String HEIGHT = "height";
     public static final String STREED = "street";
     public static final String HOUSE = "house";
+    public static final String PRODUCT_MODEL = "product_model";
+    public static final String PRODUCT_ID = "product_id";
 }

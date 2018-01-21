@@ -18,6 +18,9 @@ import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.MultiListView;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,10 +45,11 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     private LoadRestoEvaluationTask loadRestoEvaluationTask;
     private LoadBeerEvaluationTask loadBeerEvaluationTask;
 
+    private ArrayList<IFlexible> itemArrayList=new ArrayList<>();
+
 
     @Inject
-    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks,LoadRestoEvaluationTask loadRestoEvaluationTask,LoadBeerEvaluationTask loadBeerEvaluationTask
-    ){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks,LoadRestoEvaluationTask loadRestoEvaluationTask,LoadBeerEvaluationTask loadBeerEvaluationTask){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
         this.containerTasks = containerTasks;
@@ -182,30 +186,58 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                             hashMap.put(id_resto,evaluationData);
                         }
 
-                        ArrayList<IFlexible> itemArrayList=new ArrayList<>();
+
                         Iterator<EvaluationData> iterator=hashMap.values().iterator();
                         while (iterator.hasNext())
                             itemArrayList.add(new EvaluationItem(iterator.next()));
 
-                        view.appendItems(itemArrayList);
                         loadMyEvaluation(1);
                     }
 
                 });
             }break;
             case 1:{
-                loadBeerEvaluationTask.execute(0,new SimpleSubscriber<List<EvaluationBeer>>()
-                {
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        super.onError(e);
-//                    }
+                loadBeerEvaluationTask.execute(0,
+                        new Subscriber<ArrayList<EvaluationBeer>>() {
+                            @Override
+                            public void onSubscribe(Subscription s) {
 
-//                    @Override
-//                    public void onNext(List<EvaluationBeer> evaluationBeers) {
-//                        super.onNext(evaluationBeers);
-//                    }
-                }
+                            }
+
+                            @Override
+                            public void onNext(ArrayList<EvaluationBeer> evaluationBeers) {
+                                //collect by id_beer
+                                String id_beer=null;
+                                HashMap<String,EvaluationData> hashMap=new HashMap<>();
+                                for (EvaluationBeer evaluationBeer:evaluationBeers){
+                                    id_beer=evaluationBeer.getProduct_id();
+                                    EvaluationData evaluationData=null;
+                                    if(hashMap.containsKey(id_beer))
+                                        evaluationData=hashMap.get(id_beer);
+                                    else
+                                        evaluationData=new EvaluationData(id_beer,Keys.CAP_BEER);
+                                    evaluationData.add(evaluationBeer);
+                                    hashMap.put(id_beer,evaluationData);
+                                }
+
+
+                                Iterator<EvaluationData> iterator=hashMap.values().iterator();
+                                while (iterator.hasNext())
+                                    itemArrayList.add(new EvaluationItem(iterator.next()));
+
+                                view.appendItems(itemArrayList);
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        }
                 );
             }break;
         }

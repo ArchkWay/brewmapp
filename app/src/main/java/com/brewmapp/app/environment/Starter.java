@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 
+import com.brewmapp.R;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
@@ -64,6 +66,13 @@ public class Starter {
         Intent intent=new Intent(activity, AddReviewBeerActivity.class);
         intent.putExtra(Keys.CAP_BEER,id_beer);
         activity.startActivityForResult(intent, requestCode);
+
+    }
+
+    public static void BeerDetailActivity(Context context, String id_beer) {
+        Intent intent = new Intent(context, BeerDetailActivity.class);
+        intent.putExtra(context.getString(R.string.key_serializable_extra), new Interest(new Beer(id_beer)));
+        context.startActivity(intent);
 
     }
 }

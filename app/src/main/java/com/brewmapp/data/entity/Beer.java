@@ -36,6 +36,14 @@ public class Beer implements Serializable {
     private String like;
     private String dis_like;
 
+    public Beer(String id_beer) {
+        setId(id_beer);
+    }
+
+    public Beer(){
+
+    }
+
     public String getLike() {
         return like;
     }

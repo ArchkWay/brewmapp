@@ -8,6 +8,7 @@ import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -20,7 +21,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by Kras on 21.01.2018.
  */
 
-public class LoadBeerEvaluationTask  extends BaseNetworkTask<Integer, List<EvaluationBeer>> {
+public class LoadBeerEvaluationTask  extends BaseNetworkTask<Integer, ArrayList<EvaluationBeer>> {
 
     @Inject
     public LoadBeerEvaluationTask(MainThread mainThread, Executor executor, Api api) {
@@ -28,14 +29,14 @@ public class LoadBeerEvaluationTask  extends BaseNetworkTask<Integer, List<Evalu
     }
 
     @Override
-    protected Observable<List<EvaluationBeer>> prepareObservable(Integer beer_id) {
+    protected Observable<ArrayList<EvaluationBeer>> prepareObservable(Integer beer_id) {
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params=new WrapperParams(Wrappers.PRODUCT_EVALUATION);
                 params.addParam(Keys.PRODUCT_MODEL, Keys.CAP_BEER);
                 //params.addParam(Keys.PRODUCT_ID, beer_id);
                 ListResponse<EvaluationBeer> listResponse= executeCall(getApi().getBeerEvaluation(params));
-                subscriber.onNext(listResponse.getModels());
+                subscriber.onNext(new ArrayList<>(listResponse.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

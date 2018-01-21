@@ -51,11 +51,13 @@
                     android:lines="1"
                     android:ellipsize="end"
                     />
+                <!--container.resto-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
+                    android:id="@+id/view.evaluation.container.resto"
                     >
 
                     <LinearLayout
@@ -175,6 +177,143 @@
                                     />
                                 <TextView
                                     android:id="@+id/view.evaluation.effect"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    android:lines="1"
+                                    />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!--container.beer-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:id="@+id/view.evaluation.container.beer"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+
+                            >
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_flavor"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/view.evaluation.flavor"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_taste"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/view.evaluation.taste"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="@dimen/common_block_space"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_quality_color"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:id="@+id/view.evaluation.color"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_value_not_found"
+                                    android:gravity="center_vertical"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/text_view_aftertaste"
+                                    android:lines="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:ellipsize="end"
+                                    android:layout_marginRight="@dimen/common_block_space_half"
+                                    />
+                                <TextView
+                                    android:id="@+id/view.evaluation.aftertaste"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/text_view_value_not_found"

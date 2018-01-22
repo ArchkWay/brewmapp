@@ -99,6 +99,17 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         return title;
     }
 
+
+    public static List<CardMenuField> createProfileViewItems(Context context) {
+        List<CardMenuField> out = new ArrayList<>();
+        out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_bar, context.getString(R.string.fav_beer)));
+        out.add(new CardMenuField(FAVORITE_RESTO, R.drawable.ic_fav_bar, context.getString(R.string.fav_bars)));
+        out.add(new CardMenuField(MY_RATINGS, R.drawable.ic_fav_bar, context.getString(R.string.my_ratings)));
+
+
+        return out;
+    }
+
     public static List<CardMenuField> createProfileItems(Context context) {
         List<CardMenuField> out = new ArrayList<>();
         out.add(new CardMenuField(NEW_POST, R.drawable.ic_new_post, context.getString(R.string.new_post)));

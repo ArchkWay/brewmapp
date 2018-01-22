@@ -461,5 +461,6 @@
     <string name="action_text_title_reviews">Отзывы</string>
     <string name="action_text_title_my_evaluation">Мои оценки</string>
     <string name="text_view_data_not_found">Дата отсутствует</string>
+    <string name="button_text_request">Заявка</string>
 
 </resources>

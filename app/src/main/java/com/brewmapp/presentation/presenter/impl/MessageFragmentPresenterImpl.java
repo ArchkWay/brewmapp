@@ -193,7 +193,6 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                         contact.setUser(users.get(0));
                         contactInfo.setModel(contact);
                         arrayList.add(contactInfo);
-                        loadUserDetails(chatListDialogs, arrayList);
                     }else {
                         view.showMessage(context.getString(R.string.error_user_chat_not_found,String.valueOf(chatListDialogs.get(0).getUser().getId())),0);
                     }

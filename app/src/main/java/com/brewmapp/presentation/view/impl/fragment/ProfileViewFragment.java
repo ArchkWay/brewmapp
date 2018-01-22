@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,15 +15,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Starter;
+import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
@@ -32,14 +42,20 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
  * {@link ProfileViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ProfileViewFragment extends BaseFragment implements ProfileViewFragmentView {
+public class ProfileViewFragment extends BaseFragment implements ProfileViewFragmentView , FlexibleAdapter.OnItemClickListener{
 
-    @BindView(R.id.fragment_profile_edit_avatar)    ImageView avatar;
-    @BindView(R.id.fragment_profile_edit_name)      TextView name;
-    @BindView(R.id.fragment_profile_edit_place)      TextView place;
-    @BindView(R.id.fragment_profile_edit_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.fragment_profile_view_avatar)    ImageView avatar;
+    @BindView(R.id.fragment_profile_view_name)      TextView name;
+    @BindView(R.id.fragment_profile_view_place)      TextView place;
+    @BindView(R.id.fragment_profile_view_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.fragment_profile_view_counter_friends)    InfoCounter counter_friends;
+    @BindView(R.id.fragment_profile_view_counter_photos)    InfoCounter counter_photos;
+    @BindView(R.id.fragment_profile_view_counter_subscribers)    InfoCounter counter_subscribers;
+    @BindView(R.id.fragment_profile_view_counter_subscribes)    InfoCounter counter_subscribes;
+    @BindView(R.id.fragment_profile_view_menu)    RecyclerView menu;
 
     private OnFragmentInteractionListener mListener;
+    private List<CardMenuField> cardMenuFields = new ArrayList<>();
 
     @Inject    ProfileViewFragmentPresenter presenter;
 
@@ -83,6 +99,10 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @Override
     protected void initView(View view) {
         setHasOptionsMenu(true);
+        cardMenuFields=CardMenuField.createProfileViewItems(getActivity());
+        menu.setLayoutManager(new LinearLayoutManager(getActivity()));
+        menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
+
     }
 
     @Override
@@ -110,6 +130,10 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         }
         name.setText(user.getFormattedName());
         place.setText(user.getCountryCityFormated());
+        counter_friends.setCount(user.getCounts().getFriends());
+        counter_photos.setCount(user.getCounts().getPhotos());
+        counter_subscribers.setCount(user.getCounts().getSubscriptions());
+        counter_subscribes.setCount(user.getCounts().getSubscribers());
 
     }
 
@@ -136,6 +160,16 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onItemClick(int position) {
+        switch (cardMenuFields.get(position).getId()){
+            case CardMenuField.FAVORITE_BEER:
+                //Starter.MultiListActivity();
+                break;
+        }
+        return false;
     }
 
     //***********************************

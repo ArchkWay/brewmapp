@@ -14,7 +14,9 @@ import com.brewmapp.app.di.module.ShareModule;
 import com.brewmapp.execution.exchange.common.Api;
 
 import io.socket.client.Socket;
+import ru.frosteye.ovsa.data.storage.Storage;
 import ru.frosteye.ovsa.execution.executor.MainThread;
+import ru.frosteye.ovsa.execution.serialization.Serializer;
 
 @Component(modules = {AppModule.class, RepoModule.class, ShareModule.class})
 @Singleton
@@ -24,5 +26,6 @@ public interface AppComponent {
     MainThread mainThread();
     Executor executor();
     Api api();
+    Storage storage();
 
 }

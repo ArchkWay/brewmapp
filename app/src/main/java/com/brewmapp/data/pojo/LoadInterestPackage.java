@@ -10,6 +10,7 @@ public class LoadInterestPackage {
     private String related_model;
     private String filterInterest;
     private boolean only_curr_user=true;
+    private String user_id;
 
     public String getRelated_id() {
         return related_id;
@@ -49,5 +50,13 @@ public class LoadInterestPackage {
 
     public void setOnly_curr_user(boolean only_curr_user) {
         this.only_curr_user = only_curr_user;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

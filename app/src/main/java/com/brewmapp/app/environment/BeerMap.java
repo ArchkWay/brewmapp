@@ -13,15 +13,23 @@ import android.widget.Toast;
 import com.brewmapp.app.di.component.AppComponent;
 import com.brewmapp.app.di.component.DaggerAppComponent;
 import com.brewmapp.app.di.module.AppModule;
+import com.brewmapp.data.db.contract.UiSettingRepo;
+import com.brewmapp.data.db.impl.UiSettingImpl;
+import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.SplashActivity;
 import com.crashlytics.android.Crashlytics;
 
 import java.net.URISyntaxException;
 
+import javax.inject.Inject;
+
 import io.fabric.sdk.android.Fabric;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import ru.frosteye.ovsa.data.storage.SharedPreferencesStorage;
+import ru.frosteye.ovsa.data.storage.Storage;
+import ru.frosteye.ovsa.execution.serialization.Serializer;
 
 
 public class BeerMap extends Application {
@@ -40,7 +48,7 @@ public class BeerMap extends Application {
     public void onCreate() {
         super.onCreate();
         appContext=getApplicationContext();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
@@ -48,12 +56,12 @@ public class BeerMap extends Application {
         registerReceiver(oldApiReceiver, new IntentFilter(OLD_API_ACTION));
 
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-                RestartApp();
-            }
-        });
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//            @Override
+//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+//                RestartApp();
+//            }
+//        });
 
     }
 
@@ -67,8 +75,9 @@ public class BeerMap extends Application {
 
     public static void RestartApp(){
 
-        appContext.stopService(new Intent(appContext, ChatService.class));
+        new UiSettingImpl(appComponent.storage()).setActiveFragment(MenuField.PROFILE);
 
+        appContext.stopService(new Intent(appContext, ChatService.class));
         Intent mStartActivity = new Intent(appContext, SplashActivity.class);
         int mPendingIntentId = 123456;
         PendingIntent mPendingIntent = PendingIntent.getActivity(appContext, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);

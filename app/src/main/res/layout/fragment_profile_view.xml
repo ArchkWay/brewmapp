@@ -4,31 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment">
+    tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment"
+    >
     <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment.profile.edit.swipe"
+        android:id="@+id/fragment.profile.view.swipe"
         android:orientation="vertical"
         >
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorDecorBgGray"
                 android:orientation="vertical">
-
+                <!--header-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:focusable="true"
-                    android:background="@color/colorWhite"
+
                     android:focusableInTouchMode="true"
                     android:padding="@dimen/common_block_space">
 
@@ -44,7 +45,6 @@
                             android:orientation="vertical"
                             android:background="@drawable/selector_ring"
                             android:padding="@dimen/common_block_space"
-                            android:id="@+id/activity.register.avatar.placeholder"
                             android:gravity="center">
 
                             <ImageView
@@ -65,7 +65,7 @@
                         <com.makeramen.roundedimageview.RoundedImageView
                             android:layout_width="@dimen/size_icon_72"
                             android:layout_height="@dimen/size_icon_72"
-                            android:id="@+id/fragment.profile.edit.avatar"
+                            android:id="@+id/fragment.profile.view.avatar"
                             android:background="@drawable/selector_ring"
                             app:riv_oval="true"/>
                     </RelativeLayout>
@@ -80,7 +80,7 @@
                             android:layout_height="match_parent"
                             style="@style/AppTheme.Text.Georgia.BoldItalic"
                             android:textSize="18sp"
-                            android:id="@+id/fragment.profile.edit.name"
+                            android:id="@+id/fragment.profile.view.name"
                             android:background="@null"
                             android:text="@string/text_view_value_not_found"
                             android:layout_weight="1"/>
@@ -88,7 +88,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@null"
-                            android:text="@string/text_view_data_not_found"
+                            android:text="@string/text_view_value_not_found"
                             android:textColor="@color/colorBlack"
                             android:layout_weight="1"
                             />
@@ -96,14 +96,90 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textPersonName|textCapWords"
-                            android:id="@+id/fragment.profile.edit.place"
+                            android:id="@+id/fragment.profile.view.place"
                             android:background="@null"
                             android:layout_weight="1"
+                            android:text="@string/text_view_value_not_found"
                             />
 
 
                     </LinearLayout>
                 </LinearLayout>
+                <!--buttons-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    >
+
+                    <Button
+                        android:id="@+id/fragment.profile.view.private_message"
+                        style="@style/AppTheme.Button.Green.Solid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:layout_weight="1"
+                        android:lines="1"
+                        android:text="@string/message_send"
+                        android:ellipsize="end"
+                        />
+
+                    <Button
+                        android:id="@+id/fragment.profile.view.request"
+                        style="@style/AppTheme.Button.Green.Solid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:layout_weight="1"
+                        android:lines="1"
+                        android:text="@string/button_text_request"
+
+                        />
+
+                </LinearLayout>
+                <!--counters-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.profile.view.counter_friends"
+                        app:counterTitle="@string/friends_count"/>
+
+                    <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.profile.view.counter_subscribes"
+                        app:counterTitle="@string/subscribes_count"/>
+
+                    <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.profile.view.counter_subscribers"
+                        app:counterTitle="@string/subscribers_count"/>
+
+                    <com.brewmapp.presentation.view.impl.widget.InfoCounter
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.profile.view.counter_photos"
+                        app:counterTitle="@string/photos_count"/>
+
+                </LinearLayout>
+                <!--menu-->
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fragment.profile.view.menu"/>
+
 
             </LinearLayout>
         </ScrollView>

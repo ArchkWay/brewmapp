@@ -103,12 +103,26 @@ public class AddReviewBeerPresenterImpl extends BasePresenter<AddReviewBeerView>
                                     @Override
                                     public void onNext(String s) {
                                         super.onNext(s);
+                                        containerTasks.addReviewTask(Keys.CAP_BEER,beer.getId(),post.getText(),new SimpleSubscriber<String>(){
+                                            @Override
+                                            public void onNext(String s) {
+                                                super.onNext(s);
+                                                view.reviewSent();
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                super.onError(e);
+                                                view.commonError(e.getMessage());
+                                            }
+                                        });
 
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
                                         super.onError(e);
+                                        view.commonError(e.getMessage());
                                     }
                                 });
 
@@ -117,6 +131,7 @@ public class AddReviewBeerPresenterImpl extends BasePresenter<AddReviewBeerView>
                             @Override
                             public void onError(Throwable e) {
                                 super.onError(e);
+                                view.commonError(e.getMessage());
                             }
                         });
 
@@ -125,6 +140,7 @@ public class AddReviewBeerPresenterImpl extends BasePresenter<AddReviewBeerView>
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
+                        view.commonError(e.getMessage());
                     }
                 });
 
@@ -133,22 +149,10 @@ public class AddReviewBeerPresenterImpl extends BasePresenter<AddReviewBeerView>
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                view.commonError(e.getMessage());
             }
         });
 
-//        containerTasks.addReviewTask(Keys.CAP_BEER,beer.getId(),post.getText(),new SimpleSubscriber<String>(){
-//            @Override
-//            public void onNext(String s) {
-//                super.onNext(s);
-//                view.reviewSent();
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                super.onError(e);
-//                view.commonError(e.getMessage());
-//            }
-//        });
     }
 
     @Override

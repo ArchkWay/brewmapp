@@ -17,6 +17,7 @@ import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
+import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
@@ -566,22 +567,29 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
 
         private void loadInterests(int mode) {
-            if(interest.getId()==null)
-                view.addItemsAddedToFavorite(new ArrayList<>());
-            else
-                loadUsersByInterestTask.execute(Integer.valueOf(interest.getId()),new SimpleSubscriber<List<IFlexible>>(){
-                    @Override
-                    public void onNext(List<IFlexible> iFlexibles) {
-                        super.onNext(iFlexibles);
-                        view.addItemsAddedToFavorite(iFlexibles);
+            LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
+            loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
+            loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+            loadInterestPackage.setOnly_curr_user(false);
+            loadInterestTask.execute(loadInterestPackage ,new SimpleSubscriber<List<IFlexible>>() {
+                @Override
+                public void onNext(List<IFlexible> iFlexibles) {
+                    super.onNext(iFlexibles);
+                    ArrayList<IFlexible> arrayList=new ArrayList<>();
+                    for (IFlexible iFlexible:iFlexibles){
+                        InterestInfoByUsers interestInfoByUsers=new InterestInfoByUsers();
+                        interestInfoByUsers.setModel(((InterestInfo)iFlexible).getModel());
+                        arrayList.add(interestInfoByUsers);
                     }
+                    view.addItemsAddedToFavorite(arrayList);
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        view.commonError(e.getMessage());
-                    }
-                });
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    view.commonError(e.getMessage());
+                }
+            });
 
         }
     }

@@ -78,10 +78,12 @@ public class ContainerTasksImpl implements ContainerTasks {
     }
 
     @Override
-    public void loadInteres(String related_model, Integer related_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber) {
+    public void loadInteres(String related_model, Integer related_id, boolean only_curr_user,SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber) {
         LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
         loadInterestPackage.setRelated_model(related_model);
         loadInterestPackage.setRelated_id(String.valueOf(related_id));
+        loadInterestPackage.setOnly_curr_user(only_curr_user);
+
         loadInterestTask.execute(loadInterestPackage ,objectSimpleSubscriber);
     }
 

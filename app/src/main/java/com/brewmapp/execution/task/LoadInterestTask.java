@@ -43,14 +43,17 @@ public class LoadInterestTask extends BaseNetworkTask<LoadInterestPackage,List<I
         return Observable.create(subscriber -> {
           try {
               WrapperParams params = new WrapperParams(Wrappers.USER_INTEREST);
-              params.addParam(Keys.USER_ID, userRepo.load().getId());
+
+
               int start = loadInterestPackage.getPage() * step;
               //int end = loadInterestPackage.getPage() * step + step;
               int end = 1000;
-              if(loadInterestPackage.getRelated_model()!=null&&loadInterestPackage.getRelated_id()!=null) {
+              if(loadInterestPackage.getRelated_model()!=null)
                   params.addParam(Keys.RELATED_MODEL,loadInterestPackage.getRelated_model());
+              if(loadInterestPackage.getRelated_id()!=null)
                   params.addParam(Keys.RELATED_ID,loadInterestPackage.getRelated_id());
-              }
+              if(loadInterestPackage.isOnly_curr_user())
+                params.addParam(Keys.USER_ID, userRepo.load().getId());
               Interests interests=executeCall(getApi().loadInterest(start , end, params));
               subscriber.onNext(new ArrayList<>(interests.getModels()));
               subscriber.onComplete();

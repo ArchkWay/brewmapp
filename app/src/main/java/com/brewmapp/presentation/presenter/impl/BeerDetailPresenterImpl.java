@@ -13,6 +13,7 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
+import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -175,7 +176,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadFav(int mode) {
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
+                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),true,new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);
@@ -265,38 +266,30 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadWhoIsInterested(int mode) {
                 switch (mode) {
                     case Actions.MODE_REFRESH_ALL:
-                        if(interest.getId()==null) {
-                            loadProductAverageValue(mode);
-                            view.addItemsAddedToFavorite(new ArrayList<>());
-                        }else
-                            containerTasks.loadUsersByInteres(Integer.valueOf(interest.getId()), new SimpleSubscriber<List<IFlexible>>() {
-                                @Override
-                                public void onNext(List<IFlexible> iFlexibles) {
-                                    super.onNext(iFlexibles);
-                                    view.addItemsAddedToFavorite(iFlexibles);
+                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),false,new SimpleSubscriber<List<IFlexible>>(){
+                            @Override
+                            public void onNext(List<IFlexible> iFlexibles) {
+                                super.onNext(iFlexibles);
+                                ArrayList<IFlexible> arrayList=new ArrayList<>();
+                                for (IFlexible iFlexible:iFlexibles){
+                                    InterestInfoByUsers interestInfoByUsers=new InterestInfoByUsers();
+                                    interestInfoByUsers.setModel(((InterestInfo)iFlexible).getModel());
+                                    arrayList.add(interestInfoByUsers);
+                                }
+                                    view.addItemsAddedToFavorite(arrayList);
                                     loadProductAverageValue(mode);
-                                }
+                            }
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    super.onError(e);
-                                    view.commonError(e.getMessage());
-                                }
-                            });
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                view.commonError(e.getMessage());
+                            }
+                        });
                         break;
                         default:
                             loadProductAverageValue(mode);
                 }
-//                containerTasks.loadLikesByBeer(beerDetail.getBeer().getId(),new SimpleSubscriber<Object>(){
-//                    @Override
-//                    public void onNext(Object o) {
-//                        super.onNext(o);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                    }
-//                });
             }
             private void loadProductAverageValue(int mode){//productaveragevalue
                 switch (mode){

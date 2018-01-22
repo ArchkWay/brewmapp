@@ -28,6 +28,7 @@ public class User implements Serializable {
 
 //    @SerializedName("1.03"==SERVER_API_VER?"relations":"")
     private Relations relations_fix_bugs_backend;
+    private Relations relations;
 
     private int subscriptionsCount;
 
@@ -424,11 +425,18 @@ public class User implements Serializable {
     }
 
     public String getCountryCityFormated() {
+        String result=null;
         try {
-            return String.format("%s,%s",getRelations_fix_bugs_backend().getmCountry().getName(),getRelations_fix_bugs_backend().getmCity().getName());
+            result= String.format("%s,%s",getRelations_fix_bugs_backend().getmCountry().getName(),getRelations_fix_bugs_backend().getmCity().getName());
         }catch (Exception e){
-            return null;
         }
+        if(result==null)
+            try {
+                result= String.format("%s,%s",relations.getmCountry().getName(),relations.getmCity().getName());
+            }catch (Exception e){
+            }
+
+        return result;
     }
 
     public static class Counts {

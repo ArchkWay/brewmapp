@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
@@ -22,6 +26,9 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public class ProfileEditActivity extends BaseActivity implements ProfileEditView,ProfileEditFragment.OnFragmentInteractionListener,ProfileViewFragment.OnFragmentInteractionListener  {
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
 
     @Inject    ProfileEditPresenter presenter;
 
@@ -35,6 +42,11 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+
+
         enableBackButton();
         setTitle(R.string.title_activity_edit_profile);
     }
@@ -128,5 +140,17 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
                 showSelect(this, R.array.avatar_options, (text, position) -> presenter.handlePhoto(baseFragment,position));
                 break;
         }
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        super.setTitle(titleId);
+        toolbarTitle.setText(getTitle());
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
     }
 }

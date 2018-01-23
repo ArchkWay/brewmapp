@@ -52,8 +52,8 @@ public class LoadInterestTask extends BaseNetworkTask<LoadInterestPackage,List<I
                   params.addParam(Keys.RELATED_MODEL,loadInterestPackage.getRelated_model());
               if(loadInterestPackage.getRelated_id()!=null)
                   params.addParam(Keys.RELATED_ID,loadInterestPackage.getRelated_id());
-              if(loadInterestPackage.isOnly_curr_user())
-                params.addParam(Keys.USER_ID, userRepo.load().getId());
+              if(loadInterestPackage.getUser_id()!=null)
+                params.addParam(Keys.USER_ID, loadInterestPackage.getUser_id());
               Interests interests=executeCall(getApi().loadInterest(start , end, params));
               subscriber.onNext(new ArrayList<>(interests.getModels()));
               subscriber.onComplete();

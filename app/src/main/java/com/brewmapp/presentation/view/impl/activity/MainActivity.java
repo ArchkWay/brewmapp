@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.ChatService;
@@ -409,6 +410,32 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         processChengeFragment(MenuField.PROFILE);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(mode.equals(MODE_DEFAULT))
+            if(presenter.getActiveFragment()== MenuField.PROFILE)
+                new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                @Override
+                public void onOk() {
+                    finish();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            else {
+                navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
+                navigator.onDrawerClosed();
+            }
+
+        else
+            finish();
+
+    }
+
+//*****************************************
     @SuppressLint("RestrictedApi")
     public void refreshState() {
         for (Fragment fragment : getSupportFragmentManager().getFragments())
@@ -445,22 +472,4 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             }
     }
 
-    @Override
-    public void onBackPressed() {
-        if(mode.equals(MODE_DEFAULT))
-            new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
-            @Override
-            public void onOk() {
-                finish();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        else
-            finish();
-
-    }
 }

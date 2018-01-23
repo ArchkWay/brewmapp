@@ -110,6 +110,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
         loadInterestPackage =new LoadInterestPackage();
         loadInterestPackage.setPage(0);
         loadInterestPackage.setFilterInterest(getIntent().getAction());
+        loadInterestPackage.setUser_id(getIntent().getData().toString());
         switch (loadInterestPackage.getFilterInterest()){
             case Keys.CAP_BEER:
                 setTitle(R.string.fav_beer);

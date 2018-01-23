@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -7,7 +8,9 @@ import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.db.contract.UiSettingRepo;
+import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
@@ -49,7 +52,6 @@ import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
-import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
@@ -60,7 +62,6 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
-import eu.davidea.flexibleadapter.items.IFilterable;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
@@ -97,6 +98,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private LoadUsersTask loadUsersTask;
     private LoadUsersByInterestTask loadUsersByInterestTask;
     private Interest interest;
+    private UserRepo userRepo;
 
     @Inject
     public RestoDetailPresenterImpl(
@@ -115,7 +117,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask,
             ContainerTasks containerTasks,
             LoadUsersTask loadUsersTask,
-            LoadUsersByInterestTask loadUsersByInterestTask){
+            LoadUsersByInterestTask loadUsersByInterestTask,
+            UserRepo userRepo){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -132,6 +135,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.containerTasks = containerTasks;
         this.loadUsersTask = loadUsersTask;
         this.loadUsersByInterestTask = loadUsersByInterestTask;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -339,22 +343,25 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     }
 
     @Override
-    public void startChat(String user_id) {
+    public void startChat(Activity activity, String user_id) {
 
         loadUsersTask.execute(Integer.valueOf(user_id),new SimpleSubscriber<ArrayList<User>>(){
             @Override
             public void onNext(ArrayList<User> users) {
                 super.onNext(users);
                 if(users.size()==0) return;
-                Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, context, MultiFragmentActivity.class);
                 User friend=new User();
                 friend.setId(users.get(0).getId());
                 friend.setFirstname(users.get(0).getFirstname());
                 friend.setLastname(users.get(0).getLastname());
-                intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                Starter.MultiFragmentActivity_MODE_CHAT(activity,friend);
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
             }
         });
     }
@@ -509,6 +516,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
                 loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
                 loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+                loadInterestPackage.setUser_id(String.valueOf(userRepo.load().getId()));
                 loadInterestTask.execute(loadInterestPackage ,new SimpleSubscriber<List<IFlexible>>(){
                     @Override
                     public void onNext(List<IFlexible> iFlexibles) {
@@ -570,7 +578,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
             loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
             loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
-            loadInterestPackage.setOnly_curr_user(false);
             loadInterestTask.execute(loadInterestPackage ,new SimpleSubscriber<List<IFlexible>>() {
                 @Override
                 public void onNext(List<IFlexible> iFlexibles) {

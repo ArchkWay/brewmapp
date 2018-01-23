@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
@@ -48,13 +49,15 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
     private Context context;
     private TempDataHolder tempDataHolder =new TempDataHolder();
     private Interest interest;
+    private UserRepo userRepo;
 
 
     @Inject
-    public BeerDetailPresenterImpl(LoadProductTask loadProductTask, ContainerTasks containerTasks, Context context){
+    public BeerDetailPresenterImpl(LoadProductTask loadProductTask, ContainerTasks containerTasks, Context context,UserRepo userRepo){
         this.loadProductTask= loadProductTask;
         this.containerTasks = containerTasks;
         this.context = context;
+        this.userRepo = userRepo;
 
     }
 
@@ -176,7 +179,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadFav(int mode) {
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),true,new SimpleSubscriber<List<IFlexible>>(){
+                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),String.valueOf(userRepo.load().getId()),new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);
@@ -266,7 +269,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadWhoIsInterested(int mode) {
                 switch (mode) {
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),false,new SimpleSubscriber<List<IFlexible>>(){
+                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),null,new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);

@@ -116,7 +116,6 @@
                     >
 
                     <Button
-                        android:id="@+id/fragment.profile.view.private_message"
                         style="@style/AppTheme.Button.Green.Solid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -125,6 +124,7 @@
                         android:lines="1"
                         android:text="@string/message_send"
                         android:ellipsize="end"
+                        android:id="@+id/fragment.profile.button.private_message"
                         />
 
                     <Button

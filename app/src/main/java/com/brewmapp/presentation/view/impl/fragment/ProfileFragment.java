@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +14,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
@@ -85,6 +88,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     private FlexibleModelAdapter<IFlexible> postAdapter;
     private FlexibleModelAdapter<SubscriptionInfo> subscriptionAdapter;
     private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
+    private UserProfile profile;
 
     @Override
     protected int getFragmentLayout() {
@@ -143,8 +147,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
                 intent.setAction(String.valueOf(Actions.ACTION_SCROLL_TO_NEWS));
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
-
             }break;
+            case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
+                Starter.ProfileEditActivity(
+                        getActivity(),
+                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        String.valueOf(((Review) payload).getUser_id())
+                );
+                break;
         }
     }
 
@@ -186,6 +196,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @Override
     public void setContent(UserProfile profile) {
         if(getActivity()==null) return;
+        this.profile=profile;
         getActivity().setTitle(R.string.my_profile);
         Picasso.with(getActivity()).load(profile.getUser().getThumbnail()).fit().into(avatar);
         username.setText(profile.getUser().getFormattedName());
@@ -232,13 +243,12 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 startActivity(new Intent(getActivity(), AlbumsActivity.class));
                 break;
             case CardMenuField.FAVORITE_BEER:
-                startActivity(new Intent(Keys.CAP_BEER,null,getActivity(), InterestListActivity.class));
+                Starter.InterestListActivity(getActivity(),Keys.CAP_BEER,profile.getUser().getId());
                 break;
             case CardMenuField.FAVORITE_RESTO:
-                startActivityForResult(new Intent(Keys.CAP_RESTO,null,getActivity(), InterestListActivity.class),REQUEST_CODE_REFRESH_ITEMS);
+                Starter.InterestListActivityForResult(getActivity(),Keys.CAP_RESTO,profile.getUser().getId(),REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case CardMenuField.MY_RATINGS :
-                //startActivity(new Intent(getActivity(), AssessmentsActivity.class));
                 Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
                 break;
         }

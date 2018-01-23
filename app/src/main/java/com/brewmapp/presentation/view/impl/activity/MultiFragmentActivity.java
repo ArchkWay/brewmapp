@@ -53,6 +53,7 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     @Override
     protected void initView() {
         enableBackButton();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarSubTitle.setVisibility(View.GONE);
         toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);

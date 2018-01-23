@@ -18,7 +18,7 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 public interface ContainerTasks {
     void clickLikeDislike(String relatedModel, int relatedId, int type_like, SimpleSubscriber<MessageResponse> simpleSubscriber);
 
-    void loadInteres(String related_model, Integer related_id, boolean only_curr_user ,SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
+    void loadInteres(String related_model, Integer related_id, String user_id ,SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
 
     void loadInteresByUsers(String related_model, Integer related_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
 

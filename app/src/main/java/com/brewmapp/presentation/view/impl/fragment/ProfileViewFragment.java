@@ -2,7 +2,6 @@ package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.brewmapp.R;
@@ -18,7 +17,9 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
@@ -29,10 +30,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import br.com.sapereaude.maskedEditText.MaskedEditText;
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import info.hoang8f.android.segmented.SegmentedGroup;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
@@ -53,9 +52,11 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @BindView(R.id.fragment_profile_view_counter_subscribers)    InfoCounter counter_subscribers;
     @BindView(R.id.fragment_profile_view_counter_subscribes)    InfoCounter counter_subscribes;
     @BindView(R.id.fragment_profile_view_menu)    RecyclerView menu;
+    @BindView(R.id.fragment_profile_button_private_message) Button private_message;
 
     private OnFragmentInteractionListener mListener;
     private List<CardMenuField> cardMenuFields = new ArrayList<>();
+    private User user;
 
     @Inject    ProfileViewFragmentPresenter presenter;
 
@@ -102,6 +103,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         cardMenuFields=CardMenuField.createProfileViewItems(getActivity());
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
+        private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
 
     }
 
@@ -122,7 +124,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public void setContent(User user) {
-
+        this.user=user;
         if(!"http://www.placehold.it/100x100/EFEFEF/AAAAAA?".equals(user.getThumbnail())) {
             Picasso.with(getContext()).load(user.getThumbnail()).fit().centerCrop().into(avatar);
         }else {
@@ -166,7 +168,13 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     public boolean onItemClick(int position) {
         switch (cardMenuFields.get(position).getId()){
             case CardMenuField.FAVORITE_BEER:
-                //Starter.MultiListActivity();
+                Starter.InterestListActivity(getActivity(), Keys.CAP_BEER,user.getId());
+                break;
+            case CardMenuField.FAVORITE_RESTO:
+                Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO,user.getId());
+                break;
+            case CardMenuField.MY_RATINGS:
+                Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
                 break;
         }
         return false;

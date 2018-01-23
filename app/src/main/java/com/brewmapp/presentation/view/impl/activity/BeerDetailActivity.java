@@ -184,15 +184,15 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         fav_icon.setOnClickListener(v -> {presenter.clickFav();setResult(RESULT_OK);enableControls(false,0);});
         button_review.setOnClickListener(view -> Starter.AddReviewBeerActivityForResult(BeerDetailActivity.this,presenter.getBeerDetail().getBeer().getId(),RequestCodes.REQUEST_CODE_REVIEW));
         panel_map.setOnClickListener(v->Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,null));
-        panel_reviews.setOnClickListener(v-> Starter.MultiListActivity(this,MultiListView.MODE_SHOW_REVIEWS_BEER,beer.getId()));
+        panel_reviews.setOnClickListener(v-> Starter.MultiListActivity_MODE_SHOW_REVIEWS_BEER(this,beer.getId()));
 
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         recycler_where_they_pour.setLayoutManager(new LinearLayoutManager(this));
         recycler_added_to_favorite.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter_where_they_pour =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
-        adapter_added_to_favorite =new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
-        adapter_review=new FlexibleModelAdapter<>(new ArrayList<>(),this::processAction);
+        adapter_where_they_pour =new FlexibleModelAdapter<>(new ArrayList<>(),this::processItemClickAction);
+        adapter_added_to_favorite =new FlexibleModelAdapter<>(new ArrayList<>(),this::processItemClickAction);
+        adapter_review=new FlexibleModelAdapter<>(new ArrayList<>(),this::processItemClickAction);
 
         recycler_where_they_pour.setAdapter(adapter_where_they_pour);
         recycler_reviews.setAdapter(adapter_review);
@@ -324,7 +324,7 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
     }
 
     //************************
-    private void processAction(int action, Object payload){
+    private void processItemClickAction(int action, Object payload){
 
 
         switch (action){

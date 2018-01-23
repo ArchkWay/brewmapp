@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.app.Activity;
 import android.content.Intent;
 
 import com.brewmapp.data.entity.Photo;
@@ -7,7 +8,6 @@ import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
@@ -40,7 +40,7 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
     void loadAllPhoto(SimpleSubscriber<List<Photo>> slider);
 
-    void startChat(String user_id);
+    void startChat(Activity activity, String user_id);
 
     RestoDetail getRestoDetails();
 }

@@ -25,16 +25,19 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.AverageEvaluation;
+import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.MultiListView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -59,6 +62,7 @@ import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
@@ -157,8 +161,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         place.setOnClickListener(v -> presenter.startMapFragment(RestoDetailActivity.this));
         subscribe.setOnClickListener(view -> presenter.changeSubscription());
         button_revew.setOnClickListener(view -> Starter.AddReviewRestoActivityForResult(RestoDetailActivity.this,presenter.getRestoDetails(),RequestCodes.REQUEST_CODE_REVIEW));
-        adapter_reviews =new FlexibleAdapter<>(new ArrayList<>());
-        adapter_favorites=new FlexibleAdapter<>(new ArrayList<>());
+        adapter_reviews =new FlexibleModelAdapter<>(new ArrayList<>(), this::processItemClickAction);
+        adapter_favorites=new FlexibleModelAdapter<>(new ArrayList<>(), this::processItemClickAction);
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
@@ -167,7 +171,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
-        private_message.setOnClickListener(v -> presenter.startChat(resto.getUser_id()));
+        private_message.setOnClickListener(v -> presenter.startChat(this,resto.getUser_id()));
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
@@ -488,6 +492,29 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         toolbarTitle.setText(title);
     }
 
+    //*****************************************
+    private void processItemClickAction(int action, Object payload){
+        switch (action){
+            case Actions.ACTION_CLICK_ON_ITEM_USER: {
+                Starter.ProfileEditActivityForResult(
+                        this,
+                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        String.valueOf(((Interest) payload).getUser_info().getId()),
+                        RequestCodes.REQUEST_CODE_REFRESH_ITEMS
+                );
+            }
+                break;
+            case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER: {
+                Starter.ProfileEditActivityForResult(
+                        this,
+                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        ((Review) payload).getUser_id(),
+                        RequestCodes.REQUEST_CODE_REFRESH_ITEMS
+                );
+            }
+                break;
+        }
+    }
     class swipeDelayed implements Runnable {
         private boolean cancel=false;
         public void cancel(){

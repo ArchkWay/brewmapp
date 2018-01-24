@@ -59,7 +59,9 @@ public class BeerMap extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                Crashlytics.logException(paramThrowable);
                 RestartApp();
+
             }
         });
 

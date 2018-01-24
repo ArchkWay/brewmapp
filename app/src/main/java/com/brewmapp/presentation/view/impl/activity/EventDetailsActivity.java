@@ -9,7 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -66,6 +68,10 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     @BindView(R.id.activity_eventDetails_text) TextView text;
     @BindView(R.id.activity_eventDetails_like)   ImageView like;
     @BindView(R.id.activity_eventDetails_dislike)   ImageView dislike;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+
 
     @Inject EventDetailsPresenter presenter;
     @Inject EventsPresenter eventsPresenter;
@@ -93,6 +99,10 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+
         enableBackButton();
         slider.stopAutoCycle();
         optionsAdapter = new FlexibleAdapter<>(new ArrayList<>(), this);
@@ -243,12 +253,16 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         return true;
     }
 
-    private void alert() {
-        presenter.onRequestAlertVariants();
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
     }
 
-    private void share() {
-
+    @Override
+    public void setTitle(int title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
     }
 
     @Override
@@ -265,5 +279,13 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+//********************************
 
+    private void alert() {
+        presenter.onRequestAlertVariants();
+    }
+
+    private void share() {
+
+    }
 }

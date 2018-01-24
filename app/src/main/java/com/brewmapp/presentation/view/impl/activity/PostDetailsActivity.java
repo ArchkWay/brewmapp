@@ -48,6 +48,9 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     @BindView(R.id.view_post_container_repost_photo)    ImageView repost_photo;
 
     @BindView(R.id.root_view_share_like)    ShareLikeView shareLikeView;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
 
 
     @Inject    PostDetailsPresenter presenter;
@@ -62,7 +65,13 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+
         enableBackButton();
+
+
         text.setMovementMethod(LinkMovementMethod.getInstance());
         text.setLinksClickable(true);
         setTitle(R.string.title_activity_news_detail);
@@ -209,6 +218,18 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
     @Override
     protected Toolbar findActionBar() {
         return toolbar;
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
+    }
+
+    @Override
+    public void setTitle(int title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
     }
 
     @Override

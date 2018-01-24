@@ -42,6 +42,11 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
     @BindView(R.id.activity_sale_details_photo)    ImageView photo;
     @BindView(R.id.activity_sale_details_resto_name)    TextView resto_name;
     @BindView(R.id.root_view_share_like) ShareLikeView shareLikeView;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+
+
     private Sale sale;
 
     @Inject SaleDetailsPresenter presenter;
@@ -59,6 +64,9 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
         enableBackButton();
         text.setMovementMethod(LinkMovementMethod.getInstance());
         container_avatar.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +174,17 @@ public class SaleDetailsActivity extends BaseActivity implements SaleDetailsView
         new FillContent().fill();
     }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
+    }
+
+    @Override
+    public void setTitle(int title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

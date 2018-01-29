@@ -1,5 +1,7 @@
 package com.brewmapp.execution.task;
 
+import android.util.Log;
+
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
 import com.brewmapp.execution.exchange.common.Api;
@@ -14,6 +16,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -35,8 +38,21 @@ public class LoadRestoAverageEvaluationTask extends BaseNetworkTask<RestoAverage
                 WrapperParams params=new WrapperParams(Wrappers.AVERAGE_EVALUATION);
                 params.addParam(Keys.ID, restoAverageEvaluationPackage.getResto_id());
 
+                String key=new StringBuilder()
+                        .append(getClass().toString())
+                        .append(restoAverageEvaluationPackage.getResto_id())
+                        .toString();
+                ListResponse<AverageEvaluation> o= Paper.book().read(key);
+                if(o!=null)  {
+                    subscriber.onNext(o.getModels());
+                    Log.i("NetworkTask","LoadRestoAverageEvaluationTask - cache-read");
+                }
+
                 ListResponse<AverageEvaluation> averageEvaluationListResponse= executeCall(getApi().getRestoAverageEvaluation(params));
-                subscriber.onNext(averageEvaluationListResponse.getModels());
+                Paper.book().write(key,averageEvaluationListResponse);
+                Log.i("NetworkTask","LoadRestoAverageEvaluationTask - cache-write");
+                if(o==null)
+                    subscriber.onNext(averageEvaluationListResponse.getModels());
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

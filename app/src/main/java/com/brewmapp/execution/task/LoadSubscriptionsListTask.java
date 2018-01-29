@@ -1,5 +1,7 @@
 package com.brewmapp.execution.task;
 
+import android.util.Log;
+
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.pojo.SubscriptionPackage;
@@ -14,6 +16,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -46,8 +49,23 @@ public class LoadSubscriptionsListTask extends BaseNetworkTask<SubscriptionPacka
                 if(subscriptionPackage.getRelated_id()!=null)
                     params.addParam(Keys.RELATED_ID,subscriptionPackage.getRelated_id());
 
+
+                String key=new StringBuilder()
+                        .append(getClass().toString())
+                        .append(subscriptionPackage.getRelated_model())
+                        .append(subscriptionPackage.getRelated_id())
+                        .toString();
+                ListResponse<Subscription>  o= Paper.book().read(key);
+                if(o!=null)  {
+                    subscriber.onNext(o);
+                    Log.i("NetworkTask","LoadSubscriptionsListTask - cache-read");
+                }
+
                 ListResponse<Subscription> response = executeCall(getApi().loadUserSubscriptionsList(params));
-                subscriber.onNext(response);
+                Paper.book().write(key,response);
+                Log.i("NetworkTask","LoadSubscriptionsListTask - cache-write");
+                if(o==null)
+                    subscriber.onNext(response);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -1,6 +1,8 @@
 package com.brewmapp.execution.task;
 
 
+import android.util.Log;
+
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.container.RestoDetails;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
@@ -12,6 +14,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -30,8 +33,22 @@ public class LoadRestoDetailTask extends BaseNetworkTask<LoadRestoDetailPackage,
     protected Observable<RestoDetail> prepareObservable(LoadRestoDetailPackage loadRestoDetailPackage) {
         return Observable.create(subscriber -> {
             try {
+
+                String key=new StringBuilder()
+                        .append(getClass().toString())
+                        .append(loadRestoDetailPackage.getId())
+                        .toString();
+                RestoDetails  o= Paper.book().read(key);
+                if(o!=null) {
+                    subscriber.onNext((RestoDetail) o.getModels().get(0).getModel());
+                    Log.i("NetworkTask","LoadRestoDetailTask - cache-read");
+                }
+
                 RestoDetails restoDetails= executeCall(getApi().getRestoDetails(loadRestoDetailPackage.getId(),new WrapperParams("")));
-                subscriber.onNext((RestoDetail) restoDetails.getModels().get(0).getModel());
+                Paper.book().write(key,restoDetails);
+                Log.i("NetworkTask","LoadRestoDetailTask - cache-write");
+                if(o==null)
+                    subscriber.onNext((RestoDetail) restoDetails.getModels().get(0).getModel());
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

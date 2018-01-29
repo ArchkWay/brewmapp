@@ -1,7 +1,10 @@
 package com.brewmapp.execution.task;
 
+import android.util.Log;
+
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Review;
+import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.pojo.ReviewPackage;
@@ -19,6 +22,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -47,8 +51,25 @@ public class LoadReviewsTask extends BaseNetworkTask<ReviewPackage, List<IFlexib
                     params.addParam(Keys.RELATED_ID, reviewPackage.getRelated_id());
                 if(reviewPackage.getUser_id()!=null)
                     params.addParam(Keys.USER_ID, reviewPackage.getUser_id());
+
+                String key=new StringBuilder()
+                        .append(getClass().toString())
+                        .append(reviewPackage.getUser_id())
+                        .append(reviewPackage.getRelated_id())
+                        .append(reviewPackage.getUser_id())
+                        .toString();
+                Reviews  o= Paper.book().read(key);
+                if(o!=null) {
+                    subscriber.onNext(new ArrayList<>(o.getModels()));
+                    Log.i("NetworkTask","LoadReviewsTask - cache-read");
+                }
+
+
                 Reviews reviews = executeCall(getApi().loadReviews(params));
-                subscriber.onNext(new ArrayList<>(reviews.getModels()));
+                Paper.book().write(key,reviews);
+                Log.i("NetworkTask","LoadReviewsTask - cache-write");
+                if(o==null)
+                    subscriber.onNext(new ArrayList<>(reviews.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

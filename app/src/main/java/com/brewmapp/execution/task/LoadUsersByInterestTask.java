@@ -37,6 +37,9 @@ public class LoadUsersByInterestTask extends BaseNetworkTask<Integer,List<IFlexi
             try {
                 RequestParams requestParams=new RequestParams();
                 requestParams.addParam("UserInterestIDs",interests_id);
+
+
+
                 InterestsByUser interests=executeCall(getApi().loadUsersByInterest(requestParams));
                 subscriber.onNext(new ArrayList<>(interests.getModels()));
                 subscriber.onComplete();

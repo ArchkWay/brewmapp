@@ -33,6 +33,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -151,6 +152,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                     case Actions.MODE_REFRESH_ONLY_LIKE:
                         LoadProductPackage loadProductPackage=new LoadProductPackage();
                         loadProductPackage.setId(beerDetail.getBeer().getId());
+
                         loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onError(Throwable e) {
@@ -163,6 +165,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                                 super.onNext(iFlexibles);
                                 if(iFlexibles.size()==1){
                                     beerDetail=new BeerDetail(((BeerInfo)iFlexibles.get(0)).getModel());
+                                    Paper.book().write("beerTest",beerDetail);
                                     view.setModel(beerDetail, mode);
                                 }else {
                                     view.commonError();

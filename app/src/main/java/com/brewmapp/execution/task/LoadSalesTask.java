@@ -1,5 +1,7 @@
 package com.brewmapp.execution.task;
 
+import android.util.Log;
+
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Sales;
@@ -20,6 +22,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.execution.executor.MainThread;
@@ -54,8 +57,25 @@ public class LoadSalesTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexib
                     params.addParam(Keys.RELATED_MODEL,request.getRelated_model());
                     params.addParam(Keys.RELATED_ID,request.getResto_id());
                 }
+
+                String key=new StringBuilder()
+                        .append(getClass().toString())
+                        .append(request.getRelated_model())
+                        .append(request.getResto_id())
+                        .append(start)
+                        .append(end)
+                        .toString();
+                Sales   o= Paper.book().read(key);
+                if(o!=null)  {
+                    subscriber.onNext(new ArrayList<>(o.getModels()));
+                    Log.i("NetworkTask","LoadSalesTask - cache-read");
+                }
+
                 Sales posts = executeCall(getApi().loadSales(start, end, params));
-                subscriber.onNext(new ArrayList<>(posts.getModels()));
+                Paper.book().write(key,posts);
+                Log.i("NetworkTask","LoadSalesTask - cache-write");
+                if(o==null)
+                    subscriber.onNext(new ArrayList<>(posts.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -38,4 +38,5 @@ public interface ContainerTasks {
 
     void loadProductAverageValue(String beer_id, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber);
 
+    void cancelTasks();
 }

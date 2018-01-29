@@ -17,6 +17,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
@@ -39,8 +40,20 @@ public class LoadProductAverageValue extends BaseNetworkTask<Integer,ListRespons
                 WrapperParams wrapperParams=new WrapperParams(Wrappers.AVERAGE_EVALUATION);
                 wrapperParams.addParam(Keys.NAME,Keys.CAP_BEER);
                 wrapperParams.addParam(Keys.ID,beer_id);
+
+                String key=new StringBuilder()
+                        .append(getClass().toString())
+                        .append(Keys.CAP_BEER)
+                        .append(beer_id)
+                        .toString();
+                ListResponse<Averagevalue>  o= Paper.book().read(key);
+                if(o!=null)  subscriber.onNext(o);
+
+
                 ListResponse<Averagevalue> listResponse=executeCall(getApi().loadProductAverageValue(wrapperParams));
-                subscriber.onNext(listResponse);
+                Paper.book().write(key,listResponse);
+                if(o==null)
+                    subscriber.onNext(listResponse);
                 subscriber.onComplete();
             }catch (Exception e){
                 subscriber.onError(e);

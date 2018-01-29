@@ -147,4 +147,21 @@ public class ContainerTasksImpl implements ContainerTasks {
     public void loadProductAverageValue(String beer_id, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber) {
         loadProductAverageValue.execute(Integer.valueOf(beer_id),listResponseSimpleSubscriber);
     }
+
+    @Override
+    public void cancelTasks() {
+        likeTask.cancel();
+        loadInterestTask.cancel();
+        loadInterestByUsersTask.cancel();
+        addInterestTask.cancel();
+        removeInterestTask.cancel();
+        loadReviewsTask.cancel();
+        addReviewTask.cancel();
+        loadRestoGeoTask.cancel();
+        loadLikesByBeerTask.cancel();
+        searchRestosTask.cancel();
+        loadUsersByInterestTask.cancel();
+        loadProductAverageValue.cancel();
+
+    }
 }

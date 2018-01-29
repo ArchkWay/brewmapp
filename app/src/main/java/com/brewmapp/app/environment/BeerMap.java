@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import javax.inject.Inject;
 
 import io.fabric.sdk.android.Fabric;
+import io.paperdb.Paper;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import ru.frosteye.ovsa.data.storage.SharedPreferencesStorage;
@@ -54,7 +55,7 @@ public class BeerMap extends Application {
                 .build();
 
         registerReceiver(oldApiReceiver, new IntentFilter(OLD_API_ACTION));
-
+        Paper.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override

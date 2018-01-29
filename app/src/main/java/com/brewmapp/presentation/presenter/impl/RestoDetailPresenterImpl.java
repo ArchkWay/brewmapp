@@ -140,7 +140,15 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void onDestroy() {
-
+        loadRestoDetailTask.cancel();
+        containerTasks.cancelTasks();
+        loadSubscriptionsListTask.cancel();
+        loadSalesTask.cancel();
+        loadNewsTask.cancel();
+        loadEventsTask.cancel();
+        loadInterestTask.cancel();
+        loadRestoAverageEvaluationTask.cancel();
+        loadInterestTask.cancel();
     }
 
     @Override
@@ -371,6 +379,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         return restoDetail;
     }
 
+
+
     //*****************************************
     class LoadersAttributes {
         public LoadersAttributes(int mode) {
@@ -399,7 +409,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             if(mode== Actions.MODE_REFRESH_ALL)
                 containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
                     @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
-                    @Override public void onError(Throwable e) {super.onError(e);view.commonError(e.getMessage());}
+                    @Override public void onError(Throwable e) {
+                        super.onError(e);view.commonError(e.getMessage());
+                    }
                 });
             else
                 loadSubscriptions(mode);

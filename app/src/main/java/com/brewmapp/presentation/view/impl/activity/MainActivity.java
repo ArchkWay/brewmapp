@@ -426,8 +426,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 }
             });
             else {
+                MenuField.unselectAll(menuItems);
+                adapter.notifyDataSetChanged();
                 navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
                 navigator.onDrawerClosed();
+
             }
 
         else

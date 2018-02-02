@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by xpusher on 10/31/2017.
  */
 
-public class SubscriptionPackage {
+public class SubscriptionPackage extends BasePackage{
     private String related_model;
     private String related_id;
     private String id;

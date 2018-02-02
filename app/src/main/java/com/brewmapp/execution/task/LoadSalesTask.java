@@ -65,12 +65,14 @@ public class LoadSalesTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexib
                         .append(start)
                         .append(end)
                         .toString();
-                Sales   o= Paper.book().read(key);
-                if(o!=null)  {
-                    subscriber.onNext(new ArrayList<>(o.getModels()));
-                    Log.i("NetworkTask","LoadSalesTask - cache-read");
+                Sales   o= null;
+                if(request.isCacheOn()) {
+                    o = Paper.book().read(key);
+                    if (o != null) {
+                        subscriber.onNext(new ArrayList<>(o.getModels()));
+                        Log.i("NetworkTask", "LoadSalesTask - cache-read");
+                    }
                 }
-
                 Sales posts = executeCall(getApi().loadSales(start, end, params));
                 Paper.book().write(key,posts);
                 Log.i("NetworkTask","LoadSalesTask - cache-write");

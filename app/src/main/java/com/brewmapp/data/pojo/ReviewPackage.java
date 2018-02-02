@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 04.11.2017.
  */
 
-public class ReviewPackage {
+public class ReviewPackage extends BasePackage{
     private String related_model;
     private String related_id;
     private String text;

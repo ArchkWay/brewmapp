@@ -15,7 +15,10 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
+import com.brewmapp.data.pojo.LoadAverageValuePackage;
+import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
@@ -182,7 +185,11 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadFav(int mode) {
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),String.valueOf(userRepo.load().getId()),new SimpleSubscriber<List<IFlexible>>(){
+                        LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
+                        loadInterestPackage.setRelated_model(Keys.CAP_BEER);
+                        loadInterestPackage.setRelated_id(String.valueOf(Integer.valueOf(beerDetail.getBeer().getId())));
+                        loadInterestPackage.setUser_id(String.valueOf(userRepo.load().getId()));
+                        containerTasks.loadInteres(loadInterestPackage,new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);
@@ -219,7 +226,10 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadReviews(int mode){
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadReviewsTask(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),new SimpleSubscriber<List<IFlexible>>(){
+                        ReviewPackage reviewPackage=new ReviewPackage();
+                        reviewPackage.setRelated_model(Keys.CAP_RESTO);
+                        reviewPackage.setRelated_id(String.valueOf(beerDetail.getBeer().getId()));
+                        containerTasks.loadReviewsTask(reviewPackage,new SimpleSubscriber<List<IFlexible>>(){
                             @Override public void onNext(List<IFlexible> iFlexibles ) {
                                 super.onNext(iFlexibles);view.addItemsReviews(iFlexibles);loadResto(mode);
                             }
@@ -272,7 +282,11 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadWhoIsInterested(int mode) {
                 switch (mode) {
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadInteres(Keys.CAP_BEER,Integer.valueOf(beerDetail.getBeer().getId()),null,new SimpleSubscriber<List<IFlexible>>(){
+                        LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
+                        loadInterestPackage.setRelated_model(Keys.CAP_BEER);
+                        loadInterestPackage.setRelated_id(String.valueOf(Integer.valueOf(beerDetail.getBeer().getId())));
+                        loadInterestPackage.setUser_id(null);
+                        containerTasks.loadInteres(loadInterestPackage,new SimpleSubscriber<List<IFlexible>>(){
                             @Override
                             public void onNext(List<IFlexible> iFlexibles) {
                                 super.onNext(iFlexibles);
@@ -300,7 +314,9 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
             private void loadProductAverageValue(int mode){//productaveragevalue
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
-                        containerTasks.loadProductAverageValue(beerDetail.getBeer().getId(),new SimpleSubscriber<ListResponse<Averagevalue>>(){
+                        LoadAverageValuePackage loadAverageValuePackage=new LoadAverageValuePackage();
+                        loadAverageValuePackage.setBeer_id(beerDetail.getBeer().getId());
+                        containerTasks.loadProductAverageValue(loadAverageValuePackage,new SimpleSubscriber<ListResponse<Averagevalue>>(){
                             @Override
                             public void onNext(ListResponse<Averagevalue> averagevalueListResponse) {
                                 super.onNext(averagevalueListResponse);

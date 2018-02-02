@@ -2,6 +2,9 @@ package com.brewmapp.execution.task.containers.contract;
 
 import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.pojo.LoadAverageValuePackage;
+import com.brewmapp.data.pojo.LoadInterestPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SearchPackage;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
@@ -18,7 +21,7 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 public interface ContainerTasks {
     void clickLikeDislike(String relatedModel, int relatedId, int type_like, SimpleSubscriber<MessageResponse> simpleSubscriber);
 
-    void loadInteres(String related_model, Integer related_id, String user_id ,SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
+    void loadInteres(LoadInterestPackage loadInterestPackage, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
 
     void loadInteresByUsers(String related_model, Integer related_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
 
@@ -26,7 +29,7 @@ public interface ContainerTasks {
 
     void interestON(String relatedModel, String relatedId, SimpleSubscriber<String> simpleSubscriber);
 
-    void loadReviewsTask(String relatedModel, int relatedId, SimpleSubscriber<List<IFlexible>> simpleSubscriber);
+    void loadReviewsTask(ReviewPackage reviewPackage, SimpleSubscriber<List<IFlexible>> simpleSubscriber);
 
     void addReviewTask(String relatedModel, String relatedId, String text, SimpleSubscriber<String> simpleSubscriber);
 
@@ -36,7 +39,7 @@ public interface ContainerTasks {
 
     void loadUsersByInteres(Integer interest_id, SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber);
 
-    void loadProductAverageValue(String beer_id, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber);
+    void loadProductAverageValue(LoadAverageValuePackage loadAverageValuePackage, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber);
 
     void cancelTasks();
 }

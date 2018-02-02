@@ -55,12 +55,14 @@ public class LoadSubscriptionsListTask extends BaseNetworkTask<SubscriptionPacka
                         .append(subscriptionPackage.getRelated_model())
                         .append(subscriptionPackage.getRelated_id())
                         .toString();
-                ListResponse<Subscription>  o= Paper.book().read(key);
-                if(o!=null)  {
-                    subscriber.onNext(o);
-                    Log.i("NetworkTask","LoadSubscriptionsListTask - cache-read");
+                ListResponse<Subscription>  o= null;
+                if(subscriptionPackage.isCacheOn()) {
+                    o = Paper.book().read(key);
+                    if (o != null) {
+                        subscriber.onNext(o);
+                        Log.i("NetworkTask", "LoadSubscriptionsListTask - cache-read");
+                    }
                 }
-
                 ListResponse<Subscription> response = executeCall(getApi().loadUserSubscriptionsList(params));
                 Paper.book().write(key,response);
                 Log.i("NetworkTask","LoadSubscriptionsListTask - cache-write");

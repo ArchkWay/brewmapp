@@ -1,10 +1,10 @@
 package com.brewmapp.data.pojo;
 
 /**
- * Created by Kras on 16.11.2017.
+ * Created by xpusher on 02.02.2018.
  */
 
-public class LikesByBeerPackage extends BasePackage{
+public class LoadPhotoPackage extends BasePackage {
     private String related_model;
     private String related_id;
 

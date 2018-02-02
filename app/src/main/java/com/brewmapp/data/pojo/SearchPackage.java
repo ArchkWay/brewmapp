@@ -11,7 +11,7 @@ import ru.frosteye.ovsa.execution.network.request.RequestParams;
  * Created by oleg on 30.09.17.
  */
 
-public class SearchPackage {
+public class SearchPackage extends BasePackage{
     private int startLimit, endLimit;
     private double lat, lng;
     private String text;

@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 21.10.2017.
  */
 
-public class LoadProductPackage {
+public class LoadProductPackage extends BasePackage{
     private String interestFilter;
 
     private int mode;

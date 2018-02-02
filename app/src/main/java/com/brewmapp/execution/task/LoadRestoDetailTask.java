@@ -38,12 +38,14 @@ public class LoadRestoDetailTask extends BaseNetworkTask<LoadRestoDetailPackage,
                         .append(getClass().toString())
                         .append(loadRestoDetailPackage.getId())
                         .toString();
-                RestoDetails  o= Paper.book().read(key);
-                if(o!=null) {
-                    subscriber.onNext((RestoDetail) o.getModels().get(0).getModel());
-                    Log.i("NetworkTask","LoadRestoDetailTask - cache-read");
+                RestoDetails  o=null;
+                if(loadRestoDetailPackage.isCacheOn()) {
+                    o= Paper.book().read(key);
+                    if (o != null) {
+                        subscriber.onNext((RestoDetail) o.getModels().get(0).getModel());
+                        Log.i("NetworkTask", "LoadRestoDetailTask - cache-read");
+                    }
                 }
-
                 RestoDetails restoDetails= executeCall(getApi().getRestoDetails(loadRestoDetailPackage.getId(),new WrapperParams("")));
                 Paper.book().write(key,restoDetails);
                 Log.i("NetworkTask","LoadRestoDetailTask - cache-write");

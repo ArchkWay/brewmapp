@@ -24,8 +24,10 @@ import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
+import com.brewmapp.data.pojo.LoadPhotoPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -63,6 +65,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
@@ -317,21 +320,38 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
 
     @Override
     public void loadAllPhoto(SimpleSubscriber<List<Photo>> simpleSubscriber) {
-        class LoadPhotoResto extends BaseNetworkTask<String, List<Photo>> {
+
+
+        class LoadPhotoResto extends BaseNetworkTask<LoadPhotoPackage, List<Photo>> {
 
             public LoadPhotoResto(MainThread mainThread, Executor executor, Api api) {
                 super(mainThread, executor, api);
             }
 
             @Override
-            protected Observable<List<Photo>> prepareObservable(String resto_id) {
+            protected Observable<List<Photo>> prepareObservable(LoadPhotoPackage loadPhotoPackage) {
                 return Observable.create(subscriber -> {
                     try {
                         WrapperParams wrapperParams=new WrapperParams(Wrappers.PHOTO);
-                        wrapperParams.addParam(Keys.RELATED_MODEL,Keys.CAP_RESTO);
-                        wrapperParams.addParam(Keys.RELATED_ID,resto_id);
+                        if(loadPhotoPackage.getRelated_id()!=null)
+                            wrapperParams.addParam(Keys.RELATED_ID,loadPhotoPackage.getRelated_id());
+                        if(loadPhotoPackage.getRelated_model()!=null)
+                            wrapperParams.addParam(Keys.RELATED_MODEL,loadPhotoPackage.getRelated_model());
+                        Object o=null;
+                        String key=new StringBuilder()
+                                .append(getClass().toString())
+                                .append(loadPhotoPackage.getRelated_id())
+                                .append(loadPhotoPackage.getRelated_model())
+                                .toString();
+                        if(loadPhotoPackage.isCacheOn()){
+                            o= Paper.book().read(key);
+                            if(o!=null)
+                                subscriber.onNext(((ListResponse<Photo>)o).getModels());
+                        }
                         ListResponse<Photo> listResponse= executeCall(getApi().loadPhotosResto(wrapperParams));
-                        subscriber.onNext(listResponse.getModels());
+                        Paper.book().write(key,listResponse);
+                        if(o==null)
+                            subscriber.onNext(listResponse.getModels());
                         subscriber.onComplete();
                     } catch (Exception e) {
                         subscriber.onError(e);
@@ -339,12 +359,17 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                 });
             }
         }
+
+        LoadPhotoPackage loadPhotoPackage=new LoadPhotoPackage();
+        loadPhotoPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+        loadPhotoPackage.setRelated_model(Keys.CAP_RESTO);
+        loadPhotoPackage.setCacheOn(true);
         new LoadPhotoResto(
                 BeerMap.getAppComponent().mainThread(),
                 BeerMap.getAppComponent().executor(),
                 BeerMap.getAppComponent().api()
-        ).execute(
-                String.valueOf(restoDetail.getResto().getId()),
+        ).execute(loadPhotoPackage
+                ,
                 simpleSubscriber
         );
 
@@ -390,6 +415,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
                 LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                 loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
+                loadRestoDetailPackage.setCacheOn(true);
                 loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
                     @Override public void onNext(RestoDetail _restoDetail) {
                         super.onNext(_restoDetail);
@@ -406,14 +432,25 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             }
         }
         private void loadReviews(int mode) {
-            if(mode== Actions.MODE_REFRESH_ALL)
-                containerTasks.loadReviewsTask(Keys.CAP_RESTO,restoDetail.getResto().getId(),new SimpleSubscriber<List<IFlexible>>(){
-                    @Override public void onNext(List<IFlexible> iFlexibles ) {super.onNext(iFlexibles);view.setReviews(iFlexibles);loadSubscriptions(mode);}
-                    @Override public void onError(Throwable e) {
-                        super.onError(e);view.commonError(e.getMessage());
+            if(mode== Actions.MODE_REFRESH_ALL) {
+                ReviewPackage reviewPackage=new ReviewPackage();
+                reviewPackage.setRelated_model(Keys.CAP_RESTO);
+                reviewPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
+                containerTasks.loadReviewsTask(reviewPackage, new SimpleSubscriber<List<IFlexible>>() {
+                    @Override
+                    public void onNext(List<IFlexible> iFlexibles) {
+                        super.onNext(iFlexibles);
+                        view.setReviews(iFlexibles);
+                        loadSubscriptions(mode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
                     }
                 });
-            else
+            }else
                 loadSubscriptions(mode);
         }
         private void loadSubscriptions(int mode) {

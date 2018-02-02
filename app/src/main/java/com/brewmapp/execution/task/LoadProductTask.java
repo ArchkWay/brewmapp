@@ -57,12 +57,13 @@ public class LoadProductTask extends BaseNetworkTask<LoadProductPackage,List<IFl
                         .append(loadProductPackage.getId())
                         .append(start)
                         .append(end).toString();
-
-                Beers   o= Paper.book().read(key);
-                if(o!=null) {
-                    subscriber.onNext(new ArrayList<>(o.getModels()));
+                Beers o=null;
+                if (loadProductPackage.isCacheOn()) {
+                    o = Paper.book().read(key);
+                    if (o != null) {
+                        subscriber.onNext(new ArrayList<>(o.getModels()));
+                    }
                 }
-
                 Beers beers = executeCall(getApi().loadProduct(start , end, params));
                 Paper.book().write(key,beers );
                 if(o==null)

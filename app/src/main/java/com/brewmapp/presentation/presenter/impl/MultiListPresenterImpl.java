@@ -8,6 +8,7 @@ import com.brewmapp.data.entity.wrapper.EvaluationData;
 import com.brewmapp.data.entity.wrapper.EvaluationItem;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.EvaluationPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.task.FullSearchTask;
@@ -133,7 +134,10 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     @Override
     public void loadReviewsResto(int id_resto) {
-        containerTasks.loadReviewsTask(Keys.CAP_RESTO,id_resto,new SimpleSubscriber<List<IFlexible>>(){
+        ReviewPackage reviewPackage=new ReviewPackage();
+        reviewPackage.setRelated_model(Keys.CAP_RESTO);
+        reviewPackage.setRelated_id(String.valueOf(id_resto));
+        containerTasks.loadReviewsTask(reviewPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override public void onNext(List<IFlexible> iFlexibles ) {
                 super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);
@@ -146,7 +150,10 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     @Override
     public void loadReviewsBeer(int id_beer) {
-        containerTasks.loadReviewsTask(Keys.CAP_BEER,id_beer,new SimpleSubscriber<List<IFlexible>>(){
+        ReviewPackage reviewPackage=new ReviewPackage();
+        reviewPackage.setRelated_model(Keys.CAP_BEER);
+        reviewPackage.setRelated_id(String.valueOf(id_beer));
+        containerTasks.loadReviewsTask(reviewPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override public void onNext(List<IFlexible> iFlexibles ) {
                 super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);

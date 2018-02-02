@@ -26,13 +26,11 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.AverageEvaluation;
 import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.pojo.LikeDislikePackage;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
@@ -53,6 +51,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -137,8 +136,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private final int ALL_CONTROL =0;
 
     private Resto resto;
-    private ArrayList<String> photosResto=new ArrayList<>();
-    private ArrayList<String> photosRestoPreview=new ArrayList<>();
+
+    private ArrayList<String> photoArrayListPreview =new ArrayList<>();
     private FlexibleAdapter adapter_favorites;
     private FlexibleAdapter adapter_reviews;
     private  swipeDelayed swipeDelayed=new swipeDelayed();
@@ -175,7 +174,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
         call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
-        slider.setVisibility(View.INVISIBLE);
+
         panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
         panel_favorite.setOnClickListener(v->{presenter.clickFav();setResult(RESULT_OK);});
         panel_i_owner.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
@@ -259,36 +258,21 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                     public void onNext(List<Photo> photos) {
                         super.onNext(photos);
                         photoArrayList=new ArrayList<>(photos);
-
                         Iterator<Photo> iterator=photos.iterator();
                         while (iterator.hasNext()) {
                             Photo photo=iterator.next();
                             try {
-                                photosResto.add(photo.getThumb().getUrl());
-                                photosRestoPreview.add(photo.getThumb().getThumbUrl());
+                                photoArrayListPreview.add(photo.getThumb().getThumbUrl());
                             }catch (Exception e){}
                         }
                         fillSlider();
                     }
 
                     private void fillSlider() {
-                        if(restoDetail.getResto().getThumb()==null&&photosRestoPreview.size()==0) {
-                            slider.addSlider(new DefaultSliderView(RestoDetailActivity.this)
-                                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                    .image(R.drawable.ic_default_resto)
-                            );
-                        }else {
+                            if(restoDetail.getResto().getThumb()!=null)
+                                photoArrayListPreview.add(restoDetail.getResto().getThumb());
 
-                            photosRestoPreview.add(restoDetail.getResto().getThumb());
-                            photosResto.add(restoDetail.getResto().getThumb());
-
-                            for (Kitchen kitchen:restoDetail.getResto_kitchen())
-                                if(kitchen.getGetThumb()!=null) {
-                                    photosRestoPreview.add(kitchen.getGetThumb());
-                                    photosResto.add(kitchen.getGetThumb());
-                                }
-
-                            for(String imgUrl:photosRestoPreview){
+                            for(String imgUrl: photoArrayListPreview){
                                 if(imgUrl!=null) {
                                     DefaultSliderView defaultSliderView=new DefaultSliderView(RestoDetailActivity.this);
                                     defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
@@ -298,21 +282,24 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                                     slider.addSlider(defaultSliderView);
                                 }
                             }
+
+
+                        if(photoArrayListPreview.size()==0){
+                            slider.addSlider(new DefaultSliderView(RestoDetailActivity.this)
+                                    .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                                    .image(R.drawable.ic_default_resto)
+                            );
                         }
 
-                        if(photosRestoPreview.size()>0) {
-                            photosCounter.setText(String.format("%d/%d", 1, photosRestoPreview.size()));
-                            slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
-                                @Override
-                                public void onPageSelected(int position) {
-                                    photosCounter.setText(String.format("%d/%d", position + 1, photosRestoPreview.size()));
-                                }
-                            });
-                            cnt_photo.setText(String.valueOf(photosRestoPreview.size()));
-                            slider.setVisibility(View.VISIBLE);
-                        }else {
-                            container_slider.setVisibility(View.GONE);
-                        }
+
+                        photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", 1, photoArrayListPreview.size()));
+                        slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+                            @Override
+                            public void onPageSelected(int position) {
+                                photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", position + 1, photoArrayListPreview.size()));
+                            }
+                        });
+                        cnt_photo.setText(String.valueOf(photoArrayListPreview.size()));
 
                     }
 
@@ -325,7 +312,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                     @Override
                     public void onComplete() {
                         super.onComplete();
-                        fillSlider();
+
                     }
                 });
 

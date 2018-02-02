@@ -66,12 +66,14 @@ public class LoadEventsTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexi
                         .append(start)
                         .append(end)
                         .toString();
-                Events o= Paper.book().read(key);
-                if(o!=null)  {
-                    subscriber.onNext(new ArrayList<>(o.getModels()));
-                    Log.i("NetworkTask","LoadEventsTask - cache-read");
+                Events o= null;
+                if (request.isCacheOn()){
+                    o=Paper.book().read(key);
+                    if(o!=null)  {
+                        subscriber.onNext(new ArrayList<>(o.getModels()));
+                        Log.i("NetworkTask","LoadEventsTask - cache-read");
+                    }
                 }
-
 
                 Events posts = executeCall(getApi().loadEvents(start, end, params));
                 Paper.book().write(key,posts);

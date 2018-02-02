@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by Kras on 22.10.2017.
  */
 
-public class LoadInterestPackage {
+public class LoadInterestPackage extends BasePackage{
     private int page;
     private String related_id;
     private String related_model;

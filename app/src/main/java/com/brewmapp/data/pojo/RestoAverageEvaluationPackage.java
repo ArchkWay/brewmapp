@@ -4,7 +4,7 @@ package com.brewmapp.data.pojo;
  * Created by xpusher on 11/7/2017.
  */
 
-public class RestoAverageEvaluationPackage {
+public class RestoAverageEvaluationPackage extends BasePackage{
     private String resto_id;
 
     public String getResto_id() {

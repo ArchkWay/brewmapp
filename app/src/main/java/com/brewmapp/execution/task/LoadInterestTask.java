@@ -66,13 +66,14 @@ public class LoadInterestTask extends BaseNetworkTask<LoadInterestPackage,List<I
                       .append(loadInterestPackage.getUser_id())
                       .append(start)
                       .append(end).toString();
-              Interests o= Paper.book().read(key);
-              if(o!=null)  {
-                  subscriber.onNext(new ArrayList<>(o.getModels()));
-                  Log.i("NetworkTask","LoadInterestTask - cache-read");
+              Interests o= null;
+              if (loadInterestPackage.isCacheOn()){
+                  o= Paper.book().read(key);
+                  if(o!=null)  {
+                      subscriber.onNext(new ArrayList<>(o.getModels()));
+                      Log.i("NetworkTask","LoadInterestTask - cache-read");
+                  }
               }
-
-
 
               Interests interests=executeCall(getApi().loadInterest(start , end, params));
               Paper.book().write(key,interests);

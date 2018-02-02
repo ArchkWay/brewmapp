@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by oleg on 23.08.17.
  */
 
-public class LoadNewsPackage {
+public class LoadNewsPackage extends BasePackage{
 
     private String resto_id;
     private String related_model;

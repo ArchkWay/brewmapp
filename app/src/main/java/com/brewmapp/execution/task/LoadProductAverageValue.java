@@ -2,6 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.Averagevalue;
 import com.brewmapp.data.entity.container.InterestsByUser;
+import com.brewmapp.data.pojo.LoadAverageValuePackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -26,7 +27,7 @@ import ru.frosteye.ovsa.execution.network.request.RequestParams;
  * Created by Kras on 16.01.2018.
  */
 
-public class LoadProductAverageValue extends BaseNetworkTask<Integer,ListResponse<Averagevalue>> {
+public class LoadProductAverageValue extends BaseNetworkTask<LoadAverageValuePackage ,ListResponse<Averagevalue>> {
 
     @Inject
     public LoadProductAverageValue(MainThread mainThread, Executor executor, Api api) {
@@ -34,21 +35,24 @@ public class LoadProductAverageValue extends BaseNetworkTask<Integer,ListRespons
     }
 
     @Override
-    protected Observable<ListResponse<Averagevalue>> prepareObservable(Integer beer_id) {
+    protected Observable<ListResponse<Averagevalue>> prepareObservable(LoadAverageValuePackage loadAverageValuePackage) {
         return Observable.create(subscriber -> {
             try {
                 WrapperParams wrapperParams=new WrapperParams(Wrappers.AVERAGE_EVALUATION);
                 wrapperParams.addParam(Keys.NAME,Keys.CAP_BEER);
-                wrapperParams.addParam(Keys.ID,beer_id);
+                wrapperParams.addParam(Keys.ID,loadAverageValuePackage.getBeer_id());
 
                 String key=new StringBuilder()
                         .append(getClass().toString())
                         .append(Keys.CAP_BEER)
-                        .append(beer_id)
+                        .append(loadAverageValuePackage.getBeer_id())
                         .toString();
-                ListResponse<Averagevalue>  o= Paper.book().read(key);
-                if(o!=null)  subscriber.onNext(o);
-
+                ListResponse<Averagevalue>  o=null;
+                if (loadAverageValuePackage.isCacheOn()) {
+                    o = Paper.book().read(key);
+                    if (o != null)
+                        subscriber.onNext(o);
+                }
 
                 ListResponse<Averagevalue> listResponse=executeCall(getApi().loadProductAverageValue(wrapperParams));
                 Paper.book().write(key,listResponse);

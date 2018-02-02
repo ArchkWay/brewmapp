@@ -6,6 +6,7 @@ import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.pojo.AddInterestPackage;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LikesByBeerPackage;
+import com.brewmapp.data.pojo.LoadAverageValuePackage;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.RestoGeoPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
@@ -78,11 +79,8 @@ public class ContainerTasksImpl implements ContainerTasks {
     }
 
     @Override
-    public void loadInteres(String related_model, Integer related_id, String user_id,SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber) {
-        LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
-        loadInterestPackage.setRelated_model(related_model);
-        loadInterestPackage.setRelated_id(String.valueOf(related_id));
-        loadInterestPackage.setUser_id(user_id);
+    public void loadInteres(LoadInterestPackage loadInterestPackage,SimpleSubscriber<List<IFlexible>> objectSimpleSubscriber) {
+
 
         loadInterestTask.execute(loadInterestPackage ,objectSimpleSubscriber);
     }
@@ -109,10 +107,7 @@ public class ContainerTasksImpl implements ContainerTasks {
     }
 
     @Override
-    public void loadReviewsTask(String relatedModel, int relatedId, SimpleSubscriber<List<IFlexible>> simpleSubscriber) {
-        ReviewPackage reviewPackage=new ReviewPackage();
-        reviewPackage.setRelated_model(relatedModel);
-        reviewPackage.setRelated_id(String.valueOf(relatedId));
+    public void loadReviewsTask(ReviewPackage reviewPackage, SimpleSubscriber<List<IFlexible>> simpleSubscriber) {
         loadReviewsTask.execute(reviewPackage,simpleSubscriber);
     }
 
@@ -144,8 +139,8 @@ public class ContainerTasksImpl implements ContainerTasks {
     }
 
     @Override
-    public void loadProductAverageValue(String beer_id, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber) {
-        loadProductAverageValue.execute(Integer.valueOf(beer_id),listResponseSimpleSubscriber);
+    public void loadProductAverageValue(LoadAverageValuePackage loadAverageValuePackage, SimpleSubscriber<ListResponse<Averagevalue>> listResponseSimpleSubscriber) {
+        loadProductAverageValue.execute(loadAverageValuePackage,listResponseSimpleSubscriber);
     }
 
     @Override

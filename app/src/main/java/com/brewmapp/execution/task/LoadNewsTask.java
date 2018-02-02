@@ -65,12 +65,14 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, List<IFlexibl
                         .append(start)
                         .append(end)
                         .toString();
-                Posts  o= Paper.book().read(key);
-                if(o!=null)  {
-                    subscriber.onNext(new ArrayList<>(o.getModels()));
-                    Log.i("NetworkTask","LoadNewsTask - cache-read");
+                Posts  o= null;
+                if (request.isCacheOn()){
+                    o= Paper.book().read(key);
+                    if(o!=null)  {
+                        subscriber.onNext(new ArrayList<>(o.getModels()));
+                        Log.i("NetworkTask","LoadNewsTask - cache-read");
+                    }
                 }
-
 
                 Posts posts = executeCall(getApi().loadPosts(start, end, params));
                 Paper.book().write(key,posts);

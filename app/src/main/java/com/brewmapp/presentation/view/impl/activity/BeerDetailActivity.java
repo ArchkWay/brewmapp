@@ -147,8 +147,8 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
                     photos.add(beer.getGetThumb());
                 if(photos.size()==0){
                     slider.addSlider(new DefaultSliderView(this)
-                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                            .image(R.drawable.ic_default_brewery));
+                            .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                            .image(R.drawable.ic_default_beer));
                 }else {
                     for(String s:photos){
                         slider.addSlider(new DefaultSliderView(this)

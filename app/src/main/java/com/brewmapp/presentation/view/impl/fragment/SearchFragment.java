@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterBeerField;
@@ -139,8 +140,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
-            intent.putExtra(Keys.FILTER_CATEGORY, position);
-            intent.putExtra(Keys.BEER_TYPES, tabsView.getTabs().getSelectedTabPosition());
+            intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+            intent.putExtra(Actions.PARAM2,position);
+
             getActivity().startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
         }
         return false;

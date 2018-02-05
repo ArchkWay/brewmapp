@@ -137,7 +137,13 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.SELECT_PHOTO))));
         layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);invalidateOptionsMenu();}));
         layout_city.setOnClickListener(v -> new DialogSelectCountryCity(getActivity(),getActivity().getSupportFragmentManager(), city -> {
-                    text_city.setText("Россия,"+city.getName());
+            String nameCountry=getString(R.string.text_view_city_not_found);
+            try {
+                nameCountry=city.getRelations().getmCountry().getName();
+            }catch (Exception e){
+
+            }
+                    text_city.setText(String.format("%s, %s",nameCountry,city.getName()));
                     user.setCityId(city.getId());
                     user.setCountryId(Integer.valueOf(city.getCountryId()));
                     getActivity().invalidateOptionsMenu();

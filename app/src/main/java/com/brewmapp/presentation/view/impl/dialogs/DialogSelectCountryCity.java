@@ -102,7 +102,7 @@ public class DialogSelectCountryCity extends DialogFragment {
                 if(txt.length()>0) {
                     GeoPackage geoPackage = new GeoPackage();
                     geoPackage.setCityName(txt);
-                    geoPackage.setCountryId("1");
+                    //geoPackage.setCountryId("1");
                     loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
                         @Override
                         public void onError(Throwable e) {

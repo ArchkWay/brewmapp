@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
@@ -33,6 +34,7 @@ import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
@@ -87,8 +89,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private List<IFlexible> original;
     private int filterCategory;
     private String selectedFilter = null;
-    private boolean isBeer;
-    private boolean isBrewery;
+    private int selectedTab;
+    private int selectedItemPosition;
 
     @Inject
     SelectCategoryActivityPresenter presenter;
@@ -112,6 +114,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initView() {
+        selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        selectedItemPosition=getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
 
         fullSearchPackage = new FullSearchPackage();
         fullSearchPackage.setPage(0);
@@ -120,12 +124,16 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             @Override
             public void onLoadMore(int currentPage) {
                 fullSearchPackage.setPage(manager.getItemCount());
-                if (isBrewery) {
-                    presenter.loadBreweryCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
-                } else if (isBeer) {
-                    presenter.loadBeerCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
-                } else {
-                    presenter.loadRestoCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                switch (selectedTab){
+                    case SearchFragment.TAB_BEER:
+                        presenter.loadBeerCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                        break;
+                    case SearchFragment.TAB_BREWERY:
+                        presenter.loadBreweryCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                        break;
+                    case SearchFragment.TAB_RESTO:
+                        presenter.loadRestoCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
+                        break;
                 }
             }
         };
@@ -141,8 +149,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             return false;
         });
 
-        isBeer = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 1;
-        isBrewery = getIntent().getIntExtra(Keys.BEER_TYPES, 0) == 2;
         initFilterCategory();
         initFilter();
     }
@@ -176,13 +182,18 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
-        if (isBrewery) {
-            breweryLogic();
-        } else if (isBeer) {
-            beerFilterLogic();
-        } else {
-            restoFilterLogic();
+        switch (selectedTab){
+            case SearchFragment.TAB_BEER:
+                beerFilterLogic();
+                break;
+            case SearchFragment.TAB_BREWERY:
+                breweryLogic();
+                break;
+            case SearchFragment.TAB_RESTO:
+                restoFilterLogic();
+                break;
         }
+
         goToFilterMap();
     }
 
@@ -204,12 +215,16 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initFilterCategory() {
-        if (isBeer) {
-            initBeerFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
-        } else if (isBrewery) {
-            initBreweryFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
-        } else {
-            initRestoFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+        switch (selectedTab){
+            case SearchFragment.TAB_BEER:
+                initBeerFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+                break;
+            case SearchFragment.TAB_BREWERY:
+                initBreweryFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+                break;
+            case SearchFragment.TAB_RESTO:
+                initRestoFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+                break;
         }
     }
 
@@ -560,16 +575,36 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initFilter() {
-        if (fullSearchPackage.getType() != null) {
-            finder.setListener(string -> prepareQuery(string));
-        } else {
+        //0-local filter
+        //1-remote filter
+        int type_filter=0;
+
+        switch (selectedTab){
+            case SearchFragment.TAB_BEER:
+                if(FilterBeerField.NAME==selectedItemPosition)
+                    type_filter=1;
+                break;
+            case SearchFragment.TAB_BREWERY:
+                if(FilterBreweryField.NAME==selectedItemPosition)
+                    type_filter=1;
+                break;
+            case SearchFragment.TAB_RESTO:
+                if(FilterRestoField.NAME==selectedItemPosition)
+                    type_filter=1;
+                break;
+        }
+
+        if(type_filter==0) {
             finder.setListener(string -> {
                 if (original != null) {
                     adapter.setSearchText(string);
                     adapter.filterItems(original);
                 }
             });
+        }else {
+            finder.setListener(string -> prepareQuery(string));
         }
+
     }
 
     private void prepareQuery(String stringSearch) {
@@ -614,7 +649,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         break;
                     case FilterRestoField.CITY:
                         Country country = (Country) payload;
-                        if (country.getId() == null || isBeer || isBrewery) {
+                        if (country.getId() == null) {
                             selectedItem = country.getName();
                             selectedItemId = country.getId();
                             goToFilterMap();

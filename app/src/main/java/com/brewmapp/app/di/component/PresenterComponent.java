@@ -1,12 +1,12 @@
 package com.brewmapp.app.di.component;
 
 import android.app.Service;
-import android.view.View;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.AddAlbumActivity;
+import com.brewmapp.presentation.view.impl.activity.BreweryDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
@@ -21,7 +21,7 @@ import com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
-import com.brewmapp.presentation.view.impl.activity.FilterByCategory;
+import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
@@ -39,7 +39,7 @@ import com.brewmapp.presentation.view.impl.activity.NewPostSettingsActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
 import com.brewmapp.presentation.view.impl.activity.PickLocationActivity;
 import com.brewmapp.presentation.view.impl.activity.RegisterActivity;
-import com.brewmapp.presentation.view.impl.activity.SearchActivity;
+import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
@@ -101,7 +101,7 @@ public interface PresenterComponent {
     void inject(PickLocationActivity activity);
     void inject(FriendsActivity activity);
     void inject(NewPostSettingsActivity activity);
-    void inject(SearchActivity activity);
+    void inject(ResultSearchActivity activity);
     void inject(ExtendedSearchActivity activity);
     void inject(EventDetailsActivity activity);
     void inject(PhotoSliderActivity activity);
@@ -118,10 +118,11 @@ public interface PresenterComponent {
     void inject(BeerDetailActivity beerDetailActivity);
     void inject(AddReviewRestoActivity addReviewRestoActivity);
     void inject(ProfileEditActivity profileEditActivity);
-    void inject(FilterByCategory filterByCategory);
+    void inject(SelectCategoryActivity selectSearchCategory);
     void inject(FilterMapActivity filterMapActivity);
     void inject(AddReviewBeerActivity addReviewBeerActivity);
     void inject(MultiFragmentActivity multiFragmentActivity);
     void inject(DialogManageContact dialogManageContact);
     void inject(ItemEvaluationView itemEvaluationView);
+    void inject(BreweryDetailsActivity breweryDetailsActivity);
 }

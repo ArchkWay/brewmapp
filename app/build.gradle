@@ -116,7 +116,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile "com.andkulikov:transitionseverywhere:1.7.7"
     compile 'com.google.maps.android:android-maps-utils:0.4+'
-    compile ('io.socket:socket.io-client:0.8.3') {
+    compile('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
 

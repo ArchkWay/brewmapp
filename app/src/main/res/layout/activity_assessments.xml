@@ -7,6 +7,6 @@
     tools:context="com.brewmapp.presentation.view.impl.activity.PostDetailsActivity"
     android:orientation="vertical"
     >
-    <include layout="@layout/view_toolbar" />
+    <include layout="@layout/view_toolbar_bm" />
 
 </LinearLayout>

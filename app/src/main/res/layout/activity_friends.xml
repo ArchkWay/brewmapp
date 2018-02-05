@@ -9,7 +9,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <include layout="@layout/view_toolbar" />
+    <include layout="@layout/view_toolbar_bm" />
 
     <com.brewmapp.presentation.view.impl.widget.FinderView
         android:layout_width="match_parent"

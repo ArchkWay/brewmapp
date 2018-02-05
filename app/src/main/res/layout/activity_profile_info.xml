@@ -8,7 +8,7 @@
     android:orientation="vertical"
     >
 
-        <include layout="@layout/view_toolbar" />
+        <include layout="@layout/view_toolbar_bm" />
 
         <FrameLayout
             android:layout_width="match_parent"

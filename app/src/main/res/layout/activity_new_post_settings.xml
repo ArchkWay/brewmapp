@@ -8,7 +8,7 @@
     android:background="@color/colorDecorBgGray"
     android:orientation="vertical">
 
-    <include layout="@layout/view_toolbar" />
+    <include layout="@layout/view_toolbar_bm" />
 
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"

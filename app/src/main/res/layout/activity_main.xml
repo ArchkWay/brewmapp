@@ -26,7 +26,7 @@
         android:id="@+id/activity.main.visible_container"
         >
 
-        <include layout="@layout/view_toolbar" />
+        <include layout="@layout/view_toolbar_bm" />
 
         <FrameLayout
             android:id="@+id/activity.main.container"

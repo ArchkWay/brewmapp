@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
@@ -22,8 +24,9 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.SearchBeer;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.SearchPresenter;
-import com.brewmapp.presentation.view.contract.SearchView;
+import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
+import com.brewmapp.presentation.view.contract.ResultSearchActivityView;
+
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -34,6 +37,7 @@ import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
@@ -41,14 +45,13 @@ import java.util.List;
 
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
-public class SearchActivity extends BaseActivity implements SearchView {
+public class ResultSearchActivity extends BaseActivity implements ResultSearchActivityView {
 
     @BindView(R.id.filter_category_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_search_list) RecyclerView list;
     @BindView(R.id.activity_search_search) FinderView finder;
     @BindView(R.id.activity_search_more) Button more;
-    @BindView(R.id.title_toolbar)
-    TextView titleToolbar;
+    @BindView(R.id.title_toolbar)    TextView titleToolbar;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage;
@@ -58,7 +61,8 @@ public class SearchActivity extends BaseActivity implements SearchView {
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private int craftBeer, offer, filterBeer;
 
-    @Inject SearchPresenter presenter;
+    @Inject
+    ResultSearchActivityPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,15 +113,15 @@ public class SearchActivity extends BaseActivity implements SearchView {
 
     private void loadResult(FullSearchPackage searchPackage) {
         switch (selectedTab) {
-            case 0:
+            case SearchFragment.TAB_RESTO:
                 showDialogProgressBar(R.string.search_resto_message);
                 presenter.loadRestoList(offer, searchPackage);
                 break;
-            case 1:
+            case SearchFragment.TAB_BEER:
                 showDialogProgressBar(R.string.search_beer_message);
                 presenter.loadBeerList(craftBeer, filterBeer, searchPackage);
                 break;
-            case 2:
+            case SearchFragment.TAB_BREWERY:
                 showDialogProgressBar(R.string.search_brewery_message);
                 presenter.loadBrewery(searchPackage);
                 break;
@@ -155,17 +159,24 @@ public class SearchActivity extends BaseActivity implements SearchView {
 
 
     private void processAction(int action, Object payload) {
-        switch (action) {
-            case FilterRestoField.NAME:
-                Resto resto = (Resto) payload;
-                goToRestoDetails(String.valueOf(resto.getId()));
+        switch (selectedTab) {
+            case SearchFragment.TAB_RESTO:
+                switch (action) {
+                    case FilterRestoField.NAME:
+                        Resto resto = (Resto) payload;
+                        goToRestoDetails(String.valueOf(resto.getId()));
+                        break;
+                    case FilterRestoField.BEER:
+                        SearchBeer beer = (SearchBeer) payload;
+                        goToBeerDetails(beer.getId());
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            case FilterRestoField.BEER:
-                SearchBeer beer = (SearchBeer) payload;
-                goToBeerDetails(beer.getId());
-                break;
-            default:
-                break;
+                case SearchFragment.TAB_BREWERY:
+                    Starter.BreweryDetailsActivity(this,((Brewery)payload).getId());
+                    break;
         }
     }
 

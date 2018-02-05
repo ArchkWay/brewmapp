@@ -7,7 +7,7 @@
     tools:context="com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity"
     android:orientation="vertical">
 
-        <include layout="@layout/view_toolbar" />
+        <include layout="@layout/view_toolbar_bm" />
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">

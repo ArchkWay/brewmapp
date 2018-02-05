@@ -25,6 +25,7 @@ import com.brewmapp.data.entity.BeerPowerTypes;
 import com.brewmapp.data.entity.BeerSmellTypes;
 import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
+import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
@@ -520,5 +521,10 @@ public interface Api {
     @POST("/api/beer/productevaluation/add")
     @FormUrlEncoded
     Call<Object> setBeerEvaluation(@FieldMap WrapperParams params);
+
+    @POST("/api/brewery")
+    @FormUrlEncoded
+    Call<Breweries>  apiBrewery(@FieldMap RequestParams params);
+    //Call<ListResponse<Brewery>>  apiBrewery(@FieldMap RequestParams params);
 
 }

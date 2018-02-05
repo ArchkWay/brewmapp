@@ -1,6 +1,6 @@
 package com.brewmapp.execution.exchange.common.base;
 
-import com.brewmapp.data.entity.BreweryShort;
+import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.wrapper.BreweryInfo;
 
 import ru.frosteye.ovsa.execution.serialization.AdapterItemTempDeserializer;
@@ -9,10 +9,10 @@ import ru.frosteye.ovsa.execution.serialization.AdapterItemTempDeserializer;
  * Created by nixus on 05.12.2017.
  */
 
-public class BreweryDeserializer extends AdapterItemTempDeserializer<BreweryShort, BreweryInfo> {
+public class BreweryDeserializer extends AdapterItemTempDeserializer<Brewery, BreweryInfo> {
     @Override
-    protected Class<BreweryShort> provideType() {
-        return BreweryShort.class;
+    protected Class<Brewery> provideType() {
+        return Brewery.class;
     }
 
     @Override

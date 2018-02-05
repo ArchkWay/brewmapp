@@ -33,4 +33,5 @@ public class Actions {
     public static final int ACTION_CLICK_ON_ITEM_REVIEW_ON_USER = 26;
 
 
+    public static final String PARAM1 = "PARAM1";
 }

@@ -5,11 +5,8 @@ import java.util.List;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
-/**
- * Created by nixus on 01.11.2017.
- */
-
-public interface FilterByCategoryView extends BasicView {
+public interface ResultSearchActivityView extends BasicView {
+    void showDialogProgressBar(int message);
+    void hideProgressBar();
     void appendItems(List<IFlexible> list);
-    void showProgressBar(boolean show);
 }

@@ -29,7 +29,7 @@ import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
-import com.brewmapp.data.entity.wrapper.BreweryInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfoSelect;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
@@ -163,7 +163,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
         if ((tabsView.getTabs().getSelectedTabPosition() == 0) && position == 6){
             Toast.makeText(this, "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(this, FilterByCategory.class);
+            Intent intent = new Intent(this, SelectCategoryActivity.class);
             intent.putExtra(Keys.FILTER_CATEGORY, position);
             intent.putExtra(Keys.BEER_TYPES, tabsView.getTabs().getSelectedTabPosition());
             intent.putExtra(Keys.SEARCH, true);
@@ -489,21 +489,21 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BREWERIES)) {
-                List<BreweryInfo> breweryInfos = new ArrayList<>();
+                List<BreweryInfoSelect> breweryInfoSelects = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_BREWERIES);
                 if (tempList != null) {
                     for (Object o : tempList) {
-                        breweryInfos.add((BreweryInfo) o);
+                        breweryInfoSelects.add((BreweryInfoSelect) o);
                     }
-                    for (BreweryInfo breweryInfo : breweryInfos) {
-                        if (breweryInfo.getModel().isSelected()) {
+                    for (BreweryInfoSelect breweryInfoSelect : breweryInfoSelects) {
+                        if (breweryInfoSelect.getModel().isSelected()) {
                             notEmpty = true;
-                            filter.append(breweryInfo.getModel().getName()).append(", ");
-                            filterId.append(breweryInfo.getModel().getId()).append(",");
+                            filter.append(breweryInfoSelect.getModel().getName()).append(", ");
+                            filterId.append(breweryInfoSelect.getModel().getId()).append(",");
                         }
                     }
                     if (!notEmpty) {
-                        filter.append(breweryInfos.get(0).getModel().getName());
+                        filter.append(breweryInfoSelects.get(0).getModel().getName());
                     }
                 }
             }

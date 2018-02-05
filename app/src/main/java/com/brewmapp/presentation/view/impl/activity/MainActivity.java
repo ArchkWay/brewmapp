@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
@@ -117,8 +118,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Paper.book().destroy();
     }
 
     @Override

@@ -8,7 +8,7 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
-    <include layout="@layout/view_toolbar" />
+    <include layout="@layout/view_toolbar_bm" />
 
     <EditText
         android:layout_width="match_parent"

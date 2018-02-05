@@ -13,7 +13,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  * Created by ovcst on 24.08.2017.
  */
 
-public interface SearchAllPresenter extends LivePresenter<SearchAllView> {
+public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
     void storeTabActive(int position);
     void saveRestoFilterChanges(List<FilterRestoField> fields);
     void saveBeerFilterChanges(List<FilterBeerField> fields);

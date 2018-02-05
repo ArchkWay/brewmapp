@@ -265,7 +265,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
     public void onBarAction(int id) {
         switch (id) {
             case R.id.action_search:
-                //startActivity(new Intent(getActivity(), SearchActivity.class));
                 showMessage(getString(R.string.message_develop));
                 break;
             case R.id.action_add:

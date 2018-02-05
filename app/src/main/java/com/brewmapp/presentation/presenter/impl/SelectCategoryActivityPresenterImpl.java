@@ -9,7 +9,6 @@ import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.PriceRangeType;
-import com.brewmapp.data.pojo.ScrollPackage;
 import com.brewmapp.execution.task.BeerAftertasteTask;
 import com.brewmapp.execution.task.BeerBrandTask;
 import com.brewmapp.execution.task.BeerColorTask;
@@ -29,8 +28,8 @@ import com.brewmapp.execution.task.LoadCityTaskFilter;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RegionTask;
 import com.brewmapp.execution.task.RestoTypeTask;
-import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
-import com.brewmapp.presentation.view.contract.FilterByCategoryView;
+import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
+import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by nixus on 01.11.2017.
  */
 
-public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategoryView> implements FilterByCategoryPresenter {
+public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCategoryActivityView> implements SelectCategoryActivityPresenter {
 
     private Context context;
 
@@ -73,25 +72,25 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     private BeerIbuTask beerIbuTask;
 
     @Inject
-    public FilterByCategoryPresenterImpl(Context context, RestoTypeTask restoTypeTask,
-                                         KitchenTask kitchenTask,
-                                         PriceRangeTask priceRangeTask,
-                                         FeatureTask featureTask,
-                                         FullSearchFilterTask fullSearchFilterTask,
-                                         BeerTypesTask beerTypesTask,
-                                         BeerPackTask beerPackTask,
-                                         BeerBrandTask beerBrandTask,
-                                         BeerColorTask beerColorTask,
-                                         BeerTasteTask beerTasteTask,
-                                         BeerSmellTask beerSmellTask,
-                                         BeerAftertasteTask beerAftertasteTask,
-                                         BeerPowerTask beerPowerTask,
-                                         BeerDensityTask beerDensityTask,
-                                         BeerIbuTask beerIbuTask,
-                                         CountryTask countryTask,
-                                         RegionTask regionTask,
-                                         LoadCityTaskFilter cityTask,
-                                         BreweryTask breweryTask) {
+    public SelectCategoryActivityPresenterImpl(Context context, RestoTypeTask restoTypeTask,
+                                               KitchenTask kitchenTask,
+                                               PriceRangeTask priceRangeTask,
+                                               FeatureTask featureTask,
+                                               FullSearchFilterTask fullSearchFilterTask,
+                                               BeerTypesTask beerTypesTask,
+                                               BeerPackTask beerPackTask,
+                                               BeerBrandTask beerBrandTask,
+                                               BeerColorTask beerColorTask,
+                                               BeerTasteTask beerTasteTask,
+                                               BeerSmellTask beerSmellTask,
+                                               BeerAftertasteTask beerAftertasteTask,
+                                               BeerPowerTask beerPowerTask,
+                                               BeerDensityTask beerDensityTask,
+                                               BeerIbuTask beerIbuTask,
+                                               CountryTask countryTask,
+                                               RegionTask regionTask,
+                                               LoadCityTaskFilter cityTask,
+                                               BreweryTask breweryTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
@@ -115,8 +114,8 @@ public class FilterByCategoryPresenterImpl extends BasePresenter<FilterByCategor
     }
 
     @Override
-    public void onAttach(FilterByCategoryView filterByCategoryView) {
-        super.onAttach(filterByCategoryView);
+    public void onAttach(SelectCategoryActivityView selectCategoryActivityView) {
+        super.onAttach(selectCategoryActivityView);
         Paper.init(context);
     }
 

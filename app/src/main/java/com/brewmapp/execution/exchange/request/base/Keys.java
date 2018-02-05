@@ -196,4 +196,8 @@ public class Keys {
     public static final String HOUSE = "house";
     public static final String PRODUCT_MODEL = "product_model";
     public static final String PRODUCT_ID = "product_id";
+    public static final String BEER_COUNTRY_ID = "beer_country_id";
+    public static final String BEER_BRAND_ID = "beer_brand_id";
+    public static final String BEER_TYPE_ID = "beer_type_id";
+    public static final String CAP_BREWERY ="Brewery";
 }

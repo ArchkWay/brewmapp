@@ -6,6 +6,7 @@ import android.view.View;
 import com.brewmapp.app.di.scope.PresenterScope;
 import com.brewmapp.presentation.presenter.contract.AddAlbumPresenter;
 import com.brewmapp.presentation.presenter.contract.BeerEditFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.BreweryDetailsActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MessageFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.MultiFragmentActivityPresenter;
@@ -22,7 +23,7 @@ import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.ExtendedSearchPresenter;
-import com.brewmapp.presentation.presenter.contract.FilterByCategoryPresenter;
+import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
@@ -43,13 +44,14 @@ import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
 import com.brewmapp.presentation.presenter.contract.SaleDetailsPresenter;
-import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
-import com.brewmapp.presentation.presenter.contract.SearchPresenter;
+import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
 import com.brewmapp.presentation.presenter.contract.StartPresenter;
 import com.brewmapp.presentation.presenter.impl.AddAlbumPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.BeerEditFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.BreweryDetailsActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ChatFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MessageFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.MultiFragmentActivityPresenterImpl;
@@ -66,7 +68,7 @@ import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ExtendedSearchPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.FilterByCategoryPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.SelectCategoryActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InterestListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FilerMapPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FriendsPresenterImpl;
@@ -88,8 +90,8 @@ import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RestoDetailPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RestoEditFragmentPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SaleDetailsPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.SearchAllPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.SearchPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.SearchFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ResultSearchActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
@@ -210,7 +212,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    SearchAllPresenter provideSearchAllPresenter(SearchAllPresenterImpl presenter) {
+    SearchFragmentPresenter provideSearchAllPresenter(SearchFragmentPresenterImpl presenter) {
         return presenter;
     }
     @Provides @PresenterScope
@@ -219,7 +221,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
     
     @Provides @PresenterScope
-    SearchPresenter provideSearchPresenter(SearchPresenterImpl presenter) {
+    ResultSearchActivityPresenter provideSearchPresenter(ResultSearchActivityPresenterImpl presenter) {
         return presenter;
     }
     
@@ -297,7 +299,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    FilterByCategoryPresenter provideFilterByCategory (FilterByCategoryPresenterImpl presenter){
+    SelectCategoryActivityPresenter provideFilterByCategory (SelectCategoryActivityPresenterImpl presenter){
         return presenter;
     }
 
@@ -338,6 +340,10 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
 
     @Provides @PresenterScope
     ChatFragmentPresenter provideChatFragmentPresenter(ChatFragmentPresenterImpl presenter){
+        return presenter;
+    }
+    @Provides @PresenterScope
+    BreweryDetailsActivityPresenter provideBreweryDetailsActivityPresenter(BreweryDetailsActivityPresenterImpl presenter){
         return presenter;
     }
 }

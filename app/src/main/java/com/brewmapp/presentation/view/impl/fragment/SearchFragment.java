@@ -28,16 +28,16 @@ import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
-import com.brewmapp.data.entity.wrapper.BreweryInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfoSelect;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.SearchAllPresenter;
+import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
 import com.brewmapp.presentation.view.contract.SearchAllView;
-import com.brewmapp.presentation.view.impl.activity.FilterByCategory;
-import com.brewmapp.presentation.view.impl.activity.SearchActivity;
+import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
+import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     @BindView(R.id.fragment_events_tabs)
     TabsView tabsView;
 
-    @Inject SearchAllPresenter presenter;
+    @Inject    SearchFragmentPresenter presenter;
 
     private FlexibleAdapter<FilterRestoField> restoAdapter;
     private FlexibleAdapter<FilterBeerField> beerAdapter;
@@ -86,9 +86,14 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
 
     private SearchFragmentPackage searchFragmentPackage = new SearchFragmentPackage();
 
-    public static final int TAB_BEER = 0;
-    public static final int TAB_RESTO = 1;
-    public static final int TEB_BREWERY = 2;
+    public static final int TAB_RESTO = 0;
+    public static final int TAB_BEER = 1;
+    public static final int TAB_BREWERY = 2;
+    public static final String CATEGORY_LIST_RESTO = "restoCategoryList";
+    public static final String CATEGORY_LIST_BEER = "beerCategoryList";
+    public static final String CATEGORY_LIST_BREWERY = "breweryCategoryList";
+
+
 
     private String[] searchContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.search_title);
@@ -133,7 +138,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         if ((tabsView.getTabs().getSelectedTabPosition() == 0) && position == 6){
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(getContext(), FilterByCategory.class);
+            Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
             intent.putExtra(Keys.FILTER_CATEGORY, position);
             intent.putExtra(Keys.BEER_TYPES, tabsView.getTabs().getSelectedTabPosition());
             getActivity().startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
@@ -507,21 +512,21 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
                     }
                 }
             } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BREWERIES)) {
-                List<BreweryInfo> breweryInfos = new ArrayList<>();
+                List<BreweryInfoSelect> breweryInfoSelects = new ArrayList<>();
                 tempList = Paper.book().read(FilterKeys.BEER_BREWERIES);
                 if (tempList != null) {
                     for (Object o : tempList) {
-                        breweryInfos.add((BreweryInfo) o);
+                        breweryInfoSelects.add((BreweryInfoSelect) o);
                     }
-                    for (BreweryInfo breweryInfo : breweryInfos) {
-                        if (breweryInfo.getModel().isSelected()) {
+                    for (BreweryInfoSelect breweryInfoSelect : breweryInfoSelects) {
+                        if (breweryInfoSelect.getModel().isSelected()) {
                             notEmpty = true;
-                            filter.append(breweryInfo.getModel().getName()).append(", ");
-                            filterId.append(breweryInfo.getModel().getId()).append(",");
+                            filter.append(breweryInfoSelect.getModel().getName()).append(", ");
+                            filterId.append(breweryInfoSelect.getModel().getId()).append(",");
                         }
                     }
                     if (!notEmpty) {
-                        filter.append(breweryInfos.get(0).getModel().getName());
+                        filter.append(breweryInfoSelects.get(0).getModel().getName());
                     }
                 }
             }
@@ -594,26 +599,29 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
             breweryAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
             breweryAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
         }
+        String selectedItemId=breweryAdapter.getItem(category).getSelectedItemId();
+        if("null".equals(selectedItemId))
+            breweryAdapter.getItem(category).setSelectedItemId(null);
         breweryAdapter.notifyDataSetChanged();
         presenter.saveBreweryFilterChanges(breweryList);
     }
 
     @OnClick(R.id.accept_filter)
     public void acceptFilter() {
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        Intent intent = new Intent(getActivity(), ResultSearchActivity.class);
         switch (tabsView.getTabs().getSelectedTabPosition()) {
-            case TAB_BEER:
+            case TAB_RESTO:
                 intent.putExtra("craft", craft.isChecked() ? 1 : 0);
                 intent.putExtra("filterBeer", filterBeer.isChecked() ? 1 : 0);
                 intent.putExtra(Keys.SEARCH_RESULT, 0);
                 startActivity(intent);
                 break;
-            case TAB_RESTO:
+            case TAB_BEER:
                 intent.putExtra("offer", craft.isChecked() ? 1 : 0);
                 intent.putExtra(Keys.SEARCH_RESULT, 1);
                 startActivity(intent);
                 break;
-            case TEB_BREWERY:
+            case TAB_BREWERY:
                 intent.putExtra(Keys.SEARCH_RESULT, 2);
                 startActivity(intent);
                 break;
@@ -629,17 +637,17 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     @Override
     public void showResult(Intent data) {
         switch (tabsView.getTabs().getSelectedTabPosition()) {
-            case 0:
+            case TAB_RESTO:
                 setRestoSelectedFilter(data.getStringExtra("filter"),
                         data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
                         data.getStringExtra("selectedItemId"));
                 break;
-            case 1:
+            case TAB_BEER:
                 setBeerSelectedFilter(data.getStringExtra("filter"),
                         data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
                         data.getStringExtra("selectedItemId"));
                 break;
-            case 2:
+            case TAB_BREWERY:
                 setBrewerySelectedFilter(data.getStringExtra("filter"),
                         data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
                         data.getStringExtra("selectedItemId"));

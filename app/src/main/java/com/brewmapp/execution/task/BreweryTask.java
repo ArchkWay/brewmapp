@@ -2,7 +2,7 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.data.entity.BreweryShort;
 import com.brewmapp.data.entity.BreweryTypes;
-import com.brewmapp.data.entity.wrapper.BreweryInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfoSelect;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
@@ -39,10 +39,10 @@ public class BreweryTask extends BaseNetworkTask<BreweryShort, List<IFlexible>> 
                 params.addParam("country_id", "");
                 params.addParam("location_id", "");
                 BreweryTypes response = executeCall(getApi().loadBrewery(0, 30, params));
-                List<BreweryInfo> breweryInfos = new ArrayList<>();
-                breweryInfos.add(0, new BreweryInfo(new BreweryShort("Не имеет значения  ")));
-                breweryInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(breweryInfos));
+                List<BreweryInfoSelect> breweryInfoSelects = new ArrayList<>();
+                breweryInfoSelects.add(0, new BreweryInfoSelect(new BreweryShort("Не имеет значения  ")));
+                breweryInfoSelects.addAll(response.getModels());
+                subscriber.onNext(new ArrayList<>(breweryInfoSelects));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

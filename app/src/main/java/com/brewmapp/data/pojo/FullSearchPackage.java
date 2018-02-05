@@ -6,7 +6,7 @@ package com.brewmapp.data.pojo;
 
 public class FullSearchPackage {
 
-    private String type;
+    private String type="NO_TYPE";
     private int page;
     private String stringSearch;
 

@@ -9,7 +9,7 @@
     android:background="@color/colorGrayLightSemi"
     >
 
-    <include layout="@layout/view_toolbar" />
+    <include layout="@layout/view_toolbar_bm" />
 
     <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
         android:layout_width="match_parent"
@@ -17,972 +17,963 @@
         android:id="@+id/activity.beer.detaild.swipe"
         android:orientation="vertical"
         >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/common_block_space"
+            android:layout_marginRight="@dimen/common_block_space"
+            >
 
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/common_block_space"
-                android:layout_marginRight="@dimen/common_block_space"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
                 >
+
+                <!--Slider-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_event_slider"
+                    android:orientation="vertical">
+
+                    <com.daimajia.slider.library.SliderLayout
+                        android:id="@+id/activity.beerDetails.slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:layout_weight="1">
+
+                        <com.daimajia.slider.library.Indicators.PagerIndicator
+                            android:id="@+id/activity.beerDetails.indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </com.daimajia.slider.library.SliderLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        >
+                        <include layout="@layout/view_like_dislike_fav" />
+                    </RelativeLayout>
+
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:background="@color/colorBlackSemi"-->
+                    <!--android:gravity="right">-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/activity.beerDetails.photosCounter"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/colorWhite"-->
+                    <!--android:textSize="@dimen/text_size_common" />-->
+                    <!--</LinearLayout>-->
+                </RelativeLayout>
+                <!--name-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:layout_marginLeft="@dimen/common_block_space">
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.name"
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:text="@string/text_view_value_not_found"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_weight="1"
+                        />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_view_rating"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorBlack"
+                            android:layout_marginRight="@dimen/common_block_space"
+                            android:textSize="@dimen/text_size_common"
+                            />
+                        <TextView
+                            android:layout_width="@dimen/size_icon_36"
+                            android:layout_height="@dimen/size_icon_36"
+                            android:background="@drawable/bg_circle"
+                            android:layout_gravity="right|center_vertical"
+                            android:text="@string/text_view_value_not_found"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/common_block_space"
+                    android:layout_weight="1"
+                    android:background="@color/colorSplitter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <!--panel-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/common_block_space_double"
+                    android:layout_marginBottom="@dimen/common_block_space_double">
+                    <!--Я здесь-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:id="@+id/activity.beer.panel.map">
+                        <ImageView
+                            android:layout_width="@dimen/common_block_space_triple"
+                            android:layout_height="@dimen/common_block_space_triple"
+                            android:src="@drawable/ic_menu_map_red"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_view_map"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            />
+
+                    </LinearLayout>
+                    <!--Отзывы-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:id="@+id/activity.beer.panel.reviews">
+                        <ImageView
+                            android:layout_width="@dimen/common_block_space_triple"
+                            android:layout_height="@dimen/common_block_space_triple"
+                            android:src="@drawable/ic_reviews"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_view_reviews"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            />
+
+                    </LinearLayout>
+                    <!--Избранное-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:id="@+id/activity.beer.panel.favorite">
+                        <ImageView
+                            android:layout_width="@dimen/common_block_space_triple"
+                            android:layout_height="@dimen/common_block_space_triple"
+                            android:src="@drawable/ic_love_icon_green"
+                            android:id="@+id/activity.beer.panel.favorite.icon"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_view_favorites"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/common_block_space"
+                    android:layout_weight="1"
+                    android:background="@color/colorSplitter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <!--panel2-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:layout_marginBottom="@dimen/common_block_space"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_flavor"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:layout_marginLeft="@dimen/common_block_space"
+                                android:layout_marginTop="@dimen/common_block_space"
+                                android:layout_marginBottom="@dimen/common_block_space"
+                                android:layout_marginRight="@dimen/common_block_space_half"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_value_not_found"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+
+                                android:id="@+id/activity.beer.panel2.aroma"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_taste"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:layout_marginLeft="@dimen/common_block_space"
+                                android:layout_marginRight="@dimen/common_block_space_half"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_value_not_found"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:id="@+id/activity.beer.panel2.taste"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_quality_color"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:layout_marginLeft="@dimen/common_block_space"
+                                android:layout_marginTop="@dimen/common_block_space"
+                                android:layout_marginBottom="@dimen/common_block_space"
+                                android:layout_marginRight="@dimen/common_block_space_half"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_value_not_found"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:id="@+id/activity.beer.panel2.color"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_aftertaste"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:layout_marginLeft="@dimen/common_block_space"
+                                android:layout_marginRight="@dimen/common_block_space_half"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_value_not_found"
+                                android:textColor="@color/colorBlack"
+                                android:lines="1"
+                                android:ellipsize="end"
+                                android:id="@+id/activity.beer.panel2.aftertaste"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/common_block_space"
+                    android:layout_weight="1"
+                    android:background="@color/colorSplitter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:id="@+id/activity.resto.detail.constraintLayout"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_avg_price"
+                        android:id="@+id/activity.beer.detail.image.view.avg_price"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/text_view_place"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_avg_price"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/activity.beer.detail.text.view.avg.cost"
+                        android:text="@string/text_view_value_not_found"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_rub"
+                        android:id="@+id/_chevr"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_brand" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_brand"
+                        android:layout_weight="1"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.brand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_brew" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_brew"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.brew"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        android:gravity="right"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_country" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_country"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.country"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_lager" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_type"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_strength" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_strength"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.strength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_density" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_density"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.density"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_ubi" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_ubi"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.ubi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+                <!--not filter beer-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_filter_beer" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_filter_beer"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.filter_beer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_beer_taste" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_beer_taste"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.taste"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:src="@drawable/ic_beer_aftertaste" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_beer_after_taste"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        style="@style/AppTheme.Paragraph"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.after_taste"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_value_not_found"
+                        style="@style/AppTheme.Paragraph"
+                        android:textSize="@dimen/text_size_common_bigger"
+                        />
+                </LinearLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/common_block_space"
+                    android:layout_weight="1"
+                    android:background="@color/colorSplitter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:text="@string/text_view_resto_description"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
+                        app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                        />
+
+                    <TextView
+                        android:id="@+id/activity.beer.detail.text.view.description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/text_view_value_not_found_4"
+                        style="@style/AppTheme.Text.H5"
+                        app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+                        android:lines="@integer/init_max_lites_text_view"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        />
+                </LinearLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="@dimen/common_block_space"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:id="@+id/activity.beer.detail.layout_photo">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_photo_icon"
+                        android:layout_marginLeft="8dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:id="@+id/activity.beer.detail.text.view.none20"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_photo"
+                        style="@style/AppTheme.Paragraph"
+                        app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none20"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:id="@+id/activity.beer.detail.text.view.none21"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:gravity="center_vertical"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_bracket_from"
+                        style="@style/AppTheme.Paragraph"
+                        app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none21"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:id="@+id/activity.beer.detail.text.view.none22"
+                        android:layout_marginLeft="@dimen/common_block_space_half"
+                        android:gravity="center_vertical"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_cnt"
+                        style="@style/AppTheme.Paragraph"
+                        app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none22"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:id="@+id/activity.beer.detail.text.view.none23"
+                        android:gravity="center_vertical"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_view_bracket_to"
+                        style="@style/AppTheme.Paragraph"
+                        app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none23"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:id="@+id/activity.beer.detail.text.view.none24"
+                        android:gravity="center_vertical"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:src="@drawable/ic_cell_arrow"
+                        android:gravity="right"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                </android.support.constraint.ConstraintLayout>
+                <!--where they pour-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="@color/colorWhite"
+                    android:background="@color/colorGrayLightSemi"
+                    android:id="@+id/activity.beer.details.container_recycler_resto"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    android:layout_marginRight="@dimen/common_block_space"
                     >
 
-                    <!--Slider-->
+                    <TextView
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/text_view_beer_where_exist"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:padding="@dimen/common_block_space"
+                        />
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/height_event_slider"
-                        android:orientation="vertical">
-
-                        <com.daimajia.slider.library.SliderLayout
-                            android:id="@+id/activity.beerDetails.slider"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        >
+                        <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/common_block_space"
-                            android:layout_weight="1">
-
-                            <com.daimajia.slider.library.Indicators.PagerIndicator
-                                android:id="@+id/activity.beerDetails.indicator"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </com.daimajia.slider.library.SliderLayout>
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
+                            android:id="@+id/activity.beer.details.recycler_where_they_pour"
                             >
-                            <include layout="@layout/view_like_dislike_fav" />
-                        </RelativeLayout>
 
-                        <!--<LinearLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_alignParentBottom="true"-->
-                            <!--android:background="@color/colorBlackSemi"-->
-                            <!--android:gravity="right">-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/activity.beerDetails.photosCounter"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:textColor="@color/colorWhite"-->
-                                <!--android:textSize="@dimen/text_size_common" />-->
-                        <!--</LinearLayout>-->
+                        </android.support.v7.widget.RecyclerView>
                     </RelativeLayout>
-                    <!--name-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="@dimen/common_block_space"
-                        android:layout_marginLeft="@dimen/common_block_space">
 
-                            <TextView
-                                android:id="@+id/activity.beer.detail.name"
-                                style="@style/AppTheme.Text.Georgia.BoldItalic"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_margin="@dimen/common_block_space"
-                                android:text="@string/text_view_value_not_found"
-                                android:textColor="@color/red_focused"
-                                android:textSize="@dimen/text_size_big_phone"
-                                android:layout_weight="1"
-                            />
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_gravity="center_vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_rating"
-                                    android:layout_gravity="center_vertical"
-                                    android:textColor="@color/colorBlack"
-                                    android:layout_marginRight="@dimen/common_block_space"
-                                    android:textSize="@dimen/text_size_common"
-                                    />
-                                <TextView
-                                    android:layout_width="@dimen/size_icon_36"
-                                    android:layout_height="@dimen/size_icon_36"
-                                    android:background="@drawable/bg_circle"
-                                    android:layout_gravity="right|center_vertical"
-                                    android:text="@string/text_view_value_not_found"
-                                    android:gravity="center"
-                                    android:textColor="@color/white"
-                                    />
-
-                            </LinearLayout>
                 </LinearLayout>
-                    <ru.frosteye.ovsa.presentation.view.widget.Line
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="@dimen/common_block_space"
-                        android:layout_weight="1"
-                        android:background="@color/colorSplitter"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                    <!--panel-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/common_block_space_double"
-                        android:layout_marginBottom="@dimen/common_block_space_double">
-                        <!--Я здесь-->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:id="@+id/activity.beer.panel.map">
-                            <ImageView
-                                android:layout_width="@dimen/common_block_space_triple"
-                                android:layout_height="@dimen/common_block_space_triple"
-                                android:src="@drawable/ic_menu_map_red"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_view_map"
-                                android:gravity="center"
-                                android:lines="1"
-                                android:ellipsize="end"
-                                />
+                <!--added to favorite-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorGrayLightSemi"
+                    android:orientation="vertical"
+                    android:id="@+id/activity.beer.details.container_added_to_favorite">
 
-                        </LinearLayout>
-                        <!--Отзывы-->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:id="@+id/activity.beer.panel.reviews">
-                            <ImageView
-                                android:layout_width="@dimen/common_block_space_triple"
-                                android:layout_height="@dimen/common_block_space_triple"
-                                android:src="@drawable/ic_reviews"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_view_reviews"
-                                android:gravity="center"
-                                android:lines="1"
-                                android:ellipsize="end"
-                                />
-
-                        </LinearLayout>
-                        <!--Избранное-->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:id="@+id/activity.beer.panel.favorite">
-                            <ImageView
-                                android:layout_width="@dimen/common_block_space_triple"
-                                android:layout_height="@dimen/common_block_space_triple"
-                                android:src="@drawable/ic_love_icon_green"
-                                android:id="@+id/activity.beer.panel.favorite.icon"
-                                />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_view_favorites"
-                                android:gravity="center"
-                                android:lines="1"
-                                android:ellipsize="end"
-                                />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-                    <ru.frosteye.ovsa.presentation.view.widget.Line
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="@dimen/common_block_space"
-                        android:layout_weight="1"
-                        android:background="@color/colorSplitter"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                    <!--panel2-->
-                    <LinearLayout
+                    <TextView
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/common_block_space"
-                        android:layout_marginRight="@dimen/common_block_space"
-                        android:layout_marginBottom="@dimen/common_block_space"
-                        >
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-
-                            >
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_flavor"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginTop="@dimen/common_block_space"
-                                    android:layout_marginBottom="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space_half"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_value_not_found"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-
-                                    android:id="@+id/activity.beer.panel2.aroma"
-                                    />
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                >
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_taste"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space_half"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_value_not_found"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:id="@+id/activity.beer.panel2.taste"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_quality_color"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginTop="@dimen/common_block_space"
-                                    android:layout_marginBottom="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space_half"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_value_not_found"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:id="@+id/activity.beer.panel2.color"
-                                    />
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_aftertaste"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:layout_marginLeft="@dimen/common_block_space"
-                                    android:layout_marginRight="@dimen/common_block_space_half"
-                                    />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_view_value_not_found"
-                                    android:textColor="@color/colorBlack"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:id="@+id/activity.beer.panel2.aftertaste"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                    </LinearLayout>
-                    <ru.frosteye.ovsa.presentation.view.widget.Line
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="@dimen/common_block_space"
-                        android:layout_weight="1"
-                        android:background="@color/colorSplitter"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:id="@+id/activity.resto.detail.constraintLayout"
-                        >
+                        android:text="@string/text_view_beer_who_likes"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_avg_price"
-                            android:id="@+id/activity.beer.detail.image.view.avg_price"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-
-                            />
-
-                        <TextView
-                            android:id="@+id/text_view_place"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_avg_price"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/activity.beer.detail.text.view.avg.cost"
-                            android:text="@string/text_view_value_not_found"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_rub"
-                            android:id="@+id/_chevr"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_brand" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_brand"
-                            android:layout_weight="1"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.brand"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_brew" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_brew"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.brew"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            android:gravity="right"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_country" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_country"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.country"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_lager" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_type"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.type"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_strength" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_strength"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.strength"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_density" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_density"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.density"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_ubi" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_ubi"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.ubi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-                    <!--not filter beer-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_filter_beer" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_filter_beer"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.filter_beer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_beer_taste" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_beer_taste"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.taste"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            android:src="@drawable/ic_beer_aftertaste" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_beer_after_taste"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            style="@style/AppTheme.Paragraph"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.after_taste"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_value_not_found"
-                            style="@style/AppTheme.Paragraph"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            />
-                    </LinearLayout>
-
-                    <ru.frosteye.ovsa.presentation.view.widget.Line
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="@dimen/common_block_space"
-                        android:layout_weight="1"
-                        android:background="@color/colorSplitter"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/AppTheme.Text.Georgia.BoldItalic"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/common_block_space"
-                            android:text="@string/text_view_resto_description"
-                            android:textColor="@color/red_focused"
-                            android:textSize="@dimen/text_size_big_phone"
-                            app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity.beer.detail.text.view.description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/text_view_value_not_found_4"
-                            style="@style/AppTheme.Text.H5"
-                            app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
-                            android:lines="@integer/init_max_lites_text_view"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:layout_marginRight="@dimen/common_block_space"
-                            />
-                    </LinearLayout>
-
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:id="@+id/activity.beer.detail.layout_photo">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/ic_photo_icon"
-                            android:layout_marginLeft="8dp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:id="@+id/activity.beer.detail.text.view.none20"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_photo"
-                            style="@style/AppTheme.Paragraph"
-                            app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none20"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:id="@+id/activity.beer.detail.text.view.none21"
-                            android:layout_marginLeft="@dimen/common_block_space"
-                            android:gravity="center_vertical"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_bracket_from"
-                            style="@style/AppTheme.Paragraph"
-                            app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none21"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:id="@+id/activity.beer.detail.text.view.none22"
-                            android:layout_marginLeft="@dimen/common_block_space_half"
-                            android:gravity="center_vertical"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_cnt"
-                            style="@style/AppTheme.Paragraph"
-                            app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none22"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:id="@+id/activity.beer.detail.text.view.none23"
-                            android:gravity="center_vertical"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_view_bracket_to"
-                            style="@style/AppTheme.Paragraph"
-                            app:layout_constraintLeft_toRightOf="@+id/activity.beer.detail.text.view.none23"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:id="@+id/activity.beer.detail.text.view.none24"
-                            android:gravity="center_vertical"
-                            />
-
-                        <ImageView
-                            android:layout_width="@dimen/arrow_right_width"
-                            android:layout_height="@dimen/arrow_right_height"
-                            android:src="@drawable/ic_cell_arrow"
-                            android:gravity="right"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            />
-                    </android.support.constraint.ConstraintLayout>
-                    <!--where they pour-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="@color/colorGrayLightSemi"
-                        android:id="@+id/activity.beer.details.container_recycler_resto"
-                        android:layout_marginLeft="@dimen/common_block_space"
-                        android:layout_marginRight="@dimen/common_block_space"
-                        >
-
-                        <TextView
-                            style="@style/AppTheme.Text.Georgia.BoldItalic"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/text_view_beer_where_exist"
-                            android:textColor="@color/red_focused"
-                            android:textSize="@dimen/text_size_big_phone"
-                            android:padding="@dimen/common_block_space"
                         />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            >
-                            <android.support.v7.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/activity.beer.details.recycler_where_they_pour"
-                                >
-
-                            </android.support.v7.widget.RecyclerView>
-                        </RelativeLayout>
-
-                    </LinearLayout>
-                    <!--added to favorite-->
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorGrayLightSemi"
-                        android:orientation="vertical"
-                        android:id="@+id/activity.beer.details.container_added_to_favorite">
-
-                        <TextView
-                            style="@style/AppTheme.Text.Georgia.BoldItalic"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/common_block_space"
-                            android:text="@string/text_view_beer_who_likes"
-                            android:textColor="@color/red_focused"
-                            android:textSize="@dimen/text_size_big_phone"
-
-                            />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:minHeight="50dp"
-                            android:background="@color/white"
-                            >
-                            <android.support.v7.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/activity.beer.details.recycler_added_to_favorite">
-
-                            </android.support.v7.widget.RecyclerView>
-                        </RelativeLayout>
-
-                    </LinearLayout>
-                    <!--review-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="@color/colorGrayLightSemi"
-                        android:id="@+id/activity.beer.details.container_reviews"
+                        android:layout_height="match_parent"
+                        android:minHeight="50dp"
+                        android:background="@color/white"
                         >
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/activity.beer.details.recycler_added_to_favorite">
 
-                        <TextView
-                            style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        </android.support.v7.widget.RecyclerView>
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <!--review-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/colorGrayLightSemi"
+                    android:id="@+id/activity.beer.details.container_reviews"
+                    >
+
+                    <TextView
+                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/text_view_replay_users"
+                        android:textColor="@color/red_focused"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:background="@android:color/transparent"
+                        android:padding="@dimen/common_block_space"
+                        />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        >
+                        <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/text_view_replay_users"
-                            android:textColor="@color/red_focused"
-                            android:textSize="@dimen/text_size_big_phone"
-                            android:background="@android:color/transparent"
-                            android:padding="@dimen/common_block_space"
-                            />
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
+                            android:id="@+id/activity.beer.details.recycler_reviews"
+
                             >
-                            <android.support.v7.widget.RecyclerView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/activity.beer.details.recycler_reviews"
-
-                                >
-                            </android.support.v7.widget.RecyclerView>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_view_while_empty_review"
-                                android:gravity="center"
-                                style="@style/AppTheme.Paragraph"
-                                android:layout_centerInParent="true"
-                                android:id="@+id/activity.beer.details_empty_text_reviews"
-                                />
-                        </RelativeLayout>
-                        <Button
+                        </android.support.v7.widget.RecyclerView>
+                        <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/button_height_type_0"
-                            android:text="@string/button_text_write_review"
-                            android:background="@drawable/bg_with_corner_red"
-                            android:textColor="@color/colorButtonRed"
-                            android:layout_margin="@dimen/common_block_space"
-                            android:id="@+id/activity.beer.detail.button_review"
-                            android:textSize="@dimen/text_size_small"
-                            android:minWidth="170dp"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_view_while_empty_review"
+                            android:gravity="center"
+                            style="@style/AppTheme.Paragraph"
+                            android:layout_centerInParent="true"
+                            android:id="@+id/activity.beer.details_empty_text_reviews"
                             />
-
-                    </LinearLayout>
+                    </RelativeLayout>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height_type_0"
+                        android:text="@string/button_text_write_review"
+                        android:background="@drawable/bg_with_corner_red"
+                        android:textColor="@color/colorButtonRed"
+                        android:layout_margin="@dimen/common_block_space"
+                        android:id="@+id/activity.beer.detail.button_review"
+                        android:textSize="@dimen/text_size_small"
+                        android:minWidth="170dp"
+                        android:layout_gravity="center_horizontal"
+                        />
 
                 </LinearLayout>
 
-            </ScrollView>
+            </LinearLayout>
 
+        </ScrollView>
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 
-    <!--<ru.frosteye.ovsa.presentation.view.widget.Line-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_marginBottom="@dimen/common_block_space"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@color/colorSplitter"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent" />-->
+
+
 
 </LinearLayout>

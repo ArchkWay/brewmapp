@@ -18,6 +18,7 @@ import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
+import com.brewmapp.presentation.view.impl.activity.BreweryDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
@@ -25,6 +26,7 @@ import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
+import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
@@ -129,5 +131,11 @@ public class Starter {
         intent.putExtra(RequestCodes.INTENT_EXTRAS,user);
         activity.startActivity(intent);
 
+    }
+
+    public static void BreweryDetailsActivity(Activity activity, String breweryId) {
+        Intent intent=new Intent(activity,BreweryDetailsActivity.class);
+        intent.putExtra(Actions.PARAM1,breweryId);
+        activity.startActivity(intent);
     }
 }

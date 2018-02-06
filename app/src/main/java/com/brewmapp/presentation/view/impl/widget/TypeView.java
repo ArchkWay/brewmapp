@@ -75,7 +75,9 @@ public class TypeView extends BaseLinearLayout implements InteractiveModelView<R
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0,model);
         });
+
     }
 
     @Override

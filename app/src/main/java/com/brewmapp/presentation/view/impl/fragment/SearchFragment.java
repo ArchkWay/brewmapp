@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -139,13 +140,32 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         if ((tabsView.getTabs().getSelectedTabPosition() == 0) && position == 6){
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         } else {
+            String filterTxt=null;
+            String filterId=null;
+            switch (tabsView.getTabs().getSelectedTabPosition()){
+                case TAB_RESTO:
+                    filterTxt=restoAdapter.getItem(position).getSelectedFilter();
+                    filterId=restoAdapter.getItem(position).getSelectedItemId();
+                    break;
+            }
+
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
             intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
             intent.putExtra(Actions.PARAM2,position);
+            intent.putExtra(Actions.PARAM3,filterTxt);
+            intent.putExtra(Actions.PARAM4,filterId);
 
-            getActivity().startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
+            startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
         }
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK)
+            if(requestCode == RequestCodes.REQUEST_SEARCH_CODE)
+                showResult(data);
     }
 
     @Override
@@ -638,11 +658,24 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
 
     @Override
     public void showResult(Intent data) {
-        switch (tabsView.getTabs().getSelectedTabPosition()) {
+        int numberTab=data.getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        int numberMenuItem=data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
+        String filterTXT=data.getStringExtra(Actions.PARAM3);
+        String filterID=data.getStringExtra(Actions.PARAM4);
+
+        switch (numberTab) {
             case TAB_RESTO:
-                setRestoSelectedFilter(data.getStringExtra("filter"),
-                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
-                        data.getStringExtra("selectedItemId"));
+                switch (numberMenuItem){
+                    case FilterRestoField.CITY:
+                        restoAdapter.getItem(numberMenuItem).setSelectedFilter(filterTXT);
+                        restoAdapter.getItem(numberMenuItem).setSelectedItemId(filterID);
+                        break;
+
+                }
+
+//                setRestoSelectedFilter(data.getStringExtra("filter"),
+//                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
+//                        data.getStringExtra("selectedItemId"));
                 break;
             case TAB_BEER:
                 setBeerSelectedFilter(data.getStringExtra("filter"),

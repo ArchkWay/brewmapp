@@ -12,6 +12,12 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class CityInfo extends AdapterItem<City, CityView> implements IFilterable {
+    public CityInfo(City model) {
+        super(model);
+    }
+
+    public CityInfo() {
+    }
 
     @Override
     public int getLayoutRes() {

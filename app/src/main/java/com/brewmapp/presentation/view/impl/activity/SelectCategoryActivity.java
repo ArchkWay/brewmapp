@@ -29,6 +29,8 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Region;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoType;
+import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -38,6 +40,7 @@ import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -84,14 +87,15 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private FlexibleModelAdapter<IFlexible> adapter;
     private EndlessRecyclerOnScrollListener scrollListener;
     private FullSearchPackage fullSearchPackage;
-    private String selectedItem;
-    private String selectedItemId;
+
+    private String filterTxt;
+    private String filterId;
     private List<IFlexible> original;
     private int filterCategory;
     private String selectedFilter = null;
-    private int selectedTab;
-    private int selectedItemPosition;
-
+    private int numberTab;
+    private int numberMenuItem;
+    private HashMap<String,String> hashMap=new HashMap<>();
     @Inject
     SelectCategoryActivityPresenter presenter;
 
@@ -114,8 +118,17 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initView() {
-        selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
-        selectedItemPosition=getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
+        numberTab =getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        numberMenuItem =getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
+        filterTxt =getIntent().getStringExtra(Actions.PARAM3);
+        filterId=getIntent().getStringExtra(Actions.PARAM4);
+        try {
+            String[] ids=filterId.split(",");
+            String[] txts=filterId.split(",");
+            int i=0;
+            for (String s:ids)
+                hashMap.put(s,txts[i++]);
+        }catch (Exception e){}
 
         fullSearchPackage = new FullSearchPackage();
         fullSearchPackage.setPage(0);
@@ -124,7 +137,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             @Override
             public void onLoadMore(int currentPage) {
                 fullSearchPackage.setPage(manager.getItemCount());
-                switch (selectedTab){
+                switch (numberTab){
                     case SearchFragment.TAB_BEER:
                         presenter.loadBeerCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
                         break;
@@ -169,6 +182,27 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     @Override
     public void appendItems(List<IFlexible> list) {
+
+        switch (numberTab){
+            case SearchFragment.TAB_BEER:
+                break;
+            case SearchFragment.TAB_BREWERY:
+                break;
+            case SearchFragment.TAB_RESTO:
+                switch (numberMenuItem){
+                    case FilterRestoField.NAME:
+                        break;
+                    case FilterRestoField.TYPE:
+                        for(IFlexible iFlexible:list){
+                            RestoType model= ((RestoTypeInfo) iFlexible).getModel();
+                            model.setSelected(hashMap.containsKey(model.getId()));
+                        }
+                }
+                break;
+        }
+
+
+
         showProgressBar(false);
         adapter.clear();
         this.original = list;
@@ -191,7 +225,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
-        switch (selectedTab){
+        switch (numberTab){
             case SearchFragment.TAB_BEER:
                 beerFilterLogic();
                 break;
@@ -224,19 +258,19 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initFilterCategory() {
-        int numberPositionClicked=getIntent().getIntExtra(Actions.PARAM2, Integer.MAX_VALUE);
-        switch (selectedTab){
+
+        switch (numberTab){
             case SearchFragment.TAB_BEER:
-                initBeerFilterByCategory(numberPositionClicked);
+                initBeerFilterByCategory(numberMenuItem);
                 break;
             case SearchFragment.TAB_BREWERY:
-                initBreweryFilterByCategory(numberPositionClicked);
+                initBreweryFilterByCategory(numberMenuItem);
                 break;
             case SearchFragment.TAB_RESTO:
-                initRestoFilterByCategory(numberPositionClicked);
+                initRestoFilterByCategory(numberMenuItem);
                 break;
-                default:
-                    commonError(getString(R.string.replay_not_valid_param));
+            default:
+                commonError(getString(R.string.replay_not_valid_param));
 
         }
     }
@@ -510,46 +544,36 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void beerFilterLogic() {
+        selectedFilter=null;
         if (filterCategory == FilterBeerField.PRICE_BEER) {
             selectedFilter = FilterKeys.PRICE_BEER;
-            saveStoredFilter(FilterKeys.PRICE_BEER);
         } else if (filterCategory == FilterBeerField.BEER_PACK) {
             selectedFilter = FilterKeys.BEER_PACK;
-            saveStoredFilter(FilterKeys.BEER_PACK);
         } else if (filterCategory == FilterBeerField.TYPE) {
             selectedFilter = FilterKeys.BEER_TYPES;
-            saveStoredFilter(FilterKeys.BEER_TYPES);
         } else if (filterCategory == FilterBeerField.BRAND) {
             selectedFilter = FilterKeys.BEER_BRAND;
-            saveStoredFilter(FilterKeys.BEER_BRAND);
         } else if (filterCategory == FilterBeerField.COLOR) {
             selectedFilter = FilterKeys.BEER_COLOR;
-            saveStoredFilter(FilterKeys.BEER_COLOR);
         } else if (filterCategory == FilterBeerField.TASTE) {
             selectedFilter = FilterKeys.BEER_TASTE;
-            saveStoredFilter(FilterKeys.BEER_TASTE);
         } else if (filterCategory == FilterBeerField.SMELL) {
             selectedFilter = FilterKeys.BEER_SMELL;
-            saveStoredFilter(FilterKeys.BEER_SMELL);
         } else if (filterCategory == FilterBeerField.AFTER_TASTE) {
             selectedFilter = FilterKeys.BEER_AFTER_TASTE;
-            saveStoredFilter(FilterKeys.BEER_AFTER_TASTE);
         } else if (filterCategory == FilterBeerField.POWER) {
             selectedFilter = FilterKeys.BEER_POWER;
-            saveStoredFilter(FilterKeys.BEER_POWER);
         } else if (filterCategory == FilterBeerField.DENSITY) {
             selectedFilter = FilterKeys.BEER_DENSITY;
-            saveStoredFilter(FilterKeys.BEER_DENSITY);
         }  else if (filterCategory == FilterBeerField.IBU) {
             selectedFilter = FilterKeys.BEER_IBU;
-            saveStoredFilter(FilterKeys.BEER_IBU);
         } else if (filterCategory == FilterBeerField.COUNTRY) {
             selectedFilter = FilterKeys.COUNTRY;
-            saveStoredFilter(FilterKeys.COUNTRY);
         } else if (filterCategory == FilterBeerField.BREWERY) {
             selectedFilter = FilterKeys.BEER_BREWERIES;
-            saveStoredFilter(FilterKeys.BEER_BREWERIES);
         }
+        if(selectedFilter!=null)
+            saveStoredFilter(selectedFilter);
     }
 
     private void restoFilterLogic() {
@@ -579,10 +603,16 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     private void goToFilterMap() {
         Intent returnIntent = new Intent();
+
+        returnIntent.putExtra(Actions.PARAM1, numberTab);
+        returnIntent.putExtra(Actions.PARAM2, numberMenuItem);
+        returnIntent.putExtra(Actions.PARAM3, filterTxt);
+        returnIntent.putExtra(Actions.PARAM4, filterId);
+
         returnIntent.putExtra("filter", selectedFilter);
         returnIntent.putExtra("category", filterCategory);
-        returnIntent.putExtra("selectedItem", selectedItem);
-        returnIntent.putExtra("selectedItemId", selectedItemId);
+        returnIntent.putExtra("selectedItem", filterTxt);
+        returnIntent.putExtra("selectedItemId", filterId);
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -592,21 +622,21 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         //1-remote filter
         int type_filter=0;
 
-        switch (selectedTab){
+        switch (numberTab){
             case SearchFragment.TAB_BEER:
-                if(FilterBeerField.NAME==selectedItemPosition)
+                if(FilterBeerField.NAME== numberMenuItem)
                     type_filter=1;
                 break;
             case SearchFragment.TAB_BREWERY:
-                if(FilterBreweryField.NAME==selectedItemPosition)
+                if(FilterBreweryField.NAME== numberMenuItem)
                     type_filter=1;
                 break;
             case SearchFragment.TAB_RESTO:
-                if(FilterRestoField.NAME==selectedItemPosition)
+                if(FilterRestoField.NAME== numberMenuItem)
                     type_filter=1;
-                else if(FilterRestoField.BEER==selectedItemPosition)
+                else if(FilterRestoField.BEER== numberMenuItem)
                     type_filter=1;
-                else if(FilterRestoField.CITY==selectedItemPosition)
+                else if(FilterRestoField.CITY== numberMenuItem)
                     type_filter=1;
                 break;
         }
@@ -643,91 +673,99 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             fullSearchPackage.setPage(0);
             appendItems(new ArrayList<>());
         } else {
-            lytProgressBar.setVisibility(View.VISIBLE);
-            switch (selectedTab){
-                case SearchFragment.TAB_RESTO:
-                    if(selectedItemPosition==FilterRestoField.CITY){
-                        presenter.sendQueryCitySearch(fullSearchPackage);
-                    }
-                case SearchFragment.TAB_BEER:
-                case SearchFragment.TAB_BREWERY:
-                    if (
-                        selectedItemPosition==FilterRestoField.NAME||
-                        selectedItemPosition==FilterBeerField.NAME||
-                        selectedItemPosition==FilterBreweryField.NAME||
-                        selectedItemPosition==FilterRestoField.BEER
-                        ){
-                            presenter.sendQueryFullSearch(fullSearchPackage);
-                    }
+            if(numberMenuItem ==FilterRestoField.CITY){
+                presenter.sendQueryCitySearch(fullSearchPackage);
+            }else{
+                presenter.sendQueryFullSearch(fullSearchPackage);
             }
-
         }
     }
 
     private void processAction(int action, Object payload) {
-        switch (fullSearchPackage.getType()) {
-            case Keys.TYPE_BREWERY:{
-                Brewery brewery= (Brewery) payload;
-                Starter.BreweryDetailsActivity(this,brewery.getId());
-            }break;
-            default: {
-                switch (action){
+
+        switch (numberTab){
+            case SearchFragment.TAB_BEER:
+                break;
+            case SearchFragment.TAB_BREWERY:
+                break;
+            case SearchFragment.TAB_RESTO:
+                switch (numberMenuItem){
                     case FilterRestoField.NAME:
-                        Resto resto = (Resto) payload;
-                        goToRestoDetails(String.valueOf(resto.getId()));
                         break;
-                    case FilterRestoField.BEER:
-                        Beer beer = (Beer) payload;
-                        goToBeerDetails(beer.getId());
+                    case FilterRestoField.TYPE:
+                        RestoType model= (RestoType) payload;
+                        if(model.isSelected())
+                            hashMap.put(model.getId(),model.getName());
+                        else
+                            hashMap.remove(model.getId());
                         break;
-                    case FilterRestoField.CITY:
-                        Country country = (Country) payload;
-                        if (country.getId() == null) {
-                            selectedItem = country.getName();
-                            selectedItemId = country.getId();
-                            goToFilterMap();
-                            return;
-                        }
-                        toolbarTitle.setText(R.string.select_region);
-                        if (getStoredFilterList(FilterKeys.REGION) != null) {
-                            appendItems(getStoredFilterList(FilterKeys.REGION));
-                        } else {
-                            showProgressBar(true);
-                            presenter.loadRegions(new GeoPackage(country.getId(), null));
-                        }
-                        break;
-                    case FilterRestoField.REGION:
-                        if (getStoredFilterList(FilterKeys.REGION) == null) {
-                            saveStoredFilter(FilterKeys.REGION);
-                        }
-                        Region region = (Region) payload;
-                        if (region.getId() == 1 || region.getId() == 2) {
-                            selectedItem = region.getName();
-                            selectedItemId = String.valueOf(region.getId());
-                            goToFilterMap();
-                            return;
-                        }
-                        toolbarTitle.setText(R.string.select_city);
-                        if (getStoredFilterList(FilterKeys.CITY) != null) {
-                            appendItems(getStoredFilterList(FilterKeys.CITY));
-                        } else {
-                            showProgressBar(true);
-                            presenter.loadCity(new GeoPackage(region.getCountryId(), String.valueOf(region.getId())));
-                        }
-                        break;
-                    case FilterRestoField.SELECTED_CITY:
-                        City city = (City) payload;
-                        selectedItem = city.getName();
-                        selectedItemId = String.valueOf(city.getId());
-                        goToFilterMap();
-                        break;
-                    case FilterRestoField.METRO:
-                        //TO DO
-                        break;
-                    default:break;
                 }
-            }break;
+                break;
         }
+
+//        switch (fullSearchPackage.getType()) {
+//            case Keys.TYPE_BREWERY:{
+//                Brewery brewery= (Brewery) payload;
+//                Starter.BreweryDetailsActivity(this,brewery.getId());
+//            }break;
+//            default: {
+//                switch (action){
+//                    case FilterRestoField.NAME:
+//                        Resto resto = (Resto) payload;
+//                        goToRestoDetails(String.valueOf(resto.getId()));
+//                        break;
+//                    case FilterRestoField.BEER:
+//                        Beer beer = (Beer) payload;
+//                        goToBeerDetails(beer.getId());
+//                        break;
+//                    case FilterRestoField.CITY:
+//                        Country country = (Country) payload;
+//                        if (country.getId() == null) {
+//                            filterTxt = country.getName();
+//                            filterId = country.getId();
+//                            goToFilterMap();
+//                            return;
+//                        }
+//                        toolbarTitle.setText(R.string.select_region);
+//                        if (getStoredFilterList(FilterKeys.REGION) != null) {
+//                            appendItems(getStoredFilterList(FilterKeys.REGION));
+//                        } else {
+//                            showProgressBar(true);
+//                            presenter.loadRegions(new GeoPackage(country.getId(), null));
+//                        }
+//                        break;
+//                    case FilterRestoField.REGION:
+//                        if (getStoredFilterList(FilterKeys.REGION) == null) {
+//                            saveStoredFilter(FilterKeys.REGION);
+//                        }
+//                        Region region = (Region) payload;
+//                        if (region.getId() == 1 || region.getId() == 2) {
+//                            filterTxt = region.getName();
+//                            filterId = String.valueOf(region.getId());
+//                            goToFilterMap();
+//                            return;
+//                        }
+//                        toolbarTitle.setText(R.string.select_city);
+//                        if (getStoredFilterList(FilterKeys.CITY) != null) {
+//                            appendItems(getStoredFilterList(FilterKeys.CITY));
+//                        } else {
+//                            showProgressBar(true);
+//                            presenter.loadCity(new GeoPackage(region.getCountryId(), String.valueOf(region.getId())));
+//                        }
+//                        break;
+//                    case FilterRestoField.SELECTED_CITY:
+//                        City city = (City) payload;
+//                        filterTxt = city.getName();
+//                        filterId = String.valueOf(city.getId());
+//                        goToFilterMap();
+//                        break;
+//                    case FilterRestoField.METRO:
+//                        //TO DO
+//                        break;
+//                    default:break;
+//                }
+//            }break;
+//        }
     }
 
     private void goToRestoDetails(String restoId) {

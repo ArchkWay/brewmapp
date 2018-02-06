@@ -1,11 +1,14 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
+import android.widget.ArrayAdapter;
 
 import com.brewmapp.app.environment.FilterKeys;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.wrapper.CityInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.PriceRangeType;
@@ -24,6 +27,7 @@ import com.brewmapp.execution.task.CountryTask;
 import com.brewmapp.execution.task.FeatureTask;
 import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
+import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadCityTaskFilter;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RegionTask;
@@ -31,6 +35,7 @@ import com.brewmapp.execution.task.RestoTypeTask;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -70,6 +75,7 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
     private BeerPowerTask beerPowerTask;
     private BeerDensityTask beerDensityTask;
     private BeerIbuTask beerIbuTask;
+    private LoadCityTask loadCityTask;
 
     @Inject
     public SelectCategoryActivityPresenterImpl(Context context, RestoTypeTask restoTypeTask,
@@ -90,7 +96,8 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
                                                CountryTask countryTask,
                                                RegionTask regionTask,
                                                LoadCityTaskFilter cityTask,
-                                               BreweryTask breweryTask) {
+                                               BreweryTask breweryTask,
+                                               LoadCityTask loadCityTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
@@ -111,6 +118,7 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         this.regionTask = regionTask;
         this.cityTask = cityTask;
         this.breweryTask = breweryTask;
+        this.loadCityTask = loadCityTask;
     }
 
     @Override
@@ -140,6 +148,7 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         regionTask.cancel();
         cityTask.cancel();
         breweryTask.cancel();
+        loadCityTask.cancel();
     }
 
     @Override
@@ -606,6 +615,25 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
 
     @Override
     public void sendQueryCitySearch(FullSearchPackage fullSearchPackage) {
+        loadCityTask.cancel();
+        GeoPackage geoPackage = new GeoPackage();
+        geoPackage.setCityName(fullSearchPackage.getStringSearch());
+        loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+
+            @Override
+            public void onNext(List<City> cities) {
+                super.onNext(cities);
+                ArrayList<CityInfo> cityInfoArrayList=new ArrayList<>();
+                for(City city:cities)
+                    cityInfoArrayList.add(new CityInfo(city));
+                view.appendItems(new ArrayList<>(cityInfoArrayList));
+            }
+
+        });
 
     }
 

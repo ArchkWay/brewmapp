@@ -389,8 +389,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
                 showMapResult(data.getBooleanExtra("isBeer", false),
                         data.getIntExtra("checkBox", 0));
-            } else if (requestCode == REQUEST_SEARCH_CODE) {
-                showSearchFilter(data);
             }
         }
     }
@@ -463,14 +461,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         for (Fragment fragment : getSupportFragmentManager().getFragments())
             if (fragment instanceof BeerMapFragment) {
                 ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
-            }
-    }
-
-    @SuppressLint("RestrictedApi")
-    public void showSearchFilter(Intent data) {
-        for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if (fragment instanceof SearchFragment) {
-                ((SearchFragment) fragment).showResult(data);
             }
     }
 

@@ -150,7 +150,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         });
 
         initFilterCategory();
-        initFilter();
+        initFinder();
     }
 
     @Override
@@ -178,6 +178,15 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     @Override
     public void showProgressBar(boolean show) {
         lytProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
     }
 
     @OnClick(R.id.filter_toolbar_subtitle)
@@ -215,16 +224,20 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initFilterCategory() {
+        int numberPositionClicked=getIntent().getIntExtra(Actions.PARAM2, Integer.MAX_VALUE);
         switch (selectedTab){
             case SearchFragment.TAB_BEER:
-                initBeerFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+                initBeerFilterByCategory(numberPositionClicked);
                 break;
             case SearchFragment.TAB_BREWERY:
-                initBreweryFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+                initBreweryFilterByCategory(numberPositionClicked);
                 break;
             case SearchFragment.TAB_RESTO:
-                initRestoFilterByCategory(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0));
+                initRestoFilterByCategory(numberPositionClicked);
                 break;
+                default:
+                    commonError(getString(R.string.replay_not_valid_param));
+
         }
     }
 
@@ -404,7 +417,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     presenter.loadBrewery();
                 }
                 break;
-            default:break;
+            default:commonError(getString(R.string.replay_not_valid_param));
         }
     }
 
@@ -457,14 +470,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 break;
             case FilterRestoField.CITY:
-                showProgressBar(true);
-                okButton.setVisibility(View.GONE);
-                toolbarTitle.setText(R.string.select_country);
-                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
-                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
-                } else {
-                    presenter.loadCountries();
-                }
+//                showProgressBar(true);
+//                okButton.setVisibility(View.GONE);
+//                toolbarTitle.setText(R.string.select_country);
+//                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
+//                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
+//                } else {
+//                    presenter.loadCountries();
+//                }
                 break;
             case FilterRestoField.METRO:
                 toolbarTitle.setText(R.string.select_metro);
@@ -479,7 +492,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 break;
             default:
-                break;
+                commonError(getString(R.string.replay_not_valid_param));
         }
     }
 
@@ -574,7 +587,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         finish();
     }
 
-    private void initFilter() {
+    private void initFinder() {
         //0-local filter
         //1-remote filter
         int type_filter=0;
@@ -590,6 +603,10 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 break;
             case SearchFragment.TAB_RESTO:
                 if(FilterRestoField.NAME==selectedItemPosition)
+                    type_filter=1;
+                else if(FilterRestoField.BEER==selectedItemPosition)
+                    type_filter=1;
+                else if(FilterRestoField.CITY==selectedItemPosition)
                     type_filter=1;
                 break;
         }
@@ -610,11 +627,11 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
-        if (stringSearch.length() > 3) {
+        if (stringSearch.length() > 1) {
             emptyView.setVisibility(View.GONE);
             filterList.setVisibility(View.VISIBLE);
             sendQuery();
-        } else if (stringSearch.length() == 0) {
+        } else  {
             adapter.clear();
             emptyView.setVisibility(View.VISIBLE);
             filterList.setVisibility(View.GONE);
@@ -627,7 +644,23 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             appendItems(new ArrayList<>());
         } else {
             lytProgressBar.setVisibility(View.VISIBLE);
-            presenter.sendQueryFullSearch(fullSearchPackage);
+            switch (selectedTab){
+                case SearchFragment.TAB_RESTO:
+                    if(selectedItemPosition==FilterRestoField.CITY){
+                        presenter.sendQueryCitySearch(fullSearchPackage);
+                    }
+                case SearchFragment.TAB_BEER:
+                case SearchFragment.TAB_BREWERY:
+                    if (
+                        selectedItemPosition==FilterRestoField.NAME||
+                        selectedItemPosition==FilterBeerField.NAME||
+                        selectedItemPosition==FilterBreweryField.NAME||
+                        selectedItemPosition==FilterRestoField.BEER
+                        ){
+                            presenter.sendQueryFullSearch(fullSearchPackage);
+                    }
+            }
+
         }
     }
 

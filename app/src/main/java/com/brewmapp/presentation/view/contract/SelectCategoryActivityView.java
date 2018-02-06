@@ -12,4 +12,5 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
 public interface SelectCategoryActivityView extends BasicView {
     void appendItems(List<IFlexible> list);
     void showProgressBar(boolean show);
+    void commonError(String... strings);
 }

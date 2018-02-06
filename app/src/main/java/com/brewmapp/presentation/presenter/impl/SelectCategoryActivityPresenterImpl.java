@@ -604,6 +604,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         }
     }
 
+    @Override
+    public void sendQueryCitySearch(FullSearchPackage fullSearchPackage) {
+
+    }
+
     private void saveStoredFilter(String filterKey, List<IFlexible> storeList) {
         Paper.book().write(filterKey, storeList);
     }

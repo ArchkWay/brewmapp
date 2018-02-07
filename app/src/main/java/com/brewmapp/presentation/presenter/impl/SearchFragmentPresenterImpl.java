@@ -35,7 +35,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     @Override
     public void onAttach(SearchAllView searchAllView) {
         super.onAttach(searchAllView);
-        Paper.init(context);
+
         if (Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO) == null) {
             Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, FilterRestoField.createDefault(context));
         }

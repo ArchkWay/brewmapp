@@ -120,14 +120,17 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     protected void initView() {
         numberTab =getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
         numberMenuItem =getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
-        filterTxt =getIntent().getStringExtra(Actions.PARAM3);
-        filterId=getIntent().getStringExtra(Actions.PARAM4);
+        filterId=getIntent().getStringExtra(Actions.PARAM3);
+        filterTxt=getIntent().getStringExtra(Actions.PARAM4);
         try {
             String[] ids=filterId.split(",");
-            String[] txts=filterId.split(",");
+            String[] txts=filterTxt.split(",");
             int i=0;
             for (String s:ids)
-                hashMap.put(s,txts[i++]);
+                hashMap.put(
+                        new StringBuilder().append(s).toString(),
+                        new StringBuilder().append(txts[i++]).toString()
+                );
         }catch (Exception e){}
 
         fullSearchPackage = new FullSearchPackage();
@@ -195,7 +198,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     case FilterRestoField.TYPE:
                         for(IFlexible iFlexible:list){
                             RestoType model= ((RestoTypeInfo) iFlexible).getModel();
-                            model.setSelected(hashMap.containsKey(model.getId()));
+                            model.setSelected(hashMap.containsKey(new StringBuilder().append(model.getId()).toString()));
                         }
                 }
                 break;
@@ -470,11 +473,11 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterRestoField.TYPE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_type);
-                if (getStoredFilterList(FilterKeys.RESTO_TYPE) != null) {
-                    appendItems(getStoredFilterList(FilterKeys.RESTO_TYPE));
-                } else {
+//                if (getStoredFilterList(FilterKeys.RESTO_TYPE) != null) {
+//                    appendItems(getStoredFilterList(FilterKeys.RESTO_TYPE));
+//                } else {
                     presenter.loadRestoTypes();
-                }
+//                }
                 break;
             case FilterRestoField.BEER:
                 okButton.setVisibility(View.GONE);
@@ -604,10 +607,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private void goToFilterMap() {
         Intent returnIntent = new Intent();
 
+
+
         returnIntent.putExtra(Actions.PARAM1, numberTab);
         returnIntent.putExtra(Actions.PARAM2, numberMenuItem);
-        returnIntent.putExtra(Actions.PARAM3, filterTxt);
-        returnIntent.putExtra(Actions.PARAM4, filterId);
+        returnIntent.putExtra(Actions.PARAM3, strJoin( hashMap.keySet().toArray(),","));
+        returnIntent.putExtra(Actions.PARAM4, strJoin( hashMap.values().toArray(),","));
 
         returnIntent.putExtra("filter", selectedFilter);
         returnIntent.putExtra("category", filterCategory);
@@ -695,9 +700,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     case FilterRestoField.TYPE:
                         RestoType model= (RestoType) payload;
                         if(model.isSelected())
-                            hashMap.put(model.getId(),model.getName());
+                            hashMap.put(new StringBuilder().append(model.getId()).toString(),model.getName());
                         else
-                            hashMap.remove(model.getId());
+                            hashMap.remove(new StringBuilder().append(model.getId()).toString());
                         break;
                 }
                 break;
@@ -786,4 +791,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         startActivity(intent);
     }
 
+    public String strJoin(Object[] aArr, String sSep) {
+        StringBuilder sbStr = new StringBuilder();
+        for (int i = 0, il = aArr.length; i < il; i++) {
+            if (i > 0)
+                sbStr.append(sSep);
+            sbStr.append(aArr[i]);
+        }
+        return sbStr.toString();
+    }
 }

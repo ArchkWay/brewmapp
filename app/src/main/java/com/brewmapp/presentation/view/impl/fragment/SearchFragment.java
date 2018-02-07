@@ -152,8 +152,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
             intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
             intent.putExtra(Actions.PARAM2,position);
-            intent.putExtra(Actions.PARAM3,filterTxt);
-            intent.putExtra(Actions.PARAM4,filterId);
+            intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
+            intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
 
             startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
         }
@@ -660,15 +660,17 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     public void showResult(Intent data) {
         int numberTab=data.getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
         int numberMenuItem=data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
-        String filterTXT=data.getStringExtra(Actions.PARAM3);
-        String filterID=data.getStringExtra(Actions.PARAM4);
+        String filterID=data.getStringExtra(Actions.PARAM3);
+        String filterTXT=data.getStringExtra(Actions.PARAM4);
 
         switch (numberTab) {
             case TAB_RESTO:
                 switch (numberMenuItem){
-                    case FilterRestoField.CITY:
-                        restoAdapter.getItem(numberMenuItem).setSelectedFilter(filterTXT);
+                    case FilterRestoField.TYPE:
                         restoAdapter.getItem(numberMenuItem).setSelectedItemId(filterID);
+                        restoAdapter.getItem(numberMenuItem).setSelectedFilter(filterTXT);
+                        restoAdapter.notifyDataSetChanged();
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                         break;
 
                 }

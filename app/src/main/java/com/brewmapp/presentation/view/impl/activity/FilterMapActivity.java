@@ -105,7 +105,7 @@ public class FilterMapActivity extends BaseActivity implements FilterMapView, Fl
     @Override
     protected void initView() {
         enableBackButton();
-        Paper.init(this);
+
         titleToolbar.setText(titleContent[0]);
         offer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 0 ? View.VISIBLE : View.GONE);
         craft.setVisibility(tabsView.getTabs().getSelectedTabPosition() != 0 ? View.VISIBLE : View.GONE);

@@ -100,7 +100,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Paper.init(getContext());
+
         Bundle arguments = getArguments();
         if (arguments != null) {
             location = (RestoLocation) arguments.getSerializable(Keys.LOCATION);

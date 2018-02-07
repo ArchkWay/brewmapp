@@ -33,7 +33,7 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
     @Override
     public void onAttach(FilterMapView filterMapView) {
         super.onAttach(filterMapView);
-        Paper.init(context);
+
         if (Paper.book().read("restoCategoryList") == null) {
             Paper.book().write("restoCategoryList", FilterRestoField.createDefault(context));
         }

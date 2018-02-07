@@ -7,7 +7,7 @@ import io.paperdb.Paper;
 public class DbManager {
 
     public DbManager(Context context) {
-        Paper.init(context);
+
     }
 
 

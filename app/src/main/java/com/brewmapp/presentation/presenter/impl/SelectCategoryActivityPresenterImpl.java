@@ -124,7 +124,7 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
     @Override
     public void onAttach(SelectCategoryActivityView selectCategoryActivityView) {
         super.onAttach(selectCategoryActivityView);
-        Paper.init(context);
+
     }
 
     @Override

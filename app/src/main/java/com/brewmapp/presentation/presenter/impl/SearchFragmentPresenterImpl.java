@@ -48,7 +48,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                 List<FilterRestoField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
                 if(list==null)
                 {
-                    list = FilterRestoField.createDefault(context);
+                    list = FilterRestoField.createDefault();
                     Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
                 }
                 view.showRestoFilters(list);
@@ -62,7 +62,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                 }
                 view.showBeerFilters(list);
             }break;
-            case 2:
+            case SearchFragment.TAB_BREWERY:
                 List<FilterBreweryField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY);
                 if(list==null)
                 {

@@ -46,13 +46,11 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     private String title;
     private String selectedFilter;
     private boolean selected;
-    private String title_default;
-    public FilterBeerField(int id, int icon, String title, String selectedFilter) {
+    private boolean isDirty =true;
+
+    public FilterBeerField(int id) {
         this.id = id;
-        this.icon = icon;
-        this.title = title;
-        this.selectedFilter = selectedFilter;
-        this.title_default = selectedFilter;
+
     }
 
     @Override
@@ -86,8 +84,11 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterBeerRowField> holder,
                                int position, List payloads) {
-        holder.view.setModel(this);
         holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
+        if(isDirty)
+            resetToDefault(holder.view.getContext());
+        holder.view.setModel(this);
+
     }
 
     public static void unselectAll(List<MenuField> fields) {
@@ -119,21 +120,21 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
 
     public static List<FilterBeerField> createDefault(Context context) {
         List<FilterBeerField> out = new ArrayList<>();
-        out.add(new FilterBeerField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_beer_name), "Любое"));
-        out.add(new FilterBeerField(COUNTRY, R.drawable.ic_country, context.getString(R.string.search_beer_country), "Не имеет значения"));
-        out.add(new FilterBeerField(TYPE, R.drawable.ic_beer_type, context.getString(R.string.search_beer_type), "Любой"));
-        out.add(new FilterBeerField(BRAND, R.drawable.ic_brand, context.getString(R.string.search_beer_brand), "Любой"));
-        out.add(new FilterBeerField(POWER, R.drawable.ic_power, context.getString(R.string.search_beer_power), "Любая"));
-        out.add(new FilterBeerField(BEER_FILTER, R.drawable.ic_filter_beer, context.getString(R.string.search_beer_filter), "Все виды"));
-        out.add(new FilterBeerField(DENSITY, R.drawable.ic_broj, context.getString(R.string.search_beer_type_broj), "Любой"));
-        out.add(new FilterBeerField(IBU, R.drawable.ic_beer_ibu, context.getString(R.string.search_beer_ibu), "Любой"));
-        out.add(new FilterBeerField(BEER_PACK, R.drawable.ic_bottle_beer, context.getString(R.string.search_beer_bootle), "Любой"));
-        out.add(new FilterBeerField(COLOR, R.drawable.ic_color_beer, context.getString(R.string.search_beer_color), "Любой"));
-        out.add(new FilterBeerField(SMELL, R.drawable.ic_beer, context.getString(R.string.search_beer_smell), "Любой"));
-        out.add(new FilterBeerField(TASTE, R.drawable.ic_taste, context.getString(R.string.search_beer_taste), "Любой"));
-        out.add(new FilterBeerField(AFTER_TASTE, R.drawable.ic_beer_aftertaste, context.getString(R.string.search_beer_after_taste), "Любое"));
-        out.add(new FilterBeerField(BREWERY, R.drawable.ic_brewery, context.getString(R.string.search_beer_factory), "Не имеет значения"));
-        out.add(new FilterBeerField(PRICE_BEER, R.drawable.ic_price_range, context.getString(R.string.search_beer_price), "Любая"));
+        out.add(new FilterBeerField(NAME));
+        out.add(new FilterBeerField(COUNTRY));
+        out.add(new FilterBeerField(TYPE));
+        out.add(new FilterBeerField(BRAND));
+        out.add(new FilterBeerField(POWER));
+        out.add(new FilterBeerField(BEER_FILTER));
+        out.add(new FilterBeerField(DENSITY));
+        out.add(new FilterBeerField(IBU));
+        out.add(new FilterBeerField(BEER_PACK));
+        out.add(new FilterBeerField(COLOR));
+        out.add(new FilterBeerField(SMELL));
+        out.add(new FilterBeerField(TASTE));
+        out.add(new FilterBeerField(AFTER_TASTE));
+        out.add(new FilterBeerField(BREWERY));
+        out.add(new FilterBeerField(PRICE_BEER));
         return out;
     }
 
@@ -150,7 +151,105 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     }
 
     public void clearFilter() {
-        this.selectedFilter = title_default ;
-        this.selectedItemId = null;
+        isDirty =true;
     }
+
+    private void resetToDefault(Context context) {
+        isDirty =false;
+        if(context!=null)
+            switch (id){
+                case NAME:
+                    icon = R.drawable.ic_resto_name;
+                    title = context.getString(R.string.search_beer_name);
+                    selectedFilter = context.getString(R.string.search_beer_name_defailt);
+                    selectedItemId=null;
+                    break;
+                case COUNTRY:
+                    icon = R.drawable.ic_country;
+                    title = context.getString(R.string.search_beer_country);
+                    selectedFilter = context.getString(R.string.search_beer_country_defailt);
+                    selectedItemId=null;
+                    break;
+                case TYPE:
+                    icon = R.drawable.ic_beer_type;
+                    title = context.getString(R.string.search_beer_type);
+                    selectedFilter = context.getString(R.string.search_beer_type_defailt);
+                    selectedItemId=null;
+                    break;
+                case BRAND:
+                    icon = R.drawable.ic_brand;
+                    title = context.getString(R.string.search_beer_brand);
+                    selectedFilter = context.getString(R.string.search_beer_brand_defailt);
+                    selectedItemId=null;
+                    break;
+                case POWER:
+                    icon = R.drawable.ic_power;
+                    title = context.getString(R.string.search_beer_power);
+                    selectedFilter = context.getString(R.string.search_beer_power_defailt);
+                    selectedItemId=null;
+                    break;
+                case BEER_FILTER:
+                    icon = R.drawable.ic_filter_beer;
+                    title = context.getString(R.string.search_beer_filter);
+                    selectedFilter = context.getString(R.string.search_beer_filter_defailt);
+                    selectedItemId=null;
+                    break;
+                case DENSITY:
+                    icon = R.drawable.ic_broj;
+                    title = context.getString(R.string.search_beer_type_broj);
+                    selectedFilter = context.getString(R.string.search_beer_type_broj_defailt);
+                    selectedItemId=null;
+                    break;
+                case IBU:
+                    icon = R.drawable.ic_beer_ibu;
+                    title = context.getString(R.string.search_beer_ibu);
+                    selectedFilter = context.getString(R.string.search_beer_ibu_defailt);
+                    selectedItemId=null;
+                    break;
+                case BEER_PACK:
+                    icon = R.drawable.ic_bottle_beer;
+                    title = context.getString(R.string.search_beer_bootle);
+                    selectedFilter = context.getString(R.string.search_beer_bootle_defailt);
+                    selectedItemId=null;
+                    break;
+                case COLOR:
+                    icon = R.drawable.ic_color_beer;
+                    title = context.getString(R.string.search_beer_color);
+                    selectedFilter = context.getString(R.string.search_beer_color_defailt);
+                    selectedItemId=null;
+                    break;
+                case SMELL:
+                    icon = R.drawable.ic_beer;
+                    title = context.getString(R.string.search_beer_smell);
+                    selectedFilter = context.getString(R.string.search_beer_smell_defailt);
+                    selectedItemId=null;
+                    break;
+                case TASTE:
+                    icon = R.drawable.ic_taste;
+                    title = context.getString(R.string.search_beer_taste);
+                    selectedFilter = context.getString(R.string.search_beer_taste_defailt);
+                    selectedItemId=null;
+                    break;
+                case AFTER_TASTE:
+                    icon = R.drawable.ic_beer_aftertaste;
+                    title = context.getString(R.string.search_beer_after_taste);
+                    selectedFilter = context.getString(R.string.search_beer_after_taste_defailt);
+                    selectedItemId=null;
+                    break;
+                case BREWERY:
+                    icon = R.drawable.ic_brewery;
+                    title = context.getString(R.string.search_beer_factory);
+                    selectedFilter = context.getString(R.string.search_beer_factory_defailt);
+                    selectedItemId=null;
+                    break;
+                case PRICE_BEER:
+                    icon = R.drawable.ic_price_range;
+                    title = context.getString(R.string.search_beer_price);
+                    selectedFilter = context.getString(R.string.search_beer_price_defailt);
+                    selectedItemId=null;
+                    break;
+            }
+
+    }
+
 }

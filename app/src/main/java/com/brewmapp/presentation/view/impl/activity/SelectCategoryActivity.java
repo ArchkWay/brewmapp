@@ -773,8 +773,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 //        }
     }
 
-
-
     private void goToBeerDetails(String beerId) {
         Beer beer = new Beer();
         beer.setId(beerId);

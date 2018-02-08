@@ -34,13 +34,11 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
     private String title;
     private String selectedFilter;
     private boolean selected;
-    private String title_default;
-    public FilterBreweryField(int id, int icon, String title, String selectedFilter) {
+
+    private boolean isDirty =true;
+
+    public FilterBreweryField(int id) {
         this.id = id;
-        this.icon = icon;
-        this.title = title;
-        this.selectedFilter = selectedFilter;
-        this.title_default = selectedFilter;
     }
 
     @Override
@@ -108,10 +106,10 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
 
     public static List<FilterBreweryField> createDefault(Context context) {
         List<FilterBreweryField> out = new ArrayList<>();
-        out.add(new FilterBreweryField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_brewery_name), "Любое"));
-        out.add(new FilterBreweryField(COUNTRY, R.drawable.ic_country, context.getString(R.string.search_beer_country), "Любая"));
-        out.add(new FilterBreweryField(BRAND, R.drawable.ic_brand, context.getString(R.string.search_beer_brand), "Любой"));
-        out.add(new FilterBreweryField(TYPE_BEER, R.drawable.ic_beer_type, context.getString(R.string.search_beer_type), "Любой"));
+        out.add(new FilterBreweryField(NAME));
+        out.add(new FilterBreweryField(COUNTRY));
+        out.add(new FilterBreweryField(BRAND));
+        out.add(new FilterBreweryField(TYPE_BEER));
         return out;
     }
 
@@ -128,7 +126,6 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
     }
 
     public void clearFilter() {
-        this.selectedFilter = title_default ;
-        this.selectedItemId = null;
+        isDirty =true;
     }
 }

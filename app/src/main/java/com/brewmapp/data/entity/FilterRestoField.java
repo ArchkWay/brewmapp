@@ -42,15 +42,10 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     private String title;
     private String selectedFilter;
     private boolean selected;
+    private boolean isDirty =true;
 
-    private String title_default;
-
-    public FilterRestoField(int id, int icon, String title, String selectedFilter) {
+    public FilterRestoField(int id) {
         this.id = id;
-        this.icon = icon;
-        this.title = title;
-        this.selectedFilter = selectedFilter;
-        this.title_default = selectedFilter;
     }
 
     @Override
@@ -87,8 +82,66 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterRestoRowField> holder,
                                int position, List payloads) {
-        holder.view.setModel(this);
         holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
+        if(isDirty)
+            resetToDefault(holder.view.getContext());
+        holder.view.setModel(this);
+    }
+
+    private void resetToDefault(Context context) {
+        isDirty =false;
+        if(context!=null)
+            switch (id){
+                case NAME:
+                    icon = R.drawable.ic_resto_name;
+                    title = context.getString(R.string.search_resto_name);
+                    selectedFilter = context.getString(R.string.search_resto_name_defailt);
+                    selectedItemId=null;
+                    break;
+                case TYPE:
+                    icon = R.drawable.ic_resto;
+                    title = context.getString(R.string.search_resto_type);
+                    selectedFilter = context.getString(R.string.search_resto_type_defailt);
+                    selectedItemId=null;
+                    break;
+                case BEER:
+                    icon = R.drawable.ic_beer;
+                    title = context.getString(R.string.search_resto_beer);
+                    selectedFilter = context.getString(R.string.search_resto_beer_defailt);
+                    selectedItemId=null;
+                    break;
+                case KITCHEN:
+                    icon = R.drawable.ic_kitchen;
+                    title = context.getString(R.string.search_resto_kitchen);
+                    selectedFilter = context.getString(R.string.search_resto_kitchen_defailt);
+                    selectedItemId=null;
+                    break;
+                case PRICE:
+                    icon = R.drawable.ic_price_range;
+                    title = context.getString(R.string.search_resto_price);
+                    selectedFilter = context.getString(R.string.search_resto_price_default);
+                    selectedItemId=null;
+                    break;
+                case CITY:
+                    icon = R.drawable.ic_city;
+                    title = context.getString(R.string.search_resto_city);
+                    selectedFilter = context.getString(R.string.search_resto_city_default);
+                    selectedItemId=null;
+                    break;
+                case METRO:
+                    icon = R.drawable.ic_metro;
+                    title = context.getString(R.string.search_resto_metro);
+                    selectedFilter = context.getString(R.string.search_resto_metro_default);
+                    selectedItemId=null;
+                    break;
+                case FEATURES:
+                    icon = R.drawable.ic_feature;
+                    title = context.getString(R.string.search_resto_other);
+                    selectedFilter = context.getString(R.string.search_resto_other_default);
+                    selectedItemId=null;
+                    break;
+            }
+
     }
 
     public static void unselectAll(List<MenuField> fields) {
@@ -118,16 +171,16 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
         this.selectedFilter = selectedFilter;
     }
 
-    public static List<FilterRestoField> createDefault(Context context) {
+    public static List<FilterRestoField> createDefault() {
         List<FilterRestoField> out = new ArrayList<>();
-        out.add(new FilterRestoField(NAME, R.drawable.ic_resto_name, context.getString(R.string.search_resto_name), "Любое"));
-        out.add(new FilterRestoField(TYPE, R.drawable.ic_resto, context.getString(R.string.search_resto_type), "Любой"));
-        out.add(new FilterRestoField(BEER, R.drawable.ic_beer, context.getString(R.string.search_resto_beer), "Любое"));
-        out.add(new FilterRestoField(KITCHEN, R.drawable.ic_kitchen, context.getString(R.string.search_resto_kitchen), "Любая"));
-        out.add(new FilterRestoField(PRICE, R.drawable.ic_price_range, context.getString(R.string.search_resto_price), "Не имеет значения"));
-        out.add(new FilterRestoField(CITY, R.drawable.ic_city, context.getString(R.string.search_resto_city), "Любой город"));
-        out.add(new FilterRestoField(METRO, R.drawable.ic_metro, context.getString(R.string.search_resto_metro), "Не имеет значения"));
-        out.add(new FilterRestoField(FEATURES, R.drawable.ic_feature, context.getString(R.string.search_resto_other), "Не имеют значения"));
+        out.add(new FilterRestoField(NAME));
+        out.add(new FilterRestoField(TYPE));
+        out.add(new FilterRestoField(BEER));
+        out.add(new FilterRestoField(KITCHEN));
+        out.add(new FilterRestoField(PRICE));
+        out.add(new FilterRestoField(CITY));
+        out.add(new FilterRestoField(METRO));
+        out.add(new FilterRestoField(FEATURES));
         return out;
     }
 
@@ -144,7 +197,6 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     }
 
     public void clearFilter() {
-        this.selectedFilter = title_default ;
-        this.selectedItemId = null;
+        this.isDirty = true;
     }
 }

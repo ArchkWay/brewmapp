@@ -35,7 +35,7 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
         super.onAttach(filterMapView);
 
         if (Paper.book().read("restoCategoryList") == null) {
-            Paper.book().write("restoCategoryList", FilterRestoField.createDefault(context));
+            Paper.book().write("restoCategoryList", FilterRestoField.createDefault());
         }
         if (Paper.book().read("beerCategoryList") == null) {
             Paper.book().write("beerCategoryList", FilterBeerField.createDefault(context));

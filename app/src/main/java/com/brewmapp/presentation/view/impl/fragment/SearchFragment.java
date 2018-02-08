@@ -213,7 +213,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     @Override
     public void showRestoFilters(List<FilterRestoField> fieldList) {
         this.restoFilterList = fieldList;
-        restoAdapter = new FlexibleModelAdapter<>(fieldList, this::onItemClickInteractive);
+        restoAdapter = new FlexibleModelAdapter<>(restoFilterList, this::onItemClickInteractive);
         list.setAdapter(restoAdapter);
     }
 
@@ -721,18 +721,14 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
             case TAB_RESTO:
                 switch (numberMenuItem){
                     case FilterRestoField.TYPE:
-                        restoAdapter.getItem(numberMenuItem).setSelectedItemId(filterID);
-                        restoAdapter.getItem(numberMenuItem).setSelectedFilter(filterTXT);
-                        restoAdapter.notifyDataSetChanged();
+                        restoFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        restoFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
                         Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
+                        restoAdapter.notifyItemChanged(numberMenuItem);
                         break;
-
                 }
 
-//                setRestoSelectedFilter(data.getStringExtra("filter"),
-//                        data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
-//                        data.getStringExtra("selectedItemId"));
-                break;
+
             case TAB_BEER:
                 setBeerSelectedFilter(data.getStringExtra("filter"),
                         data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),

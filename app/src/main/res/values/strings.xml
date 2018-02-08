@@ -466,5 +466,28 @@
     <string name="not_valid_param">Не верный параметр</string>
     <string name="message_need_filtr">Не выбраны критерии поиска</string>
     <string name="text_view_city_not_found">Город не указан</string>
+    <string name="search_resto_name_defailt">Любое</string>
+    <string name="search_resto_type_defailt">Любой</string>
+    <string name="search_resto_beer_defailt">Любое</string>
+    <string name="search_resto_kitchen_defailt">Любая</string>
+    <string name="search_resto_price_default">Не имеет значения</string>
+    <string name="search_resto_city_default">Любой город</string>
+    <string name="search_resto_metro_default">Не имеет значения</string>
+    <string name="search_resto_other_default">Не имеют значения</string>
+    <string name="search_beer_name_defailt">Любое</string>
+    <string name="search_beer_country_defailt">Не имеет значения</string>
+    <string name="search_beer_type_defailt">Любой</string>
+    <string name="search_beer_brand_defailt">Любой</string>
+    <string name="search_beer_power_defailt">Любая</string>
+    <string name="search_beer_filter_defailt">Все виды</string>
+    <string name="search_beer_type_broj_defailt">Любой</string>
+    <string name="search_beer_ibu_defailt">Любой</string>
+    <string name="search_beer_bootle_defailt">Любой</string>
+    <string name="search_beer_color_defailt">Любой</string>
+    <string name="search_beer_smell_defailt">Любой</string>
+    <string name="search_beer_taste_defailt">Любой</string>
+    <string name="search_beer_after_taste_defailt">Любое</string>
+    <string name="search_beer_factory_defailt">Не имеет значения</string>
+    <string name="search_beer_price_defailt">Любая</string>
 
 </resources>

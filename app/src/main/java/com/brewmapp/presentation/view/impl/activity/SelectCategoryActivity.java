@@ -19,20 +19,15 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
-import com.brewmapp.data.entity.Brewery;
-import com.brewmapp.data.entity.City;
-import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
-import com.brewmapp.data.entity.Region;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
-import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
@@ -273,7 +268,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 initRestoFilterByCategory(numberMenuItem);
                 break;
             default:
-                commonError(getString(R.string.replay_not_valid_param));
+                commonError(getString(R.string.not_valid_param));
 
         }
     }
@@ -454,7 +449,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     presenter.loadBrewery();
                 }
                 break;
-            default:commonError(getString(R.string.replay_not_valid_param));
+            default:commonError(getString(R.string.not_valid_param));
         }
     }
 
@@ -467,17 +462,16 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_resto));
-                filterList.setVisibility(View.GONE);
+                //filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_resto_name);
+
                 break;
             case FilterRestoField.TYPE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_type);
-//                if (getStoredFilterList(FilterKeys.RESTO_TYPE) != null) {
-//                    appendItems(getStoredFilterList(FilterKeys.RESTO_TYPE));
-//                } else {
-                    presenter.loadRestoTypes();
-//                }
+                presenter.loadRestoTypes();
+                //emptyTitle.requestFocus();
+                finder.clearFocus();
                 break;
             case FilterRestoField.BEER:
                 okButton.setVisibility(View.GONE);
@@ -529,7 +523,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 break;
             default:
-                commonError(getString(R.string.replay_not_valid_param));
+                commonError(getString(R.string.not_valid_param));
         }
     }
 
@@ -662,7 +656,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
-        if (stringSearch.length() > 1) {
+        if (stringSearch.length() > 0) {
             emptyView.setVisibility(View.GONE);
             filterList.setVisibility(View.VISIBLE);
             sendQuery();
@@ -696,6 +690,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case SearchFragment.TAB_RESTO:
                 switch (numberMenuItem){
                     case FilterRestoField.NAME:
+                        Starter.RestoDetailActivity(this,String.valueOf(((Resto)payload).getId()));
                         break;
                     case FilterRestoField.TYPE:
                         RestoType model= (RestoType) payload;
@@ -704,8 +699,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         else
                             hashMap.remove(new StringBuilder().append(model.getId()).toString());
                         break;
+                        default:
+                            commonError(getString(R.string.not_valid_param));
                 }
                 break;
+            default:
+                commonError(getString(R.string.not_valid_param));
+
         }
 
 //        switch (fullSearchPackage.getType()) {
@@ -773,15 +773,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 //        }
     }
 
-    private void goToRestoDetails(String restoId) {
-        Interest interest = new Interest();
-        Interest_info interest_info = new Interest_info();
-        interest_info.setId(restoId);
-        interest.setInterest_info(interest_info);
-        Intent intent = new Intent(this, RestoDetailActivity.class);
-        intent.putExtra(RESTO_ID, interest);
-        startActivity(intent);
-    }
+
 
     private void goToBeerDetails(String beerId) {
         Beer beer = new Beer();

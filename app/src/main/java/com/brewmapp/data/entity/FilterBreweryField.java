@@ -12,6 +12,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 
 /**
@@ -24,6 +25,8 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
     public static final int COUNTRY = 1;
     public static final int BRAND = 2;
     public static final int TYPE_BEER = 3;
+    public static final int CODE_CLICK_FILTER_START_SELECTION = 0;
+    public static final int CODE_CLICK_FILTER_CLEAR = 1;
 
     private int id;
     private String selectedItemId;
@@ -31,12 +34,13 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
     private String title;
     private String selectedFilter;
     private boolean selected;
-
+    private String title_default;
     public FilterBreweryField(int id, int icon, String title, String selectedFilter) {
         this.id = id;
         this.icon = icon;
         this.title = title;
         this.selectedFilter = selectedFilter;
+        this.title_default = selectedFilter;
     }
 
     @Override
@@ -71,6 +75,8 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterBreweryRowField> holder,
                                int position, List payloads) {
         holder.view.setModel(this);
+        holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
+
     }
 
     public static void unselectAll(List<MenuField> fields) {
@@ -119,5 +125,10 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
 
     public void setSelectedItemId(String selectedItemId) {
         this.selectedItemId = selectedItemId;
+    }
+
+    public void clearFilter() {
+        this.selectedFilter = title_default ;
+        this.selectedItemId = null;
     }
 }

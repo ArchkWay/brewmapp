@@ -69,7 +69,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STA
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_SEARCH_CODE;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
-        FragmentInterractor {
+        FragmentInterractor,SearchFragment.OnFragmentInteractionListener {
 
     @BindView(R.id.common_toolbar)
     Toolbar toolbar;

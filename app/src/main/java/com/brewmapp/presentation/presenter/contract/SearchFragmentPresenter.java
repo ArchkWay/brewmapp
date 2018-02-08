@@ -14,7 +14,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
-    void storeTabActive(int position);
+    void setTabActive(int position);
     void saveRestoFilterChanges(List<FilterRestoField> fields);
     void saveBeerFilterChanges(List<FilterBeerField> fields);
     void saveBreweryFilterChanges(List<FilterBreweryField> fields);

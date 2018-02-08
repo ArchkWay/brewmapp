@@ -463,7 +463,7 @@
     <string name="text_view_data_not_found">Дата отсутствует</string>
     <string name="button_text_request">Заявка</string>
     <string name="replay_not_valid">Не верный ответ сервера</string>
-    <string name="replay_not_valid_param">Не верный параметр</string>
+    <string name="not_valid_param">Не верный параметр</string>
     <string name="message_need_filtr">Не выбраны критерии поиска</string>
     <string name="text_view_city_not_found">Город не указан</string>
 

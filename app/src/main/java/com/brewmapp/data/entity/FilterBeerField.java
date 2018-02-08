@@ -12,6 +12,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 
 /**
@@ -36,18 +37,22 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static final int BREWERY = 13;
     public static final int PRICE_BEER = 14;
 
+    public static final int CODE_CLICK_FILTER_START_SELECTION = 0;
+    public static final int CODE_CLICK_FILTER_CLEAR = 1;
+
     private int id;
     private String selectedItemId;
     private int icon;
     private String title;
     private String selectedFilter;
     private boolean selected;
-
+    private String title_default;
     public FilterBeerField(int id, int icon, String title, String selectedFilter) {
         this.id = id;
         this.icon = icon;
         this.title = title;
         this.selectedFilter = selectedFilter;
+        this.title_default = selectedFilter;
     }
 
     @Override
@@ -82,6 +87,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterBeerRowField> holder,
                                int position, List payloads) {
         holder.view.setModel(this);
+        holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
     }
 
     public static void unselectAll(List<MenuField> fields) {
@@ -141,5 +147,10 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
 
     public void setSelectedItemId(String selectedItemId) {
         this.selectedItemId = selectedItemId;
+    }
+
+    public void clearFilter() {
+        this.selectedFilter = title_default ;
+        this.selectedItemId = null;
     }
 }

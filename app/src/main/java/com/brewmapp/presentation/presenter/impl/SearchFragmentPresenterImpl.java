@@ -35,25 +35,6 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     @Override
     public void onAttach(SearchAllView searchAllView) {
         super.onAttach(searchAllView);
-
-        if (Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO) == null) {
-            Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, FilterRestoField.createDefault(context));
-        }
-        if (Paper.book().read(SearchFragment.CATEGORY_LIST_BEER) == null) {
-            Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, FilterBeerField.createDefault(context));
-        }
-        if (Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY) == null) {
-            Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, FilterBreweryField.createDefault(context));
-        }
-
-        if (uiSettingRepo.getnActiveFragment() == 0 || uiSettingRepo.getnActiveFragment() == -1) {
-            view.showRestoFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO));
-        } else if (uiSettingRepo.getnActiveFragment() == 1) {
-            view.showBeerFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_BEER));
-        } else if (uiSettingRepo.getnActiveFragment() == 2) {
-            view.showBreweryFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY));
-        }
-        searchAllView.setTabActive(uiSettingRepo.getnActiveTabEventFragment());
     }
 
     @Override
@@ -61,24 +42,38 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     }
 
     @Override
-    public void storeTabActive(int position) {
-        uiSettingRepo.setnActiveTabEventFragment(position);
-        selectTab(position);
-    }
-
-    private void selectTab(int position) {
+    public void setTabActive(int position) {
         switch (position) {
-            case 0:
-                view.showRestoFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO));
-                break;
-            case 1:
-                view.showBeerFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_BEER));
-                break;
+            case SearchFragment.TAB_RESTO: {
+                List<FilterRestoField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
+                if(list==null)
+                {
+                    list = FilterRestoField.createDefault(context);
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
+                }
+                view.showRestoFilters(list);
+            }break;
+            case SearchFragment.TAB_BEER: {
+                List<FilterBeerField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_BEER);
+                if(list==null)
+                {
+                    list = FilterBeerField.createDefault(context);
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, list);
+                }
+                view.showBeerFilters(list);
+            }break;
             case 2:
-                view.showBreweryFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY));
+                List<FilterBreweryField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY);
+                if(list==null)
+                {
+                    list = FilterBreweryField.createDefault(context);
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, list);
+                }
+                view.showBreweryFilters(list);
                 break;
         }
     }
+
 
     @Override
     public void saveRestoFilterChanges(List<FilterRestoField> fields) {

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -54,6 +55,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
@@ -77,11 +79,13 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     @BindView(R.id.fragment_events_tabs)
     TabsView tabsView;
 
+    private OnFragmentInteractionListener mListener;
+
     @Inject    SearchFragmentPresenter presenter;
 
-    private FlexibleAdapter<FilterRestoField> restoAdapter;
-    private FlexibleAdapter<FilterBeerField> beerAdapter;
-    private FlexibleAdapter<FilterBreweryField> breweryAdapter;
+    private FlexibleModelAdapter<FilterRestoField> restoAdapter;
+    private FlexibleModelAdapter<FilterBeerField> beerAdapter;
+    private FlexibleModelAdapter<FilterBreweryField> breweryAdapter;
     private List<FilterRestoField> restoFilterList;
     private List<FilterBeerField> beerFilterList;
     private List<FilterBreweryField> breweryList;
@@ -125,14 +129,17 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         tabsView.setItems(Arrays.asList(searchContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                 searchFragmentPackage.setMode(tab.getPosition());
-                presenter.storeTabActive(tab.getPosition());
+                searchFragmentPackage.setMode(tab.getPosition());
+                presenter.setTabActive(tab.getPosition());
                 offer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 0 ? View.VISIBLE : View.GONE);
                 craft.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 1 ? View.VISIBLE : View.GONE);
                 filterBeer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 1 ? View.VISIBLE : View.GONE);
                 interractor().processSetFilterFragmentActionBar(SearchFragment.this);
             }
         });
+        list.setLayoutManager(new LinearLayoutManager(getContext()));
+        list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
+        list.setNestedScrollingEnabled(true);
     }
 
     @Override
@@ -171,6 +178,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        presenter.setTabActive(TAB_RESTO);
     }
 
     @Override
@@ -193,7 +201,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         return titleContent[searchFragmentPackage.getMode()];
     }
 
-
     @Override
     public void enableControls(boolean enabled, int code) {
     }
@@ -206,31 +213,78 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
     @Override
     public void showRestoFilters(List<FilterRestoField> fieldList) {
         this.restoFilterList = fieldList;
-        restoAdapter = new FlexibleAdapter<>(fieldList, this);
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
-        list.setNestedScrollingEnabled(true);
+        restoAdapter = new FlexibleModelAdapter<>(fieldList, this::onItemClickInteractive);
         list.setAdapter(restoAdapter);
     }
 
     @Override
     public void showBeerFilters(List<FilterBeerField> fieldList) {
         this.beerFilterList = fieldList;
-        beerAdapter = new FlexibleAdapter<>(fieldList, this);
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
-        list.setNestedScrollingEnabled(true);
+        beerAdapter = new FlexibleModelAdapter<>(fieldList, this::onItemClickInteractive);
         list.setAdapter(beerAdapter);
     }
 
     @Override
     public void showBreweryFilters(List<FilterBreweryField> fieldList) {
         this.breweryList = fieldList;
-        breweryAdapter = new FlexibleAdapter<>(fieldList, this);
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
-        list.setNestedScrollingEnabled(true);
+        breweryAdapter = new FlexibleModelAdapter<>(fieldList, this::onItemClickInteractive);
         list.setAdapter(breweryAdapter);
+    }
+
+    private void onItemClickInteractive(int code, Object o) {
+        if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION
+                ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION
+                ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
+            int itemId=0;
+            String filterTxt=null;
+            String filterId=null;
+            switch (tabsView.getTabs().getSelectedTabPosition()){
+                case TAB_RESTO:
+                    FilterRestoField f=((FilterRestoField)o);
+                    itemId=f.getId();
+                    filterTxt=f.getSelectedFilter();
+                    filterId=f.getSelectedItemId();
+                    break;
+
+                    default: {
+                        commonError(getString(R.string.not_valid_param));
+                        return;
+                    }
+
+            }
+
+            Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
+            intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+            intent.putExtra(Actions.PARAM2,itemId);
+            intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
+            intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
+
+            startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
+
+        }else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR
+                ||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR
+                ||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
+            switch (tabsView.getTabs().getSelectedTabPosition()){
+                case TAB_RESTO:
+                    ((FilterRestoField)o).clearFilter();
+                    restoAdapter.notifyDataSetChanged();
+                    break;
+                case TAB_BEER:
+                    ((FilterBeerField)o).clearFilter();
+                    beerAdapter.notifyDataSetChanged();
+                    break;
+                case TAB_BREWERY:
+                    ((FilterBreweryField)o).clearFilter();
+                    breweryAdapter.notifyDataSetChanged();
+                    break;
+                    default:{
+                        commonError(getString(R.string.not_valid_param));
+                        return;
+                    }
+            }
+
+        }
+
     }
 
     private void setBeerSelectedFilter(String filterCategory, int category, String selectedItem, String countryId) {
@@ -691,4 +745,30 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
                 break;
         }
     }
+
+    @Override
+    public void commonError(String... strings) {
+        mListener.commonError(strings);
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+
+//***************************************************
+
+    public interface OnFragmentInteractionListener {
+        void commonError(String... message);
+        void setTitle(CharSequence name);
+    }
+
 }

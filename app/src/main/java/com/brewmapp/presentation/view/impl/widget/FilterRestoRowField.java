@@ -13,6 +13,7 @@ import com.brewmapp.data.entity.FilterRestoField;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
 
@@ -20,13 +21,15 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
  * Created by nlbochas on 28/10/2017.
  */
 
-public class FilterRestoRowField extends BaseRelativeLayout implements ModelView<FilterRestoField> {
+public class FilterRestoRowField extends BaseRelativeLayout implements InteractiveModelView<FilterRestoField> {
 
     @BindView(R.id.filter_name) TextView filterTitle;
     @BindView(R.id.selected_filter) TextView selectedFilter;
     @BindView(R.id.icon_filter) ImageView icon;
+    @BindView(R.id.clear_filter) ImageView clear_filter;
 
     private FilterRestoField model;
+    private Listener listener;
 
     public FilterRestoRowField(Context context) {
         super(context);
@@ -61,6 +64,14 @@ public class FilterRestoRowField extends BaseRelativeLayout implements ModelView
         this.selectedFilter.setTypeface(null, Typeface.BOLD_ITALIC);
         this.selectedFilter.setText(model.getSelectedFilter());
         this.icon.setImageResource(model.getIcon());
+        setOnClickListener(view -> listener.onModelAction(FilterRestoField.CODE_CLICK_FILTER_START_SELECTION,model));
+        clear_filter.setVisibility(model.getSelectedItemId()==null?GONE:VISIBLE);
+        clear_filter.setOnClickListener(view -> listener.onModelAction(FilterRestoField.CODE_CLICK_FILTER_CLEAR,model));
+    }
+
+    @Override
+    public void setListener(Listener listener) {
+        this.listener=listener;
     }
 }
 

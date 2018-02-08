@@ -88,4 +88,10 @@ public class FinderView extends BaseFrameLayout {
         this.hintString = hintString;
         input.setHint(hintString);
     }
+
+    @Override
+    public void clearFocus() {
+        super.clearFocus();
+        input.clearFocus();
+    }
 }

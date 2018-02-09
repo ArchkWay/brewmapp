@@ -231,7 +231,8 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
     @Override
     public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
         fullSearchFilterTask.cancel();
-        view.showProgressBar(true);
+        if(fullSearchPackage.getPage()==0)
+            view.showProgressBar(true);
         fullSearchFilterTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {

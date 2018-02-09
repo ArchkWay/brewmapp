@@ -24,8 +24,10 @@ import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
+import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
+import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -85,7 +87,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     private String filterTxt;
     private String filterId;
-    private List<IFlexible> original;
+    private List<IFlexible> original=new ArrayList<>();
     private int filterCategory;
     private String selectedFilter = null;
     private int numberTab;
@@ -117,42 +119,39 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         numberMenuItem =getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
         filterId=getIntent().getStringExtra(Actions.PARAM3);
         filterTxt=getIntent().getStringExtra(Actions.PARAM4);
-        try {
-            String[] ids=filterId.split(",");
-            String[] txts=filterTxt.split(",");
-            int i=0;
-            for (String s:ids)
-                hashMap.put(
-                        new StringBuilder().append(s).toString(),
-                        new StringBuilder().append(txts[i++]).toString()
-                );
-        }catch (Exception e){}
+        if(numberTab ==SearchFragment.TAB_RESTO&&(numberMenuItem==FilterRestoField.BEER||numberMenuItem==FilterRestoField.NAME)) {
+            hashMap.clear();
+        }else {
+            try {
+                String[] ids = filterId.split(",");
+                String[] txts = filterTxt.split(",");
+                int i = 0;
+                for (String s : ids)
+                    if(!"null".equals(s))
+                    hashMap.put(
+                            new StringBuilder().append(s).toString(),
+                            new StringBuilder().append(txts[i++]).toString()
+                    );
+            } catch (Exception e) {
+            }
+        }
+
+        okButton.setVisibility(hashMap.size()==0?View.GONE:View.VISIBLE);
 
         fullSearchPackage = new FullSearchPackage();
-        fullSearchPackage.setPage(0);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-                fullSearchPackage.setPage(manager.getItemCount());
-                switch (numberTab){
-                    case SearchFragment.TAB_BEER:
-                        presenter.loadBeerCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
-                        break;
-                    case SearchFragment.TAB_BREWERY:
-                        presenter.loadBreweryCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
-                        break;
-                    case SearchFragment.TAB_RESTO:
-                        presenter.loadRestoCategoryItem(getIntent().getIntExtra(Keys.FILTER_CATEGORY, 0), fullSearchPackage);
-                        break;
-                }
+                fullSearchPackage.setPage(currentPage-1);
+                if(getTypeFiltr()==1) sendQuery();
             }
         };
         filterList.addOnScrollListener(scrollListener);
         filterList.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         filterList.setLayoutManager(manager);
 
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        adapter = new FlexibleModelAdapter<>(original, this::processAction);
         filterList.setAdapter(adapter);
 
         filterList.setOnTouchListener((view, motionEvent) -> {
@@ -195,6 +194,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                             RestoType model= ((RestoTypeInfo) iFlexible).getModel();
                             model.setSelected(hashMap.containsKey(new StringBuilder().append(model.getId()).toString()));
                         }
+                        break;
+                    case FilterRestoField.KITCHEN:
+                        for(IFlexible iFlexible:list){
+                            Kitchen model= ((KitchenInfo) iFlexible).getModel();
+                            model.setSelected(hashMap.containsKey(new StringBuilder().append(model.getId()).toString()));
+                        }
+                        break;
+
                 }
                 break;
         }
@@ -202,9 +209,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
 
         showProgressBar(false);
-        adapter.clear();
-        this.original = list;
-        adapter.updateDataSet(list);
+
+        this.original.addAll(list);
+        int numberStartNotificationInsert=this.original.size();
+        adapter.notifyItemRangeInserted(numberStartNotificationInsert,list.size());
+        emptyView.setVisibility(numberStartNotificationInsert==0?View.VISIBLE:View.GONE);
+        filterList.setVisibility(numberStartNotificationInsert==0?View.GONE:View.VISIBLE);
+
     }
 
     @Override
@@ -277,7 +288,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.filterCategory = filterId;
         switch (filterId) {
             case FilterBreweryField.NAME:
-                okButton.setVisibility(View.GONE);
+
                 fullSearchPackage.setType(Keys.TYPE_BREWERY);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
@@ -287,7 +298,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 break;
             case FilterBreweryField.COUNTRY:
                 showProgressBar(true);
-                okButton.setVisibility(View.GONE);
+
                 toolbarTitle.setText(R.string.select_country);
                 if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
                     appendItems(getStoredFilterList(FilterKeys.COUNTRY));
@@ -323,7 +334,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         switch (filterId) {
             case FilterBeerField.NAME:
                 showProgressBar(true);
-                okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
@@ -333,7 +343,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 break;
             case FilterBeerField.COUNTRY:
                 showProgressBar(true);
-                okButton.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.select_country);
                 if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
                     appendItems(getStoredFilterList(FilterKeys.COUNTRY));
@@ -457,39 +466,30 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.filterCategory = filterId;
         switch (filterId) {
             case FilterRestoField.NAME:
-                okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
-                emptyView.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_resto));
-                //filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_resto_name);
-
                 break;
             case FilterRestoField.TYPE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_type);
                 presenter.loadRestoTypes();
-                //emptyTitle.requestFocus();
                 finder.clearFocus();
                 break;
             case FilterRestoField.BEER:
-                //okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_beer));
-                filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_beer_name);
                 break;
             case FilterRestoField.KITCHEN:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_kitchen);
-                if (getStoredFilterList(FilterKeys.KITCHEN) != null) {
-                    appendItems(getStoredFilterList(FilterKeys.KITCHEN));
-                } else {
-                    presenter.loadKitchenTypes();
-                }
+                presenter.loadKitchenTypes();
+                finder.clearFocus();
                 break;
             case FilterRestoField.PRICE:
                 showProgressBar(true);
@@ -501,14 +501,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 break;
             case FilterRestoField.CITY:
-//                showProgressBar(true);
-//                okButton.setVisibility(View.GONE);
-//                toolbarTitle.setText(R.string.select_country);
-//                if (getStoredFilterList(FilterKeys.COUNTRY) != null) {
-//                    appendItems(getStoredFilterList(FilterKeys.COUNTRY));
-//                } else {
-//                    presenter.loadCountries();
-//                }
                 break;
             case FilterRestoField.METRO:
                 toolbarTitle.setText(R.string.select_metro);
@@ -617,30 +609,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initFinder() {
-        //0-local filter
-        //1-remote filter
-        int type_filter=0;
 
-        switch (numberTab){
-            case SearchFragment.TAB_BEER:
-                if(FilterBeerField.NAME== numberMenuItem)
-                    type_filter=1;
-                break;
-            case SearchFragment.TAB_BREWERY:
-                if(FilterBreweryField.NAME== numberMenuItem)
-                    type_filter=1;
-                break;
-            case SearchFragment.TAB_RESTO:
-                if(FilterRestoField.NAME== numberMenuItem)
-                    type_filter=1;
-                else if(FilterRestoField.BEER== numberMenuItem)
-                    type_filter=1;
-                else if(FilterRestoField.CITY== numberMenuItem)
-                    type_filter=1;
-                break;
-        }
-
-        if(type_filter==0) {
+        if(getTypeFiltr()==0) {
             finder.setListener(string -> {
                 if (original != null) {
                     adapter.setSearchText(string);
@@ -653,25 +623,44 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     }
 
+    private int getTypeFiltr() {
+        //0-local filter
+        //1-remote filter
+        int type_filter=0;
+
+        switch (numberTab){
+            case SearchFragment.TAB_BEER:
+                if(FilterBeerField.NAME == numberMenuItem)
+                    type_filter=1;
+                break;
+            case SearchFragment.TAB_BREWERY:
+                if(FilterBreweryField.NAME == numberMenuItem)
+                    type_filter=1;
+                break;
+            case SearchFragment.TAB_RESTO:
+                if(FilterRestoField.NAME == numberMenuItem)
+                    type_filter=1;
+                else if(FilterRestoField.BEER == numberMenuItem)
+                    type_filter=1;
+                else if(FilterRestoField.CITY == numberMenuItem)
+                    type_filter=1;
+                break;
+        }
+
+        return type_filter;
+    }
+
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
-        if (stringSearch.length() > 0) {
-            emptyView.setVisibility(View.GONE);
-            filterList.setVisibility(View.VISIBLE);
-            sendQuery();
-        } else  {
-            adapter.clear();
-            emptyView.setVisibility(View.VISIBLE);
-            filterList.setVisibility(View.GONE);
-        }
+        scrollListener.reset();
+        this.original.clear();
+        adapter.notifyDataSetChanged();
+        sendQuery();
     }
 
     private void sendQuery() {
-        if (fullSearchPackage.getStringSearch().length() == 0){
-            fullSearchPackage.setPage(0);
-            appendItems(new ArrayList<>());
-        } else {
+        if (fullSearchPackage.getStringSearch().length() > 0){
             if(numberMenuItem ==FilterRestoField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
             }else{
@@ -697,13 +686,19 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     case FilterRestoField.TYPE: {
                         RestoType model = (RestoType) payload;
                         key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getId()).toString();
+                        name = new StringBuilder().append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
                     case FilterRestoField.BEER: {
                         Beer model = (Beer) payload;
                         key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getTitleRU()).toString();
+                        name = new StringBuilder().append(model.getTitle()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterRestoField.KITCHEN: {
+                        Kitchen model = (Kitchen) payload;
+                        key = new StringBuilder().append(model.getId()).toString();
+                        name = new StringBuilder().append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
                         default: {
@@ -717,6 +712,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 commonError(getString(R.string.not_valid_param));
 
         }
+        okButton.setVisibility(hashMap.size()==0?View.GONE:View.VISIBLE);
 
 //        switch (fullSearchPackage.getType()) {
 //            case Keys.TYPE_BREWERY:{

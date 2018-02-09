@@ -31,7 +31,7 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
     @Inject
     public FullSearchFilterTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
-        this.step = 30;
+        this.step = 15;
     }
 
     @Override
@@ -40,7 +40,8 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
             try {
                 WrapperParams params = new WrapperParams(Wrappers.SEARCH_TYPE);
                 params.addParam(Keys.TYPE, fullSearchPackage.getType());
-                int end = fullSearchPackage.getPage() + step;
+                int start = fullSearchPackage.getPage() * step;
+                int end = start + step;
                 switch (fullSearchPackage.getType()) {
                     case Keys.TYPE_BEER:
                         FilterBeer filterBeer = executeCall(getApi().filterSearchBeer(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
@@ -48,7 +49,7 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_RESTO:
-                        Restos restos = executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
+                        Restos restos = executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(restos.getModels()));
                         subscriber.onComplete();
                         break;

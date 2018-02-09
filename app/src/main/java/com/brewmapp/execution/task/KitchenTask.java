@@ -34,10 +34,7 @@ public class KitchenTask extends BaseNetworkTask<Kitchen, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 KitchenTypes response = executeCall(getApi().loadKitchenTypes());
-                List<KitchenInfo> kitchenInfos = new ArrayList<>();
-                kitchenInfos.add(0, new KitchenInfo(new Kitchen("Любая  ")));
-                kitchenInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(kitchenInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -47,7 +47,6 @@ public class BeerTypesTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
                 BeerTypesModel response = executeCall(getApi().loadBeerTypes(fullSearchPackage.getPage(), end, params));
                 if (beerTypeInfos == null) {
                     beerTypeInfos = new ArrayList<>();
-                    beerTypeInfos.add(0, new BeerTypeInfo(new BeerTypes("Любой  ")));
                 }
                 beerTypeInfos.addAll(response.getModels());
                 subscriber.onNext(new ArrayList<>(beerTypeInfos));

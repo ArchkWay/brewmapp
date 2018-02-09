@@ -721,13 +721,21 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
             case TAB_RESTO:
                 switch (numberMenuItem){
                     case FilterRestoField.TYPE:
-                        restoFilterList.get(numberMenuItem).setSelectedItemId(filterID);
-                        restoFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                    case FilterRestoField.BEER:
+                    case FilterRestoField.KITCHEN:
+                        if("null".equals(filterID)){
+                            restoFilterList.get(numberMenuItem).clearFilter();
+                        }else {
+                            restoFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                            restoFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        }
                         Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                         restoAdapter.notifyItemChanged(numberMenuItem);
                         break;
+                    default:
+                        commonError(getString(R.string.not_valid_param));
                 }
-
+                break;
 
             case TAB_BEER:
                 setBeerSelectedFilter(data.getStringExtra("filter"),
@@ -739,6 +747,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
                         data.getIntExtra("category", -999), data.getStringExtra("selectedItem"),
                         data.getStringExtra("selectedItemId"));
                 break;
+            default:
+                commonError(getString(R.string.not_valid_param));
+
         }
     }
 

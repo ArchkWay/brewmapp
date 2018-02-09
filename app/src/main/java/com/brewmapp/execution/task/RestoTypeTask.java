@@ -34,10 +34,7 @@ public class RestoTypeTask extends BaseNetworkTask<RestoType, List<IFlexible>> {
         return Observable.create(subscriber -> {
             try {
                 RestoTypes response = executeCall(getApi().loadRestoTypes());
-                List<RestoTypeInfo> restoTypeInfos = new ArrayList<>();
-                restoTypeInfos.add(0, new RestoTypeInfo(new RestoType("Любой  ")));
-                restoTypeInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(restoTypeInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

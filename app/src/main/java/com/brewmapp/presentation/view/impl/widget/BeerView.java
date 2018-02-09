@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     TextView title;
     @BindView(R.id.logo)
     ImageView logo;
+    @BindView(R.id.chkbox)
+    CheckBox restoTypeCheckbox;
     private Listener listener;
     private Beer model;
 
@@ -61,6 +64,7 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     @SuppressLint("SetTextI18n")
     @Override
     public void setModel(Beer model) {
+        if(isInEditMode()) return;
         this.model = model;
         String titleRu = (model.getTitleRU() == null || TextUtils.isEmpty(model.getTitleRU()) ? "" : " (" + model.getTitleRU() + ")");
         title.setText(model.getTitle() + titleRu);
@@ -70,7 +74,20 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
             logo.setVisibility(INVISIBLE);
         }
 
-        setOnClickListener(v -> listener.onModelAction(FilterRestoField.BEER, model));
+        restoTypeCheckbox.setChecked(model.isSelected());
+
+        setOnClickListener(view -> {
+            if (!model.isSelected()) {
+                model.setSelected(true);
+                restoTypeCheckbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                restoTypeCheckbox.setChecked(false);
+            }
+            listener.onModelAction(0,model);
+        });
+
+        //setOnClickListener(v -> listener.onModelAction(FilterRestoField.BEER, model));
 
     }
 

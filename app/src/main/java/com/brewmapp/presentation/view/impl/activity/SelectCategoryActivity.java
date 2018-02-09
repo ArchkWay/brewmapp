@@ -474,7 +474,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 finder.clearFocus();
                 break;
             case FilterRestoField.BEER:
-                okButton.setVisibility(View.GONE);
+                //okButton.setVisibility(View.GONE);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
@@ -681,27 +681,37 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void processAction(int action, Object payload) {
-
         switch (numberTab){
             case SearchFragment.TAB_BEER:
                 break;
             case SearchFragment.TAB_BREWERY:
                 break;
             case SearchFragment.TAB_RESTO:
+                String key=null;
+                String name=null;
+                boolean selected=false;
                 switch (numberMenuItem){
                     case FilterRestoField.NAME:
                         Starter.RestoDetailActivity(this,String.valueOf(((Resto)payload).getId()));
                         break;
-                    case FilterRestoField.TYPE:
-                        RestoType model= (RestoType) payload;
-                        if(model.isSelected())
-                            hashMap.put(new StringBuilder().append(model.getId()).toString(),model.getName());
-                        else
-                            hashMap.remove(new StringBuilder().append(model.getId()).toString());
-                        break;
-                        default:
+                    case FilterRestoField.TYPE: {
+                        RestoType model = (RestoType) payload;
+                        key = new StringBuilder().append(model.getId()).toString();
+                        name = new StringBuilder().append(model.getId()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterRestoField.BEER: {
+                        Beer model = (Beer) payload;
+                        key = new StringBuilder().append(model.getId()).toString();
+                        name = new StringBuilder().append(model.getTitleRU()).toString();
+                        selected = model.isSelected();
+                    }break;
+                        default: {
                             commonError(getString(R.string.not_valid_param));
+                            return;
+                        }
                 }
+                if(selected) hashMap.put(key,name);else hashMap.remove(key);
                 break;
             default:
                 commonError(getString(R.string.not_valid_param));

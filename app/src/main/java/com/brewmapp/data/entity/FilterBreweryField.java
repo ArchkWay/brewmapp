@@ -72,9 +72,41 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterBreweryRowField> holder,
                                int position, List payloads) {
-        holder.view.setModel(this);
         holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
+        if(isDirty)
+            resetToDefault(holder.view.getContext());
+        holder.view.setModel(this);
+    }
 
+    private void resetToDefault(Context context) {
+        isDirty =false;
+        if(context!=null)
+            switch (id) {
+                case NAME:
+                    icon = R.drawable.ic_resto_name;
+                    title = context.getString(R.string.search_brewery_name);
+                    selectedFilter = context.getString(R.string.search_brewery_name_defailt);
+                    selectedItemId = null;
+                    break;
+                case COUNTRY:
+                    icon = R.drawable.ic_country;
+                    title = context.getString(R.string.search_beer_country);
+                    selectedFilter = context.getString(R.string.search_beer_country_defailt);
+                    selectedItemId = null;
+                    break;
+                case BRAND:
+                    icon = R.drawable.ic_brand;
+                    title = context.getString(R.string.search_beer_brand);
+                    selectedFilter = context.getString(R.string.search_beer_brand_defailt);
+                    selectedItemId = null;
+                    break;
+                case TYPE_BEER:
+                    icon = R.drawable.ic_beer_type;
+                    title = context.getString(R.string.search_beer_type);
+                    selectedFilter = context.getString(R.string.search_beer_type_defailt);
+                    selectedItemId = null;
+                    break;
+            }
     }
 
     public static void unselectAll(List<MenuField> fields) {

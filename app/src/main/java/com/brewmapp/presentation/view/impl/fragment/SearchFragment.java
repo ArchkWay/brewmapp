@@ -723,6 +723,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
                     case FilterRestoField.TYPE:
                     case FilterRestoField.BEER:
                     case FilterRestoField.KITCHEN:
+                    case FilterRestoField.PRICE:
+                    case FilterRestoField.CITY:
                         if("null".equals(filterID)){
                             restoFilterList.get(numberMenuItem).clearFilter();
                         }else {

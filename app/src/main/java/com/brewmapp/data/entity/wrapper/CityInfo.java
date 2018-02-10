@@ -13,7 +13,7 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
 
 public class CityInfo extends AdapterItem<City, CityView> implements IFilterable {
     public CityInfo(City model) {
-        super(model);
+        setModel(model);
     }
 
     public CityInfo() {

@@ -25,6 +25,16 @@ public class City implements Serializable {
     @SerializedName("relations")
     private Relations mRelations;
 
+    private boolean selected;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public String getCountryId() {
         return mCountryId;
     }

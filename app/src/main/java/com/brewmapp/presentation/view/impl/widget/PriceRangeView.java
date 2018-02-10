@@ -76,6 +76,7 @@ public class PriceRangeView extends BaseLinearLayout implements InteractiveModel
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0,model);
         });
     }
 

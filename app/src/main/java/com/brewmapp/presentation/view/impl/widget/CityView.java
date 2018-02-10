@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +30,8 @@ public class CityView extends BaseLinearLayout implements InteractiveModelView<C
     TextView title;
     @BindView(R.id.logo)
     ImageView logo;
-
+    @BindView(R.id.chkbox)
+    CheckBox cityCheckbox;
     private Listener listener;
     private City model;
 
@@ -65,7 +67,17 @@ public class CityView extends BaseLinearLayout implements InteractiveModelView<C
         this.model = model;
         title.setText(model.getName());
         logo.setVisibility(INVISIBLE);
-        setOnClickListener(v -> listener.onModelAction(FilterRestoField.SELECTED_CITY, model));
+        setOnClickListener(view -> {
+            if (!model.isSelected()) {
+                model.setSelected(true);
+                cityCheckbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                cityCheckbox.setChecked(false);
+            }
+            listener.onModelAction(0,model);
+        });
+        cityCheckbox.setChecked(model.isSelected());
     }
 
     @Override

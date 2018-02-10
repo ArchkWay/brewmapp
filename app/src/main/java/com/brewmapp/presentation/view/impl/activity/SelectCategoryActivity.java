@@ -26,6 +26,8 @@ import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
+import com.brewmapp.data.entity.wrapper.BeerInfo;
+import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -173,14 +175,27 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
         switch (numberTab){
             case SearchFragment.TAB_BEER:
+                //region Prepare append items for TAB_BEER
+                switch (numberMenuItem) {
+                    case FilterBeerField.NAME:
+                        if (fullSearchPackage.getPage() == 0)
+                            this.original.clear();
+                        for (IFlexible iFlexible:list)
+                            ((FilterBeerInfo)iFlexible).getModel().setSelectable(false);
+                        break;
+                }
+                //endregion
                 break;
             case SearchFragment.TAB_BREWERY:
                 break;
             case SearchFragment.TAB_RESTO:
+                //region Prepare append items for TAB_RESTO
                 switch (numberMenuItem){
+                    case FilterRestoField.BEER:
+                        for (IFlexible iFlexible:list)
+                            ((FilterBeerInfo)iFlexible).getModel().setSelectable(true);
                     case FilterRestoField.NAME:
                     case FilterRestoField.CITY:
-                    case FilterRestoField.BEER:
                         if(fullSearchPackage.getPage()==0)
                             this.original.clear();
                         break;
@@ -201,22 +216,21 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     case FilterRestoField.PRICE:
                         this.original.clear();
                         break;
-
-
                 }
+                //endregion
                 break;
         }
-
-
-
-        showProgressBar(false);
+        //region Process append
         adapter.notifyDataSetChanged();
         this.original.addAll(list);
         int numberStartNotificationInsert=this.original.size();
         adapter.notifyItemRangeInserted(numberStartNotificationInsert,list.size());
+        //endregion
+        //region Visible control
+        showProgressBar(false);
         emptyView.setVisibility(numberStartNotificationInsert==0?View.VISIBLE:View.GONE);
         filterList.setVisibility(numberStartNotificationInsert==0?View.GONE:View.VISIBLE);
-
+        //endregion
     }
 
     @Override
@@ -318,13 +332,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.filterCategory = filterId;
         switch (filterId) {
             case FilterBeerField.NAME:
-                showProgressBar(true);
+                filterList.addOnScrollListener(scrollListener);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_beer));
-                filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_beer_name);
+                hashMap.clear();
+                invalidateMenu();
                 break;
             case FilterBeerField.COUNTRY:
                 showProgressBar(true);
@@ -436,7 +451,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_price);
                 presenter.loadPriceRangeTypes("resto");
-
                 finder.clearFocus();
                 break;
             case FilterRestoField.CITY:
@@ -514,15 +528,28 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void processAction(int action, Object payload) {
+        String key=null;
+        String name=null;
+
         switch (numberTab){
             case SearchFragment.TAB_BEER:
+                //region select item for TAB_BEER
+                switch (numberMenuItem) {
+                    case FilterRestoField.NAME:
+                        Starter.BeerDetailActivity(this, String.valueOf(((Beer) payload).getId()));
+                        break;
+                    default: {
+                        commonError(getString(R.string.not_valid_param));
+                        return;
+                    }
+                }
+                //endregion
                 break;
             case SearchFragment.TAB_BREWERY:
                 break;
             case SearchFragment.TAB_RESTO:
-                String key=null;
-                String name=null;
                 boolean selected=false;
+                //region select item for TAB_RESTO
                 switch (numberMenuItem){
                     case FilterRestoField.NAME:
                         Starter.RestoDetailActivity(this,String.valueOf(((Resto)payload).getId()));
@@ -563,6 +590,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         }
                 }
                 if(selected) hashMap.put(key,name);else hashMap.remove(key);
+                //endregion
                 break;
             default:
                 commonError(getString(R.string.not_valid_param));

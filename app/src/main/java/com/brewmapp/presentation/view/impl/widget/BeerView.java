@@ -32,6 +32,8 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     ImageView logo;
     @BindView(R.id.chkbox)
     CheckBox restoTypeCheckbox;
+    @BindView(R.id.selectbox)
+    ImageView selectImageView;
     private Listener listener;
     private Beer model;
 
@@ -87,7 +89,8 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
             listener.onModelAction(0,model);
         });
 
-        //setOnClickListener(v -> listener.onModelAction(FilterRestoField.BEER, model));
+        selectImageView.setVisibility(model.isSelectable()?GONE:VISIBLE);
+        restoTypeCheckbox.setVisibility(model.isSelectable()?VISIBLE:GONE);
 
     }
 

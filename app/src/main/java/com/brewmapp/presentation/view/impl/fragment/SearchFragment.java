@@ -144,27 +144,38 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
 
     @Override
     public boolean onItemClick(int position) {
-        if ((tabsView.getTabs().getSelectedTabPosition() == 0) && position == 6){
-            Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
-        } else {
-            String filterTxt=null;
-            String filterId=null;
-            switch (tabsView.getTabs().getSelectedTabPosition()){
-                case TAB_RESTO:
-                    filterTxt=restoAdapter.getItem(position).getSelectedFilter();
-                    filterId=restoAdapter.getItem(position).getSelectedItemId();
-                    break;
-            }
+        boolean result=false;
+        String filterTxt=null;
+        String filterId=null;
+        switch (tabsView.getTabs().getSelectedTabPosition()){
+            case TAB_RESTO:
+                switch (position){
+                    case FilterRestoField.NAME:
+                    case FilterRestoField.BEER:
+                    case FilterRestoField.CITY:
+                    case FilterRestoField.PRICE:
+                    case FilterRestoField.TYPE:
+                    case FilterRestoField.KITCHEN:
+                        result=true;
+                        break;
+                }
+                filterTxt=restoAdapter.getItem(position).getSelectedFilter();
+                filterId=restoAdapter.getItem(position).getSelectedItemId();
+                break;
+        }
 
+        if(result) {
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
-            intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
-            intent.putExtra(Actions.PARAM2,position);
-            intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
-            intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
+            intent.putExtra(Actions.PARAM1, tabsView.getTabs().getSelectedTabPosition());
+            intent.putExtra(Actions.PARAM2, position);
+            intent.putExtra(Actions.PARAM3, new StringBuilder().append(filterId).toString());
+            intent.putExtra(Actions.PARAM4, new StringBuilder().append(filterTxt).toString());
 
             startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
+        }else {
+            Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         }
-        return false;
+        return result;
     }
 
     @Override
@@ -235,35 +246,57 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION
                 ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION
                 ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
+            //region Selection category
+            boolean result=false;
             int itemId=0;
             String filterTxt=null;
             String filterId=null;
             switch (tabsView.getTabs().getSelectedTabPosition()){
-                case TAB_RESTO:
+                case TAB_RESTO:{
                     FilterRestoField f=((FilterRestoField)o);
                     itemId=f.getId();
                     filterTxt=f.getSelectedFilter();
                     filterId=f.getSelectedItemId();
-                    break;
-
-                    default: {
-                        commonError(getString(R.string.not_valid_param));
-                        return;
+                    switch (itemId){
+                        case FilterRestoField.NAME:
+                        case FilterRestoField.BEER:
+                        case FilterRestoField.CITY:
+                        case FilterRestoField.PRICE:
+                        case FilterRestoField.TYPE:
+                        case FilterRestoField.KITCHEN:
+                            result=true;
+                            break;
+                    }
+                }break;
+                case TAB_BEER:{
+                    FilterBeerField f=((FilterBeerField)o);
+                    itemId=f.getId();
+                    filterTxt=f.getSelectedFilter();
+                    filterId=f.getSelectedItemId();
+                    switch (itemId){
+                        case FilterBeerField.NAME:
+                            result=true;
+                            break;
                     }
 
+                }
             }
+            if(result){
+                Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
+                intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+                intent.putExtra(Actions.PARAM2,itemId);
+                intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
+                intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
 
-            Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
-            intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
-            intent.putExtra(Actions.PARAM2,itemId);
-            intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
-            intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
-
-            startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
-
+                startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
+            }else {
+                Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
+            }
+            //endregion
         }else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR
                 ||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR
                 ||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
+            //region Clear category
             switch (tabsView.getTabs().getSelectedTabPosition()){
                 case TAB_RESTO:
                     ((FilterRestoField)o).clearFilter();
@@ -282,6 +315,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
                         return;
                     }
             }
+            //endregion
 
         }
 
@@ -506,119 +540,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView, Flexi
         }
         beerAdapter.notifyDataSetChanged();
         presenter.saveBeerFilterChanges(beerFilterList);
-    }
-
-    private void setRestoSelectedFilter(String filterCategory, int category, String cityName, String cityId) {
-        StringBuilder filter = new StringBuilder();
-        StringBuilder filterId = new StringBuilder();
-        boolean notEmpty = false;
-        List<IFlexible> tempList;
-        if (filterCategory != null) {
-            if (filterCategory.equalsIgnoreCase(FilterKeys.RESTO_TYPE)) {
-                List<RestoTypeInfo> restoTypeInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.RESTO_TYPE);
-                if (tempList != null) {
-                    for (Object o : tempList) {
-                        restoTypeInfos.add((RestoTypeInfo) o);
-                    }
-                    for (int i = 0; i < restoTypeInfos.size(); i++) {
-                        if (restoTypeInfos.get(i).getModel().isSelected()) {
-                            notEmpty = true;
-                            filter.append(restoTypeInfos.get(i).getModel().getName()).append(", ");
-                            filterId.append(restoTypeInfos.get(i).getModel().getId()).append("|");
-                        }
-                    }
-                    if (!notEmpty) {
-                        filter.append(restoTypeInfos.get(0).getModel().getName());
-                    }
-                }
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.KITCHEN)) {
-                List<KitchenInfo> kitchenInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.KITCHEN);
-                if (tempList != null) {
-                    for (Object o : tempList) {
-                        kitchenInfos.add((KitchenInfo) o);
-                    }
-                    for (KitchenInfo kitchenInfo : kitchenInfos) {
-                        if (kitchenInfo.getModel().isSelected()) {
-                            notEmpty = true;
-                            filter.append(kitchenInfo.getModel().getName()).append(", ");
-                            filterId.append(kitchenInfo.getModel().getId()).append("|");
-                        }
-                    }
-                    if (!notEmpty) {
-                        filter.append(kitchenInfos.get(0).getModel().getName());
-                    }
-                }
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.PRICE_RANGE)) {
-                List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.PRICE_RANGE);
-                if (tempList != null) {
-                    for (Object o : tempList) {
-                        priceRangeInfos.add((PriceRangeInfo) o);
-                    }
-                    for (PriceRangeInfo priceRangeInfo : priceRangeInfos) {
-                        if (priceRangeInfo.getModel().isSelected()) {
-                            notEmpty = true;
-                            filter.append(priceRangeInfo.getModel().getName()).append(", ");
-                            filterId.append(priceRangeInfo.getModel().getId()).append(",");
-                        }
-                    }
-                    if (!notEmpty) {
-                        filter.append(priceRangeInfos.get(0).getModel().getName());
-                    }
-                }
-
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.FEATURES)) {
-                List<FeatureInfo> featureInfos = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.FEATURES);
-                if (tempList != null) {
-                    for (Object o : tempList) {
-                        featureInfos.add((FeatureInfo) o);
-                    }
-                    for (FeatureInfo featureInfo : featureInfos) {
-                        if (featureInfo.getModel().isSelected()) {
-                            notEmpty = true;
-                            filter.append(featureInfo.getModel().getName()).append(", ");
-                            filterId.append(featureInfo.getModel().getId()).append("|");
-                        }
-                    }
-                    if (!notEmpty) {
-                        filter.append(featureInfos.get(0).getModel().getName());
-                    }
-                }
-            } else if (filterCategory.equalsIgnoreCase(FilterKeys.BEER_BREWERIES)) {
-                List<BreweryInfoSelect> breweryInfoSelects = new ArrayList<>();
-                tempList = Paper.book().read(FilterKeys.BEER_BREWERIES);
-                if (tempList != null) {
-                    for (Object o : tempList) {
-                        breweryInfoSelects.add((BreweryInfoSelect) o);
-                    }
-                    for (BreweryInfoSelect breweryInfoSelect : breweryInfoSelects) {
-                        if (breweryInfoSelect.getModel().isSelected()) {
-                            notEmpty = true;
-                            filter.append(breweryInfoSelect.getModel().getName()).append(", ");
-                            filterId.append(breweryInfoSelect.getModel().getId()).append(",");
-                        }
-                    }
-                    if (!notEmpty) {
-                        filter.append(breweryInfoSelects.get(0).getModel().getName());
-                    }
-                }
-            }
-            if (!notEmpty) {
-                filterId.append("!");
-            }
-        }
-        if (cityName != null) {
-            restoAdapter.getItem(category).setSelectedFilter(cityName);
-            restoAdapter.getItem(category).setSelectedItemId(cityId);
-        } else if (!filterId.toString().isEmpty()) {
-            restoAdapter.getItem(category).setSelectedFilter(filter.deleteCharAt(filter.length() - 2).toString());
-            restoAdapter.getItem(category).setSelectedItemId(filterId.deleteCharAt(filterId.length() - 1).toString());
-        }
-        restoAdapter.notifyDataSetChanged();
-        presenter.saveRestoFilterChanges(restoFilterList);
     }
 
     private void setBrewerySelectedFilter(String filterCategory, int category, String cityName, String cityId) {

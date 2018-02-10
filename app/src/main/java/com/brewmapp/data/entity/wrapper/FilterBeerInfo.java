@@ -11,8 +11,13 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class FilterBeerInfo extends AdapterItem<Beer, BeerView> {
+    private int layoutRes=R.layout.view_beer;
     @Override
     public int getLayoutRes() {
-        return R.layout.view_beer;
+        return layoutRes;
+    }
+
+    public void setLayoutRes(int layoutRes) {
+        this.layoutRes = layoutRes;
     }
 }

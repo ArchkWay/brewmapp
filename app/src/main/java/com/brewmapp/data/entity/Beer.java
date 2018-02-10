@@ -35,6 +35,7 @@ public class Beer implements Serializable {
     private Relations relations=new Relations();
     private String like;
     private String dis_like;
+    private boolean selectable;
 
     public Beer(String id_beer) {
         setId(id_beer);
@@ -42,6 +43,14 @@ public class Beer implements Serializable {
 
     public Beer(){
 
+    }
+
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
     }
 
     public String getLike() {

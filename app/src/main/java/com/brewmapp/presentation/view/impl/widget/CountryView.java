@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,10 @@ public class CountryView extends BaseLinearLayout implements InteractiveModelVie
     TextView title;
     @BindView(R.id.logo)
     ImageView logo;
+    @BindView(R.id.chkbox)
+    CheckBox checkbox;
+    @BindView(R.id.selectbox)
+    ImageView chevron;
 
     private Listener listener;
     private Country model;
@@ -64,15 +69,26 @@ public class CountryView extends BaseLinearLayout implements InteractiveModelVie
     public void setModel(Country model) {
         this.model = model;
         title.setText(model.getName());
-        if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
+        if (model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
             Picasso.with(getContext()).load(model.getGetThumb()).fit().into(logo);
         } else {
             logo.setVisibility(INVISIBLE);
         }
 
-        setOnClickListener(v -> listener.onModelAction(FilterRestoField.CITY, model));
+        setOnClickListener(view -> {
+            if (!model.isSelected()) {
+                model.setSelected(true);
+                checkbox.setChecked(true);
+            } else {
+                model.setSelected(false);
+                checkbox.setChecked(false);
+            }
+            listener.onModelAction(0, model);
+        });
+        checkbox.setChecked(model.isSelected());
+        chevron.setVisibility(model.isSelectable() ? GONE : VISIBLE);
+        checkbox.setVisibility(model.isSelectable() ? VISIBLE : GONE);
     }
-
     @Override
     public void setListener(Listener listener) {
         this.listener = listener;

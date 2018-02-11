@@ -28,7 +28,6 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
 public class BeerTypesTask extends BaseNetworkTask<FullSearchPackage, List<IFlexible>> {
 
     private int step;
-    private List<BeerTypeInfo> beerTypeInfos;
 
     @Inject
     public BeerTypesTask(MainThread mainThread,
@@ -45,11 +44,7 @@ public class BeerTypesTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
                 WrapperParams params = new WrapperParams("");
                 int end = fullSearchPackage.getPage() + step;
                 BeerTypesModel response = executeCall(getApi().loadBeerTypes(fullSearchPackage.getPage(), end, params));
-                if (beerTypeInfos == null) {
-                    beerTypeInfos = new ArrayList<>();
-                }
-                beerTypeInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(beerTypeInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

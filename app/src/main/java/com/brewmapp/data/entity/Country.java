@@ -27,9 +27,18 @@ public class Country implements Serializable {
     @SerializedName("name_en")
     private String mNameEn;
     private boolean selected;
+    private boolean selectable;
 
     public Country(String mName) {
         this.mName = mName;
+    }
+
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
     }
 
     public boolean isSelected() {

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Beer;
-import com.brewmapp.data.entity.FilterRestoField;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -31,9 +30,9 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
     @BindView(R.id.logo)
     ImageView logo;
     @BindView(R.id.chkbox)
-    CheckBox restoTypeCheckbox;
+    CheckBox checkbox;
     @BindView(R.id.selectbox)
-    ImageView selectImageView;
+    ImageView chevron;
     private Listener listener;
     private Beer model;
 
@@ -76,21 +75,21 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
             logo.setVisibility(INVISIBLE);
         }
 
-        restoTypeCheckbox.setChecked(model.isSelected());
+        checkbox.setChecked(model.isSelected());
 
         setOnClickListener(view -> {
             if (!model.isSelected()) {
                 model.setSelected(true);
-                restoTypeCheckbox.setChecked(true);
+                checkbox.setChecked(true);
             } else {
                 model.setSelected(false);
-                restoTypeCheckbox.setChecked(false);
+                checkbox.setChecked(false);
             }
             listener.onModelAction(0,model);
         });
 
-        selectImageView.setVisibility(model.isSelectable()?GONE:VISIBLE);
-        restoTypeCheckbox.setVisibility(model.isSelectable()?VISIBLE:GONE);
+        chevron.setVisibility(model.isSelectable()?GONE:VISIBLE);
+        checkbox.setVisibility(model.isSelectable()?VISIBLE:GONE);
 
     }
 

@@ -19,6 +19,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -27,9 +28,12 @@ import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
+import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
+import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
@@ -90,6 +94,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private int numberTab;
     private int numberMenuItem;
     private HashMap<String,String> hashMap=new HashMap<>();
+    private StringBuilder sb=new StringBuilder();
     @Inject
     SelectCategoryActivityPresenter presenter;
 
@@ -177,12 +182,30 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case SearchFragment.TAB_BEER:
                 //region Prepare append items for TAB_BEER
                 switch (numberMenuItem) {
-                    case FilterBeerField.NAME:
+                    case FilterBeerField.NAME: {
                         if (fullSearchPackage.getPage() == 0)
                             this.original.clear();
-                        for (IFlexible iFlexible:list)
-                            ((FilterBeerInfo)iFlexible).getModel().setSelectable(false);
-                        break;
+                        for (IFlexible iFlexible : list)
+                            ((FilterBeerInfo) iFlexible).getModel().setSelectable(false);
+                    }break;
+                     case FilterBeerField.COUNTRY: {
+                         for (IFlexible iFlexible : list) {
+                             CountryInfo countryInfo=(CountryInfo) iFlexible;
+                             Country model=countryInfo.getModel();
+                             String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                             model.setSelectable(true);
+                             model.setSelected(hashMap.containsKey(key));
+                         }
+                     }break;
+                    case FilterBeerField.TYPE: {
+                        for (IFlexible iFlexible : list) {
+                            BeerTypeInfo beerTypeInfo=(BeerTypeInfo) iFlexible;
+                            BeerTypes model=beerTypeInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+
                 }
                 //endregion
                 break;
@@ -203,14 +226,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         this.original.clear();
                         for(IFlexible iFlexible:list){
                             RestoType model= ((RestoTypeInfo) iFlexible).getModel();
-                            model.setSelected(hashMap.containsKey(new StringBuilder().append(model.getId()).toString()));
+                            model.setSelected(hashMap.containsKey(sb.delete(0,sb.length()).append(model.getId()).toString()));
                         }
                         break;
                     case FilterRestoField.KITCHEN:
                         this.original.clear();
                         for(IFlexible iFlexible:list){
                             Kitchen model= ((KitchenInfo) iFlexible).getModel();
-                            model.setSelected(hashMap.containsKey(new StringBuilder().append(model.getId()).toString()));
+                            model.setSelected(hashMap.containsKey(sb.delete(0,sb.length()).append(model.getId()).toString()));
                         }
                         break;
                     case FilterRestoField.PRICE:
@@ -255,10 +278,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         returnIntent.putExtra(Actions.PARAM3, strJoin( hashMap.keySet().toArray(),","));
         returnIntent.putExtra(Actions.PARAM4, strJoin( hashMap.values().toArray(),","));
 
-        returnIntent.putExtra("filter", selectedFilter);
-        returnIntent.putExtra("category", filterCategory);
-        returnIntent.putExtra("selectedItem", filterTxt);
-        returnIntent.putExtra("selectedItemId", filterId);
         setResult(RESULT_OK, returnIntent);
         finish();
 
@@ -270,8 +289,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
 //*********************************************
-
-
 
     private void filterStringToHashMap() {
         try {
@@ -344,12 +361,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.COUNTRY:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.select_country);
-                    presenter.loadCountries();
+                filterStringToHashMap();
+                presenter.loadCountries();
                 break;
             case FilterBeerField.TYPE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type);
-                    presenter.loadBeerTypes(fullSearchPackage);
+                filterStringToHashMap();
+                presenter.loadBeerTypes(fullSearchPackage);
                 break;
             case FilterBeerField.PRICE_BEER:
                 showProgressBar(true);
@@ -530,14 +549,28 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private void processAction(int action, Object payload) {
         String key=null;
         String name=null;
+        boolean selected=false;
+
 
         switch (numberTab){
             case SearchFragment.TAB_BEER:
                 //region select item for TAB_BEER
                 switch (numberMenuItem) {
-                    case FilterRestoField.NAME:
+                    case FilterBeerField.NAME:
                         Starter.BeerDetailActivity(this, String.valueOf(((Beer) payload).getId()));
                         break;
+                    case FilterBeerField.COUNTRY: {
+                        Country model = (Country) payload;
+                        key = sb.delete(0, sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0, sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.TYPE:{
+                        BeerTypes model = (BeerTypes) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
                     default: {
                         commonError(getString(R.string.not_valid_param));
                         return;
@@ -548,7 +581,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case SearchFragment.TAB_BREWERY:
                 break;
             case SearchFragment.TAB_RESTO:
-                boolean selected=false;
                 //region select item for TAB_RESTO
                 switch (numberMenuItem){
                     case FilterRestoField.NAME:
@@ -556,32 +588,32 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         break;
                     case FilterRestoField.TYPE: {
                         RestoType model = (RestoType) payload;
-                        key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getName()).toString();
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
                     case FilterRestoField.BEER: {
                         Beer model = (Beer) payload;
-                        key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getTitle()).toString();
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getTitle()).toString();
                         selected = model.isSelected();
                     }break;
                     case FilterRestoField.KITCHEN: {
                         Kitchen model = (Kitchen) payload;
-                        key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getName()).toString();
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
                     case FilterRestoField.PRICE: {
                         PriceRange model = (PriceRange) payload;
-                        key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getName()).toString();
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
                     case FilterRestoField.CITY: {
                         City model = (City) payload;
-                        key = new StringBuilder().append(model.getId()).toString();
-                        name = new StringBuilder().append(model.getName()).toString();
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
                         default: {
@@ -589,13 +621,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                             return;
                         }
                 }
-                if(selected) hashMap.put(key,name);else hashMap.remove(key);
                 //endregion
                 break;
             default:
                 commonError(getString(R.string.not_valid_param));
 
         }
+        if(selected) hashMap.put(key,name);else hashMap.remove(key);
         invalidateMenu();
     }
 

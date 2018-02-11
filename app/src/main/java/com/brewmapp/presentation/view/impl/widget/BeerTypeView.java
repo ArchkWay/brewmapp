@@ -78,7 +78,10 @@ public class BeerTypeView extends BaseLinearLayout implements InteractiveModelVi
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0, model);
         });
+
+        restoTypeCheckbox.setChecked(model.isSelected());
     }
 
     @Override

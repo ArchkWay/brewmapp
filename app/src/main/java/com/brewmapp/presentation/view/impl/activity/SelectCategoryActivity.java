@@ -245,14 +245,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         }
         //region Process append
         adapter.notifyDataSetChanged();
-        this.original.addAll(list);
         int numberStartNotificationInsert=this.original.size();
+        this.original.addAll(list);
         adapter.notifyItemRangeInserted(numberStartNotificationInsert,list.size());
         //endregion
         //region Visible control
         showProgressBar(false);
-        emptyView.setVisibility(numberStartNotificationInsert==0?View.VISIBLE:View.GONE);
-        filterList.setVisibility(numberStartNotificationInsert==0?View.GONE:View.VISIBLE);
+        emptyView.setVisibility(original.size()==0?View.VISIBLE:View.GONE);
+        filterList.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
         //endregion
     }
 

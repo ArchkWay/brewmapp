@@ -169,6 +169,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.restoFilterList = fieldList;
         restoAdapter = new FlexibleModelAdapter<>(restoFilterList, this::processAction);
         list.setAdapter(restoAdapter);
+        search.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -176,6 +177,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.beerFilterList = fieldList;
         beerAdapter = new FlexibleModelAdapter<>(fieldList, this::processAction);
         list.setAdapter(beerAdapter);
+        search.setVisibility(View.GONE);
     }
 
     @Override
@@ -183,6 +185,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.breweryList = fieldList;
         breweryAdapter = new FlexibleModelAdapter<>(fieldList, this::processAction);
         list.setAdapter(breweryAdapter);
+        search.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.accept_filter)
@@ -315,6 +318,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                         result=true;
                         break;
                 }
+                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
             }break;
             case TAB_BEER:{
                 FilterBeerField f=((FilterBeerField)o);
@@ -332,8 +336,11 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                         result=true;
                         break;
                 }
-
-            }
+                Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+            }break;
+            case TAB_BREWERY:{
+                Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
+            }break;
         }
         if(result){
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
@@ -341,7 +348,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             intent.putExtra(Actions.PARAM2,itemId);
             intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
             intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
-
             startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
         }else {
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
@@ -360,18 +366,24 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             case TAB_BEER:
                 ((FilterBeerField)o).clearFilter();
                 beerAdapter.notifyDataSetChanged();
+                Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
                 break;
             case TAB_BREWERY:
                 ((FilterBreweryField)o).clearFilter();
                 breweryAdapter.notifyDataSetChanged();
+                Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
                 break;
             default:{
                 commonError(getString(R.string.not_valid_param));
                 return;
             }
         }
-        //endregion
 
+        //endregion
+    }else if(code==FilterRestoField.CODE_CLICK_FILTER_ERROR
+            ||code==FilterBeerField.CODE_CLICK_FILTER_ERROR
+            ||code==FilterBreweryField.CODE_CLICK_FILTER_ERROR){
+        Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
     }
 
 }

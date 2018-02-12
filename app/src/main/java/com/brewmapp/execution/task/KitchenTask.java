@@ -13,6 +13,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -33,8 +34,14 @@ public class KitchenTask extends BaseNetworkTask<Kitchen, List<IFlexible>> {
     protected Observable<List<IFlexible>> prepareObservable(Kitchen kitchen) {
         return Observable.create(subscriber -> {
             try {
-                KitchenTypes response = executeCall(getApi().loadKitchenTypes());
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                String key=getClass().getSimpleName();
+                ArrayList<IFlexible> arrayList= Paper.book().read(key);
+                if(arrayList==null) {
+                    KitchenTypes response = executeCall(getApi().loadKitchenTypes());
+                    arrayList=new ArrayList<>(response.getModels());
+                    Paper.book().write(key,arrayList);
+                }
+                subscriber.onNext(arrayList);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

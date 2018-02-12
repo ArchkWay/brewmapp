@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -57,9 +59,12 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     @BindView(R.id.activity_search_search) FinderView finder;
     @BindView(R.id.activity_search_more) Button more;
     @BindView(R.id.title_toolbar)    TextView titleToolbar;
+    @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
+    @BindView(R.id.activity_search_progress)
+    RelativeLayout progress;
 
     private FlexibleModelAdapter<IFlexible> adapter;
-    private FullSearchPackage searchPackage;
+    private FullSearchPackage searchPackage = new FullSearchPackage();
     private int selectedTab;
     private EndlessRecyclerOnScrollListener scrollListener;
     private ProgressDialog dialog;
@@ -87,12 +92,10 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     @Override
     protected void initView() {
         enableBackButton();
-        searchPackage = new FullSearchPackage();
-        searchPackage.setPage(0);
 
         //region Parse Intent
-        int numberTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
-        switch (numberTab) {
+        selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        switch (selectedTab) {
             case SearchFragment.TAB_RESTO: {
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
                 if (restoFilterList != null) {
@@ -126,17 +129,9 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         }
         //endregion
 
-//        if (getIntent().getExtras() != null) {
-//            selectedTab = getIntent().getExtras().getInt(Keys.SEARCH_RESULT, 0);
-//            craftBeer = getIntent().getExtras().getInt("craft", 0);
-//            offer = getIntent().getExtras().getInt("offer", 0);
-//            filterBeer = getIntent().getExtras().getInt("filter", 0);
-//            finder.setVisibility(View.GONE);
-//            more.setVisibility(View.GONE);
-//        }
+        //region setup View
         titleToolbar.setText(titleContent[selectedTab]);
         more.setOnClickListener(v -> startActivity(ExtendedSearchActivity.class));
-
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
@@ -150,7 +145,14 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(listAdapter, this::processAction);
         list.setAdapter(adapter);
+        finder.setVisibility(View.GONE);
+        list.setVisibility(View.GONE);
+        //endregion
+
+        //region LoadResult
+        searchPackage.setPage(0);
         loadResult(searchPackage);
+        //endregion
     }
 
     private void loadResult(FullSearchPackage searchPackage) {
@@ -255,5 +257,11 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         int startPosition=listAdapter.size();
         listAdapter.addAll(startPosition,list);
         adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
+        if(listAdapter.size()==0) {
+            tv_not_found.setVisibility(View.VISIBLE);
+            finder.setVisibility(View.GONE);
+        }
+        this.list.setVisibility(View.VISIBLE);
+        progress.setVisibility(View.GONE);
     }
 }

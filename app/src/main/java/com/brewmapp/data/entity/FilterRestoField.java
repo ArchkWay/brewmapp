@@ -35,6 +35,7 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
 
     public static final int CODE_CLICK_FILTER_START_SELECTION = 0;
     public static final int CODE_CLICK_FILTER_CLEAR = 1;
+    public static final int CODE_CLICK_FILTER_ERROR = 3;
 
     private int id;
     private String selectedItemId;

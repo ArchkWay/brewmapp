@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -16,6 +17,9 @@ import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
+
+import static com.brewmapp.data.entity.FilterRestoField.FEATURES;
+import static com.brewmapp.data.entity.FilterRestoField.METRO;
 
 /**
  * Created by nlbochas on 28/10/2017.
@@ -59,14 +63,36 @@ public class FilterRestoRowField extends BaseRelativeLayout implements Interacti
     }
 
     public void setModel(FilterRestoField model) {
+        boolean itemEnable =true;
+
+        switch (model.getId()){
+            case METRO:
+                itemEnable =false;
+                break;
+            case FEATURES:
+                itemEnable =false;
+                break;
+            default:
+                itemEnable =true;
+        }
+
         this.model = model;
         this.filterTitle.setText(model.getTitle());
         this.selectedFilter.setTypeface(null, Typeface.BOLD_ITALIC);
         this.selectedFilter.setText(model.getSelectedFilter());
         this.icon.setImageResource(model.getIcon());
-        setOnClickListener(view -> listener.onModelAction(FilterRestoField.CODE_CLICK_FILTER_START_SELECTION,model));
+        if(itemEnable) {
+            setOnClickListener(view -> listener.onModelAction(FilterRestoField.CODE_CLICK_FILTER_START_SELECTION, model));
+            icon.setAlpha(1.0f);
+            selectedFilter.setAlpha(1.0f);
+        }else {
+            setOnClickListener(view -> listener.onModelAction(FilterRestoField.CODE_CLICK_FILTER_ERROR, model));
+            icon.setAlpha(0.3f);
+            selectedFilter.setAlpha(0.3f);
+        }
         clear_filter.setVisibility(model.getSelectedItemId()==null?GONE:VISIBLE);
         clear_filter.setOnClickListener(view -> listener.onModelAction(FilterRestoField.CODE_CLICK_FILTER_CLEAR,model));
+
     }
 
     @Override

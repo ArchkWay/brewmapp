@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -35,11 +36,14 @@ public class PriceRangeTask extends BaseNetworkTask<PriceRangeType, List<IFlexib
     protected Observable<List<IFlexible>> prepareObservable(PriceRangeType priceRange) {
         return Observable.create(subscriber -> {
             try {
-                PriceRangeTypes response = executeCall(getApi().loadPriceRanges(priceRange.getType()));
-                List<PriceRangeInfo> priceRangeInfos = new ArrayList<>();
-                priceRangeInfos.add(0, new PriceRangeInfo(new PriceRange("Не имеет значения  ")));
-                priceRangeInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(priceRangeInfos));
+                String key=getClass().getSimpleName();
+                ArrayList<IFlexible> arrayList= Paper.book().read(key);
+                if(arrayList==null) {
+                    PriceRangeTypes response = executeCall(getApi().loadPriceRanges(priceRange.getType()));
+                    arrayList=new ArrayList<>(response.getModels());
+                    Paper.book().write(key,arrayList);
+                }
+                subscriber.onNext(arrayList);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

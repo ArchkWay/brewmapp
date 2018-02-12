@@ -39,6 +39,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
 
     public static final int CODE_CLICK_FILTER_START_SELECTION = 0;
     public static final int CODE_CLICK_FILTER_CLEAR = 1;
+    public static final int CODE_CLICK_FILTER_ERROR = 2;
 
     private int id;
     private String selectedItemId;

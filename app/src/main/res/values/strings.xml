@@ -490,5 +490,6 @@
     <string name="search_beer_factory_defailt">Не имеет значения</string>
     <string name="search_beer_price_defailt">Любая</string>
     <string name="search_brewery_name_defailt">Любое</string>
+    <string name="nothing_not_found">По запросу ничего не найдено</string>
 
 </resources>

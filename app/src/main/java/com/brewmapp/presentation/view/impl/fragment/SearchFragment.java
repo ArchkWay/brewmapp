@@ -188,24 +188,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     @OnClick(R.id.accept_filter)
     public void acceptFilter() {
         Intent intent = new Intent(getActivity(), ResultSearchActivity.class);
-        switch (tabsView.getTabs().getSelectedTabPosition()) {
-            case TAB_RESTO:
-                intent.putExtra("craft", craft.isChecked() ? 1 : 0);
-                intent.putExtra("filterBeer", filterBeer.isChecked() ? 1 : 0);
-                intent.putExtra(Keys.SEARCH_RESULT, 0);
-                startActivity(intent);
-                break;
-            case TAB_BEER:
-                intent.putExtra("offer", craft.isChecked() ? 1 : 0);
-                intent.putExtra(Keys.SEARCH_RESULT, 1);
-                startActivity(intent);
-                break;
-            case TAB_BREWERY:
-                intent.putExtra(Keys.SEARCH_RESULT, 2);
-                startActivity(intent);
-                break;
-            default :break;
-        }
+        intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+        startActivity(intent);
     }
 
     @Override
@@ -371,6 +355,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             case TAB_RESTO:
                 ((FilterRestoField)o).clearFilter();
                 restoAdapter.notifyDataSetChanged();
+                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                 break;
             case TAB_BEER:
                 ((FilterBeerField)o).clearFilter();

@@ -66,16 +66,20 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
     @Override
     public void loadRestoList(int specialOffer, FullSearchPackage searchPackage) {
         loadRestosList.cancel();
-        List<FilterRestoField> filterRestoFields = Paper.book().read("restoCategoryList");
+
         FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
         filterRestoPackage.setPage(searchPackage.getPage());
-        filterRestoPackage.setRestoCity(filterRestoFields.get(FilterRestoField.CITY).getSelectedItemId());
-        filterRestoPackage.setRestoTypes(filterRestoFields.get(FilterRestoField.TYPE).getSelectedItemId());
-        filterRestoPackage.setMenuBeer(filterRestoFields.get(FilterRestoField.BEER).getSelectedItemId());
-        filterRestoPackage.setRestoKitchens(filterRestoFields.get(FilterRestoField.KITCHEN).getSelectedItemId());
-        filterRestoPackage.setRestoAveragepriceRange(filterRestoFields.get(FilterRestoField.PRICE).getSelectedItemId());
-        filterRestoPackage.setRestoFeatures(filterRestoFields.get(FilterRestoField.FEATURES).getSelectedItemId());
-        filterRestoPackage.setResto_discount(specialOffer);
+        if(searchPackage.getCity()!=null)
+            filterRestoPackage.setRestoCity(searchPackage.getCity());
+        if(searchPackage.getType()!=null)
+            filterRestoPackage.setRestoTypes(searchPackage.getType());
+        if(searchPackage.getBeer()!=null)
+            filterRestoPackage.setRestoBeer(searchPackage.getBeer());
+        if(searchPackage.getKitchen()!=null)
+            filterRestoPackage.setRestoKitchens(searchPackage.getKitchen());
+        if(searchPackage.getPrice()!=null)
+            filterRestoPackage.setRestoPrices(searchPackage.getPrice());
+
         loadRestosList.execute(filterRestoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
@@ -86,11 +90,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             @Override
             public void onNext(List<IFlexible> restoLocations) {
                 view.hideProgressBar();
-                if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено ни одного заведения",0);
-                } else {
                     view.appendItems(restoLocations);
-                }
             }
 
             @Override

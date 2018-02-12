@@ -14,12 +14,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Brewery;
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
+import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.SearchBeer;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -30,6 +34,7 @@ import com.brewmapp.presentation.view.contract.ResultSearchActivityView;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -59,7 +64,7 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     private EndlessRecyclerOnScrollListener scrollListener;
     private ProgressDialog dialog;
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
-    private int craftBeer, offer, filterBeer;
+    private List<IFlexible> listAdapter=new ArrayList<>();
 
     @Inject
     ResultSearchActivityPresenter presenter;
@@ -84,14 +89,51 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         enableBackButton();
         searchPackage = new FullSearchPackage();
         searchPackage.setPage(0);
-        if (getIntent().getExtras() != null) {
-            selectedTab = getIntent().getExtras().getInt(Keys.SEARCH_RESULT, 0);
-            craftBeer = getIntent().getExtras().getInt("craft", 0);
-            offer = getIntent().getExtras().getInt("offer", 0);
-            filterBeer = getIntent().getExtras().getInt("filter", 0);
-            finder.setVisibility(View.GONE);
-            more.setVisibility(View.GONE);
+
+        //region Parse Intent
+        int numberTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        switch (numberTab) {
+            case SearchFragment.TAB_RESTO: {
+                List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
+                if (restoFilterList != null) {
+                    for (FilterRestoField filterRestoField:restoFilterList){
+                        if(filterRestoField.getSelectedItemId()!=null){
+                            switch (filterRestoField.getId()){
+                                case FilterRestoField.TYPE:{
+                                    searchPackage.setType(filterRestoField.getSelectedItemId());
+                                }break;
+                                case FilterRestoField.CITY:{
+                                    searchPackage.setCity(filterRestoField.getSelectedItemId());
+                                }break;
+                                case FilterRestoField.BEER:{
+                                    searchPackage.setBeer(filterRestoField.getSelectedItemId());
+                                }break;
+                                case FilterRestoField.KITCHEN:{
+                                    searchPackage.setKitchen(filterRestoField.getSelectedItemId());
+                                }break;
+                                case FilterRestoField.PRICE:{
+                                    searchPackage.setPrice(filterRestoField.getSelectedItemId());
+                                }break;
+                            }
+                        }
+                    }
+                } else {
+                    commonError(getString(R.string.not_valid_param));
+                }
+            }break;
+                default:
+                    commonError(getString(R.string.not_valid_param));
         }
+        //endregion
+
+//        if (getIntent().getExtras() != null) {
+//            selectedTab = getIntent().getExtras().getInt(Keys.SEARCH_RESULT, 0);
+//            craftBeer = getIntent().getExtras().getInt("craft", 0);
+//            offer = getIntent().getExtras().getInt("offer", 0);
+//            filterBeer = getIntent().getExtras().getInt("filter", 0);
+//            finder.setVisibility(View.GONE);
+//            more.setVisibility(View.GONE);
+//        }
         titleToolbar.setText(titleContent[selectedTab]);
         more.setOnClickListener(v -> startActivity(ExtendedSearchActivity.class));
 
@@ -99,14 +141,14 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-                searchPackage.setPage(manager.getItemCount());
+                searchPackage.setPage(currentPage-1);
                 loadResult(searchPackage);
             }
         };
         list.addOnScrollListener(scrollListener);
         list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setLayoutManager(manager);
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        adapter = new FlexibleModelAdapter<>(listAdapter, this::processAction);
         list.setAdapter(adapter);
         loadResult(searchPackage);
     }
@@ -114,16 +156,18 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     private void loadResult(FullSearchPackage searchPackage) {
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
-                showDialogProgressBar(R.string.search_resto_message);
-                presenter.loadRestoList(offer, searchPackage);
+                //showDialogProgressBar(R.string.search_resto_message);
+                presenter.loadRestoList(0, searchPackage);
                 break;
             case SearchFragment.TAB_BEER:
-                showDialogProgressBar(R.string.search_beer_message);
-                presenter.loadBeerList(craftBeer, filterBeer, searchPackage);
+//                showDialogProgressBar(R.string.search_beer_message);
+//                presenter.loadBeerList(craftBeer, filterBeer, searchPackage);
+                commonError();
                 break;
             case SearchFragment.TAB_BREWERY:
-                showDialogProgressBar(R.string.search_brewery_message);
-                presenter.loadBrewery(searchPackage);
+//                showDialogProgressBar(R.string.search_brewery_message);
+//                presenter.loadBrewery(searchPackage);
+                commonError();
                 break;
             default: break;
         }
@@ -157,6 +201,14 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         }
     }
 
+    @Override
+    public void commonError(String... strings) {
+        if(strings!=null && strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+    }
 
     private void processAction(int action, Object payload) {
         switch (selectedTab) {
@@ -200,6 +252,8 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        adapter.updateDataSet(list);
+        int startPosition=listAdapter.size();
+        listAdapter.addAll(startPosition,list);
+        adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
     }
 }

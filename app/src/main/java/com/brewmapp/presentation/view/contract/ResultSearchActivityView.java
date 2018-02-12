@@ -9,4 +9,5 @@ public interface ResultSearchActivityView extends BasicView {
     void showDialogProgressBar(int message);
     void hideProgressBar();
     void appendItems(List<IFlexible> list);
+    void commonError(String... strings);
 }

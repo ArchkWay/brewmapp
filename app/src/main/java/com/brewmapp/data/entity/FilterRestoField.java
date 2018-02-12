@@ -102,43 +102,36 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
                     icon = R.drawable.ic_resto;
                     title = context.getString(R.string.search_resto_type);
                     selectedFilter = context.getString(R.string.search_resto_type_defailt);
-                    selectedItemId=null;
                     break;
                 case BEER:
                     icon = R.drawable.ic_beer;
                     title = context.getString(R.string.search_resto_beer);
                     selectedFilter = context.getString(R.string.search_resto_beer_defailt);
-                    selectedItemId=null;
                     break;
                 case KITCHEN:
                     icon = R.drawable.ic_kitchen;
                     title = context.getString(R.string.search_resto_kitchen);
                     selectedFilter = context.getString(R.string.search_resto_kitchen_defailt);
-                    selectedItemId=null;
                     break;
                 case PRICE:
                     icon = R.drawable.ic_price_range;
                     title = context.getString(R.string.search_resto_price);
                     selectedFilter = context.getString(R.string.search_resto_price_default);
-                    selectedItemId=null;
                     break;
                 case CITY:
                     icon = R.drawable.ic_city;
                     title = context.getString(R.string.search_resto_city);
                     selectedFilter = context.getString(R.string.search_resto_city_default);
-                    selectedItemId=null;
                     break;
                 case METRO:
                     icon = R.drawable.ic_metro;
                     title = context.getString(R.string.search_resto_metro);
                     selectedFilter = context.getString(R.string.search_resto_metro_default);
-                    selectedItemId=null;
                     break;
                 case FEATURES:
                     icon = R.drawable.ic_feature;
                     title = context.getString(R.string.search_resto_other);
                     selectedFilter = context.getString(R.string.search_resto_other_default);
-                    selectedItemId=null;
                     break;
             }
 
@@ -198,5 +191,6 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
 
     public void clearFilter() {
         this.isDirty = true;
+        selectedItemId=null;
     }
 }

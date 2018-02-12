@@ -37,29 +37,30 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
                        Api api, UserRepo userRepo) {
         super(mainThread, executor, api);
         this.userRepo = userRepo;
-        this.step = 30;
+        this.step = 15;
     }
 
     @Override
     protected Observable<List<IFlexible>> prepareObservable(FilterRestoPackage restoPackage) {
         return Observable.create(subscriber -> {
             try {
-                int end = restoPackage.getPage() + step;
+                int start = restoPackage.getPage() * step;
+                int end = start + step;
                 RequestParams params = new RequestParams();
                 RequestParams queryParams = new RequestParams();
                 params.addParam(Keys.RESTO_CITY, restoPackage.getRestoCity() != null ? restoPackage.getRestoCity() : "");
-                params.addParam(Keys.MENU_BEER, restoPackage.getMenuBeer() != null ? restoPackage.getMenuBeer() : "");
+                params.addParam(Keys.MENU_BEER, restoPackage.getRestoBeer() != null ? restoPackage.getRestoBeer() : "");
                 params.addParam(Keys.RESTO_TYPE, restoPackage.getRestoTypes() != null ? restoPackage.getRestoTypes() : "");
                 params.addParam(Keys.RESTO_FEATURES, restoPackage.getRestoFeatures() != null ? restoPackage.getRestoFeatures() : "");
                 params.addParam(Keys.RESTO_AVERAGE, restoPackage.getRestoPrices() != null ? restoPackage.getRestoPrices() : "");
                 params.addParam(Keys.RESTO_KITCHEN, restoPackage.getRestoKitchens() != null ? restoPackage.getRestoKitchens() : "");
-                params.addParam(Keys.RESTO_DISCOUNT, restoPackage.getResto_discount());
+                //params.addParam(Keys.RESTO_DISCOUNT, restoPackage.getResto_discount());
 
                 params.addParam(Keys.COORD_START , restoPackage.getCoordStart() != null ? restoPackage.getCoordStart() : "");
                 params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
 
                 queryParams.addParam(Keys.USER_ID, userRepo.load().getId());
-                Restos response = executeCall(getApi().loadRestos(queryParams, restoPackage.getPage(), end, params));
+                Restos response = executeCall(getApi().loadRestos(queryParams, start, end, params));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

@@ -19,6 +19,7 @@ public class FilterRestoPackage {
     private String coordStart;
     private String coordEnd;
     private String restoOrderSort;
+    private String restoBeer;
     private int page;
 
     public FilterRestoPackage(String restoCity, String restoTypes, String restoMetroes, String restoKitchens,
@@ -40,6 +41,14 @@ public class FilterRestoPackage {
     }
 
     public FilterRestoPackage() {
+    }
+
+    public String getRestoBeer() {
+        return restoBeer;
+    }
+
+    public void setRestoBeer(String restoBeer) {
+        this.restoBeer = restoBeer;
     }
 
     public String getRestoCity() {

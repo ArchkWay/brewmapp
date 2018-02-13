@@ -35,4 +35,6 @@ public interface SelectCategoryActivityPresenter extends LivePresenter<SelectCat
     void loadBeerCategoryItem(int filterCategory, FullSearchPackage searchPackage);
 
     void sendQueryCitySearch(FullSearchPackage fullSearchPackage);
+
+    void loadFilter();
 }

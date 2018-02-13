@@ -491,5 +491,7 @@
     <string name="search_beer_price_defailt">Любая</string>
     <string name="search_brewery_name_defailt">Любое</string>
     <string name="nothing_not_found">По запросу ничего не найдено</string>
+    <string name="property_not_filter_beer">Не фильтрованое пиво</string>
+    <string name="property_filter_beer">Фильтрованое пиво</string>
 
 </resources>

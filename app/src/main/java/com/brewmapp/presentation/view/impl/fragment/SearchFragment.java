@@ -196,85 +196,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     }
 
     @Override
-    public void setTabActive(int i) {
-        tabsView.getTabs().getTabAt(i);
-    }
-
-    @Override
-    public void showResult(Intent data) {
-
-        //region Parse intent
-        int numberTab=data.getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
-        int numberMenuItem=data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
-        String filterID=data.getStringExtra(Actions.PARAM3);
-        String filterTXT=data.getStringExtra(Actions.PARAM4);
-        //endregion
-
-        //region Refresh filter list
-        switch (numberTab) {
-            case TAB_RESTO:
-                switch (numberMenuItem){
-                    case FilterRestoField.TYPE:
-                    case FilterRestoField.BEER:
-                    case FilterRestoField.KITCHEN:
-                    case FilterRestoField.PRICE:
-                    case FilterRestoField.CITY:
-                        if("null".equals(filterID)){
-                            restoFilterList.get(numberMenuItem).clearFilter();
-                        }else {
-                            restoFilterList.get(numberMenuItem).setSelectedItemId(filterID);
-                            restoFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
-                        }
-                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
-                        restoAdapter.notifyItemChanged(numberMenuItem);
-                        break;
-                    default:
-                        commonError(getString(R.string.not_valid_param));
-                }
-                break;
-
-            case TAB_BEER:
-                switch (numberMenuItem){
-                    case FilterBeerField.COUNTRY: {
-                        if ("null".equals(filterID)) {
-                            beerFilterList.get(numberMenuItem).clearFilter();
-                        } else {
-                            beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
-                            beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
-                        }
-                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList);
-                        beerAdapter.notifyItemChanged(numberMenuItem);
-                    }break;
-                    case FilterBeerField.TYPE: {
-                        if ("null".equals(filterID)) {
-                            beerFilterList.get(numberMenuItem).clearFilter();
-                        } else {
-                            beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
-                            beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
-                        }
-                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList);
-                        beerAdapter.notifyItemChanged(numberMenuItem);
-                    }break;
-                    default:
-                        commonError(getString(R.string.not_valid_param));
-                }
-                break;
-            case TAB_BREWERY:
-                switch (numberMenuItem){
-                    case FilterBreweryField.NAME:
-                        break;
-                    default:
-                        commonError(getString(R.string.not_valid_param));
-                }
-                break;
-            default:
-                commonError(getString(R.string.not_valid_param));
-
-        }
-        //endregion
-    }
-
-    @Override
     public void commonError(String... strings) {
         mListener.commonError(strings);
 
@@ -294,15 +215,14 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
 
 //***************************************************
     private void processAction(int code, Object o) {
-    if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION
-            ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION
-            ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
+    if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
         //region Selection category
         boolean result=false;
         int itemId=0;
         String filterTxt=null;
         String filterId=null;
         switch (tabsView.getTabs().getSelectedTabPosition()){
+            //region RESTO
             case TAB_RESTO:{
                 FilterRestoField f=((FilterRestoField)o);
                 itemId=f.getId();
@@ -319,7 +239,10 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                         break;
                 }
                 Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
-            }break;
+            }
+            //endregion
+            break;
+            //region BEER
             case TAB_BEER:{
                 FilterBeerField f=((FilterBeerField)o);
                 itemId=f.getId();
@@ -335,13 +258,31 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                     case FilterBeerField.TYPE:
                         result=true;
                         break;
+//                    case FilterBeerField.BRAND:
+//                        result=true;
+//                        break;
+                    case FilterBeerField.POWER:
+                        result=true;
+                        break;
+                    case FilterBeerField.BEER_FILTER:
+                        result=true;
+                        break;
+                    case FilterBeerField.BEER_PACK:
+                        result=true;
+                        break;
                 }
                 Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
-            }break;
+            }
+            //endregion
+            break;
+            //region BREWERY
             case TAB_BREWERY:{
                 Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
-            }break;
+            }
+            //endregion
+            break;
         }
+        //region Go to SelectCategoryActivity
         if(result){
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
             intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
@@ -353,9 +294,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         }
         //endregion
-    }else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR
-            ||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR
-            ||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
+        //endregion
+    }
+    else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
         //region Clear category
         switch (tabsView.getTabs().getSelectedTabPosition()){
             case TAB_RESTO:
@@ -378,15 +319,104 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                 return;
             }
         }
-
         //endregion
-    }else if(code==FilterRestoField.CODE_CLICK_FILTER_ERROR
-            ||code==FilterBeerField.CODE_CLICK_FILTER_ERROR
-            ||code==FilterBreweryField.CODE_CLICK_FILTER_ERROR){
+    }
+    else if(code==FilterRestoField.CODE_CLICK_FILTER_ERROR||code==FilterBeerField.CODE_CLICK_FILTER_ERROR||code==FilterBreweryField.CODE_CLICK_FILTER_ERROR){
         Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
     }
 
 }
+
+    public void showResult(Intent data) {
+
+        //region Parse intent
+        int numberTab=data.getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        int numberMenuItem=data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
+        String filterID=data.getStringExtra(Actions.PARAM3);
+        String filterTXT=data.getStringExtra(Actions.PARAM4);
+        //endregion
+
+        //region Refresh filter list
+        switch (numberTab) {
+            //region RESTO
+            case TAB_RESTO:
+                switch (numberMenuItem){
+                    case FilterRestoField.TYPE:
+                    case FilterRestoField.BEER:
+                    case FilterRestoField.KITCHEN:
+                    case FilterRestoField.PRICE:
+                    case FilterRestoField.CITY:
+                        if("null".equals(filterID)){
+                            restoFilterList.get(numberMenuItem).clearFilter();
+                        }else {
+                            restoFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                            restoFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        }
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
+                        restoAdapter.notifyItemChanged(numberMenuItem);
+                        break;
+                    default:
+                        commonError(getString(R.string.not_valid_param));
+                }
+                break;
+            //endregion
+            //region BEER
+            case TAB_BEER:
+                switch (numberMenuItem){
+                    //region COUNTRY
+                    case FilterBeerField.COUNTRY: {
+                        if ("null".equals(filterID)) {
+                            beerFilterList.get(numberMenuItem).clearFilter();
+                        } else {
+                            beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                            beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        }
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region TYPE
+                    case FilterBeerField.TYPE: {
+                        if ("null".equals(filterID)) {
+                            beerFilterList.get(numberMenuItem).clearFilter();
+                        } else {
+                            beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                            beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        }
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region BEER_FILTER
+                    case FilterBeerField.BEER_FILTER: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        if(filterID.split(",").length==2)
+                            beerFilterList.get(numberMenuItem).clearFilter();
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    default:
+                        commonError(getString(R.string.not_valid_param));
+                }
+                break;
+            //endregion
+            //region BREWERY
+            case TAB_BREWERY:
+                switch (numberMenuItem){
+                    case FilterBreweryField.NAME:
+                        break;
+                    default:
+                        commonError(getString(R.string.not_valid_param));
+                }
+                break;
+            default:
+                commonError(getString(R.string.not_valid_param));
+                //endregion
+        }
+        //endregion
+    }
 
     public interface OnFragmentInteractionListener {
         void commonError(String... message);

@@ -17,7 +17,7 @@ import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
 
-import static com.brewmapp.data.entity.FilterBeerField.NAME;
+import static com.brewmapp.data.entity.FilterBeerField.*;
 
 /**
  * Created by nixus on 25.11.2017.
@@ -66,6 +66,12 @@ public class FilterBeerRowField extends BaseRelativeLayout implements Interactiv
 
         switch (model.getId()){
             case NAME:
+            case COUNTRY:
+            case TYPE:
+            case POWER:
+            case BEER_FILTER:
+            case BEER_PACK :
+            //case BRAND: лимиты не работают
                 itemEnable =true;
                 break;
             default:

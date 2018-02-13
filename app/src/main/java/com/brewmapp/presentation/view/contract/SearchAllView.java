@@ -18,7 +18,5 @@ public interface SearchAllView extends BasicView {
     void showRestoFilters(List<FilterRestoField> fieldList);
     void showBeerFilters(List<FilterBeerField> fieldList);
     void showBreweryFilters(List<FilterBreweryField> fieldList);
-    void setTabActive(int i);
-    void showResult(Intent data);
     void commonError(String... strings);
 }

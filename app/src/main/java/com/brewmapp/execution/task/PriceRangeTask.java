@@ -36,7 +36,7 @@ public class PriceRangeTask extends BaseNetworkTask<PriceRangeType, List<IFlexib
     protected Observable<List<IFlexible>> prepareObservable(PriceRangeType priceRange) {
         return Observable.create(subscriber -> {
             try {
-                String key=getClass().getSimpleName();
+                String key=getClass().getSimpleName()+priceRange.getType();
                 ArrayList<IFlexible> arrayList= Paper.book().read(key);
                 if(arrayList==null) {
                     PriceRangeTypes response = executeCall(getApi().loadPriceRanges(priceRange.getType()));

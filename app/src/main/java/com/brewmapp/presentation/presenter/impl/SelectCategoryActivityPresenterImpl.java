@@ -3,12 +3,16 @@ package com.brewmapp.presentation.presenter.impl;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
+import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.PropertyFilterBeer;
 import com.brewmapp.data.entity.wrapper.CityInfo;
+import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
+import com.brewmapp.data.entity.wrapper.PropertyFilterBeerInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.PriceRangeType;
@@ -637,6 +641,15 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
 
         });
 
+    }
+
+    @Override
+    public void loadFilter() {
+
+        List<IFlexible> flexibleList=new ArrayList<>();
+        flexibleList.add(new PropertyFilterBeerInfo(new PropertyFilterBeer(context.getString(R.string.property_filter_beer),"1")));
+        flexibleList.add(new PropertyFilterBeerInfo(new PropertyFilterBeer(context.getString(R.string.property_not_filter_beer),"0")));
+        view.appendItems(new ArrayList<>(flexibleList));
     }
 
     private void saveStoredFilter(String filterKey, List<IFlexible> storeList) {

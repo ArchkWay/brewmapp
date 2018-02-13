@@ -14,6 +14,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -36,11 +37,14 @@ public class BeerPowerTask extends BaseNetworkTask<BeerPower, List<IFlexible>> {
             try {
                 WrapperParams params = new WrapperParams("BeerStrength");
                 params.addParam("id", "");    //it's backend style :)
-                BeerPowerTypes response = executeCall(getApi().loadBeerPower(params));
-                List<BeerPowerInfo> beerPowerInfos = new ArrayList<>();
-                beerPowerInfos.add(0, new BeerPowerInfo(new BeerPower("Любая  ")));
-                beerPowerInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(beerPowerInfos));
+                String key=getClass().getSimpleName();
+                List<IFlexible> flexibleList= Paper.book().read(key);
+                if(flexibleList==null) {
+                    BeerPowerTypes response = executeCall(getApi().loadBeerPower(params));
+                    flexibleList=new ArrayList<>(response.getModels());
+                    Paper.book().write(key,flexibleList);
+                }
+                subscriber.onNext(flexibleList);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

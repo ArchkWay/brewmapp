@@ -18,6 +18,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
@@ -34,7 +35,7 @@ public class BeerTypesTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
                          Executor executor,
                          Api api) {
         super(mainThread, executor, api);
-        this.step = 30;
+        this.step = 500;
     }
 
     @Override
@@ -43,8 +44,14 @@ public class BeerTypesTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
             try {
                 WrapperParams params = new WrapperParams("");
                 int end = fullSearchPackage.getPage() + step;
-                BeerTypesModel response = executeCall(getApi().loadBeerTypes(fullSearchPackage.getPage(), end, params));
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                String key=getClass().getSimpleName();
+                List<IFlexible> flexibleList= Paper.book().read(key);
+                if(flexibleList==null) {
+                    BeerTypesModel response = executeCall(getApi().loadBeerTypes(0, end, params));
+                    flexibleList=new ArrayList<>(response.getModels());
+                    Paper.book().write(key,flexibleList);
+                }
+                subscriber.onNext(flexibleList);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

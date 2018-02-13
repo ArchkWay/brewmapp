@@ -25,6 +25,7 @@ import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.PriceRange;
+import com.brewmapp.data.entity.PropertyFilterBeer;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
@@ -32,6 +33,7 @@ import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
+import com.brewmapp.data.entity.wrapper.PropertyFilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -141,29 +143,28 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         filterTxt=getIntent().getStringExtra(Actions.PARAM4);
         //endregion
 
-        //region Load data and custom View
-        switch (numberTab){
-            case SearchFragment.TAB_BEER:
-                initBeerFilterByCategory(numberMenuItem);
-                break;
-            case SearchFragment.TAB_BREWERY:
-                initBreweryFilterByCategory(numberMenuItem);
-                break;
-            case SearchFragment.TAB_RESTO:
-                initRestoFilterByCategory(numberMenuItem);
-                break;
-            default:
-                commonError(getString(R.string.not_valid_param));
-
-        }
-        //endregion
-
         initFinder();
     }
 
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        //region Load data for selection
+        switch (numberTab){
+            case SearchFragment.TAB_RESTO:
+                initRestoFilterByCategory(numberMenuItem);
+                break;
+            case SearchFragment.TAB_BEER:
+                initBeerFilterByCategory(numberMenuItem);
+                break;
+            case SearchFragment.TAB_BREWERY:
+                initBreweryFilterByCategory(numberMenuItem);
+                break;
+            default:
+                commonError(getString(R.string.not_valid_param));
+
+        }
+        //endregion
     }
 
     @Override
@@ -201,6 +202,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         for (IFlexible iFlexible : list) {
                             BeerTypeInfo beerTypeInfo=(BeerTypeInfo) iFlexible;
                             BeerTypes model=beerTypeInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.BEER_FILTER: {
+                        for (IFlexible iFlexible : list) {
+                            PropertyFilterBeerInfo propertyFilterBeerInfo=(PropertyFilterBeerInfo) iFlexible;
+                            PropertyFilterBeer model=propertyFilterBeerInfo.getModel();
                             String key=sb.delete(0,sb.length()).append(model.getId()).toString();
                             model.setSelected(hashMap.containsKey(key));
                         }
@@ -326,9 +335,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 break;
             case FilterBreweryField.COUNTRY:
                 showProgressBar(true);
-
                 toolbarTitle.setText(R.string.select_country);
-                    presenter.loadCountries();
+                presenter.loadCountries();
+                finder.clearFocus();
                 break;
             case FilterBreweryField.BRAND:
                 showProgressBar(true);
@@ -363,17 +372,19 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 toolbarTitle.setText(R.string.select_country);
                 filterStringToHashMap();
                 presenter.loadCountries();
+                finder.clearFocus();
                 break;
             case FilterBeerField.TYPE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type);
                 filterStringToHashMap();
                 presenter.loadBeerTypes(fullSearchPackage);
+                finder.clearFocus();
                 break;
             case FilterBeerField.PRICE_BEER:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_price);
-                    presenter.loadPriceRangeTypes("beer");
+                presenter.loadPriceRangeTypes("beer");
                 break;
             case FilterBeerField.BEER_PACK:
                 showProgressBar(true);
@@ -408,7 +419,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.POWER:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_power);
-                    presenter.loadBeerPower();
+                presenter.loadBeerPower();
+                finder.clearFocus();
                 break;
             case FilterBeerField.DENSITY:
                 showProgressBar(true);
@@ -424,6 +436,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_factory);
                     presenter.loadBrewery();
+                break;
+            case FilterBeerField.BEER_FILTER:
+                finder.clearFocus();
+                finder.setVisibility(View.GONE);
+                filterStringToHashMap();
+                presenter.loadFilter();
                 break;
             default:commonError(getString(R.string.not_valid_param));
         }
@@ -567,6 +585,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     }break;
                     case FilterBeerField.TYPE:{
                         BeerTypes model = (BeerTypes) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.BEER_FILTER:{
+                        PropertyFilterBeer model = (PropertyFilterBeer) payload;
                         key = sb.delete(0,sb.length()).append(model.getId()).toString();
                         name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();

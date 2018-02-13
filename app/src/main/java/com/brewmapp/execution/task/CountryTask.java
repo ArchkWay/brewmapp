@@ -13,6 +13,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
@@ -36,8 +37,15 @@ public class CountryTask extends BaseNetworkTask<Country, List<IFlexible>> {
             try {
                 RequestParams requestParams = new RequestParams();
                 requestParams.addParam("show_use_beer", 1);
-                CountryTypes response = executeCall(getApi().loadCountries(requestParams));
-                subscriber.onNext(new ArrayList<>(response.getModels()));
+                String key=getClass().getSimpleName();
+                List<IFlexible> flexibleList= Paper.book().read(key);
+                if(flexibleList==null){
+                    CountryTypes response = executeCall(getApi().loadCountries(requestParams));
+                    flexibleList=new ArrayList<>(response.getModels());
+                    Paper.book().write(key,flexibleList);
+                }
+
+                subscriber.onNext(flexibleList);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -385,6 +385,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_price);
                 presenter.loadPriceRangeTypes("beer");
+                finder.clearFocus();
                 break;
             case FilterBeerField.BEER_PACK:
                 showProgressBar(true);
@@ -443,6 +444,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 presenter.loadFilter();
                 break;
+
             default:commonError(getString(R.string.not_valid_param));
         }
     }

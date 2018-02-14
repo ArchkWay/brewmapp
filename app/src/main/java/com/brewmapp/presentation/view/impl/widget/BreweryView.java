@@ -81,6 +81,7 @@ public class BreweryView extends BaseLinearLayout implements InteractiveModelVie
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0,model);
         });
     }
 

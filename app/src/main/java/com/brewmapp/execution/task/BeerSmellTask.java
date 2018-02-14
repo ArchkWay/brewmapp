@@ -37,10 +37,7 @@ public class BeerSmellTask extends BaseNetworkTask<BeerSmell, List<IFlexible>> {
                 WrapperParams params = new WrapperParams("BeerFragrance");
                 params.addParam("id", "");    //it's backend style :)
                 BeerSmellTypes response = executeCall(getApi().loadBeerSmell(params));
-                List<BeerSmellInfo> beerAftertasteInfos = new ArrayList<>();
-                beerAftertasteInfos.add(0, new BeerSmellInfo(new BeerSmell("Любой  ")));
-                beerAftertasteInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(beerAftertasteInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

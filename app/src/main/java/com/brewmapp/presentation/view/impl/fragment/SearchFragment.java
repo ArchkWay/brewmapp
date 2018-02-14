@@ -270,6 +270,27 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                     case FilterBeerField.BEER_PACK:
                         result=true;
                         break;
+                    case FilterBeerField.COLOR:
+                        result=true;
+                        break;
+                    case FilterBeerField.SMELL:
+                        result=true;
+                        break;
+                    case FilterBeerField.TASTE:
+                        result=true;
+                        break;
+                    case FilterBeerField.AFTER_TASTE:
+                        result=true;
+                        break;
+                    case FilterBeerField.BREWERY:
+                        result=true;
+                        break;
+                    case FilterBeerField.PRICE_BEER:
+                        result=true;
+                        break;
+                    case FilterBeerField.DENSITY:
+                        result=true;
+                        break;
                 }
                 Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
             }
@@ -282,6 +303,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             //endregion
             break;
         }
+
         //region Go to SelectCategoryActivity
         if(result){
             Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
@@ -294,6 +316,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         }
         //endregion
+
         //endregion
     }
     else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
@@ -393,6 +416,62 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                         beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
                         if(filterID.split(",").length==2)
                             beerFilterList.get(numberMenuItem).clearFilter();
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region BEER_PACK
+                    case FilterBeerField.BEER_PACK: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region COLOR
+                    case FilterBeerField.COLOR: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region SMELL
+                    case FilterBeerField.SMELL: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region TASTE
+                    case FilterBeerField.TASTE: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region AFTER_TASTE
+                    case FilterBeerField.AFTER_TASTE: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region BREWERY
+                    case FilterBeerField.BREWERY: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region DENSITY
+                    case FilterBeerField.DENSITY: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
                         Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
                         beerAdapter.notifyItemChanged(numberMenuItem);
                     }break;

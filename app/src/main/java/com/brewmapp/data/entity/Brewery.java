@@ -3,7 +3,7 @@ package com.brewmapp.data.entity;
 import com.brewmapp.BuildConfig;
 
 public class Brewery implements java.io.Serializable {
-    private static final long serialVersionUID = -6902596022653865455L;
+    //private static final long serialVersionUID = -6902596022653865455L;
     private String country;
     private String vacancies_count;
     private String short_text;
@@ -31,6 +31,8 @@ public class Brewery implements java.io.Serializable {
     private String interested;
     private String beer_count;
     private String employees_count;
+    private boolean selected;
+    private boolean selectable;
 
     public String getGetThumbFormated() {
         if(getThumb != null && !getThumb.startsWith("http")) {
@@ -39,6 +41,21 @@ public class Brewery implements java.io.Serializable {
         return getThumb;
     }
 
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     public String getCountry() {
         return this.country;

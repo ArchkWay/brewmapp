@@ -39,10 +39,7 @@ public class BreweryTask extends BaseNetworkTask<BreweryShort, List<IFlexible>> 
                 params.addParam("country_id", "");
                 params.addParam("location_id", "");
                 BreweryTypes response = executeCall(getApi().loadBrewery(0, 30, params));
-                List<BreweryInfoSelect> breweryInfoSelects = new ArrayList<>();
-                breweryInfoSelects.add(0, new BreweryInfoSelect(new BreweryShort("Не имеет значения  ")));
-                breweryInfoSelects.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(breweryInfoSelects));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

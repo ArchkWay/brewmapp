@@ -71,6 +71,14 @@ public class FilterBeerRowField extends BaseRelativeLayout implements Interactiv
             case POWER:
             case BEER_FILTER:
             case BEER_PACK :
+            case COLOR:
+            case SMELL:
+            case TASTE:
+            case AFTER_TASTE:
+            case BREWERY:
+            case PRICE_BEER:
+            case DENSITY:
+
             //case BRAND: лимиты не работают
                 itemEnable =true;
                 break;

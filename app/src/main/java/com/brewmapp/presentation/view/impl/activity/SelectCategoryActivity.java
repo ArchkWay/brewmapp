@@ -18,6 +18,15 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.BeerAftertaste;
+import com.brewmapp.data.entity.BeerColor;
+import com.brewmapp.data.entity.BeerDensity;
+import com.brewmapp.data.entity.BeerPack;
+import com.brewmapp.data.entity.BeerSmell;
+import com.brewmapp.data.entity.BeerTaste;
+import com.brewmapp.data.entity.Brewery;
+import com.brewmapp.data.entity.BreweryShort;
+import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.FilterBeerField;
@@ -28,8 +37,16 @@ import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.PropertyFilterBeer;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
+import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
+import com.brewmapp.data.entity.wrapper.BeerColorInfo;
+import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
+import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
+import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfo;
+import com.brewmapp.data.entity.wrapper.BreweryInfoSelect;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -214,7 +231,63 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                             model.setSelected(hashMap.containsKey(key));
                         }
                     }break;
-
+                    case FilterBeerField.BEER_PACK: {
+                        for (IFlexible iFlexible : list) {
+                            BeerPackInfo beerPack=(BeerPackInfo) iFlexible;
+                            BeerPack model=beerPack.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.COLOR: {
+                        for (IFlexible iFlexible : list) {
+                            BeerColorInfo colorInfo=(BeerColorInfo) iFlexible;
+                            BeerColor model=colorInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.SMELL: {
+                        for (IFlexible iFlexible : list) {
+                            BeerSmellInfo beerSmellInfo=(BeerSmellInfo) iFlexible;
+                            BeerSmell model=beerSmellInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.TASTE: {
+                        for (IFlexible iFlexible : list) {
+                            BeerTasteInfo beerTasteInfo=(BeerTasteInfo) iFlexible;
+                            BeerTaste model=beerTasteInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.AFTER_TASTE: {
+                        for (IFlexible iFlexible : list) {
+                            BeerAftertasteInfo aftertasteInfo=(BeerAftertasteInfo) iFlexible;
+                            BeerAftertaste model=aftertasteInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.BREWERY: {
+                        for (IFlexible iFlexible : list) {
+                            BreweryInfo breweryInfo=(BreweryInfo) iFlexible;
+                            Brewery model=breweryInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                            model.setSelectable(true);
+                        }
+                    }break;
+                    case FilterBeerField.DENSITY: {
+                        for (IFlexible iFlexible : list) {
+                            BeerDensityInfo beerDensityInfo=(BeerDensityInfo) iFlexible;
+                            BeerDensity model=beerDensityInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
                 }
                 //endregion
                 break;
@@ -325,7 +398,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.filterCategory = filterId;
         switch (filterId) {
             case FilterBreweryField.NAME:
-
                 fullSearchPackage.setType(Keys.TYPE_BREWERY);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
@@ -384,13 +456,17 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.PRICE_BEER:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_price);
+                filterStringToHashMap();
                 presenter.loadPriceRangeTypes("beer");
                 finder.clearFocus();
                 break;
             case FilterBeerField.BEER_PACK:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_bootle);
-                    presenter.loadBeerPack();
+                filterStringToHashMap();
+                finder.clearFocus();
+                presenter.loadBeerPack();
+
                 break;
             case FilterBeerField.BRAND:
                 showProgressBar(true);
@@ -400,22 +476,30 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.COLOR:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_color);
-                    presenter.loadBeerColor();
+                filterStringToHashMap();
+                finder.clearFocus();
+                presenter.loadBeerColor();
                 break;
             case FilterBeerField.TASTE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_taste);
-                    presenter.loadBeerTaste();
+                filterStringToHashMap();
+                finder.clearFocus();
+                presenter.loadBeerTaste();
                 break;
             case FilterBeerField.SMELL:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_smell);
-                    presenter.loadBeerSmell();
+                filterStringToHashMap();
+                finder.clearFocus();
+                presenter.loadBeerSmell();
                 break;
             case FilterBeerField.AFTER_TASTE:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_after_taste);
-                    presenter.loadBeerAfterTaste();
+                filterStringToHashMap();
+                finder.clearFocus();
+                presenter.loadBeerAfterTaste();
                 break;
             case FilterBeerField.POWER:
                 showProgressBar(true);
@@ -426,7 +510,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.DENSITY:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type_broj);
-                    presenter.loadBeerDensity();
+                filterStringToHashMap();
+                presenter.loadBeerDensity();
+                finder.clearFocus();
                 break;
             case FilterBeerField.IBU:
                 showProgressBar(true);
@@ -434,9 +520,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     presenter.loadBeerIbu();
                 break;
             case FilterBeerField.BREWERY:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_factory);
-                    presenter.loadBrewery();
+                filterList.addOnScrollListener(scrollListener);
+                fullSearchPackage.setType(Keys.TYPE_BREWERY);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                emptyTitle.setText(getString(R.string.filter_search_brewery));
+                filterStringToHashMap();
                 break;
             case FilterBeerField.BEER_FILTER:
                 finder.clearFocus();
@@ -531,10 +621,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case SearchFragment.TAB_BEER:
                 if(FilterBeerField.NAME == numberMenuItem)
                     type_filter=1;
+                else if(FilterBeerField.BREWERY == numberMenuItem)
+                    type_filter=1;
                 break;
             case SearchFragment.TAB_BREWERY:
                 if(FilterBreweryField.NAME == numberMenuItem)
                     type_filter=1;
+
                 break;
             case SearchFragment.TAB_RESTO:
                 if(FilterRestoField.NAME == numberMenuItem)
@@ -573,39 +666,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
 
         switch (numberTab){
-            case SearchFragment.TAB_BEER:
-                //region select item for TAB_BEER
-                switch (numberMenuItem) {
-                    case FilterBeerField.NAME:
-                        Starter.BeerDetailActivity(this, String.valueOf(((Beer) payload).getId()));
-                        break;
-                    case FilterBeerField.COUNTRY: {
-                        Country model = (Country) payload;
-                        key = sb.delete(0, sb.length()).append(model.getId()).toString();
-                        name = sb.delete(0, sb.length()).append(model.getName()).toString();
-                        selected = model.isSelected();
-                    }break;
-                    case FilterBeerField.TYPE:{
-                        BeerTypes model = (BeerTypes) payload;
-                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
-                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
-                        selected = model.isSelected();
-                    }break;
-                    case FilterBeerField.BEER_FILTER:{
-                        PropertyFilterBeer model = (PropertyFilterBeer) payload;
-                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
-                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
-                        selected = model.isSelected();
-                    }break;
-                    default: {
-                        commonError(getString(R.string.not_valid_param));
-                        return;
-                    }
-                }
-                //endregion
-                break;
-            case SearchFragment.TAB_BREWERY:
-                break;
             case SearchFragment.TAB_RESTO:
                 //region select item for TAB_RESTO
                 switch (numberMenuItem){
@@ -642,12 +702,87 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                         name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();
                     }break;
-                        default: {
-                            commonError(getString(R.string.not_valid_param));
-                            return;
-                        }
+                    default: {
+                        commonError(getString(R.string.not_valid_param));
+                        return;
+                    }
                 }
                 //endregion
+                break;
+            case SearchFragment.TAB_BEER:
+                //region select item for TAB_BEER
+                switch (numberMenuItem) {
+                    case FilterBeerField.NAME:
+                        Starter.BeerDetailActivity(this, String.valueOf(((Beer) payload).getId()));
+                        break;
+                    case FilterBeerField.COUNTRY: {
+                        Country model = (Country) payload;
+                        key = sb.delete(0, sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0, sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.TYPE:{
+                        BeerTypes model = (BeerTypes) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.BEER_FILTER:{
+                        PropertyFilterBeer model = (PropertyFilterBeer) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.BEER_PACK:{
+                        BeerPack model = (BeerPack) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.COLOR:{
+                        BeerColor model = (BeerColor) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.SMELL:{
+                        BeerSmell model = (BeerSmell) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.TASTE:{
+                        BeerTaste model = (BeerTaste) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.AFTER_TASTE:{
+                        BeerAftertaste model = (BeerAftertaste) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.BREWERY:{
+                        Brewery model = (Brewery) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.DENSITY:{
+                        BeerDensity model = (BeerDensity) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    default: {
+                        commonError(getString(R.string.not_valid_param));
+                        return;
+                    }
+                }
+                //endregion
+                break;
+            case SearchFragment.TAB_BREWERY:
                 break;
             default:
                 commonError(getString(R.string.not_valid_param));

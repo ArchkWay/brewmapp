@@ -36,10 +36,7 @@ public class BeerPackTask extends BaseNetworkTask<BeerPack, List<IFlexible>> {
             try {
                 WrapperParams params = new WrapperParams("");
                 BeerPackTypes response = executeCall(getApi().loadBeerPack(params));
-                List<BeerPackInfo> beerPackInfos = new ArrayList<>();
-                beerPackInfos.add(0, new BeerPackInfo(new BeerPack("Любой  ")));
-                beerPackInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(beerPackInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -39,10 +39,7 @@ public class BeerColorTask extends BaseNetworkTask<BeerColor, List<IFlexible>> {
                 WrapperParams params = new WrapperParams("BeerColor");
                 params.addParam("id", "");    //it's backend style :)
                 BeerColorTypes response = executeCall(getApi().loadBeerColors(params));
-                List<BeerColorInfo> beerColorInfos = new ArrayList<>();
-                beerColorInfos.add(0, new BeerColorInfo(new BeerColor("Любой  ")));
-                beerColorInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(beerColorInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

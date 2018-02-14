@@ -37,10 +37,7 @@ public class BeerDensityTask extends BaseNetworkTask<BeerDensity, List<IFlexible
                 WrapperParams params = new WrapperParams("ProductDensity");
                 params.addParam("id", "");    //it's backend style :)
                 BeerDensityTypes response = executeCall(getApi().loadBeerDensity(params));
-                List<BeerDensityInfo> beerDensityInfos = new ArrayList<>();
-                beerDensityInfos.add(0, new BeerDensityInfo(new BeerDensity("Любое  ")));
-                beerDensityInfos.addAll(response.getModels());
-                subscriber.onNext(new ArrayList<>(beerDensityInfos));
+                subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

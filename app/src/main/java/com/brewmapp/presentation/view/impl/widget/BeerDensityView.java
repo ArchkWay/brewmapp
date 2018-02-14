@@ -77,6 +77,7 @@ public class BeerDensityView extends BaseLinearLayout implements InteractiveMode
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0,model);
         });
     }
 

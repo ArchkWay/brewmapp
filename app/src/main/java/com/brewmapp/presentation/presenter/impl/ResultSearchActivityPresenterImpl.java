@@ -102,29 +102,9 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
     }
 
     @Override
-    public void loadBeerList(int craftBeer, int filter, FullSearchPackage searchPackage) {
+    public void loadBeerList(FullSearchPackage searchPackage) {
         loadBeerTask.cancel();
-        List<FilterBeerField> fieldList = Paper.book().read("beerCategoryList");
-        FilterBeerPackage filterBeerPackage = new FilterBeerPackage();
-        filterBeerPackage.setBeerCountries(fieldList.get(FilterBeerField.COUNTRY).getSelectedItemId());
-        filterBeerPackage.setBeerTypes(fieldList.get(FilterBeerField.TYPE).getSelectedItemId());
-        filterBeerPackage.setBeerStrengthes(fieldList.get(FilterBeerField.POWER).getSelectedItemId());
-        filterBeerPackage.setBeerPacks(fieldList.get(FilterBeerField.BEER_PACK).getSelectedItemId());
-        filterBeerPackage.setBeerBreweries(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
-        filterBeerPackage.setPage(searchPackage.getPage());
-        filterBeerPackage.setCraft(craftBeer);
-        filterBeerPackage.setBeerFiltered(filter);
-        filterBeerPackage.setBeerDensity(fieldList.get(FilterBeerField.DENSITY).getSelectedItemId());
-//        filterBeerPackage.setBeerFiltered(fieldList.get(FilterBeerField.COUNTRY).getSelectedItemId());
-
-        filterBeerPackage.setBeerAveragepriceRange(fieldList.get(FilterBeerField.PRICE_BEER).getSelectedItemId());
-        filterBeerPackage.setBeerColors(fieldList.get(FilterBeerField.COLOR).getSelectedItemId());
-        filterBeerPackage.setBeerFragrances(fieldList.get(FilterBeerField.SMELL).getSelectedItemId());
-        filterBeerPackage.setBeerTastes(fieldList.get(FilterBeerField.TASTE).getSelectedItemId());
-        filterBeerPackage.setBeerAftertastes(fieldList.get(FilterBeerField.AFTER_TASTE).getSelectedItemId());
-        filterBeerPackage.setBeerAftertastes(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
-        filterBeerPackage.setBeerIBU(fieldList.get(FilterBeerField.IBU).getSelectedItemId());
-        loadBeerTask.execute(filterBeerPackage, new SimpleSubscriber<List<IFlexible>>() {
+        loadBeerTask.execute(searchPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
                 view.hideProgressBar();

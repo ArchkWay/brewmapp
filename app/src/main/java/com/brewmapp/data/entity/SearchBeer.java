@@ -3,6 +3,8 @@ package com.brewmapp.data.entity;
 
 import java.util.List;
 import javax.annotation.Generated;
+
+import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
@@ -159,8 +161,22 @@ public class SearchBeer {
     }
 
     public String getGetThumb() {
+        if(mGetThumb != null && !mGetThumb.startsWith("http")) {
+            mGetThumb = BuildConfig.SERVER_ROOT_URL + mGetThumb;
+        }
         return mGetThumb;
     }
+
+    public String getFormatedTitle() {
+        String titleFormated=null;
+        if(getTitle()!=null)
+            titleFormated=getTitle();
+        if(getTitleRu()!=null)
+            titleFormated=new StringBuilder().append(titleFormated).append(" (").append(getTitleRu()).append(")").toString();
+
+        return titleFormated==null?"":titleFormated;
+    }
+
 
     public void setGetThumb(String getThumb) {
         mGetThumb = getThumb;

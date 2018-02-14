@@ -177,7 +177,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.beerFilterList = fieldList;
         beerAdapter = new FlexibleModelAdapter<>(fieldList, this::processAction);
         list.setAdapter(beerAdapter);
-        search.setVisibility(View.GONE);
+
     }
 
     @Override

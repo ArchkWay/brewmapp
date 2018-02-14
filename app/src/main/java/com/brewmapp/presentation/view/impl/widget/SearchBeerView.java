@@ -73,7 +73,7 @@ public class SearchBeerView extends BaseLinearLayout implements InteractiveModel
         shortDescription.setVisibility((model.getShortText() != null && model.getShortText().isEmpty()) ? GONE : VISIBLE);
         shortDescription.setText((model.getShortText() != null && model.getShortText().isEmpty()) ? "" : model.getShortText());
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
-            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(logo);
         } else {
             Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(logo);
         }

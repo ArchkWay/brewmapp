@@ -18,6 +18,15 @@ public class FullSearchPackage {
     private String city=null;
     private String metro=null;
     private String features=null;
+    private String country=null;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
     public String getName() {
         return name;

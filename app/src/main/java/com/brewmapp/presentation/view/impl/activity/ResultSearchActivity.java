@@ -96,36 +96,50 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         //region Parse Intent
         selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
         switch (selectedTab) {
+            //region TAB_RESTO
             case SearchFragment.TAB_RESTO: {
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-                if (restoFilterList != null) {
-                    for (FilterRestoField filterRestoField:restoFilterList){
-                        if(filterRestoField.getSelectedItemId()!=null){
-                            switch (filterRestoField.getId()){
-                                case FilterRestoField.TYPE:{
-                                    searchPackage.setType(filterRestoField.getSelectedItemId());
-                                }break;
-                                case FilterRestoField.CITY:{
-                                    searchPackage.setCity(filterRestoField.getSelectedItemId());
-                                }break;
-                                case FilterRestoField.BEER:{
-                                    searchPackage.setBeer(filterRestoField.getSelectedItemId());
-                                }break;
-                                case FilterRestoField.KITCHEN:{
-                                    searchPackage.setKitchen(filterRestoField.getSelectedItemId());
-                                }break;
-                                case FilterRestoField.PRICE:{
-                                    searchPackage.setPrice(filterRestoField.getSelectedItemId());
-                                }break;
-                            }
+                for (FilterRestoField filterRestoField:restoFilterList){
+                    if(filterRestoField.getSelectedItemId()!=null){
+                        switch (filterRestoField.getId()){
+                            case FilterRestoField.TYPE:{
+                                searchPackage.setType(filterRestoField.getSelectedItemId());
+                            }break;
+                            case FilterRestoField.CITY:{
+                                searchPackage.setCity(filterRestoField.getSelectedItemId());
+                            }break;
+                            case FilterRestoField.BEER:{
+                                searchPackage.setBeer(filterRestoField.getSelectedItemId());
+                            }break;
+                            case FilterRestoField.KITCHEN:{
+                                searchPackage.setKitchen(filterRestoField.getSelectedItemId());
+                            }break;
+                            case FilterRestoField.PRICE:{
+                                searchPackage.setPrice(filterRestoField.getSelectedItemId());
+                            }break;
                         }
                     }
-                } else {
-                    commonError(getString(R.string.not_valid_param));
                 }
             }break;
-                default:
+            //endregion
+
+            //region TAB_BEER
+            case SearchFragment.TAB_BEER: {
+                List<FilterBeerField> filterBeerFieldList = Paper.book().read(SearchFragment.CATEGORY_LIST_BEER);
+                for(FilterBeerField filterBeerField:filterBeerFieldList)
+                    if(filterBeerField.getSelectedItemId()!=null){
+                        switch (filterBeerField.getId()){
+                            case FilterBeerField.COUNTRY:
+                                searchPackage.setCountry(filterBeerField.getSelectedItemId());break;
+                        }
+                    }
+            }break;
+            //endregion
+
+            //region DEFAULT
+            default:
                     commonError(getString(R.string.not_valid_param));
+            //endregion
         }
         //endregion
 
@@ -149,7 +163,7 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         list.setVisibility(View.GONE);
         //endregion
 
-        //region LoadResult
+        //region StartLoad
         searchPackage.setPage(0);
         loadResult(searchPackage);
         //endregion
@@ -158,13 +172,11 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     private void loadResult(FullSearchPackage searchPackage) {
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
-                //showDialogProgressBar(R.string.search_resto_message);
                 presenter.loadRestoList(0, searchPackage);
                 break;
             case SearchFragment.TAB_BEER:
-//                showDialogProgressBar(R.string.search_beer_message);
-//                presenter.loadBeerList(craftBeer, filterBeer, searchPackage);
-                commonError();
+                presenter.loadBeerList( searchPackage);
+//                commonError();
                 break;
             case SearchFragment.TAB_BREWERY:
 //                showDialogProgressBar(R.string.search_brewery_message);
@@ -215,41 +227,15 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     private void processAction(int action, Object payload) {
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
-                switch (action) {
-                    case FilterRestoField.NAME:
-                        Resto resto = (Resto) payload;
-                        goToRestoDetails(String.valueOf(resto.getId()));
-                        break;
-                    case FilterRestoField.BEER:
-                        SearchBeer beer = (SearchBeer) payload;
-                        goToBeerDetails(beer.getId());
-                        break;
-                    default:
-                        break;
-                }
+                Starter.RestoDetailActivity(this,String.valueOf(((Resto) payload).getId()));
                 break;
-                case SearchFragment.TAB_BREWERY:
-                    Starter.BreweryDetailsActivity(this,((Brewery)payload).getId());
-                    break;
+            case SearchFragment.TAB_BEER:
+                Starter.BeerDetailActivity(this,((SearchBeer)payload).getId());
+                break;
+            case SearchFragment.TAB_BREWERY:
+                Starter.BreweryDetailsActivity(this,((Brewery)payload).getId());
+                break;
         }
-    }
-
-    private void goToRestoDetails(String restoId) {
-        Interest interest = new Interest();
-        Interest_info interest_info = new Interest_info();
-        interest_info.setId(restoId);
-        interest.setInterest_info(interest_info);
-        Intent intent = new Intent(this, RestoDetailActivity.class);
-        intent.putExtra(RESTO_ID, interest);
-        startActivity(intent);
-    }
-
-    private void goToBeerDetails(String beerId) {
-        Beer beer = new Beer();
-        beer.setId(beerId);
-        Intent intent = new Intent(this, BeerDetailActivity.class);
-        intent.putExtra(getString(R.string.key_serializable_extra), new Interest(beer));
-        startActivity(intent);
     }
 
     @Override

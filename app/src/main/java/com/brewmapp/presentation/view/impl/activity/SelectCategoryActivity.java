@@ -312,6 +312,17 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 //endregion
                 break;
             case SearchFragment.TAB_BREWERY:
+                switch (numberMenuItem){
+                    case FilterBreweryField.COUNTRY: {
+                        for (IFlexible iFlexible : list) {
+                            CountryInfo countryInfo=(CountryInfo) iFlexible;
+                            Country model=countryInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelectable(true);
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                }
                 break;
             case SearchFragment.TAB_RESTO:
                 //region Prepare append items for TAB_RESTO
@@ -418,11 +429,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.filterCategory = filterId;
         switch (filterId) {
             case FilterBreweryField.NAME:
+                toolbarTitle.setText(R.string.search_beer_factory);
+                filterList.addOnScrollListener(scrollListener);
                 fullSearchPackage.setType(Keys.TYPE_BREWERY);
                 emptyView.setVisibility(View.VISIBLE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_brewery));
-                filterList.setVisibility(View.GONE);
                 toolbarTitle.setText(R.string.search_brewery_name);
                 break;
             case FilterBreweryField.COUNTRY:
@@ -832,7 +844,20 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 //endregion
                 break;
             case SearchFragment.TAB_BREWERY:
-                break;
+                //region select item for TAB_BREWERY
+                switch (numberMenuItem) {
+                    case FilterBeerField.NAME:
+                        Starter.BreweryDetailsActivity(this, String.valueOf(((Brewery) payload).getId()));
+                        break;
+                    case FilterBeerField.COUNTRY:
+                        Country model = (Country) payload;
+                        key = sb.delete(0, sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0, sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                        break;
+                }
+                //endregion
+                    break;
             default:
                 commonError(getString(R.string.not_valid_param));
 

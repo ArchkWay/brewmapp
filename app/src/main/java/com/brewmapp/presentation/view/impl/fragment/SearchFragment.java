@@ -298,6 +298,18 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
             break;
             //region BREWERY
             case TAB_BREWERY:{
+                FilterBreweryField f=((FilterBreweryField)o);
+                itemId=f.getId();
+                filterTxt=f.getSelectedFilter();
+                filterId=f.getSelectedItemId();
+                switch (itemId) {
+                    case FilterBreweryField.NAME:
+                        result = true;
+                        break;
+                    case FilterBreweryField.COUNTRY:
+                        result = true;
+                        break;
+                }
                 Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
             }
             //endregion
@@ -510,6 +522,18 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                 switch (numberMenuItem){
                     case FilterBreweryField.NAME:
                         break;
+                    //region COUNTRY
+                    case FilterBreweryField.COUNTRY: {
+                        if ("null".equals(filterID)) {
+                            beerFilterList.get(numberMenuItem).clearFilter();
+                        } else {
+                            beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                            beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        }
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+
                     default:
                         commonError(getString(R.string.not_valid_param));
                 }

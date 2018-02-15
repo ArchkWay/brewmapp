@@ -258,9 +258,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                     case FilterBeerField.TYPE:
                         result=true;
                         break;
-//                    case FilterBeerField.BRAND:
-//                        result=true;
-//                        break;
+                    case FilterBeerField.BRAND:
+                        result=true;
+                        break;
                     case FilterBeerField.POWER:
                         result=true;
                         break;
@@ -470,6 +470,30 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                     //endregion
                     //region DENSITY
                     case FilterBeerField.DENSITY: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region BRAND
+                    case FilterBeerField.BRAND: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region BRAND
+                    case FilterBeerField.POWER: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
+                    //endregion
+                    //region BRAND
+                    case FilterBeerField.PRICE_BEER: {
                         beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
                         beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
                         Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);

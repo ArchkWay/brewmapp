@@ -171,7 +171,7 @@ public class SearchBeer {
         String titleFormated=null;
         if(getTitle()!=null)
             titleFormated=getTitle();
-        if(getTitleRu()!=null)
+        if(getTitleRu()!=null && getTitleRu().length()>0)
             titleFormated=new StringBuilder().append(titleFormated).append(" (").append(getTitleRu()).append(")").toString();
 
         return titleFormated==null?"":titleFormated;

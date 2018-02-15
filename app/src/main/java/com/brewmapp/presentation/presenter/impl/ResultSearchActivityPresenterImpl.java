@@ -114,11 +114,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             @Override
             public void onNext(List<IFlexible> restoLocations) {
                 view.hideProgressBar();
-                if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено совпадений",0);
-                } else {
-                    view.appendItems(restoLocations);
-                }
+                view.appendItems(restoLocations);
             }
 
             @Override

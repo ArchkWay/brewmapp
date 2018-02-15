@@ -19,9 +19,11 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerAftertaste;
+import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerColor;
 import com.brewmapp.data.entity.BeerDensity;
 import com.brewmapp.data.entity.BeerPack;
+import com.brewmapp.data.entity.BeerPower;
 import com.brewmapp.data.entity.BeerSmell;
 import com.brewmapp.data.entity.BeerTaste;
 import com.brewmapp.data.entity.Brewery;
@@ -38,10 +40,12 @@ import com.brewmapp.data.entity.PropertyFilterBeer;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
+import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
 import com.brewmapp.data.entity.wrapper.BeerColorInfo;
 import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.BeerPackInfo;
+import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
@@ -288,6 +292,22 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                             model.setSelected(hashMap.containsKey(key));
                         }
                     }break;
+                    case FilterBeerField.BRAND: {
+                        for (IFlexible iFlexible : list) {
+                            BeerBrandInfo beerBrandInfo=(BeerBrandInfo) iFlexible;
+                            BeerBrand model=beerBrandInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBeerField.POWER: {
+                        for (IFlexible iFlexible : list) {
+                            BeerPowerInfo beerPowerInfo=(BeerPowerInfo) iFlexible;
+                            BeerPower model=beerPowerInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
                 }
                 //endregion
                 break;
@@ -471,7 +491,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.BRAND:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_brand);
-                    presenter.loadBeerBrand(fullSearchPackage);
+                    //presenter.loadBeerBrand(fullSearchPackage);
+                filterList.addOnScrollListener(scrollListener);
+                fullSearchPackage.setType(Keys.TYPE_BEERBRAND);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                emptyTitle.setText(getString(R.string.filter_search_brand));
+                filterStringToHashMap();
+
                 break;
             case FilterBeerField.COLOR:
                 showProgressBar(true);
@@ -504,6 +531,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.POWER:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_power);
+                filterStringToHashMap();
                 presenter.loadBeerPower();
                 finder.clearFocus();
                 break;
@@ -529,6 +557,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 break;
             case FilterBeerField.BEER_FILTER:
+                toolbarTitle.setText(R.string.search_beer_filter);
                 finder.clearFocus();
                 finder.setVisibility(View.GONE);
                 filterStringToHashMap();
@@ -622,6 +651,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 if(FilterBeerField.NAME == numberMenuItem)
                     type_filter=1;
                 else if(FilterBeerField.BREWERY == numberMenuItem)
+                    type_filter=1;
+                else if(FilterBeerField.BRAND == numberMenuItem)
                     type_filter=1;
                 break;
             case SearchFragment.TAB_BREWERY:
@@ -771,6 +802,24 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     }break;
                     case FilterBeerField.DENSITY:{
                         BeerDensity model = (BeerDensity) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.BRAND:{
+                        BeerBrand model = (BeerBrand) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.POWER:{
+                        BeerPower model = (BeerPower) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBeerField.PRICE_BEER:{
+                        PriceRange model = (PriceRange) payload;
                         key = sb.delete(0,sb.length()).append(model.getId()).toString();
                         name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();

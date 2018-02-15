@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.SearchBeer;
 import com.squareup.picasso.Picasso;
@@ -68,8 +69,9 @@ public class SearchBeerView extends BaseLinearLayout implements InteractiveModel
     @Override
     public void setModel(SearchBeer model) {
         this.model = model;
-        String titleRu = (model.getTitleRu() == null || TextUtils.isEmpty(model.getTitle()) ? "" : " (" + model.getTitleRu() + ")");
-        title.setText(model.getTitle() + titleRu);
+
+        //String titleRu = (model.getTitleRu() == null || TextUtils.isEmpty(model.getTitle()) ? "" : " (" + model.getTitleRu() + ")");
+        title.setText(model.getFormatedTitle());
         shortDescription.setVisibility((model.getShortText() != null && model.getShortText().isEmpty()) ? GONE : VISIBLE);
         shortDescription.setText((model.getShortText() != null && model.getShortText().isEmpty()) ? "" : model.getShortText());
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {

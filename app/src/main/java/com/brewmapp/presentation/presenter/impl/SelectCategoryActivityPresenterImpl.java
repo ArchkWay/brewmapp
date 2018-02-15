@@ -398,7 +398,6 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.BEER_POWER, iFlexibles);
                 view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }

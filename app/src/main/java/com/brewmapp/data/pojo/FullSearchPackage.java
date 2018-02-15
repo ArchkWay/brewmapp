@@ -19,6 +19,16 @@ public class FullSearchPackage {
     private String metro=null;
     private String features=null;
     private String country=null;
+    private String power;
+    private String beerBrand;
+    private String pack;
+    private String brewery;
+    private String density;
+    private String fitredBeer;
+    private String color;
+    private String beerFragrance;
+    private String taste;
+    private String afterTaste;
 
     public String getCountry() {
         return country;
@@ -106,5 +116,85 @@ public class FullSearchPackage {
 
     public void setStringSearch(String stringSearch) {
         this.stringSearch = stringSearch;
+    }
+
+    public void setPower(String power) {
+        this.power = power;
+    }
+
+    public String getPower() {
+        return power;
+    }
+
+    public String getBeerBrand() {
+        return beerBrand;
+    }
+
+    public void setBeerBrand(String beerBrand) {
+        this.beerBrand = beerBrand;
+    }
+
+    public void setPack(String pack) {
+        this.pack = pack;
+    }
+
+    public String getPack() {
+        return pack;
+    }
+
+    public void setBrewery(String brewery) {
+        this.brewery = brewery;
+    }
+
+    public String getBrewery() {
+        return brewery;
+    }
+
+    public void setDensity(String density) {
+        this.density = density;
+    }
+
+    public String getDensity() {
+        return density;
+    }
+
+    public void setFitredBeer(String fitredBeer) {
+        this.fitredBeer = fitredBeer;
+    }
+
+    public String getFitredBeer() {
+        return fitredBeer;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setBeerFragrance(String beerFragrance) {
+        this.beerFragrance = beerFragrance;
+    }
+
+    public String getBeerFragrance() {
+        return beerFragrance;
+    }
+
+    public void setTaste(String taste) {
+        this.taste = taste;
+    }
+
+    public String getTaste() {
+        return taste;
+    }
+
+    public void setAfterTaste(String afterTaste) {
+        this.afterTaste = afterTaste;
+    }
+
+    public String getAfterTaste() {
+        return afterTaste;
     }
 }

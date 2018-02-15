@@ -153,6 +153,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
 
     public void clearFilter() {
         isDirty =true;
+        setSelectedItemId(null);
     }
 
     private void resetToDefault(Context context) {

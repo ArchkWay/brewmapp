@@ -78,6 +78,7 @@ public class BeerPowerView extends BaseLinearLayout implements InteractiveModelV
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0,model);
         });
     }
 

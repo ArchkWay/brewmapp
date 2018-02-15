@@ -1,5 +1,6 @@
 package com.brewmapp.execution.task;
 
+import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Breweries;
 import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.data.entity.container.Restos;
@@ -56,6 +57,11 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
                     case Keys.TYPE_BREWERY:
                         Breweries breweries = executeCall(getApi().fullSearchBrewery(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
                         subscriber.onNext(new ArrayList<>(breweries.getModels()));
+                        subscriber.onComplete();
+                        break;
+                    case Keys.TYPE_BEERBRAND:
+                        BeerBrands beerBrands= executeCall(getApi().fullSearchBeerBrand(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
+                        subscriber.onNext(new ArrayList<>(beerBrands.getModels()));
                         subscriber.onComplete();
                         break;
                 }

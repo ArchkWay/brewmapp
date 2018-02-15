@@ -131,6 +131,30 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
                         switch (filterBeerField.getId()){
                             case FilterBeerField.COUNTRY:
                                 searchPackage.setCountry(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.TYPE:
+                                searchPackage.setType(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.BRAND:
+                                searchPackage.setBeerBrand(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.POWER:
+                                searchPackage.setPower(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.BREWERY:
+                                searchPackage.setBrewery(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.DENSITY:
+                                searchPackage.setDensity(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.BEER_FILTER:
+                                searchPackage.setFitredBeer(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.BEER_PACK:
+                                searchPackage.setPack(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.COLOR:
+                                searchPackage.setColor(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.SMELL:
+                                searchPackage.setBeerFragrance(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.TASTE:
+                                searchPackage.setTaste(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.AFTER_TASTE:
+                                searchPackage.setAfterTaste(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.PRICE_BEER:
+                                searchPackage.setPrice(filterBeerField.getSelectedItemId());break;
                         }
                     }
             }break;
@@ -170,6 +194,8 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     }
 
     private void loadResult(FullSearchPackage searchPackage) {
+        if(searchPackage.getPage()==0)
+            progress.setVisibility(View.VISIBLE);
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
                 presenter.loadRestoList(0, searchPackage);
@@ -240,6 +266,8 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
 
     @Override
     public void appendItems(List<IFlexible> list) {
+        progress.setVisibility(View.GONE);
+
         int startPosition=listAdapter.size();
         listAdapter.addAll(startPosition,list);
         adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
@@ -248,6 +276,11 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
             finder.setVisibility(View.GONE);
         }
         this.list.setVisibility(View.VISIBLE);
-        progress.setVisibility(View.GONE);
+
+
+        if(listAdapter.size()==0)
+            tv_not_found.setVisibility(View.VISIBLE);
+        else
+            tv_not_found.setVisibility(View.GONE);
     }
 }

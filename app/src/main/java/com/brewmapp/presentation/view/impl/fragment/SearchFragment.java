@@ -185,7 +185,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.breweryList = fieldList;
         breweryAdapter = new FlexibleModelAdapter<>(fieldList, this::processAction);
         list.setAdapter(breweryAdapter);
-        search.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.accept_filter)
@@ -307,6 +306,12 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                         result = true;
                         break;
                     case FilterBreweryField.COUNTRY:
+                        result = true;
+                        break;
+                    case FilterBreweryField.BRAND:
+                        result = true;
+                        break;
+                    case FilterBreweryField.TYPE_BEER:
                         result = true;
                         break;
                 }
@@ -522,16 +527,18 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                 switch (numberMenuItem){
                     case FilterBreweryField.NAME:
                         break;
-                    //region COUNTRY
-                    case FilterBreweryField.COUNTRY: {
+
+                    case FilterBreweryField.COUNTRY:
+                    case FilterBreweryField.BRAND:
+                    case FilterBreweryField.TYPE_BEER: {
                         if ("null".equals(filterID)) {
-                            beerFilterList.get(numberMenuItem).clearFilter();
+                            breweryList.get(numberMenuItem).clearFilter();
                         } else {
-                            beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
-                            beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                            breweryList.get(numberMenuItem).setSelectedItemId(filterID);
+                            breweryList.get(numberMenuItem).setSelectedFilter(filterTXT);
                         }
-                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
-                        beerAdapter.notifyItemChanged(numberMenuItem);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
+                        breweryAdapter.notifyItemChanged(numberMenuItem);
                     }break;
 
                     default:

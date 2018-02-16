@@ -161,14 +161,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         restoTypeTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.RESTO_TYPE, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -180,14 +177,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         kitchenTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.KITCHEN, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -200,14 +194,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         priceRangeTask.execute(priceRangeType, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.PRICE_RANGE, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -219,14 +210,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         featureTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.FEATURES, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -241,13 +229,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                view.showProgressBar(false);
                 view.showMessage(e.getMessage(),0);
             }
         });
@@ -259,14 +245,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerTypesTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.BEER_TYPES, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -278,14 +261,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerPackTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.BEER_PACK, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -297,7 +277,6 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerBrandTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
@@ -305,7 +284,6 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
             public void onNext(List<IFlexible> iFlexibles) {
 
                 saveStoredFilter(FilterKeys.BEER_BRAND, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -317,14 +295,12 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerColorTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 saveStoredFilter(FilterKeys.BEER_COLOR, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -336,13 +312,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerTasteTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -354,14 +328,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerSmellTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.BEER_SMELL, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -373,14 +344,12 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerAftertasteTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 saveStoredFilter(FilterKeys.BEER_AFTER_TASTE, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -392,13 +361,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerPowerTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -410,14 +377,12 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerDensityTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 saveStoredFilter(FilterKeys.BEER_DENSITY, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -429,14 +394,12 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         beerIbuTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 saveStoredFilter(FilterKeys.BEER_IBU, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -448,14 +411,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         countryTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.COUNTRY, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -467,14 +427,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         regionTask.execute(geoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.REGION, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -486,14 +443,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         cityTask.execute(geoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.CITY, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });
@@ -505,14 +459,11 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         breweryTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
-                view.showProgressBar(false);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
-                saveStoredFilter(FilterKeys.BEER_BREWERIES, iFlexibles);
-                view.showProgressBar(false);
                 view.appendItems(iFlexibles);
             }
         });

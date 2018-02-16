@@ -72,6 +72,12 @@ public class FilterBreweryRowField extends BaseRelativeLayout implements Interac
             case COUNTRY:
                 itemEnable =true;
                 break;
+            case BRAND:
+                itemEnable =true;
+                break;
+            case TYPE_BEER:
+                itemEnable =true;
+                break;
             default:
                 itemEnable =false;
         }

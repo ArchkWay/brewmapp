@@ -26,6 +26,7 @@ import com.brewmapp.data.entity.BeerPack;
 import com.brewmapp.data.entity.BeerPower;
 import com.brewmapp.data.entity.BeerSmell;
 import com.brewmapp.data.entity.BeerTaste;
+import com.brewmapp.data.entity.BeerType;
 import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.BreweryShort;
 import com.brewmapp.data.entity.BreweryTypes;
@@ -322,6 +323,23 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                             model.setSelected(hashMap.containsKey(key));
                         }
                     }break;
+                    case FilterBreweryField.BRAND: {
+                        for (IFlexible iFlexible : list) {
+                            BeerBrandInfo beerBrandInfo=(BeerBrandInfo) iFlexible;
+                            BeerBrand model=beerBrandInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+                    case FilterBreweryField.TYPE_BEER: {
+                        for (IFlexible iFlexible : list) {
+                            BeerTypeInfo beerTypeInfo=(BeerTypeInfo) iFlexible;
+                            BeerTypes model=beerTypeInfo.getModel();
+                            String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                            model.setSelected(hashMap.containsKey(key));
+                        }
+                    }break;
+
                 }
                 break;
             case SearchFragment.TAB_RESTO:
@@ -356,6 +374,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 //endregion
                 break;
         }
+
         //region Process append
         adapter.notifyDataSetChanged();
         int numberStartNotificationInsert=this.original.size();
@@ -446,12 +465,19 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBreweryField.BRAND:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_brand);
-                    presenter.loadBeerBrand(fullSearchPackage);
+                filterList.addOnScrollListener(scrollListener);
+                fullSearchPackage.setType(Keys.TYPE_BEERBRAND);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+                emptyTitle.setText(getString(R.string.filter_search_brand));
+                filterStringToHashMap();
+                finder.clearFocus();
                 break;
             case FilterBreweryField.TYPE_BEER:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type);
-                    presenter.loadBeerTypes(fullSearchPackage);
+                presenter.loadBeerTypes(fullSearchPackage);
+                finder.clearFocus();
+                finder.setVisibility(View.GONE);
                 break;
             default:
                 break;
@@ -503,7 +529,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case FilterBeerField.BRAND:
                 showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_brand);
-                    //presenter.loadBeerBrand(fullSearchPackage);
                 filterList.addOnScrollListener(scrollListener);
                 fullSearchPackage.setType(Keys.TYPE_BEERBRAND);
                 emptyView.setVisibility(View.VISIBLE);
@@ -670,7 +695,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case SearchFragment.TAB_BREWERY:
                 if(FilterBreweryField.NAME == numberMenuItem)
                     type_filter=1;
-
+                else if(FilterBreweryField.BRAND == numberMenuItem)
+                    type_filter=1;
                 break;
             case SearchFragment.TAB_RESTO:
                 if(FilterRestoField.NAME == numberMenuItem)
@@ -689,6 +715,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
         scrollListener.reset();
+        this.original.clear();
+        emptyView.setVisibility(View.GONE);
+        filterList.setVisibility(View.GONE);
         sendQuery();
     }
 
@@ -849,12 +878,24 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     case FilterBeerField.NAME:
                         Starter.BreweryDetailsActivity(this, String.valueOf(((Brewery) payload).getId()));
                         break;
-                    case FilterBeerField.COUNTRY:
+                    case FilterBreweryField.COUNTRY: {
                         Country model = (Country) payload;
                         key = sb.delete(0, sb.length()).append(model.getId()).toString();
                         name = sb.delete(0, sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();
-                        break;
+                    }break;
+                    case FilterBreweryField.BRAND: {
+                        BeerBrand model = (BeerBrand) payload;
+                        key = sb.delete(0, sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0, sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterBreweryField.TYPE_BEER: {
+                        BeerTypes model = (BeerTypes) payload;
+                        key = sb.delete(0, sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0, sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
                 }
                 //endregion
                     break;

@@ -160,6 +160,24 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
             }break;
             //endregion
 
+            //region TAB_BREWERY
+            case SearchFragment.TAB_BREWERY: {
+                List<FilterBreweryField> filterBreweryFields = Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY);
+                for(FilterBreweryField filterBreweryField:filterBreweryFields){
+                    switch (filterBreweryField.getId()){
+                        case FilterBreweryField.COUNTRY:
+                            searchPackage.setCountry(filterBreweryField.getSelectedItemId());
+                            break;
+                        case FilterBreweryField.BRAND:
+                            searchPackage.setBeerBrand(filterBreweryField.getSelectedItemId());
+                            break;
+                        case FilterBreweryField.TYPE_BEER:
+                            searchPackage.setType(filterBreweryField.getSelectedItemId());
+                            break;
+                    }
+                }
+            }break;
+            //endregion
             //region DEFAULT
             default:
                     commonError(getString(R.string.not_valid_param));
@@ -202,12 +220,9 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
                 break;
             case SearchFragment.TAB_BEER:
                 presenter.loadBeerList( searchPackage);
-//                commonError();
                 break;
             case SearchFragment.TAB_BREWERY:
-//                showDialogProgressBar(R.string.search_brewery_message);
-//                presenter.loadBrewery(searchPackage);
-                commonError();
+                presenter.loadBrewery(searchPackage);
                 break;
             default: break;
         }

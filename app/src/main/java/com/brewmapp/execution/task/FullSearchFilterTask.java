@@ -45,7 +45,7 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
                 int end = start + step;
                 switch (fullSearchPackage.getType()) {
                     case Keys.TYPE_BEER:
-                        FilterBeer filterBeer = executeCall(getApi().filterSearchBeer(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
+                        FilterBeer filterBeer = executeCall(getApi().filterSearchBeer(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(filterBeer.getModels()));
                         subscriber.onComplete();
                         break;
@@ -55,12 +55,12 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_BREWERY:
-                        Breweries breweries = executeCall(getApi().fullSearchBrewery(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
+                        Breweries breweries = executeCall(getApi().fullSearchBrewery(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(breweries.getModels()));
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_BEERBRAND:
-                        BeerBrands beerBrands= executeCall(getApi().fullSearchBeerBrand(fullSearchPackage.getStringSearch(), fullSearchPackage.getPage(), end, params));
+                        BeerBrands beerBrands= executeCall(getApi().fullSearchBeerBrand(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(beerBrands.getModels()));
                         subscriber.onComplete();
                         break;

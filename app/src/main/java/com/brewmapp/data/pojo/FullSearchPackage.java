@@ -29,6 +29,7 @@ public class FullSearchPackage {
     private String beerFragrance;
     private String taste;
     private String afterTaste;
+    private String id;
 
     public String getCountry() {
         return country;
@@ -196,5 +197,13 @@ public class FullSearchPackage {
 
     public String getAfterTaste() {
         return afterTaste;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 }

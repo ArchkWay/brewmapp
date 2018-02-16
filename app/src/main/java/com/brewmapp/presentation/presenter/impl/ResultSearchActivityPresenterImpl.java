@@ -127,33 +127,8 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
 
     @Override
     public void loadBrewery(FullSearchPackage searchPackage) {
-        ApiBreweryPackage apiBreweryPackage=new ApiBreweryPackage();
-        List<FilterBreweryField> fields=Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY);
-        if(fields!=null){
-            for (FilterBreweryField field:fields)
-                if(field.getSelectedItemId()!=null)
-                    switch (field.getId()){
-                        case FilterBreweryField.BRAND:
-                            apiBreweryPackage.setBeer_brand_id(field.getSelectedItemId());
-                            break;
-                        case FilterBreweryField.COUNTRY:
-                            apiBreweryPackage.setCountry_id(field.getSelectedItemId());
-                            break;
-                        case FilterBreweryField.TYPE_BEER:
-                            apiBreweryPackage.setBeer_type_id(field.getSelectedItemId());
-                            break;
-                    }
-        }
 
-
-        if(apiBreweryPackage.getCountry_id()==null
-                &&apiBreweryPackage.getBeer_brand_id()==null
-                &&apiBreweryPackage.getBeer_type_id()==null){
-            view.showMessage(context.getString(R.string.message_need_filtr),0);
-            return;
-        }
-
-        apiBreweryTask.execute(apiBreweryPackage,new SimpleSubscriber<List<IFlexible>>(){
+        apiBreweryTask.execute(searchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onError(Throwable e) {
                 view.hideProgressBar();

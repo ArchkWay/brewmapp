@@ -8,6 +8,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.wrapper.BreweryInfo;
 import com.brewmapp.data.pojo.ApiBreweryPackage;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.task.ApiBreweryTask;
 import com.brewmapp.presentation.presenter.contract.BreweryDetailsActivityPresenter;
 import com.brewmapp.presentation.view.contract.BreweryDetailsActivityView;
@@ -54,9 +55,9 @@ public class BreweryDetailsActivityPresenterImpl extends BasePresenter<BreweryDe
     }
 //***********************************************
     private void requestContent(String brewery_id) {
-        ApiBreweryPackage apiBreweryPackage=new ApiBreweryPackage();
-        apiBreweryPackage.setId(brewery_id);
-        apiBreweryTask.execute(apiBreweryPackage,new SimpleSubscriber<List<IFlexible>>(){
+        FullSearchPackage fullSearchPackage=new FullSearchPackage();
+        fullSearchPackage.setId(brewery_id);
+        apiBreweryTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);

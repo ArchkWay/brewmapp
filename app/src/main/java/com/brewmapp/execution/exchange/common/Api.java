@@ -524,7 +524,10 @@ public interface Api {
 
     @POST("/api/brewery")
     @FormUrlEncoded
-    Call<Breweries>  apiBrewery(@FieldMap RequestParams params);
+    Call<Breweries>  apiBrewery(
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap RequestParams params);
     //Call<ListResponse<Brewery>>  apiBrewery(@FieldMap RequestParams params);
 
 }

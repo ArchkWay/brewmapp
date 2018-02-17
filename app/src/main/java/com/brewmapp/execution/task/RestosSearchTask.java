@@ -1,5 +1,7 @@
 package com.brewmapp.execution.task;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.brewmapp.R;
@@ -33,17 +35,18 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
 
     @Inject
     public RestosSearchTask(MainThread mainThread,
-                       Executor executor,
-                       Api api, UserRepo userRepo) {
+                            Executor executor,
+                            Api api, UserRepo userRepo, Context context) {
         super(mainThread, executor, api);
         this.userRepo = userRepo;
-        this.step = 15;
+        this.step = context.getResources().getInteger(R.integer.step_items_load);
     }
 
     @Override
     protected Observable<List<IFlexible>> prepareObservable(FilterRestoPackage restoPackage) {
         return Observable.create(subscriber -> {
             try {
+
                 int start = restoPackage.getPage() * step;
                 int end = start + step;
                 RequestParams params = new RequestParams();

@@ -34,13 +34,12 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
     private SearchBeerTask loadBeerTask;
     private SearchBreweryTask loadBreweryTask;
     private ApiBreweryTask apiBreweryTask;
-    private Context context;
+
 
     @Inject
-    public ResultSearchActivityPresenterImpl(Context context, RestosSearchTask loadRestosList,
+    public ResultSearchActivityPresenterImpl( RestosSearchTask loadRestosList,
                                              SearchBeerTask loadBeerTask, SearchBreweryTask loadBreweryTask,
                                              ApiBreweryTask apiBreweryTask) {
-        this.context = context;
         this.loadRestosList = loadRestosList;
         this.loadBeerTask = loadBeerTask;
         this.loadBreweryTask = loadBreweryTask;
@@ -138,11 +137,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             @Override
             public void onNext(List<IFlexible> restoLocations) {
                 view.hideProgressBar();
-                if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено ни одной пивоварни",0);
-                } else {
                     view.appendItems(restoLocations);
-                }
             }
 
             @Override

@@ -1,5 +1,8 @@
 package com.brewmapp.execution.task;
 
+import android.content.Context;
+
+import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.pojo.BreweryPackage;
@@ -26,9 +29,9 @@ public class SearchBreweryTask extends BaseNetworkTask<BreweryPackage, List<IFle
     private int step;
 
     @Inject
-    public SearchBreweryTask(MainThread mainThread, Executor executor, Api api) {
+    public SearchBreweryTask(MainThread mainThread, Executor executor, Api api, Context context) {
         super(mainThread, executor, api);
-        this.step = 30;
+        this.step = context.getResources().getInteger(R.integer.step_items_load);
     }
 
     @Override

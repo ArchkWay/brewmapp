@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
+import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
@@ -60,8 +62,8 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     @BindView(R.id.activity_search_more) Button more;
     @BindView(R.id.title_toolbar)    TextView titleToolbar;
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
-    @BindView(R.id.activity_search_progress)
-    RelativeLayout progress;
+    @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.activity_search_progress)    RelativeLayout progress;
 
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage = new FullSearchPackage();
@@ -202,7 +204,6 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         adapter = new FlexibleModelAdapter<>(listAdapter, this::processAction);
         list.setAdapter(adapter);
         finder.setVisibility(View.GONE);
-        list.setVisibility(View.GONE);
         //endregion
 
         //region StartLoad
@@ -212,8 +213,14 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     }
 
     private void loadResult(FullSearchPackage searchPackage) {
-        if(searchPackage.getPage()==0)
+        if(searchPackage.getPage()==0) {
             progress.setVisibility(View.VISIBLE);
+            swipe.setVisibility(View.GONE);
+        }else {
+            swipe.setVisibility(View.VISIBLE);
+            swipe.setEnabled(true);
+            swipe.setRefreshing(true);
+        }
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
                 presenter.loadRestoList(0, searchPackage);
@@ -290,12 +297,19 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
             tv_not_found.setVisibility(View.VISIBLE);
             finder.setVisibility(View.GONE);
         }
-        this.list.setVisibility(View.VISIBLE);
 
 
-        if(listAdapter.size()==0)
+
+        if(listAdapter.size()==0) {
             tv_not_found.setVisibility(View.VISIBLE);
-        else
+            swipe.setVisibility(View.GONE);
+        }else {
             tv_not_found.setVisibility(View.GONE);
+            swipe.setVisibility(View.VISIBLE);
+        }
+
+        swipe.setEnabled(false);
+        swipe.setRefreshing(false);
+
     }
 }

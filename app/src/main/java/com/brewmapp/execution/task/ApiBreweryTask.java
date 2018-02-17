@@ -1,5 +1,9 @@
 package com.brewmapp.execution.task;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.BreweryTypes;
@@ -28,11 +32,12 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
 
 public class ApiBreweryTask extends BaseNetworkTask<FullSearchPackage, List<IFlexible>> {
 
-    private int step = 15;
+    private int step = 0;
 
     @Inject
-    public ApiBreweryTask(MainThread mainThread, Executor executor, Api api) {
+    public ApiBreweryTask(MainThread mainThread, Executor executor, Api api, Context context) {
         super(mainThread, executor, api);
+        step = context.getResources().getInteger(R.integer.step_items_load);
     }
 
 

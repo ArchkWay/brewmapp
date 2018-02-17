@@ -160,5 +160,6 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
 
     public void clearFilter() {
         isDirty =true;
+        setSelectedItemId(null);
     }
 }

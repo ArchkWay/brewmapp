@@ -457,13 +457,11 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 toolbarTitle.setText(R.string.search_brewery_name);
                 break;
             case FilterBreweryField.COUNTRY:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.select_country);
                 presenter.loadCountries();
                 finder.clearFocus();
                 break;
             case FilterBreweryField.BRAND:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_brand);
                 filterList.addOnScrollListener(scrollListener);
                 fullSearchPackage.setType(Keys.TYPE_BEERBRAND);
@@ -498,28 +496,24 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 invalidateMenu();
                 break;
             case FilterBeerField.COUNTRY:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.select_country);
                 filterStringToHashMap();
                 presenter.loadCountries();
                 finder.clearFocus();
                 break;
             case FilterBeerField.TYPE:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type);
                 filterStringToHashMap();
                 presenter.loadBeerTypes(fullSearchPackage);
                 finder.clearFocus();
                 break;
             case FilterBeerField.PRICE_BEER:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_price);
                 filterStringToHashMap();
                 presenter.loadPriceRangeTypes("beer");
                 finder.clearFocus();
                 break;
             case FilterBeerField.BEER_PACK:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_bootle);
                 filterStringToHashMap();
                 finder.clearFocus();
@@ -527,7 +521,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
                 break;
             case FilterBeerField.BRAND:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_brand);
                 filterList.addOnScrollListener(scrollListener);
                 fullSearchPackage.setType(Keys.TYPE_BEERBRAND);
@@ -538,49 +531,42 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
                 break;
             case FilterBeerField.COLOR:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_color);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerColor();
                 break;
             case FilterBeerField.TASTE:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_taste);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerTaste();
                 break;
             case FilterBeerField.SMELL:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_smell);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerSmell();
                 break;
             case FilterBeerField.AFTER_TASTE:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_after_taste);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerAfterTaste();
                 break;
             case FilterBeerField.POWER:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_power);
                 filterStringToHashMap();
                 presenter.loadBeerPower();
                 finder.clearFocus();
                 break;
             case FilterBeerField.DENSITY:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_type_broj);
                 filterStringToHashMap();
                 presenter.loadBeerDensity();
                 finder.clearFocus();
                 break;
             case FilterBeerField.IBU:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_beer_ibu);
                     presenter.loadBeerIbu();
                 break;
@@ -619,7 +605,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 invalidateMenu();
                 break;
             case FilterRestoField.TYPE:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_type);
                 filterStringToHashMap();
                 presenter.loadRestoTypes();
@@ -636,14 +621,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 invalidateMenu();
                 break;
             case FilterRestoField.KITCHEN:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_kitchen);
                 filterStringToHashMap();
                 presenter.loadKitchenTypes();
                 finder.clearFocus();
                 break;
             case FilterRestoField.PRICE:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_price);
                 presenter.loadPriceRangeTypes("resto");
                 finder.clearFocus();
@@ -654,7 +637,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 toolbarTitle.setText(R.string.select_metro);
                 break;
             case FilterRestoField.FEATURES:
-                showProgressBar(true);
                 toolbarTitle.setText(R.string.search_resto_other);
                     presenter.loadFeatureTypes();
                 break;
@@ -718,6 +700,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.original.clear();
         emptyView.setVisibility(View.GONE);
         filterList.setVisibility(View.GONE);
+        showProgressBar(true);
         sendQuery();
     }
 
@@ -728,6 +711,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             }else{
                 presenter.sendQueryFullSearch(fullSearchPackage);
             }
+        }else {
+            showProgressBar(false);
         }
     }
 

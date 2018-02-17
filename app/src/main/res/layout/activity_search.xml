@@ -13,42 +13,51 @@
         android:layout_height="?attr/actionBarSize"
         app:finderHint="@string/search_hint"
         android:id="@+id/activity.search.search"/>
-
-    <android.support.v7.widget.RecyclerView
+    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/activity.search.list"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/AppTheme.Button.Green.Solid.Square"
-        android:id="@+id/activity.search.more"
-        android:textAllCaps="true"
-        android:textSize="@dimen/text_size_common"
-        android:text="@string/more_results"
-        android:visibility="gone"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activity.search.tv_not_found"
-        android:gravity="center"
-        android:text="@string/nothing_not_found"
-        android:visibility="gone"
-        />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activity.search.progress"
+        android:id="@+id/activity.search.swipe"
+        android:orientation="vertical"
         >
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
 
-    </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/activity.search.list"
+
+            />
+    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button.Green.Solid.Square"
+            android:id="@+id/activity.search.more"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_size_common"
+            android:text="@string/more_results"
+            android:visibility="gone"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/activity.search.tv_not_found"
+            android:gravity="center"
+            android:text="@string/nothing_not_found"
+            android:visibility="gone"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/activity.search.progress"
+            android:visibility="gone"
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
 
 </LinearLayout>

@@ -70,10 +70,10 @@ public class BrewerySearchView extends BaseLinearLayout implements InteractiveMo
         this.model = model;
 //        String titleRu = (model.getName_ru() == null || TextUtils.isEmpty(model.getName_ru()) ? "" : " (" + model.getName_ru() + ")");
         title.setText(model.getName());
-        if(model.getImage() != null && !model.getImage().isEmpty()) {
-            Picasso.with(getContext()).load(model.getImage()).fit().centerCrop().into(logo);
+        if(model.getGetThumbFormated() != null && !model.getGetThumbFormated().isEmpty()) {
+            Picasso.with(getContext()).load(model.getGetThumbFormated()).fit().centerCrop().into(logo);
         } else {
-            logo.setVisibility(INVISIBLE);
+            Picasso.with(getContext()).load(R.drawable.ic_brewery).fit().centerCrop().into(logo);
         }
 
         setOnClickListener(view -> {

@@ -70,9 +70,9 @@ public class BeerView extends BaseLinearLayout implements InteractiveModelView<B
         String titleRu = (model.getTitleRU() == null || TextUtils.isEmpty(model.getTitleRU()) ? "" : " (" + model.getTitleRU() + ")");
         title.setText(model.getTitle() + titleRu);
         if(model.getGetThumb() != null && !model.getGetThumb().isEmpty()) {
-            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerCrop().into(logo);
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(logo);
         } else {
-            logo.setVisibility(INVISIBLE);
+            Picasso.with(getContext()).load(R.drawable.ic_beer).fit().centerCrop().into(logo);
         }
 
         checkbox.setChecked(model.isSelected());

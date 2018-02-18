@@ -47,8 +47,6 @@ import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
 
 public class SearchFragment extends BaseFragment implements SearchAllView  {
 
-    @BindView(R.id.accept_filter)
-    Button search;
     @BindView(R.id.filter_list)
     RecyclerView list;
     @BindView(R.id.offer)
@@ -169,7 +167,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.restoFilterList = fieldList;
         restoAdapter = new FlexibleModelAdapter<>(restoFilterList, this::processAction);
         list.setAdapter(restoAdapter);
-        search.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -187,7 +184,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         list.setAdapter(breweryAdapter);
     }
 
-    @OnClick(R.id.accept_filter)
+    @OnClick(R.id.accept_filter_layout)
     public void acceptFilter() {
         Intent intent = new Intent(getActivity(), ResultSearchActivity.class);
         intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());

@@ -67,7 +67,11 @@ public class BeerPowerView extends BaseLinearLayout implements InteractiveModelV
         this.model = model;
         title.setText(model.getName());
 
-        logo.setVisibility(INVISIBLE);
+        if(model.getGetThumb()!=null&&model.getGetThumb().length()>0){
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(logo);
+        } else {
+            Picasso.with(getContext()).load(R.drawable.ic_beer_type).fit().centerCrop().into(logo);
+        }
         restoTypeCheckbox.setChecked(model.isSelected());
 
         setOnClickListener(view -> {

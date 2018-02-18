@@ -494,5 +494,7 @@
     <string name="nothing_not_found">По запросу ничего не найдено</string>
     <string name="property_not_filter_beer">Не фильтрованое пиво</string>
     <string name="property_filter_beer">Фильтрованое пиво</string>
+    <string name="filter_search_city">Для поиска введите название города</string>
+    <string name="filter_search_city_title">Поиск по городу</string>
 
 </resources>

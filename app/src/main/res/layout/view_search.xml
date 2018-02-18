@@ -27,8 +27,13 @@
             android:paddingLeft="@dimen/common_block_space"
             android:paddingRight="@dimen/common_block_space"
             android:id="@+id/view.finder.input"
-            android:layout_weight="1">
-            <requestFocus></requestFocus>
+            android:layout_weight="1"
+            android:lines="1"
+            android:singleLine="true"
+            >
+            <requestFocus>
+
+            </requestFocus>
         </AutoCompleteTextView>
 
         <ProgressBar

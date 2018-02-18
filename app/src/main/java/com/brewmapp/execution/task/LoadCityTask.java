@@ -35,9 +35,7 @@ public class LoadCityTask extends BaseNetworkTask<GeoPackage, List<City>> {
                 params.addParam(Keys.COUNTRY_ID, geoPackage.getCountryId() != null ? geoPackage.getCountryId() : "");
                 params.addParam(Keys.REGION_ID, geoPackage.getRegionId() != null ? geoPackage.getRegionId() : "");
                 ListResponse<City> response = executeCall(getApi().loadCity(params));
-                if (response.getModels().size() > 0) {
-                    subscriber.onNext(response.getModels());
-                }
+                subscriber.onNext(response.getModels());
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

@@ -14,7 +14,7 @@
         android:id="@+id/filter_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/accept.filter"
+        android:layout_above="@+id/accept.filter_layout"
         android:layout_below="@+id/fragment.events.tabs" />
 
     <LinearLayout
@@ -51,15 +51,34 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/accept.filter"
-        style="@style/AppTheme.Button.Green.Solid.Square"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="6dp"
-        android:text="@string/search"
-        android:textAllCaps="true"
-        android:textSize="@dimen/text_size_common" />
+        style="@style/AppTheme.Button.Green.Solid.Square"
+        android:gravity="center"
+        android:id="@+id/accept.filter_layout"
+        android:clickable="true"
+        >
+        <ImageView
+            android:layout_width="@dimen/size_icon_24"
+            android:layout_height="@dimen/size_icon_24"
+            android:src="@drawable/ic_search_big_white"
+            android:clickable="false"
+            />
+        <TextView
+            android:id="@+id/accept.filter"
+            style="@style/AppTheme.Button.Green.Solid.Square"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/search"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_size_common"
+            android:clickable="false"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

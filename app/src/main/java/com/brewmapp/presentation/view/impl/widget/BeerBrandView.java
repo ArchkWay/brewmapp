@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.BeerBrand;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,8 +66,12 @@ public class BeerBrandView extends BaseLinearLayout implements InteractiveModelV
     public void setModel(BeerBrand model) {
         this.model = model;
         title.setText(model.getName());
-        logo.setVisibility(INVISIBLE);
         restoTypeCheckbox.setChecked(model.isSelected());
+        if(model.getGetThumb()!=null&&model.getGetThumb().length()>0){
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(logo);
+        } else {
+            Picasso.with(getContext()).load(R.drawable.ic_brand).fit().centerCrop().into(logo);
+        }
 
         setOnClickListener(view -> {
             if (!model.isSelected()) {

@@ -66,8 +66,14 @@ public class BeerPackView extends BaseLinearLayout implements InteractiveModelVi
     public void setModel(BeerPack model) {
         this.model = model;
         title.setText(model.getName());
+        if(model.getGetThumb()!=null&&model.getGetThumb().length()>0){
+            logo.setVisibility(VISIBLE);
+            Picasso.with(getContext()).load(model.getGetThumb()).fit().centerInside().into(logo);
+        } else {
+            logo.setVisibility(INVISIBLE);
+        }
 
-        logo.setVisibility(INVISIBLE);
+
         restoTypeCheckbox.setChecked(model.isSelected());
 
         setOnClickListener(view -> {

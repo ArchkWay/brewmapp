@@ -5,7 +5,9 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 
 import butterknife.BindView;
@@ -24,6 +26,7 @@ public class FinderView extends BaseFrameLayout {
     @BindView(R.id.view_finder_input)  AutoCompleteTextView input;
 
     private String hintString;
+
 
     public interface Listener {
         void onTextChanged(String string);
@@ -77,6 +80,19 @@ public class FinderView extends BaseFrameLayout {
                 }
             }
         });
+        input.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() ==       KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+        input.requestFocus();
         cancel.setOnClickListener(v -> input.setText(null));
     }
 

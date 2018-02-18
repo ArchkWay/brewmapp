@@ -1,5 +1,8 @@
 package com.brewmapp.execution.task;
 
+import android.content.Context;
+
+import com.brewmapp.R;
 import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Breweries;
 import com.brewmapp.data.entity.container.FilterBeer;
@@ -30,9 +33,9 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
     private int step;
 
     @Inject
-    public FullSearchFilterTask(MainThread mainThread, Executor executor, Api api) {
+    public FullSearchFilterTask(MainThread mainThread, Executor executor, Api api, Context context) {
         super(mainThread, executor, api);
-        this.step = 15;
+        this.step = context.getResources().getInteger(R.integer.step_items_load);
     }
 
     @Override

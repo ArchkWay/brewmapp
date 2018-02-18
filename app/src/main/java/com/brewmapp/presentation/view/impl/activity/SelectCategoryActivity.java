@@ -26,10 +26,7 @@ import com.brewmapp.data.entity.BeerPack;
 import com.brewmapp.data.entity.BeerPower;
 import com.brewmapp.data.entity.BeerSmell;
 import com.brewmapp.data.entity.BeerTaste;
-import com.brewmapp.data.entity.BeerType;
 import com.brewmapp.data.entity.Brewery;
-import com.brewmapp.data.entity.BreweryShort;
-import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.FilterBeerField;
@@ -44,14 +41,12 @@ import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
 import com.brewmapp.data.entity.wrapper.BeerColorInfo;
 import com.brewmapp.data.entity.wrapper.BeerDensityInfo;
-import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.entity.wrapper.BeerPackInfo;
 import com.brewmapp.data.entity.wrapper.BeerPowerInfo;
 import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.BreweryInfo;
-import com.brewmapp.data.entity.wrapper.BreweryInfoSelect;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
@@ -113,8 +108,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private String filterTxt;
     private String filterId;
     private List<IFlexible> original=new ArrayList<>();
-    private int filterCategory;
-    private String selectedFilter = null;
     private int numberTab;
     private int numberMenuItem;
     private HashMap<String,String> hashMap=new HashMap<>();
@@ -156,6 +149,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         filterList.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(original, this::processAction);
         filterList.setAdapter(adapter);
+        emptyView.setVisibility(View.VISIBLE);
         //endregion
 
         //region parse intent
@@ -313,6 +307,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 //endregion
                 break;
             case SearchFragment.TAB_BREWERY:
+                //region Prepare append items for TAB_BREWERY
                 switch (numberMenuItem){
                     case FilterBreweryField.COUNTRY: {
                         for (IFlexible iFlexible : list) {
@@ -341,6 +336,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     }break;
 
                 }
+                //endregion
                 break;
             case SearchFragment.TAB_RESTO:
                 //region Prepare append items for TAB_RESTO
@@ -445,7 +441,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initBreweryFilterByCategory(int filterId) {
-        this.filterCategory = filterId;
+
         switch (filterId) {
             case FilterBreweryField.NAME:
                 toolbarTitle.setText(R.string.search_beer_factory);
@@ -455,11 +451,15 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_brewery));
                 toolbarTitle.setText(R.string.search_brewery_name);
+                hashMap.clear();
+                invalidateMenu();
                 break;
             case FilterBreweryField.COUNTRY:
                 toolbarTitle.setText(R.string.select_country);
                 presenter.loadCountries();
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBreweryField.BRAND:
                 toolbarTitle.setText(R.string.search_beer_brand);
@@ -475,7 +475,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 toolbarTitle.setText(R.string.search_beer_type);
                 presenter.loadBeerTypes(fullSearchPackage);
                 finder.clearFocus();
-                finder.setVisibility(View.GONE);
+                filterStringToHashMap();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             default:
                 break;
@@ -483,7 +485,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initBeerFilterByCategory(int filterId) {
-        this.filterCategory = filterId;
+
         switch (filterId) {
             case FilterBeerField.NAME:
                 filterList.addOnScrollListener(scrollListener);
@@ -500,6 +502,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 presenter.loadCountries();
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.TYPE:
                 toolbarTitle.setText(R.string.search_beer_type);
@@ -512,13 +516,17 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 presenter.loadPriceRangeTypes("beer");
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
+
                 break;
             case FilterBeerField.BEER_PACK:
                 toolbarTitle.setText(R.string.search_beer_bootle);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerPack();
-
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.BRAND:
                 toolbarTitle.setText(R.string.search_beer_brand);
@@ -528,43 +536,54 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_brand));
                 filterStringToHashMap();
-
                 break;
             case FilterBeerField.COLOR:
                 toolbarTitle.setText(R.string.search_beer_color);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerColor();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.TASTE:
                 toolbarTitle.setText(R.string.search_beer_taste);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerTaste();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.SMELL:
                 toolbarTitle.setText(R.string.search_beer_smell);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerSmell();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.AFTER_TASTE:
                 toolbarTitle.setText(R.string.search_beer_after_taste);
                 filterStringToHashMap();
                 finder.clearFocus();
                 presenter.loadBeerAfterTaste();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.POWER:
                 toolbarTitle.setText(R.string.search_beer_power);
                 filterStringToHashMap();
                 presenter.loadBeerPower();
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.DENSITY:
                 toolbarTitle.setText(R.string.search_beer_type_broj);
                 filterStringToHashMap();
                 presenter.loadBeerDensity();
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterBeerField.IBU:
                 toolbarTitle.setText(R.string.search_beer_ibu);
@@ -592,12 +611,11 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void initRestoFilterByCategory(int filterId) {
-        this.filterCategory = filterId;
+
         switch (filterId) {
             case FilterRestoField.NAME:
                 filterList.addOnScrollListener(scrollListener);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
-                emptyView.setVisibility(View.GONE);
                 emptyTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 emptyTitle.setText(getString(R.string.filter_search_resto));
                 toolbarTitle.setText(R.string.search_resto_name);
@@ -609,6 +627,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 presenter.loadRestoTypes();
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterRestoField.BEER:
                 filterList.addOnScrollListener(scrollListener);
@@ -625,13 +645,20 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 presenter.loadKitchenTypes();
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterRestoField.PRICE:
                 toolbarTitle.setText(R.string.search_resto_price);
                 presenter.loadPriceRangeTypes("resto");
                 finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             case FilterRestoField.CITY:
+                filterStringToHashMap();
+                emptyTitle.setText(getString(R.string.filter_search_city));
+                toolbarTitle.setText(R.string.filter_search_city_title);
                 break;
             case FilterRestoField.METRO:
                 toolbarTitle.setText(R.string.select_metro);

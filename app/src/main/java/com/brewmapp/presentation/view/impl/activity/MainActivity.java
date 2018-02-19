@@ -1,15 +1,21 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.MenuRes;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -118,6 +124,8 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkLocationPermission();
+
     }
 
     @Override
@@ -359,6 +367,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     @Override
     public boolean onItemClick(int position) {
+
         MenuField field = adapter.getItem(position);
         if(field.getId() == MenuField.LOGOUT) {
             presenter.onLogout();
@@ -463,5 +472,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
             }
     }
+
 
 }

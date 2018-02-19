@@ -32,7 +32,7 @@ android {
 //        jumboMode true
 //        javaMaxHeapSize "4g"
 //    }
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "26.0.1"
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.brewmapp"
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 25
         versionName "1.0.5"
         multiDexEnabled true
@@ -88,14 +88,14 @@ dependencies {
         transitive = true;
     }
     compile 'com.github.mirrajabi:rx-contacts2:1.0'
-    compile 'com.google.dagger:dagger:2.5'
+    compile 'com.google.dagger:dagger:2.8'
     compile 'com.github.stfalcon:frescoimageviewer:0.5.0'
     compile 'com.facebook.fresco:fresco:1.5.0'
     compile 'com.jakewharton:butterknife:8.1.0'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'info.hoang8f:android-segmented:1.0.6'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'nl.psdcompany:duo-navigation-drawer:2.0.6'
     compile 'com.facebook.android:facebook-android-sdk:4.25.0'
@@ -109,10 +109,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'org.greenrobot:eventbus:3.1.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:support-v4:26.1.0'
     compile 'io.paperdb:paperdb:2.6'
     testCompile 'junit:junit:4.12'
-    apt 'com.google.dagger:dagger-compiler:2.5'
+    apt 'com.google.dagger:dagger-compiler:2.8'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile "com.andkulikov:transitionseverywhere:1.7.7"
     compile 'com.google.maps.android:android-maps-utils:0.4+'

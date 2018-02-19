@@ -496,5 +496,7 @@
     <string name="property_filter_beer">Фильтрованое пиво</string>
     <string name="filter_search_city">Для поиска введите название города</string>
     <string name="filter_search_city_title">Поиск по городу</string>
+    <string name="title_location_permission">Разрешение</string>
+    <string name="text_location_permission">Геолокация</string>
 
 </resources>

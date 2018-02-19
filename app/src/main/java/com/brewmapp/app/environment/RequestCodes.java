@@ -22,9 +22,11 @@ public class RequestCodes {
     public static final int REQUEST_PROFILE_FRIEND = 123;
     public static final int REQUEST_EDIT_BEER = 124;
     public static final int REQUEST_EDIT_RESTO = 125;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 126;
     public static final int REQUEST_SEARCH_CODE = 999;
 
 
     public static final String INTENT_EXTRAS = "extras";
+
 
 }

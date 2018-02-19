@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        checkLocationPermission();
+
 
     }
 
@@ -415,6 +415,12 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             showMessage(strings[0]);
         processChengeFragment(MenuField.PROFILE);
     }
+
+    @Override
+    public void processCheckLocationPermission() {
+        checkLocationPermission();
+    }
+
 
     @Override
     public void onBackPressed() {

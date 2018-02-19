@@ -202,6 +202,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            mListener.processCheckLocationPermission();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -552,6 +553,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     public interface OnFragmentInteractionListener {
         void commonError(String... message);
         void setTitle(CharSequence name);
+        void processCheckLocationPermission();
     }
 
 }

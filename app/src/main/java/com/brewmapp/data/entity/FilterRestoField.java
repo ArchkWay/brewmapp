@@ -193,5 +193,10 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     public void clearFilter() {
         this.isDirty = true;
         selectedItemId=null;
+
+    }
+
+    public void setDirty(boolean dirty){
+        this.isDirty = dirty;
     }
 }

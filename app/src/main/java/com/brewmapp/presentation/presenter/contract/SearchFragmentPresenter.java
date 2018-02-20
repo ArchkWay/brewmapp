@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.location.Location;
+
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -19,4 +21,5 @@ public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
     void saveBeerFilterChanges(List<FilterBeerField> fields);
     void saveBreweryFilterChanges(List<FilterBreweryField> fields);
 
+    void setUserLocation(Location location);
 }

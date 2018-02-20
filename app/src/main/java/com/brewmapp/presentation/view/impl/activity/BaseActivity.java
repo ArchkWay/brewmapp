@@ -28,9 +28,12 @@ import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.ChatReceiveMessage;
 import com.brewmapp.execution.services.ChatService;
+
+import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 
 import butterknife.ButterKnife;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -39,10 +42,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by ovcst on 01.05.2017.
  */
 
-public abstract class BaseActivity extends PresenterActivity {
+public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener {
     private LocationManager locationManager;
     private String provider;
-    Location location;
+    private Callback<Location> callbackLocation;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,22 +79,9 @@ public abstract class BaseActivity extends PresenterActivity {
         });
         //endregion
 
-        //region set LocationManager
-        location=getDefaultLocation();
-        //endregion
 
         if(this instanceof MainActivity){
 
-        }
-    }
-
-
-    public void showSnackbar(String text) {
-        View view=getWindow().getDecorView().findViewById(android.R.id.content);
-        if(view!=null) {
-            Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
-            snackbar.show();
         }
     }
 
@@ -119,9 +110,7 @@ public abstract class BaseActivity extends PresenterActivity {
     protected void onResume() {
         super.onResume();
         registerSnackbarReceiver();
-        registerLocationManager();
     }
-
 
     @Override
     protected void onPause() {
@@ -129,9 +118,42 @@ public abstract class BaseActivity extends PresenterActivity {
         unRegisterSnackbarReceiver();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    registerLocationManager();
+                } else {
+                    callbackLocation.onResult(getDefaultLocation());
+
+                }
+                return;
+            }
+
+        }
+    }
+
+    @Override
+    public void getLocation(Callback<Location> callback) {
+        this.callbackLocation = callback;
+        if(checkLocationPermission())
+            registerLocationManager();
+    }
 
     //******************************************
     private ChatResultReceiver chatResultReceiver;
+
+    public void showSnackbar(String text) {
+        View view=getWindow().getDecorView().findViewById(android.R.id.content);
+        if(view!=null) {
+            Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
+            snackbar.show();
+        }
+    }
 
     private void unRegisterSnackbarReceiver() {
         Intent intent=new Intent(ChatService.ACTION_CLEAR_RECEIVER,null,this, ChatService.class);
@@ -142,7 +164,6 @@ public abstract class BaseActivity extends PresenterActivity {
         intent.putExtra(ChatService.RECEIVER,chatResultReceiver);
         startService(intent);
     }
-
     private void registerLocationManager() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -153,8 +174,9 @@ public abstract class BaseActivity extends PresenterActivity {
             float minDistance=50.0f;
             locationManager.requestLocationUpdates(provider, minTime, minDistance, new LocationListener() {
                 @Override
-                public void onLocationChanged(Location new_location) {
-                    location = new_location;
+                public void onLocationChanged(Location location) {
+                    callbackLocation.onResult(location);
+
                 }
 
                 @Override
@@ -185,8 +207,7 @@ public abstract class BaseActivity extends PresenterActivity {
         location.setLongitude(37.618423);
         return location;
     }
-
-    protected boolean checkLocationPermission() {
+    private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -223,24 +244,6 @@ public abstract class BaseActivity extends PresenterActivity {
             return false;
         } else {
             return true;
-        }
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    registerLocationManager();
-                } else {
-                    location=getDefaultLocation();
-
-                }
-                return;
-            }
-
         }
     }
 

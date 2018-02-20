@@ -8,10 +8,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
@@ -22,6 +20,7 @@ import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.SearchFragmentPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
+import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.contract.SearchAllView;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
@@ -59,6 +58,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     TabsView tabsView;
 
     private OnFragmentInteractionListener mListener;
+    private OnLocationInteractionListener mLocationListener;
 
     @Inject    SearchFragmentPresenter presenter;
 
@@ -81,6 +81,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     private String[] searchContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.search_title);
 
+
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_search;
@@ -89,7 +90,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
     }
 
     public static SearchFragment newInstance() {
@@ -131,6 +131,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     protected void attachPresenter() {
         presenter.onAttach(this);
         presenter.setTabActive(TAB_RESTO);
+        mLocationListener.getLocation(result -> presenter.setUserLocation(result));
+
     }
 
     @Override
@@ -167,6 +169,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         this.restoFilterList = fieldList;
         restoAdapter = new FlexibleModelAdapter<>(restoFilterList, this::processAction);
         list.setAdapter(restoAdapter);
+        restoAdapter.notifyItemRangeChanged(0,restoFilterList.size());
     }
 
     @Override
@@ -198,11 +201,17 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     }
 
     @Override
+    public void refreshItemRestoFilters(int position, List<FilterRestoField> list) {
+        this.restoFilterList = list;
+        restoAdapter.notifyItemRangeChanged(position,1);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            mListener.processCheckLocationPermission();
+            mLocationListener = mListener.getLocationListener();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -210,7 +219,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     }
 
 
-//***************************************************
+
+    //***************************************************
     private void processAction(int code, Object o) {
     if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
         //region Selection category
@@ -553,7 +563,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     public interface OnFragmentInteractionListener {
         void commonError(String... message);
         void setTitle(CharSequence name);
-        void processCheckLocationPermission();
+        OnLocationInteractionListener getLocationListener();
     }
 
 }

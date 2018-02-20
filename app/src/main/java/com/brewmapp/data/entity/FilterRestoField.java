@@ -5,10 +5,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.brewmapp.R;
+import com.brewmapp.app.di.module.PresenterModule;
+import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.presentation.view.impl.widget.FilterRestoRowField;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -43,7 +47,7 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     private String title;
     private String selectedFilter;
     private boolean selected;
-    private boolean isDirty =true;
+
 
     public FilterRestoField(int id) {
         this.id = id;
@@ -84,55 +88,60 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterRestoRowField> holder,
                                int position, List payloads) {
         holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
-        if(isDirty)
-            resetToDefault(holder.view.getContext());
+        resetToDefault(holder.view.getContext());
         holder.view.setModel(this);
     }
 
     private void resetToDefault(Context context) {
-        isDirty =false;
         if(context!=null)
             switch (id){
                 case NAME:
                     icon = R.drawable.ic_resto_name;
                     title = context.getString(R.string.search_resto_name);
-                    selectedFilter = context.getString(R.string.search_resto_name_defailt);
-                    selectedItemId=null;
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_name_defailt);
                     break;
                 case TYPE:
                     icon = R.drawable.ic_resto;
                     title = context.getString(R.string.search_resto_type);
-                    selectedFilter = context.getString(R.string.search_resto_type_defailt);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_type_defailt);
                     break;
                 case BEER:
                     icon = R.drawable.ic_beer;
                     title = context.getString(R.string.search_resto_beer);
-                    selectedFilter = context.getString(R.string.search_resto_beer_defailt);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_beer_defailt);
                     break;
                 case KITCHEN:
                     icon = R.drawable.ic_kitchen;
                     title = context.getString(R.string.search_resto_kitchen);
-                    selectedFilter = context.getString(R.string.search_resto_kitchen_defailt);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_kitchen_defailt);
                     break;
                 case PRICE:
                     icon = R.drawable.ic_price_range;
                     title = context.getString(R.string.search_resto_price);
-                    selectedFilter = context.getString(R.string.search_resto_price_default);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_price_default);
                     break;
                 case CITY:
                     icon = R.drawable.ic_city;
                     title = context.getString(R.string.search_resto_city);
-                    selectedFilter = context.getString(R.string.search_resto_city_default);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_city_default);
                     break;
                 case METRO:
                     icon = R.drawable.ic_metro;
                     title = context.getString(R.string.search_resto_metro);
-                    selectedFilter = context.getString(R.string.search_resto_metro_default);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_metro_default);
                     break;
                 case FEATURES:
                     icon = R.drawable.ic_feature;
                     title = context.getString(R.string.search_resto_other);
-                    selectedFilter = context.getString(R.string.search_resto_other_default);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_other_default);
                     break;
             }
 
@@ -191,12 +200,8 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     }
 
     public void clearFilter() {
-        this.isDirty = true;
         selectedItemId=null;
-
+        selectedFilter=null;
     }
 
-    public void setDirty(boolean dirty){
-        this.isDirty = dirty;
-    }
 }

@@ -202,7 +202,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
 
     @Override
     public void refreshItemRestoFilters(int position, List<FilterRestoField> list) {
-        this.restoFilterList = list;
+        this.restoFilterList.clear();
+        this.restoFilterList.addAll(list);
         restoAdapter.notifyItemRangeChanged(position,1);
     }
 
@@ -400,8 +401,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
                             restoFilterList.get(numberMenuItem).setSelectedItemId(filterID);
                             restoFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
                         }
-                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                         restoAdapter.notifyItemChanged(numberMenuItem);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                         break;
                     default:
                         commonError(getString(R.string.not_valid_param));

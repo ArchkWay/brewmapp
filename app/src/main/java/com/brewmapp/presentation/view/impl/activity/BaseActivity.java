@@ -127,8 +127,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     registerLocationManager();
                 } else {
-                    callbackLocation.onResult(getDefaultLocation());
-
+                    callbackLocation.onResult(null);
                 }
                 return;
             }
@@ -169,14 +168,19 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            provider = locationManager.getBestProvider(new Criteria(), false);
+            Criteria criteria=new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setCostAllowed(true);
+            provider = locationManager.getBestProvider(criteria, false);
+            callbackLocation.onResult(locationManager.getLastKnownLocation(provider));
             long minTime = 10000;
             float minDistance=50.0f;
             locationManager.requestLocationUpdates(provider, minTime, minDistance, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    callbackLocation.onResult(location);
-
+                    locationManager.removeUpdates(this);
                 }
 
                 @Override
@@ -195,17 +199,6 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                 }
             });
         }
-    }
-    private void unRegisterLocationManager() {
-        if (locationManager!=null&&provider!=null&&ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.removeTestProvider(provider);
-        }
-    }
-    private Location getDefaultLocation() {
-        Location location=new Location(Actions.NAME_DEFAULT_PROVIDER);
-        location.setLatitude(55.751244);
-        location.setLongitude(37.618423);
-        return location;
     }
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,

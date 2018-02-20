@@ -37,5 +37,5 @@ public class Actions {
     public static final String PARAM2 = "PARAM2";
     public static final String PARAM3 = "PARAM3";
     public static final String PARAM4 = "PARAM4";
-    public static final String NAME_DEFAULT_PROVIDER = "DefaultProvider";
+
 }

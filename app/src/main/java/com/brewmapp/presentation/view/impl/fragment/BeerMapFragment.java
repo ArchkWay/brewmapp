@@ -1,13 +1,20 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,8 +32,8 @@ import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
-import com.brewmapp.presentation.presenter.impl.LocationFragment;
 import com.brewmapp.presentation.view.contract.BeerMapView;
+import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -66,7 +73,7 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 /**
  * Created by ovcst on 24.08.2017.
  */
-public class BeerMapFragment extends LocationFragment implements BeerMapView, OnMapReadyCallback,
+public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapReadyCallback,
         ClusterManager.OnClusterItemInfoWindowClickListener<FilterRestoLocation> {
 
     @BindView(R.id.fragment_map_map)
@@ -79,6 +86,9 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Inject
     BeerMapPresenter presenter;
 
+    private OnFragmentInteractionListener mListener;
+    private OnLocationInteractionListener mLocationListener;
+
     private GoogleMap googleMap;
     private Marker marker;
     private RestoLocation location;
@@ -86,16 +96,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
-
     private ClusterManager<FilterRestoLocation> mClusterManager;
-
-    public static BeerMapFragment newInstance(RestoLocation restoLocation) {
-        BeerMapFragment fragment = new BeerMapFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Keys.LOCATION, restoLocation);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,8 +119,7 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
 
     @Override
     protected void initView(View fragmentView) {
-        interractor().processSetActionBar(Actions.ACTION_FILTER);
-
+        setHasOptionsMenu(true);
         searchPackage = new FullSearchPackage();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
@@ -133,29 +133,11 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
         list.setAdapter(adapter);
-        list.setOnTouchListener((view, motionEvent) -> {
-            UITools.hideKeyboard(getActivity());
-            return false;
-        });
 
         finder.setListener(this::prepareQuery);
 
         mapView.onCreate(null);
         mapView.getMapAsync(this);
-    }
-
-    private void prepareQuery(String stringSearch) {
-        searchPackage.setPage(0);
-        searchPackage.setStringSearch(stringSearch);
-        if (stringSearch.length() > 3) {
-            showProgressBar();
-            presenter.sendQueryRestoSearch(searchPackage);
-        } else if (stringSearch.length() == 0) {
-            UITools.hideKeyboard(getActivity());
-            adapter.clear();
-            hideProgressBar();
-            showLogicAnimation();
-        }
     }
 
     @Override
@@ -193,6 +175,19 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if(menu!=null)
+            menu.clear();
+        inflater.inflate(R.menu.filter,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
@@ -205,7 +200,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mClusterManager = new ClusterManager<>(getContext(), googleMap);
@@ -216,61 +210,44 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         googleMap.setOnInfoWindowClickListener(mClusterManager);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
         googleMap.setOnMyLocationButtonClickListener(() -> {
-            lookForLocation();
+            mLocationListener.getLocation(result -> onLocationFound(result));
             return true;
         });
 
         googleMap.setOnMapClickListener(latLng -> presenter.onGeocodeRequest(latLng));
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
-        Log.i("nearLeft", String.valueOf(visibleRegion.nearLeft.latitude));
-        Log.i("neartRight", String.valueOf(visibleRegion.nearRight.latitude));
-        Log.i("farLeft", String.valueOf(visibleRegion.farLeft.latitude));
-        Log.i("farRight", String.valueOf(visibleRegion.farRight.latitude));
 
         if (location != null) {
             setSingleMarker();
         } else {
-            lookForLocation();
+            mLocationListener.getLocation(result -> onLocationFound(result));
         }
     }
 
-    private void setSingleMarker() {
-        showDialogProgressBar(false);
-        if (marker != null) marker.remove();
-        MarkerOptions markerOptions = new MarkerOptions()
-                .title(location.getName())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
-                .snippet(String.valueOf(location.getId()))
-                .position(new LatLng(location.getLocation_lat(), location.getLocation_lon()));
-
-        googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLocation_lat(),
-                location.getLocation_lon()) , 15));
-    }
-
-        private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
-        mClusterManager.setRenderer(new ClusterRender(getContext(), googleMap, mClusterManager));
-        mClusterManager.addItems(restoLocations);
-
-        if (animateCamera) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restoLocations.get(0).getLocationLat(),
-                    restoLocations.get(0).getLocationLon()) , 9));
-        }
-    }
-
-    @Override
     protected void onLocationFound(Location location) {
-        presenter.onLocationChanged(new SimpleLocation(location));
-        presenter.onLoadedCity(MapUtils.getCityName(location, getActivity()));
-        showDialogProgressBar(false);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-                location.getLatitude(), location.getLongitude()
-        ), 14));
+        if(location==null) {
+            location=MapUtils.getDefaultLocation(location, getContext());
+        }
+        if(location!=null) {
+            presenter.onLocationChanged(new SimpleLocation(location));
+            String nameCity = MapUtils.getCityName(location, getActivity());
+            if (nameCity != null) {
+                presenter.onLoadedCity(nameCity);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+                        location.getLatitude(), location.getLongitude()
+                ), 14));
+            }
+        }
+        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }else {
+            googleMap.setMyLocationEnabled(true);
+        }
+
     }
 
     @Override
     public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
-        showDialogProgressBar(false);
         setMarker(restoLocations, true);
     }
 
@@ -304,15 +281,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         getActivity().startActivityForResult(intent, REQUEST_CODE_MAP_RESULT);
     }
 
-    public void showResult(boolean isBeer, int checkBox) {
-        showDialogProgressBar(true);
-        if (!isBeer) {
-            presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), checkBox);
-        } else {
-            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"),  checkBox);
-        }
-    }
-
     @Override
     public void onClusterItemInfoWindowClick(FilterRestoLocation filterRestoLocation) {
         Interest interest = new Interest();
@@ -322,20 +290,6 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         Intent intent = new Intent(getContext(), RestoDetailActivity.class);
         intent.putExtra(RESTO_ID, interest);
         startActivity(intent);
-    }
-
-    private void processAction(int action, Object payload) {
-        UITools.hideKeyboard(getActivity());
-        FilterRestoOnMap filterOnMapResto = (FilterRestoOnMap) payload;
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https")
-                .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
-                .appendQueryParameter("destination", filterOnMapResto.getLocationLat() + "," + filterOnMapResto.getLocationLon());
-        String url = builder.build().toString();
-        Log.d("Directions", url);
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
     }
 
     @Override
@@ -352,6 +306,52 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         adapter.addItems(adapter.getItemCount(), restoList);
     }
 
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+            mLocationListener = mListener.getLocationListener();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+//*************************************
+    private void prepareQuery(String stringSearch) {
+    searchPackage.setPage(0);
+    searchPackage.setStringSearch(stringSearch);
+    if (stringSearch.length() > 3) {
+        showProgressBar();
+        presenter.sendQueryRestoSearch(searchPackage);
+    } else if (stringSearch.length() == 0) {
+        UITools.hideKeyboard(getActivity());
+        adapter.clear();
+        hideProgressBar();
+        showLogicAnimation();
+    }
+}
+
+    private void processAction(int action, Object payload) {
+        UITools.hideKeyboard(getActivity());
+        FilterRestoOnMap filterOnMapResto = (FilterRestoOnMap) payload;
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
+                .appendQueryParameter("destination", filterOnMapResto.getLocationLat() + "," + filterOnMapResto.getLocationLon());
+        String url = builder.build().toString();
+        Log.d("Directions", url);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
+
     private void showLogicAnimation() {
         animFlowBrandList();
     }
@@ -362,8 +362,43 @@ public class BeerMapFragment extends LocationFragment implements BeerMapView, On
         list.setVisibility(list.isShown() ? View.GONE : View.VISIBLE);
     }
 
-    @Override
-    protected void prepareView(View view) {
-        super.prepareView(view);
+    private void setSingleMarker() {
+        showDialogProgressBar(false);
+        if (marker != null) marker.remove();
+        MarkerOptions markerOptions = new MarkerOptions()
+                .title(location.getName())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green))
+                .snippet(String.valueOf(location.getId()))
+                .position(new LatLng(location.getLocation_lat(), location.getLocation_lon()));
+
+        googleMap.addMarker(markerOptions);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLocation_lat(),
+                location.getLocation_lon()) , 15));
     }
+
+    private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
+        mClusterManager.setRenderer(new ClusterRender(getContext(), googleMap, mClusterManager));
+        mClusterManager.addItems(restoLocations);
+
+        if (animateCamera) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restoLocations.get(0).getLocationLat(),
+                    restoLocations.get(0).getLocationLon()) , 9));
+        }
+    }
+
+    public void showResult(boolean isBeer, int checkBox) {
+        showDialogProgressBar(true);
+        if (!isBeer) {
+            presenter.loadRestoCoordinates(Paper.book().read("restoCategoryList"), checkBox);
+        } else {
+            presenter.loadBeerCoordinates(Paper.book().read("beerCategoryList"),  checkBox);
+        }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void commonError(String... message);
+        void setTitle(CharSequence name);
+        OnLocationInteractionListener getLocationListener();
+    }
+
 }

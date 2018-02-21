@@ -43,6 +43,7 @@ import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -365,9 +366,9 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<User>> profileEdit(@FieldMap WrapperParams params);
 
-    @POST("api/resto/getcoordinates")
+    @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<Object> loadRestoGeo(@FieldMap WrapperValues params);
+    Call<ListResponse<RestoLocation>> loadRestoGeo(@FieldMap WrapperValues params);
 
     @POST("/api/like")
     @FormUrlEncoded

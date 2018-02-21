@@ -200,4 +200,6 @@ public class Keys {
     public static final String BEER_BRAND_ID = "beer_brand_id";
     public static final String BEER_TYPE_ID = "beer_type_id";
     public static final String CAP_BREWERY ="Brewery";
+    public static final String CoordStart="coordStart";
+    public static final String CoordEnd="coordEnd";
 }

@@ -8,6 +8,8 @@ public class GeoPackage {
 
     private String countryId;
     private String regionId;
+    private String coordStart;
+    private String coordEnd;
 
     public GeoPackage() {
     }
@@ -41,5 +43,21 @@ public class GeoPackage {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public void setCoordStart(String coordStart) {
+        this.coordStart = coordStart;
+    }
+
+    public String getCoordStart() {
+        return coordStart;
+    }
+
+    public void setCoordEnd(String coordEnd) {
+        this.coordEnd = coordEnd;
+    }
+
+    public String getCoordEnd() {
+        return coordEnd;
     }
 }

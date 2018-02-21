@@ -16,6 +16,7 @@ public class RestoLocation implements ICommonItem, Serializable {
     private double location_lon, location_lat;
     private int metro_id;
     private String metro_name;
+    private String resto_id;
 
     @SerializedName(Keys.GET_THUMB)
     private String thumb;
@@ -35,6 +36,14 @@ public class RestoLocation implements ICommonItem, Serializable {
             thumb = BuildConfig.SERVER_ROOT_URL + thumb;
         }
         return thumb;
+    }
+
+    public String getResto_id() {
+        return resto_id;
+    }
+
+    public void setResto_id(String resto_id) {
+        this.resto_id = resto_id;
     }
 
     @Override

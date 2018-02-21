@@ -11,10 +11,12 @@ import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
+import com.brewmapp.data.pojo.RestoGeoPackage;
 import com.brewmapp.execution.task.FilterBeerTask;
 import com.brewmapp.execution.task.FilterRestoTask;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadLocationTask;
+import com.brewmapp.execution.task.LoadRestoGeoTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
 import com.brewmapp.execution.task.SearchOnMapTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
@@ -45,19 +47,22 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     private FilterRestoTask filterRestoTask;
     private FilterBeerTask filterBeerTask;
     private SearchOnMapTask searchOnMapTask;
+    private LoadRestoGeoTask loadRestoGeoTask;
 
     @Inject
     public BeerMapPresenterImpl(LoadCityTask loadCityTask,
                                 LoadRestoLocationTask loadRestoLocationTask,
                                 FilterRestoTask filterRestoTask,
                                 FilterBeerTask filterBeerTask,
-                                SearchOnMapTask searchOnMapTask) {
+                                SearchOnMapTask searchOnMapTask,
+                                LoadRestoGeoTask loadRestoGeoTask) {
 
         this.loadRestoLocationTask = loadRestoLocationTask;
         this.loadCityTask = loadCityTask;
         this.filterRestoTask = filterRestoTask;
         this.filterBeerTask = filterBeerTask;
         this.searchOnMapTask = searchOnMapTask;
+        this.loadRestoGeoTask = loadRestoGeoTask;
     }
 
     @Override
@@ -215,6 +220,14 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
                 view.showMessage(e.getMessage(),0);
             }
         });
+    }
+
+    @Override
+    public void loadRestoByLatLngBounds(GeoPackage geoPackage) {
+        RestoGeoPackage restoGeoPackage=new RestoGeoPackage();
+        restoGeoPackage.setCoordStart(geoPackage.getCoordStart());
+        restoGeoPackage.setCoordEnd(geoPackage.getCoordEnd());
+        loadRestoGeoTask.execute(restoGeoPackage,new SimpleSubscriber<>());
     }
 
 }

@@ -90,22 +90,6 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
         }
     }
 
-
-    @Override
-    public void saveRestoFilterChanges(List<FilterRestoField> fields) {
-        new Thread(() -> Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, fields)).start();
-    }
-
-    @Override
-    public void saveBeerFilterChanges(List<FilterBeerField> fields) {
-        new Thread(() -> Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, fields)).start();
-    }
-
-    @Override
-    public void saveBreweryFilterChanges(List<FilterBreweryField> fields) {
-        new Thread(() -> Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, fields)).start();
-    }
-
     @Override
     public void setUserLocation(Location location) {
         if(location==null)

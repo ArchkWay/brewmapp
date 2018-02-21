@@ -30,6 +30,7 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
@@ -46,6 +47,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
@@ -97,6 +99,7 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
     private FullSearchPackage searchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
     private ClusterManager<FilterRestoLocation> mClusterManager;
+    private GeoPackage geoPackage=new GeoPackage();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,7 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
 
         mapView.onCreate(null);
         mapView.getMapAsync(this);
+
     }
 
     @Override
@@ -215,7 +219,6 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
         });
 
         googleMap.setOnMapClickListener(latLng -> presenter.onGeocodeRequest(latLng));
-        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
 
         if (location != null) {
             setSingleMarker();
@@ -229,15 +232,40 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
             location=MapUtils.getDefaultLocation(location, getContext());
         }
         if(location!=null) {
-            presenter.onLocationChanged(new SimpleLocation(location));
-            String nameCity = MapUtils.getCityName(location, getActivity());
-            if (nameCity != null) {
-                presenter.onLoadedCity(nameCity);
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-                        location.getLatitude(), location.getLongitude()
-                ), 14));
+//            presenter.onLocationChanged(new SimpleLocation(location));
+//            String nameCity = MapUtils.getCityName(location, getActivity());
+//            if (nameCity != null) {
+//                presenter.onLoadedCity(nameCity);
+                // 1 градус долготы примерно 111 км
+                LatLngBounds AUSTRALIA = new LatLngBounds(
+                        new LatLng(
+                                location.getLatitude()-0.1,//минус 10 км от центра
+                                location.getLongitude()
+                        ), new LatLng(
+                                location.getLatitude()+0.1,//плюс 10 км от центра
+                                location.getLongitude()
+                        )
+                );
+                googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                    @Override
+                    public void onCameraIdle() {
+                        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
+                        LatLng farRight = visibleRegion.farRight;
+                        LatLng nearLeft = visibleRegion.nearLeft;
+                        String coordStart = String.format("%.2f|%.2f",nearLeft.latitude,nearLeft.longitude);
+                        String coordEnd = String.format("%.2f|%.2f",farRight.latitude,farRight.longitude);
+                        Log.i("onCameraMove","coordStart - "+coordStart+"  coordEnd-"+coordEnd );
+                        geoPackage.setCoordStart(coordStart);
+                        geoPackage.setCoordEnd(coordEnd);
+
+                        presenter.loadRestoByLatLngBounds(geoPackage);
+
+                    }
+                });
+                googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngBounds(AUSTRALIA, 14));
             }
-        }
+//        }
         if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }else {
@@ -379,11 +407,11 @@ public class BeerMapFragment extends BaseFragment implements BeerMapView, OnMapR
     private void setMarker(List<FilterRestoLocation> restoLocations, boolean animateCamera) {
         mClusterManager.setRenderer(new ClusterRender(getContext(), googleMap, mClusterManager));
         mClusterManager.addItems(restoLocations);
-
-        if (animateCamera) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restoLocations.get(0).getLocationLat(),
-                    restoLocations.get(0).getLocationLon()) , 9));
-        }
+//
+//        if (animateCamera) {
+//            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restoLocations.get(0).getLocationLat(),
+//                    restoLocations.get(0).getLocationLon()) , 9));
+//        }
     }
 
     public void showResult(boolean isBeer, int checkBox) {

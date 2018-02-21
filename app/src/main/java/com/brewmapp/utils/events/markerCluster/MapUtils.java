@@ -5,6 +5,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 
+import com.brewmapp.R;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -16,7 +18,8 @@ import java.util.Locale;
 public class MapUtils {
 
     public static String getCityName(Location location, Context context) {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(context, new Locale("RU","ru"));
+        //Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> addresses = null;
         try {
             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -32,5 +35,12 @@ public class MapUtils {
                 restoLocation.getLatitude(), restoLocation.getLongitude(),
                 distances);
         return String.valueOf(distances[0]);
+    }
+
+    public static Location getDefaultLocation(Location location, Context context) {
+        location=new Location("gps");
+        location.setLatitude(Float.valueOf(context.getResources().getString(R.string.default_Latitude)));
+        location.setLongitude(Float.valueOf(context.getResources().getString(R.string.default_Longitude)));
+        return location;
     }
 }

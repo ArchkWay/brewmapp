@@ -496,8 +496,8 @@
     <string name="property_filter_beer">Фильтрованое пиво</string>
     <string name="filter_search_city">Для поиска введите название города</string>
     <string name="filter_search_city_title">Поиск по городу</string>
-    <string name="title_location_permission">Разрешение</string>
-    <string name="text_location_permission">Геолокация</string>
+    <string name="title_location_permission">Геолокация</string>
+    <string name="text_location_permission">Для эффективного поиска включите разрашение для определения местоположения.</string>
     <string name="default_Latitude">55.751244</string>
     <string name="default_Longitude">37.618423</string>
 

@@ -86,17 +86,14 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     @Override
     public void onLoadedRestoGeo(int id) {
         loadRestoLocationTask.cancel();
-        enableControls(false);
         loadRestoLocationTask.execute(id, new SimpleSubscriber<List<FilterRestoLocation>>() {
             @Override
             public void onError(Throwable e) {
-                enableControls(true);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<FilterRestoLocation> restoLocation) {
-                enableControls(true);
                 view.showGeolocationResult(restoLocation);
             }
         });
@@ -105,20 +102,18 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     @Override
     public void onLoadedCity(String cityName) {
         loadCityTask.cancel();
-        enableControls(false);
         GeoPackage geoPackage = new GeoPackage();
         geoPackage.setCityName(cityName);
         loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
             @Override
             public void onError(Throwable e) {
-                enableControls(true);
                 showError(e.getMessage());
             }
 
             @Override
             public void onNext(List<City> restoLocation) {
-                onLoadedRestoGeo(restoLocation.get(0).getId());
-                enableControls(true);
+                if(restoLocation.size()>0)
+                    onLoadedRestoGeo(restoLocation.get(0).getId());
             }
         });
     }

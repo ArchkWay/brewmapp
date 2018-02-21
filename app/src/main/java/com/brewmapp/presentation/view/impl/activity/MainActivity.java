@@ -28,6 +28,7 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.ChatService;
+import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
@@ -68,7 +69,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITE
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
 
 public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
-        FragmentInterractor,SearchFragment.OnFragmentInteractionListener {
+        FragmentInterractor,SearchFragment.OnFragmentInteractionListener,BeerMapFragment.OnFragmentInteractionListener  {
 
     @BindView(R.id.common_toolbar)
     Toolbar toolbar;
@@ -352,6 +353,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+            case R.id.action_filter:
                 return super.onOptionsItemSelected(item);
             default:
               return navigator.onOptionsItemSelected(item);

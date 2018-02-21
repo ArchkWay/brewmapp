@@ -17,6 +17,7 @@ import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
 import com.brewmapp.presentation.view.contract.SearchAllView;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -107,11 +108,8 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
 
     @Override
     public void setUserLocation(Location location) {
-        if(location==null){
-            location=new Location("gps");
-            location.setLatitude(Float.valueOf(context.getResources().getString(R.string.default_Latitude)));
-            location.setLongitude(Float.valueOf(context.getResources().getString(R.string.default_Longitude)));
-        }
+        if(location==null)
+            location=MapUtils.getDefaultLocation(location, context);
 
         if(location!=null) {
             Geocoder geocoder = new Geocoder(context, new Locale("RU", "ru"));

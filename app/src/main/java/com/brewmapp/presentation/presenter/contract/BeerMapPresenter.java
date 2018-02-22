@@ -26,4 +26,6 @@ public interface BeerMapPresenter extends LivePresenter<BeerMapView> {
     void sendQueryRestoSearch(FullSearchPackage fullSearchPackage);
 
     void loadRestoByLatLngBounds(GeoPackage geoPackage);
+
+    void cancelLoadRestoByLatLngBounds();
 }

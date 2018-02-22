@@ -301,15 +301,19 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void onCameraIdle() {
-            VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
-            LatLng farRight = visibleRegion.farRight;
-            LatLng nearLeft = visibleRegion.nearLeft;
-            String coordStart = String.format(Locale.getDefault(), "%.2f|%.2f", nearLeft.latitude, nearLeft.longitude);
-            String coordEnd = String.format(Locale.getDefault(), "%.2f|%.2f", farRight.latitude, farRight.longitude);
-            Log.i("onCameraMove", "coordStart - " + coordStart + "  coordEnd-" + coordEnd);
-            geoPackage.setCoordStart(coordStart);
-            geoPackage.setCoordEnd(coordEnd);
-            presenter.loadRestoByLatLngBounds(geoPackage);
+        presenter.cancelLoadRestoByLatLngBounds();
+        mClusterManager.cluster();
+        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
+        LatLng farRight = visibleRegion.farRight;
+        LatLng nearLeft = visibleRegion.nearLeft;
+        String coordStart = String.format(Locale.getDefault(), "%.2f|%.2f", nearLeft.latitude, nearLeft.longitude);
+        String coordEnd = String.format(Locale.getDefault(), "%.2f|%.2f", farRight.latitude, farRight.longitude);
+        Log.i("onCameraMove", "coordStart - " + coordStart + "  coordEnd-" + coordEnd);
+        geoPackage.setCoordStart(coordStart);
+        geoPackage.setCoordEnd(coordEnd);
+        mapView.postDelayed(() -> presenter.loadRestoByLatLngBounds(geoPackage),2000);
+
+
     }
 
     @Override
@@ -397,8 +401,8 @@ public class BeerMapFragment extends BaseFragment implements
             }
         }
         mClusterManager.cluster();
-
     }
+
 
     public void showResult(boolean isBeer, int checkBox) {
         showDialogProgressBar(true);

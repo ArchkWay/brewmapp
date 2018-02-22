@@ -247,5 +247,10 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         });
     }
 
+    @Override
+    public void cancelLoadRestoByLatLngBounds() {
+        loadRestoGeoTask.cancel();
+    }
+
 }
 

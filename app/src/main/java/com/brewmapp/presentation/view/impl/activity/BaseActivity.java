@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +20,6 @@ import android.view.View;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.di.module.PresenterModule;
-import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.ChatReceiveMessage;
@@ -31,6 +27,8 @@ import com.brewmapp.execution.services.ChatService;
 
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.execution.executor.Callback;
@@ -42,10 +40,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by ovcst on 01.05.2017.
  */
 
-public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener, LocationListener {
-    private LocationManager locationManager;
-    private String provider;
-    private Callback<Location> callbackLocation;
+public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener{
+
+    private Callback<Location> callback;
+    private ChatResultReceiver chatResultReceiver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,7 +114,6 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     protected void onPause() {
         super.onPause();
         unRegisterSnackbarReceiver();
-        unregisterLocationManager();
     }
 
     @Override
@@ -126,9 +123,9 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             case RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    registerLocationManager();
+                    findLocation();
                 } else {
-                    callbackLocation.onResult(null);
+                    replayLocation(null);
                 }
                 return;
             }
@@ -136,81 +133,15 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         }
     }
     @Override
-    public void getLocation(Callback<Location> callback) {
-        this.callbackLocation = callback;
-        if(checkLocationPermission())
-            registerLocationManager();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        unregisterLocationManager();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    //******************************************
-    private ChatResultReceiver chatResultReceiver;
-
-    public void showSnackbar(String text) {
-        View view=getWindow().getDecorView().findViewById(android.R.id.content);
-        if(view!=null) {
-            Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
-            snackbar.show();
+    public void requestLocation(Callback<Location> callback) {
+        this.callback = callback;
+        if(checkLocationPermission()){
+            findLocation();
         }
     }
 
-    private void unRegisterSnackbarReceiver() {
-        Intent intent=new Intent(ChatService.ACTION_CLEAR_RECEIVER,null,this, ChatService.class);
-        startService(intent);
-    }
 
-    private void registerSnackbarReceiver() {
-        Intent intent=new Intent(ChatService.ACTION_SET_RECEIVER,null,this, ChatService.class);
-        intent.putExtra(ChatService.RECEIVER,chatResultReceiver);
-        startService(intent);
-    }
-
-    private void registerLocationManager() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria=new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(false);
-            criteria.setCostAllowed(true);
-            provider = locationManager.getBestProvider(criteria, false);
-            callbackLocation.onResult(locationManager.getLastKnownLocation(provider));
-            long minTime = 10000;
-            float minDistance=50.0f;
-            locationManager.requestLocationUpdates(provider, minTime, minDistance, this);
-        }
-    }
-
-    private void unregisterLocationManager(){
-        if(this.locationManager!=null) {
-            this.locationManager.removeUpdates(this);
-            this.locationManager=null;
-            this.callbackLocation=null;
-        }
-    }
-
+    //region LOCATION
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -250,5 +181,49 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             return true;
         }
     }
+
+    private void findLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        for (int i=providers.size()-1; i>=0; i--) {
+            Location l = locationManager.getLastKnownLocation(providers.get(i));
+            if(l!=null){
+                replayLocation(l);
+                return;
+            }
+        }
+        replayLocation(null);
+    }
+
+    private void replayLocation(Location location) {
+        if(callback!=null) {
+            callback.onResult(location);
+            callback=null;
+        }
+    }
+    //endregion
+
+    //region CHAT Snackbar
+    public void showSnackbar(String text) {
+        View view=getWindow().getDecorView().findViewById(android.R.id.content);
+        if(view!=null) {
+            Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
+            snackbar.show();
+        }
+    }
+
+    private void unRegisterSnackbarReceiver() {
+        Intent intent=new Intent(ChatService.ACTION_CLEAR_RECEIVER,null,this, ChatService.class);
+        startService(intent);
+    }
+
+    private void registerSnackbarReceiver() {
+        Intent intent=new Intent(ChatService.ACTION_SET_RECEIVER,null,this, ChatService.class);
+        intent.putExtra(ChatService.RECEIVER,chatResultReceiver);
+        startService(intent);
+    }
+    //endregion
+
 
 }

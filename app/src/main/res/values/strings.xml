@@ -500,5 +500,6 @@
     <string name="text_location_permission">Для эффективного поиска включите разрашение для определения местоположения.</string>
     <string name="default_Latitude">55.751244</string>
     <string name="default_Longitude">37.618423</string>
+    <string name="geo_error">Местоположение не определено. По умоолчанию - \"Москва\"</string>
 
 </resources>

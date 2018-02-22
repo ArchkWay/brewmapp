@@ -93,7 +93,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     @Override
     public void setUserLocation(Location location) {
         if(location==null)
-            location=MapUtils.getDefaultLocation( context);
+            location=MapUtils.getDefaultLocation(context);
 
         if(location!=null) {
             Geocoder geocoder = new Geocoder(context, new Locale("RU", "ru"));

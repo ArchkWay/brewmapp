@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.widget.Toast;
 
 import com.brewmapp.R;
 
@@ -41,6 +42,7 @@ public class MapUtils {
         Location location=new Location("gps");
         location.setLatitude(Float.valueOf(context.getResources().getString(R.string.default_Latitude)));
         location.setLongitude(Float.valueOf(context.getResources().getString(R.string.default_Longitude)));
+        Toast.makeText(context,R.string.geo_error,Toast.LENGTH_SHORT).show();
         return location;
     }
 }

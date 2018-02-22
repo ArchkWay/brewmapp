@@ -9,5 +9,5 @@ import ru.frosteye.ovsa.execution.executor.Callback;
  */
 
 public interface OnLocationInteractionListener {
-    void getLocation(Callback<Location> callback);
+    void requestLocation(Callback<Location> callback);
 }

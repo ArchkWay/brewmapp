@@ -131,7 +131,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
     protected void attachPresenter() {
         presenter.onAttach(this);
         presenter.setTabActive(TAB_RESTO);
-        mLocationListener.getLocation(result -> presenter.setUserLocation(result));
+        mLocationListener.requestLocation(result -> presenter.setUserLocation(result));
 
     }
 

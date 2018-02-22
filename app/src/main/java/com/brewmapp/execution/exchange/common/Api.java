@@ -265,12 +265,6 @@ public interface Api {
     @FormUrlEncoded
     Call<CityTypes> loadCityFilter(@FieldMap WrapperParams params);
 
-//    @GET("geocode/json")
-//    Call<GeoСodeResponse> getLocation(
-//            @Query("address") String address,w
-//            @Query("key") String key
-//    );
-
     @POST("full_search/{query}")
     @FormUrlEncoded
     Call<Beers> fullSearchBeer(

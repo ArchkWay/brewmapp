@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.brewmapp.data.entity.FilterRestoLocation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -19,4 +20,5 @@ public interface BeerMapView extends BasicView {
     void showProgressBar();
     void hideProgressBar();
     void appendItems(List<IFlexible> list);
+
 }

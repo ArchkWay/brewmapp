@@ -42,7 +42,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by ovcst on 01.05.2017.
  */
 
-public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener {
+public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener, LocationListener {
     private LocationManager locationManager;
     private String provider;
     private Callback<Location> callbackLocation;
@@ -116,6 +116,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     protected void onPause() {
         super.onPause();
         unRegisterSnackbarReceiver();
+        unregisterLocationManager();
     }
 
     @Override
@@ -134,12 +135,31 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
         }
     }
-
     @Override
     public void getLocation(Callback<Location> callback) {
         this.callbackLocation = callback;
         if(checkLocationPermission())
             registerLocationManager();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        unregisterLocationManager();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     //******************************************
@@ -158,11 +178,13 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         Intent intent=new Intent(ChatService.ACTION_CLEAR_RECEIVER,null,this, ChatService.class);
         startService(intent);
     }
+
     private void registerSnackbarReceiver() {
         Intent intent=new Intent(ChatService.ACTION_SET_RECEIVER,null,this, ChatService.class);
         intent.putExtra(ChatService.RECEIVER,chatResultReceiver);
         startService(intent);
     }
+
     private void registerLocationManager() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -177,29 +199,18 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             callbackLocation.onResult(locationManager.getLastKnownLocation(provider));
             long minTime = 10000;
             float minDistance=50.0f;
-            locationManager.requestLocationUpdates(provider, minTime, minDistance, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    locationManager.removeUpdates(this);
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            });
+            locationManager.requestLocationUpdates(provider, minTime, minDistance, this);
         }
     }
+
+    private void unregisterLocationManager(){
+        if(this.locationManager!=null) {
+            this.locationManager.removeUpdates(this);
+            this.locationManager=null;
+            this.callbackLocation=null;
+        }
+    }
+
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)

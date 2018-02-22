@@ -368,7 +368,7 @@ public interface Api {
 
     @POST("resto/getcoordinates")
     @FormUrlEncoded
-    Call<ListResponse<RestoLocation>> loadRestoGeo(@FieldMap WrapperValues params);
+    Call<ListResponse<FilterRestoLocationInfo>> loadRestoGeo(@FieldMap WrapperValues params);
 
     @POST("/api/like")
     @FormUrlEncoded

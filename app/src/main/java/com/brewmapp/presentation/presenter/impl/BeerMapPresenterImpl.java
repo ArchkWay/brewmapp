@@ -7,6 +7,9 @@ import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.FilterRestoOnMap;
+import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -23,6 +26,8 @@ import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -227,7 +232,19 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         RestoGeoPackage restoGeoPackage=new RestoGeoPackage();
         restoGeoPackage.setCoordStart(geoPackage.getCoordStart());
         restoGeoPackage.setCoordEnd(geoPackage.getCoordEnd());
-        loadRestoGeoTask.execute(restoGeoPackage,new SimpleSubscriber<>());
+        loadRestoGeoTask.execute(restoGeoPackage,new SimpleSubscriber<List<FilterRestoLocationInfo>>(){
+            @Override
+            public void onNext(List<FilterRestoLocationInfo> restoLocations) {
+                super.onNext(restoLocations);
+                //view.appendItems(new ArrayList<>(restoLocations));
+                ArrayList arrayList=new ArrayList<>();
+                Iterator<FilterRestoLocationInfo> infoIterator=restoLocations.iterator();
+
+                while (infoIterator.hasNext())
+                    arrayList.add(new FilterRestoLocation(infoIterator.next().getModel()));
+                view.showGeolocationResult(arrayList);
+            }
+        });
     }
 
 }

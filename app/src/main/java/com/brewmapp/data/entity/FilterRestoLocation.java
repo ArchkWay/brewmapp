@@ -38,6 +38,15 @@ public class FilterRestoLocation implements ClusterItem {
         this.snippet = snippet;
     }
 
+    public FilterRestoLocation(FilterRestoOnMap model) {
+        setLocationId(model.getLocationId());
+        setLocationLat(Double.valueOf(model.getLocationLat()));
+        setLocationLon(Double.valueOf(model.getLocationLon()));
+        setRestoId(model.getRestoId());
+        setmName(model.getName());
+        setmNameEn(getmNameEn());
+    }
+
     public String getLocationId() {
         return mLocationId;
     }

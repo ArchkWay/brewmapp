@@ -390,10 +390,11 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
                 refreshItems();
             } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
                 refreshState();
-            } else if (requestCode == REQUEST_CODE_MAP_RESULT) {
-                showMapResult(data.getBooleanExtra("isBeer", false),
-                        data.getIntExtra("checkBox", 0));
             }
+//            else if (requestCode == REQUEST_CODE_MAP_RESULT) {
+//                showMapResult(data.getBooleanExtra("isBeer", false),
+//                        data.getIntExtra("checkBox", 0));
+//            }
         }
     }
 
@@ -460,19 +461,19 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             if (fragment instanceof EventsFragment)
                 ((EventsFragment) fragment).refreshItems(false);
     }
-    @SuppressLint("RestrictedApi")
-    public void showResultOnMap() {
-        for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if(fragment instanceof ProfileFragment)
-                ((ProfileFragment) fragment).refreshItems();
-    }
-    @SuppressLint("RestrictedApi")
-    public void showMapResult(boolean isBeer, int checkBox) {
-        for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if (fragment instanceof BeerMapFragment) {
-                ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
-            }
-    }
+//    @SuppressLint("RestrictedApi")
+//    public void showResultOnMap() {
+//        for (Fragment fragment : getSupportFragmentManager().getFragments())
+//            if(fragment instanceof ProfileFragment)
+//                ((ProfileFragment) fragment).refreshItems();
+//    }
+//    @SuppressLint("RestrictedApi")
+//    public void showMapResult(boolean isBeer, int checkBox) {
+//        for (Fragment fragment : getSupportFragmentManager().getFragments())
+//            if (fragment instanceof BeerMapFragment) {
+//                ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
+//            }
+//    }
 
 
 }

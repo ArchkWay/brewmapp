@@ -32,12 +32,15 @@ public class ClusterRender extends DefaultClusterRenderer<FilterRestoLocation> {
         markerOptions.icon(item.getIcon());
         markerOptions.snippet(item.getRestoId());
         markerOptions.title(item.getTitle());
-
         super.onBeforeClusterItemRendered(item, markerOptions);
     }
 
-    private Boolean isInBounds(LatLng position, LatLngBounds latLngBounds) {
-        return (latLngBounds == null ? mMap.getProjection().getVisibleRegion().latLngBounds : latLngBounds).contains(position);
+
+    @Override
+    protected void onBeforeClusterRendered(Cluster<FilterRestoLocation> cluster, MarkerOptions markerOptions) {
+        super.onBeforeClusterRendered(cluster, markerOptions);
+
     }
+
 
 }

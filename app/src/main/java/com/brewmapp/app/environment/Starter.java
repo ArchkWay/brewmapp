@@ -59,9 +59,11 @@ public class Starter {
         activity.startActivityForResult(intent, requestCode);
     }
     public static void RestoDetailActivity(Context context, String id_resto) {
-        Intent intent = new Intent(context, RestoDetailActivity.class);
-        intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto,"")));
-        context.startActivity(intent);
+        if(id_resto!=null) {
+            Intent intent = new Intent(context, RestoDetailActivity.class);
+            intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
+            context.startActivity(intent);
+        }
     }
 
     public static void AddReviewRestoActivityForResult(Activity activity, RestoDetail restoDetails, int requestCodeReview) {

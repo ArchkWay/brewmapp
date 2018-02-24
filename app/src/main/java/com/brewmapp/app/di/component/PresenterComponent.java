@@ -60,6 +60,7 @@ import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
 import com.brewmapp.presentation.view.impl.widget.ItemEvaluationView;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
@@ -125,4 +126,5 @@ public interface PresenterComponent {
     void inject(DialogManageContact dialogManageContact);
     void inject(ItemEvaluationView itemEvaluationView);
     void inject(BreweryDetailsActivity breweryDetailsActivity);
+    void inject(InfoWindowMap infoWindowMap);
 }

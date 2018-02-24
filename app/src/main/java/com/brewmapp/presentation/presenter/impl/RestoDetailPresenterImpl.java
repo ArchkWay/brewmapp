@@ -312,9 +312,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         );
 
         tempDataHolder.storeUiSetting();
-        Intent intent=new Intent(MainActivity.MODE_MAP_FRAGMENT,null,restoDetailActivity,MainActivity.class);
-        intent.putExtra(Keys.LOCATION,restoLocation);
-        restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_MAP_FRAGMENT);
+        Starter.MainActivity(restoDetailActivity,MainActivity.MODE_MAP_FRAGMENT,restoLocation);
 
     }
 

@@ -59,7 +59,7 @@ public class BeerLocation {
         private String street;
         private String house;
         private String name;
-        private double lat, lng;
+        private double lat, lon;
 
         public String getFormattedAddress() {
             LocationInfo info = this;
@@ -107,8 +107,8 @@ public class BeerLocation {
             return lat;
         }
 
-        public double getLng() {
-            return lng;
+        public double getLon() {
+            return lon;
         }
     }
 
@@ -144,6 +144,10 @@ public class BeerLocation {
 
         public int getDistance() {
             return distance;
+        }
+
+        public void setLon(double lon) {
+            this.lon = lon;
         }
     }
 }

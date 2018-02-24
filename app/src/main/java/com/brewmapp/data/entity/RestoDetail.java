@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,22 @@ import java.util.List;
 
 public class RestoDetail implements Serializable{
 
+    private Distance distance;
     private Resto resto=new Resto();
     private List<Kitchen> resto_kitchen=new ArrayList<>();
     private List<Menu> menu=new ArrayList<>();
     private List<Feature> resto_feature=new ArrayList<>();
     private List<RestoType> resto_type=new ArrayList<>();
     private List<RestoWorkTime> resto_work_tyoe=new ArrayList<>();
+
+
+    public Distance getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Distance distance) {
+        this.distance = distance;
+    }
 
     public void setResto_kitchen(List<Kitchen> resto_kitchen) {
         this.resto_kitchen = resto_kitchen;

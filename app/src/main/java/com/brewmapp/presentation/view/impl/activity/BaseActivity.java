@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +42,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by ovcst on 01.05.2017.
  */
 
-public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener{
+public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener {
 
     private Callback<Location> callback;
     private ChatResultReceiver chatResultReceiver;
@@ -56,15 +58,15 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         //endregion
 
         //region set CreateChatReseiver
-        chatResultReceiver=new ChatResultReceiver(new Handler(getMainLooper()),new SimpleSubscriber<Bundle>(){
+        chatResultReceiver = new ChatResultReceiver(new Handler(getMainLooper()), new SimpleSubscriber<Bundle>() {
             @Override
             public void onNext(Bundle bundle) {
                 super.onNext(bundle);
-                String action=bundle.getString(ChatService.EXTRA_PARAM1);
-                switch (action){
+                String action = bundle.getString(ChatService.EXTRA_PARAM1);
+                switch (action) {
                     case ChatService.ACTION_RECEIVE_MESSAGE:
                         ChatReceiveMessage chatReceiveMessage = (ChatReceiveMessage) bundle.getSerializable(ChatService.EXTRA_PARAM2);
-                        String text=chatReceiveMessage.getText()+getString(R.string.chat_new_message_text,chatReceiveMessage.getFrom().getFormattedName());
+                        String text = chatReceiveMessage.getText() + getString(R.string.chat_new_message_text, chatReceiveMessage.getFrom().getFormattedName());
                         showSnackbar(text);
                         break;
                 }
@@ -78,7 +80,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         //endregion
 
 
-        if(this instanceof MainActivity){
+        if (this instanceof MainActivity) {
 
         }
     }
@@ -89,7 +91,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     protected void prepareView() {
         ButterKnife.bind(this);
         Toolbar toolbar = findActionBar();
-        if(toolbar != null) {
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setElevation(0);
         }
@@ -123,7 +125,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             case RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    findLocation();
+                    getLastLocation();
                 } else {
                     replayLocation(null);
                 }
@@ -132,11 +134,49 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
         }
     }
+
     @Override
     public void requestLocation(Callback<Location> callback) {
         this.callback = callback;
-        if(checkLocationPermission()){
-            findLocation();
+        if (checkLocationPermission()) {
+            getLastLocation();
+        }
+    }
+
+    @Override
+    public void refreshLocation() {
+        if (checkLocationPermission()) {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            List<String> providers = locationManager.getProviders(true);
+            for (int i = providers.size() - 1; i >= 0; i--) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                } else {
+                    locationManager.requestLocationUpdates(providers.get(i), 0, 0, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            locationManager.removeUpdates(this);
+                            replayLocation(location);
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+                            locationManager.removeUpdates(this);
+                        }
+                    });
+
+                }
+            }
         }
     }
 
@@ -173,7 +213,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION);
             }
             return false;
@@ -182,14 +222,18 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         }
     }
 
-    private void findLocation() {
+    private void getLastLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
-        for (int i=providers.size()-1; i>=0; i--) {
-            Location l = locationManager.getLastKnownLocation(providers.get(i));
-            if(l!=null){
-                replayLocation(l);
+        for (int i = providers.size() - 1; i >= 0; i--) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
+            }else {
+                Location l = locationManager.getLastKnownLocation(providers.get(i));
+                if (l != null) {
+                    replayLocation(l);
+                    return;
+                }
             }
         }
         replayLocation(null);
@@ -201,6 +245,8 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             callback=null;
         }
     }
+
+
     //endregion
 
     //region CHAT Snackbar

@@ -15,11 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.ClaimPackage;
 import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -102,7 +104,6 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarSubTitle.setVisibility(View.GONE);
-
         enableBackButton();
         slider.stopAutoCycle();
         optionsAdapter = new FlexibleAdapter<>(new ArrayList<>(), this);
@@ -199,7 +200,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
             }
 
             private void texts() {
-                setTitle(event.getName());
+                setTitle(R.string.text_view_event);
                 try{title.setText(event.getResto().getName());}catch (Exception e){}
                 likes.setText(String.valueOf(event.getLike()));
                 dislikes.setText(String.valueOf(event.getDislike()));
@@ -238,10 +239,7 @@ public class EventDetailsActivity extends BaseActivity implements EventDetailsVi
     public boolean onItemClick(int position) {
         switch (position) {
             case 1:
-                SimpleLocation location = new SimpleLocation(event.getLocation().getInfo().getLat(),
-                        event.getLocation().getInfo().getLat(), event.getLocation().getFormattedAddress());
-                activeBox.setActive(location);
-                startActivity(UniversalMapActivity.class);
+                Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,new RestoLocation(event));
                 break;
             case 2:
                 share();

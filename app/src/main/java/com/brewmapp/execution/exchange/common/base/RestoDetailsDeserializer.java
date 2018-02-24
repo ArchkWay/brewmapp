@@ -1,5 +1,6 @@
 package com.brewmapp.execution.exchange.common.base;
 
+import com.brewmapp.data.entity.Distance;
 import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.Menu;
@@ -29,6 +30,7 @@ public class RestoDetailsDeserializer  implements JsonDeserializer<RestoDetailIn
         try {
             o= (RestoDetailInfo) ((Class) typeOfT).newInstance();
             RestoDetail restoDetail=new RestoDetail();
+            restoDetail.setDistance(context.deserialize(((JsonObject) json).getAsJsonObject("distance"),Distance.class));
             restoDetail.setResto(context.deserialize(((JsonObject) json).getAsJsonArray("resto").getAsJsonArray().get(0),Resto.class));
             try {
                 Iterator<JsonElement> iterator=((JsonObject) json).getAsJsonArray("resto_kitchen").getAsJsonArray().iterator();

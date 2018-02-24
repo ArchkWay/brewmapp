@@ -31,6 +31,11 @@ public class RestoLocation implements ICommonItem, Serializable {
         this.location_lat = location_lat;
     }
 
+    public RestoLocation(Event event) {
+        location_lon=event.getLocation().getInfo().getLon();
+        location_lat=event.getLocation().getInfo().getLat();
+    }
+
     public String getThumb() {
         if(thumb != null && !thumb.startsWith("http")) {
             thumb = BuildConfig.SERVER_ROOT_URL + thumb;
@@ -78,6 +83,14 @@ public class RestoLocation implements ICommonItem, Serializable {
 
     public double getLocation_lon() {
         return location_lon;
+    }
+
+    public void setLocation_lon(double location_lon) {
+        this.location_lon = location_lon;
+    }
+
+    public void setLocation_lat(double location_lat) {
+        this.location_lat = location_lat;
     }
 
     public int getMetro_id() {

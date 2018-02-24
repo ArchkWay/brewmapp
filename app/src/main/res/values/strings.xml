@@ -325,7 +325,7 @@
     <string name="text_view_bracket_from">(</string>
     <string name="text_view_bracket_to">)</string>
     <string name="text_view_sales">Акции</string>
-    <string name="text_view_event">События</string>
+    <string name="text_view_events">События</string>
     <string name="text_view_menu">Меню</string>
     <string name="text_view_photo">Фото</string>
     <string name="text_view_replay_users">Отзывы пользователей</string>
@@ -501,6 +501,7 @@
     <string name="default_Latitude">55.751244</string>
     <string name="default_Longitude">37.618423</string>
     <string name="geo_error">Местоположение не определено. По умоолчанию - \"Москва\"</string>
-    <string name="select_resto">Выбрать заведение</string>
+    <string name="select_resto">%s заведений</string>
+    <string name="text_view_event">Событие</string>
 
 </resources>

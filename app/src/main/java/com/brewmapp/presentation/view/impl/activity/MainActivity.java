@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.MenuRes;
@@ -28,7 +27,6 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
 import com.brewmapp.execution.services.ChatService;
-import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
@@ -59,12 +57,10 @@ import com.brewmapp.presentation.support.navigation.MainNavigator;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
-import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
 
@@ -276,7 +272,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
-    public void processChengeFragment(int id) {
+    public void processChangeFragment(int id) {
         MenuField.unselectAll(menuItems);
         adapter.notifyDataSetChanged();
         navigator.onNavigatorAction(new SimpleNavAction(id));
@@ -354,6 +350,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         switch (item.getItemId()){
             case android.R.id.home:
             case R.id.action_filter:
+            case R.id.action_map:
                 return super.onOptionsItemSelected(item);
             default:
               return navigator.onOptionsItemSelected(item);
@@ -409,7 +406,7 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
             showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
-        processChengeFragment(MenuField.PROFILE);
+        processChangeFragment(MenuField.PROFILE);
     }
 
     @Override

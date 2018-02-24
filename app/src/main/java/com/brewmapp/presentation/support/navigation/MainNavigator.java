@@ -46,7 +46,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 fragmentToShow = new EventsFragment();
                 break;
             case MenuField.SEARCH:
-                fragmentToShow = SearchFragment.newInstance();
+                fragmentToShow = new SearchFragment();
                 break;
             case MenuField.MAP:
                 fragmentToShow = new BeerMapFragment();

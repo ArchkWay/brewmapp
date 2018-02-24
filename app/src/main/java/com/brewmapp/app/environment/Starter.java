@@ -11,12 +11,14 @@ import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
+import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.BreweryDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.FriendsActivity;
@@ -49,8 +51,14 @@ public class Starter {
         activity.startActivity(new Intent(action, null,activity,MultiListActivity.class));
     }
 
-    public static void MainActivity(BeerDetailActivity activity, String action, Object o) {
-        activity.startActivity(new Intent(action,null,activity,MainActivity.class));
+    public static void MainActivity(BaseActivity activity, String action, Object o) {
+        Intent intent=new Intent(action,null,activity,MainActivity.class);
+        switch (action){
+            case MainActivity.MODE_MAP_FRAGMENT:
+                intent.putExtra(Keys.LOCATION,(RestoLocation)o);
+                break;
+        }
+        activity.startActivity(intent);
     }
 
     public static void RestoDetailActivityForResult(Activity activity, Interest interest, int requestCode) {

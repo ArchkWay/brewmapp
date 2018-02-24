@@ -299,6 +299,15 @@ public interface Api {
 
     @POST("resto/restodata")
     @FormUrlEncoded
+    Call<RestoDetails> getRestoDetailsWithDistance(
+            @Query(Keys.RESTO_ID) String query,
+            @FieldMap WrapperParams params,
+            @Query(Keys.LAT) double start,
+            @Query(Keys.LON) double end
+        );
+
+    @POST("resto/restodata")
+    @FormUrlEncoded
     Call<ListResponse<RestoDetails>> getMultiRestoDetails(@Query(Keys.RESTO_ID) String query, @FieldMap WrapperParams params);
 
     @GET("resto/type")
@@ -434,7 +443,11 @@ public interface Api {
 
     @POST("resto/getcoordinatesbytext")
     @FormUrlEncoded
-    Call<ListResponse<FilterRestoLocationInfo>> searchOnMap(@FieldMap RequestParams requestParams);
+    Call<ListResponse<FilterRestoLocationInfo>> searchOnMap(
+            @Query(Keys.LIMIT_START) int start,
+            @Query(Keys.LIMIT_END) int end,
+            @FieldMap RequestParams requestParams
+    );
 
     @POST("full_search/{query}")
     @FormUrlEncoded

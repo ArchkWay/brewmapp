@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.SearchFragmentPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
@@ -92,17 +96,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         super.onCreate(savedInstanceState);
     }
 
-    public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(Keys.SEARCH, true);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
     protected void initView(View view) {
-        interractor().processSetActionBar(0);
+        setHasOptionsMenu(true);
         tabsView.setItems(Arrays.asList(searchContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -117,6 +113,20 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
         list.setNestedScrollingEnabled(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if(menu!=null) menu.clear();
+         inflater.inflate(R.menu.map,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mListener.processChangeFragment(MenuField.MAP);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -565,6 +575,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView  {
         void commonError(String... message);
         void setTitle(CharSequence name);
         OnLocationInteractionListener getLocationListener();
+        void processChangeFragment(int id);
     }
 
 }

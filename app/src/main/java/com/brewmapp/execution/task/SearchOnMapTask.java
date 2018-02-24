@@ -43,10 +43,10 @@ public class SearchOnMapTask extends BaseNetworkTask<FullSearchPackage, List<IFl
                 RequestParams requestParams = new RequestParams();
                 int start = fullSearchPackage.getPage() * step;
                 int end = fullSearchPackage.getPage() * step + step;
-                requestParams.addParam(Keys.LIMIT_START, start);
-                requestParams.addParam(Keys.LIMIT_END, end);
+//                requestParams.addParam(Keys.LIMIT_START, start);
+//                requestParams.addParam(Keys.LIMIT_END, end);
                 requestParams.addParam("searchString", fullSearchPackage.getStringSearch());
-                ListResponse<FilterRestoLocationInfo> response = executeCall(getApi().searchOnMap(requestParams));
+                ListResponse<FilterRestoLocationInfo> response = executeCall(getApi().searchOnMap(start,end,requestParams));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

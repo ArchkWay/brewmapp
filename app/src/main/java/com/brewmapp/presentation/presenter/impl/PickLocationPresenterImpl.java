@@ -109,7 +109,7 @@ public class PickLocationPresenterImpl extends BasePresenter<PickLocationView> i
                 view.showGeolocationResult(new GeolocatorResultPackage(
                         info.getFormattedAddress(),
                         new SimpleLocation(
-                                info.getLat(), info.getLng()
+                                info.getLat(), info.getLon()
                         )
                 ));
             }

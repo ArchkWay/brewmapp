@@ -84,7 +84,7 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
         list.setAdapter(adapter);
         presenter.setItemTouchHelper(list);
-        textView.setOnClickListener(v -> interractor().processChengeFragment(MenuField.FRIENDS));
+        textView.setOnClickListener(v -> interractor().processChangeFragment(MenuField.FRIENDS));
 
     }
 

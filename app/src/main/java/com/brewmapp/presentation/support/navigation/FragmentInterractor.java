@@ -15,5 +15,5 @@ public interface FragmentInterractor {
     void processSetActionBar(int position);
     void processSetFilterFragmentActionBar(SearchFragment searchFragment);
 
-    void processChengeFragment(int id);
+    void processChangeFragment(int id);
 }

@@ -503,5 +503,7 @@
     <string name="geo_error">Местоположение не определено. По умоолчанию - \"Москва\"</string>
     <string name="select_resto">%s заведений</string>
     <string name="text_view_event">Событие</string>
+    <string name="title_call_phone_permission">Исходящий вызов</string>
+    <string name="text_call_phone_permission">Для совершения вызова требуется соответствующее разрешение</string>
 
 </resources>

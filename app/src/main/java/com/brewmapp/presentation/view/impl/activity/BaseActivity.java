@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -47,6 +47,9 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     private Callback<Location> callback;
     private ChatResultReceiver chatResultReceiver;
 
+    protected abstract void inject(PresenterComponent component);
+
+    //region Impl BaseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,8 +87,6 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
         }
     }
-
-    protected abstract void inject(PresenterComponent component);
 
     @Override
     protected void prepareView() {
@@ -134,18 +135,21 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
         }
     }
+    //endregion
+
+    //region LOCATION
 
     @Override
     public void requestLocation(Callback<Location> callback) {
         this.callback = callback;
-        if (checkLocationPermission()) {
+        if (isLocationPermission()) {
             getLastLocation();
         }
     }
 
     @Override
     public void refreshLocation() {
-        if (checkLocationPermission()) {
+        if (isLocationPermission()) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             List<String> providers = locationManager.getProviders(true);
             for (int i = providers.size() - 1; i >= 0; i--) {
@@ -180,9 +184,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         }
     }
 
-
-    //region LOCATION
-    private boolean checkLocationPermission() {
+    private boolean isLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -190,25 +192,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.title_location_permission)
-                        .setMessage(R.string.text_location_permission)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(BaseActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION);
-                            }
-                        })
-                        .create()
-                        .show();
-
+                explanationLocation();
 
             } else {
                 // No explanation needed, we can request the permission.
@@ -222,13 +206,30 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         }
     }
 
+    public void explanationLocation() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_location_permission)
+                .setMessage(R.string.text_location_permission)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Prompt the user once explanation has been shown
+                        ActivityCompat.requestPermissions(BaseActivity.this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION);
+                    }
+                })
+                .create()
+                .show();
+    }
+
     private void getLastLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
         for (int i = providers.size() - 1; i >= 0; i--) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
-            }else {
+            } else {
                 Location l = locationManager.getLastKnownLocation(providers.get(i));
                 if (l != null) {
                     replayLocation(l);
@@ -240,19 +241,17 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
 
     private void replayLocation(Location location) {
-        if(callback!=null) {
+        if (callback != null) {
             callback.onResult(location);
-            callback=null;
+            callback = null;
         }
     }
-
-
     //endregion
 
     //region CHAT Snackbar
     public void showSnackbar(String text) {
-        View view=getWindow().getDecorView().findViewById(android.R.id.content);
-        if(view!=null) {
+        View view = getWindow().getDecorView().findViewById(android.R.id.content);
+        if (view != null) {
             Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
             snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
             snackbar.show();
@@ -260,16 +259,63 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
 
     private void unRegisterSnackbarReceiver() {
-        Intent intent=new Intent(ChatService.ACTION_CLEAR_RECEIVER,null,this, ChatService.class);
+        Intent intent = new Intent(ChatService.ACTION_CLEAR_RECEIVER, null, this, ChatService.class);
         startService(intent);
     }
 
     private void registerSnackbarReceiver() {
-        Intent intent=new Intent(ChatService.ACTION_SET_RECEIVER,null,this, ChatService.class);
-        intent.putExtra(ChatService.RECEIVER,chatResultReceiver);
+        Intent intent = new Intent(ChatService.ACTION_SET_RECEIVER, null, this, ChatService.class);
+        intent.putExtra(ChatService.RECEIVER, chatResultReceiver);
         startService(intent);
     }
     //endregion
 
+    //region Call Phone
+    protected void callPhone(String phoneNumber) {
+        if (isPermissionCallPhone()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            }else {
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber)));
+            }
+        }
+    }
+
+    private boolean isPermissionCallPhone() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CALL_PHONE)) {
+
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.title_call_phone_permission)
+                        .setMessage(R.string.text_call_phone_permission)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(BaseActivity.this,
+                                        new String[]{Manifest.permission.CALL_PHONE},
+                                        RequestCodes.MY_PERMISSIONS_CALL_PHONE);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        RequestCodes.MY_PERMISSIONS_CALL_PHONE);
+            }
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+    //endregion
 
 }

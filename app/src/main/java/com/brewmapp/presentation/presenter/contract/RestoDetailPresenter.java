@@ -8,8 +8,10 @@ import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
+import java.io.File;
 import java.util.List;
 
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -43,4 +45,6 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     void startChat(Activity activity, String user_id);
 
     RestoDetail getRestoDetails();
+
+    void uploadPhoto(File file,Callback<Integer> callback);
 }

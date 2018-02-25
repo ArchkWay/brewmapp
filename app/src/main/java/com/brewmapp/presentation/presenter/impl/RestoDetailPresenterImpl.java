@@ -26,6 +26,7 @@ import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
 import com.brewmapp.data.pojo.LoadPhotoPackage;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
+import com.brewmapp.data.pojo.NewPhotoPackage;
 import com.brewmapp.data.pojo.RestoAverageEvaluationPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.data.pojo.SubscriptionPackage;
@@ -33,10 +34,13 @@ import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.LoadUsersByInterestTask;
 import com.brewmapp.execution.task.LoadUsersTask;
+import com.brewmapp.execution.task.UploadPhotoTask;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
 import com.brewmapp.execution.task.AddInterestTask;
@@ -58,6 +62,7 @@ import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -67,6 +72,7 @@ import javax.inject.Inject;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import io.reactivex.Observable;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
@@ -81,6 +87,7 @@ import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter{
 
 
+    //region Private
     private ContainerTasks containerTasks;
     private Context context;
     private LoadRestoAverageEvaluationTask loadRestoAverageEvaluationTask;
@@ -102,7 +109,10 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     private LoadUsersByInterestTask loadUsersByInterestTask;
     private Interest interest;
     private UserRepo userRepo;
+    private UploadPhotoTask uploadPhotoTask;
+    //endregion
 
+    //region Inject
     @Inject
     public RestoDetailPresenterImpl(
             Context context,
@@ -121,7 +131,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             ContainerTasks containerTasks,
             LoadUsersTask loadUsersTask,
             LoadUsersByInterestTask loadUsersByInterestTask,
-            UserRepo userRepo){
+            UserRepo userRepo,
+            UploadPhotoTask uploadPhotoTask){
         this.context=context;
         this.loadRestoDetailTask = loadRestoDetailTask;
         this.subscriptionOnTask = subscriptionOnTask;
@@ -139,7 +150,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         this.loadUsersTask = loadUsersTask;
         this.loadUsersByInterestTask = loadUsersByInterestTask;
         this.userRepo = userRepo;
+        this.uploadPhotoTask = uploadPhotoTask;
     }
+    //endregion
 
     @Override
     public void onDestroy() {
@@ -361,7 +374,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         LoadPhotoPackage loadPhotoPackage=new LoadPhotoPackage();
         loadPhotoPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
         loadPhotoPackage.setRelated_model(Keys.CAP_RESTO);
-        loadPhotoPackage.setCacheOn(true);
+        loadPhotoPackage.setCacheOn(false);
         new LoadPhotoResto(
                 BeerMap.getAppComponent().mainThread(),
                 BeerMap.getAppComponent().executor(),
@@ -402,6 +415,25 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         return restoDetail;
     }
 
+    @Override
+    public void uploadPhoto(File file, Callback<Integer> callback) {
+        NewPhotoPackage newPhotoPackage=new NewPhotoPackage(file);
+        newPhotoPackage.setRelatedModel(Keys.CAP_RESTO);
+        newPhotoPackage.setRelatedId(restoDetail.getResto().id());
+        uploadPhotoTask.execute(newPhotoPackage,new SimpleSubscriber<SingleResponse<UploadPhotoResponse>>(){
+            @Override
+            public void onNext(SingleResponse<UploadPhotoResponse> uploadPhotoResponseSingleResponse) {
+                super.onNext(uploadPhotoResponseSingleResponse);
+                if(callback!=null) callback.onResult(Activity.RESULT_OK);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                if(callback!=null) callback.onResult(Activity.RESULT_CANCELED);
+            }
+        });
+    }
 
 
     //*****************************************

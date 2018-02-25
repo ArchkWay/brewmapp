@@ -17,12 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.data.entity.Event;
+import com.brewmapp.data.entity.Location;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
+import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.tool.HashTagHelper;
 import com.brewmapp.presentation.view.contract.ResultTask;
+import com.brewmapp.presentation.view.impl.dialogs.DialogSelectAddress;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import java.io.File;
@@ -47,6 +50,7 @@ import com.brewmapp.presentation.presenter.contract.NewPostPresenter;
 import com.brewmapp.presentation.view.contract.NewPostView;
 
 import ru.frosteye.ovsa.data.storage.ActiveBox;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 import com.twitter.Extractor;
@@ -105,17 +109,17 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
     }
 
     private void processBack() {
-        if(!post.isStarted()) {
+//        if(!post.isStarted()) {
             finish();
-            return;
-        }
-        Confirm.create(this)
-                .title(R.string.confirm_stop_edit)
-                .message(R.string.confirm_cancel_post)
-                .yes(R.string.stay, (dialog, which) -> {
-
-                })
-                .no(R.string.leave, (dialog, which) -> finish()).show();
+//            return;
+//        }
+//        Confirm.create(this)
+//                .title(R.string.confirm_stop_edit)
+//                .message(R.string.confirm_cancel_post)
+//                .yes(R.string.stay, (dialog, which) -> {
+//
+//                })
+//                .no(R.string.leave, (dialog, which) -> finish()).show();
     }
 
     @Override
@@ -170,7 +174,28 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
             invalidateOptionsMenu();
         }, input, title);
         photos.setNestedScrollingEnabled(false);
-        attachLocation.setOnClickListener(v -> startActivityForResult(new Intent(this, PickLocationActivity.class),RequestCodes.REQUEST_PICK_LOCATION));
+        attachLocation.setOnClickListener(v -> {
+            //startActivityForResult(new Intent(this, PickLocationActivity.class),RequestCodes.REQUEST_PICK_LOCATION);
+            requestLocation(new Callback<android.location.Location>() {
+                @Override
+                public void onResult(android.location.Location location) {
+                    if(location!=null) {
+                        DialogSelectAddress dialogSelectAddress = new DialogSelectAddress();
+                        dialogSelectAddress.setLocation(new Location(location));
+                        dialogSelectAddress.showDialog(getSupportFragmentManager(), new DialogSelectAddress.OnSelectAddress() {
+                            @Override
+                            public void onOk(Location location) {
+                                Intent intent = new Intent();
+                                ru.frosteye.ovsa.data.entity.SimpleLocation simpleLocation = new ru.frosteye.ovsa.data.entity.SimpleLocation(location.getLocation().getLat(), location.getLocation().getLon());
+                                GeolocatorResultPackage geolocatorResultPackage = new GeolocatorResultPackage(location.getFormatLocation(), simpleLocation);
+                                intent.putExtra(Keys.LOCATION, geolocatorResultPackage);
+                                onActivityResult(RequestCodes.REQUEST_PICK_LOCATION, RESULT_OK, intent);
+                            }
+                        });
+                    }
+                }
+            });
+        });
         attachPhoto.setOnClickListener(v -> takePhoto());
         attactFile.setOnClickListener(v -> takeFromGallery());
         settings.setOnClickListener(v -> {

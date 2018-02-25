@@ -38,16 +38,19 @@ import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
+import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +63,9 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -70,6 +76,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
 public class RestoDetailActivity extends BaseActivity implements RestoDetailView {
 
+    //region BindView
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_resto_detail_name)    TextView name;
     @BindView(R.id.activity_restoDetails_slider)    SliderLayout slider;
@@ -131,18 +138,23 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             R.id.activity_restoDetails_slider
     })    List<View> viewList;
 
+    //endregion
+
+    //region Inject
     @Inject RestoDetailPresenter presenter;
+    //endregion
 
+    //region Private
     private final int ALL_CONTROL =0;
-
     private Resto resto;
-
     private ArrayList<String> photoArrayListPreview =new ArrayList<>();
     private FlexibleAdapter adapter_favorites;
     private FlexibleAdapter adapter_reviews;
     private  swipeDelayed swipeDelayed=new swipeDelayed();
     private  ArrayList<Photo> photoArrayList;
+    //endregion
 
+    //region Impl RestoDetailActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,8 +183,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
         private_message.setOnClickListener(v -> presenter.startChat(this,resto.getUser_id()));
-        call.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_call.getText()))));
-        call1.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number_cal2.getText()))));
+        call.setOnClickListener(v -> callPhone(number_call.getText().toString()));
+        call1.setOnClickListener(v -> callPhone(number_cal2.getText().toString()));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
 
         panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
@@ -183,24 +195,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         added_favorites.setAdapter(adapter_favorites);
 
 
-    }
-
-    private void setTitleToButtonOfMoreDescription(boolean click) {
-        if(button_more_description.getVisibility()==View.VISIBLE) {
-            if(click) {
-                if (description.getLineCount() > description.getMaxLines())
-                    description.setMaxLines(description.getMaxLines() * 4);
-                else
-                    description.setMaxLines(getResources().getInteger(R.integer.init_max_lites_text_view));
-            }
-
-            if (getResources().getInteger(R.integer.init_max_lites_text_view) == description.getMaxLines())
-                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать подробнее" : "Свернуть");
-            else
-                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать полностью" : "Свернуть");
-        }else {
-            button_more_description.setOnClickListener(null);
-        }
     }
 
     @Override
@@ -243,84 +237,61 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
+            case RequestCodes.REQUEST_MAP_FRAGMENT:
+                if(resultCode==RESULT_OK)
+                    presenter.restoreSetting();
+                return;
+            case RequestCodes.REQUEST_CODE_REVIEW:
+                if(resultCode==RESULT_OK) {
+                    enableControls(false,ALL_CONTROL);
+                    presenter.refreshContent(Actions.MODE_REFRESH_ALL);
+                }
+                return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit,menu);
+        menu.findItem(R.id.action_edit).getActionView().setOnClickListener(v -> onOptionsItemSelected(menu.findItem(R.id.action_edit)));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:
+                startActivityForResult(new Intent(MultiFragmentActivityView.MODE_RESTO_EDIT,Uri.parse(String.valueOf(resto.getId())),this,MultiFragmentActivity.class),REQUEST_EDIT_BEER);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(title);
+    }
+
+    //endregion
+
+    //region Imp RestoDetailView
+    @Override
     public void setModel(RestoDetail restoDetail, int mode) {
 
         switch (mode){
             case Actions.MODE_REFRESH_ALL:
+
+                //region fill Texts
                 resto=restoDetail.getResto();
                 try {text_view_place.setText(restoDetail.getResto().getAdressFormat());}catch (Exception e){}
                 setTitle(restoDetail.getResto().getName());
                 name.setText(restoDetail.getResto().getName());
-                //fill photos
-                presenter.loadAllPhoto(new SimpleSubscriber<List<Photo>>(){
-
-                    @Override
-                    public void onNext(List<Photo> photos) {
-                        super.onNext(photos);
-                        photoArrayList=new ArrayList<>(photos);
-                        Iterator<Photo> iterator=photos.iterator();
-                        while (iterator.hasNext()) {
-                            Photo photo=iterator.next();
-                            try {
-                                photoArrayListPreview.add(photo.getThumb().getThumbUrl());
-                            }catch (Exception e){}
-                        }
-                        fillSlider();
-                    }
-
-                    private void fillSlider() {
-                            if(restoDetail.getResto().getThumb()!=null)
-                                photoArrayListPreview.add(restoDetail.getResto().getThumb());
-
-                            for(String imgUrl: photoArrayListPreview){
-                                if(imgUrl!=null) {
-                                    DefaultSliderView defaultSliderView=new DefaultSliderView(RestoDetailActivity.this);
-                                    defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
-                                    defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
-                                    defaultSliderView.image(imgUrl);
-                                    defaultSliderView.setOnSliderClickListener(slider1 -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,RestoDetailActivity.this));
-                                    slider.addSlider(defaultSliderView);
-                                }
-                            }
-
-
-                        if(photoArrayListPreview.size()==0){
-                            slider.addSlider(new DefaultSliderView(RestoDetailActivity.this)
-                                    .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
-                                    .image(R.drawable.ic_default_resto)
-                            );
-                        }
-
-
-                        photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", 1, photoArrayListPreview.size()));
-                        slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
-                            @Override
-                            public void onPageSelected(int position) {
-                                photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", position + 1, photoArrayListPreview.size()));
-                            }
-                        });
-                        cnt_photo.setText(String.valueOf(photoArrayListPreview.size()));
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        fillSlider();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        super.onComplete();
-
-                    }
-                });
-
-                site.setText(restoDetail.getResto().getSite());
-                String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
-                if(strDescription.length()>0)  description.setText(strDescription);
-                cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
-
+                //region Phone
                 try {
                     JSONObject jsonObject=new JSONObject(restoDetail.getResto().getAdditional_data());
                     JSONArray jsonArray=jsonObject.getJSONArray("phones");
@@ -335,13 +306,39 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                         }
 
                 }catch (Exception e){};
-
-                button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
+                //endregion
+                site.setText(restoDetail.getResto().getSite());
+                cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
+                //region Description
+                String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
+                if(strDescription.length()>0)  description.setText(strDescription);
                 setTitleToButtonOfMoreDescription(false);
+                button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
+                //endregion
+                //endregion
+
+                //region fill Photo
+                fillSlider(restoDetail);
+
+                presenter.loadAllPhoto(new SimpleSubscriber<List<Photo>>(){
+
+                    @Override
+                    public void onNext(List<Photo> photos) {
+                        super.onNext(photos);
+                        photoArrayList=new ArrayList<>(photos);
+                        Iterator<Photo> iterator=photos.iterator();
+                        while (iterator.hasNext()) try {photoArrayListPreview.add(iterator.next().getThumb().getThumbUrl());}catch (Exception e){}
+                        cnt_photo.setText(String.valueOf(photoArrayListPreview.size()));
+                    }
+                });
+                //endregion
+
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
+
             case Actions.MODE_REFRESH_ONLY_LIKE:
-                try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){};
-                try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){};
+
+                try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){}
+                try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){}
 
         }
 
@@ -438,48 +435,108 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT:
-            case RequestCodes.REQUEST_MAP_FRAGMENT:
-                if(resultCode==RESULT_OK)
-                    presenter.restoreSetting();
-                return;
-            case RequestCodes.REQUEST_CODE_REVIEW:
-                if(resultCode==RESULT_OK) {
-                    enableControls(false,ALL_CONTROL);
-                    presenter.refreshContent(Actions.MODE_REFRESH_ALL);
+    //endregion
+
+    //region Functions
+    private void fillSlider(RestoDetail restoDetail) {
+
+        if(restoDetail.getResto().getThumb()!=null) {
+            DefaultSliderView defaultSliderView = new DefaultSliderView(RestoDetailActivity.this);
+            defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
+            defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
+            defaultSliderView.image(restoDetail.getResto().getThumb());
+            defaultSliderView.setOnSliderClickListener(slider1 -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList, RestoDetailActivity.this));
+            slider.addSlider(defaultSliderView);
+        }else {
+            slider.addSlider(new DefaultSliderView(RestoDetailActivity.this)
+                    .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                    .image(R.drawable.ic_default_resto)
+            );
+        }
+        slider.addSlider(new AddPhotoSliderView(RestoDetailActivity.this, v -> {addPhoto();}));
+
+        int mountSliders=2;
+        photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", 1, mountSliders));
+        slider.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", position + 1, mountSliders));
+            }
+        });
+
+    }
+
+    private void addPhoto() {
+        showSelect(this, R.array.avatar_options_mini, (text, position) -> {
+            switch (position) {
+                case 0:takeFromGallery(); break;
+                case 1:takePhoto(); break;
+            }
+        });
+
+    }
+
+    private void takePhoto() {
+        RxPaparazzo.single(this)
+                .usingCamera()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() != RESULT_OK) {
+                        return;
+                    }
+                    response.targetUI().onImageReady(response.data().getFile());
+                });
+    }
+
+    private void takeFromGallery() {
+        RxPaparazzo.single(this)
+                .usingGallery()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() != RESULT_OK) {
+                        return;
+                    }
+                    response.targetUI().onImageReady(response.data().getFile());
+                });
+
+    }
+
+    void onImageReady(File file){
+        presenter.uploadPhoto(file, new Callback<Integer>() {
+            @Override
+            public void onResult(Integer result) {
+                switch (result){
+                    case RESULT_OK:
+                        showMessage(getString(android.R.string.ok));
+                        break;
+                    case RESULT_CANCELED:
+                        showMessage(getString(android.R.string.cancel));
+                        break;
                 }
-                return;
+            }
+        });
+    }
+
+    private void setTitleToButtonOfMoreDescription(boolean click) {
+        if(button_more_description.getVisibility()==View.VISIBLE) {
+            if(click) {
+                if (description.getLineCount() > description.getMaxLines())
+                    description.setMaxLines(description.getMaxLines() * 4);
+                else
+                    description.setMaxLines(getResources().getInteger(R.integer.init_max_lites_text_view));
+            }
+
+            if (getResources().getInteger(R.integer.init_max_lites_text_view) == description.getMaxLines())
+                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать подробнее" : "Свернуть");
+            else
+                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать полностью" : "Свернуть");
+        }else {
+            button_more_description.setOnClickListener(null);
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit,menu);
-        menu.findItem(R.id.action_edit).getActionView().setOnClickListener(v -> onOptionsItemSelected(menu.findItem(R.id.action_edit)));
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_edit:
-                startActivityForResult(new Intent(MultiFragmentActivityView.MODE_RESTO_EDIT,Uri.parse(String.valueOf(resto.getId())),this,MultiFragmentActivity.class),REQUEST_EDIT_BEER);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        super.setTitle(title);
-        toolbarTitle.setText(title);
-    }
-
-    //*****************************************
     private void processItemClickAction(int action, Object payload){
         switch (action){
             case Actions.ACTION_CLICK_ON_ITEM_USER: {
@@ -502,6 +559,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 break;
         }
     }
+
     class swipeDelayed implements Runnable {
         private boolean cancel=false;
         public void cancel(){
@@ -515,4 +573,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         }
 
     }
+
+    //endregion
 }

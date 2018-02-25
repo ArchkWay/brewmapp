@@ -11,6 +11,17 @@ public class Location implements Serializable {
     private LocationChild location;
     private Metro metro;
 
+    public Location() {
+
+    }
+
+
+    public Location(android.location.Location location) {
+        this.location=new LocationChild();
+        this.location.setLat(location.getLatitude());
+        this.location.setLon(location.getLongitude());
+    }
+
     public String getCity_id() {
         return city_id;
     }

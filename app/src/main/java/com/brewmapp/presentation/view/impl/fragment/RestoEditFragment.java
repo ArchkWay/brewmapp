@@ -36,6 +36,8 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
  */
 
 public class RestoEditFragment extends BaseFragment  implements RestoEditFragmentView {
+
+    //region BindView
     @BindView(R.id.fragment_edit_resto_swipe)    RefreshableSwipeRefreshLayout refreshableSwipeRefreshLayout;
     @BindView(R.id.fragment_edit_resto_scroll)    ScrollView scrollView;
     @BindView(R.id.fragment_edit_resto_slider)    SliderLayout sliderLayout;
@@ -49,6 +51,7 @@ public class RestoEditFragment extends BaseFragment  implements RestoEditFragmen
     @BindView(R.id.fragment_edit_resto_edit_place)    ImageView edit_place;
     @BindView(R.id.fragment_edit_resto_edit_kitchen)    ImageView edit_kitchen;
     @BindView(R.id.fragment_edit_resto_kitchen)    TextView kitchen;
+    //endregion
 
 
     @Inject RestoEditFragmentPresenter presenter;

@@ -505,5 +505,6 @@
     <string name="text_view_event">Событие</string>
     <string name="title_call_phone_permission">Исходящий вызов</string>
     <string name="text_call_phone_permission">Для совершения вызова требуется соответствующее разрешение</string>
+    <string name="text_continue_input">Продолжайте ввод</string>
 
 </resources>

@@ -97,7 +97,7 @@ public class BeerMapFragment extends BaseFragment implements
     BeerMapPresenter presenter;
     //endregion
 
-    //region mVALUES
+    //region Privates
     private OnFragmentInteractionListener mListener;
     private OnLocationInteractionListener mLocationListener;
     private GoogleMap googleMap;
@@ -116,11 +116,12 @@ public class BeerMapFragment extends BaseFragment implements
     private float minZoomPref=12.0f;
     private DialogShowView dialogShowView;
     private Location userLocation=null;
+    private ArrayList arrayList=new ArrayList<>();
 
 
     //endregion
 
-    //region FRAGMENT
+    //region Impl BeerMapFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,17 +142,18 @@ public class BeerMapFragment extends BaseFragment implements
 
         searchPackage = new FullSearchPackage();
 
-        list.addOnScrollListener(scrollListener);
         list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         scrollListener = new EndlessRecyclerOnScrollListener((LinearLayoutManager) list.getLayoutManager()) {
             @Override
             public void onLoadMore(int currentPage) {
                 searchPackage.setPage(currentPage - 1);
+                startQuery();
             }
         };
+        list.addOnScrollListener(scrollListener);
 
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
         finder.setListener(this::prepareQuery);
         finder.clearFocus();
@@ -220,6 +222,40 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     @Override
+    public void onBarAction(int id) {
+        Intent intent = new Intent(getContext(), FilterMapActivity.class);
+        getActivity().startActivityForResult(intent, REQUEST_CODE_MAP_RESULT);
+    }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+            mLocationListener = mListener.getLocationListener();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+    //endregion
+
+    //region Impl BeerMapView
+    @Override
+    public void appendItems(List<IFlexible> restoList) {
+        int oldSize=arrayList.size();
+        arrayList.addAll(restoList);
+        adapter.notifyItemRangeChanged(oldSize,restoList.size());
+        hideList(false);
+    }
+
+
+    @Override
     public void showDialogProgressBar(boolean show) {
         if (show) {
             dialog = ProgressDialog.show(getContext(), getString(R.string.loading),
@@ -241,29 +277,6 @@ public class BeerMapFragment extends BaseFragment implements
     public void hideProgressBar() {
         finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
         finder.findViewById(R.id.finder_cancel).setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onBarAction(int id) {
-        Intent intent = new Intent(getContext(), FilterMapActivity.class);
-        getActivity().startActivityForResult(intent, REQUEST_CODE_MAP_RESULT);
-    }
-
-    @Override
-    protected void prepareView(View view) {
-        super.prepareView(view);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-            mLocationListener = mListener.getLocationListener();
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
     //endregion
 
@@ -311,17 +324,6 @@ public class BeerMapFragment extends BaseFragment implements
         }else if(cntRequestFromUI==1){
             cntRequestFromUI =0;
         }
-    }
-
-    @Override
-    public void appendItems(List<IFlexible> restoList) {
-        adapter.clear();
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        list.setLayoutParams(params);
-        adapter.addItems(adapter.getItemCount(), restoList);
-        adapter.notifyDataSetChanged();
-        animFlowBrandList(false);
     }
 
     @Override
@@ -427,21 +429,28 @@ public class BeerMapFragment extends BaseFragment implements
 
     //endregion
 
-    //region FUNCTIONS
+    //region Functions
     private void prepareQuery(String stringSearch) {
-    searchPackage.setPage(0);
-    searchPackage.setStringSearch(stringSearch);
-    if (stringSearch.length() > 0) {
+        scrollListener.reset();
+        searchPackage.setPage(0);
+        searchPackage.setStringSearch(stringSearch);
+        if (stringSearch.length() > 1) {
+            arrayList.clear();
+            startQuery();
+        }else if (stringSearch.length() == 0) {
+            arrayList.clear();
+            adapter.notifyDataSetChanged();
+            hideProgressBar();
+            hideList(true);
+
+        }
+}
+
+    private void startQuery() {
         showProgressBar();
         presenter.sendQueryRestoSearch(searchPackage);
-    } else if (stringSearch.length() == 0) {
-        //UITools.hideKeyboard(getActivity());
-        adapter.clear();
-        hideProgressBar();
-        animFlowBrandList(true);
 
     }
-}
 
     private void processAction(int action, Object payload) {
         UITools.hideKeyboard(getActivity());
@@ -473,7 +482,7 @@ public class BeerMapFragment extends BaseFragment implements
 //        startActivity(i);
     }
 
-    private void animFlowBrandList(boolean hide) {
+    private void hideList(boolean hide) {
         list.setVisibility(hide ? View.GONE : View.VISIBLE);
     }
 

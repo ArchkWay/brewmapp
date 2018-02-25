@@ -35,7 +35,7 @@ public class BeerBrandTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
                          Executor executor,
                          Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.filter_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
     }
 
     @Override

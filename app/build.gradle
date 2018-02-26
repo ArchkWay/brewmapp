@@ -45,7 +45,7 @@ android {
         applicationId "com.brewmapp"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 28
+        versionCode 30
         versionName "1.0.5"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -96,6 +96,7 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'info.hoang8f:android-segmented:1.0.6'
     compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'nl.psdcompany:duo-navigation-drawer:2.0.6'
     compile 'com.facebook.android:facebook-android-sdk:4.25.0'

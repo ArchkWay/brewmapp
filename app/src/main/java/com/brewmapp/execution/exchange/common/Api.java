@@ -223,6 +223,10 @@ public interface Api {
     @FormUrlEncoded
     Call<MessageResponse> deleteAlbum(@FieldMap WrapperParams params);
 
+    @POST("photo/delete")
+    @FormUrlEncoded
+    Call<MessageResponse> deletePhoto(@FieldMap WrapperParams params);
+
     @GET("quick_search/{query}")
     Call<MessageResponse> quickSearch(@Path("query") String query,
                                       @Query("lat") double lat, @Query("lon") double lon);

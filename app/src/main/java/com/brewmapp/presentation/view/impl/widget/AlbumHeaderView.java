@@ -66,7 +66,7 @@ public class AlbumHeaderView extends BaseLinearLayout implements ModelView<Album
                     .fit().centerCrop()
                     .into(image);
         } else {
-            image.setImageDrawable(null);
+            image.setImageResource(R.drawable.ic_photo_icon);
         }
     }
 }

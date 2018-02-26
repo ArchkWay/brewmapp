@@ -19,6 +19,14 @@ public class Album implements Serializable {
     private int like;
     private int interested;
 
+
+    public Album() {
+    }
+
+    public Album(String name) {
+        this.name = name;
+    }
+
     @SerializedName(Keys.DIS_LIKE)
     private int dislike;
 

@@ -34,18 +34,28 @@ import ru.frosteye.ovsa.presentation.view.dialog.Confirm;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.listener.SelectListener;
 
-public class AlbumsActivity extends BaseActivity implements AlbumsView, FlexibleAdapter.OnItemClickListener,
-        FlexibleAdapter.OnItemLongClickListener {
+public class AlbumsActivity extends BaseActivity implements
+        AlbumsView,
+        FlexibleAdapter.OnItemClickListener,
+        FlexibleAdapter.OnItemLongClickListener
+{
 
+    //region BindView
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_list_list) RecyclerView list;
     @BindView(R.id.activity_list_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.activity_album_text_empty)    TextView textView;
+    //endregion
 
+    //region Inject
     @Inject AlbumsPresenter presenter;
+    //endregion
 
+    //region Private
     private FlexibleAdapter<AlbumInfo> adapter;
+    //endregion
 
+    //region Impl AlbumsActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,21 +91,6 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView, Flexible
     }
 
     @Override
-    public void enableControls(boolean enabled, int code) {
-        if(enabled) {
-            if(code == CONTROLS_CODE_PROGRESS) {
-                showTopBarLoading(true);
-                swipe.setRefreshing(false);
-            } else {
-                showTopBarLoading(false);
-                swipe.setRefreshing(false);
-            }
-        } else {
-            showTopBarLoading(true);
-        }
-    }
-
-    @Override
     protected void initView() {
         enableBackButton();
         swipe.setOnRefreshListener(() -> presenter.onLoadAlbums());
@@ -120,14 +115,32 @@ public class AlbumsActivity extends BaseActivity implements AlbumsView, Flexible
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+    //endregion
+
+    //region Impl AlbumsView
+    @Override
+    public void enableControls(boolean enabled, int code) {
+        if(enabled) {
+            if(code == CONTROLS_CODE_PROGRESS) {
+                showTopBarLoading(true);
+                swipe.setRefreshing(false);
+            } else {
+                showTopBarLoading(false);
+                swipe.setRefreshing(false);
+            }
+        } else {
+            showTopBarLoading(true);
+        }
+    }
 
     @Override
     public void showAlbums(Albums albums) {
+        albums.getModels().add(new AlbumInfo(new Album(getString(R.string.all_photos))));
         adapter.updateDataSet(albums.getModels());
         textView.setVisibility(albums.getModels().size()!=0? View.GONE:View.VISIBLE);
         list.setVisibility(albums.getModels().size()==0?View.GONE:View.VISIBLE);
-
     }
+    //endregion
 
     @Override
     public boolean onItemClick(int position) {

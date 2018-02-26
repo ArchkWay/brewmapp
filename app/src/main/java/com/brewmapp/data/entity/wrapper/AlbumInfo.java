@@ -10,6 +10,14 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class AlbumInfo extends AdapterItem<Album, AlbumHeaderView> {
+
+    public AlbumInfo(Album model) {
+        super(model);
+    }
+
+    public AlbumInfo() {
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.view_album_header;

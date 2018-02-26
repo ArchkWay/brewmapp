@@ -36,19 +36,28 @@ import ru.frosteye.ovsa.stub.listener.SelectListener;
  * Created by Kras on 13.12.2017.
  */
 
-public class ChatFragment extends BaseFragment implements ChatFragmentView {
+public class ChatFragment extends BaseFragment implements
+        ChatFragmentView
+{
 
+    //region BindView
     @BindView(R.id.fragment_chat_messages)    RecyclerView recyclerView;
     @BindView(R.id.fragment_chat_message_input) EditText mInputMessageView;
     @BindView(R.id.fragment_chat_send_button)    ImageButton send_button;
+    //endregion
 
+    //region Private
     private MessageAdapter mAdapter;
     private List<Message> mMessages = new ArrayList<Message>();
     private OnFragmentInteractionListener mListener;
     private RecyclerView.OnScrollListener onScrollListener;
+    //endregion
 
+    //region Inject
     @Inject ChatFragmentPresenter presenter;
+    //endregion
 
+    //region Impl ChatFragment
     @Override
     protected int getFragmentLayout() {return R.layout.fragment_chat;}
 
@@ -155,6 +164,14 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //endregion
+
+    //region Impl ChatFragmentView
+    @Override
     public void enableControls(boolean enabled, int code) {
 
     }
@@ -205,15 +222,13 @@ public class ChatFragment extends BaseFragment implements ChatFragmentView {
 
         }
     }
+    //endregion
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
+    //region Functions
     private void scrollToBottom() {
         recyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
+    //endregion
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

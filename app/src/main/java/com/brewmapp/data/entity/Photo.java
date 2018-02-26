@@ -16,6 +16,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 public class Photo implements ILikeable,Serializable{
     private int id;
     private int like;
+    private boolean selected;
 
     private String title;
 
@@ -34,6 +35,14 @@ public class Photo implements ILikeable,Serializable{
     private String url;
 
     private Info info;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     public Info getInfo() {
         return info;

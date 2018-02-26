@@ -18,7 +18,7 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  * Created by oleg on 26.07.17.
  */
 
-public class LoadAlbumPhotosTask extends BaseNetworkTask<Integer, AlbumPhotos> {
+public class LoadAlbumPhotosTask extends BaseNetworkTask<WrapperParams, AlbumPhotos> {
 
 
     @Inject
@@ -29,11 +29,9 @@ public class LoadAlbumPhotosTask extends BaseNetworkTask<Integer, AlbumPhotos> {
     }
 
     @Override
-    protected Observable<AlbumPhotos> prepareObservable(Integer params) {
+    protected Observable<AlbumPhotos> prepareObservable(WrapperParams wrapperParams) {
         return Observable.create(subscriber -> {
             try {
-                WrapperParams wrapperParams = new WrapperParams(Wrappers.PHOTO);
-                wrapperParams.addParam(Keys.PHOTO_ALBUM_ID, params);
                 subscriber.onNext(executeCall(getApi().loadPhotosForAlbum(wrapperParams)));
                 subscriber.onComplete();
             } catch (Exception e) {

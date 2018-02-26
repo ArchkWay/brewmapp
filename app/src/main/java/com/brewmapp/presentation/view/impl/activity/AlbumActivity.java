@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.brewmapp.presentation.view.impl.widget.LikeView;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import java.io.File;
@@ -42,20 +43,31 @@ import ru.frosteye.ovsa.tool.DateTools;
 import com.brewmapp.R;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
-public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAdapter.OnItemClickListener {
+public class AlbumActivity extends BaseActivity implements
+           AlbumView,
+        FlexibleAdapter.OnItemClickListener,
+        FlexibleAdapter.OnItemLongClickListener
+{
 
+    //region BindView
     @BindView(R.id.activity_album_list) RecyclerView list;
     @BindView(R.id.activity_album_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_album_text_empty) TextView textView;
+    //endregion
 
+    //region Inject
     @Inject AlbumPresenter presenter;
+    //endregion
 
+    //region Private
     private int albumId;
     private String albumTitle;
     private FlexibleAdapter<PhotoInfo> adapter;
     private AlbumPhotos albumPhotos;
+    //endregion
 
+    //region Impl AlbumActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,14 +82,10 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
         enableBackButton();
         swipe.setOnRefreshListener(() -> presenter.onRequestPhotos(albumId));
         adapter = new FlexibleAdapter<>(new ArrayList<>(), this);
+        adapter.addListener(this);
+
         list.setLayoutManager(new GridLayoutManager(this, 3));
         list.setAdapter(adapter);
-    }
-
-    @Override
-    public void enableControls(boolean enabled, int code) {
-        showTopBarLoading(!enabled);
-        if(enabled) swipe.setRefreshing(false);
     }
 
     @Override
@@ -106,6 +114,41 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void attachPresenter() {
+        presenter.onAttach(this);
+        presenter.onRequestPhotos(albumId);
+    }
+
+    @Override
+    protected LivePresenter<?> getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected void inject(PresenterComponent component) {
+        component.inject(this);
+    }
+    //endregion
+
+    //region Impl AlbumView
+    @Override
+    public void showPhotos(AlbumPhotos photos) {
+        this.albumPhotos = photos;
+        adapter.updateDataSet(photos.getModels());
+        textView.setVisibility(photos.getModels().size()!=0?View.GONE:View.VISIBLE);
+        list.setVisibility(photos.getModels().size()==0?View.GONE:View.VISIBLE);
+
+    }
+
+    @Override
+    public void enableControls(boolean enabled, int code) {
+        showTopBarLoading(!enabled);
+        if(enabled) swipe.setRefreshing(false);
+    }
+    //endregion
+
+    //region Functions
     private void takePhoto() {
         RxPaparazzo.single(this)
                 .usingCamera()
@@ -133,33 +176,9 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
     }
 
     public void onImageReady(File file) {
-        presenter.onUploadPhoto(albumId, file);
+        presenter.onUploadPhoto(albumId, MapUtils.ImageFormat(file));
     }
-
-    @Override
-    protected void attachPresenter() {
-        presenter.onAttach(this);
-        presenter.onRequestPhotos(albumId);
-    }
-
-    @Override
-    protected LivePresenter<?> getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    protected void inject(PresenterComponent component) {
-        component.inject(this);
-    }
-
-    @Override
-    public void showPhotos(AlbumPhotos photos) {
-        this.albumPhotos = photos;
-        adapter.updateDataSet(photos.getModels());
-        textView.setVisibility(photos.getModels().size()!=0?View.GONE:View.VISIBLE);
-        list.setVisibility(photos.getModels().size()==0?View.GONE:View.VISIBLE);
-
-    }
+    //endregion
 
     @Override
     public boolean onItemClick(int position) {
@@ -182,5 +201,11 @@ public class AlbumActivity extends BaseActivity implements AlbumView, FlexibleAd
                 .setStartPosition(position)
                 .show();
         return false;
+    }
+
+
+    @Override
+    public void onItemLongClick(int position) {
+        presenter.deletePhoto(albumPhotos.getModels().get(position).getModel().getId(),albumId);
     }
 }

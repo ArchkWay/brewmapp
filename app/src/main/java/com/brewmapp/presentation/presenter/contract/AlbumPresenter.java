@@ -12,4 +12,6 @@ public interface AlbumPresenter extends LivePresenter<AlbumView> {
     void onRequestPhotos(int albumId);
     void onUploadPhoto(int albumId, File file);
     void onLikePhoto(Photo photo, Callback<Boolean> callback);
+
+    void deletePhoto(int photo_id, int albumId);
 }

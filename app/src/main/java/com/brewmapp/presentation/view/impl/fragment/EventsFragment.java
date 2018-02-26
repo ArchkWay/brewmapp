@@ -53,41 +53,47 @@ import java.util.List;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-public class EventsFragment extends BaseFragment implements EventsView, View.OnClickListener, AdapterView.OnItemClickListener {
+public class EventsFragment extends BaseFragment implements
+        EventsView,
+        View.OnClickListener,
+        AdapterView.OnItemClickListener
+{
 
+    //region BindView
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
     @BindView(R.id.fragment_events_list) RecyclerView list;
     @BindView(R.id.fragment_events_swipe) RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_events_empty) TextView empty;
     @BindView(R.id.dark_layout) LinearLayout darkBackGround;
     @BindView(R.id.filter_list) ListView filterList;
+    //endregion
 
+    //region Inject
     @Inject EventsPresenter presenter;
     @Inject ActiveBox activeBox;
+    //endregion
 
+    //region Private
     private String[] tabContent = ResourceHelper.getResources().getStringArray(R.array.event_types);
     private LoadNewsPackage loadNewsPackage = new LoadNewsPackage();
     private FlexibleModelAdapter<IFlexible> adapter;
     private EndlessRecyclerOnScrollListener scrollListener;
     private List<FilteredTitle> dropdownItems;
+    private final String MODE_DEFAULT="0";
+    private final String MODE_TABS_INVISIBLE ="1";
+    private String mode=MODE_DEFAULT;
+    //endregion
 
+    //region Public
     public static final int TAB_EVENT = 0;
     public static final int TAB_SALE = 1;
     public static final int TAB_POST = 2;
+    //endregion
 
-    private final String MODE_DEFAULT="0";
-    private final String MODE_TABS_INVISIBLE ="1";
-
-    private String mode=MODE_DEFAULT;
-
+    //region Impl EventsFragment
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_events;
-    }
-
-    @Override
-    public void enableControls(boolean enabled, int code) {
-        if(enabled) swipe.setRefreshing(false);
     }
 
     @Override
@@ -136,17 +142,145 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
 
     }
 
-    private void fillDropDownList() {
-        dropdownItems = new ArrayList<>();
-        for (String title : this.getTitleDropDown()) {
-            dropdownItems.add(new FilteredTitle(title, false));
-        }
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         refreshItems(false);
+    }
+
+    @Override
+    protected void attachPresenter() {
+        presenter.onAttach(this);
+    }
+
+    @Override
+    protected LivePresenter<?> getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    public int getMenuToInflate() {
+        return R.menu.search_add;
+    }
+
+    @Override
+    protected void inject(PresenterComponent component) {
+        component.inject(this);
+    }
+
+    @Override
+    public CharSequence getTitle() {
+        return tabContent[loadNewsPackage.getMode()];
+    }
+
+    @Override
+    public void onBarAction(int id) {
+        switch (id) {
+            case R.id.action_search:
+                showMessage(getString(R.string.message_develop));
+                break;
+            case R.id.action_add:
+                interractor().processStartActivityWithRefresh(new Intent(getActivity(), NewPostActivity.class), REQUEST_CODE_REFRESH_ITEMS);
+                break;
+        }
+    }
+
+    @Override
+    public List<String> getTitleDropDown() {
+        switch (loadNewsPackage.getMode()) {
+            case 0:
+                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_events));
+            case 1:
+                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_sales));
+            case 2:
+                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_news));
+        }
+        return super.getTitleDropDown();
+    }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+    }
+    //endregion
+
+    //region Impl EventsView
+    @Override
+    public void appendItems(List<IFlexible> list) {
+        setEmpty(loadNewsPackage.getPage() == 0 && list.isEmpty());
+        if(loadNewsPackage.getPage() == 0) {
+            adapter.clear();
+            scrollListener.reset();
+            this.list.addOnScrollListener(scrollListener);
+        }
+        adapter.addItems(adapter.getItemCount(), list);
+
+    }
+
+    @Override
+    public void enableControls(boolean enabled, int code) {
+        if(enabled) swipe.setRefreshing(false);
+    }
+
+    @Override
+    public void refreshState() {
+        adapter.notifyDataSetChanged();
+    }
+
+
+    @OnClick(R.id.dark_layout)
+    public void darkLayoutClicked() {
+        showLogicAnimation();
+    }
+    //endregion
+
+    @Override
+    public void onClick(View v) {
+        initFilterItems();
+        showLogicAnimation();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        loadNewsPackage.setFilter(position);
+        interractor().processSpinnerTitleSubtitle(getTitleDropDown().get(position));
+        if(loadNewsPackage.getFilter() == 2) {
+            DateTools.showDateDialogRange(getActivity(), (startDate, endDate) -> {
+                loadNewsPackage.setDateFrom(startDate);
+                loadNewsPackage.setDateTo(endDate);
+                presenter.onLoadItems(loadNewsPackage);
+            }, Calendar.getInstance());
+        } else {
+            refreshItems(false);
+        }
+
+        for (int i = 0; i < dropdownItems.size(); i++) {
+            if (position == i) {
+                dropdownItems.get(position).setSelected(true);
+            } else {
+                dropdownItems.get(i).setSelected(false);
+            }
+        }
+        initAdapter();
+        showLogicAnimation();
+    }
+
+    //region Function
+    private void hideFilterLayout() {
+        filterList.setVisibility(View.GONE);
+        darkBackGround.setVisibility(View.GONE);
+    }
+
+    private void initFilterItems() {
+        if (dropdownItems == null || dropdownItems.size() == 0) {
+            fillDropDownList();
+        }
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        FilterAdapter filterAdapter = new FilterAdapter(getContext(), dropdownItems);
+        filterList.setAdapter(filterAdapter);
     }
 
     private void processAction(int action, Object payload) {
@@ -186,44 +320,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         viewToAnimate.setVisibility(filterList.isShown() ? View.GONE : View.VISIBLE);
     }
 
-    @Override
-    protected void attachPresenter() {
-        presenter.onAttach(this);
-    }
-
-    @Override
-    protected LivePresenter<?> getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    public int getMenuToInflate() {
-        return R.menu.search_add;
-    }
-
-    @Override
-    protected void inject(PresenterComponent component) {
-        component.inject(this);
-    }
-
-    @Override
-    public CharSequence getTitle() {
-        return tabContent[loadNewsPackage.getMode()];
-    }
-
-    @Override
-    public void appendItems(List<IFlexible> list) {
-        setEmpty(loadNewsPackage.getPage() == 0 && list.isEmpty());
-        if(loadNewsPackage.getPage() == 0) {
-            adapter.clear();
-            scrollListener.reset();
-            this.list.addOnScrollListener(scrollListener);
-        }
-        adapter.addItems(adapter.getItemCount(), list);
-
-    }
-
-
     private void setEmpty(boolean empty) {
         if(!empty) {
             this.empty.setVisibility(View.GONE);
@@ -243,36 +339,6 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         }
     }
 
-    @Override
-    public void refreshState() {
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public List<String> getTitleDropDown() {
-        switch (loadNewsPackage.getMode()) {
-            case 0:
-                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_events));
-            case 1:
-                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_sales));
-            case 2:
-                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_news));
-        }
-        return super.getTitleDropDown();
-    }
-
-    @Override
-    public void onBarAction(int id) {
-        switch (id) {
-            case R.id.action_search:
-                showMessage(getString(R.string.message_develop));
-                break;
-            case R.id.action_add:
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), NewPostActivity.class), REQUEST_CODE_REFRESH_ITEMS);
-                break;
-        }
-    }
-
     public void refreshItems(boolean tabSelected) {
         swipe.setRefreshing(true);
         list.removeOnScrollListener(scrollListener);
@@ -288,61 +354,12 @@ public class EventsFragment extends BaseFragment implements EventsView, View.OnC
         }
     }
 
-    @OnClick(R.id.dark_layout)
-    public void darkLayoutClicked() {
-        showLogicAnimation();
-    }
-
-    @Override
-    public void onClick(View v) {
-        initFilterItems();
-        showLogicAnimation();
-    }
-
-    private void hideFilterLayout() {
-        filterList.setVisibility(View.GONE);
-        darkBackGround.setVisibility(View.GONE);
-    }
-
-    private void initFilterItems() {
-        if (dropdownItems == null || dropdownItems.size() == 0) {
-            fillDropDownList();
+    private void fillDropDownList() {
+        dropdownItems = new ArrayList<>();
+        for (String title : this.getTitleDropDown()) {
+            dropdownItems.add(new FilteredTitle(title, false));
         }
-        initAdapter();
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        loadNewsPackage.setFilter(position);
-        interractor().processSpinnerTitleSubtitle(getTitleDropDown().get(position));
-        if(loadNewsPackage.getFilter() == 2) {
-            DateTools.showDateDialogRange(getActivity(), (startDate, endDate) -> {
-                loadNewsPackage.setDateFrom(startDate);
-                loadNewsPackage.setDateTo(endDate);
-                presenter.onLoadItems(loadNewsPackage);
-            }, Calendar.getInstance());
-        } else {
-            refreshItems(false);
-        }
-
-        for (int i = 0; i < dropdownItems.size(); i++) {
-            if (position == i) {
-                dropdownItems.get(position).setSelected(true);
-            } else {
-                dropdownItems.get(i).setSelected(false);
-            }
-        }
-        initAdapter();
-        showLogicAnimation();
-    }
-
-    private void initAdapter() {
-        FilterAdapter filterAdapter = new FilterAdapter(getContext(), dropdownItems);
-        filterList.setAdapter(filterAdapter);
-    }
-    @Override
-    protected void prepareView(View view) {
-        super.prepareView(view);
-    }
+    //endregion
 
 }

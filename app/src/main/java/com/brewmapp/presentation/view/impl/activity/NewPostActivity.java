@@ -58,9 +58,12 @@ import com.twitter.Extractor;
 import ru.frosteye.ovsa.presentation.view.dialog.Confirm;
 import ru.frosteye.ovsa.tool.TextTools;
 
-public class NewPostActivity extends BaseActivity implements NewPostView, FlexibleAdapter.OnItemLongClickListener {
+public class NewPostActivity extends BaseActivity implements
+        NewPostView,
+        FlexibleAdapter.OnItemLongClickListener {
 
 
+    //region BindView
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_newPost_attach_file) View attactFile;
     @BindView(R.id.activity_newPost_attach_photo) View attachPhoto;
@@ -73,29 +76,25 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    //endregion
 
+    //region Inject
     @Inject NewPostPresenter presenter;
     @Inject HashTagHelper hashTagHelper;
     @Inject ActiveBox activeBox;
+    //endregion
+
+    //region Private
     private FlexibleAdapter<PhotoPreviewInfo> adapter;
     private Post post = new Post();
     private boolean inputChangeLocked = false;
+    //endregion
 
+    //region Impl NewPostActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
-    }
-
-    @Override
-    public void enableControls(boolean enabled, int code) {
-        showTopBarLoading(!enabled);
-        settings.setEnabled(enabled);
-        attachPhoto.setEnabled(enabled);
-        title.setEnabled(enabled);
-        attachLocation.setEnabled(enabled);
-        attactFile.setEnabled(enabled);
-        input.setEnabled(enabled);
     }
 
     @Override
@@ -106,20 +105,6 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
     @Override
     public void onBackPressed() {
         processBack();
-    }
-
-    private void processBack() {
-//        if(!post.isStarted()) {
-            finish();
-//            return;
-//        }
-//        Confirm.create(this)
-//                .title(R.string.confirm_stop_edit)
-//                .message(R.string.confirm_cancel_post)
-//                .yes(R.string.stay, (dialog, which) -> {
-//
-//                })
-//                .no(R.string.leave, (dialog, which) -> finish()).show();
     }
 
     @Override
@@ -208,51 +193,6 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
         photos.setAdapter(adapter);
     }
 
-    private void highlightHashTag() {
-        inputChangeLocked = true;
-        input.setText(hashTagHelper.formatNewPost(TextTools.extract(input)));
-        input.setSelection(TextTools.extract(input).length());
-        inputChangeLocked = false;
-    }
-
-    private void takePhoto() {
-        RxPaparazzo.single(this)
-                .usingCamera()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.resultCode() != RESULT_OK) {
-                        return;
-                    }
-                    response.targetUI().addPhoto(response.data().getFile());
-                });
-    }
-
-    private void takeFromGallery() {
-        FilePickerBuilder.getInstance().setMaxCount(10)
-                .setActivityTheme(R.style.AppThemeWithActionBar)
-                .pickPhoto(this);
-        /*RxPaparazzo.single(this)
-                .usingGallery()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.resultCode() != RESULT_OK) {
-                        return;
-                    }
-                    response.targetUI().addPhoto(response.data().getFile());
-                });*/
-    }
-
-    public void addPhoto(File file) {
-        photos.setVisibility(View.VISIBLE);
-        UploadPhotoResponse newItem = new UploadPhotoResponse(file);
-        post.getFilesToUpload().add(newItem);
-        adapter.addItem(new PhotoPreviewInfo(newItem));
-        invalidateOptionsMenu();
-//        presenter.onUploadPhotoRequest(file);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -298,6 +238,19 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+    //endregion
+
+    //region Impl NewPostView
+    @Override
+    public void enableControls(boolean enabled, int code) {
+        showTopBarLoading(!enabled);
+        settings.setEnabled(enabled);
+        attachPhoto.setEnabled(enabled);
+        title.setEnabled(enabled);
+        attachLocation.setEnabled(enabled);
+        attactFile.setEnabled(enabled);
+        input.setEnabled(enabled);
+    }
 
     @Override
     public void addPhoto(PhotoPreviewInfo photo) {
@@ -322,6 +275,68 @@ public class NewPostActivity extends BaseActivity implements NewPostView, Flexib
         invalidateOptionsMenu();
         if(adapter.getItemCount() == 0) photos.setVisibility(View.GONE);
     }
+    //endregion
 
+    //region Functions
+    private void highlightHashTag() {
+        inputChangeLocked = true;
+        input.setText(hashTagHelper.formatNewPost(TextTools.extract(input)));
+        input.setSelection(TextTools.extract(input).length());
+        inputChangeLocked = false;
+    }
+
+    private void takePhoto() {
+        RxPaparazzo.single(this)
+                .usingCamera()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() != RESULT_OK) {
+                        return;
+                    }
+                    response.targetUI().addPhoto(response.data().getFile());
+                });
+    }
+
+    private void takeFromGallery() {
+        FilePickerBuilder.getInstance().setMaxCount(10)
+                .setActivityTheme(R.style.AppThemeWithActionBar)
+                .pickPhoto(this);
+        /*RxPaparazzo.single(this)
+                .usingGallery()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() != RESULT_OK) {
+                        return;
+                    }
+                    response.targetUI().addPhoto(response.data().getFile());
+                });*/
+    }
+
+    public void addPhoto(File file) {
+        photos.setVisibility(View.VISIBLE);
+        UploadPhotoResponse newItem = new UploadPhotoResponse(file);
+        post.getFilesToUpload().add(newItem);
+        adapter.addItem(new PhotoPreviewInfo(newItem));
+        invalidateOptionsMenu();
+//        presenter.onUploadPhotoRequest(file);
+    }
+
+    private void processBack() {
+//        if(!post.isStarted()) {
+        finish();
+//            return;
+//        }
+//        Confirm.create(this)
+//                .title(R.string.confirm_stop_edit)
+//                .message(R.string.confirm_cancel_post)
+//                .yes(R.string.stay, (dialog, which) -> {
+//
+//                })
+//                .no(R.string.leave, (dialog, which) -> finish()).show();
+    }
+
+    //endregion
 
 }

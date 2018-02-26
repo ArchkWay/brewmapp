@@ -59,6 +59,7 @@ import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresen
 import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,8 +79,10 @@ import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
  * Created by nixus on 01.11.2017.
  */
 
-public class SelectCategoryActivity extends BaseActivity implements SelectCategoryActivityView {
+public class SelectCategoryActivity extends BaseActivity implements SelectCategoryActivityView
+{
 
+    //region BindView
     @BindView(R.id.filter_toolbar)
     Toolbar toolbar;
     @BindView(R.id.filter_toolbar_title)
@@ -100,11 +103,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     AutoCompleteTextView input;
     @BindView(R.id.lytProgressBar)
     LinearLayout lytProgressBar;
+    //endregion
 
+    //region Private
     private FlexibleModelAdapter<IFlexible> adapter;
     private EndlessRecyclerOnScrollListener scrollListener;
     private FullSearchPackage fullSearchPackage=new FullSearchPackage();
-
     private String filterTxt;
     private String filterId;
     private List<IFlexible> original=new ArrayList<>();
@@ -112,9 +116,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private int numberMenuItem;
     private HashMap<String,String> hashMap=new HashMap<>();
     private StringBuilder sb=new StringBuilder();
+    //endregion
+
+    //region Inject
     @Inject
     SelectCategoryActivityPresenter presenter;
+    //endregion
 
+    //region Impl SelectCategoryActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,7 +196,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     protected LivePresenter<?> getPresenter() {
         return presenter;
     }
+    //endregion
 
+    //region Impl SelectCategoryActivityView
     @Override
     public void enableControls(boolean enabled, int code) {
     }
@@ -397,14 +408,16 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             showMessage(strings[0]);
         finish();
     }
+    //endregion
 
+    //region Functions
     @OnClick(R.id.filter_toolbar_subtitle)
     public void okFilterClicked() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra(Actions.PARAM1, numberTab);
         returnIntent.putExtra(Actions.PARAM2, numberMenuItem);
-        returnIntent.putExtra(Actions.PARAM3, strJoin( hashMap.keySet().toArray(),","));
-        returnIntent.putExtra(Actions.PARAM4, strJoin( hashMap.values().toArray(),","));
+        returnIntent.putExtra(Actions.PARAM3, MapUtils.strJoin(hashMap.keySet().toArray(),","));
+        returnIntent.putExtra(Actions.PARAM4, MapUtils.strJoin(hashMap.values().toArray(),","));
 
         setResult(RESULT_OK, returnIntent);
         finish();
@@ -415,8 +428,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     public void cancelFilterClicked() {
         onBackPressed();
     }
-
-//*********************************************
 
     private void filterStringToHashMap() {
         try {
@@ -919,13 +930,5 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         invalidateMenu();
     }
 
-    public String strJoin(Object[] aArr, String sSep) {
-        StringBuilder sbStr = new StringBuilder();
-        for (int i = 0, il = aArr.length; i < il; i++) {
-            if (i > 0)
-                sbStr.append(sSep);
-            sbStr.append(aArr[i]);
-        }
-        return sbStr.toString();
-    }
+    //endregion
 }

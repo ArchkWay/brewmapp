@@ -1,6 +1,8 @@
 package com.brewmapp.execution.task;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -16,6 +18,8 @@ import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
+
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
 /**
@@ -43,6 +47,8 @@ public class CreatePostTask extends BaseNetworkTask<Post, SingleResponse<Post>> 
                 }
                 WrapperParams wrapperParams = post.createParams();
                 wrapperParams.addParam(Keys.RELATED_ID, userRepo.load().getId());
+                if(post.getPhotoIds().size()>0)
+                    wrapperParams.addParam(Keys.PHOTOS_ID, MapUtils.strJoin(post.getPhotoIds().toArray(),","));
                 subscriber.onNext(executeCall(getApi().createPost(wrapperParams)));
                 subscriber.onComplete();
             } catch (Exception e) {

@@ -66,8 +66,6 @@ public class NewPostPresenterImpl extends BasePresenter<NewPostView> implements 
     @Override
     public void onPostReady(Post post, ResultTask resultTask) {
 
-
-
         enableControls(false);
         createPostTask.execute(post, new SimpleSubscriber<SingleResponse<Post>>() {
             @Override

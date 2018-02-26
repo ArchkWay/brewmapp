@@ -232,6 +232,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         RestoGeoPackage restoGeoPackage=new RestoGeoPackage();
         restoGeoPackage.setCoordStart(geoPackage.getCoordStart());
         restoGeoPackage.setCoordEnd(geoPackage.getCoordEnd());
+        view.showProgressBar();
         loadRestoGeoTask.execute(restoGeoPackage,new SimpleSubscriber<List<FilterRestoLocationInfo>>(){
             @Override
             public void onNext(List<FilterRestoLocationInfo> restoLocations) {
@@ -243,6 +244,13 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
                 while (infoIterator.hasNext())
                     arrayList.add(new FilterRestoLocation(infoIterator.next().getModel()));
                 view.showGeolocationResult(arrayList);
+                view.hideProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.hideProgressBar();
             }
         });
     }

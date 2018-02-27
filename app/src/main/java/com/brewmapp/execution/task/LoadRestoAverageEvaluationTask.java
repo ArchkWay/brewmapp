@@ -38,23 +38,8 @@ public class LoadRestoAverageEvaluationTask extends BaseNetworkTask<RestoAverage
                 WrapperParams params=new WrapperParams(Wrappers.AVERAGE_EVALUATION);
                 params.addParam(Keys.ID, restoAverageEvaluationPackage.getResto_id());
 
-                String key=new StringBuilder()
-                        .append(getClass().toString())
-                        .append(restoAverageEvaluationPackage.getResto_id())
-                        .toString();
-                ListResponse<AverageEvaluation> o=null;
-                if (restoAverageEvaluationPackage.isCacheOn()) {
-                    o = Paper.book().read(key);
-                    if (o != null) {
-                        subscriber.onNext(o.getModels());
-                        Log.i("NetworkTask", "LoadRestoAverageEvaluationTask - cache-read");
-                    }
-                }
                 ListResponse<AverageEvaluation> averageEvaluationListResponse= executeCall(getApi().getRestoAverageEvaluation(params));
-                Paper.book().write(key,averageEvaluationListResponse);
-                Log.i("NetworkTask","LoadRestoAverageEvaluationTask - cache-write");
-                if(o==null)
-                    subscriber.onNext(averageEvaluationListResponse.getModels());
+                subscriber.onNext(averageEvaluationListResponse.getModels());
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

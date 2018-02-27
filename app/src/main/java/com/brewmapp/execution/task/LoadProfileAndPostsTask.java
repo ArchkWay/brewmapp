@@ -39,7 +39,7 @@ public class LoadProfileAndPostsTask extends BaseNetworkTask<Void, ProfileInfoPa
         super(mainThread, executor, api);
         this.postsRepo = postsRepo;
         this.userRepo = userRepo;
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
     }
 
     @Override

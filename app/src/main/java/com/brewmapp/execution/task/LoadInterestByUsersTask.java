@@ -2,7 +2,6 @@ package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.container.Interests;
 import com.brewmapp.data.entity.container.InterestsByUser;
 import com.brewmapp.data.pojo.LoadInterestPackage;
 import com.brewmapp.execution.exchange.common.Api;
@@ -35,7 +34,7 @@ public class LoadInterestByUsersTask extends BaseNetworkTask<LoadInterestPackage
     public LoadInterestByUsersTask(MainThread mainThread, Executor executor, Api api, UserRepo userRepo) {
         super(mainThread, executor, api);
         this.userRepo = userRepo;
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
     }
 
     @Override

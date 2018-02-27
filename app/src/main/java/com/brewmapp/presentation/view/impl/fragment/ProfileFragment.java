@@ -25,6 +25,7 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
@@ -143,10 +144,7 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }break;
             case Actions.ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS: {
-                Intent intent = new Intent(getContext(), RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
-                intent.setAction(String.valueOf(Actions.ACTION_SCROLL_TO_NEWS));
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+                Starter.RestoDetailActivity_With_SCROLL(getActivity(),(String) payload, RestoDetailView.ACTION_SCROLL_TO_NEWS);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
                 Starter.ProfileEditActivity(

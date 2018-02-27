@@ -101,6 +101,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_text_view_place)    TextView text_view_place;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.activity_resto_detail_button_review)    Button button_revew;
+    @BindView(R.id.activity_resto_detail_button_review_layout)    View button_review_layout;
     @BindView(R.id.activity_restoDetails_recycler_reviews)    RecyclerView recycler_reviews;
     @BindView(R.id.activity_restoDetails_recycler_added_favorites)    RecyclerView added_favorites;
     @BindView(R.id.activity_resto_detail_layout_news)    ViewGroup layout_news;
@@ -425,20 +426,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     }
 
     @Override
-    public void scrollTo(Integer integer) {
-        switch (integer){
-            case Actions.ACTION_SCROLL_TO_NEWS:
-                scroll.postDelayed(() ->
-                        ObjectAnimator.ofInt(scroll, "scrollY",  layout_news.getTop()).setDuration(1000).start()
-                ,1500);
-                getIntent().setAction(null);
-                break;
-        }
-
-
-    }
-
-    @Override
     public void addItemsAddedToFavorite(List<IFlexible> iFlexibles) {
         container_added_to_favorite.setVisibility(iFlexibles.size()==0?View.GONE:View.VISIBLE);
         adapter_favorites.clear();
@@ -569,6 +556,27 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         }
     }
 
+    private void scrollTo(Integer integer) {
+        switch (integer){
+            case ACTION_SCROLL_TO_NEWS:
+                scroll.postDelayed(() ->
+                                ObjectAnimator.ofInt(scroll, "scrollY",  layout_news.getTop()).setDuration(1000).start()
+                        ,300);
+                getIntent().setAction(null);
+                break;
+            case ACTION_SCROLL_TO_ADD_REVIEWS:
+                scroll.postDelayed(() ->
+                                ObjectAnimator.ofInt(scroll, "scrollY",  button_review_layout.getBottom()).setDuration(1000).start()
+                        ,300);
+                getIntent().setAction(null);
+                break;
+        }
+    }
+
+
+    //endregion
+
+    //region Inner classes
     class swipeDelayed implements Runnable {
         private boolean cancel=false;
         public void cancel(){
@@ -582,6 +590,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         }
 
     }
-
     //endregion
+
 }

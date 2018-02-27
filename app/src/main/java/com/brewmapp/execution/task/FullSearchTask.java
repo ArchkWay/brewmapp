@@ -1,7 +1,6 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.Restos;
@@ -11,7 +10,6 @@ import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
-import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class FullSearchTask extends BaseNetworkTask<FullSearchPackage,List<IFlex
     @Inject
     public FullSearchTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
     }
 
     @Override

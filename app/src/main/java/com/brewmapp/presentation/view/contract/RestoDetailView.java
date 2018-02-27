@@ -13,6 +13,10 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface RestoDetailView extends BasicView{
+    int ACTION_SCROLL_TO_NEWS = 1;
+    int ACTION_SCROLL_TO_ADD_REVIEWS = 2;
+
+
     void setModel(RestoDetail restoDetail, int mode);
 
     void commonError(String... string);
@@ -26,8 +30,6 @@ public interface RestoDetailView extends BasicView{
     void setFav(boolean b);
 
     void AverageEvaluation(List<AverageEvaluation> evaluations);
-
-    void scrollTo(Integer integer);
 
     void addItemsAddedToFavorite(List<IFlexible> iFlexibles);
 }

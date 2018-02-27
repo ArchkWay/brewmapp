@@ -1,7 +1,6 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.BeerDetail;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.execution.exchange.common.Api;
@@ -17,7 +16,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
-import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.execution.executor.MainThread;
@@ -33,7 +31,7 @@ public class LoadProductTask extends BaseNetworkTask<LoadProductPackage,List<IFl
     @Inject
     public LoadProductTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
     }
 
     @Override
@@ -51,23 +49,8 @@ public class LoadProductTask extends BaseNetworkTask<LoadProductPackage,List<IFl
                     start = loadProductPackage.getPage() * step;
                     end = loadProductPackage.getPage() * step + step;
                 }
-                String key=new StringBuilder()
-                        .append(getClass().toString())
-                        .append(loadProductPackage.getmTitle())
-                        .append(loadProductPackage.getId())
-                        .append(start)
-                        .append(end).toString();
-                Beers o=null;
-                if (loadProductPackage.isCacheOn()) {
-                    o = Paper.book().read(key);
-                    if (o != null) {
-                        subscriber.onNext(new ArrayList<>(o.getModels()));
-                    }
-                }
                 Beers beers = executeCall(getApi().loadProduct(start , end, params));
-                Paper.book().write(key,beers );
-                if(o==null)
-                    subscriber.onNext(new ArrayList<>(beers.getModels()));
+                subscriber.onNext(new ArrayList<>(beers.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

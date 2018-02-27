@@ -13,6 +13,15 @@ public class LoadNewsPackage extends BasePackage{
     private int mode, filter, page;
     private Date dateFrom, dateTo;
     private String user_id;
+    private boolean onlyMountNews=false;
+
+    public boolean isOnlyMount() {
+        return onlyMountNews;
+    }
+
+    public void setOnlyMount(boolean onlyMountNews) {
+        this.onlyMountNews = onlyMountNews;
+    }
 
     public String getUser_id() {
         return user_id;

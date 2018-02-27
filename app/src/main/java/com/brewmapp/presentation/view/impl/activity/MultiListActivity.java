@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
@@ -20,6 +21,7 @@ import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.MultiListPresenter;
 import com.brewmapp.presentation.view.contract.MultiListView;
+import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 
@@ -39,7 +41,12 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_PROFILE_FRIEND;
 
-public class MultiListActivity extends BaseActivity implements MultiListView{
+public class MultiListActivity extends BaseActivity implements
+        MultiListView,
+        View.OnClickListener
+{
+
+    //region BindView
     @BindView(R.id.common_toolbar_search)    Toolbar toolbarSearch;
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_search_search)    FinderView finder;
@@ -50,14 +57,20 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.mulilist_activity_button_review_layout)    LinearLayout button_review_layout;
+    //endregion
 
+    //region Inject
     @Inject    MultiListPresenter presenter;
+    //endregion
 
+    //region Private
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
     private String mode;
+    //endregion
 
+    //region Impl MultiListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +151,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
             case MODE_SHOW_REVIEWS_RESTO:
                 start_search.setText(R.string.text_view_while_empty_review);
                 button_review_layout.setVisibility(View.VISIBLE);
+                button_review_layout.setOnClickListener(this);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_reviews);
@@ -180,38 +194,8 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     }
 
     @Override
-    public void enableControls(boolean enabled, int code) {
-    }
-
-    @Override
     protected Toolbar findActionBar() {
         return toolbar;
-    }
-
-    @Override
-    public void appendItems(List<IFlexible> list) {
-
-        adapter.clear();
-        adapter.addItems(0,list);
-        adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
-
-        start_search.setVisibility(adapter.getItemCount()==0?View.VISIBLE:View.GONE);
-    }
-
-    @Override
-    public void onError() {
-        swipe.setRefreshing(false);
-    }
-
-    @Override
-    public void commonError(String... strings) {
-        if(strings.length==0)
-            showMessage(getString(R.string.error));
-        else
-            showMessage(strings[0]);
-        finish();
-
     }
 
     @Override
@@ -242,8 +226,41 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         super.setTitle(title);
         toolbarTitle.setText(getTitle());
     }
+    //endregion
 
-    //***************************************
+    //region Impl MultiListView
+    @Override
+    public void enableControls(boolean enabled, int code) {
+    }
+
+    @Override
+    public void appendItems(List<IFlexible> list) {
+
+        adapter.clear();
+        adapter.addItems(0,list);
+        adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
+
+        start_search.setVisibility(adapter.getItemCount()==0?View.VISIBLE:View.GONE);
+    }
+
+    @Override
+    public void onError() {
+        swipe.setRefreshing(false);
+    }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+
+    }
+    //endregion
+
+    //region Functions
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
@@ -307,5 +324,15 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
             }break;
         }
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (mode){
+            case MODE_SHOW_REVIEWS_RESTO:
+                Starter.RestoDetailActivity_With_SCROLL(this,String.valueOf(getIntent().getData().toString()), RestoDetailView.ACTION_SCROLL_TO_ADD_REVIEWS);
+                break;
+        }
+    }
+    //endregion
 
 }

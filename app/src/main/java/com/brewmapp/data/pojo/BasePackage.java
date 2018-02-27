@@ -5,13 +5,4 @@ package com.brewmapp.data.pojo;
  */
 
 class BasePackage {
-    private boolean CacheOn=false;
-
-    public boolean isCacheOn() {
-        return CacheOn;
-    }
-
-    public void setCacheOn(boolean cacheOn) {
-        CacheOn = cacheOn;
-    }
 }

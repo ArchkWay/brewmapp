@@ -1227,6 +1227,7 @@
                 android:layout_height="60dp"
                 android:gravity="center"
                 android:background="@color/colorGrayLightSemi"
+                android:id="@+id/activity.resto.detail.button_review_layout"
                 >
                 <Button
                     android:layout_width="wrap_content"

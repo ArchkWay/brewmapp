@@ -52,26 +52,8 @@ public class LoadReviewsTask extends BaseNetworkTask<ReviewPackage, List<IFlexib
                 if(reviewPackage.getUser_id()!=null)
                     params.addParam(Keys.USER_ID, reviewPackage.getUser_id());
 
-                String key=new StringBuilder()
-                        .append(getClass().toString())
-                        .append(reviewPackage.getUser_id())
-                        .append(reviewPackage.getRelated_id())
-                        .append(reviewPackage.getUser_id())
-                        .toString();
-                Reviews  o= null;
-                if (reviewPackage.isCacheOn()) {
-                    o = Paper.book().read(key);
-                    if (o != null) {
-                        subscriber.onNext(new ArrayList<>(o.getModels()));
-                        Log.i("NetworkTask", "LoadReviewsTask - cache-read");
-                    }
-                }
-
                 Reviews reviews = executeCall(getApi().loadReviews(params));
-                Paper.book().write(key,reviews);
-                Log.i("NetworkTask","LoadReviewsTask - cache-write");
-                if(o==null)
-                    subscriber.onNext(new ArrayList<>(reviews.getModels()));
+                subscriber.onNext(new ArrayList<>(reviews.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

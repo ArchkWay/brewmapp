@@ -128,7 +128,7 @@
         <activity
             android:name=".presentation.view.impl.activity.PhotoSliderActivity"
             android:label="@string/photos"
-            android:screenOrientation="portrait" />
+            />
         <activity
             android:name=".presentation.view.impl.activity.UniversalMapActivity"
             android:label="@string/on_map"

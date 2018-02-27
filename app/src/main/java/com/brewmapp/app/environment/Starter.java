@@ -77,6 +77,19 @@ public class Starter {
         }
     }
 
+    public static void RestoDetailActivity_With_SCROLL(Context context, String id_resto, int type_scroll) {
+        if(id_resto!=null) {
+            Intent intent = new Intent(context, RestoDetailActivity.class);
+            intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
+            intent.setAction(String.valueOf(type_scroll));
+            context.startActivity(intent);
+
+//            Intent intent = new Intent(context, RestoDetailActivity.class);
+//            intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
+//            context.startActivity(intent);
+        }
+    }
+
     public static void AddReviewRestoActivityForResult(Activity activity, RestoDetail restoDetails, int requestCodeReview) {
         Intent intent=new Intent(activity, AddReviewRestoActivity.class);
         intent.putExtra(Keys.RESTO_ID,restoDetails);

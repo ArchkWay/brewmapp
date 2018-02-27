@@ -42,22 +42,8 @@ public class LoadProductAverageValue extends BaseNetworkTask<LoadAverageValuePac
                 wrapperParams.addParam(Keys.NAME,Keys.CAP_BEER);
                 wrapperParams.addParam(Keys.ID,loadAverageValuePackage.getBeer_id());
 
-                String key=new StringBuilder()
-                        .append(getClass().toString())
-                        .append(Keys.CAP_BEER)
-                        .append(loadAverageValuePackage.getBeer_id())
-                        .toString();
-                ListResponse<Averagevalue>  o=null;
-                if (loadAverageValuePackage.isCacheOn()) {
-                    o = Paper.book().read(key);
-                    if (o != null)
-                        subscriber.onNext(o);
-                }
-
                 ListResponse<Averagevalue> listResponse=executeCall(getApi().loadProductAverageValue(wrapperParams));
-                Paper.book().write(key,listResponse);
-                if(o==null)
-                    subscriber.onNext(listResponse);
+                subscriber.onNext(listResponse);
                 subscriber.onComplete();
             }catch (Exception e){
                 subscriber.onError(e);

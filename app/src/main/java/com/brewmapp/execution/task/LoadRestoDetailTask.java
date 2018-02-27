@@ -35,18 +35,6 @@ public class LoadRestoDetailTask extends BaseNetworkTask<LoadRestoDetailPackage,
         return Observable.create(subscriber -> {
             try {
 
-                String key=new StringBuilder()
-                        .append(getClass().toString())
-                        .append(loadRestoDetailPackage.getId())
-                        .toString();
-                RestoDetails  o=null;
-                if(loadRestoDetailPackage.isCacheOn()) {
-                    o= Paper.book().read(key);
-                    if (o != null) {
-                        subscriber.onNext((RestoDetail) o.getModels().get(0).getModel());
-                        Log.i("NetworkTask", "LoadRestoDetailTask - cache-read");
-                    }
-                }
                 WrapperParams wrapperParams=new WrapperParams("");
                 RestoDetails restoDetails;
                 if(loadRestoDetailPackage.getLat()!=0&&loadRestoDetailPackage.getLon()!=0) {
@@ -54,10 +42,7 @@ public class LoadRestoDetailTask extends BaseNetworkTask<LoadRestoDetailPackage,
                 }else {
                     restoDetails = executeCall(getApi().getRestoDetails(loadRestoDetailPackage.getId(), wrapperParams));
                 }
-                Paper.book().write(key,restoDetails);
-                Log.i("NetworkTask","LoadRestoDetailTask - cache-write");
-                if(o==null)
-                    subscriber.onNext((RestoDetail) restoDetails.getModels().get(0).getModel());
+                subscriber.onNext((RestoDetail) restoDetails.getModels().get(0).getModel());
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

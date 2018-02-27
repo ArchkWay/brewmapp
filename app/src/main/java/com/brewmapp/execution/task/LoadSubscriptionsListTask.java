@@ -50,24 +50,8 @@ public class LoadSubscriptionsListTask extends BaseNetworkTask<SubscriptionPacka
                     params.addParam(Keys.RELATED_ID,subscriptionPackage.getRelated_id());
 
 
-                String key=new StringBuilder()
-                        .append(getClass().toString())
-                        .append(subscriptionPackage.getRelated_model())
-                        .append(subscriptionPackage.getRelated_id())
-                        .toString();
-                ListResponse<Subscription>  o= null;
-                if(subscriptionPackage.isCacheOn()) {
-                    o = Paper.book().read(key);
-                    if (o != null) {
-                        subscriber.onNext(o);
-                        Log.i("NetworkTask", "LoadSubscriptionsListTask - cache-read");
-                    }
-                }
                 ListResponse<Subscription> response = executeCall(getApi().loadUserSubscriptionsList(params));
-                Paper.book().write(key,response);
-                Log.i("NetworkTask","LoadSubscriptionsListTask - cache-write");
-                if(o==null)
-                    subscriber.onNext(response);
+                subscriber.onNext(response);
                 subscriber.onComplete();
             } catch (Exception e) {
                 subscriber.onError(e);

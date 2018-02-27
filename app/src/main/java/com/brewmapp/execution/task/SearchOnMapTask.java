@@ -1,12 +1,9 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.entity.container.FilterRestoLocationTypes;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.common.Api;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 
@@ -33,7 +30,7 @@ public class SearchOnMapTask extends BaseNetworkTask<FullSearchPackage, List<IFl
     @Inject
     public SearchOnMapTask(MainThread mainThread, Executor executor, Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
     }
 
     @Override

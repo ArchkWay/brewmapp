@@ -7,6 +7,9 @@ import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.Sale;
+import com.brewmapp.data.entity.Sales;
+import com.brewmapp.data.entity.container.Events;
+import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
@@ -19,7 +22,6 @@ import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.execution.task.LoadSalesTask;
 import com.brewmapp.presentation.view.contract.EventsView;
 
-import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
@@ -28,7 +30,7 @@ import com.brewmapp.presentation.view.contract.RefreshableView;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class EventsPresenterImpl extends BasePresenter<EventsView> implements EventsPresenter {
 
@@ -77,13 +79,13 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         cancelAllTasks();
         switch (request.getMode()) {
             case EventsFragment.TAB_EVENT:
-                loadEventsTask.execute(request, new NewsSubscriber());
+                loadEventsTask.execute(request, new NewsSubscriberEvent());
                 break;
             case EventsFragment.TAB_SALE:
-                loadSalesTask.execute(request, new NewsSubscriber());
+                loadSalesTask.execute(request, new NewsSubscriberSale());
                 break;
             case EventsFragment.TAB_POST:
-                loadNewsTask.execute(request, new NewsSubscriber());
+                loadNewsTask.execute(request, new NewsSubscriberPosts());
                 break;
         }
     }
@@ -134,11 +136,11 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
 
     }
 
-    class NewsSubscriber extends SimpleSubscriber<List<IFlexible>> {
+    class NewsSubscriberPosts extends SimpleSubscriber<Posts> {
         @Override
-        public void onNext(List<IFlexible> iFlexibles) {
+        public void onNext(Posts posts) {
             enableControls(true);
-            view.appendItems(iFlexibles);
+            view.appendItems(new ArrayList<>(posts.getModels()));
         }
         @Override
         public void onError(Throwable e) {
@@ -147,4 +149,32 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         }
 
     }
+
+    class NewsSubscriberEvent extends SimpleSubscriber<Events> {
+        @Override
+        public void onNext(Events events) {
+            enableControls(true);
+            view.appendItems(new ArrayList<>(events.getModels()));
+        }
+        @Override
+        public void onError(Throwable e) {
+            enableControls(true);
+            ((MainActivity)view.getActivity()).commonError(e.getMessage());
+        }
+
+    }
+    class NewsSubscriberSale extends SimpleSubscriber<Sales> {
+        @Override
+        public void onNext(Sales sales) {
+            enableControls(true);
+            view.appendItems(new ArrayList<>(sales.getModels()));
+        }
+        @Override
+        public void onError(Throwable e) {
+            enableControls(true);
+            ((MainActivity)view.getActivity()).commonError(e.getMessage());
+        }
+
+    }
+
 }

@@ -3,6 +3,7 @@ package com.brewmapp.presentation.presenter.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
@@ -17,8 +18,11 @@ import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.container.Events;
+import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.wrapper.InterestInfo;
 import com.brewmapp.data.entity.wrapper.InterestInfoByUsers;
 import com.brewmapp.data.pojo.AddInterestPackage;
@@ -56,10 +60,8 @@ import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
-import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
-import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 
 import java.io.File;
@@ -77,14 +79,16 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 /**
  * Created by Kras on 26.10.2017.
  */
 
-public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> implements RestoDetailPresenter{
+public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
+        implements
+        RestoDetailPresenter
+{
 
 
     //region Private
@@ -154,6 +158,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     }
     //endregion
 
+    //region Impl BasePresenter
     @Override
     public void onDestroy() {
         loadRestoDetailTask.cancel();
@@ -171,7 +176,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
     public void onAttach(RestoDetailView restoDetailView) {
         super.onAttach(restoDetailView);
     }
+    //endregion
 
+    //region Impl RestoDetailPresenter
     @Override
     public void changeSubscription() {
 
@@ -348,21 +355,9 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
                             wrapperParams.addParam(Keys.RELATED_ID,loadPhotoPackage.getRelated_id());
                         if(loadPhotoPackage.getRelated_model()!=null)
                             wrapperParams.addParam(Keys.RELATED_MODEL,loadPhotoPackage.getRelated_model());
-                        Object o=null;
-                        String key=new StringBuilder()
-                                .append(getClass().toString())
-                                .append(loadPhotoPackage.getRelated_id())
-                                .append(loadPhotoPackage.getRelated_model())
-                                .toString();
-                        if(loadPhotoPackage.isCacheOn()){
-                            o= Paper.book().read(key);
-                            if(o!=null)
-                                subscriber.onNext(((ListResponse<Photo>)o).getModels());
-                        }
+
                         ListResponse<Photo> listResponse= executeCall(getApi().loadPhotosResto(wrapperParams));
-                        Paper.book().write(key,listResponse);
-                        if(o==null)
-                            subscriber.onNext(listResponse.getModels());
+                        subscriber.onNext(listResponse.getModels());
                         subscriber.onComplete();
                     } catch (Exception e) {
                         subscriber.onError(e);
@@ -374,15 +369,12 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         LoadPhotoPackage loadPhotoPackage=new LoadPhotoPackage();
         loadPhotoPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
         loadPhotoPackage.setRelated_model(Keys.CAP_RESTO);
-        loadPhotoPackage.setCacheOn(false);
+
         new LoadPhotoResto(
                 BeerMap.getAppComponent().mainThread(),
                 BeerMap.getAppComponent().executor(),
                 BeerMap.getAppComponent().api()
-        ).execute(loadPhotoPackage
-                ,
-                simpleSubscriber
-        );
+        ).execute(loadPhotoPackage, simpleSubscriber);
 
     }
 
@@ -434,6 +426,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
             }
         });
     }
+    //endregion
 
 
     //*****************************************
@@ -443,9 +436,10 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadRestoDetails(int mode){
             if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
+                Log.i("SpeedLoad","loadRestoDetailPackage");
                 LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                 loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
-                loadRestoDetailPackage.setCacheOn(true);
+
                 loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
                     @Override public void onNext(RestoDetail _restoDetail) {
                         super.onNext(_restoDetail);
@@ -463,6 +457,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadReviews(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadReviews");
                 ReviewPackage reviewPackage=new ReviewPackage();
                 reviewPackage.setRelated_model(Keys.CAP_RESTO);
                 reviewPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -485,6 +480,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadSubscriptions(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadSubscriptions");
                 SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
                 subscriptionPackage.setRelated_model(Keys.CAP_RESTO);
                 subscriptionPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -516,15 +512,17 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadCntSales(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadCntSales");
                 LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                 loadNewsPackage.setMode(EventsView.MODE_SALES);
                 loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
                 loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                loadSalesTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                loadNewsPackage.setOnlyMount(true);
+                loadSalesTask.execute(loadNewsPackage,new SimpleSubscriber<Sales>(){
                     @Override
-                    public void onNext(List<IFlexible> flexibleList) {
-                        super.onNext(flexibleList);
-                        view.setCnt(flexibleList.size(),EventsView.MODE_SALES);
+                    public void onNext(Sales sales) {
+                        super.onNext(sales);
+                        view.setCnt(sales.getTotal(),EventsView.MODE_SALES);
                         loadCntNews(mode);
                     }
 
@@ -541,15 +539,17 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadCntNews(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadCntNews");
                 LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                 loadNewsPackage.setMode(EventsView.MODE_NEWS);
                 loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
                 loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                loadNewsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                loadNewsPackage.setOnlyMount(true);
+                loadNewsTask.execute(loadNewsPackage,new SimpleSubscriber<Posts>(){
                     @Override
-                    public void onNext(List<IFlexible> flexibleList) {
-                        super.onNext(flexibleList);
-                        view.setCnt(flexibleList.size(), EventsView.MODE_NEWS);
+                    public void onNext(Posts posts) {
+                        super.onNext(posts);
+                        view.setCnt(posts.getTotal(), EventsView.MODE_NEWS);
                         loadCntEvent(mode);
                     }
 
@@ -567,15 +567,17 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadCntEvent(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadCntEvent");
                 LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
                 loadNewsPackage.setMode(EventsView.MODE_EVENTS);
                 loadNewsPackage.setRelated_model(Keys.CAP_RESTO);
                 loadNewsPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
-                loadEventsTask.execute(loadNewsPackage,new SimpleSubscriber<List<IFlexible>>(){
+                loadNewsPackage.setOnlyMount(true);
+                loadEventsTask.execute(loadNewsPackage,new SimpleSubscriber<Events>(){
                     @Override
-                    public void onNext(List<IFlexible> flexibleList) {
-                        super.onNext(flexibleList);
-                        view.setCnt(flexibleList.size(), EventsView.MODE_EVENTS);
+                    public void onNext(Events events) {
+                        super.onNext(events);
+                        view.setCnt(events.getTotal(), EventsView.MODE_EVENTS);
                         loadFav(mode);
                     }
 
@@ -592,6 +594,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadFav(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadFav");
                 LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
                 loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
                 loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));
@@ -631,6 +634,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
         private void loadAvegagEvaluation(int mode) {
             if(mode== Actions.MODE_REFRESH_ALL) {
+                Log.i("SpeedLoad","loadAvegagEvaluation");
                 RestoAverageEvaluationPackage restoAverageEvaluationPackage=new RestoAverageEvaluationPackage();
                 restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
                 restoAverageEvaluationPackage.setResto_id(String.valueOf(restoDetail.getResto().getId()));
@@ -654,6 +658,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView> imp
         }
 
         private void loadInterests(int mode) {
+            Log.i("SpeedLoad","loadInterests");
             LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
             loadInterestPackage.setRelated_model(Keys.CAP_RESTO);
             loadInterestPackage.setRelated_id(String.valueOf(restoDetail.getResto().getId()));

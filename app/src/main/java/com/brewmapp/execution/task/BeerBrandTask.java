@@ -1,7 +1,6 @@
 package com.brewmapp.execution.task;
 
 import com.brewmapp.R;
-import com.brewmapp.data.entity.BeerBrand;
 import com.brewmapp.data.entity.BeerBrandTypes;
 import com.brewmapp.data.entity.wrapper.BeerBrandInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -35,7 +34,7 @@ public class BeerBrandTask extends BaseNetworkTask<FullSearchPackage, List<IFlex
                          Executor executor,
                          Api api) {
         super(mainThread, executor, api);
-        this.step = ResourceHelper.getInteger(R.integer.config_posts_pack_size);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
     }
 
     @Override

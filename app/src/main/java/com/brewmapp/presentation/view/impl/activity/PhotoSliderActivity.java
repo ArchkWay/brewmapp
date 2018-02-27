@@ -46,6 +46,7 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_slider);
+        toolbar.setVisibility(View.GONE);
     }
 
     @Override

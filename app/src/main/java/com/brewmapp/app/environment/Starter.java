@@ -54,14 +54,20 @@ public class Starter {
         activity.startActivity(new Intent(action, null,activity,MultiListActivity.class));
     }
 
-    public static void MainActivity(BaseActivity activity, String action, Object o) {
+    public static void MainActivity(BaseActivity activity, String action, Object... o) {
         Intent intent=new Intent(action,null,activity,MainActivity.class);
         switch (action){
             case MainActivity.MODE_MAP_FRAGMENT:
-                intent.putExtra(Keys.LOCATION,(RestoLocation)o);
+                intent.putExtra(Keys.LOCATION,(RestoLocation)o[0]);
+                break;
+            case MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS:
+                intent.putExtra(RequestCodes.INTENT_EXTRAS,(Integer) o[0]);
+                intent.putExtra(Keys.RELATED_ID,String.valueOf(o[1]));
+                intent.putExtra(Keys.RELATED_MODEL,String.valueOf(o[2]));
                 break;
         }
         activity.startActivity(intent);
+
     }
 
     public static void RestoDetailActivityForResult(Activity activity, Interest interest, int requestCode) {
@@ -83,10 +89,6 @@ public class Starter {
             intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
             intent.setAction(String.valueOf(type_scroll));
             context.startActivity(intent);
-
-//            Intent intent = new Intent(context, RestoDetailActivity.class);
-//            intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
-//            context.startActivity(intent);
         }
     }
 

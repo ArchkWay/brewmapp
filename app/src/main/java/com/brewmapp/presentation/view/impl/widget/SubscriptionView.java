@@ -1,7 +1,6 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -10,11 +9,8 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
-import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +70,7 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
             date.setText(getContext().getString(R.string.subscribed, DateTools.formatDottedDateWithTime(dashedDateFormat.parse(model.getCreated_at()))));
         }catch (Exception t){}
 
-        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS,this.model.getInformation().getId()));
+        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_SHOW_NEWS,this.model.getInformation().getId()));
         arrow_right.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY,this.model.getInformation().getId()));
     }
 

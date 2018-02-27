@@ -24,7 +24,7 @@ public class Actions {
     public static final int ACTION_VIEW_MODEL =17;
     public static final int MODE_REFRESH_ALL =18;
     public static final int MODE_REFRESH_ONLY_LIKE =19;
-    public static final int ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS = 20;
+    public static final int ACTION_START_SHOW_NEWS = 20;
     public static final int ACTION_SHOW_ALL_RESTO_BY_BEER = 22;
     public static final int ACTION_CLICK_ON_ITEM_INTEREST_BEER = 23;
     public static final int ACTION_CLICK_ON_ITEM_INTEREST_RESTO = 24;

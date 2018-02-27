@@ -3,7 +3,6 @@ package com.brewmapp.presentation.view.impl.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.brewmapp.app.environment.Actions;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Post;
@@ -25,8 +23,8 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
-import com.brewmapp.presentation.view.contract.RestoDetailView;
-import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -143,8 +141,15 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
                 intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
                 startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }break;
-            case Actions.ACTION_START_DETAILS_ACTIVITY_AND_SHOW_NEWS: {
-                Starter.RestoDetailActivity_With_SCROLL(getActivity(),(String) payload, RestoDetailView.ACTION_SCROLL_TO_NEWS);
+            case Actions.ACTION_START_SHOW_NEWS: {
+                Starter.MainActivity(
+                        (BaseActivity) getActivity(),
+                        MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
+                        EventsFragment.TAB_EVENT,
+                        String.valueOf(payload) ,
+                        Keys.CAP_RESTO
+                );
+
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
                 Starter.ProfileEditActivity(

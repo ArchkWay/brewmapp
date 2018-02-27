@@ -37,7 +37,7 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, Posts> {
                         Api api, UserRepo userRepo) {
         super(mainThread, executor, api);
         this.userRepo = userRepo;
-        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_0);
+        this.step = ResourceHelper.getInteger(R.integer.config_pack_size_1);
     }
 
     @Override

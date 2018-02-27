@@ -90,7 +90,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         RestoDetailPresenter
 {
 
-
     //region Private
     private ContainerTasks containerTasks;
     private Context context;
@@ -235,19 +234,25 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
     @Override
     public void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab) {
         tempDataHolder.storeUiSetting();
-        //set mode EventsFragment
-        Intent intent=new Intent(
-                MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
-                null,
+        Starter.MainActivity(
                 restoDetailActivity,
-                MainActivity.class);
-        intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+                MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
+                tab,
+                String.valueOf(restoDetail.getResto().getId()),
+                Keys.CAP_RESTO
+        );
 
-        //set arguments EventsFragment
-        intent.putExtra(Keys.RELATED_ID,String.valueOf(restoDetail.getResto().getId()));
-        intent.putExtra(Keys.RELATED_MODEL,Keys.CAP_RESTO);
-
-        restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT);
+//        Intent intent=new Intent(
+//                MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
+//                null,
+//                restoDetailActivity,
+//                MainActivity.class);
+//        intent.putExtra(RequestCodes.INTENT_EXTRAS,tab);
+//
+//        intent.putExtra(Keys.RELATED_ID,String.valueOf(restoDetail.getResto().getId()));
+//        intent.putExtra(Keys.RELATED_MODEL,Keys.CAP_RESTO);
+//
+//        restoDetailActivity.startActivityForResult(intent,RequestCodes.REQUEST_SHOW_EVENT_FRAGMENT);
     }
 
     @Override
@@ -428,8 +433,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
     }
     //endregion
 
-
-    //*****************************************
+    //region Inner Classes
     class LoadersAttributes {
         public LoadersAttributes(int mode) {
             loadRestoDetails(mode);
@@ -656,7 +660,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
                 loadInterests(mode);
             }
         }
-
         private void loadInterests(int mode) {
             Log.i("SpeedLoad","loadInterests");
             LoadInterestPackage loadInterestPackage =new LoadInterestPackage();
@@ -732,5 +735,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
             uiSettingRepo.setnActiveTabEventFragment(getActiveTabFragment());
         }
     }
+    //endregion
 
 }

@@ -45,10 +45,11 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
     @BindView(R.id.activity_search_search)    FinderView finder;
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
     @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
-    @BindView(R.id.activity_add_interest_text_start_search)    TextView start_search;
+    @BindView(R.id.activity_add_interest_text_info_empty_list)    TextView start_search;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.mulilist_activity_button_review_layout)    LinearLayout button_review_layout;
 
     @Inject    MultiListPresenter presenter;
 
@@ -84,6 +85,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
         mode=presenter.parseIntent(getIntent());
         switch (mode){
             case MODE_SHOW_AND_SELECT_BEER:
+                start_search.setText(R.string.text_hint_search);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_beer));
@@ -91,6 +93,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
             case MODE_SHOW_AND_SELECT_RESTO:
+                start_search.setText(R.string.text_hint_search);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_resto));
@@ -98,6 +101,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 recyclerview.addOnScrollListener(scrollListener);
                 break;
             case MODE_SHOW_AND_SELECT_FRIENDS:
+                start_search.setText(R.string.text_hint_search);
                 setTitle(R.string.action_find_friends);
                 fullSearchPackage.setType(Keys.TYPE_USER);
                 finder.setListener(string -> prepareQuery(string));
@@ -118,6 +122,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
                 }
                 break;
             case MODE_SHOW_REVIEWS_BEER:
+                start_search.setText(R.string.text_view_while_empty_review);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_reviews);
@@ -131,6 +136,8 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
                 break;
             case MODE_SHOW_REVIEWS_RESTO:
+                start_search.setText(R.string.text_view_while_empty_review);
+                button_review_layout.setVisibility(View.VISIBLE);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_reviews);
@@ -141,6 +148,7 @@ public class MultiListActivity extends BaseActivity implements MultiListView{
 
                 break;
             case MODE_SHOW_ALL_MY_EVALUATION:
+                start_search.setText(R.string.text_view_while_empty_evaluation);
                 swipe.setEnabled(false);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);

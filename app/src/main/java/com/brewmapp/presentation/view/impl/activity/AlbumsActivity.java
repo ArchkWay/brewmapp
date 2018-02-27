@@ -135,7 +135,7 @@ public class AlbumsActivity extends BaseActivity implements
 
     @Override
     public void showAlbums(Albums albums) {
-        albums.getModels().add(new AlbumInfo(new Album(getString(R.string.all_photos))));
+        albums.getModels().add(new AlbumInfo(new Album(getString(R.string.all_photos),getString(R.string.list_all_photos))));
         adapter.updateDataSet(albums.getModels());
         textView.setVisibility(albums.getModels().size()!=0? View.GONE:View.VISIBLE);
         list.setVisibility(albums.getModels().size()==0?View.GONE:View.VISIBLE);

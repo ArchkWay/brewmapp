@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -109,7 +110,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_layout_menu)    ViewGroup layout_menu;
     @BindView(R.id.layout_like)    ViewGroup layout_like;
     @BindView(R.id.layout_dislike)    ViewGroup layout_dislike;
-//    @BindView(R.id.layout_fav)    ViewGroup layout_fav;
     @BindView(R.id.view_like_counter)    TextView like_counter;
     @BindView(R.id.view_dislike_counter)    TextView dislike_counter;
     @BindView(R.id.activity_restoDetails_empty_text_reviews)    TextView empty_text_reviews;
@@ -135,7 +135,19 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             R.id.activity_resto_detail_button_call,
             R.id.activity_resto_detail_button_subscribe,
             R.id.activity_resto_detail_button_private_message,
-            R.id.activity_restoDetails_slider
+            R.id.activity_resto_panel_reviews,
+            R.id.activity_resto_panel_i_here,
+            R.id.activity_resto_panel_favorite,
+            R.id.activity_resto_panel_i_owner,
+            R.id.activity_resto_detail_text_view_description_button,
+            R.id.activity_resto_detail_layout_news,
+            R.id.activity_resto_detail_layout_event,
+            R.id.activity_resto_detail_layout_sale,
+            R.id.activity_resto_detail_layout_photo,
+            R.id.activity_resto_detail_layout_menu,
+            R.id.layout_like,
+            R.id.layout_dislike,
+            R.id.activity_resto_details_container_added_to_favorite
     })    List<View> viewList;
 
     //endregion
@@ -190,10 +202,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
         panel_favorite.setOnClickListener(v->{presenter.clickFav();setResult(RESULT_OK);});
         panel_i_owner.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
-        panel_reviews.setOnClickListener(v->RestoDetailActivity.this.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_RESTO,Uri.parse(String.valueOf(resto.getId())),this,MultiListActivity.class)));
+        panel_reviews.setOnClickListener(v->Starter.MultiListActivity_MODE_SHOW_REVIEWS_RESTO(RestoDetailActivity.this,String.valueOf(resto.getId())));
         added_favorites.setLayoutManager(new LinearLayoutManager(this));
         added_favorites.setAdapter(adapter_favorites);
-
 
     }
 
@@ -224,10 +235,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         }
 
         ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
-            if(code == ALL_CONTROL) {
                 view.setEnabled(enabled);
-                view.setClickable(enabled);
-            }
+//                view.setClickable(enabled);
+                view.setAlpha(enabled?1.0f:0.5f);
         });
     }
 
@@ -418,7 +428,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     public void scrollTo(Integer integer) {
         switch (integer){
             case Actions.ACTION_SCROLL_TO_NEWS:
-                scroll.post(() -> scroll.scrollTo(0,layout_news.getTop()));
+                scroll.postDelayed(() ->
+                        ObjectAnimator.ofInt(scroll, "scrollY",  layout_news.getTop()).setDuration(1000).start()
+                ,1500);
                 getIntent().setAction(null);
                 break;
         }
@@ -431,7 +443,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         container_added_to_favorite.setVisibility(iFlexibles.size()==0?View.GONE:View.VISIBLE);
         adapter_favorites.clear();
         adapter_favorites.addItems(0,iFlexibles);
-        adapter_favorites.notifyDataSetChanged();
+        adapter_favorites.notifyItemRangeInserted(0,iFlexibles.size());
 
     }
 
@@ -522,16 +534,13 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private void setTitleToButtonOfMoreDescription(boolean click) {
         if(button_more_description.getVisibility()==View.VISIBLE) {
             if(click) {
-                if (description.getLineCount() > description.getMaxLines())
-                    description.setMaxLines(description.getMaxLines() * 4);
-                else
-                    description.setMaxLines(getResources().getInteger(R.integer.init_max_lites_text_view));
+                if (description.getMaxLines() > 0) {
+                    int k = description.getLineCount() / description.getMaxLines() + 1;
+                    ObjectAnimator.ofInt(description, "height", description.getHeight() * k).setDuration(1000).start();
+                    button_more_description.setVisibility(View.GONE);
+                }
             }
-
-            if (getResources().getInteger(R.integer.init_max_lites_text_view) == description.getMaxLines())
-                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать подробнее" : "Свернуть");
-            else
-                button_more_description.setText(description.getLineCount() > description.getMaxLines() ? "Читать полностью" : "Свернуть");
+            button_more_description.setText("Читать полностью");
         }else {
             button_more_description.setOnClickListener(null);
         }

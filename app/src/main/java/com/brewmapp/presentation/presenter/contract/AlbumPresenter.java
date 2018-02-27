@@ -6,6 +6,7 @@ import com.brewmapp.data.entity.Photo;
 import com.brewmapp.presentation.view.contract.AlbumView;
 
 import ru.frosteye.ovsa.execution.executor.Callback;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface AlbumPresenter extends LivePresenter<AlbumView> {
@@ -13,5 +14,5 @@ public interface AlbumPresenter extends LivePresenter<AlbumView> {
     void onUploadPhoto(int albumId, File file);
     void onLikePhoto(Photo photo, Callback<Boolean> callback);
 
-    void deletePhoto(int photo_id, int albumId);
+    void deletePhoto(int photo_id, int albumId,SimpleSubscriber<Integer> simpleSubscriber);
 }

@@ -3,10 +3,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="1dp"
-        android:id="@+id/view.photo.image"
-        android:scaleType="centerCrop"/>
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:id="@+id/view.photo.image"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:id="@+id/view.photo.selected"
+            android:src="@drawable/ic_selected"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
 </com.brewmapp.presentation.view.impl.widget.PhotoView>

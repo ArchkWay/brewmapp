@@ -117,16 +117,10 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
     }
 
     @Override
-    public void deletePhoto(int photo_id, final int albumId) {
+    public void deletePhoto(int photo_id, final int albumId, SimpleSubscriber<Integer> simpleSubscriber) {
         WrapperParams wrapperParams=new WrapperParams(Keys.CAP_PHOTO);
         wrapperParams.addParam(Keys.ID,photo_id);
-        deletePhotoTask.execute(wrapperParams,new SimpleSubscriber<Integer>(){
-            @Override
-            public void onNext(Integer integer) {
-                super.onNext(integer);
-                onRequestPhotos(albumId);
-            }
-        });
+        deletePhotoTask.execute(wrapperParams,simpleSubscriber);
     }
 
     private class LikeSubscriber extends SimpleSubscriber<MessageResponse> {

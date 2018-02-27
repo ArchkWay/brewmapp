@@ -18,12 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.brewmapp.data.entity.Album;
+import com.brewmapp.data.entity.Photo;
+import com.brewmapp.data.entity.wrapper.AlbumInfo;
 import com.brewmapp.presentation.view.impl.widget.LikeView;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -37,6 +41,7 @@ import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.view.contract.AlbumView;
 
 import ru.frosteye.ovsa.execution.executor.Callback;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.tool.DateTools;
 
@@ -65,6 +70,8 @@ public class AlbumActivity extends BaseActivity implements
     private String albumTitle;
     private FlexibleAdapter<PhotoInfo> adapter;
     private AlbumPhotos albumPhotos;
+    private boolean mode_selection_on=false;
+    private ArrayList<PhotoInfo> arrayList=new ArrayList();
     //endregion
 
     //region Impl AlbumActivity
@@ -81,7 +88,7 @@ public class AlbumActivity extends BaseActivity implements
         setTitle(albumTitle);
         enableBackButton();
         swipe.setOnRefreshListener(() -> presenter.onRequestPhotos(albumId));
-        adapter = new FlexibleAdapter<>(new ArrayList<>(), this);
+        adapter = new FlexibleAdapter<>(arrayList, this);
         adapter.addListener(this);
 
         list.setLayoutManager(new GridLayoutManager(this, 3));
@@ -95,7 +102,11 @@ public class AlbumActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add, menu);
+        if(mode_selection_on){
+            getMenuInflater().inflate(R.menu.delete, menu);
+        }else {
+            getMenuInflater().inflate(R.menu.add, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -109,6 +120,9 @@ public class AlbumActivity extends BaseActivity implements
                         case 1:takePhoto(); break;
                     }
                 });
+                return true;
+            case R.id.action_delete:
+                deletePhoto();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -135,10 +149,12 @@ public class AlbumActivity extends BaseActivity implements
     @Override
     public void showPhotos(AlbumPhotos photos) {
         this.albumPhotos = photos;
-        adapter.updateDataSet(photos.getModels());
+        arrayList.clear();
+        arrayList.addAll(this.albumPhotos.getModels());
+        adapter.notifyDataSetChanged();
         textView.setVisibility(photos.getModels().size()!=0?View.GONE:View.VISIBLE);
         list.setVisibility(photos.getModels().size()==0?View.GONE:View.VISIBLE);
-
+        mode_selection_on=false;
     }
 
     @Override
@@ -178,34 +194,71 @@ public class AlbumActivity extends BaseActivity implements
     public void onImageReady(File file) {
         presenter.onUploadPhoto(albumId, MapUtils.ImageFormat(file));
     }
+
+    private void deletePhoto() {
+
+        for (int i=0;i<arrayList.size();i++) {
+            PhotoInfo photoInfo=arrayList.get(i);
+            if (photoInfo.getModel().isSelected()) {
+                presenter.deletePhoto(photoInfo.getModel().getId(), albumId, new SimpleSubscriber<Integer>() {
+                    @Override
+                    public void onNext(Integer integer) {
+                        super.onNext(integer);
+                        deletePhoto();
+                    }
+                });
+                arrayList.remove(i);
+                adapter.notifyItemRemoved(i+1);
+                return;
+            }
+        }
+        mode_selection_on=false;
+        invalidateOptionsMenu();
+    }
+
+
     //endregion
 
     @Override
     public boolean onItemClick(int position) {
-        View overlay = LayoutInflater.from(this).inflate(R.layout.view_photo_overlay, null);
-        LikeView likeView = ((LikeView) overlay.findViewById(R.id.view_photoOverlay_likes));
-        TextView name = ((TextView) overlay.findViewById(R.id.view_photoOverlay_name));
-        TextView date = ((TextView) overlay.findViewById(R.id.view_photoOverlay_date));
-        new ImageViewer.Builder<>(this, albumPhotos.getModels())
-                .setFormatter(customImage -> customImage.getModel().getThumb().getUrl())
-                .setOverlayView(overlay)
-                .setImageChangeListener(position1 -> {
-                    PhotoInfo info = adapter.getItem(position1);
-                    likeView.setCount(info.getModel().getLike());
-                    date.setText(DateTools.formatDottedDateWithTime(info.getModel().getCreatedAt()));
-                    name.setText(info.getModel().getUser().getFormattedName());
-                    likeView.setOnClickListener(v -> presenter.onLikePhoto(info.getModel(), result -> {
-                        if(result) likeView.increase();
-                    }));
-                })
-                .setStartPosition(position)
-                .show();
+        if(mode_selection_on){
+            onItemLongClick(position);
+        }else {
+            View overlay = LayoutInflater.from(this).inflate(R.layout.view_photo_overlay, null);
+            LikeView likeView = ((LikeView) overlay.findViewById(R.id.view_photoOverlay_likes));
+            TextView name = ((TextView) overlay.findViewById(R.id.view_photoOverlay_name));
+            TextView date = ((TextView) overlay.findViewById(R.id.view_photoOverlay_date));
+            new ImageViewer.Builder<>(this, albumPhotos.getModels())
+                    .setFormatter(customImage -> customImage.getModel().getThumb().getUrl())
+                    .setOverlayView(overlay)
+                    .setImageChangeListener(position1 -> {
+                        PhotoInfo info = adapter.getItem(position1);
+                        likeView.setCount(info.getModel().getLike());
+                        date.setText(DateTools.formatDottedDateWithTime(info.getModel().getCreatedAt()));
+                        name.setText(info.getModel().getUser().getFormattedName());
+                        likeView.setOnClickListener(v -> presenter.onLikePhoto(info.getModel(), result -> {
+                            if (result) likeView.increase();
+                        }));
+                    })
+                    .setStartPosition(position)
+                    .show();
+        }
         return false;
     }
 
-
     @Override
     public void onItemLongClick(int position) {
-        presenter.deletePhoto(albumPhotos.getModels().get(position).getModel().getId(),albumId);
+
+        Photo photo=arrayList.get(position).getModel();
+        photo.setSelected(!photo.isSelected());
+        adapter.notifyItemChanged(position);
+        mode_selection_on=false;
+        for (PhotoInfo photoInfo:arrayList)
+            if(photoInfo.getModel().isSelected()){
+                mode_selection_on=true;
+            }
+        invalidateOptionsMenu();
+
+
     }
 }

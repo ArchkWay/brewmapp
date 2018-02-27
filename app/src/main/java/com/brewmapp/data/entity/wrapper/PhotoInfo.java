@@ -15,4 +15,5 @@ public class PhotoInfo extends AdapterItem<Photo, PhotoView> {
     public int getLayoutRes() {
         return R.layout.view_photo;
     }
+
 }

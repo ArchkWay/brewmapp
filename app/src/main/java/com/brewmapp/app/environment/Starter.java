@@ -47,6 +47,9 @@ public class Starter {
     public static void MultiListActivity_MODE_SHOW_REVIEWS_BEER(Activity activity,String beerId) {
         activity.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_BEER, Uri.parse(beerId),activity,MultiListActivity.class));
     }
+    public static void MultiListActivity_MODE_SHOW_REVIEWS_RESTO(Activity activity,String resto_id) {
+        activity.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_RESTO,Uri.parse(resto_id),activity,MultiListActivity.class));
+    }
     public static void MultiListActivity(Activity activity, String action) {
         activity.startActivity(new Intent(action, null,activity,MultiListActivity.class));
     }

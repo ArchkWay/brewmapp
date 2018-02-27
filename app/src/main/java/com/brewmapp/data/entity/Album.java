@@ -23,8 +23,9 @@ public class Album implements Serializable {
     public Album() {
     }
 
-    public Album(String name) {
+    public Album(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     @SerializedName(Keys.DIS_LIKE)

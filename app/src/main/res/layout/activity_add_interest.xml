@@ -39,7 +39,8 @@
         android:layout_height="match_parent"
         android:id="@+id/activity.add.interest.swipe"
         android:background="@color/colorBlockSplitter"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -52,12 +53,40 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 style="@style/AppTheme.Text.Georgia.Italic"
-                android:text="@string/text_hint_search"
-                android:id="@+id/activity.add.interest.text_start_search"
+                android:id="@+id/activity.add.interest.text_info_empty_list"
                 />
 
         </RelativeLayout>
 
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        style="@style/AppTheme.Button.Green.Solid.Square"
+        android:gravity="center"
+        android:id="@+id/mulilist.activity.button_review_layout"
+        android:visibility="gone"
+        android:clickable="true"
+        >
+        <!--<ImageView-->
+            <!--android:layout_width="@dimen/size_icon_24"-->
+            <!--android:layout_height="@dimen/size_icon_24"-->
+            <!--android:src="@drawable/ic_search_big_white"-->
+            <!--android:clickable="false"-->
+            <!--/>-->
+        <TextView
+            style="@style/AppTheme.Button.Green.Solid.Square"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/button_text_write_review"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_size_common"
+            android:clickable="false"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

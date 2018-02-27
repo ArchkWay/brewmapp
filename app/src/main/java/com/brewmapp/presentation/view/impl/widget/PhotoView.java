@@ -23,6 +23,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 public class PhotoView extends BaseLinearLayout implements ModelView<Photo> {
 
     @BindView(R.id.view_photo_image) ImageView image;
+    @BindView(R.id.view_photo_selected) ImageView icon_selected;
 
 
     private Photo model;
@@ -65,5 +66,7 @@ public class PhotoView extends BaseLinearLayout implements ModelView<Photo> {
         Picasso.with(getContext())
                 .load(model.getThumb().getThumbUrl())
                 .fit().centerCrop().into(image);
+        icon_selected.setVisibility(this.model.isSelected()?VISIBLE:GONE);
+        image.setAlpha(this.model.isSelected()?0.5f:1.0f);
     }
 }

@@ -8,6 +8,7 @@ import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.AboutFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.OwnerFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 
 import javax.inject.Inject;
@@ -47,6 +48,9 @@ public class MultiFragmentActivityPresenterImpl extends BasePresenter<MultiFragm
                     break;
                 case MultiFragmentActivityView.MODE_CHAT:
                     view.showFragment(new ChatFragment());
+                    break;
+                case MultiFragmentActivityView.MODE_FORM_I_OWNER:
+                    view.showFragment(new OwnerFragment());
                     break;
                 default:
                     view.commonError();return;

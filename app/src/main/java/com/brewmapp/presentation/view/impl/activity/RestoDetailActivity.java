@@ -137,7 +137,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             R.id.activity_resto_detail_button_subscribe,
             R.id.activity_resto_detail_button_private_message,
             R.id.activity_resto_panel_reviews,
-            R.id.activity_resto_panel_i_here,
+            //R.id.activity_resto_panel_i_here,
             R.id.activity_resto_panel_favorite,
             R.id.activity_resto_panel_i_owner,
             R.id.activity_resto_detail_text_view_description_button,
@@ -199,10 +199,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         call.setOnClickListener(v -> callPhone(number_call.getText().toString()));
         call1.setOnClickListener(v -> callPhone(number_cal2.getText().toString()));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
+        panel_i_here.setAlpha(0.5f);
+        //panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
 
-        panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
         panel_favorite.setOnClickListener(v->{presenter.clickFav();setResult(RESULT_OK);});
-        panel_i_owner.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
+        panel_i_owner.setOnClickListener(v->Starter.MultiFragmentActivity_MODE_FORM_I_OWNER(this));
         panel_reviews.setOnClickListener(v->Starter.MultiListActivity_MODE_SHOW_REVIEWS_RESTO(RestoDetailActivity.this,String.valueOf(resto.getId())));
         added_favorites.setLayoutManager(new LinearLayoutManager(this));
         added_favorites.setAdapter(adapter_favorites);

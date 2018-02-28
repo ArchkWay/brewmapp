@@ -160,6 +160,10 @@ public class Starter {
         activity.startActivity(intent);
 
     }
+    public static void MultiFragmentActivity_MODE_FORM_I_OWNER(Activity activity) {
+        Intent intent=new Intent(MultiFragmentActivityView.MODE_FORM_I_OWNER, null, activity, MultiFragmentActivity.class);
+        activity.startActivity(intent);
+    }
 
     public static void BreweryDetailsActivity(Activity activity, String breweryId) {
         Intent intent=new Intent(activity,BreweryDetailsActivity.class);

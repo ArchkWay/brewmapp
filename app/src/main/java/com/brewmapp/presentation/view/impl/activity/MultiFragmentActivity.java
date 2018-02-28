@@ -18,6 +18,7 @@ import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.AboutFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.OwnerFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 
 import javax.inject.Inject;
@@ -26,24 +27,30 @@ import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.listener.SelectListener;
 
-public class MultiFragmentActivity extends BaseActivity implements MultiFragmentActivityView,
+public class MultiFragmentActivity extends BaseActivity implements
+        MultiFragmentActivityView,
         AboutFragment.OnFragmentInteractionListener,
         WebViewFragment.OnFragmentInteractionListener ,
         BeerEditFragment.OnFragmentInteractionListener,
         RestoEditFragment.OnFragmentInteractionListener,
-        ChatFragment.OnFragmentInteractionListener
+        ChatFragment.OnFragmentInteractionListener,
+        OwnerFragment.OnFragmentInteractionListener
 
 {
+
+    //region BindView
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.multiactivity_root)    ViewGroup root;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle) TextView toolbarSubTitle;
+    //endregion
 
-
-
+    //region Inject
     @Inject    MultiFragmentActivityPresenter presenter;
+    //endregion
 
+    //region Impl MultiFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +64,6 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarSubTitle.setVisibility(View.GONE);
         toolbarDropdown.setGravity(Gravity.CENTER_HORIZONTAL);
-
     }
 
     @Override
@@ -76,6 +82,20 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
         component.inject(this);
     }
 
+    @Override
+    protected Toolbar findActionBar() {
+        return toolbar;
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        toolbarTitle.setText(getTitle());
+    }
+
+    //endregion
+
+    //region Impl MultiFragmentActivityView
     @Override
     public void enableControls(boolean enabled, int code) {
 
@@ -98,12 +118,9 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
                 .commit();
 
     }
+    //endregion
 
-    @Override
-    protected Toolbar findActionBar() {
-        return toolbar;
-    }
-
+    //region Impl other interfaces
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -116,13 +133,8 @@ public class MultiFragmentActivity extends BaseActivity implements MultiFragment
     }
 
     @Override
-    public void setTitle(CharSequence title) {
-        super.setTitle(title);
-        toolbarTitle.setText(getTitle());
-    }
-
-    @Override
     public void selectPhoto(SelectListener selectListener) {
         showSelect(this, R.array.avatar_options, selectListener);
     }
+    //endregion
 }

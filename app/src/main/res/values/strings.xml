@@ -508,5 +508,9 @@
     <string name="text_call_phone_permission">Для совершения вызова требуется соответствующее разрешение</string>
     <string name="text_continue_input">Продолжайте ввод</string>
     <string name="list_all_photos">Общий список</string>
+    <string name="i_am_owner">Я владелец</string>
+    <string name="you_first_last_name">Ваше фамилия имя и отчество</string>
+    <string name="email">Email</string>
+    <string name="text_hint_mobile_phone">Телефон1111</string>
 
 </resources>

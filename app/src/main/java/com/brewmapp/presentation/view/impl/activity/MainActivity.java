@@ -64,9 +64,16 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
 
-public class MainActivity extends BaseActivity implements MainView, FlexibleAdapter.OnItemClickListener,
-        FragmentInterractor,SearchFragment.OnFragmentInteractionListener,BeerMapFragment.OnFragmentInteractionListener  {
+public class MainActivity extends BaseActivity
+        implements
+        MainView,
+        FlexibleAdapter.OnItemClickListener,
+        FragmentInterractor,
+        SearchFragment.OnFragmentInteractionListener,
+        BeerMapFragment.OnFragmentInteractionListener
+{
 
+    //region BindView
     @BindView(R.id.common_toolbar)
     Toolbar toolbar;
     @BindView(R.id.common_toolbar_dropdown)
@@ -89,27 +96,30 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     FrameLayout container;
     @BindView(R.id.activity_main_visible_container)
     RelativeLayout visible_container;
+    //endregion
 
-    @Inject
-    MainPresenter presenter;
-    @Inject
-    MainNavigator navigator;
+    //region Inject
+    @Inject    public MainPresenter presenter;
+    @Inject    public MainNavigator navigator;
+    //endregion
 
+    //region Private
     private FlexibleAdapter<MenuField> adapter;
     private List<MenuField> menuItems;
-    private @MenuRes
-    int menuToShow;
+    private @MenuRes    int menuToShow;
+    private DuoDrawerToggle drawerToggle;
+    private String mode;
+    //endregion
 
+    //region Static
     public static final String KEY_FIRST_FRAGMENT = "first_fragment";
     public static final String MODE_DEFAULT = "default";
     public static final String MODE_EVENT_FRAGMENT_WITHOUT_TABS = "event_fragment";
     public static final String MODE_MAP_FRAGMENT = "map_fragment";
     public static final String MODE_SEARCH_FRAGMENT = "search_fragment";
+    //endregion
 
-
-    DuoDrawerToggle drawerToggle;
-    private String mode;
-
+    //region Impl MainActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +135,103 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         mode = presenter.parseMode(getIntent());
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        switch (mode){
+            case MODE_DEFAULT:
+                if(menuToShow != 0){
+                    getMenuInflater().inflate(menuToShow, menu);
+                }
+                break;
+            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
+            case MODE_MAP_FRAGMENT:
+                if (menu!=null) menu.clear();
+                getMenuInflater().inflate(R.menu.stub, menu);
+                break;
+            case MODE_SEARCH_FRAGMENT:
+                if (menu!=null) menu.clear();
+                getMenuInflater().inflate(R.menu.stub, menu);
+                break;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+            case R.id.action_filter:
+            case R.id.action_map:
+                return super.onOptionsItemSelected(item);
+            default:
+                return navigator.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void attachPresenter() {
+        presenter.onAttach(this);
+    }
+
+    @Override
+    protected LivePresenter<?> getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected void inject(PresenterComponent component) {
+        component.inject(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_REFRESH_ITEMS) {
+                refreshItems();
+            } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
+                refreshState();
+            }
+//            else if (requestCode == REQUEST_CODE_MAP_RESULT) {
+//                showMapResult(data.getBooleanExtra("isBeer", false),
+//                        data.getIntExtra("checkBox", 0));
+//            }
+        }
+    }
+
+    @Override
+    protected Toolbar findActionBar() {
+        return toolbar;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mode.equals(MODE_DEFAULT))
+            if(presenter.getActiveFragment()== MenuField.PROFILE)
+                new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+            else {
+                MenuField.unselectAll(menuItems);
+                adapter.notifyDataSetChanged();
+                navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
+                navigator.onDrawerClosed();
+
+            }
+
+        else
+            finish();
+
+    }
+    //endregion
 
     private void setDrawer() {
         drawer.setMarginFactor(0.5f);
@@ -176,20 +283,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
 
     }
 
-    @Override
-    protected void attachPresenter() {
-        presenter.onAttach(this);
-    }
-
-    @Override
-    protected LivePresenter<?> getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    protected void inject(PresenterComponent component) {
-        component.inject(this);
-    }
 
     @Override
     public void enableControls(boolean enabled, int code) {
@@ -325,39 +418,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        switch (mode){
-            case MODE_DEFAULT:
-                if(menuToShow != 0){
-                    getMenuInflater().inflate(menuToShow, menu);
-                }
-                break;
-            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
-            case MODE_MAP_FRAGMENT:
-                if (menu!=null) menu.clear();
-                getMenuInflater().inflate(R.menu.stub, menu);
-                break;
-            case MODE_SEARCH_FRAGMENT:
-                if (menu!=null) menu.clear();
-                getMenuInflater().inflate(R.menu.stub, menu);
-                break;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-            case R.id.action_filter:
-            case R.id.action_map:
-                return super.onOptionsItemSelected(item);
-            default:
-              return navigator.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public boolean onItemClick(int position) {
 
         MenuField field = adapter.getItem(position);
@@ -379,26 +439,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
         return this;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE_REFRESH_ITEMS) {
-                refreshItems();
-            } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
-                refreshState();
-            }
-//            else if (requestCode == REQUEST_CODE_MAP_RESULT) {
-//                showMapResult(data.getBooleanExtra("isBeer", false),
-//                        data.getIntExtra("checkBox", 0));
-//            }
-        }
-    }
-
-    @Override
-    protected Toolbar findActionBar() {
-        return toolbar;
-    }
 
     @Override
     public void commonError(String... strings) {
@@ -415,33 +455,6 @@ public class MainActivity extends BaseActivity implements MainView, FlexibleAdap
     }
 
 
-    @Override
-    public void onBackPressed() {
-        if(mode.equals(MODE_DEFAULT))
-            if(presenter.getActiveFragment()== MenuField.PROFILE)
-                new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
-                @Override
-                public void onOk() {
-                    finish();
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-            else {
-                MenuField.unselectAll(menuItems);
-                adapter.notifyDataSetChanged();
-                navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
-                navigator.onDrawerClosed();
-
-            }
-
-        else
-            finish();
-
-    }
 
 //*****************************************
     @SuppressLint("RestrictedApi")

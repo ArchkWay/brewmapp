@@ -3,16 +3,16 @@ package com.brewmapp.presentation.view.impl.fragment.Simple;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 
 public class OwnerFragment extends Fragment {
@@ -78,6 +78,8 @@ public class OwnerFragment extends Fragment {
     //region Function
     private void init(View view) {
         setHasOptionsMenu(true);
+        TextInputEditText phone=view.findViewById(R.id.phone);
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("7"));
     }
     //endregion
 

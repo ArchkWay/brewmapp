@@ -511,6 +511,7 @@
     <string name="i_am_owner">Я владелец</string>
     <string name="you_first_last_name">Ваше фамилия имя и отчество</string>
     <string name="email">Email</string>
-    <string name="text_hint_mobile_phone">Телефон1111</string>
+    <string name="text_hint_mobile_phone">Телефон</string>
+    <string name="text_comment_to_you_request">Ваш комментарий к заявке</string>
 
 </resources>

@@ -18,7 +18,6 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.CommonItemInfo;
 import com.brewmapp.data.model.ICommonItem;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
-import com.brewmapp.presentation.presenter.impl.LocationActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -44,7 +43,7 @@ import com.brewmapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PickLocationActivity extends LocationActivity implements PickLocationView,
+public class PickLocationActivity extends BaseActivity implements PickLocationView,
         OnMapReadyCallback {
 
     @BindView(R.id.common_toolbar) Toolbar toolbar;
@@ -66,13 +65,13 @@ public class PickLocationActivity extends LocationActivity implements PickLocati
         setContentView(R.layout.activity_pick_location);
     }
 
-    @Override
-    protected void onLocationFound(Location location) {
-        presenter.onLocationChanged(new SimpleLocation(location));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-                location.getLatitude(), location.getLongitude()
-        ), 14));
-    }
+//    @Override
+//    protected void onLocationFound(Location location) {
+//        presenter.onLocationChanged(new SimpleLocation(location));
+//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+//                location.getLatitude(), location.getLongitude()
+//        ), 14));
+//    }
 
     @Override
     protected Toolbar findActionBar() {
@@ -160,11 +159,11 @@ public class PickLocationActivity extends LocationActivity implements PickLocati
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        lookForLocation(true);
+        //lookForLocation(true);
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setOnMyLocationButtonClickListener(() -> {
-            lookForLocation(true);
+            //lookForLocation(true);
             return true;
         });
         googleMap.setOnMapClickListener(latLng -> {

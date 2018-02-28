@@ -7,32 +7,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
 import com.brewmapp.R;
-import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.entity.SocialContact;
 import com.brewmapp.data.entity.container.Contacts;
 import com.brewmapp.execution.social.SocialAuthResult;
 import com.brewmapp.execution.social.SocialContactsResult;
 import com.brewmapp.execution.social.SocialErrorListener;
-import com.brewmapp.execution.social.SocialException;
 import com.brewmapp.execution.social.SocialListener;
 import com.brewmapp.execution.social.SocialNetwork;
 import com.brewmapp.execution.social.SocialProfileResult;
 import com.brewmapp.execution.social.SocialResult;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-
-import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import ru.frosteye.ovsa.execution.task.ObservableTask;
-import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ir.mirrajabi.rxcontacts.Contact;
 import ir.mirrajabi.rxcontacts.RxContacts;
 import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;

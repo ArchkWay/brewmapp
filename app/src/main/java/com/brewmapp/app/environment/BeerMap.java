@@ -7,30 +7,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.brewmapp.app.di.component.AppComponent;
+
 import com.brewmapp.app.di.component.DaggerAppComponent;
 import com.brewmapp.app.di.module.AppModule;
-import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.impl.UiSettingImpl;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.SplashActivity;
-import com.crashlytics.android.Crashlytics;
-
-import java.net.URISyntaxException;
-
-import javax.inject.Inject;
-
-import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import ru.frosteye.ovsa.data.storage.SharedPreferencesStorage;
-import ru.frosteye.ovsa.data.storage.Storage;
-import ru.frosteye.ovsa.execution.serialization.Serializer;
 
 
 public class BeerMap extends Application {

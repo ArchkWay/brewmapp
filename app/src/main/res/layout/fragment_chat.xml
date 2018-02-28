@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray">
+    android:background="@color/colorSplitter">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment.chat.messages"
         android:layout_width="match_parent"

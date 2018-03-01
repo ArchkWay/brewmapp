@@ -156,4 +156,9 @@ public class  MessageFragment extends BaseFragment implements MessageFragmentVie
         super.prepareView(view);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        search.clearFocus();
+    }
 }

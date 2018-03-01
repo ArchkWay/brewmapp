@@ -78,7 +78,7 @@ public class OwnerFragment extends Fragment {
     //region Function
     private void init(View view) {
         setHasOptionsMenu(true);
-        TextInputEditText phone=view.findViewById(R.id.phone);
+        TextInputEditText phone= (TextInputEditText) view.findViewById(R.id.phone);
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("7"));
     }
     //endregion

@@ -243,6 +243,8 @@ public class BeerMapFragment extends BaseFragment implements
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
     //endregion
 
     //region Impl BeerMapView
@@ -530,8 +532,8 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private InfoWindowMap createItemInfoWindow(FilterRestoLocation filterRestoLocation) {
-        InfoWindowMap view= (InfoWindowMap) getLayoutInflater().inflate(R.layout.layout_info_window, null);
-        TextView restoTitle = view.findViewById(R.id.title);
+        InfoWindowMap view= (InfoWindowMap) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window, null);
+        TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(filterRestoLocation.getmName());
         view.setOnClickListener(v -> Starter.RestoDetailActivity(getContext(), filterRestoLocation.getRestoId()));
@@ -541,8 +543,8 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private InfoWindowMap createClusterInfoWindow(Cluster<FilterRestoLocation> cluster) {
-        InfoWindowMap view= (InfoWindowMap) getLayoutInflater().inflate(R.layout.layout_info_window, null);
-        TextView restoTitle = view.findViewById(R.id.title);
+        InfoWindowMap view= (InfoWindowMap) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window, null);
+        TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(getString(R.string.select_resto,String.valueOf(cluster.getItems().size())));
         view.setOnClickListener(v -> clearDialog());

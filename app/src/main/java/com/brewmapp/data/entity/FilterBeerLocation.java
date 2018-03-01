@@ -56,12 +56,10 @@ public class FilterBeerLocation implements ClusterItem {
         return null;
     }
 
-    @Override
     public String getTitle() {
         return null;
     }
 
-    @Override
     public String getSnippet() {
         return null;
     }

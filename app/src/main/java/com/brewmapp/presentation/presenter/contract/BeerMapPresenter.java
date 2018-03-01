@@ -17,15 +17,9 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface BeerMapPresenter extends LivePresenter<BeerMapView> {
-    void onLocationChanged(SimpleLocation location);
-    void onGeocodeRequest(LatLng latLng);
     void onLoadedRestoGeo(int cityId);
-    void onLoadedCity(String cityName);
-    void loadRestoCoordinates(List<FilterRestoField> fieldList, int specialOffer);
-    void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer);
     void sendQueryRestoSearch(FullSearchPackage fullSearchPackage);
 
     void loadRestoByLatLngBounds(GeoPackage geoPackage);
 
-    void cancelLoadRestoByLatLngBounds();
 }

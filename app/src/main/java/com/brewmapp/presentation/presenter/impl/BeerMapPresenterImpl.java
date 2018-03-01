@@ -80,20 +80,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     }
 
     @Override
-    public void onLocationChanged(SimpleLocation location) {
-        loadRestoLocationTask.cancel();
-        loadCityTask.cancel();
-        this.simpleLocation = location;
-    }
-
-    @Override
-    public void onGeocodeRequest(LatLng latLng) {
-        Location location = new Location(LocationManager.GPS_PROVIDER);
-        location.setLatitude(latLng.latitude);
-        location.setLongitude(latLng.longitude);
-    }
-
-    @Override
     public void onLoadedRestoGeo(int id) {
         loadRestoLocationTask.cancel();
         loadRestoLocationTask.execute(id, new SimpleSubscriber<List<FilterRestoLocation>>() {
@@ -105,106 +91,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             @Override
             public void onNext(List<FilterRestoLocation> restoLocation) {
                 view.showGeolocationResult(restoLocation);
-            }
-        });
-    }
-
-    @Override
-    public void onLoadedCity(String cityName) {
-        loadCityTask.cancel();
-        GeoPackage geoPackage = new GeoPackage();
-        geoPackage.setCityName(cityName);
-        loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
-            @Override
-            public void onError(Throwable e) {
-                showError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(List<City> restoLocation) {
-                if(restoLocation.size()>0)
-                    onLoadedRestoGeo(restoLocation.get(0).getId());
-            }
-        });
-    }
-
-    @Override
-    public void loadRestoCoordinates(List<FilterRestoField> filterRestoFields, int specialOffer) {
-        filterRestoTask.cancel();
-        FilterRestoPackage filterRestoPackage = new FilterRestoPackage();
-        filterRestoPackage.setRestoCity(filterRestoFields.get(FilterRestoField.CITY).getSelectedItemId());
-        filterRestoPackage.setRestoTypes(filterRestoFields.get(FilterRestoField.TYPE).getSelectedItemId());
-        filterRestoPackage.setMenuBeer(filterRestoFields.get(FilterRestoField.BEER).getSelectedItemId());
-        filterRestoPackage.setRestoKitchens(filterRestoFields.get(FilterRestoField.KITCHEN).getSelectedItemId());
-        filterRestoPackage.setRestoAveragepriceRange(filterRestoFields.get(FilterRestoField.PRICE).getSelectedItemId());
-        filterRestoPackage.setRestoFeatures(filterRestoFields.get(FilterRestoField.FEATURES).getSelectedItemId());
-        filterRestoPackage.setResto_discount(specialOffer);
-        filterRestoTask.execute(filterRestoPackage, new SimpleSubscriber<List<FilterRestoLocation>>() {
-            @Override
-            public void onError(Throwable e) {
-                showError(e.getMessage());
-                view.showDialogProgressBar(false);
-            }
-
-            @Override
-            public void onNext(List<FilterRestoLocation> restoLocations) {
-                view.showDialogProgressBar(false);
-                if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено ни одного заведения",0);
-                } else {
-                    view.showGeolocationResult(restoLocations);
-                }
-            }
-
-            @Override
-            public void onComplete() {
-                view.showDialogProgressBar(false);
-                super.onComplete();
-            }
-        });
-    }
-
-    @Override
-    public void loadBeerCoordinates(List<FilterBeerField> fieldList, int craftBeer) {
-        filterBeerTask.cancel();
-        FilterBeerPackage filterBeerPackage = new FilterBeerPackage();
-        filterBeerPackage.setBeerCountries(fieldList.get(FilterBeerField.COUNTRY).getSelectedItemId());
-        filterBeerPackage.setBeerTypes(fieldList.get(FilterBeerField.TYPE).getSelectedItemId());
-        filterBeerPackage.setBeerStrengthes(fieldList.get(FilterBeerField.POWER).getSelectedItemId());
-        filterBeerPackage.setBeerPacks(fieldList.get(FilterBeerField.BEER_PACK).getSelectedItemId());
-        filterBeerPackage.setBeerBreweries(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
-        filterBeerPackage.setCraft(craftBeer);
-        filterBeerPackage.setBeerDensity(fieldList.get(FilterBeerField.DENSITY).getSelectedItemId());
-//        filterBeerPackage.setBeerFiltered(fieldList.get(FilterBeerField.COUNTRY).getSelectedItemId());
-
-        filterBeerPackage.setBeerAveragepriceRange(fieldList.get(FilterBeerField.PRICE_BEER).getSelectedItemId());
-        filterBeerPackage.setBeerColors(fieldList.get(FilterBeerField.COLOR).getSelectedItemId());
-        filterBeerPackage.setBeerFragrances(fieldList.get(FilterBeerField.SMELL).getSelectedItemId());
-        filterBeerPackage.setBeerTastes(fieldList.get(FilterBeerField.TASTE).getSelectedItemId());
-        filterBeerPackage.setBeerAftertastes(fieldList.get(FilterBeerField.AFTER_TASTE).getSelectedItemId());
-        filterBeerPackage.setBeerAftertastes(fieldList.get(FilterBeerField.BREWERY).getSelectedItemId());
-        filterBeerPackage.setBeerIBU(fieldList.get(FilterBeerField.IBU).getSelectedItemId());
-        filterBeerTask.execute(filterBeerPackage, new SimpleSubscriber<List<FilterRestoLocation>>() {
-            @Override
-            public void onError(Throwable e) {
-                view.showDialogProgressBar(false);
-                showError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(List<FilterRestoLocation> restoLocations) {
-                view.showDialogProgressBar(false);
-                if (restoLocations.size() == 0) {
-                    view.showMessage("Не найдено ни одного заведения",0);
-                } else {
-                    view.showGeolocationResult(restoLocations);
-                }
-            }
-
-            @Override
-            public void onComplete() {
-                super.onComplete();
-                view.showDialogProgressBar(false);
             }
         });
     }
@@ -229,6 +115,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
     @Override
     public void loadRestoByLatLngBounds(GeoPackage geoPackage) {
+        loadRestoGeoTask.cancel();
         RestoGeoPackage restoGeoPackage=new RestoGeoPackage();
         restoGeoPackage.setCoordStart(geoPackage.getCoordStart());
         restoGeoPackage.setCoordEnd(geoPackage.getCoordEnd());
@@ -255,10 +142,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         });
     }
 
-    @Override
-    public void cancelLoadRestoByLatLngBounds() {
-        loadRestoGeoTask.cancel();
-    }
 
 }
 

@@ -15,6 +15,9 @@ import com.brewmapp.data.db.impl.UiSettingImpl;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.SplashActivity;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
 
 

@@ -101,12 +101,10 @@ public class FilterRestoLocation implements ClusterItem {
         return new LatLng(getLocationLat(), getLocationLon());
     }
 
-    @Override
     public String getTitle() {
         return mName;
     }
 
-    @Override
     public String getSnippet() {
         return snippet;
     }

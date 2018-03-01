@@ -45,7 +45,7 @@ android {
         applicationId "com.brewmapp"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 31
+        versionCode 32
         versionName "1.0.5"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -95,8 +95,8 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     compile 'info.hoang8f:android-segmented:1.0.6'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile ('com.android.support:appcompat-v7:25.3.1')
+    compile ('com.android.support:design:25.3.1')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'nl.psdcompany:duo-navigation-drawer:2.0.6'
     compile 'com.facebook.android:facebook-android-sdk:4.25.0'
@@ -104,12 +104,12 @@ dependencies {
     compile 'com.twitter.sdk.android:twitter:3.1.1'
     compile 'com.vk:androidsdk:1.6.9'
     compile 'com.droidninja:filepicker:2.0.8'
-    //compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.google.android.gms:play-services-maps:11.8.0'
-    compile 'com.android.support:support-v4:25.1.0'
+    compile ('com.android.support:support-v4:25.3.1')
     compile 'io.paperdb:paperdb:2.6'
-    compile 'com.google.maps.android:android-maps-utils:0.4+'
+    compile 'com.google.maps.android:android-maps-utils:0.4.4'
     compile('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }

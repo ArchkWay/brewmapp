@@ -30,6 +30,7 @@ import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

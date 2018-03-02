@@ -30,6 +30,7 @@ import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
+import com.crashlytics.android.Crashlytics;
 
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
@@ -169,5 +170,16 @@ public class Starter {
         Intent intent=new Intent(activity,BreweryDetailsActivity.class);
         intent.putExtra(Actions.PARAM1,breweryId);
         activity.startActivity(intent);
+    }
+
+    public static void InfoAboutCrashSendToServer(String info_error,String info_class_name) {
+
+        Crashlytics.logException(new Exception(
+                new StringBuilder()
+                        .append(info_error)
+                        .append(";")
+                        .append(info_class_name)
+                        .toString()
+        ));
     }
 }

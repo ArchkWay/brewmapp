@@ -43,16 +43,17 @@ public class BeerMap extends Application {
                 .build();
 
         registerReceiver(oldApiReceiver, new IntentFilter(OLD_API_ACTION));
+
         Paper.init(this);
 
-//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-//            @Override
-//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-//                Crashlytics.logException(paramThrowable);
-//                RestartApp();
-//
-//            }
-//        });
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                Crashlytics.logException(paramThrowable);
+                Paper.book().destroy();
+                RestartApp();
+            }
+        });
 
     }
 

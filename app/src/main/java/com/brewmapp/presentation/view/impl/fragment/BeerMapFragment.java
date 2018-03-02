@@ -360,8 +360,8 @@ public class BeerMapFragment extends BaseFragment implements
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;
         LatLng nearLeft = visibleRegion.nearLeft;
-        String coordStart = String.format(new Locale("EN","en"), "%.2f|%.2f", nearLeft.latitude-0.004, nearLeft.longitude-0.004);
-        String coordEnd = String.format(new Locale("EN","en"), "%.2f|%.2f", farRight.latitude+0.004, farRight.longitude+0.004);
+        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.004, nearLeft.longitude-0.004);
+        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.004, farRight.longitude+0.004);
         Log.i("onCameraMove", "coordStart - " + coordStart + "  coordEnd-" + coordEnd);
         geoPackage.setCoordStart(coordStart);
         geoPackage.setCoordEnd(coordEnd);

@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.widget.Toast;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Starter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,7 +50,6 @@ public class MapUtils {
         Location location=new Location("gps");
         location.setLatitude(Float.valueOf(context.getResources().getString(R.string.default_Latitude)));
         location.setLongitude(Float.valueOf(context.getResources().getString(R.string.default_Longitude)));
-        Toast.makeText(context,R.string.geo_error,Toast.LENGTH_SHORT).show();
         return location;
     }
 
@@ -103,4 +103,24 @@ public class MapUtils {
         return null;
     }
 
+    public static Locale getLocaleRu() {
+        Locale[] locales=Locale.getAvailableLocales();
+        for(Locale locale:locales)
+            if(locale.getLanguage().equals("ru"))
+                return locale;
+
+        Starter.InfoAboutCrashSendToServer("Locale ru - not found!!!", "MapUtils");
+        return null;
+    }
+
+    public static Locale getLocaleEn() {
+        Locale[] locales=Locale.getAvailableLocales();
+        for(Locale locale:locales)
+            if(locale.getLanguage().equals("en"))
+                return locale;
+
+        Starter.InfoAboutCrashSendToServer("Locale en - not found!!!", "MapUtils");
+
+        return null;
+    }
 }

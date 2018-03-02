@@ -137,7 +137,7 @@ public class FilterBreweryField extends AbstractFlexibleItem<ModelViewHolder<Fil
         this.selectedFilter = selectedFilter;
     }
 
-    public static List<FilterBreweryField> createDefault(Context context) {
+    public static List<FilterBreweryField> createDefault() {
         List<FilterBreweryField> out = new ArrayList<>();
         out.add(new FilterBreweryField(NAME));
         out.add(new FilterBreweryField(COUNTRY));

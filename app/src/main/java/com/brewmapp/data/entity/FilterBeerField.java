@@ -119,7 +119,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
         this.selectedFilter = selectedFilter;
     }
 
-    public static List<FilterBeerField> createDefault(Context context) {
+    public static List<FilterBeerField> createDefault() {
         List<FilterBeerField> out = new ArrayList<>();
         out.add(new FilterBeerField(NAME));
         out.add(new FilterBeerField(COUNTRY));

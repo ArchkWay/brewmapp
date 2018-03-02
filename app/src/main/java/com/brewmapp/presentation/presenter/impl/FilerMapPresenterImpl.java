@@ -38,7 +38,7 @@ public class FilerMapPresenterImpl extends BasePresenter<FilterMapView> implemen
             Paper.book().write("restoCategoryList", FilterRestoField.createDefault());
         }
         if (Paper.book().read("beerCategoryList") == null) {
-            Paper.book().write("beerCategoryList", FilterBeerField.createDefault(context));
+            Paper.book().write("beerCategoryList", FilterBeerField.createDefault());
         }
         if (uiSettingRepo.getnActiveFragment() == 0 || uiSettingRepo.getnActiveFragment() == -1) {
             view.showRestoFilters(Paper.book().read("restoCategoryList"));

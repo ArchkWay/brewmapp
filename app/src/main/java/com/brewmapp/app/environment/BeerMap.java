@@ -37,7 +37,7 @@ public class BeerMap extends Application {
     public void onCreate() {
         super.onCreate();
         appContext=getApplicationContext();
-        //Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics());
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();

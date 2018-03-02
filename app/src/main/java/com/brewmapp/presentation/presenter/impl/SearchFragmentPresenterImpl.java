@@ -61,12 +61,12 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
         ActiveTab=position;
         switch (position) {
             case SearchFragment.TAB_RESTO: {
-                List<FilterRestoField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-                if(list==null)
-                {
-                    list = FilterRestoField.createDefault();
-                    Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
-                }
+                List<FilterRestoField> list=Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO,FilterRestoField.createDefault());
+//                if(list==null)
+//                {
+//                    list = FilterRestoField.createDefault();
+//                    Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
+//                }
                 view.showRestoFilters(list);
             }break;
             case SearchFragment.TAB_BEER: {
@@ -109,7 +109,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                         super.onNext(cities);
                         switch (ActiveTab) {
                             case SearchFragment.TAB_RESTO: {
-                                List<FilterRestoField> list = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
+                                List<FilterRestoField> list = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO,FilterRestoField.createDefault());
                                 list.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(cities.get(0).getId()));
                                 list.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(cities.get(0).getName()));
                                 Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);

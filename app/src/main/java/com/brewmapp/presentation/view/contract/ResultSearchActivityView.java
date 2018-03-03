@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
+import com.brewmapp.data.entity.FilterRestoLocation;
+
 import java.util.List;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
@@ -10,4 +12,6 @@ public interface ResultSearchActivityView extends BasicView {
     void hideProgressBar();
     void appendItems(List<IFlexible> list);
     void commonError(String... strings);
+
+    void setRestoLocations(List<FilterRestoLocation> filterRestoLocations);
 }

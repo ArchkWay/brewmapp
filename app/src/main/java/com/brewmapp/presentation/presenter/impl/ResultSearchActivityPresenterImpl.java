@@ -8,11 +8,13 @@ import com.brewmapp.R;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.pojo.ApiBreweryPackage;
 import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.task.ApiBreweryTask;
+import com.brewmapp.execution.task.FilterRestoTask;
 import com.brewmapp.execution.task.RestosSearchTask;
 import com.brewmapp.execution.task.SearchBeerTask;
 import com.brewmapp.execution.task.SearchBreweryTask;
@@ -34,16 +36,21 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
     private SearchBeerTask loadBeerTask;
     private SearchBreweryTask loadBreweryTask;
     private ApiBreweryTask apiBreweryTask;
+    private FilterRestoTask filterRestoTask;
 
 
     @Inject
     public ResultSearchActivityPresenterImpl( RestosSearchTask loadRestosList,
-                                             SearchBeerTask loadBeerTask, SearchBreweryTask loadBreweryTask,
-                                             ApiBreweryTask apiBreweryTask) {
+                                             SearchBeerTask loadBeerTask,
+                                              SearchBreweryTask loadBreweryTask,
+                                             ApiBreweryTask apiBreweryTask,
+                                              FilterRestoTask filterRestoTask
+                                              ) {
         this.loadRestosList = loadRestosList;
         this.loadBeerTask = loadBeerTask;
         this.loadBreweryTask = loadBreweryTask;
         this.apiBreweryTask = apiBreweryTask;
+        this.filterRestoTask = filterRestoTask;
 
 
     }
@@ -177,5 +184,24 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
 //                view.hideProgressBar();
 //            }
 //        });
+    }
+
+    @Override
+    public void getLocationsResto(FullSearchPackage searchPackage) {
+        FilterRestoPackage restoPackage=new FilterRestoPackage();
+        restoPackage.setRestoCity(searchPackage.getCity());
+        filterRestoTask.execute(restoPackage,new SimpleSubscriber<List<FilterRestoLocation>>(){
+            @Override
+            public void onNext(List<FilterRestoLocation> filterRestoLocations) {
+                super.onNext(filterRestoLocations);
+                view.setRestoLocations(filterRestoLocations);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
     }
 }

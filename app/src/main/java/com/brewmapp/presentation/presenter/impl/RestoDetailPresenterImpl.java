@@ -332,12 +332,14 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         RestoLocation restoLocation=new RestoLocation(
                 restoDetail.getResto().getId(),
                 restoDetail.getResto().getName()==null?"":restoDetail.getResto().getName(),
-                restoDetail.getResto().getLocation().getLocation().getLon(),
-                restoDetail.getResto().getLocation().getLocation().getLat()
+                restoDetail.getResto().getLocation().getLocation().getLat(),
+                restoDetail.getResto().getLocation().getLocation().getLon()
         );
 
         tempDataHolder.storeUiSetting();
-        Starter.MainActivity(restoDetailActivity,MainActivity.MODE_MAP_FRAGMENT,restoLocation);
+        ArrayList<RestoLocation> arrayList=new ArrayList<>();
+        arrayList.add(restoLocation);
+        Starter.MainActivity(restoDetailActivity,MainActivity.MODE_MAP_FRAGMENT,arrayList);
 
     }
 

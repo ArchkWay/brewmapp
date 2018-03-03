@@ -136,6 +136,7 @@ public class MainActivity extends BaseActivity
         mode = presenter.parseMode(getIntent());
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         switch (mode){
@@ -202,24 +203,14 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         if(mode.equals(MODE_DEFAULT))
-            if(presenter.getActiveFragment()== MenuField.PROFILE)
-                new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        finish();
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-            else {
+            if(presenter.getActiveFragment()== MenuField.PROFILE) {
+                if(!drawer.isDrawerOpen())
+                    drawer.openDrawer();
+            }else {
                 MenuField.unselectAll(menuItems);
                 adapter.notifyDataSetChanged();
                 navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
                 navigator.onDrawerClosed();
-
             }
 
         else
@@ -234,9 +225,20 @@ public class MainActivity extends BaseActivity
 
         MenuField field = adapter.getItem(position);
         if(field.getId() == MenuField.LOGOUT) {
-            presenter.onLogout();
-            startActivityAndClearTask(StartActivity.class);
-            finish();
+//            presenter.onLogout();
+//            startActivityAndClearTask(StartActivity.class);
+//            finish();
+            new DialogConfirm(getString(R.string.exit_from_app, getString(R.string.app_name)), getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                @Override
+                public void onOk() {
+                    finish();
+                }
+
+                @Override
+                public void onCancel() {
+                    drawer.closeDrawer();
+                }
+            });
             return true;
         }
         MenuField.unselectAll(menuItems);
@@ -278,11 +280,11 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void successCheckEnvironment(User user, List<MenuField> fields) {
+    public void successCheckEnvironment(User user) {
         Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
         userName.setText(user.getFormattedName());
-        this.menuItems = fields;
-        adapter = new FlexibleAdapter<>(fields, this);
+        this.menuItems = MenuField.createDefault(this);
+        adapter = new FlexibleAdapter<>(this.menuItems, this);
         menu.setLayoutManager(new LinearLayoutManager(this));
         menu.setAdapter(adapter);
 
@@ -359,7 +361,7 @@ public class MainActivity extends BaseActivity
         } else if (position == Actions.ACTION_FILTER) {
             menuToShow = R.menu.filter;
         } else {
-            menuToShow = R.menu.search;
+            menuToShow = R.menu.stub;
         }
 
         invalidateOptionsMenu();

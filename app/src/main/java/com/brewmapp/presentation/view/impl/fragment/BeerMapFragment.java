@@ -112,6 +112,7 @@ public class BeerMapFragment extends BaseFragment implements
     private ClusterManager<FilterRestoLocation> mClusterManager;
     private GeoPackage geoPackage=new GeoPackage();
     private HashMap<String,FilterRestoLocation> hashMap=new HashMap<>();
+    private HashMap<String,String> hashMap2=new HashMap<>();
     private LatLngBounds latLngBounds;
     private int cntRequestRestoFromUI =0;
     private InfoWindowMap viewInfoWindow =null;
@@ -119,8 +120,8 @@ public class BeerMapFragment extends BaseFragment implements
     private float minZoomPref=12.0f;
     private DialogShowView dialogShowView;
     private Location userLocation=null;
-    private Location restoLocation =null;
     private ArrayList arrayList=new ArrayList<>();
+    private ArrayList<RestoLocation> restoLocations;
 
 
     //endregion
@@ -283,6 +284,36 @@ public class BeerMapFragment extends BaseFragment implements
         finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
         finder.findViewById(R.id.finder_cancel).setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
+
+        for(FilterRestoLocation filterRestoLocation:restoLocations) {
+            String key = filterRestoLocation.getRestoId();
+            if (!hashMap.containsKey(key)) {
+                if(hashMap2.size()>0) {
+                    if(hashMap2.containsKey(key)) {
+                        mClusterManager.addItem(filterRestoLocation);
+                        hashMap.put(key, filterRestoLocation);
+                    }
+                }else {
+                    mClusterManager.addItem(filterRestoLocation);
+                    hashMap.put(key, filterRestoLocation);
+                }
+            }
+        }
+        Log.i("MappMarkerSpeed","setMarker - End");
+        mClusterManager.cluster();
+
+
+        if(cntRequestRestoFromUI >1){
+            cntRequestRestoFromUI =0;
+            onCameraIdle();
+        }else if(cntRequestRestoFromUI ==1){
+            cntRequestRestoFromUI =0;
+        }
+    }
+
     //endregion
 
     //region Events GoogleMap
@@ -310,28 +341,6 @@ public class BeerMapFragment extends BaseFragment implements
         }
 
         this.googleMap.setOnMapLoadedCallback(this);
-    }
-
-    @Override
-    public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
-
-        for(FilterRestoLocation filterRestoLocation:restoLocations) {
-            String key = filterRestoLocation.getRestoId();
-            if (!hashMap.containsKey(key)) {
-                mClusterManager.addItem(filterRestoLocation);
-                hashMap.put(key, filterRestoLocation);
-            }
-        }
-        Log.i("MappMarkerSpeed","setMarker - End");
-        mClusterManager.cluster();
-
-
-        if(cntRequestRestoFromUI >1){
-            cntRequestRestoFromUI =0;
-            onCameraIdle();
-        }else if(cntRequestRestoFromUI ==1){
-            cntRequestRestoFromUI =0;
-        }
     }
 
     @Override
@@ -391,7 +400,7 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public void onMapLoaded() {
         mLocationListener.requestLocation(location -> {
-            userLocation=(location==null?MapUtils.getDefaultLocation(getContext()):location);
+            userLocation=(location==null?mLocationListener.getDefaultLocation():location);
             parseArguments();
             showNewLocation();
         });
@@ -403,7 +412,7 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public boolean onMyLocationButtonClick() {
         mLocationListener.refreshLocation();
-        setRestoLocation(null);
+        setRestoLocations(null);
         showNewLocation();
         return true;
     }
@@ -516,9 +525,38 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void showNewLocation() {
+        hashMap2.clear();
+        Location newLocation;
+        double delta;
+        if(restoLocations==null||restoLocations.size()==0) {
+            newLocation = userLocation;
+            delta=0.01;
+        }else if(restoLocations.size()==1) {
+            newLocation = new Location("gps");
+            newLocation.setLatitude(restoLocations.get(0).getLocation_lat());
+            newLocation.setLongitude(restoLocations.get(0).getLocation_lon());
+            delta=0.001;
+        }else {
+            double minLat=360;
+            double maxLat=0;
+            double minLon=360;
+            double maxLon=0;
 
-        double delta= restoLocation ==null?0.01:0.001;
-        Location newLocation= restoLocation ==null?userLocation: restoLocation;
+            for (RestoLocation restoLocation:restoLocations){
+                hashMap2.put(restoLocation.getResto_id(),restoLocation.getResto_id());
+                minLat=Math.min(minLat,restoLocation.getLocation_lat());
+                maxLat=Math.max(maxLat,restoLocation.getLocation_lat());
+
+                minLon=Math.min(minLon,restoLocation.getLocation_lon());
+                maxLon=Math.max(maxLon,restoLocation.getLocation_lon());
+
+            }
+            delta=(maxLat-minLat)/2;
+            newLocation = new Location("gps");
+            newLocation.setLatitude((minLat+maxLat)/2);
+            newLocation.setLongitude((minLon+maxLon)/2);
+        }
+
 
         LatLngBounds AUSTRALIA = new LatLngBounds(
                 new LatLng(
@@ -575,14 +613,13 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void parseArguments() {
-        RestoLocation restoLocation = (RestoLocation) getArguments().getSerializable(Keys.LOCATION);
-        if (restoLocation  != null)
-            setRestoLocation(restoLocation.getLocation());
+        setRestoLocations((ArrayList<RestoLocation>) getArguments().getSerializable(Keys.LOCATION));
     }
 
-    public void setRestoLocation(Location restoLocation) {
-        this.restoLocation = restoLocation;
+    public void setRestoLocations(ArrayList<RestoLocation> restoLocations) {
+        this.restoLocations = restoLocations;
     }
+
 
     //endregion
 

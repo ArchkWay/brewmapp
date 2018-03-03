@@ -10,6 +10,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -24,11 +27,14 @@ import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.Resto;
+import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.SearchBeer;
+import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
@@ -50,12 +56,16 @@ import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
-public class ResultSearchActivity extends BaseActivity implements ResultSearchActivityView {
+public class ResultSearchActivity extends BaseActivity implements
+        ResultSearchActivityView
+{
 
+    //region BindView
     @BindView(R.id.filter_category_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_search_list) RecyclerView list;
     @BindView(R.id.activity_search_search) FinderView finder;
@@ -64,7 +74,9 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
     @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_search_progress)    RelativeLayout progress;
+    //endregion
 
+    //region Private
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage = new FullSearchPackage();
     private int selectedTab;
@@ -72,10 +84,14 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     private ProgressDialog dialog;
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private List<IFlexible> listAdapter=new ArrayList<>();
+    //endregion
 
+    //region Inject
     @Inject
     ResultSearchActivityPresenter presenter;
+    //endregion
 
+    //region Impl ResultSearchActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +99,26 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
     }
 
     @Override
-    protected Toolbar findActionBar() {
-        return toolbar;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(menu!=null) menu.clear();
+        getMenuInflater().inflate(R.menu.map,menu);
+        menu.findItem(R.id.action_map).setVisible(listAdapter.size()!=0);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public void enableControls(boolean enabled, int code) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_map:
+                presenter.getLocationsResto(searchPackage);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected Toolbar findActionBar() {
+        return toolbar;
     }
 
     @Override
@@ -206,11 +236,126 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         finder.setVisibility(View.GONE);
         //endregion
 
+    }
+
+
+    @Override
+    protected void attachPresenter() {
+        presenter.onAttach(this);
         //region StartLoad
         searchPackage.setPage(0);
         loadResult(searchPackage);
         //endregion
     }
+
+    @Override
+    protected LivePresenter<?> getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    protected void inject(PresenterComponent component) {
+        component.inject(this);
+    }
+    //endregion
+
+    //region Impl ResultSearchActivityView
+    @Override
+    public void commonError(String... strings) {
+        if(strings!=null && strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        finish();
+    }
+
+    @Override
+    public void setRestoLocations(List<FilterRestoLocation> filterRestoLocations) {
+        HashMap<String,FilterRestoLocation> hashMap=new HashMap<>();
+        for (FilterRestoLocation filterRestoLocation:filterRestoLocations)
+            hashMap.put(filterRestoLocation.getRestoId(),filterRestoLocation);
+
+        ArrayList arrayList=new ArrayList();
+
+        for (IFlexible iFlexible:listAdapter){
+            RestoInfo restoInfo= (RestoInfo) iFlexible;
+            FilterRestoLocation  filterRestoLocation=hashMap.get(String.valueOf(restoInfo.getModel().getId()));
+            if(filterRestoLocation!=null)
+                arrayList.add(
+                    new RestoLocation(
+                            filterRestoLocation.getRestoId(),
+                            Integer.valueOf(filterRestoLocation.getLocationId()),
+                            filterRestoLocation.getmName(),
+                            filterRestoLocation.getLocationLat(),
+                            filterRestoLocation.getLocationLon()
+                    )
+        );
+
+        }
+
+        Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,arrayList);
+    }
+
+    @Override
+    public void showDialogProgressBar(int message) {
+        dialog = ProgressDialog.show(this, getString(R.string.loading),
+                getString(message), true, false);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        if (dialog != null) {
+            dialog.cancel();
+        }
+    }
+
+    @Override
+    public void appendItems(List<IFlexible> list) {
+        progress.setVisibility(View.GONE);
+
+        int startPosition=listAdapter.size();
+        listAdapter.addAll(startPosition,list);
+        adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
+        if(listAdapter.size()==0) {
+            tv_not_found.setVisibility(View.VISIBLE);
+            finder.setVisibility(View.GONE);
+        }
+
+        if(listAdapter.size()==0) {
+            tv_not_found.setVisibility(View.VISIBLE);
+            swipe.setVisibility(View.GONE);
+        }else {
+            tv_not_found.setVisibility(View.GONE);
+            swipe.setVisibility(View.VISIBLE);
+        }
+
+        swipe.setEnabled(false);
+        swipe.setRefreshing(false);
+
+        invalidateOptionsMenu();
+    }
+    @Override
+    public void enableControls(boolean enabled, int code) {
+    }
+    //endregion
+
+    //region User Events
+    private void processAction(int action, Object payload) {
+        switch (selectedTab) {
+            case SearchFragment.TAB_RESTO:
+                Starter.RestoDetailActivity(this,String.valueOf(((Resto) payload).getId()));
+                break;
+            case SearchFragment.TAB_BEER:
+                Starter.BeerDetailActivity(this,((SearchBeer)payload).getId());
+                break;
+            case SearchFragment.TAB_BREWERY:
+                Starter.BreweryDetailsActivity(this,((Brewery)payload).getId());
+                break;
+        }
+    }
+    //endregion
+
+    //region Functions
 
     private void loadResult(FullSearchPackage searchPackage) {
         if(searchPackage.getPage()==0) {
@@ -235,81 +380,7 @@ public class ResultSearchActivity extends BaseActivity implements ResultSearchAc
         }
     }
 
-    @Override
-    protected void attachPresenter() {
-        presenter.onAttach(this);
-    }
-
-    @Override
-    protected LivePresenter<?> getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    protected void inject(PresenterComponent component) {
-        component.inject(this);
-    }
-
-    @Override
-    public void showDialogProgressBar(int message) {
-        dialog = ProgressDialog.show(this, getString(R.string.loading),
-                getString(message), true, false);
-    }
-
-    @Override
-    public void hideProgressBar() {
-        if (dialog != null) {
-            dialog.cancel();
-        }
-    }
-
-    @Override
-    public void commonError(String... strings) {
-        if(strings!=null && strings.length==0)
-            showMessage(getString(R.string.error));
-        else
-            showMessage(strings[0]);
-        finish();
-    }
-
-    private void processAction(int action, Object payload) {
-        switch (selectedTab) {
-            case SearchFragment.TAB_RESTO:
-                Starter.RestoDetailActivity(this,String.valueOf(((Resto) payload).getId()));
-                break;
-            case SearchFragment.TAB_BEER:
-                Starter.BeerDetailActivity(this,((SearchBeer)payload).getId());
-                break;
-            case SearchFragment.TAB_BREWERY:
-                Starter.BreweryDetailsActivity(this,((Brewery)payload).getId());
-                break;
-        }
-    }
-
-    @Override
-    public void appendItems(List<IFlexible> list) {
-        progress.setVisibility(View.GONE);
-
-        int startPosition=listAdapter.size();
-        listAdapter.addAll(startPosition,list);
-        adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
-        if(listAdapter.size()==0) {
-            tv_not_found.setVisibility(View.VISIBLE);
-            finder.setVisibility(View.GONE);
-        }
+    //endregion
 
 
-
-        if(listAdapter.size()==0) {
-            tv_not_found.setVisibility(View.VISIBLE);
-            swipe.setVisibility(View.GONE);
-        }else {
-            tv_not_found.setVisibility(View.GONE);
-            swipe.setVisibility(View.VISIBLE);
-        }
-
-        swipe.setEnabled(false);
-        swipe.setRefreshing(false);
-
-    }
 }

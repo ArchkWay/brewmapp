@@ -14,4 +14,5 @@ public interface OnLocationInteractionListener {
     void requestLocation(Callback<Location> callback);
     void requestCity(Callback<City> callback);
     void refreshLocation();
+    Location getDefaultLocation();
 }

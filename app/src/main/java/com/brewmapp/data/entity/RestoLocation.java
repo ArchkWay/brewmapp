@@ -27,16 +27,25 @@ public class RestoLocation implements ICommonItem, Serializable {
     @SerializedName(Keys.LOCATION_ID)
     private int locationId;
 
-    public RestoLocation(int id, String name, double location_lon, double location_lat) {
+    public RestoLocation(int id, String name, double location_lat, double location_lon) {
         this.id = id;
         this.name = name;
-        this.location_lon = location_lon;
         this.location_lat = location_lat;
+        this.location_lon = location_lon;
     }
 
     public RestoLocation(Event event) {
         location_lon=event.getLocation().getInfo().getLon();
         location_lat=event.getLocation().getInfo().getLat();
+    }
+
+    public RestoLocation(String restoId, Integer id, String name, double location_lat, double location_lon) {
+        this.resto_id=restoId;
+        this.id = id;
+        this.name = name;
+        this.location_lat = location_lat;
+        this.location_lon = location_lon;
+
     }
 
     public String getThumb() {

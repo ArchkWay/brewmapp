@@ -38,7 +38,7 @@ public class MainPresenterImpl extends BasePresenter<MainView> implements MainPr
     @Override
     public void onAttach(MainView mainView) {
         super.onAttach(mainView);
-        view.successCheckEnvironment(userRepo.load(), MenuField.createDefault(context));
+        view.successCheckEnvironment(userRepo.load());
     }
 
     @Override

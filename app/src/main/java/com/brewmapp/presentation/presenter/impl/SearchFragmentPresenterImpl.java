@@ -77,44 +77,4 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
         }
     }
 
-    @Override
-    public void setUserLocation(Location location) {
-        if(location==null)
-            location=MapUtils.getDefaultLocation(context);
-
-        if(location!=null) {
-            Locale ru=MapUtils.getLocaleRu();
-            if(ru!=null) {
-                Geocoder geocoder = new Geocoder(context, ru);
-                try {
-                    List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    loadCityTask.cancel();
-                    GeoPackage geoPackage = new GeoPackage();
-                    geoPackage.setCityName(list.get(0).getLocality());
-                    loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
-                        @Override
-                        public void onNext(List<City> cities) {
-                            super.onNext(cities);
-                            switch (ActiveTab) {
-                                case SearchFragment.TAB_RESTO: {
-                                    if(cities.size()==1) {
-                                        List<FilterRestoField> list = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-                                        list.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(cities.get(0).getId()));
-                                        list.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(cities.get(0).getName()));
-                                        Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
-                                        view.refreshItemRestoFilters(FilterRestoField.CITY, list);
-                                    }else {
-                                        Starter.InfoAboutCrashSendToServer("size of list not eq 1 (List<City>)", getClass().getCanonicalName());
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

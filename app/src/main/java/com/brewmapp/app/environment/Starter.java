@@ -30,6 +30,8 @@ import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.crashlytics.android.Crashlytics;
 
+import java.io.Serializable;
+
 
 /**
  * Created by xpusher on 1/19/2018.
@@ -56,7 +58,7 @@ public class Starter {
         Intent intent=new Intent(action,null,activity,MainActivity.class);
         switch (action){
             case MainActivity.MODE_MAP_FRAGMENT:
-                intent.putExtra(Keys.LOCATION,(RestoLocation)o[0]);
+                intent.putExtra(Keys.LOCATION,(Serializable) o[0]);
                 break;
             case MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS:
                 intent.putExtra(RequestCodes.INTENT_EXTRAS,(Integer) o[0]);

@@ -121,4 +121,7 @@ public class FilterRestoLocation implements ClusterItem {
         this.mBeerId = mBeerId;
     }
 
+    public Location getLocation() {
+        return new Location(getLocationLat(),getLocationLon());
+    }
 }

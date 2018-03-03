@@ -17,6 +17,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -40,6 +41,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -105,7 +107,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
 
     @Override
     protected void initView(View view) {
-        setHasOptionsMenu(true);
+
         tabsView.setItems(Arrays.asList(searchContent), new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -123,19 +125,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(menu!=null) menu.clear();
-         inflater.inflate(R.menu.map,menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        mListener.processChangeFragment(MenuField.MAP);
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK)
@@ -147,7 +136,15 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     protected void attachPresenter() {
         presenter.onAttach(this);
         presenter.setTabActive(TAB_RESTO);
-        mLocationListener.requestLocation(result -> presenter.setUserLocation(result));
+        mLocationListener.requestCity(result -> {
+            if(result!=null) {
+                List<FilterRestoField> list = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
+                list.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(result.getId()));
+                list.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(result.getName()));
+                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
+                refreshItemRestoFilters(FilterRestoField.CITY, list);
+            }
+        });
 
     }
 
@@ -231,7 +228,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     }
     //endregion
 
-    //region Functions
+    //region User Events
     @OnClick(R.id.accept_filter_layout)
     public void acceptFilter() {
         Intent intent = new Intent(getActivity(), ResultSearchActivity.class);
@@ -240,159 +237,161 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     }
 
     private void processAction(int code, Object o) {
-    if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
-        //region Selection category
-        boolean result=false;
-        int itemId=0;
-        String filterTxt=null;
-        String filterId=null;
-        switch (tabsView.getTabs().getSelectedTabPosition()){
-            //region RESTO
-            case TAB_RESTO:{
-                FilterRestoField f=((FilterRestoField)o);
-                itemId=f.getId();
-                filterTxt=f.getSelectedFilter();
-                filterId=f.getSelectedItemId();
-                switch (itemId){
-                    case FilterRestoField.NAME:
-                    case FilterRestoField.BEER:
-                    case FilterRestoField.CITY:
-                    case FilterRestoField.PRICE:
-                    case FilterRestoField.TYPE:
-                    case FilterRestoField.KITCHEN:
-                        result=true;
-                        break;
+        if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
+            //region Selection category
+            boolean result=false;
+            int itemId=0;
+            String filterTxt=null;
+            String filterId=null;
+            switch (tabsView.getTabs().getSelectedTabPosition()){
+                //region RESTO
+                case TAB_RESTO:{
+                    FilterRestoField f=((FilterRestoField)o);
+                    itemId=f.getId();
+                    filterTxt=f.getSelectedFilter();
+                    filterId=f.getSelectedItemId();
+                    switch (itemId){
+                        case FilterRestoField.NAME:
+                        case FilterRestoField.BEER:
+                        case FilterRestoField.CITY:
+                        case FilterRestoField.PRICE:
+                        case FilterRestoField.TYPE:
+                        case FilterRestoField.KITCHEN:
+                            result=true;
+                            break;
+                    }
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                 }
-                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
-            }
-            //endregion
-            break;
-            //region BEER
-            case TAB_BEER:{
-                FilterBeerField f=((FilterBeerField)o);
-                itemId=f.getId();
-                filterTxt=f.getSelectedFilter();
-                filterId=f.getSelectedItemId();
-                switch (itemId){
-                    case FilterBeerField.NAME:
-                        result=true;
-                        break;
-                    case FilterBeerField.COUNTRY:
-                        result=true;
-                        break;
-                    case FilterBeerField.TYPE:
-                        result=true;
-                        break;
-                    case FilterBeerField.BRAND:
-                        result=true;
-                        break;
-                    case FilterBeerField.POWER:
-                        result=true;
-                        break;
-                    case FilterBeerField.BEER_FILTER:
-                        result=true;
-                        break;
-                    case FilterBeerField.BEER_PACK:
-                        result=true;
-                        break;
-                    case FilterBeerField.COLOR:
-                        result=true;
-                        break;
-                    case FilterBeerField.SMELL:
-                        result=true;
-                        break;
-                    case FilterBeerField.TASTE:
-                        result=true;
-                        break;
-                    case FilterBeerField.AFTER_TASTE:
-                        result=true;
-                        break;
-                    case FilterBeerField.BREWERY:
-                        result=true;
-                        break;
-                    case FilterBeerField.PRICE_BEER:
-                        result=true;
-                        break;
-                    case FilterBeerField.DENSITY:
-                        result=true;
-                        break;
+                //endregion
+                break;
+                //region BEER
+                case TAB_BEER:{
+                    FilterBeerField f=((FilterBeerField)o);
+                    itemId=f.getId();
+                    filterTxt=f.getSelectedFilter();
+                    filterId=f.getSelectedItemId();
+                    switch (itemId){
+                        case FilterBeerField.NAME:
+                            result=true;
+                            break;
+                        case FilterBeerField.COUNTRY:
+                            result=true;
+                            break;
+                        case FilterBeerField.TYPE:
+                            result=true;
+                            break;
+                        case FilterBeerField.BRAND:
+                            result=true;
+                            break;
+                        case FilterBeerField.POWER:
+                            result=true;
+                            break;
+                        case FilterBeerField.BEER_FILTER:
+                            result=true;
+                            break;
+                        case FilterBeerField.BEER_PACK:
+                            result=true;
+                            break;
+                        case FilterBeerField.COLOR:
+                            result=true;
+                            break;
+                        case FilterBeerField.SMELL:
+                            result=true;
+                            break;
+                        case FilterBeerField.TASTE:
+                            result=true;
+                            break;
+                        case FilterBeerField.AFTER_TASTE:
+                            result=true;
+                            break;
+                        case FilterBeerField.BREWERY:
+                            result=true;
+                            break;
+                        case FilterBeerField.PRICE_BEER:
+                            result=true;
+                            break;
+                        case FilterBeerField.DENSITY:
+                            result=true;
+                            break;
+                    }
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
                 }
-                Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
-            }
-            //endregion
-            break;
-            //region BREWERY
-            case TAB_BREWERY:{
-                FilterBreweryField f=((FilterBreweryField)o);
-                itemId=f.getId();
-                filterTxt=f.getSelectedFilter();
-                filterId=f.getSelectedItemId();
-                switch (itemId) {
-                    case FilterBreweryField.NAME:
-                        result = true;
-                        break;
-                    case FilterBreweryField.COUNTRY:
-                        result = true;
-                        break;
-                    case FilterBreweryField.BRAND:
-                        result = true;
-                        break;
-                    case FilterBreweryField.TYPE_BEER:
-                        result = true;
-                        break;
+                //endregion
+                break;
+                //region BREWERY
+                case TAB_BREWERY:{
+                    FilterBreweryField f=((FilterBreweryField)o);
+                    itemId=f.getId();
+                    filterTxt=f.getSelectedFilter();
+                    filterId=f.getSelectedItemId();
+                    switch (itemId) {
+                        case FilterBreweryField.NAME:
+                            result = true;
+                            break;
+                        case FilterBreweryField.COUNTRY:
+                            result = true;
+                            break;
+                        case FilterBreweryField.BRAND:
+                            result = true;
+                            break;
+                        case FilterBreweryField.TYPE_BEER:
+                            result = true;
+                            break;
+                    }
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
                 }
-                Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
+                //endregion
+                break;
             }
-            //endregion
-            break;
-        }
 
-        //region Go to SelectCategoryActivity
-        if(result){
-            Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
-            intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
-            intent.putExtra(Actions.PARAM2,itemId);
-            intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
-            intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
-            startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
-        }else {
+            //region Go to SelectCategoryActivity
+            if(result){
+                Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
+                intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+                intent.putExtra(Actions.PARAM2,itemId);
+                intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
+                intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
+                startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
+            }else {
+                Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
+            }
+            //endregion
+
+            //endregion
+        }
+        else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
+            //region Clear category
+            switch (tabsView.getTabs().getSelectedTabPosition()){
+                case TAB_RESTO:
+                    ((FilterRestoField)o).clearFilter();
+                    restoAdapter.notifyDataSetChanged();
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
+                    break;
+                case TAB_BEER:
+                    ((FilterBeerField)o).clearFilter();
+                    beerAdapter.notifyDataSetChanged();
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                    break;
+                case TAB_BREWERY:
+                    ((FilterBreweryField)o).clearFilter();
+                    breweryAdapter.notifyDataSetChanged();
+                    Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
+                    break;
+                default:{
+                    commonError(getString(R.string.not_valid_param));
+                    return;
+                }
+            }
+            //endregion
+        }
+        else if(code==FilterRestoField.CODE_CLICK_FILTER_ERROR||code==FilterBeerField.CODE_CLICK_FILTER_ERROR||code==FilterBreweryField.CODE_CLICK_FILTER_ERROR){
             Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
         }
-        //endregion
 
-        //endregion
     }
-    else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
-        //region Clear category
-        switch (tabsView.getTabs().getSelectedTabPosition()){
-            case TAB_RESTO:
-                ((FilterRestoField)o).clearFilter();
-                restoAdapter.notifyDataSetChanged();
-                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
-                break;
-            case TAB_BEER:
-                ((FilterBeerField)o).clearFilter();
-                beerAdapter.notifyDataSetChanged();
-                Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
-                break;
-            case TAB_BREWERY:
-                ((FilterBreweryField)o).clearFilter();
-                breweryAdapter.notifyDataSetChanged();
-                Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
-                break;
-            default:{
-                commonError(getString(R.string.not_valid_param));
-                return;
-            }
-        }
-        //endregion
-    }
-    else if(code==FilterRestoField.CODE_CLICK_FILTER_ERROR||code==FilterBeerField.CODE_CLICK_FILTER_ERROR||code==FilterBreweryField.CODE_CLICK_FILTER_ERROR){
-        Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();
-    }
+    //endregion
 
-}
-
+    //region Functions
     public void showResult(Intent data) {
 
         //region Parse intent

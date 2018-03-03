@@ -22,6 +22,13 @@ public class Location implements Serializable {
         this.location.setLon(location.getLongitude());
     }
 
+    public Location(double locationLat, double locationLon) {
+        this.location=new LocationChild();
+        this.location.setLat(locationLat);
+        this.location.setLon(locationLon);
+
+    }
+
     public String getCity_id() {
         return city_id;
     }

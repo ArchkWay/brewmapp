@@ -115,7 +115,7 @@ public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow
 //        out.add(new MenuField(EVENTS, R.drawable.ic_menu_games, context.getString(R.string.games)));
 //        out.add(new MenuField(EVENTS, R.drawable.ic_menu_favorites, context.getString(R.string.favorites)));
         out.add(new MenuField(SETTINGS, R.drawable.ic_menu_settings, context.getString(R.string.settings)));
-//        out.add(new MenuField(LOGOUT, R.drawable.ic_menu_settings, context.getString(R.string.logout)));
+        out.add(new MenuField(LOGOUT, android.R.drawable.ic_menu_close_clear_cancel, context.getString(R.string.logout)));
 
 
         return out;

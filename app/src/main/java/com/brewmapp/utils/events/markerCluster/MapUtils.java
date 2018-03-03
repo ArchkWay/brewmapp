@@ -46,12 +46,6 @@ public class MapUtils {
         return String.valueOf(distances[0]);
     }
 
-    public static Location getDefaultLocation(Context context) {
-        Location location=new Location("gps");
-        location.setLatitude(Float.valueOf(context.getResources().getString(R.string.default_Latitude)));
-        location.setLongitude(Float.valueOf(context.getResources().getString(R.string.default_Longitude)));
-        return location;
-    }
 
     public static String strJoin(Object[] aArr, String sSep) {
         StringBuilder sbStr = new StringBuilder();

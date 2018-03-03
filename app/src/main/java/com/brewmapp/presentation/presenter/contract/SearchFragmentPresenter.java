@@ -17,5 +17,4 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
     void setTabActive(int position);
-    void setUserLocation(Location location);
 }

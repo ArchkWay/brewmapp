@@ -32,16 +32,17 @@ public class FilterRestoTask extends BaseNetworkTask<FilterRestoPackage, List<Fi
         return Observable.create(subscriber -> {
             try {
                 RequestParams params = new RequestParams();
-                params.addParam(Keys.RESTO_CITY, restoPackage.getRestoCity() != null ? restoPackage.getRestoCity() : "");
-                params.addParam(Keys.MENU_BEER, restoPackage.getMenuBeer() != null ? restoPackage.getMenuBeer() : "");
-                params.addParam(Keys.RESTO_TYPE, restoPackage.getRestoTypes() != null ? restoPackage.getRestoTypes() : "");
-                params.addParam(Keys.RESTO_FEATURES, restoPackage.getRestoFeatures() != null ? restoPackage.getRestoFeatures() : "");
-                params.addParam(Keys.RESTO_AVERAGE, restoPackage.getRestoPrices() != null ? restoPackage.getRestoPrices() : "");
-                params.addParam(Keys.RESTO_KITCHEN, restoPackage.getRestoKitchens() != null ? restoPackage.getRestoKitchens() : "");
-                params.addParam(Keys.RESTO_DISCOUNT, restoPackage.getResto_discount());
-
-                params.addParam(Keys.COORD_START , restoPackage.getCoordStart() != null ? restoPackage.getCoordStart() : "");
-                params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
+                if(restoPackage.getRestoCity()!=null)
+                    params.addParam(Keys.RESTO_CITY, restoPackage.getRestoCity());
+//                params.addParam(Keys.MENU_BEER, restoPackage.getMenuBeer() != null ? restoPackage.getMenuBeer() : "");
+//                params.addParam(Keys.RESTO_TYPE, restoPackage.getRestoTypes() != null ? restoPackage.getRestoTypes() : "");
+//                params.addParam(Keys.RESTO_FEATURES, restoPackage.getRestoFeatures() != null ? restoPackage.getRestoFeatures() : "");
+//                params.addParam(Keys.RESTO_AVERAGE, restoPackage.getRestoPrices() != null ? restoPackage.getRestoPrices() : "");
+//                params.addParam(Keys.RESTO_KITCHEN, restoPackage.getRestoKitchens() != null ? restoPackage.getRestoKitchens() : "");
+//                params.addParam(Keys.RESTO_DISCOUNT, restoPackage.getResto_discount());
+//
+//                params.addParam(Keys.COORD_START , restoPackage.getCoordStart() != null ? restoPackage.getCoordStart() : "");
+//                params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
 
                 ListResponse<FilterRestoLocation> response = executeCall(getApi().loadRestoLocation(params));
                 subscriber.onNext(response.getModels());

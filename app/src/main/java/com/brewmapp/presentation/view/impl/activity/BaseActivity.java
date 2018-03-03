@@ -155,7 +155,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
     //endregion
 
-    //region LOCATION
+    //region Location
 
     @Override
     public void requestLocation(Callback<Location> callback) {
@@ -170,39 +170,38 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             @Override
             public void onResult(Location location) {
                 if(location==null) {
-                    callback.onResult(null);
-                }else {
-                    Locale ru= MapUtils.getLocaleRu();
-                    if(ru!=null) {
-                        Geocoder geocoder = new Geocoder(BaseActivity.this, ru);
-                        try {
-                            List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                            loadCityTask.cancel();
-                            GeoPackage geoPackage = new GeoPackage();
-                            geoPackage.setCityName(list.get(0).getLocality());
-                            loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
-                                @Override
-                                public void onNext(List<City> cities) {
-                                    super.onNext(cities);
-                                    if(cities.size()==1) {
-                                        callback.onResult(cities.get(0));
-                                    }else {
-                                        Starter.InfoAboutCrashSendToServer("size of list not eq 1 (List<City>)", getClass().getCanonicalName());
-                                        callback.onResult(null);
-                                    }
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    super.onError(e);
+                    location = getDefaultLocation();
+                    refreshLocation();
+                }
+                Locale ru= MapUtils.getLocaleRu();
+                if(ru!=null) {
+                    Geocoder geocoder = new Geocoder(BaseActivity.this, ru);
+                    try {
+                        List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        loadCityTask.cancel();
+                        GeoPackage geoPackage = new GeoPackage();
+                        geoPackage.setCityName(list.get(0).getLocality());
+                        loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
+                            @Override
+                            public void onNext(List<City> cities) {
+                                super.onNext(cities);
+                                if(cities.size()==1) {
+                                    callback.onResult(cities.get(0));
+                                }else {
+                                    Starter.InfoAboutCrashSendToServer("size of list not eq 1 (List<City>)", getClass().getCanonicalName());
                                     callback.onResult(null);
                                 }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                            }
 
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                callback.onResult(null);
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -307,9 +306,16 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             callback = null;
         }
     }
+
+    public Location getDefaultLocation(){
+        Location location=new Location("gps");
+        location.setLatitude(Float.valueOf(getString(R.string.default_Latitude)));
+        location.setLongitude(Float.valueOf(getString(R.string.default_Longitude)));
+        return location;
+    }
     //endregion
 
-    //region CHAT Snackbar
+    //region Chat Snackbar
     public void showSnackbar(String text) {
         View view = getWindow().getDecorView().findViewById(android.R.id.content);
         if (view != null) {

@@ -1,5 +1,8 @@
 package com.brewmapp.data.entity;
 
+import android.location.*;
+import android.location.Location;
+
 import com.brewmapp.BuildConfig;
 import com.brewmapp.data.model.ICommonItem;
 import com.brewmapp.data.pojo.SimpleImageSource;
@@ -99,5 +102,12 @@ public class RestoLocation implements ICommonItem, Serializable {
 
     public String getMetro_name() {
         return metro_name;
+    }
+
+    public android.location.Location getLocation() {
+        android.location.Location location = new Location("gps");
+        location.setLatitude(getLocation_lat());
+        location.setLongitude(getLocation_lon());
+        return location;
     }
 }

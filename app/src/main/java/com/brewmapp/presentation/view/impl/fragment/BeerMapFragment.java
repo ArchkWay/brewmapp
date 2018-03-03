@@ -55,7 +55,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -120,6 +119,7 @@ public class BeerMapFragment extends BaseFragment implements
     private float minZoomPref=12.0f;
     private DialogShowView dialogShowView;
     private Location userLocation=null;
+    private Location restoLocation =null;
     private ArrayList arrayList=new ArrayList<>();
 
 
@@ -289,20 +289,27 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        googleMap.setMinZoomPreference(minZoomPref);
-        googleMap.setMaxZoomPreference(maxZoomPref);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        this.googleMap.setMinZoomPreference(minZoomPref);
+        this.googleMap.setMaxZoomPreference(maxZoomPref);
+        this.googleMap.getUiSettings().setZoomControlsEnabled(true);
+        this.googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mClusterManager = new ClusterManager<>(getContext(), googleMap);
         mClusterManager.setRenderer(new ClusterRender(getContext(), googleMap, mClusterManager));
         mClusterManager.setOnClusterClickListener(this);
         mClusterManager.setOnClusterItemClickListener(this);
-        googleMap.setOnMarkerClickListener(mClusterManager);
-        googleMap.setInfoWindowAdapter(this);
-        googleMap.setOnInfoWindowClickListener(this);
-        googleMap.setOnMyLocationButtonClickListener(this);
-        googleMap.setOnMapClickListener(this);
-        googleMap.setOnMapLoadedCallback(this);
+        this.googleMap.setOnMarkerClickListener(mClusterManager);
+        this.googleMap.setInfoWindowAdapter(this);
+        this.googleMap.setOnInfoWindowClickListener(this);
+        this.googleMap.setOnMyLocationButtonClickListener(this);
+        this.googleMap.setOnMapClickListener(this);
+        this.googleMap.setOnCameraIdleListener(this);
+        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }else {
+            this.googleMap.setMyLocationEnabled(true);
+        }
+
+        this.googleMap.setOnMapLoadedCallback(this);
     }
 
     @Override
@@ -362,7 +369,6 @@ public class BeerMapFragment extends BaseFragment implements
         LatLng nearLeft = visibleRegion.nearLeft;
         String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.004, nearLeft.longitude-0.004);
         String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.004, farRight.longitude+0.004);
-        Log.i("onCameraMove", "coordStart - " + coordStart + "  coordEnd-" + coordEnd);
         geoPackage.setCoordStart(coordStart);
         geoPackage.setCoordEnd(coordEnd);
         presenter.loadRestoByLatLngBounds(geoPackage);
@@ -384,17 +390,21 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void onMapLoaded() {
-        mLocationListener.requestLocation(this::onLocationFound);
+        mLocationListener.requestLocation(location -> {
+            userLocation=(location==null?MapUtils.getDefaultLocation(getContext()):location);
+            parseArguments();
+            showNewLocation();
+        });
     }
-
 
     //endregion
 
     //region Events User
     @Override
     public boolean onMyLocationButtonClick() {
-        mLocationListener.requestLocation(result -> onLocationFound(result));
         mLocationListener.refreshLocation();
+        setRestoLocation(null);
+        showNewLocation();
         return true;
     }
 
@@ -462,13 +472,17 @@ public class BeerMapFragment extends BaseFragment implements
             arrayList.clear();
             startQuery();
         }else if (stringSearch.length() == 0) {
-            arrayList.clear();
-            adapter.notifyDataSetChanged();
-            hideProgressBar();
-            hideList(true);
-
+            resetFinder();
         }
-}
+    }
+
+    private void resetFinder() {
+        arrayList.clear();
+        adapter.notifyDataSetChanged();
+        hideProgressBar();
+        hideList(true);
+
+    }
 
     private void startQuery() {
         showProgressBar();
@@ -479,7 +493,7 @@ public class BeerMapFragment extends BaseFragment implements
     private void processAction(int action, Object payload) {
         UITools.hideKeyboard(getActivity());
         FilterRestoOnMap filterOnMapResto = (FilterRestoOnMap) payload;
-        prepareQuery("");
+        resetFinder();
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(
                 new LatLng(Double.valueOf(filterOnMapResto.getLocationLat()), Double.valueOf(filterOnMapResto.getLocationLon())))
@@ -495,48 +509,16 @@ public class BeerMapFragment extends BaseFragment implements
                     }
                 });
 
-//        Uri.Builder builder = new Uri.Builder();
-//        builder.scheme("https")
-//                .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
-//                .appendQueryParameter("destination", filterOnMapResto.getLocationLat() + "," + filterOnMapResto.getLocationLon());
-//        String url = builder.build().toString();
-//        Log.d("Directions", url);
-//        Intent i = new Intent(Intent.ACTION_VIEW);
-//        i.setData(Uri.parse(url));
-//        startActivity(i);
     }
 
     private void hideList(boolean hide) {
         list.setVisibility(hide ? View.GONE : View.VISIBLE);
     }
 
-    private void onLocationFound(Location location) {
-        if(location==null)
-            userLocation = MapUtils.getDefaultLocation(getContext());
-        else
-            userLocation = location;
+    private void showNewLocation() {
 
-        Bundle arguments = getArguments();
-        RestoLocation restoLocation = (RestoLocation) arguments.getSerializable(Keys.LOCATION);
-        if (restoLocation  != null) {
-            Location restoLocation_1=new Location("gps");
-            restoLocation_1.setLatitude(restoLocation.getLocation_lat());
-            restoLocation_1.setLongitude(restoLocation.getLocation_lon());
-            showLocation(restoLocation_1,0.001);
-        }else {
-            // 1 градус долготы примерно 111 км
-            showLocation(userLocation,0.01);
-        }
-
-        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        }else {
-            googleMap.setMyLocationEnabled(true);
-        }
-
-    }
-
-    private void showLocation(Location newLocation,double delta) {
+        double delta= restoLocation ==null?0.01:0.001;
+        Location newLocation= restoLocation ==null?userLocation: restoLocation;
 
         LatLngBounds AUSTRALIA = new LatLngBounds(
                 new LatLng(
@@ -549,7 +531,7 @@ public class BeerMapFragment extends BaseFragment implements
                 )
         );
 
-        googleMap.setOnCameraIdleListener(this);
+
         googleMap.animateCamera(
                 CameraUpdateFactory.newLatLngBounds(AUSTRALIA, 14)
         );
@@ -590,6 +572,16 @@ public class BeerMapFragment extends BaseFragment implements
             }catch (Exception e){};
         }
         marker=null;
+    }
+
+    private void parseArguments() {
+        RestoLocation restoLocation = (RestoLocation) getArguments().getSerializable(Keys.LOCATION);
+        if (restoLocation  != null)
+            setRestoLocation(restoLocation.getLocation());
+    }
+
+    public void setRestoLocation(Location restoLocation) {
+        this.restoLocation = restoLocation;
     }
 
     //endregion

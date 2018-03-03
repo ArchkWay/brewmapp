@@ -54,6 +54,8 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, Posts> {
                 if(request.isOnlyMount()) {
                     start=0; end = 1;
                 }
+                if(request.getCity_id()!=null)
+                    params.addParam(Keys.CITY_ID,request.getCity_id());
                 Posts posts = executeCall(getApi().loadPosts(start, end, params));
                 subscriber.onNext(posts);
                 subscriber.onComplete();

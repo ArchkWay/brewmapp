@@ -102,7 +102,7 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
             container_metro.setVisibility(VISIBLE);
         }catch (Exception e){}
         try {
-            text_distance.setText(String.format("%s м",location.getMetro().getDistance()));
+            text_distance.setText(String.format("%s",location.getCity_id()));
             container_distance.setVisibility(VISIBLE);
         }catch (Exception e){}
 
@@ -133,7 +133,7 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
 
         try {tmpStr=interest.getInterest_info().getShort_text();}                          catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else tmpStr=null;
         if(tmpStr==null)
-            try {tmpStr=Html.fromHtml(interest.getInterest_info().getText()).toString();}  catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else tmpStr=null;
+            try {tmpStr=Html.fromHtml(interest.getInterest_info().getText()).toString();}  catch (Exception e){tmpStr=null;}   if(!TextUtils.isEmpty(tmpStr)) shot_text.setText(tmpStr); else shot_text.setText(getContext().getString(R.string.text_view_value_not_found));
 
 
     }

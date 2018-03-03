@@ -14,6 +14,7 @@ public class LoadNewsPackage extends BasePackage{
     private Date dateFrom, dateTo;
     private String user_id;
     private boolean onlyMountNews=false;
+    private String city_id;
 
     public boolean isOnlyMount() {
         return onlyMountNews;
@@ -100,4 +101,11 @@ public class LoadNewsPackage extends BasePackage{
         page = 0;
     }
 
+    public void setCity_Id(String city) {
+        this.city_id = city;
+    }
+
+    public String getCity_id() {
+        return city_id;
+    }
 }

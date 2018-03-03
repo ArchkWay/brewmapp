@@ -1,6 +1,7 @@
 
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +40,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import ru.frosteye.ovsa.tool.DateTools;
 
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
@@ -56,7 +58,8 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITE
 public class EventsFragment extends BaseFragment implements
         EventsView,
         View.OnClickListener,
-        AdapterView.OnItemClickListener
+        AdapterView.OnItemClickListener,
+        TabLayout.OnTabSelectedListener
 {
 
     //region BindView
@@ -82,12 +85,15 @@ public class EventsFragment extends BaseFragment implements
     private final String MODE_DEFAULT="0";
     private final String MODE_TABS_INVISIBLE ="1";
     private String mode=MODE_DEFAULT;
+    private ArrayList<IFlexible> arrayList=new ArrayList<IFlexible>();
     //endregion
 
     //region Public
     public static final int TAB_EVENT = 0;
     public static final int TAB_SALE = 1;
     public static final int TAB_POST = 2;
+    private OnFragmentInteractionListener mListener;
+    private OnLocationInteractionListener mLocationListener;
     //endregion
 
     //region Impl EventsFragment
@@ -102,27 +108,10 @@ public class EventsFragment extends BaseFragment implements
             mode = MODE_TABS_INVISIBLE;
 
         interractor().processSetActionBar(0);
-
-        tabsView.setItems(Arrays.asList(tabContent), new SimpleTabSelectListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                loadNewsPackage.dropAll();
-                loadNewsPackage.setMode(tab.getPosition());
-                interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
-                interractor().processSetActionBar(tab.getPosition());
-                presenter.storeTabActive(tab.getPosition());
-                hideFilterLayout();
-                if (dropdownItems != null) {
-                    dropdownItems.clear();
-                }
-                refreshItems(true);
-            }
-        });
-
+        tabsView.setItems(Arrays.asList(tabContent), this);
         initFilterItems();
         filterList.setOnItemClickListener(this);
         interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
-
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
@@ -133,24 +122,28 @@ public class EventsFragment extends BaseFragment implements
         };
         list.setLayoutManager(manager);
         list.addOnScrollListener(scrollListener);
-        adapter = new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
         swipe.setOnRefreshListener(() -> refreshItems(false));
         //setActiveTab
-        tabsView.post(() -> tabsView.getTabs().getTabAt(presenter.getStoredActiveTab()).select());
         tabsView.setVisibility(mode.equals(MODE_TABS_INVISIBLE)?View.GONE:View.VISIBLE);
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        refreshItems(false);
     }
 
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        int storedNumberTab=presenter.getStoredActiveTab();
+        TabLayout.Tab tab=tabsView.getTabs().getTabAt(storedNumberTab);
+        assert tab != null;
+        if(tabsView.getTabs().getSelectedTabPosition()==storedNumberTab)
+            onTabSelected(tab);
+        else
+            tab.select();
     }
 
     @Override
@@ -202,6 +195,19 @@ public class EventsFragment extends BaseFragment implements
     protected void prepareView(View view) {
         super.prepareView(view);
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+            mLocationListener = mListener.getLocationListener();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
     //endregion
 
     //region Impl EventsView
@@ -209,11 +215,12 @@ public class EventsFragment extends BaseFragment implements
     public void appendItems(List<IFlexible> list) {
         setEmpty(loadNewsPackage.getPage() == 0 && list.isEmpty());
         if(loadNewsPackage.getPage() == 0) {
-            adapter.clear();
+            arrayList.clear();
             scrollListener.reset();
-            this.list.addOnScrollListener(scrollListener);
         }
-        adapter.addItems(adapter.getItemCount(), list);
+        int prevSize=arrayList.size();
+        arrayList.addAll(list);
+        adapter.notifyItemRangeInserted(prevSize,list.size());
 
     }
 
@@ -234,6 +241,7 @@ public class EventsFragment extends BaseFragment implements
     }
     //endregion
 
+    //region User Events
     @Override
     public void onClick(View v) {
         initFilterItems();
@@ -265,7 +273,60 @@ public class EventsFragment extends BaseFragment implements
         showLogicAnimation();
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        loadNewsPackage.dropAll();
+        loadNewsPackage.setMode(tab.getPosition());
+        interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
+        interractor().processSetActionBar(tab.getPosition());
+        presenter.storeTabActive(tab.getPosition());
+        hideFilterLayout();
+        if (dropdownItems != null)
+            dropdownItems.clear();
+
+        if(mode==MODE_DEFAULT) {
+            mLocationListener.requestCity(result -> {
+                if (result != null)
+                    loadNewsPackage.setCity_Id(String.valueOf(result.getId()));
+                else
+                    loadNewsPackage.setCity_Id(null);
+                refreshItems(true);
+            });
+        }else {
+            loadNewsPackage.setCity_Id(null);
+            refreshItems(true);
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    //endregion
+
     //region Function
+    public void refreshItems(boolean tabSelected) {
+        swipe.setRefreshing(true);
+        arrayList.clear();
+        adapter.notifyDataSetChanged();
+        scrollListener.reset();
+        loadNewsPackage.setPage(0);
+
+        try {loadNewsPackage.setResto_id(getArguments().getString(Keys.RELATED_ID));}catch (Exception e){}
+        try {loadNewsPackage.setRelated_model(getArguments().getString(Keys.RELATED_MODEL));}catch (Exception e){}
+
+        presenter.onLoadItems(loadNewsPackage);
+        if (tabSelected) {
+            interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
+        }
+    }
+
     private void hideFilterLayout() {
         filterList.setVisibility(View.GONE);
         darkBackGround.setVisibility(View.GONE);
@@ -285,20 +346,20 @@ public class EventsFragment extends BaseFragment implements
 
     private void processAction(int action, Object payload) {
         switch (action) {
+            case Actions.ACTION_REFRESH_FRAGMENT_CONTENT:
+                refreshItems(false);
+                break;
             case Actions.ACTION_SELECT_EVENT:
                 activeBox.setActive(payload);
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), EventDetailsActivity.class), REQUEST_CODE_REFRESH_ITEMS
-                );
+                startActivity(new Intent(getActivity(), EventDetailsActivity.class));
                 break;
             case Actions.ACTION_SELECT_SALE:
                 activeBox.setActive(payload);
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), SaleDetailsActivity.class), REQUEST_CODE_REFRESH_ITEMS
-                );
+                startActivity(new Intent(getActivity(), SaleDetailsActivity.class));
                 break;
             case Actions.ACTION_SELECT_POST:
                 activeBox.setActive(payload);
-                interractor().processStartActivityWithRefresh(new Intent(getActivity(), PostDetailsActivity.class), REQUEST_CODE_REFRESH_ITEMS
-                );
+                startActivity(new Intent(getActivity(), PostDetailsActivity.class));
                 break;
         }
     }
@@ -339,27 +400,17 @@ public class EventsFragment extends BaseFragment implements
         }
     }
 
-    public void refreshItems(boolean tabSelected) {
-        swipe.setRefreshing(true);
-        list.removeOnScrollListener(scrollListener);
-        adapter.clear();
-        loadNewsPackage.setPage(0);
-
-        try {loadNewsPackage.setResto_id(getArguments().getString(Keys.RELATED_ID));}catch (Exception e){}
-        try {loadNewsPackage.setRelated_model(getArguments().getString(Keys.RELATED_MODEL));}catch (Exception e){}
-
-        presenter.onLoadItems(loadNewsPackage);
-        if (tabSelected) {
-            interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
-        }
-    }
-
     private void fillDropDownList() {
         dropdownItems = new ArrayList<>();
         for (String title : this.getTitleDropDown()) {
             dropdownItems.add(new FilteredTitle(title, false));
         }
     }
+
     //endregion
+
+    public interface OnFragmentInteractionListener {
+        OnLocationInteractionListener getLocationListener();
+    }
 
 }

@@ -53,6 +53,9 @@ public class LoadSalesTask extends BaseNetworkTask<LoadNewsPackage, Sales> {
                 if(request.isOnlyMount()){
                     start=0;end=1;
                 }
+                if(request.getCity_id()!=null)
+                    params.addParam(Keys.CITY_ID,request.getCity_id());
+
                 Sales posts = executeCall(getApi().loadSales(start, end, params));
                 subscriber.onNext(posts);
                 subscriber.onComplete();

@@ -53,6 +53,8 @@ public class LoadEventsTask extends BaseNetworkTask<LoadNewsPackage, Events> {
                 if(request.isOnlyMount()) {
                     start=0; end=1;
                 }
+                if(request.getCity_id()!=null)
+                    params.addParam(Keys.CITY_ID,request.getCity_id());
 
                 Events posts = executeCall(getApi().loadEvents(start, end, params));
                 subscriber.onNext(posts);

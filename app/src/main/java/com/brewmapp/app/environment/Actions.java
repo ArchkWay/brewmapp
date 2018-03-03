@@ -30,6 +30,7 @@ public class Actions {
     public static final int ACTION_CLICK_ON_ITEM_INTEREST_RESTO = 24;
     public static final int ACTION_CLICK_ON_ITEM_USER = 25;
     public static final int ACTION_CLICK_ON_ITEM_REVIEW_ON_USER = 26;
+    public static final int ACTION_REFRESH_FRAGMENT_CONTENT = 27;
 
 
     public static final String PARAM1 = "PARAM1";

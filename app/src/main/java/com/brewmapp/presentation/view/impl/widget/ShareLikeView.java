@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.di.module.PresenterModule;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.presentation.presenter.contract.ShareLikeViewPresenter;
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.BasicView;
+import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 
 /**
  * Created by Kras on 17.10.2017.
@@ -40,6 +42,7 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
     @Inject    ShareLikeViewPresenter shareLikeViewPresenter;
 
     private ILikeable iLikeable;
+    private InteractiveModelView.Listener listener;
 
     public ShareLikeView(Context context) {
         super(context);
@@ -75,13 +78,7 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
 
 
     private void refreshItems() {
-        if(getContext() instanceof MainActivity)
-            ((MainActivity)getContext()).refreshItems();
-        else{
-            ((BaseActivity)getContext()).setResult(Activity.RESULT_OK);
-            ((BaseActivity)getContext()).finish();
-        }
-
+        listener.onModelAction(Actions.ACTION_REFRESH_FRAGMENT_CONTENT,null);
     }
 
     @Override
@@ -106,4 +103,7 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
     }
 
 
+    public void setListener(InteractiveModelView.Listener listener) {
+        this.listener = listener;
+    }
 }

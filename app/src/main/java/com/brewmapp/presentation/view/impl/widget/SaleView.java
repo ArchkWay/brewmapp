@@ -96,8 +96,11 @@ public class SaleView extends BaseLinearLayout implements InteractiveModelView<S
             String photoUrl=null;
             int photoWidth=0;
             int photoHeight=0;
+
             public void fill() {
+
                 shareLikeView.setiLikeable(model);
+
 
                 texts();
 

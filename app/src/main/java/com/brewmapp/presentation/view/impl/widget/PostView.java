@@ -244,6 +244,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     @Override
     public void setListener(Listener listener) {
         this.listener = listener;
+        shareLikeView.setListener(listener);
     }
 
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,13 +26,22 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.ChatReceiveMessage;
+import com.brewmapp.data.entity.City;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.services.ChatService;
 
+import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import ru.frosteye.ovsa.execution.executor.Callback;
@@ -46,6 +57,8 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
     private Callback<Location> callback;
     private ChatResultReceiver chatResultReceiver;
+    @Inject
+    public LoadCityTask loadCityTask;
 
     protected abstract void inject(PresenterComponent component);
 
@@ -126,7 +139,12 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             case RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLastLocation();
+                    getLastLocation(new Callback<Location>() {
+                        @Override
+                        public void onResult(Location result) {
+                            replayLocation(result);
+                        }
+                    });
                 } else {
                     replayLocation(null);
                 }
@@ -143,8 +161,51 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     public void requestLocation(Callback<Location> callback) {
         this.callback = callback;
         if (isLocationPermission()) {
-            getLastLocation();
+            getLastLocation(result -> replayLocation(result));
         }
+    }
+
+    public void requestCity(Callback<City> callback){
+        getLastLocation(new Callback<Location>() {
+            @Override
+            public void onResult(Location location) {
+                if(location==null) {
+                    callback.onResult(null);
+                }else {
+                    Locale ru= MapUtils.getLocaleRu();
+                    if(ru!=null) {
+                        Geocoder geocoder = new Geocoder(BaseActivity.this, ru);
+                        try {
+                            List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            loadCityTask.cancel();
+                            GeoPackage geoPackage = new GeoPackage();
+                            geoPackage.setCityName(list.get(0).getLocality());
+                            loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
+                                @Override
+                                public void onNext(List<City> cities) {
+                                    super.onNext(cities);
+                                    if(cities.size()==1) {
+                                        callback.onResult(cities.get(0));
+                                    }else {
+                                        Starter.InfoAboutCrashSendToServer("size of list not eq 1 (List<City>)", getClass().getCanonicalName());
+                                        callback.onResult(null);
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    callback.onResult(null);
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }
+        });
     }
 
     @Override
@@ -223,7 +284,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                 .show();
     }
 
-    private void getLastLocation() {
+    private void getLastLocation(Callback<Location> callback) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
         for (int i = providers.size() - 1; i >= 0; i--) {
@@ -232,12 +293,12 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             } else {
                 Location l = locationManager.getLastKnownLocation(providers.get(i));
                 if (l != null) {
-                    replayLocation(l);
+                    callback.onResult(l);
                     return;
                 }
             }
         }
-        replayLocation(null);
+        callback.onResult(null);
     }
 
     private void replayLocation(Location location) {

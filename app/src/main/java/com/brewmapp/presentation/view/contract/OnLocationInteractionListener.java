@@ -2,6 +2,8 @@ package com.brewmapp.presentation.view.contract;
 
 import android.location.Location;
 
+import com.brewmapp.data.entity.City;
+
 import ru.frosteye.ovsa.execution.executor.Callback;
 
 /**
@@ -10,5 +12,6 @@ import ru.frosteye.ovsa.execution.executor.Callback;
 
 public interface OnLocationInteractionListener {
     void requestLocation(Callback<Location> callback);
+    void requestCity(Callback<City> callback);
     void refreshLocation();
 }

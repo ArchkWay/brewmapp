@@ -28,11 +28,8 @@ import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
-import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
-import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.crashlytics.android.Crashlytics;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 /**
  * Created by xpusher on 1/19/2018.

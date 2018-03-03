@@ -61,7 +61,6 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.navigation.impl.SimpleNavAction;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_STATE;
 
 public class MainActivity extends BaseActivity
@@ -70,7 +69,8 @@ public class MainActivity extends BaseActivity
         FlexibleAdapter.OnItemClickListener,
         FragmentInterractor,
         SearchFragment.OnFragmentInteractionListener,
-        BeerMapFragment.OnFragmentInteractionListener
+        BeerMapFragment.OnFragmentInteractionListener,
+        EventsFragment.OnFragmentInteractionListener
 {
 
     //region BindView
@@ -188,9 +188,7 @@ public class MainActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE_REFRESH_ITEMS) {
-                refreshItems();
-            } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
+            if (requestCode == REQUEST_CODE_REFRESH_STATE) {
                 refreshState();
             }
         }
@@ -454,12 +452,6 @@ public class MainActivity extends BaseActivity
         if(baseFragment!=null)
             if(baseFragment instanceof ProfileFragment)
                 ((ProfileFragment) baseFragment).refreshState();
-    }
-
-    public void refreshItems() {
-        if(baseFragment!=null)
-            if (baseFragment instanceof EventsFragment)
-                ((EventsFragment) baseFragment).refreshItems(false);
     }
 
     //endregion

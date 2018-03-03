@@ -62,8 +62,12 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_PRO
  * Created by ovcst on 03.08.2017.
  */
 
-public class ProfileFragment extends BaseFragment implements ProfileView, FlexibleAdapter.OnItemClickListener {
+public class ProfileFragment extends BaseFragment implements
+        ProfileView,
+        FlexibleAdapter.OnItemClickListener
+{
 
+    //region BindView
     @BindView(R.id.fragment_profile_avatar) ImageView avatar;
     @BindView(R.id.fragment_profile_avatar_layout) View avatar_layout;
     @BindView(R.id.fragment_profile_city) TextView city;
@@ -80,15 +84,21 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
     @BindView(R.id.fragment_profile_transitions_container) ViewGroup transitions_container;
     @BindView(R.id.fragment_profile_scrollView) ScrollView scrollView;
+    //endregion
 
+    //region Inject
     @Inject    ProfilePresenter presenter;
+    //endregion
 
+    //region Private
     private FlexibleAdapter<CardMenuField> menuAdapter;
     private FlexibleModelAdapter<IFlexible> postAdapter;
     private FlexibleModelAdapter<SubscriptionInfo> subscriptionAdapter;
     private LoadPostsPackage loadPostsPackage = new LoadPostsPackage();
     private UserProfile profile;
+    //endregion
 
+    //region Impl ProfileFragment
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_profile;
@@ -131,36 +141,6 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
 
     }
 
-    private void onClickItem(int action, Object payload) {
-        switch (action) {
-            case Actions.ACTION_LIKE_POST:
-                presenter.onLikePost(((Post) payload));
-                break;
-            case Actions.ACTION_START_DETAILS_ACTIVITY: {
-                Intent intent = new Intent(getContext(), RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
-            }break;
-            case Actions.ACTION_START_SHOW_NEWS: {
-                Starter.MainActivity(
-                        (BaseActivity) getActivity(),
-                        MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
-                        EventsFragment.TAB_EVENT,
-                        String.valueOf(payload) ,
-                        Keys.CAP_RESTO
-                );
-
-            }break;
-            case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
-                Starter.ProfileEditActivity(
-                        getActivity(),
-                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
-                        String.valueOf(((Review) payload).getUser_id())
-                );
-                break;
-        }
-    }
-
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
@@ -192,6 +172,45 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         return ResourceHelper.getString(R.string.my_profile);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK)
+                    refreshItems();
+                return;
+
+            case REQUEST_CODE_REFRESH_PROFILE:
+                if(resultCode==RESULT_OK) {
+                    presenter.refreshProfile();
+                    refreshItems();
+                }
+                return;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+    @Override
+    public void onBarAction(int id) {
+        switch (id){
+            case R.id.action_create:
+                startActivityForResult(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
+                return;
+            default:
+                super.onBarAction(id);
+        }
+    }
+
+    @Override
+    protected void prepareView(View view) {
+        super.prepareView(view);
+    }
+    //endregion
+
+
+    //region Impl ProfileView
     @Override
     public void enableControls(boolean enabled, int code) {
     }
@@ -237,6 +256,14 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
     }
 
     @Override
+    public void refreshState() {
+        postAdapter.notifyDataSetChanged();
+    }
+
+    //endregion
+
+    //region User Events
+    @Override
     public boolean onItemClick(int position) {
         switch (position) {
             case CardMenuField.NEW_POST:
@@ -258,51 +285,44 @@ public class ProfileFragment extends BaseFragment implements ProfileView, Flexib
         return false;
     }
 
-    @Override
-    public void refreshState() {
-        postAdapter.notifyDataSetChanged();
-    }
+    private void onClickItem(int action, Object payload) {
+        switch (action) {
+            case Actions.ACTION_LIKE_POST:
+                presenter.onLikePost(((Post) payload));
+                break;
+            case Actions.ACTION_START_DETAILS_ACTIVITY: {
+                Intent intent = new Intent(getContext(), RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID, new Interest(new Resto((String) payload, "")));
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+            }break;
+            case Actions.ACTION_START_SHOW_NEWS: {
+                Starter.MainActivity(
+                        (BaseActivity) getActivity(),
+                        MainActivity.MODE_EVENT_FRAGMENT_WITHOUT_TABS,
+                        EventsFragment.TAB_EVENT,
+                        String.valueOf(payload) ,
+                        Keys.CAP_RESTO
+                );
 
+            }break;
+            case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
+                Starter.ProfileEditActivity(
+                        getActivity(),
+                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        String.valueOf(((Review) payload).getUser_id())
+                );
+                break;
+        }
+    }
+    //endregion
+
+    //region Functions
     public void refreshItems() {
         if(loadPostsPackage.isSubs())
             presenter.onLoadSubscription(loadPostsPackage);
         else
             presenter.onLoadPosts(loadPostsPackage);
     }
+    //endregion
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case REQUEST_CODE_REFRESH_ITEMS:
-                if(resultCode==RESULT_OK)
-                    refreshItems();
-                    return;
-
-            case REQUEST_CODE_REFRESH_PROFILE:
-                if(resultCode==RESULT_OK) {
-                    presenter.refreshProfile();
-                    refreshItems();
-                }
-                return;
-                default:
-                    super.onActivityResult(requestCode, resultCode, data);
-        }
-
-    }
-
-    @Override
-    public void onBarAction(int id) {
-        switch (id){
-            case R.id.action_create:
-                startActivityForResult(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
-                return;
-            default:
-                super.onBarAction(id);
-        }
-    }
-
-    @Override
-    protected void prepareView(View view) {
-        super.prepareView(view);
-    }
 }

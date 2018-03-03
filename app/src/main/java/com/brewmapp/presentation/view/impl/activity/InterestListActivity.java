@@ -44,7 +44,11 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITE
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
 
-public class InterestListActivity extends BaseActivity implements InterestListView{
+public class InterestListActivity extends BaseActivity
+        implements
+        InterestListView
+{
+    //region BindView
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_interest_list)  RecyclerView recyclerView;
     @BindView(R.id.activity_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
@@ -52,14 +56,20 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    //endregion
 
+    //region Inject
     @Inject    InterestListPresenter presenter;
+    //endregion
 
+    //region Private
     private FlexibleModelAdapter<IFlexible> adapter;
     private LoadInterestPackage loadInterestPackage;
     private HashMap<Serializable,Serializable> hmAdd =new HashMap<>();
     private HashMap<Interest,Interest> hmRemove =new HashMap<>();
+    //endregion
 
+    //region Impl InterestListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +136,6 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
 
         text_save_intesest.setOnClickListener(v->{presenter.storeInterest(hmAdd,hmRemove);hmAdd.clear();hmRemove.clear();});
 
-        refreshInterests();
     }
 
     @Override
@@ -139,6 +148,7 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        refreshInterests();
     }
 
     @Override
@@ -220,30 +230,9 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    //endregion
 
-    private void visibleTextSave() {
-        if(hmAdd.size()==0&& hmRemove.size()==0)
-            text_save_intesest.setVisibility(View.GONE);
-        else
-            text_save_intesest.setVisibility(View.VISIBLE);
-    }
-
-    private void processAction(int action, Object payload) {
-        Interest interest=(Interest)payload;
-        switch (action){
-            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
-                Intent intent = new Intent(this, RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID, interest);
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
-            }break;
-            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_BEER:{
-                Intent intent = new Intent(this, BeerDetailActivity.class);
-                intent.putExtra(getString(R.string.key_serializable_extra), interest);
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
-            }
-        }
-    }
-
+    //region Impl InterestListView
     @Override
     public void refreshItems() {
         swipe.setRefreshing(true);
@@ -290,4 +279,31 @@ public class InterestListActivity extends BaseActivity implements InterestListVi
     public void onError() {
         swipe.setRefreshing(false);
     }
+    //endregion
+
+    //region Functions
+    private void visibleTextSave() {
+        if(hmAdd.size()==0&& hmRemove.size()==0)
+            text_save_intesest.setVisibility(View.GONE);
+        else
+            text_save_intesest.setVisibility(View.VISIBLE);
+    }
+
+    private void processAction(int action, Object payload) {
+        Interest interest=(Interest)payload;
+        switch (action){
+            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
+                Intent intent = new Intent(this, RestoDetailActivity.class);
+                intent.putExtra(Keys.RESTO_ID, interest);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+            }break;
+            case Actions.ACTION_CLICK_ON_ITEM_INTEREST_BEER:{
+                Intent intent = new Intent(this, BeerDetailActivity.class);
+                intent.putExtra(getString(R.string.key_serializable_extra), interest);
+                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+            }
+        }
+    }
+    //endregion
+
 }

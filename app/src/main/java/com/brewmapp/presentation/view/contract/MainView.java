@@ -20,6 +20,5 @@ public interface MainView extends BasicView, NavigatorView {
     void showDrawer(boolean shown);
     void successCheckEnvironment(User load, List<MenuField> aDefault);
     void commonError(String... strings);
-    void showFilterFragment(BaseFragment searchFragment);
 
 }

@@ -98,17 +98,18 @@ public class MainActivity extends BaseActivity
     RelativeLayout visible_container;
     //endregion
 
-    //region Inject
-    @Inject    public MainPresenter presenter;
-    @Inject    public MainNavigator navigator;
-    //endregion
-
     //region Private
     private FlexibleAdapter<MenuField> adapter;
     private List<MenuField> menuItems;
     private @MenuRes    int menuToShow;
     private DuoDrawerToggle drawerToggle;
     private String mode;
+    private BaseFragment baseFragment;
+    //endregion
+
+    //region Inject
+    @Inject    public MainPresenter presenter;
+    @Inject    public MainNavigator navigator;
     //endregion
 
     //region Static
@@ -192,10 +193,6 @@ public class MainActivity extends BaseActivity
             } else if (requestCode == REQUEST_CODE_REFRESH_STATE) {
                 refreshState();
             }
-//            else if (requestCode == REQUEST_CODE_MAP_RESULT) {
-//                showMapResult(data.getBooleanExtra("isBeer", false),
-//                        data.getIntExtra("checkBox", 0));
-//            }
         }
     }
 
@@ -233,57 +230,26 @@ public class MainActivity extends BaseActivity
     }
     //endregion
 
-    private void setDrawer() {
-        drawer.setMarginFactor(0.5f);
-        Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.ic_menu_toggle)).getBitmap();
-        drawerToggle = new CustomDuoDrawerToggle(
-                this,
-                toolbar,
-                drawer,
-                new CustomDrawerArrowDrawable(getResources(), bitmap),
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close,
-                new CustomDuoDrawerToggle.Listener() {
-                    @Override
-                    public void onDrawerClosed() {
-                        navigator.onDrawerClosed();
-                    }
-                    @Override
-                    public void onDrawerOpen() {
-                        Intent intent=new Intent(ChatService.ACTION_REQUEST_DIALOGS,null,MainActivity.this,ChatService.class);
-                        intent.putExtra(
-                                ChatService.RECEIVER,
-                                new ChatResultReceiver(
-                                        new Handler(MainActivity.this.getMainLooper()),
-                                        new SimpleSubscriber<Bundle>(){
-                                            @Override
-                                            public void onNext(Bundle bundle) {
-                                                super.onNext(bundle);
-                                                ChatListDialogs chatListDialogs = (ChatListDialogs) bundle.getSerializable(ChatService.EXTRA_PARAM2);
-                                                int cntUnread=0;
-                                                for (ChatDialog chatDialog:chatListDialogs)
-                                                    cntUnread+=chatDialog.getUnread();
-                                                TextView textView= (TextView) menu.getLayoutManager().getChildAt(MenuField.MESSAGES).findViewById(R.id.view_menuField_badget);
-                                                textView.setVisibility(cntUnread==0?View.GONE:View.VISIBLE);
-                                                textView.setText(String.valueOf(cntUnread));
+    //region User Events
+    @Override
+    public boolean onItemClick(int position) {
 
-                                                }
-                                        })
-                        );
-                        startService(intent);
-                    }
-                });
-        drawer.setDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-        profileHeader.setOnClickListener(v -> {
-            MenuField.unselectAll(menuItems);
-            adapter.notifyDataSetChanged();
-            navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
-        });
-
+        MenuField field = adapter.getItem(position);
+        if(field.getId() == MenuField.LOGOUT) {
+            presenter.onLogout();
+            startActivityAndClearTask(StartActivity.class);
+            finish();
+            return true;
+        }
+        MenuField.unselectAll(menuItems);
+        field.setSelected(true);
+        adapter.notifyDataSetChanged();
+        navigator.onMenuItemSelected(field);
+        return true;
     }
+    //endregion
 
-
+    //region Impl MainView
     @Override
     public void enableControls(boolean enabled, int code) {
 
@@ -291,28 +257,72 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void showFragment(BaseFragment fragment) {
-        fragment.setArguments(presenter.prepareArguments(getIntent(),container));
-        menuToShow = fragment.getMenuToInflate();
+        baseFragment = fragment;
+        baseFragment .setArguments(presenter.prepareArguments(getIntent(),container));
+        menuToShow = baseFragment .getMenuToInflate();
         invalidateOptionsMenu();
-        processTitleDropDown(fragment, 0);
+        processTitleDropDown(baseFragment , 0);
         if(menuToShow == 0) processSetActionBar(0);
-        navigator.setActionBarItemDelegate(fragment);
+        navigator.setActionBarItemDelegate(baseFragment );
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_main_container, fragment)
+                .replace(R.id.activity_main_container, baseFragment )
                 .commit();
     }
 
     @Override
-    public void showFilterFragment(BaseFragment searchFragment) {
-        navigator.setActionBarItemDelegate(searchFragment);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.activity_main_container, searchFragment)
-                .addToBackStack(SearchFragment.class.getSimpleName())
-                .commit();
+    public void showDrawer(boolean shown) {
+        if(shown)
+            drawer.openDrawer();
+        else {
+            drawer.closeDrawer();
+        }
     }
 
+    @Override
+    public void successCheckEnvironment(User user, List<MenuField> fields) {
+        Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
+        userName.setText(user.getFormattedName());
+        this.menuItems = fields;
+        adapter = new FlexibleAdapter<>(fields, this);
+        menu.setLayoutManager(new LinearLayoutManager(this));
+        menu.setAdapter(adapter);
+
+        switch (mode){
+            case MODE_DEFAULT:
+                setDrawer();
+                break;
+            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
+                enableBackButton();
+                navigator.storeCodeActiveFragment(MenuField.EVENTS);
+                navigator.storeCodeTebEventFragment(
+                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT)
+                );
+                setResult(RESULT_OK);
+                break;
+            case MODE_MAP_FRAGMENT:
+                enableBackButton();
+                navigator.storeCodeActiveFragment(MenuField.MAP);
+                setResult(RESULT_OK);
+                break;
+            case MODE_SEARCH_FRAGMENT:
+                navigator.storeCodeActiveFragment(MenuField.SEARCH);
+                break;
+        }
+
+        navigator.onAttachView(this);
+        navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
+        navigator.onDrawerClosed();
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    //endregion
+
+    //region Impl FragmentInterractor
     @Override
     public void processTitleDropDown(BaseFragment baseFragment, int selected) {
         ActionBar actionBar = getSupportActionBar();
@@ -363,7 +373,9 @@ public class MainActivity extends BaseActivity
         if (actionBar == null) return;
         toolbarTitle.setText(searchFragment.getTitle());
     }
+    //endregion
 
+    //region Impl Common
     @Override
     public void processChangeFragment(int id) {
         MenuField.unselectAll(menuItems);
@@ -371,74 +383,6 @@ public class MainActivity extends BaseActivity
         navigator.onNavigatorAction(new SimpleNavAction(id));
         navigator.onDrawerClosed();
     }
-
-    @Override
-    public void showDrawer(boolean shown) {
-        if(shown)
-            drawer.openDrawer();
-        else {
-            drawer.closeDrawer();
-        }
-    }
-
-    @Override
-    public void successCheckEnvironment(User user, List<MenuField> fields) {
-        Picasso.with(this).load(user.getThumbnail()).fit().into(avatar);
-        userName.setText(user.getFormattedName());
-        this.menuItems = fields;
-        adapter = new FlexibleAdapter<>(fields, this);
-        menu.setLayoutManager(new LinearLayoutManager(this));
-        menu.setAdapter(adapter);
-
-        switch (mode){
-            case MODE_DEFAULT:
-                setDrawer();
-                break;
-            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
-                enableBackButton();
-                navigator.storeCodeActiveFragment(MenuField.EVENTS);
-                navigator.storeCodeTebEventFragment(
-                        getIntent().getIntExtra(RequestCodes.INTENT_EXTRAS,EventsFragment.TAB_EVENT)
-                );
-                setResult(RESULT_OK);
-                break;
-            case MODE_MAP_FRAGMENT:
-                enableBackButton();
-                navigator.storeCodeActiveFragment(MenuField.MAP);
-                setResult(RESULT_OK);
-                break;
-            case MODE_SEARCH_FRAGMENT:
-                navigator.storeCodeActiveFragment(MenuField.SEARCH);
-                break;
-        }
-
-        navigator.onAttachView(this);
-        navigator.onNavigatorAction(new SimpleNavAction(presenter.getActiveFragment()));
-        navigator.onDrawerClosed();
-    }
-
-    @Override
-    public boolean onItemClick(int position) {
-
-        MenuField field = adapter.getItem(position);
-        if(field.getId() == MenuField.LOGOUT) {
-            presenter.onLogout();
-            startActivityAndClearTask(StartActivity.class);
-            finish();
-            return true;
-        }
-        MenuField.unselectAll(menuItems);
-        field.setSelected(true);
-        adapter.notifyDataSetChanged();
-        navigator.onMenuItemSelected(field);
-        return true;
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
-    }
-
 
     @Override
     public void commonError(String... strings) {
@@ -453,37 +397,71 @@ public class MainActivity extends BaseActivity
     public OnLocationInteractionListener getLocationListener() {
         return this;
     }
+    //endregion
 
+    //region Functions
+    private void setDrawer() {
+        drawer.setMarginFactor(0.5f);
+        Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.ic_menu_toggle)).getBitmap();
+        drawerToggle = new CustomDuoDrawerToggle(
+                this,
+                toolbar,
+                drawer,
+                new CustomDrawerArrowDrawable(getResources(), bitmap),
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close,
+                new CustomDuoDrawerToggle.Listener() {
+                    @Override
+                    public void onDrawerClosed() {
+                        navigator.onDrawerClosed();
+                    }
+                    @Override
+                    public void onDrawerOpen() {
+                        Intent intent=new Intent(ChatService.ACTION_REQUEST_DIALOGS,null,MainActivity.this,ChatService.class);
+                        intent.putExtra(
+                                ChatService.RECEIVER,
+                                new ChatResultReceiver(
+                                        new Handler(MainActivity.this.getMainLooper()),
+                                        new SimpleSubscriber<Bundle>(){
+                                            @Override
+                                            public void onNext(Bundle bundle) {
+                                                super.onNext(bundle);
+                                                ChatListDialogs chatListDialogs = (ChatListDialogs) bundle.getSerializable(ChatService.EXTRA_PARAM2);
+                                                int cntUnread=0;
+                                                for (ChatDialog chatDialog:chatListDialogs)
+                                                    cntUnread+=chatDialog.getUnread();
+                                                TextView textView= (TextView) menu.getLayoutManager().getChildAt(MenuField.MESSAGES).findViewById(R.id.view_menuField_badget);
+                                                textView.setVisibility(cntUnread==0?View.GONE:View.VISIBLE);
+                                                textView.setText(String.valueOf(cntUnread));
 
+                                            }
+                                        })
+                        );
+                        startService(intent);
+                    }
+                });
+        drawer.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        profileHeader.setOnClickListener(v -> {
+            MenuField.unselectAll(menuItems);
+            adapter.notifyDataSetChanged();
+            navigator.onNavigatorAction(new SimpleNavAction(MenuField.PROFILE));
+        });
 
-//*****************************************
-    @SuppressLint("RestrictedApi")
+    }
+
     public void refreshState() {
-        for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if (fragment instanceof EventsFragment)
-                ((EventsFragment) fragment).refreshState();
-            else if(fragment instanceof ProfileFragment)
-                ((ProfileFragment) fragment).refreshState();
+        if(baseFragment!=null)
+            if(baseFragment instanceof ProfileFragment)
+                ((ProfileFragment) baseFragment).refreshState();
     }
-    @SuppressLint("RestrictedApi")
-    public void refreshItems() {
-        for (Fragment fragment : getSupportFragmentManager().getFragments())
-            if (fragment instanceof EventsFragment)
-                ((EventsFragment) fragment).refreshItems(false);
-    }
-//    @SuppressLint("RestrictedApi")
-//    public void showResultOnMap() {
-//        for (Fragment fragment : getSupportFragmentManager().getFragments())
-//            if(fragment instanceof ProfileFragment)
-//                ((ProfileFragment) fragment).refreshItems();
-//    }
-//    @SuppressLint("RestrictedApi")
-//    public void showMapResult(boolean isBeer, int checkBox) {
-//        for (Fragment fragment : getSupportFragmentManager().getFragments())
-//            if (fragment instanceof BeerMapFragment) {
-//                ((BeerMapFragment) fragment).showResult(isBeer, checkBox);
-//            }
-//    }
 
+    public void refreshItems() {
+        if(baseFragment!=null)
+            if (baseFragment instanceof EventsFragment)
+                ((EventsFragment) baseFragment).refreshItems(false);
+    }
+
+    //endregion
 
 }

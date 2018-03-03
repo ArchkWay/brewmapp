@@ -66,18 +66,13 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
         ButterKnife.bind(this);
         shareLikeViewPresenter.onAttach(this);
 
-        like.setOnClickListener(view -> {shareLikeViewPresenter.onLike(iLikeable,()->{refreshState();});});
+        like.setOnClickListener(view -> {shareLikeViewPresenter.onLike(iLikeable,()->{
+            iLikeable.increaseDisLikes();
+            setiLikeable(iLikeable);
+        });});
         more.setOnClickListener(view -> {new DialogShare((BaseActivity) getContext(),iLikeable, () -> refreshItems());});
     }
 
-    private void refreshState() {
-        if(getContext() instanceof MainActivity)
-            ((MainActivity)getContext()).refreshState();
-        else{
-            ((BaseActivity)getContext()).setResult(Activity.RESULT_OK);
-            setiLikeable(iLikeable);
-        }
-    }
 
     private void refreshItems() {
         if(getContext() instanceof MainActivity)

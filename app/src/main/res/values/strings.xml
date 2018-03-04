@@ -513,5 +513,6 @@
     <string name="email">Email</string>
     <string name="text_hint_mobile_phone">Телефон</string>
     <string name="text_comment_to_you_request">Ваш комментарий к заявке</string>
+    <string name="text_need_select_city">Для поиска выберите город</string>
 
 </resources>

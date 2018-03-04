@@ -23,6 +23,7 @@ import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.SearchFragmentPackage;
+import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
@@ -138,11 +139,17 @@ public class SearchFragment extends BaseFragment implements SearchAllView
         presenter.setTabActive(TAB_RESTO);
         mLocationListener.requestCity(result -> {
             if(result!=null) {
-                List<FilterRestoField> list = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-                list.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(result.getId()));
-                list.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(result.getName()));
-                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, list);
-                refreshItemRestoFilters(FilterRestoField.CITY, list);
+                List<FilterRestoField> listResto = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
+                listResto.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(result.getId()));
+                listResto.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(result.getName()));
+                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, listResto);
+                refreshItemRestoFilters(FilterRestoField.CITY, listResto);
+
+                List<FilterBeerField> listBeer = Paper.book().read(SearchFragment.CATEGORY_LIST_BEER);
+                listBeer.get(FilterBeerField.CITY).setSelectedItemId(String.valueOf(result.getId()));
+                listBeer.get(FilterBeerField.CITY).setSelectedFilter(String.valueOf(result.getName()));
+                Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, listBeer);
+
             }
         });
 
@@ -231,8 +238,25 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     //region User Events
     @OnClick(R.id.accept_filter_layout)
     public void acceptFilter() {
+        int selectedTab=tabsView.getTabs().getSelectedTabPosition();
+        switch (selectedTab){
+            case TAB_RESTO: {
+                String filtrCity = restoFilterList.get(FilterRestoField.CITY).getSelectedItemId();
+                if (filtrCity == null) {
+                    mListener.showSnackbar(getString(R.string.text_need_select_city));
+                    return;
+                }
+            }break;
+            case TAB_BEER: {
+                String filtrCity = beerFilterList.get(FilterBeerField.CITY).getSelectedItemId();
+                if (filtrCity == null) {
+                    mListener.showSnackbar(getString(R.string.text_need_select_city));
+                    return;
+                }
+            }break;
+        }
         Intent intent = new Intent(getActivity(), ResultSearchActivity.class);
-        intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+        intent.putExtra(Actions.PARAM1,selectedTab);
         startActivity(intent);
     }
 
@@ -311,6 +335,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                             result=true;
                             break;
                         case FilterBeerField.DENSITY:
+                            result=true;
+                            break;
+                        case FilterBeerField.CITY:
                             result=true;
                             break;
                     }
@@ -541,6 +568,12 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                         Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
                         beerAdapter.notifyItemChanged(numberMenuItem);
                     }break;
+                    case FilterBeerField.CITY: {
+                        beerFilterList.get(numberMenuItem).setSelectedItemId(filterID);
+                        beerFilterList.get(numberMenuItem).setSelectedFilter(filterTXT);
+                        Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
+                        beerAdapter.notifyItemChanged(numberMenuItem);
+                    }break;
                     //endregion
                     default:
                         commonError(getString(R.string.not_valid_param));
@@ -583,6 +616,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
         void setTitle(CharSequence name);
         OnLocationInteractionListener getLocationListener();
         void processChangeFragment(int id);
+        void showSnackbar(String string);
     }
 
 }

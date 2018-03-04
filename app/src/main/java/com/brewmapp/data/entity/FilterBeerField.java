@@ -36,6 +36,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public static final int AFTER_TASTE = 12;
     public static final int BREWERY = 13;
     public static final int PRICE_BEER = 14;
+    public static final int CITY = 15;
 
     public static final int CODE_CLICK_FILTER_START_SELECTION = 0;
     public static final int CODE_CLICK_FILTER_CLEAR = 1;
@@ -136,6 +137,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
         out.add(new FilterBeerField(AFTER_TASTE));
         out.add(new FilterBeerField(BREWERY));
         out.add(new FilterBeerField(PRICE_BEER));
+        out.add(new FilterBeerField(CITY));
         return out;
     }
 
@@ -250,6 +252,13 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
                     selectedFilter = context.getString(R.string.search_beer_price_defailt);
                     selectedItemId=null;
                     break;
+                case CITY:
+                    icon = R.drawable.ic_city;
+                    title = context.getString(R.string.search_resto_city);
+                    if(selectedFilter==null)
+                        selectedFilter = context.getString(R.string.search_resto_city_default);
+                    break;
+
             }
 
     }

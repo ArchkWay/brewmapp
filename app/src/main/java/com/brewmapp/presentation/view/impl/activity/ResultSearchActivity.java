@@ -238,7 +238,6 @@ public class ResultSearchActivity extends BaseActivity implements
 
     }
 
-
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);

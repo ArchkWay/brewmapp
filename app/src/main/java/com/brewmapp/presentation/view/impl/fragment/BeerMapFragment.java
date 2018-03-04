@@ -111,8 +111,8 @@ public class BeerMapFragment extends BaseFragment implements
     private EndlessRecyclerOnScrollListener scrollListener;
     private ClusterManager<FilterRestoLocation> mClusterManager;
     private GeoPackage geoPackage=new GeoPackage();
-    private HashMap<String,FilterRestoLocation> hashMap=new HashMap<>();
-    private HashMap<String,String> hashMap2=new HashMap<>();
+    private HashMap<String,FilterRestoLocation> hmVisibleResto =new HashMap<>();
+    private HashMap<String,String> hmFoundResto =new HashMap<>();
     private LatLngBounds latLngBounds;
     private int cntRequestRestoFromUI =0;
     private InfoWindowMap viewInfoWindow =null;
@@ -290,15 +290,15 @@ public class BeerMapFragment extends BaseFragment implements
 
         for(FilterRestoLocation filterRestoLocation:restoLocations) {
             String key = filterRestoLocation.getRestoId();
-            if (!hashMap.containsKey(key)) {
-                if(hashMap2.size()>0) {
-                    if(hashMap2.containsKey(key)) {
+            if (!hmVisibleResto.containsKey(key)) {
+                if(hmFoundResto.size()>0) {
+                    if(hmFoundResto.containsKey(key)) {
                         mClusterManager.addItem(filterRestoLocation);
-                        hashMap.put(key, filterRestoLocation);
+                        hmVisibleResto.put(key, filterRestoLocation);
                     }
                 }else {
                     mClusterManager.addItem(filterRestoLocation);
-                    hashMap.put(key, filterRestoLocation);
+                    hmVisibleResto.put(key, filterRestoLocation);
                 }
             }
         }
@@ -364,8 +364,8 @@ public class BeerMapFragment extends BaseFragment implements
             boolean contain=latLngBounds.contains(new LatLng(filterRestoLocation.getLocationLat(),filterRestoLocation.getLocationLon()));
             if(!contain) {
                 String key = filterRestoLocation.getRestoId();
-                mClusterManager.getAlgorithm().removeItem(hashMap.get(key ));
-                hashMap.remove(key);
+                mClusterManager.getAlgorithm().removeItem(hmVisibleResto.get(key ));
+                hmVisibleResto.remove(key);
             }
         }
         //endregion
@@ -525,50 +525,64 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void showNewLocation() {
-        hashMap2.clear();
-        Location newLocation;
-        double delta;
+        hmFoundResto.clear();
+
+        //region Prepare LatLngBounds AUSTRALIA
+        LatLngBounds AUSTRALIA=null;
         if(restoLocations==null||restoLocations.size()==0) {
-            newLocation = userLocation;
-            delta=0.01;
+            Location newLocation = userLocation;
+            double delta=0.01;
+            AUSTRALIA = new LatLngBounds(
+                    new LatLng(
+                            newLocation.getLatitude()-delta,
+                            newLocation.getLongitude()-delta
+                    ),
+                    new LatLng(
+                            newLocation.getLatitude()+delta,
+                            newLocation.getLongitude()+delta
+                    )
+            );
         }else if(restoLocations.size()==1) {
-            newLocation = new Location("gps");
+            Location newLocation = new Location("gps");
             newLocation.setLatitude(restoLocations.get(0).getLocation_lat());
             newLocation.setLongitude(restoLocations.get(0).getLocation_lon());
-            delta=0.001;
+            double delta=0.001;
+            AUSTRALIA = new LatLngBounds(
+                    new LatLng(
+                            newLocation.getLatitude()-delta,
+                            newLocation.getLongitude()-delta
+                    ),
+                    new LatLng(
+                            newLocation.getLatitude()+delta,
+                            newLocation.getLongitude()+delta
+                    )
+            );
         }else {
-            double minLat=360;
-            double maxLat=0;
-            double minLon=360;
-            double maxLon=0;
-
+            this.googleMap.setMinZoomPreference(0.0f);
             for (RestoLocation restoLocation:restoLocations){
-                hashMap2.put(restoLocation.getResto_id(),restoLocation.getResto_id());
-                minLat=Math.min(minLat,restoLocation.getLocation_lat());
-                maxLat=Math.max(maxLat,restoLocation.getLocation_lat());
-
-                minLon=Math.min(minLon,restoLocation.getLocation_lon());
-                maxLon=Math.max(maxLon,restoLocation.getLocation_lon());
-
+                hmFoundResto.put(restoLocation.getResto_id(),restoLocation.getResto_id());
+                if(AUSTRALIA==null){
+                    AUSTRALIA=new LatLngBounds(
+                            new LatLng(
+                                    restoLocation.getLocation_lat(),
+                                    restoLocation.getLocation_lon()
+                            ),
+                            new LatLng(
+                                    restoLocation.getLocation_lat(),
+                                    restoLocation.getLocation_lon()
+                            )
+                    );
+                }else {
+                    AUSTRALIA=AUSTRALIA.including(
+                            new LatLng(
+                                    restoLocation.getLocation_lat(),
+                                    restoLocation.getLocation_lon()
+                            )
+                    );
+                }
             }
-            delta=(maxLat-minLat)/2;
-            newLocation = new Location("gps");
-            newLocation.setLatitude((minLat+maxLat)/2);
-            newLocation.setLongitude((minLon+maxLon)/2);
         }
-
-
-        LatLngBounds AUSTRALIA = new LatLngBounds(
-                new LatLng(
-                        newLocation.getLatitude()-delta,
-                        newLocation.getLongitude()
-                ),
-                new LatLng(
-                        newLocation.getLatitude()+delta,
-                        newLocation.getLongitude()
-                )
-        );
-
+        //endregion
 
         googleMap.animateCamera(
                 CameraUpdateFactory.newLatLngBounds(AUSTRALIA, 14)

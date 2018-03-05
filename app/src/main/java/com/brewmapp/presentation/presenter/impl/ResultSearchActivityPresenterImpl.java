@@ -14,6 +14,7 @@ import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.task.ApiBreweryTask;
+import com.brewmapp.execution.task.FilterBeerTask;
 import com.brewmapp.execution.task.FilterRestoTask;
 import com.brewmapp.execution.task.RestosSearchTask;
 import com.brewmapp.execution.task.SearchBeerTask;
@@ -37,6 +38,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
     private SearchBreweryTask loadBreweryTask;
     private ApiBreweryTask apiBreweryTask;
     private FilterRestoTask filterRestoTask;
+    private FilterBeerTask filterBeerTask;
 
 
     @Inject
@@ -44,13 +46,15 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
                                              SearchBeerTask loadBeerTask,
                                               SearchBreweryTask loadBreweryTask,
                                              ApiBreweryTask apiBreweryTask,
-                                              FilterRestoTask filterRestoTask
+                                              FilterRestoTask filterRestoTask,
+                                              FilterBeerTask filterBeerTask
                                               ) {
         this.loadRestosList = loadRestosList;
         this.loadBeerTask = loadBeerTask;
         this.loadBreweryTask = loadBreweryTask;
         this.apiBreweryTask = apiBreweryTask;
         this.filterRestoTask = filterRestoTask;
+        this.filterBeerTask = filterBeerTask;
 
 
     }
@@ -153,37 +157,6 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
                 view.hideProgressBar();
             }
         });
-
-//        loadBreweryTask.cancel();
-//        List<FilterBreweryField> fieldList = Paper.book().read("breweryCategoryList");
-//        BreweryPackage breweryPackage = new BreweryPackage();
-//        breweryPackage.setCountryId(fieldList.get(FilterBreweryField.COUNTRY).getSelectedItemId());
-//        breweryPackage.setBeerBrandId(fieldList.get(FilterBreweryField.BRAND).getSelectedItemId());
-//        breweryPackage.setBeerTypeId(fieldList.get(FilterBreweryField.TYPE_BEER).getSelectedItemId());
-//        breweryPackage.setPage(searchPackage.getPage());
-//        loadBreweryTask.execute(breweryPackage, new SimpleSubscriber<List<IFlexible>>() {
-//            @Override
-//            public void onError(Throwable e) {
-//                view.hideProgressBar();
-//                showError(e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(List<IFlexible> restoLocations) {
-//                view.hideProgressBar();
-//                if (restoLocations.size() == 0) {
-//                    view.showMessage("Не найдено ни одной пивоварни",0);
-//                } else {
-//                    view.appendItems(restoLocations);
-//                }
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                super.onComplete();
-//                view.hideProgressBar();
-//            }
-//        });
     }
 
     @Override
@@ -202,6 +175,26 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
                 super.onError(e);
                 view.commonError(e.getMessage());
             }
+        });
+    }
+
+    @Override
+    public void getLocationsBeer(FullSearchPackage searchPackage) {
+        FilterBeerPackage filterBeerPackage=new FilterBeerPackage();
+        filterBeerPackage.setBeerCity(searchPackage.getCity());
+        filterBeerTask.execute(filterBeerPackage,new SimpleSubscriber<List<FilterRestoLocation>>(){
+            @Override
+            public void onNext(List<FilterRestoLocation> filterRestoLocations) {
+                super.onNext(filterRestoLocations);
+                view.setRestoLocations(filterRestoLocations);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+
         });
     }
 }

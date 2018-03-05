@@ -15,7 +15,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface BeerMapView extends BasicView {
-    void showGeolocationResult(List<FilterRestoLocation> filterRestoLocations);
+    void addRestoToMap(List<FilterRestoLocation> filterRestoLocations);
     void showDialogProgressBar(boolean show);
     void showProgressBar();
     void hideProgressBar();

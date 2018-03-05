@@ -48,7 +48,6 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     private String title;
     private String selectedFilter;
     private boolean selected;
-    private boolean isDirty =true;
 
     public FilterBeerField(int id) {
         this.id = id;
@@ -87,8 +86,7 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     public void bindViewHolder(FlexibleAdapter adapter, ModelViewHolder<FilterBeerRowField> holder,
                                int position, List payloads) {
         holder.view.setListener(((FlexibleModelAdapter) adapter).getListener());
-        if(isDirty)
-            resetToDefault(holder.view.getContext());
+        resetToDefault(holder.view.getContext());
         holder.view.setModel(this);
 
     }
@@ -154,108 +152,106 @@ public class FilterBeerField extends AbstractFlexibleItem<ModelViewHolder<Filter
     }
 
     public void clearFilter() {
-        isDirty =true;
         setSelectedItemId(null);
     }
 
     private void resetToDefault(Context context) {
-        isDirty =false;
         if(context!=null)
             switch (id){
                 case NAME:
                     icon = R.drawable.ic_resto_name;
                     title = context.getString(R.string.search_beer_name);
-                    selectedFilter = context.getString(R.string.search_beer_name_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_name_defailt);
                     break;
                 case COUNTRY:
                     icon = R.drawable.ic_country;
                     title = context.getString(R.string.search_beer_country);
-                    selectedFilter = context.getString(R.string.search_beer_country_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_country_defailt);
                     break;
                 case TYPE:
                     icon = R.drawable.ic_beer_type;
                     title = context.getString(R.string.search_beer_type);
-                    selectedFilter = context.getString(R.string.search_beer_type_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_type_defailt);
                     break;
                 case BRAND:
                     icon = R.drawable.ic_brand;
                     title = context.getString(R.string.search_beer_brand);
-                    selectedFilter = context.getString(R.string.search_beer_brand_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_brand_defailt);
                     break;
                 case POWER:
                     icon = R.drawable.ic_power;
                     title = context.getString(R.string.search_beer_power);
-                    selectedFilter = context.getString(R.string.search_beer_power_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_power_defailt);
                     break;
                 case BEER_FILTER:
                     icon = R.drawable.ic_filter_beer;
                     title = context.getString(R.string.search_beer_filter);
-                    selectedFilter = context.getString(R.string.search_beer_filter_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_filter_defailt);
                     break;
                 case DENSITY:
                     icon = R.drawable.ic_broj;
                     title = context.getString(R.string.search_beer_type_broj);
-                    selectedFilter = context.getString(R.string.search_beer_type_broj_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_type_broj_defailt);
                     break;
                 case IBU:
                     icon = R.drawable.ic_beer_ibu;
                     title = context.getString(R.string.search_beer_ibu);
-                    selectedFilter = context.getString(R.string.search_beer_ibu_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_ibu_defailt);
                     break;
                 case BEER_PACK:
                     icon = R.drawable.ic_bottle_beer;
                     title = context.getString(R.string.search_beer_bootle);
-                    selectedFilter = context.getString(R.string.search_beer_bootle_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_bootle_defailt);
                     break;
                 case COLOR:
                     icon = R.drawable.ic_color_beer;
                     title = context.getString(R.string.search_beer_color);
-                    selectedFilter = context.getString(R.string.search_beer_color_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_color_defailt);
                     break;
                 case SMELL:
                     icon = R.drawable.ic_beer;
                     title = context.getString(R.string.search_beer_smell);
-                    selectedFilter = context.getString(R.string.search_beer_smell_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_smell_defailt);
                     break;
                 case TASTE:
                     icon = R.drawable.ic_taste;
                     title = context.getString(R.string.search_beer_taste);
-                    selectedFilter = context.getString(R.string.search_beer_taste_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_taste_defailt);
                     break;
                 case AFTER_TASTE:
                     icon = R.drawable.ic_beer_aftertaste;
                     title = context.getString(R.string.search_beer_after_taste);
-                    selectedFilter = context.getString(R.string.search_beer_after_taste_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_after_taste_defailt);
                     break;
                 case BREWERY:
                     icon = R.drawable.ic_brewery;
                     title = context.getString(R.string.search_beer_factory);
-                    selectedFilter = context.getString(R.string.search_beer_factory_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_factory_defailt);
                     break;
                 case PRICE_BEER:
                     icon = R.drawable.ic_price_range;
                     title = context.getString(R.string.search_beer_price);
-                    selectedFilter = context.getString(R.string.search_beer_price_defailt);
-                    selectedItemId=null;
+                    if(selectedItemId==null)
+                        selectedFilter = context.getString(R.string.search_beer_price_defailt);
                     break;
                 case CITY:
                     icon = R.drawable.ic_city;
                     title = context.getString(R.string.search_resto_city);
-                    if(selectedFilter==null)
+                    if(selectedItemId==null)
                         selectedFilter = context.getString(R.string.search_resto_city_default);
                     break;
 

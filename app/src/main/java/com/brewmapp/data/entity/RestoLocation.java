@@ -10,6 +10,8 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RestoLocation implements ICommonItem, Serializable {
 
@@ -20,6 +22,7 @@ public class RestoLocation implements ICommonItem, Serializable {
     private int metro_id;
     private String metro_name;
     private String resto_id;
+    private HashMap<String,String> beersId=new HashMap<>();
 
     @SerializedName(Keys.GET_THUMB)
     private String thumb;
@@ -118,5 +121,13 @@ public class RestoLocation implements ICommonItem, Serializable {
         location.setLatitude(getLocation_lat());
         location.setLongitude(getLocation_lon());
         return location;
+    }
+
+    public HashMap<String,String> getBeersId() {
+        return beersId;
+    }
+
+    public void setBeersId(HashMap<String,String> beersIs) {
+        this.beersId = beersIs;
     }
 }

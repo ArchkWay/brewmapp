@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -321,6 +323,17 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         if (view != null) {
             Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
             snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
+            snackbar.show();
+        }
+    }
+    public void showSnackbarRed(String text) {
+        View view = getWindow().getDecorView().findViewById(android.R.id.content);
+        if (view != null) {
+            Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
+            View viewSnackbar=snackbar.getView();
+            viewSnackbar.setBackgroundColor(ContextCompat.getColor(BaseActivity.this, android.R.color.holo_red_dark));
+            TextView tv = (TextView) viewSnackbar.findViewById(android.support.design.R.id.snackbar_text);
+            tv.setTypeface(null, Typeface.BOLD_ITALIC);
             snackbar.show();
         }
     }

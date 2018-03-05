@@ -58,20 +58,22 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     @Override
     public void setTabActive(int newTabActive) {
         ActiveTab=newTabActive;
+
+        if(!Paper.book().contains(SearchFragment.CATEGORY_LIST_RESTO))
+            Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO,FilterRestoField.createDefault());
+        if(!Paper.book().contains(SearchFragment.CATEGORY_LIST_BEER))
+            Paper.book().write(SearchFragment.CATEGORY_LIST_BEER,FilterBeerField.createDefault());
+        if(!Paper.book().contains(SearchFragment.CATEGORY_LIST_BREWERY))
+            Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY,FilterBreweryField.createDefault());
+
         switch (ActiveTab) {
             case SearchFragment.TAB_RESTO:
-                if(!Paper.book().contains(SearchFragment.CATEGORY_LIST_RESTO))
-                    Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO,FilterRestoField.createDefault());
                 view.showRestoFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO));
             break;
             case SearchFragment.TAB_BEER:
-                if(!Paper.book().contains(SearchFragment.CATEGORY_LIST_BEER))
-                    Paper.book().write(SearchFragment.CATEGORY_LIST_BEER,FilterBeerField.createDefault());
                 view.showBeerFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_BEER));
             break;
             case SearchFragment.TAB_BREWERY:
-                if(!Paper.book().contains(SearchFragment.CATEGORY_LIST_BREWERY))
-                    Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY,FilterBreweryField.createDefault());
                 view.showBreweryFilters(Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY));
             break;
         }

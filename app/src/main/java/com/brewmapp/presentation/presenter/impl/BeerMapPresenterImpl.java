@@ -1,30 +1,18 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import android.location.Location;
-import android.location.LocationManager;
-
-import com.brewmapp.data.entity.City;
-import com.brewmapp.data.entity.FilterBeerField;
-import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.entity.FilterRestoOnMap;
-import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
-import com.brewmapp.data.pojo.FilterBeerPackage;
-import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.RestoGeoPackage;
 import com.brewmapp.execution.task.FilterBeerTask;
 import com.brewmapp.execution.task.FilterRestoTask;
 import com.brewmapp.execution.task.LoadCityTask;
-import com.brewmapp.execution.task.LoadLocationTask;
 import com.brewmapp.execution.task.LoadRestoGeoTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
 import com.brewmapp.execution.task.SearchOnMapTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -90,7 +78,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
             @Override
             public void onNext(List<FilterRestoLocation> restoLocation) {
-                view.showGeolocationResult(restoLocation);
+                view.addRestoToMap(restoLocation);
             }
         });
     }
@@ -130,7 +118,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
                 while (infoIterator.hasNext())
                     arrayList.add(new FilterRestoLocation(infoIterator.next().getModel()));
-                view.showGeolocationResult(arrayList);
+                view.addRestoToMap(arrayList);
                 view.hideProgressBar();
             }
 

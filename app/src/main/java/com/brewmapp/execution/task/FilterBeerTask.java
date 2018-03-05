@@ -33,30 +33,33 @@ public class FilterBeerTask extends BaseNetworkTask<FilterBeerPackage, List<Filt
         return Observable.create(subscriber -> {
             try {
                 RequestParams params = new RequestParams();
-                params.addParam(FilterKeys.BEER_COUNTRY, beerPackage.getBeerCountries() != null ? beerPackage.getBeerCountries() : "");
-                params.addParam(FilterKeys.BEER_TYPES, beerPackage.getBeerTypes() != null ? beerPackage.getBeerTypes() : "");
-                params.addParam(FilterKeys.BEER_POWER, beerPackage.getBeerStrengthes() != null ? beerPackage.getBeerStrengthes() : "");
-                params.addParam(FilterKeys.BEER_VOLUMES, beerPackage.getBeerVolumes() != null ? beerPackage.getBeerVolumes() : "");
-                params.addParam(FilterKeys.BEER_BREWERIES, beerPackage.getBeerVolumes() != null ? beerPackage.getBeerVolumes() : "");
-                params.addParam(FilterKeys.CRAFT , beerPackage.getCraft());
-                params.addParam(FilterKeys.BEER_DENSITY, beerPackage.getBeerDensity() != null ? beerPackage.getBeerDensity() : "");
-                params.addParam(FilterKeys.BEER_FILTETRED , beerPackage.getBeerFiltered());
-                params.addParam(FilterKeys.BEER_DISCOUNT , beerPackage.getBeerDiscount());
-                params.addParam(FilterKeys.BEER_CITY, beerPackage.getBeerCity() != null ? beerPackage.getBeerCity() : "");
+//                params.addParam(FilterKeys.BEER_COUNTRY, beerPackage.getBeerCountries() != null ? beerPackage.getBeerCountries() : "");
+//                params.addParam(FilterKeys.BEER_TYPES, beerPackage.getBeerTypes() != null ? beerPackage.getBeerTypes() : "");
+//                params.addParam(FilterKeys.BEER_POWER, beerPackage.getBeerStrengthes() != null ? beerPackage.getBeerStrengthes() : "");
+//                params.addParam(FilterKeys.BEER_VOLUMES, beerPackage.getBeerVolumes() != null ? beerPackage.getBeerVolumes() : "");
+//                params.addParam(FilterKeys.BEER_BREWERIES, beerPackage.getBeerVolumes() != null ? beerPackage.getBeerVolumes() : "");
+//                params.addParam(FilterKeys.CRAFT , beerPackage.getCraft());
+//                params.addParam(FilterKeys.BEER_DENSITY, beerPackage.getBeerDensity() != null ? beerPackage.getBeerDensity() : "");
+//                params.addParam(FilterKeys.BEER_FILTETRED , beerPackage.getBeerFiltered());
+//                params.addParam(FilterKeys.BEER_DISCOUNT , beerPackage.getBeerDiscount());
+//                params.addParam(FilterKeys.BEER_CITY, beerPackage.getBeerCity() != null ? beerPackage.getBeerCity() : "");
+//
+//                params.addParam(FilterKeys.BEER_PACK, beerPackage.getBeerPacks() != null ? beerPackage.getBeerPacks() : "");
+//                params.addParam(FilterKeys.PRICE_BEER, beerPackage.getBeerAveragepriceRange() != null ? beerPackage.getBeerAveragepriceRange() : "");
+//                params.addParam(FilterKeys.BEER_EVALUATION_TYPE, beerPackage.getProductEvaluationType() != null ? beerPackage.getProductEvaluationType() : "");
+//                params.addParam(FilterKeys.BEER_COLOR , beerPackage.getBeerColors() != null ? beerPackage.getBeerColors() : "");
+//
+//                params.addParam(FilterKeys.BEER_POWER , beerPackage.getBeerColors() != null ? beerPackage.getBeerColors() : "");
+//                params.addParam(FilterKeys.BEER_SMELL , beerPackage.getBeerFragrances() != null ? beerPackage.getBeerFragrances() : "");
+//                params.addParam(FilterKeys.BEER_TASTE , beerPackage.getBeerTastes() != null ? beerPackage.getBeerTastes() : "");
+//
+//                params.addParam(FilterKeys.BEER_AFTER_TASTE , beerPackage.getBeerAftertastes() != null ? beerPackage.getBeerAftertastes() : "");
+//                params.addParam(Keys.COORD_START , beerPackage.getCoordStart() != null ? beerPackage.getCoordStart() : "");
+//                params.addParam(Keys.COORD_END , beerPackage.getCoordEnd() != null ? beerPackage.getCoordEnd() : "");
+//                params.addParam(FilterKeys.BEER_IBU , beerPackage.getBeerIBU() != null ? beerPackage.getBeerIBU() : "");
 
-                params.addParam(FilterKeys.BEER_PACK, beerPackage.getBeerPacks() != null ? beerPackage.getBeerPacks() : "");
-                params.addParam(FilterKeys.PRICE_BEER, beerPackage.getBeerAveragepriceRange() != null ? beerPackage.getBeerAveragepriceRange() : "");
-                params.addParam(FilterKeys.BEER_EVALUATION_TYPE, beerPackage.getProductEvaluationType() != null ? beerPackage.getProductEvaluationType() : "");
-                params.addParam(FilterKeys.BEER_COLOR , beerPackage.getBeerColors() != null ? beerPackage.getBeerColors() : "");
-
-                params.addParam(FilterKeys.BEER_POWER , beerPackage.getBeerColors() != null ? beerPackage.getBeerColors() : "");
-                params.addParam(FilterKeys.BEER_SMELL , beerPackage.getBeerFragrances() != null ? beerPackage.getBeerFragrances() : "");
-                params.addParam(FilterKeys.BEER_TASTE , beerPackage.getBeerTastes() != null ? beerPackage.getBeerTastes() : "");
-
-                params.addParam(FilterKeys.BEER_AFTER_TASTE , beerPackage.getBeerAftertastes() != null ? beerPackage.getBeerAftertastes() : "");
-                params.addParam(Keys.COORD_START , beerPackage.getCoordStart() != null ? beerPackage.getCoordStart() : "");
-                params.addParam(Keys.COORD_END , beerPackage.getCoordEnd() != null ? beerPackage.getCoordEnd() : "");
-                params.addParam(FilterKeys.BEER_IBU , beerPackage.getBeerIBU() != null ? beerPackage.getBeerIBU() : "");
+                if(beerPackage.getBeerCity() != null)
+                        params.addParam(FilterKeys.BEER_CITY,  beerPackage.getBeerCity());
 
                 ListResponse<FilterRestoLocation> response = executeCall(getApi().loadBeerLocation(params));
 

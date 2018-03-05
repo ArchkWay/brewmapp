@@ -12,4 +12,6 @@ public interface ResultSearchActivityPresenter extends LivePresenter<ResultSearc
     void loadBrewery(FullSearchPackage searchPackage);
 
     void getLocationsResto(FullSearchPackage searchPackage);
+
+    void getLocationsBeer(FullSearchPackage searchPackage);
 }

@@ -3,15 +3,12 @@ package com.brewmapp.presentation.view.impl.activity;
 import javax.inject.Inject;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,21 +19,17 @@ import android.widget.TextView;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.entity.Interest;
-import com.brewmapp.data.entity.Interest_info;
-import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.SearchBeer;
 import com.brewmapp.data.entity.wrapper.RestoInfo;
+import com.brewmapp.data.entity.wrapper.SearchBeerInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
 import com.brewmapp.presentation.view.contract.ResultSearchActivityView;
 
@@ -57,9 +50,8 @@ import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
-import static com.brewmapp.execution.exchange.request.base.Keys.RESTO_ID;
 
 public class ResultSearchActivity extends BaseActivity implements
         ResultSearchActivityView
@@ -74,6 +66,7 @@ public class ResultSearchActivity extends BaseActivity implements
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
     @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_search_progress)    RelativeLayout progress;
+    @BindView(R.id.progress_bar)    ProgressBar progressBar;
     //endregion
 
     //region Private
@@ -102,7 +95,17 @@ public class ResultSearchActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if(menu!=null) menu.clear();
         getMenuInflater().inflate(R.menu.map,menu);
-        menu.findItem(R.id.action_map).setVisible(listAdapter.size()!=0);
+        MenuItem menuItem=menu.findItem(R.id.action_map);
+        switch (selectedTab){
+            case SearchFragment.TAB_RESTO:
+            case SearchFragment.TAB_BEER:
+                menuItem.setVisible(listAdapter.size()!=0);
+                break;
+            case SearchFragment.TAB_BREWERY:
+                menuItem.setVisible(false);
+                break;
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -110,7 +113,17 @@ public class ResultSearchActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_map:
-                presenter.getLocationsResto(searchPackage);
+                progressBar.setVisibility(View.VISIBLE);
+                switch (selectedTab) {
+                    case SearchFragment.TAB_RESTO: {
+                        presenter.getLocationsResto(searchPackage);
+                    }
+                    break;
+                    case SearchFragment.TAB_BEER: {
+                        presenter.getLocationsBeer(searchPackage);
+                    }
+                }
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -187,6 +200,8 @@ public class ResultSearchActivity extends BaseActivity implements
                                 searchPackage.setAfterTaste(filterBeerField.getSelectedItemId());break;
                             case FilterBeerField.PRICE_BEER:
                                 searchPackage.setPrice(filterBeerField.getSelectedItemId());break;
+                            case FilterBeerField.CITY:
+                                searchPackage.setCity(filterBeerField.getSelectedItemId());break;
                         }
                     }
             }break;
@@ -241,7 +256,7 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        //region StartLoad
+        //region StartLoadResults
         searchPackage.setPage(0);
         loadResult(searchPackage);
         //endregion
@@ -270,29 +285,76 @@ public class ResultSearchActivity extends BaseActivity implements
 
     @Override
     public void setRestoLocations(List<FilterRestoLocation> filterRestoLocations) {
-        HashMap<String,FilterRestoLocation> hashMap=new HashMap<>();
-        for (FilterRestoLocation filterRestoLocation:filterRestoLocations)
-            hashMap.put(filterRestoLocation.getRestoId(),filterRestoLocation);
+        ArrayList<RestoLocation> arrayListResult=new ArrayList<>();
 
-        ArrayList arrayList=new ArrayList();
+        switch (selectedTab){
+            case SearchFragment.TAB_RESTO:{
+                //region Resto to Map
 
-        for (IFlexible iFlexible:listAdapter){
-            RestoInfo restoInfo= (RestoInfo) iFlexible;
-            FilterRestoLocation  filterRestoLocation=hashMap.get(String.valueOf(restoInfo.getModel().getId()));
-            if(filterRestoLocation!=null)
-                arrayList.add(
-                    new RestoLocation(
-                            filterRestoLocation.getRestoId(),
-                            Integer.valueOf(filterRestoLocation.getLocationId()),
-                            filterRestoLocation.getmName(),
-                            filterRestoLocation.getLocationLat(),
-                            filterRestoLocation.getLocationLon()
-                    )
-        );
+                HashMap<String,FilterRestoLocation> hashMap=new HashMap<>();
+                for (FilterRestoLocation filterRestoLocation:filterRestoLocations)
+                    hashMap.put(filterRestoLocation.getRestoId(),filterRestoLocation);
 
+                for (IFlexible iFlexible:listAdapter){
+                    RestoInfo restoInfo= (RestoInfo) iFlexible;
+                    FilterRestoLocation  filterRestoLocation=hashMap.get(String.valueOf(restoInfo.getModel().getId()));
+                    if(filterRestoLocation!=null)
+                        arrayListResult.add(
+                                new RestoLocation(
+                                        filterRestoLocation.getRestoId(),
+                                        Integer.valueOf(filterRestoLocation.getLocationId()),
+                                        filterRestoLocation.getmName(),
+                                        filterRestoLocation.getLocationLat(),
+                                        filterRestoLocation.getLocationLon()
+                                )
+                        );
+
+                }
+                Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,arrayListResult);
+                //endregion
+            }break;
+            case SearchFragment.TAB_BEER:{
+                //region Beer to Map
+                HashMap<String,RestoLocation> hmListResult=new HashMap<>();
+                HashMap<String,ArrayList<FilterRestoLocation>> hmBeerPourResto=new HashMap<>();
+                for (FilterRestoLocation filterRestoLocation:filterRestoLocations){
+                    String beerId=filterRestoLocation.getmBeerId();
+
+                    ArrayList<FilterRestoLocation> arrayList=hmBeerPourResto.get(beerId);
+                    if(arrayList==null) arrayList=new ArrayList<>();
+
+                    arrayList.add(filterRestoLocation);
+                    hmBeerPourResto.put(beerId,arrayList);
+                }
+
+                for (IFlexible iFlexible:listAdapter) {
+                    SearchBeerInfo beerInfo= (SearchBeerInfo) iFlexible;
+                    String beerId=beerInfo.getModel().getId();
+                    ArrayList<FilterRestoLocation> arrayListRestoLocation = hmBeerPourResto.get(beerId);
+                    if(arrayListRestoLocation !=null){
+                        for (FilterRestoLocation  filterRestoLocation:arrayListRestoLocation ){
+                            String keyResto=filterRestoLocation.getRestoId();
+                            RestoLocation restoLocation=hmListResult.get(keyResto);
+                            if(restoLocation==null) {
+                                restoLocation = new RestoLocation(
+                                        filterRestoLocation.getRestoId(),
+                                        0,
+                                        filterRestoLocation.getmName(),
+                                        filterRestoLocation.getLocationLat(),
+                                        filterRestoLocation.getLocationLon()
+                                );
+                            }
+                            restoLocation.getBeersId().put(beerId,beerId);
+                            hmListResult.put(keyResto,restoLocation );
+                        }
+                    }
+                }
+                arrayListResult.addAll(hmListResult.values());
+                Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,arrayListResult);
+                //endregion
+            }
         }
-
-        Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,arrayList);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -146,4 +149,5 @@ public class InfoWindowMap extends BaseLinearLayout {
             }
         });
     }
+
 }

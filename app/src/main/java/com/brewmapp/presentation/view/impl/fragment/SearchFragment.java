@@ -243,14 +243,14 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             case TAB_RESTO: {
                 String filtrCity = restoFilterList.get(FilterRestoField.CITY).getSelectedItemId();
                 if (filtrCity == null) {
-                    mListener.showSnackbar(getString(R.string.text_need_select_city));
+                    mListener.showSnackbarRed(getString(R.string.text_need_select_city));
                     return;
                 }
             }break;
             case TAB_BEER: {
                 String filtrCity = beerFilterList.get(FilterBeerField.CITY).getSelectedItemId();
                 if (filtrCity == null) {
-                    mListener.showSnackbar(getString(R.string.text_need_select_city));
+                    mListener.showSnackbarRed(getString(R.string.text_need_select_city));
                     return;
                 }
             }break;
@@ -617,6 +617,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView
         OnLocationInteractionListener getLocationListener();
         void processChangeFragment(int id);
         void showSnackbar(String string);
+
+        void showSnackbarRed(String string);
     }
 
 }

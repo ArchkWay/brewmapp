@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShowView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMapBeer;
 import com.brewmapp.utils.events.markerCluster.ClusterRender;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -112,7 +114,7 @@ public class BeerMapFragment extends BaseFragment implements
     private ClusterManager<FilterRestoLocation> mClusterManager;
     private GeoPackage geoPackage=new GeoPackage();
     private HashMap<String,FilterRestoLocation> hmVisibleResto =new HashMap<>();
-    private HashMap<String,String> hmFoundResto =new HashMap<>();
+    private HashMap<String,String> hmResultSearch =new HashMap<>();
     private LatLngBounds latLngBounds;
     private int cntRequestRestoFromUI =0;
     private InfoWindowMap viewInfoWindow =null;
@@ -122,6 +124,7 @@ public class BeerMapFragment extends BaseFragment implements
     private Location userLocation=null;
     private ArrayList arrayList=new ArrayList<>();
     private ArrayList<RestoLocation> restoLocations;
+    private HashMap<String,ArrayList<String>> hmBeersInResto =new HashMap<>();
 
 
     //endregion
@@ -286,32 +289,39 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     @Override
-    public void showGeolocationResult(List<FilterRestoLocation> restoLocations) {
+    public void addRestoToMap(List<FilterRestoLocation> restoLocations) {
 
+        //region addOnlyNewResto
         for(FilterRestoLocation filterRestoLocation:restoLocations) {
             String key = filterRestoLocation.getRestoId();
             if (!hmVisibleResto.containsKey(key)) {
-                if(hmFoundResto.size()>0) {
-                    if(hmFoundResto.containsKey(key)) {
+                if(hmResultSearch.size()>0) {
+                    //region addOnlyResultSearch
+                    if(hmResultSearch.containsKey(key)) {
                         mClusterManager.addItem(filterRestoLocation);
                         hmVisibleResto.put(key, filterRestoLocation);
                     }
+                    //endregion
                 }else {
+                    //region addAll
                     mClusterManager.addItem(filterRestoLocation);
                     hmVisibleResto.put(key, filterRestoLocation);
+                    //endregion
                 }
             }
         }
-        Log.i("MappMarkerSpeed","setMarker - End");
+        //endregion
+
         mClusterManager.cluster();
 
-
+        //region NextRequestOnlyAfterFinishPrevious
         if(cntRequestRestoFromUI >1){
             cntRequestRestoFromUI =0;
             onCameraIdle();
         }else if(cntRequestRestoFromUI ==1){
             cntRequestRestoFromUI =0;
         }
+        //endregion
     }
 
     //endregion
@@ -349,7 +359,7 @@ public class BeerMapFragment extends BaseFragment implements
 
         if(dialogShowView!=null) return;
 
-        //region NextRequestRestoOnlyAfterFinishPreviousRequest
+        //region NextRequestOnlyAfterFinishPrevious
         cntRequestRestoFromUI++;
         if(cntRequestRestoFromUI >1){
             cntRequestRestoFromUI++;
@@ -357,7 +367,7 @@ public class BeerMapFragment extends BaseFragment implements
         }
         //endregion
 
-        //region RemoveRestoOutOfSight
+        //region RemoveRestoFromVisibleRegion
         latLngBounds=googleMap.getProjection().getVisibleRegion().latLngBounds;
         Collection<FilterRestoLocation> oldRestoLocations=mClusterManager.getAlgorithm().getItems();
         for(FilterRestoLocation filterRestoLocation:oldRestoLocations){
@@ -372,7 +382,7 @@ public class BeerMapFragment extends BaseFragment implements
 
         mClusterManager.cluster();
 
-        //region RequestRestoWithinSight
+        //region RequestRestoInVisibleRegion
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;
         LatLng nearLeft = visibleRegion.nearLeft;
@@ -525,7 +535,7 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void showNewLocation() {
-        hmFoundResto.clear();
+        hmResultSearch.clear();
 
         //region Prepare LatLngBounds AUSTRALIA
         LatLngBounds AUSTRALIA=null;
@@ -560,7 +570,7 @@ public class BeerMapFragment extends BaseFragment implements
         }else {
             this.googleMap.setMinZoomPreference(0.0f);
             for (RestoLocation restoLocation:restoLocations){
-                hmFoundResto.put(restoLocation.getResto_id(),restoLocation.getResto_id());
+                hmResultSearch.put(restoLocation.getResto_id(),restoLocation.getResto_id());
                 if(AUSTRALIA==null){
                     AUSTRALIA=new LatLngBounds(
                             new LatLng(
@@ -590,13 +600,22 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private InfoWindowMap createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
-        InfoWindowMap view= (InfoWindowMap) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window, null);
+        LayoutInflater inflater= getActivity().getLayoutInflater();
+        InfoWindowMap view= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window, null);
         TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(filterRestoLocation.getmName());
         view.setOnClickListener(v -> Starter.RestoDetailActivity(getContext(), filterRestoLocation.getRestoId()));
+        String restoId=filterRestoLocation.getRestoId();
         if(userLocation!=null)
-            view.countDistanceResto(filterRestoLocation.getRestoId(),userLocation.getLatitude(),userLocation.getLongitude());
+            view.countDistanceResto(restoId,userLocation.getLatitude(),userLocation.getLongitude());
+        ArrayList<String> arrayListBeers= hmBeersInResto.get(restoId);
+        if(arrayListBeers!=null)
+            for (String s:arrayListBeers) {
+                InfoWindowMapBeer infoWindowMapBeer= (InfoWindowMapBeer) inflater.inflate(R.layout.layout_info_window_beer, null);
+                infoWindowMapBeer.setBeerId(s);
+                view.addView(infoWindowMapBeer);
+            }
         return view;
     }
 
@@ -632,6 +651,9 @@ public class BeerMapFragment extends BaseFragment implements
 
     public void setRestoLocations(ArrayList<RestoLocation> restoLocations) {
         this.restoLocations = restoLocations;
+        hmBeersInResto.clear();
+        for (RestoLocation restoLocation:restoLocations)
+            hmBeersInResto.put(restoLocation.getResto_id(),new ArrayList<>(restoLocation.getBeersId().values()));
     }
 
 

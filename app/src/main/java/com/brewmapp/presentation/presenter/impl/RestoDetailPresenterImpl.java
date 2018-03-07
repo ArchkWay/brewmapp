@@ -330,7 +330,8 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
     @Override
     public void startMapFragment(RestoDetailActivity restoDetailActivity) {
         RestoLocation restoLocation=new RestoLocation(
-                restoDetail.getResto().getId(),
+                String.valueOf(restoDetail.getResto().getId()),
+                0,
                 restoDetail.getResto().getName()==null?"":restoDetail.getResto().getName(),
                 restoDetail.getResto().getLocation().getLocation().getLat(),
                 restoDetail.getResto().getLocation().getLocation().getLon()

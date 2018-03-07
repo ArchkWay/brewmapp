@@ -125,6 +125,10 @@ public class BeerMapFragment extends BaseFragment implements
     private ArrayList arrayList=new ArrayList<>();
     private ArrayList<RestoLocation> restoLocations;
     private HashMap<String,ArrayList<String>> hmBeersInResto =new HashMap<>();
+    private final int MODE_SHOW_UNKNOW=0;
+    private final int MODE_SHOW_RESTO_BY_USER_LOCATION =1;
+    private final int MODE_SHOW_RESTO_BY_LIST_RESTO =3;
+    private int MODE;
 
 
     //endregion
@@ -291,22 +295,21 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public void addRestoToMap(List<FilterRestoLocation> restoLocations) {
 
-        //region addOnlyNewResto
+        //region changeVisibleResto
         for(FilterRestoLocation filterRestoLocation:restoLocations) {
             String key = filterRestoLocation.getRestoId();
             if (!hmVisibleResto.containsKey(key)) {
-                if(hmResultSearch.size()>0) {
-                    //region addOnlyResultSearch
-                    if(hmResultSearch.containsKey(key)) {
+                switch (MODE){
+                    case MODE_SHOW_RESTO_BY_USER_LOCATION: {
                         mClusterManager.addItem(filterRestoLocation);
                         hmVisibleResto.put(key, filterRestoLocation);
-                    }
-                    //endregion
-                }else {
-                    //region addAll
-                    mClusterManager.addItem(filterRestoLocation);
-                    hmVisibleResto.put(key, filterRestoLocation);
-                    //endregion
+                    }break;
+                    case MODE_SHOW_RESTO_BY_LIST_RESTO: {
+                        if(hmResultSearch.containsKey(key)) {
+                            mClusterManager.addItem(filterRestoLocation);
+                            hmVisibleResto.put(key, filterRestoLocation);
+                        }
+                    }break;
                 }
             }
         }
@@ -367,7 +370,7 @@ public class BeerMapFragment extends BaseFragment implements
         }
         //endregion
 
-        //region RemoveRestoFromVisibleRegion
+        //region RemoveInvisibleResto
         latLngBounds=googleMap.getProjection().getVisibleRegion().latLngBounds;
         Collection<FilterRestoLocation> oldRestoLocations=mClusterManager.getAlgorithm().getItems();
         for(FilterRestoLocation filterRestoLocation:oldRestoLocations){
@@ -409,11 +412,13 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void onMapLoaded() {
+        MODE =MODE_SHOW_UNKNOW;
         mLocationListener.requestLocation(location -> {
             userLocation=(location==null?mLocationListener.getDefaultLocation():location);
-            parseArguments();
+            parseArgumentsAndSetMode();
             showNewLocation();
         });
+
     }
 
     //endregion
@@ -422,7 +427,6 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public boolean onMyLocationButtonClick() {
         mLocationListener.refreshLocation();
-        setRestoLocations(null);
         showNewLocation();
         return true;
     }
@@ -539,59 +543,93 @@ public class BeerMapFragment extends BaseFragment implements
 
         //region Prepare LatLngBounds AUSTRALIA
         LatLngBounds AUSTRALIA=null;
-        if(restoLocations==null||restoLocations.size()==0) {
-            Location newLocation = userLocation;
-            double delta=0.01;
-            AUSTRALIA = new LatLngBounds(
-                    new LatLng(
-                            newLocation.getLatitude()-delta,
-                            newLocation.getLongitude()-delta
-                    ),
-                    new LatLng(
-                            newLocation.getLatitude()+delta,
-                            newLocation.getLongitude()+delta
-                    )
-            );
-        }else if(restoLocations.size()==1) {
-            Location newLocation = new Location("gps");
-            newLocation.setLatitude(restoLocations.get(0).getLocation_lat());
-            newLocation.setLongitude(restoLocations.get(0).getLocation_lon());
-            double delta=0.001;
-            AUSTRALIA = new LatLngBounds(
-                    new LatLng(
-                            newLocation.getLatitude()-delta,
-                            newLocation.getLongitude()-delta
-                    ),
-                    new LatLng(
-                            newLocation.getLatitude()+delta,
-                            newLocation.getLongitude()+delta
-                    )
-            );
-        }else {
-            this.googleMap.setMinZoomPreference(0.0f);
-            for (RestoLocation restoLocation:restoLocations){
-                hmResultSearch.put(restoLocation.getResto_id(),restoLocation.getResto_id());
-                if(AUSTRALIA==null){
-                    AUSTRALIA=new LatLngBounds(
-                            new LatLng(
-                                    restoLocation.getLocation_lat(),
-                                    restoLocation.getLocation_lon()
-                            ),
-                            new LatLng(
-                                    restoLocation.getLocation_lat(),
-                                    restoLocation.getLocation_lon()
-                            )
-                    );
-                }else {
-                    AUSTRALIA=AUSTRALIA.including(
-                            new LatLng(
-                                    restoLocation.getLocation_lat(),
-                                    restoLocation.getLocation_lon()
-                            )
-                    );
+        switch (MODE){
+            case MODE_SHOW_RESTO_BY_USER_LOCATION: {
+                Location newLocation = userLocation;
+                double delta=0.01;
+                AUSTRALIA = new LatLngBounds(
+                        new LatLng(
+                                newLocation.getLatitude()-delta,
+                                newLocation.getLongitude()-delta
+                        ),
+                        new LatLng(
+                                newLocation.getLatitude()+delta,
+                                newLocation.getLongitude()+delta
+                        )
+                );
+            }break;
+            case MODE_SHOW_RESTO_BY_LIST_RESTO:{
+                double delta=0;
+                if(restoLocations.size()==1)
+                    delta=0.001;
+                else
+                    this.googleMap.setMinZoomPreference(0.0f);
+
+                for (RestoLocation restoLocation:restoLocations){
+                    hmResultSearch.put(restoLocation.getResto_id(),restoLocation.getResto_id());
+                    if(AUSTRALIA==null){
+                        AUSTRALIA=new LatLngBounds(
+                                new LatLng(
+                                        restoLocation.getLocation_lat()-delta,
+                                        restoLocation.getLocation_lon()-delta
+                                ),
+                                new LatLng(
+                                        restoLocation.getLocation_lat()+delta,
+                                        restoLocation.getLocation_lon()+delta
+                                )
+                        );
+                    }else {
+                        AUSTRALIA=AUSTRALIA.including(
+                                new LatLng(
+                                        restoLocation.getLocation_lat(),
+                                        restoLocation.getLocation_lon()
+                                )
+                        );
+                    }
                 }
             }
         }
+//        if(restoLocations==null||restoLocations.size()==0) {
+//        }else if(restoLocations.size()==1) {
+//            Location newLocation = new Location("gps");
+//            newLocation.setLatitude(restoLocations.get(0).getLocation_lat());
+//            newLocation.setLongitude(restoLocations.get(0).getLocation_lon());
+//            double delta=0.001;
+//            AUSTRALIA = new LatLngBounds(
+//                    new LatLng(
+//                            newLocation.getLatitude()-delta,
+//                            newLocation.getLongitude()-delta
+//                    ),
+//                    new LatLng(
+//                            newLocation.getLatitude()+delta,
+//                            newLocation.getLongitude()+delta
+//                    )
+//            );
+//        }else {
+//            this.googleMap.setMinZoomPreference(0.0f);
+//            for (RestoLocation restoLocation:restoLocations){
+//                hmResultSearch.put(restoLocation.getResto_id(),restoLocation.getResto_id());
+//                if(AUSTRALIA==null){
+//                    AUSTRALIA=new LatLngBounds(
+//                            new LatLng(
+//                                    restoLocation.getLocation_lat(),
+//                                    restoLocation.getLocation_lon()
+//                            ),
+//                            new LatLng(
+//                                    restoLocation.getLocation_lat(),
+//                                    restoLocation.getLocation_lon()
+//                            )
+//                    );
+//                }else {
+//                    AUSTRALIA=AUSTRALIA.including(
+//                            new LatLng(
+//                                    restoLocation.getLocation_lat(),
+//                                    restoLocation.getLocation_lon()
+//                            )
+//                    );
+//                }
+//            }
+//        }
         //endregion
 
         googleMap.animateCamera(
@@ -645,16 +683,26 @@ public class BeerMapFragment extends BaseFragment implements
         marker=null;
     }
 
-    private void parseArguments() {
-        setRestoLocations((ArrayList<RestoLocation>) getArguments().getSerializable(Keys.LOCATION));
+    private void parseArgumentsAndSetMode() {
+
+        restoLocations=(ArrayList<RestoLocation>) getArguments().getSerializable(Keys.LOCATION);
+
+        if(restoLocations==null||restoLocations.size()==0){
+            MODE = MODE_SHOW_RESTO_BY_USER_LOCATION;
+        }else  {
+            MODE = MODE_SHOW_RESTO_BY_LIST_RESTO;
+        }
+
+
+        hmBeersInResto.clear();
+        switch (MODE){
+            case MODE_SHOW_RESTO_BY_LIST_RESTO:{
+                for (RestoLocation restoLocation:restoLocations)
+                    hmBeersInResto.put(restoLocation.getResto_id(),new ArrayList<>(restoLocation.getBeersId().values()));
+            }break;
+        }
     }
 
-    public void setRestoLocations(ArrayList<RestoLocation> restoLocations) {
-        this.restoLocations = restoLocations;
-        hmBeersInResto.clear();
-        for (RestoLocation restoLocation:restoLocations)
-            hmBeersInResto.put(restoLocation.getResto_id(),new ArrayList<>(restoLocation.getBeersId().values()));
-    }
 
 
     //endregion

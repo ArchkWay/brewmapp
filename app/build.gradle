@@ -9,15 +9,12 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'android-apt'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
-
-
-apply plugin: 'me.tatarka.retrolambda'
-
-apply plugin: 'android-apt'
 
 android {
     signingConfigs {
@@ -73,8 +70,6 @@ android {
             buildConfigField "String", "SERVER_API_VER", "\"1.03\""
             debuggable true
         }
-    }
-    productFlavors {
     }
 }
 

@@ -284,7 +284,7 @@ public class ResultSearchActivity extends BaseActivity implements
     }
 
     @Override
-    public void setRestoLocations(List<FilterRestoLocation> filterRestoLocations) {
+    public void setLocations(List<FilterRestoLocation> filterRestoLocations) {
         ArrayList<RestoLocation> arrayListResult=new ArrayList<>();
 
         switch (selectedTab){

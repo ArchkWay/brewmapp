@@ -616,7 +616,6 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
     //endregion
 
-
     //region Functions
 
     private void filterStringToHashMap() {

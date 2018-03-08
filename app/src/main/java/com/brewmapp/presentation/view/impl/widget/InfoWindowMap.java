@@ -130,9 +130,9 @@ public class InfoWindowMap extends BaseLinearLayout {
         });
     }
 
-    private void refreshInfoWindow() {
+    public void refreshInfoWindow() {
         if(marker!=null){
-            marker.hideInfoWindow();
+            //marker.hideInfoWindow();
             marker.showInfoWindow();
         }
     }

@@ -72,8 +72,8 @@ public class SearchBeerTask extends BaseNetworkTask<FullSearchPackage, List<IFle
                 if(fullSearchPackage.getFitredBeer()!=null)
                     params.addParam(FilterKeys.BEER_FILTETRED,fullSearchPackage.getFitredBeer());
 //                params.addParam(FilterKeys.BEER_DISCOUNT , beerPackage.getBeerDiscount());
-                //??????????????????????? нет в интерфейсе
-//                params.addParam(FilterKeys.BEER_CITY, beerPackage.getBeerCity() != null ? beerPackage.getBeerCity() : "");
+                if(fullSearchPackage.getCity()!=null)
+                    params.addParam(FilterKeys.BEER_CITY, fullSearchPackage.getCity());
                 //??????????????????????? нет в интерфейсе
 //                params.addParam(FilterKeys.BEER_VOLUMES, beerPackage.getBeerVolumes() != null ? beerPackage.getBeerVolumes() : "");                if(fullSearchPackage.getPack()!=null)
                 //??????????????????????? нет в интерфейсе

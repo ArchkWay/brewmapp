@@ -1,15 +1,8 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import android.content.Context;
-
 import javax.inject.Inject;
 
-import com.brewmapp.R;
-import com.brewmapp.data.entity.FilterBeerField;
-import com.brewmapp.data.entity.FilterBreweryField;
-import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.pojo.ApiBreweryPackage;
 import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -21,13 +14,11 @@ import com.brewmapp.execution.task.SearchBeerTask;
 import com.brewmapp.execution.task.SearchBreweryTask;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
-import io.paperdb.Paper;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
 import com.brewmapp.presentation.view.contract.ResultSearchActivityView;
-import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 
 import java.util.List;
 
@@ -167,7 +158,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             @Override
             public void onNext(List<FilterRestoLocation> filterRestoLocations) {
                 super.onNext(filterRestoLocations);
-                view.setRestoLocations(filterRestoLocations);
+                view.setLocations(filterRestoLocations);
             }
 
             @Override
@@ -186,7 +177,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             @Override
             public void onNext(List<FilterRestoLocation> filterRestoLocations) {
                 super.onNext(filterRestoLocations);
-                view.setRestoLocations(filterRestoLocations);
+                view.setLocations(filterRestoLocations);
             }
 
             @Override

@@ -2,7 +2,7 @@
 <com.brewmapp.presentation.view.impl.widget.InfoWindowMap xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_shadow"
+    android:minWidth="200dp"
     android:elevation="2dp"
     android:orientation="vertical"
     >

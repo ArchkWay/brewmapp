@@ -13,5 +13,5 @@ public interface ResultSearchActivityView extends BasicView {
     void appendItems(List<IFlexible> list);
     void commonError(String... strings);
 
-    void setRestoLocations(List<FilterRestoLocation> filterRestoLocations);
+    void setLocations(List<FilterRestoLocation> filterRestoLocations);
 }

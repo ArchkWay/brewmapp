@@ -31,6 +31,7 @@ import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
@@ -579,6 +580,11 @@ public class BeerMapFragment extends BaseFragment implements
                                 )
                         );
                     }else {
+                        if(
+                                Math.abs(AUSTRALIA.getCenter().latitude-restoLocation.getLocation_lat())<0.1
+                                &&
+                                Math.abs(AUSTRALIA.getCenter().longitude-restoLocation.getLocation_lon())<0.1
+                        )
                         AUSTRALIA=AUSTRALIA.including(
                                 new LatLng(
                                         restoLocation.getLocation_lat(),
@@ -589,48 +595,6 @@ public class BeerMapFragment extends BaseFragment implements
                 }
             }
         }
-//        if(restoLocations==null||restoLocations.size()==0) {
-//        }else if(restoLocations.size()==1) {
-//            Location newLocation = new Location("gps");
-//            newLocation.setLatitude(restoLocations.get(0).getLocation_lat());
-//            newLocation.setLongitude(restoLocations.get(0).getLocation_lon());
-//            double delta=0.001;
-//            AUSTRALIA = new LatLngBounds(
-//                    new LatLng(
-//                            newLocation.getLatitude()-delta,
-//                            newLocation.getLongitude()-delta
-//                    ),
-//                    new LatLng(
-//                            newLocation.getLatitude()+delta,
-//                            newLocation.getLongitude()+delta
-//                    )
-//            );
-//        }else {
-//            this.googleMap.setMinZoomPreference(0.0f);
-//            for (RestoLocation restoLocation:restoLocations){
-//                hmResultSearch.put(restoLocation.getResto_id(),restoLocation.getResto_id());
-//                if(AUSTRALIA==null){
-//                    AUSTRALIA=new LatLngBounds(
-//                            new LatLng(
-//                                    restoLocation.getLocation_lat(),
-//                                    restoLocation.getLocation_lon()
-//                            ),
-//                            new LatLng(
-//                                    restoLocation.getLocation_lat(),
-//                                    restoLocation.getLocation_lon()
-//                            )
-//                    );
-//                }else {
-//                    AUSTRALIA=AUSTRALIA.including(
-//                            new LatLng(
-//                                    restoLocation.getLocation_lat(),
-//                                    restoLocation.getLocation_lon()
-//                            )
-//                    );
-//                }
-//            }
-//        }
-        //endregion
 
         googleMap.animateCamera(
                 CameraUpdateFactory.newLatLngBounds(AUSTRALIA, 14)
@@ -639,7 +603,9 @@ public class BeerMapFragment extends BaseFragment implements
 
     private InfoWindowMap createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
         LayoutInflater inflater= getActivity().getLayoutInflater();
-        InfoWindowMap view= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window, null);
+
+        InfoWindowMap view= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window,null);
+
         TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(filterRestoLocation.getmName());

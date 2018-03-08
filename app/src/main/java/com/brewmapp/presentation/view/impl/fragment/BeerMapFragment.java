@@ -1,13 +1,19 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +23,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.AbsoluteLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,7 +39,6 @@ import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
@@ -46,6 +53,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -70,6 +78,8 @@ import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.tool.UITools;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 
 /**
@@ -118,7 +128,7 @@ public class BeerMapFragment extends BaseFragment implements
     private HashMap<String,String> hmResultSearch =new HashMap<>();
     private LatLngBounds latLngBounds;
     private int cntRequestRestoFromUI =0;
-    private InfoWindowMap viewInfoWindow =null;
+    private InfoWindowMap contentInfoWindow =null;
     private float maxZoomPref=18.0f;
     private float minZoomPref=12.0f;
     private DialogShowView dialogShowView;
@@ -131,6 +141,26 @@ public class BeerMapFragment extends BaseFragment implements
     private final int MODE_SHOW_RESTO_BY_LIST_RESTO =3;
     private int MODE;
 
+
+    //координаты отслеживаемой при прокрутке точки на карте
+    private LatLng trackedPosition;
+    //смещения всплывающего окна, позволяющее скорректировать его положение относительно маркера
+    private int popupXOffset;
+    private int popupYOffset;
+    //высота маркера
+    private int markerHeight;
+    //слушатель, который будет обновлять смещения при изменении размеров окна
+    private ViewTreeObserver.OnGlobalLayoutListener infoWindowLayoutListener;
+    //контейнер всплывающего окна
+    @BindView(R.id.container_popup)
+    LinearLayout infoWindowContainer;
+    //интервал обновления положения всплывающего окна.
+    //для плавности необходимо 60 fps, то есть 1000 ms / 60 = 16 ms между обновлениями.
+    private final int POPUP_POSITION_REFRESH_INTERVAL = 16;
+    //Handler, запускающий обновление окна с заданным интервалом
+    private Handler handler;
+    //Runnable, который обновляет положение окна
+    private Runnable positionUpdaterRunnable;
 
     //endregion
 
@@ -174,6 +204,15 @@ public class BeerMapFragment extends BaseFragment implements
         mapView.onCreate(null);
         mapView.getMapAsync(this);
 
+        infoWindowLayoutListener = new InfoWindowLayoutListener();
+        infoWindowContainer.getViewTreeObserver().addOnGlobalLayoutListener(infoWindowLayoutListener );
+        handler = new Handler(Looper.getMainLooper());
+        positionUpdaterRunnable = new PositionUpdaterRunnable();
+
+        //запускаем периодическое обновление
+        handler.post(positionUpdaterRunnable);
+        clearInfoWindow();
+
     }
 
     @Override
@@ -193,6 +232,9 @@ public class BeerMapFragment extends BaseFragment implements
         super.onDestroy();
         mapView.onDestroy();
         UITools.hideKeyboard(getActivity());
+        infoWindowContainer.getViewTreeObserver().removeGlobalOnLayoutListener(infoWindowLayoutListener );
+        handler.removeCallbacks(positionUpdaterRunnable);
+        handler = null;
     }
 
     @Override
@@ -283,14 +325,14 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void showProgressBar() {
-        finder.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        finder.findViewById(R.id.progressBar).setVisibility(VISIBLE);
         finder.findViewById(R.id.finder_cancel).setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgressBar() {
         finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
-        finder.findViewById(R.id.finder_cancel).setVisibility(View.VISIBLE);
+        finder.findViewById(R.id.finder_cancel).setVisibility(VISIBLE);
     }
 
     @Override
@@ -348,6 +390,7 @@ public class BeerMapFragment extends BaseFragment implements
         this.googleMap.setOnMyLocationButtonClickListener(this);
         this.googleMap.setOnMapClickListener(this);
         this.googleMap.setOnCameraIdleListener(this);
+
         if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }else {
@@ -397,8 +440,11 @@ public class BeerMapFragment extends BaseFragment implements
         presenter.loadRestoByLatLngBounds(geoPackage);
         //endregion
 
+        showInfoWindow();
+
 
     }
+
 
     @Override
     public View getInfoWindow(Marker marker) {
@@ -407,8 +453,18 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public View getInfoContents(Marker marker) {
-        viewInfoWindow.setMarker(marker);
-        return viewInfoWindow;
+
+        Projection projection = googleMap.getProjection();
+        trackedPosition = marker.getPosition();
+        Point trackedPoint = projection.toScreenLocation(trackedPosition);
+        trackedPoint.y -= popupYOffset / 2;
+        infoWindowContainer.removeAllViews();
+        if(contentInfoWindow !=null) {
+            contentInfoWindow.setMarker(marker);
+            infoWindowContainer.addView(contentInfoWindow);
+        }
+
+        return null;
     }
 
     @Override
@@ -422,6 +478,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     }
 
+
     //endregion
 
     //region Events User
@@ -434,6 +491,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public boolean onClusterClick(Cluster<FilterRestoLocation> cluster) {
+        clearInfoWindow();
         if(googleMap.getCameraPosition().zoom==maxZoomPref){
             ScrollView scrollView=new ScrollView(getContext());
             LinearLayout linearLayout=new LinearLayout(getContext());
@@ -448,7 +506,7 @@ public class BeerMapFragment extends BaseFragment implements
             dialogShowView=new DialogShowView();
             dialogShowView.setView(scrollView);
             dialogShowView.setCallBack(result -> clearDialog());
-            viewInfoWindow = createInfoWindowForListResto(cluster);
+            contentInfoWindow = createInfoWindowForListResto(cluster);
             return false;
         }else {
             googleMap.animateCamera(
@@ -465,7 +523,8 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public boolean onClusterItemClick(FilterRestoLocation filterRestoLocation) {
-        viewInfoWindow = createInfoWindowForOneResto(filterRestoLocation);
+        clearInfoWindow();
+        contentInfoWindow = createInfoWindowForOneResto(filterRestoLocation);
         return false;
     }
 
@@ -477,12 +536,13 @@ public class BeerMapFragment extends BaseFragment implements
         else
             dialogShowView.show(getActivity().getFragmentManager(),"dialog");
 
-        //marker.hideInfoWindow();
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
         clearDialog();
+        clearInfoWindow();
+
     }
 
     //endregion
@@ -536,7 +596,7 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void hideList(boolean hide) {
-        list.setVisibility(hide ? View.GONE : View.VISIBLE);
+        list.setVisibility(hide ? View.GONE : VISIBLE);
     }
 
     private void showNewLocation() {
@@ -581,9 +641,9 @@ public class BeerMapFragment extends BaseFragment implements
                         );
                     }else {
                         if(
-                                Math.abs(AUSTRALIA.getCenter().latitude-restoLocation.getLocation_lat())<0.1
+                                Math.abs(AUSTRALIA.getCenter().latitude-restoLocation.getLocation_lat())<0.05
                                 &&
-                                Math.abs(AUSTRALIA.getCenter().longitude-restoLocation.getLocation_lon())<0.1
+                                Math.abs(AUSTRALIA.getCenter().longitude-restoLocation.getLocation_lon())<0.05
                         )
                         AUSTRALIA=AUSTRALIA.including(
                                 new LatLng(
@@ -609,14 +669,13 @@ public class BeerMapFragment extends BaseFragment implements
         TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(filterRestoLocation.getmName());
-        view.setOnClickListener(v -> Starter.RestoDetailActivity(getContext(), filterRestoLocation.getRestoId()));
         String restoId=filterRestoLocation.getRestoId();
-        if(userLocation!=null)
-            view.countDistanceResto(restoId,userLocation.getLatitude(),userLocation.getLongitude());
+        view.setResto(restoId,userLocation.getLatitude(),userLocation.getLongitude());
         ArrayList<String> arrayListBeers= hmBeersInResto.get(restoId);
         if(arrayListBeers!=null)
             for (String s:arrayListBeers) {
                 InfoWindowMapBeer infoWindowMapBeer= (InfoWindowMapBeer) inflater.inflate(R.layout.layout_info_window_beer, null);
+                infoWindowMapBeer.setVisibility(View.GONE);
                 infoWindowMapBeer.setBeerId(s);
                 view.addView(infoWindowMapBeer);
             }
@@ -669,6 +728,36 @@ public class BeerMapFragment extends BaseFragment implements
         }
     }
 
+    private void clearInfoWindow() {
+        contentInfoWindow =null;
+        infoWindowContainer.setVisibility(INVISIBLE);
+    }
+
+    private void showInfoWindow() {
+        if(contentInfoWindow !=null&&infoWindowContainer.getVisibility()==INVISIBLE) {
+            infoWindowContainer.setVisibility(VISIBLE);
+            //region Animation appearance
+            ValueAnimator va = ValueAnimator.ofFloat(0, 1);
+            va.setDuration(500);
+            va.addUpdateListener(animation -> {
+                infoWindowContainer.setAlpha((Float) animation.getAnimatedValue());
+            });
+            va.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    for(int i=0;i<contentInfoWindow.getChildCount();i++){
+                        View view=contentInfoWindow.getChildAt(i);
+                        if(view instanceof InfoWindowMapBeer)
+                            ((InfoWindowMapBeer)view).showBeer(infoWindowContainer.getHeight());
+                    }
+                }
+            });
+            va.start();
+
+        }
+
+    }
 
 
     //endregion
@@ -680,4 +769,41 @@ public class BeerMapFragment extends BaseFragment implements
         void processChangeFragment(int id);
     }
 
+    private class InfoWindowLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {
+        @Override
+        public void onGlobalLayout() {
+            //размеры окна изменились, обновляем смещения
+            popupXOffset = infoWindowContainer.getWidth() / 2;
+            popupYOffset = infoWindowContainer.getHeight();
+        }
+    }
+
+    private class PositionUpdaterRunnable implements Runnable {
+        private int lastXPosition = Integer.MIN_VALUE;
+        private int lastYPosition = Integer.MIN_VALUE;
+
+        @Override
+        public void run() {
+            //помещаем в очередь следующий цикл обновления
+            handler.postDelayed(this, POPUP_POSITION_REFRESH_INTERVAL);
+
+            //если всплывающее окно скрыто, ничего не делаем
+            if (trackedPosition != null && infoWindowContainer.getVisibility() == VISIBLE && contentInfoWindow !=null) {
+                Point targetPosition = googleMap.getProjection().toScreenLocation(trackedPosition);
+
+                //если положение окна не изменилось, ничего не делаем
+                if (lastXPosition != targetPosition.x || lastYPosition != targetPosition.y) {
+                    //обновляем положение
+                    AbsoluteLayout.LayoutParams overlayLayoutParams = (AbsoluteLayout.LayoutParams) infoWindowContainer.getLayoutParams();
+                    overlayLayoutParams.x = targetPosition.x - popupXOffset;
+                    overlayLayoutParams.y = targetPosition.y;// - popupYOffset - markerHeight;
+                    infoWindowContainer.setLayoutParams(overlayLayoutParams);
+
+                    //запоминаем текущие координаты
+                    lastXPosition = targetPosition.x;
+                    lastYPosition = targetPosition.y;
+                }
+            }
+        }
+    }
 }

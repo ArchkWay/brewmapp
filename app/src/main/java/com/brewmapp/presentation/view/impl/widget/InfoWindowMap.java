@@ -1,11 +1,13 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
@@ -46,6 +49,7 @@ public class InfoWindowMap extends BaseLinearLayout {
 
     private Marker marker;
     private Target target;
+    private String resto_id;
 
     public InfoWindowMap(Context context) {
         super(context);
@@ -67,16 +71,32 @@ public class InfoWindowMap extends BaseLinearLayout {
     protected void prepareView() {
         ButterKnife.bind(this);
         BeerMap.getAppComponent().plus(new PresenterModule(this)).inject(this);
+
     }
 
-    public void countDistanceResto(String restoId, double locationLat, double locationLon){
-        getRestoDetail(restoId, locationLat, locationLon, new Callback<RestoDetail>() {
+
+    public void setResto(String restoId, double locationLat, double locationLon){
+        this.resto_id=restoId;
+        post(new Runnable() {
             @Override
-            public void onResult(RestoDetail restoDetail) {
-                setDistance(restoDetail);
-                setLogo(restoDetail);
+            public void run() {
+                //region User Events
+                setOnClickListener(v -> Starter.RestoDetailActivity(getContext(), resto_id));
+                //endregion
+
+                //region Request Resto
+                getRestoDetail(restoId, locationLat, locationLon, new Callback<RestoDetail>() {
+                    @Override
+                    public void onResult(RestoDetail restoDetail) {
+                        setDistance(restoDetail);
+                        setLogo(restoDetail);
+                    }
+                });
+                //endregion
+
             }
         });
+
     }
 
     private void setLogo(RestoDetail restoDetail) {
@@ -87,7 +107,6 @@ public class InfoWindowMap extends BaseLinearLayout {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         img_resto_logo.setImageBitmap(bitmap);
-                        refreshInfoWindow();
                     }
 
                     @Override
@@ -112,7 +131,6 @@ public class InfoWindowMap extends BaseLinearLayout {
     private void setDistance(RestoDetail restoDetail) {
         try {
             city.setText(restoDetail.getDistance().getFormatedDistance());
-            refreshInfoWindow();
         }catch (Exception e){}
     }
 
@@ -128,13 +146,6 @@ public class InfoWindowMap extends BaseLinearLayout {
                 callback.onResult(restoDetail);
             }
         });
-    }
-
-    public void refreshInfoWindow() {
-        if(marker!=null){
-            //marker.hideInfoWindow();
-            marker.showInfoWindow();
-        }
     }
 
     public void setMarker(Marker marker) {

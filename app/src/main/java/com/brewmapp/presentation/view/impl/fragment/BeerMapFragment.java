@@ -97,6 +97,7 @@ public class BeerMapFragment extends BaseFragment implements
                                                             GoogleMap.OnMapClickListener,
                                                             GoogleMap.OnMapLoadedCallback
 
+
 {
 
     //region BIND
@@ -140,6 +141,7 @@ public class BeerMapFragment extends BaseFragment implements
     private final int MODE_SHOW_RESTO_BY_USER_LOCATION =1;
     private final int MODE_SHOW_RESTO_BY_LIST_RESTO =3;
     private int MODE;
+    private boolean clickedClaster=false;
 
 
     //координаты отслеживаемой при прокрутке точки на карте
@@ -402,17 +404,6 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void onCameraIdle() {
-        Log.i("MappMarkerSpeed","onCameraIdle");
-
-        if(dialogShowView!=null) return;
-
-        //region NextRequestOnlyAfterFinishPrevious
-        cntRequestRestoFromUI++;
-        if(cntRequestRestoFromUI >1){
-            cntRequestRestoFromUI++;
-            return;
-        }
-        //endregion
 
         //region RemoveInvisibleResto
         latLngBounds=googleMap.getProjection().getVisibleRegion().latLngBounds;
@@ -429,26 +420,20 @@ public class BeerMapFragment extends BaseFragment implements
 
         mClusterManager.cluster();
 
-        //region RequestRestoInVisibleRegion
-        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
-        LatLng farRight = visibleRegion.farRight;
-        LatLng nearLeft = visibleRegion.nearLeft;
-        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.004, nearLeft.longitude-0.004);
-        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.004, farRight.longitude+0.004);
-        geoPackage.setCoordStart(coordStart);
-        geoPackage.setCoordEnd(coordEnd);
-        presenter.loadRestoByLatLngBounds(geoPackage);
-        //endregion
-
-        showInfoWindow();
+        if(isNeedShowInfoWindow())
+            showInfoWindow();
+        if(clickedClaster)
+            clickedClaster=false;
+        else
+            requestResto();
 
 
     }
 
-
     @Override
     public View getInfoWindow(Marker marker) {
         return null;
+
     }
 
     @Override
@@ -507,6 +492,7 @@ public class BeerMapFragment extends BaseFragment implements
             dialogShowView.setView(scrollView);
             dialogShowView.setCallBack(result -> clearDialog());
             contentInfoWindow = createInfoWindowForListResto(cluster);
+            clickedClaster=true;
             return false;
         }else {
             googleMap.animateCamera(
@@ -531,11 +517,6 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public void onInfoWindowClick(Marker marker) {
         this.marker=marker;
-        if(dialogShowView==null)
-            Starter.RestoDetailActivity(getContext(),marker.getSnippet());
-        else
-            dialogShowView.show(getActivity().getFragmentManager(),"dialog");
-
     }
 
     @Override
@@ -687,7 +668,7 @@ public class BeerMapFragment extends BaseFragment implements
         TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(getString(R.string.select_resto,String.valueOf(cluster.getItems().size())));
-        view.setOnClickListener(v -> clearDialog());
+        view.setOnClickListener(v -> dialogShowView.show(getActivity().getFragmentManager(),"dialog"));
         if(userLocation!=null)
             if(cluster.getItems().size()>0)
                 view.countDistanceCluster(cluster.getItems().iterator().next().getRestoId(),userLocation.getLatitude(),userLocation.getLongitude());
@@ -734,9 +715,8 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void showInfoWindow() {
-        if(contentInfoWindow !=null&&infoWindowContainer.getVisibility()==INVISIBLE) {
+        //if(infoWindowContainer.getVisibility()==INVISIBLE) {
             infoWindowContainer.setVisibility(VISIBLE);
-            //region Animation appearance
             ValueAnimator va = ValueAnimator.ofFloat(0, 1);
             va.setDuration(500);
             va.addUpdateListener(animation -> {
@@ -754,9 +734,31 @@ public class BeerMapFragment extends BaseFragment implements
                 }
             });
             va.start();
+        //}
+    }
 
+    private boolean isNeedShowInfoWindow(){
+        return contentInfoWindow !=null;
+    }
+
+    private void requestResto() {
+
+        //region NextRequestOnlyAfterFinishPrevious
+        cntRequestRestoFromUI++;
+        if(cntRequestRestoFromUI >1){
+            cntRequestRestoFromUI++;
+            return;
         }
+        //endregion
 
+        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
+        LatLng farRight = visibleRegion.farRight;
+        LatLng nearLeft = visibleRegion.nearLeft;
+        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.004 , nearLeft.longitude-0.004 );
+        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.004 , farRight.longitude+0.004);
+        geoPackage.setCoordStart(coordStart);
+        geoPackage.setCoordEnd(coordEnd);
+        presenter.loadRestoByLatLngBounds(geoPackage);
     }
 
 
@@ -788,7 +790,7 @@ public class BeerMapFragment extends BaseFragment implements
             handler.postDelayed(this, POPUP_POSITION_REFRESH_INTERVAL);
 
             //если всплывающее окно скрыто, ничего не делаем
-            if (trackedPosition != null && infoWindowContainer.getVisibility() == VISIBLE && contentInfoWindow !=null) {
+            if (trackedPosition != null && infoWindowContainer.getVisibility() == VISIBLE ) {
                 Point targetPosition = googleMap.getProjection().toScreenLocation(trackedPosition);
 
                 //если положение окна не изменилось, ничего не делаем

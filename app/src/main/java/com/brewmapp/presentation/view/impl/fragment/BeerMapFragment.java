@@ -751,6 +751,7 @@ public class BeerMapFragment extends BaseFragment implements
         }
         //endregion
 
+
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;
         LatLng nearLeft = visibleRegion.nearLeft;

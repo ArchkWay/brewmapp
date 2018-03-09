@@ -715,7 +715,7 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void showInfoWindow() {
-        //if(infoWindowContainer.getVisibility()==INVISIBLE) {
+        if(infoWindowContainer.getVisibility()==INVISIBLE) {
             infoWindowContainer.setVisibility(VISIBLE);
             ValueAnimator va = ValueAnimator.ofFloat(0, 1);
             va.setDuration(500);
@@ -734,7 +734,7 @@ public class BeerMapFragment extends BaseFragment implements
                 }
             });
             va.start();
-        //}
+        }
     }
 
     private boolean isNeedShowInfoWindow(){

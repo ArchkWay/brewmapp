@@ -34,13 +34,13 @@ public class ClusterRender extends DefaultClusterRenderer<FilterRestoLocation> {
 //        markerOptions.title(item.getTitle());
 //        super.onBeforeClusterItemRendered(item, markerOptions);
 //    }
-
-
-    @Override
-    protected void onBeforeClusterRendered(Cluster<FilterRestoLocation> cluster, MarkerOptions markerOptions) {
-        super.onBeforeClusterRendered(cluster, markerOptions);
-
-    }
-
+//
+//
+//    @Override
+//    protected void onBeforeClusterRendered(Cluster<FilterRestoLocation> cluster, MarkerOptions markerOptions) {
+//        super.onBeforeClusterRendered(cluster, markerOptions);
+//
+//    }
+//
 
 }

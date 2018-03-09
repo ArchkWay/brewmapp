@@ -1,10 +1,12 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.Menu;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
 import com.brewmapp.data.pojo.LoadProductPackage;
 import com.brewmapp.execution.task.LoadProductTask;
@@ -51,6 +54,7 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
 
     private Target target;
     private String beer_id;
+    private List<Menu> menu;
 
     public InfoWindowMapBeer(Context context) {
         super(context);
@@ -164,8 +168,61 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
                     getLayoutParams().height = value.intValue();
                     requestLayout();
                 });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showPrice();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
                 va.start();
                 //endregion
 
+    }
+
+    public void setMenu(List<Menu> menu) {
+        this.menu = menu;
+        showPrice();
+    }
+
+    private void showPrice() {
+        if(textViewPrice.getHeight()==0&&menu!=null) {
+            try {
+                for (Menu menuItem : menu) {
+                    if (menuItem.getBeer_id().equals(beer_id)) {
+                        textViewPrice.setText(menuItem.getPrice());
+                        String[] capacity= getContext().getResources().getStringArray(R.array.resto_menu_capacity);
+                        try {
+                            textViewPrice.setText(textViewPrice.getText()+ Html.fromHtml(" &#x20bd").toString() +" / "+capacity[Integer.valueOf(menuItem.getResto_menu_capacity_id())]);
+                        }catch (Exception e){}
+                        ValueAnimator va = ValueAnimator.ofInt(0, textView.getHeight());
+                        va.setDuration(500);
+                        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                textViewPrice.setVisibility(VISIBLE);
+                                textViewPrice.setHeight((Integer) animation.getAnimatedValue());
+                            }
+                        });
+                        va.start();
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
     }
 }

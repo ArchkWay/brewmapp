@@ -17,7 +17,8 @@
             android:layout_height="42dp"
             android:layout_marginLeft="2dp"
             android:layout_marginStart="2dp"
-            android:src="@drawable/ic_default_resto" />
+            android:src="@drawable/ic_default_resto"
+            android:layout_gravity="center_vertical"/>
 
         <LinearLayout
             android:id="@+id/lyt_info"
@@ -44,23 +45,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
+                android:id="@+id/layout.city"
                 >
 
                 <ImageView
                     android:id="@+id/img_location"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/ic_location_icon" />
+                    android:src="@drawable/ic_location_icon"
+                    android:layout_marginRight="5dp"/>
 
                 <TextView
                     android:id="@+id/city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/vk_black"
                     android:text="@string/text_view_value_not_found"/>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:id="@+id/layout.metro"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_metro"
+                    android:layout_marginRight="5dp"/>
+
+                <TextView
+                    android:id="@+id/metro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_value_not_found"/>
+
+            </LinearLayout>
         </LinearLayout>
 
         <TextView

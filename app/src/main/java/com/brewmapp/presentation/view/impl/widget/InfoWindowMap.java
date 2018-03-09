@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,9 +10,11 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
@@ -41,8 +45,14 @@ public class InfoWindowMap extends BaseLinearLayout {
 
     @BindView(R.id.city)
     TextView city;
+    @BindView(R.id.metro)
+    TextView metro;
     @BindView(R.id.img_resto_logo)
     ImageView img_resto_logo;
+    @BindView(R.id.layout_metro)
+    View layout_metro;
+    @BindView(R.id.layout_city)
+    View layout_city;
 
     @Inject
     LoadRestoDetailTask loadRestoDetailTask;
@@ -130,8 +140,67 @@ public class InfoWindowMap extends BaseLinearLayout {
 
     private void setDistance(RestoDetail restoDetail) {
         try {
-            city.setText(restoDetail.getDistance().getFormatedDistance());
+            city.setText(restoDetail.getResto().getLocation().getCity_id());
         }catch (Exception e){}
+
+        try {
+            city.setText(city.getText()+" "+restoDetail.getDistance().getFormatedDistance());
+        }catch (Exception e){}
+
+        try {
+            metro.setText(restoDetail.getResto().getLocation().getMetro().getName());
+
+            layout_metro.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    layout_metro.setVisibility(VISIBLE);
+                    layout_metro.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    ValueAnimator va = ValueAnimator.ofInt(0, layout_city.getHeight());
+                    va.setDuration(500);
+                    va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            Integer value = (Integer) animation.getAnimatedValue();
+                            layout_metro.getLayoutParams().height = value.intValue();
+                            layout_metro.requestLayout();
+
+                        }
+                    });
+                    va.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            for(int i=0;i<getChildCount();i++){
+                                View view=getChildAt(i);
+                                if(view instanceof InfoWindowMapBeer){
+                                    ((InfoWindowMapBeer) view).setMenu(restoDetail.getMenu());
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+                    va.start();
+                }
+            });
+        }catch (Exception e){
+            layout_metro.setVisibility(GONE);
+        }
+
+
     }
 
     private void getRestoDetail(String restoId, double locationLat, double locationLon, Callback<RestoDetail> callback) {

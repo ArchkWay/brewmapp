@@ -31,7 +31,8 @@
                 android:ellipsize="end"
                 android:layout_weight="1"
                 android:text="@string/text_view_value_not_found"
-                />
+                android:textColor="@color/vk_black"
+                android:textStyle="italic"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

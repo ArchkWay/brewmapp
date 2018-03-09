@@ -8,6 +8,33 @@
         <item>Не замужем</item>
         <item>Замужем</item>
     </string-array>
+    <string-array name="resto_menu_capacity">
+        <item>0 мл</item>
+        <item>250 мл</item>
+        <item>330 мл</item>
+        <item>500 мл</item>
+        <item>1000 мл</item>
+        <item>650 мл</item>
+        <item>750 мл</item>
+        <item>400 мл</item>
+        <item>800 мл</item>
+        <item>568 мл</item>
+        <item>300 мл</item>
+        <item>700 мл</item>
+        <item>355 мл</item>
+        <item>3500 мл</item>
+        <item>375 мл</item>
+        <item>450 мл</item>
+        <item>355 мл</item>
+        <item>1500 мл</item>
+        <item>280 мл</item>
+        <item>550 мл</item>
+        <item>3000 мл</item>
+        <item>335 мл</item>
+        <item>640 мл</item>
+        <item>440 мл</item>
+
+    </string-array>
     <array name="username_colors">
         <item>@color/username0</item>
         <item>@color/username1</item>

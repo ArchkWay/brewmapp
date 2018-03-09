@@ -77,6 +77,7 @@ public class ResultSearchActivity extends BaseActivity implements
     private ProgressDialog dialog;
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private List<IFlexible> listAdapter=new ArrayList<>();
+    private boolean clickGoMap=false;
     //endregion
 
     //region Inject
@@ -99,7 +100,7 @@ public class ResultSearchActivity extends BaseActivity implements
         switch (selectedTab){
             case SearchFragment.TAB_RESTO:
             case SearchFragment.TAB_BEER:
-                menuItem.setVisible(listAdapter.size()!=0);
+                menuItem.setVisible(listAdapter.size()!=0&&!clickGoMap);
                 break;
             case SearchFragment.TAB_BREWERY:
                 menuItem.setVisible(false);
@@ -114,6 +115,8 @@ public class ResultSearchActivity extends BaseActivity implements
         switch (item.getItemId()){
             case R.id.action_map:
                 progressBar.setVisibility(View.VISIBLE);
+                clickGoMap=true;
+                invalidateOptionsMenu();
                 switch (selectedTab) {
                     case SearchFragment.TAB_RESTO: {
                         presenter.getLocationsResto(searchPackage);
@@ -271,6 +274,13 @@ public class ResultSearchActivity extends BaseActivity implements
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        invalidateOptionsMenu();
+    }
+
     //endregion
 
     //region Impl ResultSearchActivityView
@@ -355,6 +365,7 @@ public class ResultSearchActivity extends BaseActivity implements
             }
         }
         progressBar.setVisibility(View.GONE);
+        clickGoMap=false;
     }
 
     @Override

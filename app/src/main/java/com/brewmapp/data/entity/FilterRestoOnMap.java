@@ -21,6 +21,19 @@ public class FilterRestoOnMap {
     @SerializedName("resto_id")
     private String mRestoId;
 
+    public FilterRestoOnMap(FilterRestoLocation next) {
+        mLocationId=next.getLocationId();
+        mLocationLat=String.valueOf(next.getLocationLat());
+        mLocationLon=String.valueOf(next.getLocationLon());
+        mName=next.getmName();
+        mNameEn=next.getmNameEn();
+        mRestoId=next.getRestoId();
+    }
+
+    public FilterRestoOnMap() {
+
+    }
+
     public String getLocationId() {
         return mLocationId;
     }

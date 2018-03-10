@@ -23,6 +23,11 @@ import ru.frosteye.ovsa.stub.impl.SimpleTextWatcher;
 public class FinderView extends BaseFrameLayout {
 
     @BindView(R.id.finder_cancel) View cancel;
+
+    public AutoCompleteTextView getInput() {
+        return input;
+    }
+
     @BindView(R.id.view_finder_input)  AutoCompleteTextView input;
 
     private String hintString;
@@ -85,8 +90,7 @@ public class FinderView extends BaseFrameLayout {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN
                         && event.getKeyCode() ==       KeyEvent.KEYCODE_ENTER) {
-                    InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    hideInputKeyboard();
                     return true;
                 }
                 return false;
@@ -94,6 +98,12 @@ public class FinderView extends BaseFrameLayout {
         });
         input.requestFocus();
         cancel.setOnClickListener(v -> input.setText(null));
+    }
+
+    public void hideInputKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+
     }
 
     public void setListener(Listener listener) {
@@ -109,5 +119,6 @@ public class FinderView extends BaseFrameLayout {
     public void clearFocus() {
         super.clearFocus();
         input.clearFocus();
+        hideInputKeyboard();
     }
 }

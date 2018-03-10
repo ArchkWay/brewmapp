@@ -18,12 +18,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsoluteLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -36,6 +38,7 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.FilterRestoOnMap;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.RestoLocation;
+import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -95,7 +98,9 @@ public class BeerMapFragment extends BaseFragment implements
                                                             ClusterManager.OnClusterItemClickListener<FilterRestoLocation>,
                                                             GoogleMap.OnMyLocationButtonClickListener,
                                                             GoogleMap.OnMapClickListener,
-                                                            GoogleMap.OnMapLoadedCallback
+                                                            GoogleMap.OnMapLoadedCallback,
+                                                            View.OnKeyListener,
+                                                            View.OnFocusChangeListener
 
 
 {
@@ -196,12 +201,22 @@ public class BeerMapFragment extends BaseFragment implements
                 startQuery();
             }
         };
-        list.addOnScrollListener(scrollListener);
+        //list.addOnScrollListener(scrollListener);
 
         adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
-        finder.setListener(this::prepareQuery);
+        //finder.setListener(this::prepareQuery);
+        finder.setListener(new FinderView.Listener() {
+            @Override
+            public void onTextChanged(String string) {
+                adapter.setSearchText(string);
+                adapter.filterItems(arrayList);
+            }
+        });
         finder.clearFocus();
+        finder.getInput().setOnFocusChangeListener(this);
+        finder.getInput().setOnKeyListener(this);
+
 
         mapView.onCreate(null);
         mapView.getMapAsync(this);
@@ -221,6 +236,7 @@ public class BeerMapFragment extends BaseFragment implements
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        getView().setOnKeyListener(null);
     }
 
     @Override
@@ -228,6 +244,7 @@ public class BeerMapFragment extends BaseFragment implements
         super.onResume();
         mapView.onResume();
     }
+
 
     @Override
     public void onDestroy() {
@@ -310,7 +327,6 @@ public class BeerMapFragment extends BaseFragment implements
         int oldSize=arrayList.size();
         arrayList.addAll(restoList);
         adapter.notifyItemRangeChanged(oldSize,restoList.size());
-        hideList(false);
     }
 
     @Override
@@ -360,7 +376,18 @@ public class BeerMapFragment extends BaseFragment implements
         }
         //endregion
 
+
         mClusterManager.cluster();
+
+        arrayList.clear();
+        Iterator<FilterRestoLocation> iterator=hmVisibleResto.values().iterator();
+        while (iterator.hasNext())
+            arrayList.add(new FilterRestoLocationInfo(new FilterRestoOnMap(iterator.next())));
+        adapter.notifyDataSetChanged();
+        adapter.filterItems(arrayList);
+
+
+
 
         //region NextRequestOnlyAfterFinishPrevious
         if(cntRequestRestoFromUI >1){
@@ -469,6 +496,7 @@ public class BeerMapFragment extends BaseFragment implements
     //region Events User
     @Override
     public boolean onMyLocationButtonClick() {
+        finder.clearFocus();
         mLocationListener.refreshLocation();
         showNewLocation();
         return true;
@@ -476,6 +504,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public boolean onClusterClick(Cluster<FilterRestoLocation> cluster) {
+        finder.clearFocus();
         clearInfoWindow();
         if(googleMap.getCameraPosition().zoom==maxZoomPref){
             ScrollView scrollView=new ScrollView(getContext());
@@ -509,6 +538,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public boolean onClusterItemClick(FilterRestoLocation filterRestoLocation) {
+        finder.clearFocus();
         clearInfoWindow();
         contentInfoWindow = createInfoWindowForOneResto(filterRestoLocation);
         return false;
@@ -521,11 +551,34 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void onMapClick(LatLng latLng) {
+        finder.clearFocus();
         clearDialog();
         clearInfoWindow();
 
     }
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+            if(finder.getInput().isFocusable()) {
+                finder.clearFocus();
+                return true;
+            }
+        }else if(event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER){
+            finder.hideInputKeyboard();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()){
+            case R.id.view_finder_input:
+                    hideList(!hasFocus);
+                break;
+        }
+    }
     //endregion
 
     //region Functions
@@ -558,14 +611,14 @@ public class BeerMapFragment extends BaseFragment implements
     private void processAction(int action, Object payload) {
         UITools.hideKeyboard(getActivity());
         FilterRestoOnMap filterOnMapResto = (FilterRestoOnMap) payload;
-        resetFinder();
+        finder.clearFocus();
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(
                 new LatLng(Double.valueOf(filterOnMapResto.getLocationLat()), Double.valueOf(filterOnMapResto.getLocationLon())))
-                , 2000, new GoogleMap.CancelableCallback() {
+                , 500, new GoogleMap.CancelableCallback() {
                     @Override
                     public void onFinish() {
-                        googleMap.animateCamera(CameraUpdateFactory.zoomBy(maxZoomPref),2000,null);
+                        googleMap.animateCamera(CameraUpdateFactory.zoomBy(maxZoomPref),500,null);
                     }
 
                     @Override
@@ -604,8 +657,6 @@ public class BeerMapFragment extends BaseFragment implements
                 double delta=0;
                 if(restoLocations.size()==1)
                     delta=0.001;
-                else
-                    this.googleMap.setMinZoomPreference(0.0f);
 
                 for (RestoLocation restoLocation:restoLocations){
                     hmResultSearch.put(restoLocation.getResto_id(),restoLocation.getResto_id());
@@ -755,13 +806,12 @@ public class BeerMapFragment extends BaseFragment implements
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;
         LatLng nearLeft = visibleRegion.nearLeft;
-        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.004 , nearLeft.longitude-0.004 );
-        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.004 , farRight.longitude+0.004);
+        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.003 , nearLeft.longitude-0.003 );
+        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.003 , farRight.longitude+0.003);
         geoPackage.setCoordStart(coordStart);
         geoPackage.setCoordEnd(coordEnd);
         presenter.loadRestoByLatLngBounds(geoPackage);
     }
-
 
     //endregion
 

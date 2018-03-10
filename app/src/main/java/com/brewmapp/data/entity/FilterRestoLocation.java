@@ -10,9 +10,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 import com.google.maps.android.clustering.ClusterItem;
 
+import eu.davidea.flexibleadapter.items.IFilterable;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class FilterRestoLocation implements ClusterItem {
+public class FilterRestoLocation implements ClusterItem{
 
     @SerializedName("location_id")
     private String mLocationId;
@@ -124,4 +126,5 @@ public class FilterRestoLocation implements ClusterItem {
     public Location getLocation() {
         return new Location(getLocationLat(),getLocationLon());
     }
+
 }

@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
@@ -343,6 +344,10 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<EvaluationResto>> getRestoEvaluation(@FieldMap WrapperParams params);
 
+    @POST("/api/resto/restoevaluation")
+    @FormUrlEncoded
+    Call<ListResponse<EvaluationResto>> getRestoEvaluationByToken(@Header("token") String tok, @FieldMap WrapperParams params);
+
     @POST("/api/resto/restoaveragevalue")
     @FormUrlEncoded
     Call<ListResponse<AverageEvaluation>> getRestoAverageEvaluation(@FieldMap WrapperParams params);
@@ -540,6 +545,9 @@ public interface Api {
             @Query(Keys.LIMIT_START) int start,
             @Query(Keys.LIMIT_END) int end,
             @FieldMap RequestParams params);
-    //Call<ListResponse<Brewery>>  apiBrewery(@FieldMap RequestParams params);
+
+    @POST("/api/reviews/approval")
+    @FormUrlEncoded
+    Call<Object>  addReviewsApproval(@FieldMap RequestParams params);
 
 }

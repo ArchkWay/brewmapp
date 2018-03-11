@@ -39,6 +39,7 @@
     <color name="dark_black">#6f000000</color>
     <color name="white">#ffffff</color>
     <color name="white_transparent">#80ffffff</color>
+    <color name="evaluation">#f8a700</color>
 
     <color name="username0">#e21400</color>
     <color name="username1">#91580f</color>
@@ -53,5 +54,6 @@
     <color name="username10">#a700ff</color>
     <color name="username11">#d300e7</color>
     <color name="input_dialog_title_color" >@color/colorButtonRed</color>
+
 
 </resources>

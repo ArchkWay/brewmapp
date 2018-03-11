@@ -93,6 +93,7 @@ import static com.brewmapp.BuildConfig.SERVER_API_VER;
 
 public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
 
+    private boolean tokenOff=false;
 
     @Inject
     public RestClient(@ApiUrl String baseUrl,
@@ -159,5 +160,22 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
     @Override
     public Class<Api> apiClass() {
         return Api.class;
+    }
+
+    @Override
+    protected String getToken() {
+        String token=null;
+        if(tokenOff) {
+            tokenOff=false;
+        }else {
+            token=super.getToken();
+        }
+
+        return token;
+    }
+
+    @Override
+    public void setTokenOffTemporarily() {
+        tokenOff=true;
     }
 }

@@ -6,4 +6,6 @@ package com.brewmapp.execution.exchange.common;
 
 public interface ApiClient {
     Api getApi();
+
+    void setTokenOffTemporarily();
 }

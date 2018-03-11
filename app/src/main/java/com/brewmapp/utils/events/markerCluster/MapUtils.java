@@ -17,6 +17,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -116,5 +119,19 @@ public class MapUtils {
         Starter.InfoAboutCrashSendToServer("Locale en - not found!!!", "MapUtils");
 
         return null;
+    }
+
+    public static String FormatDate(String timestamp) {
+        String formatedData="Дата отсутствует";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = format.parse(timestamp);
+            formatedData=android.text.format.DateFormat.format("dd MMMM yyyy в hh:mm", date).toString();
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return formatedData;
     }
 }

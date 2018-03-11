@@ -145,4 +145,5 @@
         <item name="android:textSize">@dimen/text_size_common_bigger</item>
     </style>
 
+
 </resources>

@@ -8,9 +8,14 @@ public class EvaluationPackage {
     private String model_id;
     private String ealuation_type;
     private String ealuation_value;
+    private String token;
 
     public EvaluationPackage(String ealuation_type){
         setEaluation_type(ealuation_type);
+    }
+
+    public EvaluationPackage() {
+
     }
 
     public String getEaluation_type() {
@@ -35,5 +40,13 @@ public class EvaluationPackage {
 
     public void setModel_id(String model_id) {
         this.model_id = model_id;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

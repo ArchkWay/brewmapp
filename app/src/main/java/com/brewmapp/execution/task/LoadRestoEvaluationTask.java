@@ -3,6 +3,7 @@ package com.brewmapp.execution.task;
 import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.pojo.EvaluationPackage;
 import com.brewmapp.execution.exchange.common.Api;
+import com.brewmapp.execution.exchange.common.ApiClient;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
@@ -22,10 +23,12 @@ import ru.frosteye.ovsa.execution.executor.MainThread;
  */
 
 public class LoadRestoEvaluationTask extends BaseNetworkTask<EvaluationPackage, List<EvaluationResto>> {
+    private ApiClient apiClient;
 
     @Inject
-    public LoadRestoEvaluationTask(MainThread mainThread, Executor executor, Api api) {
+    public LoadRestoEvaluationTask(MainThread mainThread, Executor executor, Api api, ApiClient apiClient) {
         super(mainThread, executor, api);
+        this.apiClient = apiClient;
     }
 
     @Override
@@ -35,7 +38,17 @@ public class LoadRestoEvaluationTask extends BaseNetworkTask<EvaluationPackage, 
                 WrapperParams params=new WrapperParams(Wrappers.RESTO_EVALUATION);
                 if(evaluationPackage.getModel_id()!=null)
                     params.addParam(Keys.RESTO_ID, evaluationPackage.getModel_id());
-                ListResponse<EvaluationResto> listResponse= executeCall(getApi().getRestoEvaluation(params));
+
+                ListResponse<EvaluationResto> listResponse;
+                if(evaluationPackage.getToken()==null)
+                    listResponse= executeCall(getApi().getRestoEvaluation(params));
+                else {
+                    apiClient.setTokenOffTemporarily();
+                    listResponse = executeCall(getApi().getRestoEvaluationByToken(
+                            evaluationPackage.getToken(),
+                            params));
+                }
+
                 subscriber.onNext(listResponse.getModels());
                 subscriber.onComplete();
             } catch (Exception e) {

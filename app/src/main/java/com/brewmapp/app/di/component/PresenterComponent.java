@@ -60,9 +60,12 @@ import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
+import com.brewmapp.presentation.view.impl.widget.ButtonReviewYesNo;
+import com.brewmapp.presentation.view.impl.widget.ImageButtonReviewMore;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMapBeer;
 import com.brewmapp.presentation.view.impl.widget.ItemEvaluationView;
+import com.brewmapp.presentation.view.impl.widget.ReviewView;
 import com.brewmapp.presentation.view.impl.widget.ShareLikeView;
 
 @PresenterScope
@@ -129,4 +132,7 @@ public interface PresenterComponent {
     void inject(BreweryDetailsActivity breweryDetailsActivity);
     void inject(InfoWindowMap infoWindowMap);
     void inject(InfoWindowMapBeer infoWindowMapBeer);
+    void inject(ReviewView reviewView);
+    void inject(ImageButtonReviewMore imageButtonReviewMore);
+    void inject(ButtonReviewYesNo buttonReviewYesNo);
 }

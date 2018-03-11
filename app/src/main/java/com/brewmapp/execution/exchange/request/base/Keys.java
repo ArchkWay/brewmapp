@@ -202,4 +202,5 @@ public class Keys {
     public static final String CAP_BREWERY ="Brewery";
     public static final String CoordStart="coordStart";
     public static final String CoordEnd="coordEnd";
+    public static final String CAP_REVIEW = "Review";
 }

@@ -4,16 +4,12 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_margin="@dimen/common_block_space_double_semi"
     >
-        <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBlockSplitterBorder"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_block_space_double_semi"
             android:id="@+id/view.review.container"
             >
             <com.makeramen.roundedimageview.RoundedImageView
@@ -42,24 +38,191 @@
                         style="@style/AppTheme.Text.Georgia.BoldItalic"
                         android:text="@string/text_view_value_not_found"
                         />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/widget.review.beer_linear_layout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
-                        android:id="@+id/view.review.date"
-                        android:textColor="@color/colorProfileCounter"
-                        android:textSize="@dimen/text_size_common" />
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:orientation="horizontal">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:id="@+id/widget.review.view.interior_linear_layout"
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_interior"
+                                android:lines="1"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/widget.review.interior"
+                                android:text="@string/text_view_value_not_found"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/evaluation"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:id="@+id/widget.review..service_linear_layout"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_service"
+                                android:lines="1"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/widget.review.service"
+                                android:text="@string/text_view_value_not_found"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/evaluation"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/common_block_space"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_quality_beer"
+                                android:lines="1"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                />
+                            <TextView
+                                android:id="@+id/widget.review.quality.beer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_value_not_found"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/evaluation"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/widget.review.effect_linear_layout"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_common_effect"
+                                android:lines="1"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                />
+                            <TextView
+                                android:id="@+id/widget.review.common.effect"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_view_value_not_found"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:textColor="@color/evaluation"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view.review.text"
-        style="@style/AppTheme.Paragraph"
-        android:layout_marginLeft="@dimen/common_block_space_double_semi"
-        android:layout_marginRight="@dimen/common_block_space_double_semi"
-        android:layout_marginBottom="@dimen/common_block_space" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view.review.text"
+            style="@style/AppTheme.Paragraph"
+            android:text="@string/text_view_value_not_found"
+            android:layout_marginBottom="5dp"
+        />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view.review.date"
+                    android:text="@string/text_view_value_not_found"
+                    android:layout_weight="1"
+                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+                    <com.brewmapp.presentation.view.impl.widget.ImageButtonReviewMore
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_post_more"
+                        android:background="@drawable/selector_post_button"
+                        android:padding="10sp"
+                        android:id="@+id/view.review.more"
+                        />
+                    <com.brewmapp.presentation.view.impl.widget.ButtonReviewYesNo
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:text="@string/yes"
+                        android:background="@drawable/selector_post_button_green"
+                        android:id="@+id/view.review.yes"
+                        android:textColor="#58dc00"
+                        />
+                    <com.brewmapp.presentation.view.impl.widget.ButtonReviewYesNo
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:text="@string/no"
+                        android:background="@drawable/selector_post_button_red"
+                        android:id="@+id/view.review.no"
+                        android:textColor="#b0dc0000"
+                        />
+                </LinearLayout>
+        </LinearLayout>
 
 </com.brewmapp.presentation.view.impl.widget.ReviewView>

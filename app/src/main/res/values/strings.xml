@@ -331,7 +331,7 @@
     <string name="text_view_replay_users">Отзывы пользователей</string>
     <string name="text_view_while_empty_review">Пока отзывов нет, \n оставте свой отзыв первым ;)</string>
     <string name="text_view_while_empty_evaluation">Пока оценок нет, \n поставьте оценку первым ;)</string>
-    <string name="button_text_write_review">Написать отзыв</string>
+    <string name="button_text_write_review"><u>Оставить отзыв</u></string>
     <string name="title_activity_add_review">Добавить отзыв</string>
     <string name="text_view_your_review">Вaш отзыв</string>
     <string name="text_edit_hint_your_review">Введите техт отзыва</string>

@@ -45,9 +45,12 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
     @BindView(R.id.widget_review_common_effect) TextView common_effect;
     @BindView(R.id.widget_review_service) TextView service;
     @BindView(R.id.widget_review_beer_linear_layout)    View linear_layout;
-    @BindView(R.id.view_review_more)    ImageButtonReviewMore more;
-    @BindView(R.id.view_review_yes)    ButtonReviewYesNo yes;
-    @BindView(R.id.view_review_no)    ButtonReviewYesNo no;
+    @BindView(R.id.view_review_more)
+    ReviewMoreImageButton more;
+    @BindView(R.id.view_review_yes)
+    ReviewYesNoButton yes;
+    @BindView(R.id.view_review_no)
+    ReviewYesNoButton no;
 
     @Inject
     LoadRestoEvaluationTask loadRestoEvaluationTask;

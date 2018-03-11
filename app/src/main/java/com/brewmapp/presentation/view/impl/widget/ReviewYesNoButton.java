@@ -21,7 +21,7 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
  * Created by Kras on 11.03.2018.
  */
 
-public class ButtonReviewYesNo extends android.support.v7.widget.AppCompatButton implements View.OnClickListener{
+public class ReviewYesNoButton extends android.support.v7.widget.AppCompatButton implements View.OnClickListener{
     private Review review;
 
     @Inject AddReviewsApprovalTask addReviewsApprovalTask;
@@ -29,15 +29,15 @@ public class ButtonReviewYesNo extends android.support.v7.widget.AppCompatButton
     private int POSITIVE_REVIEW = 1;
     private int NEGATIVE_REVIEW = 0;
 
-    public ButtonReviewYesNo(Context context) {
+    public ReviewYesNoButton(Context context) {
         super(context);
     }
 
-    public ButtonReviewYesNo(Context context, AttributeSet attrs) {
+    public ReviewYesNoButton(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ButtonReviewYesNo(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ReviewYesNoButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

@@ -198,7 +198,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     >
-                    <com.brewmapp.presentation.view.impl.widget.ImageButtonReviewMore
+                    <com.brewmapp.presentation.view.impl.widget.ReviewMoreImageButton
                         android:layout_width="60dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_post_more"
@@ -206,7 +206,7 @@
                         android:padding="10sp"
                         android:id="@+id/view.review.more"
                         />
-                    <com.brewmapp.presentation.view.impl.widget.ButtonReviewYesNo
+                    <com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton
                         android:layout_width="60dp"
                         android:layout_height="40dp"
                         android:text="@string/yes"
@@ -214,7 +214,7 @@
                         android:id="@+id/view.review.yes"
                         android:textColor="#58dc00"
                         />
-                    <com.brewmapp.presentation.view.impl.widget.ButtonReviewYesNo
+                    <com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton
                         android:layout_width="60dp"
                         android:layout_height="40dp"
                         android:text="@string/no"

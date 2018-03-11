@@ -1,12 +1,16 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.FilterRestoOnMap;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
+import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.RestoGeoPackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.FilterBeerTask;
 import com.brewmapp.execution.task.FilterRestoTask;
+import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadRestoGeoTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
@@ -40,6 +44,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     private FilterRestoTask filterRestoTask;
     private FilterBeerTask filterBeerTask;
     private SearchOnMapTask searchOnMapTask;
+    private FullSearchFilterTask fullSearchFilterTask;
     private LoadRestoGeoTask loadRestoGeoTask;
 
     @Inject
@@ -48,7 +53,8 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
                                 FilterRestoTask filterRestoTask,
                                 FilterBeerTask filterBeerTask,
                                 SearchOnMapTask searchOnMapTask,
-                                LoadRestoGeoTask loadRestoGeoTask) {
+                                LoadRestoGeoTask loadRestoGeoTask,
+                                FullSearchFilterTask fullSearchFilterTask) {
 
         this.loadRestoLocationTask = loadRestoLocationTask;
         this.loadCityTask = loadCityTask;
@@ -56,6 +62,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         this.filterBeerTask = filterBeerTask;
         this.searchOnMapTask = searchOnMapTask;
         this.loadRestoGeoTask = loadRestoGeoTask;
+        this.fullSearchFilterTask = fullSearchFilterTask;
     }
 
     @Override
@@ -85,20 +92,48 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
 
     @Override
     public void sendQueryRestoSearch(FullSearchPackage fullSearchPackage) {
-        searchOnMapTask.cancel();
-        searchOnMapTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
+        fullSearchFilterTask.cancel();
+        fullSearchPackage.setType(Keys.TYPE_RESTO);
+        fullSearchFilterTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
                 view.hideProgressBar();
-                view.appendItems(iFlexibles);
+
+                ArrayList<IFlexible> arrayList=new ArrayList<>();
+
+                Iterator<IFlexible> iterator=iFlexibles.iterator();
+                while (iterator.hasNext()) {
+                    RestoInfo restoInfo= (RestoInfo) iterator.next();
+                    arrayList.add(new FilterRestoLocationInfo(new FilterRestoOnMap(restoInfo.getModel())));
+                }
+
+                view.appendItems(arrayList);
             }
+
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
                 view.hideProgressBar();
-                view.showMessage(e.getMessage(),0);
             }
         });
+
+
+
+//        searchOnMapTask.cancel();
+//        searchOnMapTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
+//            @Override
+//            public void onNext(List<IFlexible> iFlexibles) {
+//                view.hideProgressBar();
+//                view.appendItems(iFlexibles);
+//            }
+//            @Override
+//            public void onError(Throwable e) {
+//                super.onError(e);
+//                view.hideProgressBar();
+//                view.showMessage(e.getMessage(),0);
+//            }
+//        });
     }
 
     @Override

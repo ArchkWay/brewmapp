@@ -34,6 +34,16 @@ public class FilterRestoOnMap {
 
     }
 
+    public FilterRestoOnMap(Resto model) {
+        setName(model.getName());
+        setRestoId(String.valueOf(model.getId()));
+        try {
+            setLocationLat(String.valueOf(model.getLocation().getLocation().getLat()));
+            setLocationLat(String.valueOf(model.getLocation().getLocation().getLon()));
+        }catch (Exception e){}
+
+    }
+
     public String getLocationId() {
         return mLocationId;
     }

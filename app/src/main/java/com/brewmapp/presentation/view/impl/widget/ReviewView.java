@@ -45,12 +45,10 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
     @BindView(R.id.widget_review_common_effect) TextView common_effect;
     @BindView(R.id.widget_review_service) TextView service;
     @BindView(R.id.widget_review_beer_linear_layout)    View linear_layout;
-    @BindView(R.id.view_review_more)
-    ReviewMoreImageButton more;
-    @BindView(R.id.view_review_yes)
-    ReviewYesNoButton yes;
-    @BindView(R.id.view_review_no)
-    ReviewYesNoButton no;
+    @BindView(R.id.view_review_more) ReviewMoreImageButton more;
+    @BindView(R.id.view_review_plus_minus)    TextView plus_minus;
+    @BindView(R.id.view_review_yes)    ReviewYesNoButton yes;
+    @BindView(R.id.view_review_no)    ReviewYesNoButton no;
 
     @Inject
     LoadRestoEvaluationTask loadRestoEvaluationTask;
@@ -79,6 +77,13 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
         this.model = model;
         try {author.setText(model.getUser_info().getFormattedName());}catch (Exception e){}
 
+        if(model.getType().equals("1")){
+            plus_minus.setText("+");
+            plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle,getContext().getTheme()));
+        }else {
+            plus_minus.setText("-");
+            plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle_red, getContext().getTheme()));
+        }
         more.setReview(model);
         yes.setReview(model);        yes.setVal(1);
         no.setReview(model);         no.setVal(0);

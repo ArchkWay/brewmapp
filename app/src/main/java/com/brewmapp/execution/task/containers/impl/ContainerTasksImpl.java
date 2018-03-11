@@ -112,11 +112,12 @@ public class ContainerTasksImpl implements ContainerTasks {
     }
 
     @Override
-    public void addReviewTask(String relatedModel, String relatedId, String text, SimpleSubscriber<String> simpleSubscriber) {
+    public void addReviewTask(String relatedModel, String relatedId, String text, int type, SimpleSubscriber<String> simpleSubscriber) {
         ReviewPackage reviewPackage =new ReviewPackage();
         reviewPackage.setRelated_model(relatedModel);
         reviewPackage.setRelated_id(relatedId);
         reviewPackage.setText(text);
+        reviewPackage.setType(type);
         addReviewTask.execute(reviewPackage,simpleSubscriber);
     }
 

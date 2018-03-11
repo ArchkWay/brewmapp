@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:id="@+id/activity.beer.detaild.swipe"
         android:orientation="vertical"
-        >
+        android:layout_weight="1">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -953,26 +953,24 @@
                             android:id="@+id/activity.beer.details_empty_text_reviews"
                             />
                     </RelativeLayout>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/button_height_type_0"
-                        android:text="@string/button_text_write_review"
-                        android:background="@drawable/bg_with_corner_red"
-                        android:textColor="@color/colorButtonRed"
-                        android:layout_margin="@dimen/common_block_space"
-                        android:id="@+id/activity.beer.detail.button_review"
-                        android:textSize="@dimen/text_size_small"
-                        android:minWidth="170dp"
-                        android:layout_gravity="center_horizontal"
-                        />
-
                 </LinearLayout>
 
             </LinearLayout>
 
         </ScrollView>
+
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/button_text_write_review"
+        android:textColor="@color/white"
+        android:id="@+id/activity.beer.detail.button_review"
+        android:textSize="@dimen/text_size_small"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorGreenButton"
+        />
 
 
 

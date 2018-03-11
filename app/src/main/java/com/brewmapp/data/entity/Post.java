@@ -41,6 +41,7 @@ public class Post implements Postable, Serializable, ILikeable {
     private Related_model_data related_model_data;
     private String user_getThumb;
     private List<Photo> photo=new ArrayList<>();
+    private int type;
 
 
     public String getRelated_id() {
@@ -264,4 +265,11 @@ public class Post implements Postable, Serializable, ILikeable {
         return params;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
+    }
 }

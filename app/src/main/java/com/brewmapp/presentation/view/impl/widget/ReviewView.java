@@ -77,12 +77,16 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
         this.model = model;
         try {author.setText(model.getUser_info().getFormattedName());}catch (Exception e){}
 
-        if(model.getType().equals("1")){
-            plus_minus.setText("+");
-            plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle,getContext().getTheme()));
-        }else {
-            plus_minus.setText("-");
-            plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle_red, getContext().getTheme()));
+        try {
+            if(model.getType().equals("1")){
+                plus_minus.setText("+");
+                plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle,getContext().getTheme()));
+            }else {
+                plus_minus.setText("-");
+                plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle_red, getContext().getTheme()));
+            }
+        }catch (Exception e){
+            plus_minus.setVisibility(INVISIBLE);
         }
         more.setReview(model);
         yes.setReview(model);        yes.setVal(1);

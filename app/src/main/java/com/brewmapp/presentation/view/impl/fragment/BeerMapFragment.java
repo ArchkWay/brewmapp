@@ -205,12 +205,12 @@ public class BeerMapFragment extends BaseFragment implements
 
         adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
-        //finder.setListener(this::prepareQuery);
         finder.setListener(new FinderView.Listener() {
             @Override
             public void onTextChanged(String string) {
                 adapter.setSearchText(string);
-                adapter.filterItems(arrayList);
+                searchPackage.setStringSearch(string);
+                prepareQuery();
             }
         });
         finder.clearFocus();
@@ -379,12 +379,12 @@ public class BeerMapFragment extends BaseFragment implements
 
         mClusterManager.cluster();
 
-        arrayList.clear();
-        Iterator<FilterRestoLocation> iterator=hmVisibleResto.values().iterator();
-        while (iterator.hasNext())
-            arrayList.add(new FilterRestoLocationInfo(new FilterRestoOnMap(iterator.next())));
-        adapter.notifyDataSetChanged();
-        adapter.filterItems(arrayList);
+//        arrayList.clear();
+//        Iterator<FilterRestoLocation> iterator=hmVisibleResto.values().iterator();
+//        while (iterator.hasNext())
+//            arrayList.add(new FilterRestoLocationInfo(new FilterRestoOnMap(iterator.next())));
+//        adapter.notifyDataSetChanged();
+//        adapter.filterItems(arrayList);
 
 
 
@@ -582,14 +582,13 @@ public class BeerMapFragment extends BaseFragment implements
     //endregion
 
     //region Functions
-    private void prepareQuery(String stringSearch) {
+    private void prepareQuery() {
         scrollListener.reset();
         searchPackage.setPage(0);
-        searchPackage.setStringSearch(stringSearch);
-        if (stringSearch.length() > 1) {
+        if (searchPackage.getStringSearch().length() > 1) {
             arrayList.clear();
             startQuery();
-        }else if (stringSearch.length() == 0) {
+        }else if (searchPackage.getStringSearch().length() == 0) {
             resetFinder();
         }
     }

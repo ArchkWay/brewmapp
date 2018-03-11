@@ -97,6 +97,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_detail_button_call2)    TextView call1;
     @BindView(R.id.text_view_call_1)    TextView number_call;
     @BindView(R.id.text_view_call_2)    TextView number_cal2;
+    @BindView(R.id.layout_view_call)  View layout_view_call;
+    @BindView(R.id.layout_view_call_2)  View layout_view_call_2;
     @BindView(R.id.activity_resto_detail_constraintLayout)    ConstraintLayout place;
     @BindView(R.id.activity_resto_detail_text_view_place)    TextView text_view_place;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
@@ -207,6 +209,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         panel_reviews.setOnClickListener(v->Starter.MultiListActivity_MODE_SHOW_REVIEWS_RESTO(RestoDetailActivity.this,String.valueOf(resto.getId())));
         added_favorites.setLayoutManager(new LinearLayoutManager(this));
         added_favorites.setAdapter(adapter_favorites);
+        layout_view_call.setVisibility(View.GONE);
+        layout_view_call_2.setVisibility(View.GONE);
 
     }
 
@@ -311,9 +315,11 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                         switch (i){
                             case 0:
                                 number_call.setText(jsonArray.getString(i));
+                                layout_view_call.setVisibility(View.VISIBLE);
                                 break;
                             case 1:
                                 number_cal2.setText(jsonArray.getString(i));
+                                layout_view_call_2.setVisibility(View.VISIBLE);
                                 break;
                         }
 

@@ -8,7 +8,7 @@ public class FullSearchPackage {
 
 
     private int page;
-    private String stringSearch;
+    private String stringSearch="";
 
     private String name=null;
     private String type=null;

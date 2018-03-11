@@ -28,13 +28,18 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.tool.TextTools;
 
 
-public class AddReviewRestoActivity extends BaseActivity implements AddReviewRestoView {
+public class AddReviewRestoActivity extends BaseActivity implements AddReviewRestoView, View.OnFocusChangeListener{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.addreviewactivity_rating_common_effect)    RatingBar common_effect;
     @BindView(R.id.addreviewactivity_rating_interior)    RatingBar interior;
     @BindView(R.id.addreviewactivity_rating_quality_beer)    RatingBar quality_beer;
     @BindView(R.id.addreviewactivity_rating_service)    RatingBar service;
     @BindView(R.id.addreviewactivity_review_edit_text)    EditText review_edit_text;
+
+    @BindView(R.id.addreviewactivity_rating_negative)    View rating_negative;
+    @BindView(R.id.addreviewactivity_rating_positive)    View rating_positive;
+    @BindView(R.id.addreviewactivity_rating_positive_select)    View positive_select;
+    @BindView(R.id.addreviewactivity_rating_negative_select)    View negative_select;
 
     @BindViews({
             R.id.addreviewactivity_rating_common_effect,
@@ -67,6 +72,11 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
                 post.setText(TextTools.extractTrimmed(review_edit_text)); invalidateOptionsMenu();},
                 review_edit_text
             );
+
+        rating_negative.setOnFocusChangeListener(this);
+        rating_positive.setOnFocusChangeListener(this);
+        positive_select.setVisibility(View.VISIBLE);
+        negative_select.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -169,9 +179,26 @@ public class AddReviewRestoActivity extends BaseActivity implements AddReviewRes
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_send:{
+                post.setType(positive_select.getVisibility()==View.VISIBLE?1:0);
                 presenter.sendReview(post);
             }return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            switch (v.getId()) {
+                case R.id.addreviewactivity_rating_positive:
+                    positive_select.setVisibility(View.VISIBLE);
+                    negative_select.setVisibility(View.INVISIBLE);
+                    break;
+                case R.id.addreviewactivity_rating_negative:
+                    positive_select.setVisibility(View.INVISIBLE);
+                    negative_select.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
     }
 }

@@ -31,7 +31,7 @@ public interface ContainerTasks {
 
     void loadReviewsTask(ReviewPackage reviewPackage, SimpleSubscriber<List<IFlexible>> simpleSubscriber);
 
-    void addReviewTask(String relatedModel, String relatedId, String text, SimpleSubscriber<String> simpleSubscriber);
+    void addReviewTask(String relatedModel, String relatedId, String text, int type, SimpleSubscriber<String> simpleSubscriber);
 
     void loadRestoByBeer(SearchPackage searchPackage, SimpleSubscriber<ListResponse<Resto>> objectSimpleSubscriber);
 

@@ -514,5 +514,7 @@
     <string name="text_hint_mobile_phone">Телефон</string>
     <string name="text_comment_to_you_request">Ваш комментарий к заявке</string>
     <string name="text_need_select_city">Укажите город, по которому необходимо выполнить поиск</string>
+    <string name="positive">Положительный</string>
+    <string name="negative">Отрицательный</string>
 
 </resources>

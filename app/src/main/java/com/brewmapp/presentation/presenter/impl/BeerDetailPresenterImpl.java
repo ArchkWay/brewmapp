@@ -227,7 +227,7 @@ public class BeerDetailPresenterImpl extends BasePresenter<BeerDetailView> imple
                 switch (mode){
                     case Actions.MODE_REFRESH_ALL:
                         ReviewPackage reviewPackage=new ReviewPackage();
-                        reviewPackage.setRelated_model(Keys.CAP_RESTO);
+                        reviewPackage.setRelated_model(Keys.CAP_BEER);
                         reviewPackage.setRelated_id(String.valueOf(beerDetail.getBeer().getId()));
                         containerTasks.loadReviewsTask(reviewPackage,new SimpleSubscriber<List<IFlexible>>(){
                             @Override public void onNext(List<IFlexible> iFlexibles ) {

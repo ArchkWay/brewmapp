@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
@@ -22,7 +23,7 @@ import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.tool.TextTools;
 
-public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeerView {
+public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeerView , View.OnFocusChangeListener{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.addreviewactivity_review_edit_text)    EditText review_edit_text;
 
@@ -30,6 +31,11 @@ public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeer
     @BindView(R.id.addreviewactivitybeer_rating_color)    RatingBar color;
     @BindView(R.id.addreviewactivitybeer_rating_flavor)    RatingBar flavor;
     @BindView(R.id.addreviewactivitybeer_rating_taste)    RatingBar taste;
+
+    @BindView(R.id.addreviewactivity_rating_negative)    View rating_negative;
+    @BindView(R.id.addreviewactivity_rating_positive)    View rating_positive;
+    @BindView(R.id.addreviewactivity_rating_positive_select)    View positive_select;
+    @BindView(R.id.addreviewactivity_rating_negative_select)    View negative_select;
 
     @Inject    AddReviewBeerPresenter presenter;
 
@@ -52,6 +58,11 @@ public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeer
         color.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
         flavor.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
         taste.setOnRatingBarChangeListener(presenter.getRatingBarChangeListener());
+
+        rating_negative.setOnFocusChangeListener(this);
+        rating_positive.setOnFocusChangeListener(this);
+        positive_select.setVisibility(View.VISIBLE);
+        negative_select.setVisibility(View.INVISIBLE);
 
     }
 
@@ -92,6 +103,7 @@ public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeer
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_send:{
+                post.setType(positive_select.getVisibility()==View.VISIBLE?1:0);
                 presenter.sendReview(post);
             }return true;
         }
@@ -118,4 +130,19 @@ public class AddReviewBeerActivity extends BaseActivity implements AddReviewBeer
         finish();
     }
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            switch (v.getId()) {
+                case R.id.addreviewactivity_rating_positive:
+                    positive_select.setVisibility(View.VISIBLE);
+                    negative_select.setVisibility(View.INVISIBLE);
+                    break;
+                case R.id.addreviewactivity_rating_negative:
+                    positive_select.setVisibility(View.INVISIBLE);
+                    negative_select.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+    }
 }

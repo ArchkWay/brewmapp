@@ -32,6 +32,7 @@ public class AddReviewTask extends BaseNetworkTask<ReviewPackage,String> {
                 params.addParam(Keys.RELATED_MODEL, reviewPackage.getRelated_model());
                 params.addParam(Keys.RELATED_ID, reviewPackage.getRelated_id());
                 params.addParam(Keys.TEXT, reviewPackage.getText());
+                params.addParam(Keys.TYPE, reviewPackage.getType());
                 Object o=executeCall(getApi().addReview(params));
                 subscriber.onNext("");
                 subscriber.onComplete();

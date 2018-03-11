@@ -9,6 +9,7 @@ import com.brewmapp.data.entity.EvaluationResto;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.EvaluationPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.AddReviewTask;
 import com.brewmapp.execution.task.LoadRestoEvaluationTask;
@@ -142,33 +143,62 @@ public class AddReviewRestoPresenterImpl extends BasePresenter<AddReviewRestoVie
                                 @Override
                                 public void onNext(String s) {
                                     super.onNext(s);
-                                    setRestoEvaluationTask.execute(evaluationPackageService);
+                                    setRestoEvaluationTask.execute(evaluationPackageService, new SimpleSubscriber<String>(){
+                                        @Override
+                                        public void onNext(String s) {
+                                            super.onNext(s);
+                                            //Review
+                                            containerTasks.addReviewTask(
+                                                    Keys.CAP_RESTO,
+                                                    String.valueOf(restoDetail.getResto().getId()),
+                                                    post.getText(),
+                                                    post.getType(),
+                                                    new SimpleSubscriber<String>(){
+                                                        @Override
+                                                        public void onNext(String s) {
+                                                            super.onNext(s);
+                                                            view.reviewSent();
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Throwable e) {
+                                                            super.onError(e);
+                                                            view.commonError(e.getMessage());
+                                                        }
+
+                                                    });
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            super.onError(e);
+                                            view.commonError(e.getMessage());
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    });
-                }
-            });
 
-
-
-        //Review
-        containerTasks.addReviewTask(
-                Keys.CAP_RESTO,
-                String.valueOf(restoDetail.getResto().getId()),
-                post.getText(),
-                new SimpleSubscriber<String>(){
                                 @Override
                                 public void onError(Throwable e) {
                                     super.onError(e);
                                     view.commonError(e.getMessage());
                                 }
 
-                                @Override
-                                public void onNext(String s) {
-                                    super.onNext(s);
-                                    view.reviewSent();
-                                }
                             });
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            view.commonError(e.getMessage());
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    view.commonError(e.getMessage());
+                }
+            });
     }
 }

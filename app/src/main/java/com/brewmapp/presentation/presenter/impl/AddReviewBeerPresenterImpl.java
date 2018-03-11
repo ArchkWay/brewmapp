@@ -103,7 +103,7 @@ public class AddReviewBeerPresenterImpl extends BasePresenter<AddReviewBeerView>
                                     @Override
                                     public void onNext(String s) {
                                         super.onNext(s);
-                                        containerTasks.addReviewTask(Keys.CAP_BEER,beer.getId(),post.getText(),new SimpleSubscriber<String>(){
+                                        containerTasks.addReviewTask(Keys.CAP_BEER,beer.getId(),post.getText(),post.getType(),new SimpleSubscriber<String>(){
                                             @Override
                                             public void onNext(String s) {
                                                 super.onNext(s);

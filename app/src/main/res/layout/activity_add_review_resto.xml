@@ -12,183 +12,271 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorGrayLightSemi"
-            android:gravity="center_vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/text_view_interior"
+                android:orientation="vertical"
+                    >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:clickable="true"
+                    android:focusableInTouchMode="true"
+                    android:id="@+id/addreviewactivity.rating.positive"
+                    android:focusable="true"
+                    >
+
+                    <TextView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:text="+"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_circle"
+                        android:gravity="center"
+                        android:clickable="false"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/positive"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="15dp"
+                        android:clickable="false"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"/>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_selected"
+                        android:id="@+id/addreviewactivity.rating.positive_select"
+                        android:clickable="false"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:clickable="true"
+                    android:focusableInTouchMode="true"
+                    android:id="@+id/addreviewactivity.rating.negative"
+                    >
+                    <TextView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:text="-"
+                        android:background="@drawable/bg_circle_red"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/negative"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="15dp"
+                        />
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_selected"
+                        android:id="@+id/addreviewactivity.rating.negative_select"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorGrayLightSemi"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_interior"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                >
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="0.5"
+                    android:stepSize="0.5"
+                    android:id="@+id/addreviewactivity.rating.interior"
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorGrayLightSemi"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_service"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                >
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="0.5"
+                    android:stepSize="0.5"
+                    android:id="@+id/addreviewactivity.rating.service"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorGrayLightSemi"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_quality_beer"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                >
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="0.5"
+                    android:stepSize="0.5"
+                    android:id="@+id/addreviewactivity.rating.quality_beer"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorGrayLightSemi"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_common_effect"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                >
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="0.5"
+                    android:stepSize="0.5"
+                    android:id="@+id/addreviewactivity.rating.common_effect"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorGrayLightSemi"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_your_review"
+                    android:layout_marginLeft="@dimen/common_block_space"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:textColor="@color/colorButtonRed"
+                    android:textSize="@dimen/text_size_big_phone_bigger"
+                    />
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_edit_hint_your_review"
                 android:layout_marginLeft="@dimen/common_block_space"
-                style="@style/AppTheme.Text.Georgia.Italic"
-                android:textColor="@color/colorButtonRed"
-                android:textSize="@dimen/text_size_big_phone_bigger"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            >
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="0.5"
-                android:stepSize="0.5"
-                android:id="@+id/addreviewactivity.rating.interior"
-
+                android:layout_marginRight="@dimen/common_block_space"
+                android:id="@+id/addreviewactivity.review.edit_text"
+                android:minHeight="200dp"
+                android:gravity="top|left"
                 />
 
-
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorGrayLightSemi"
-            android:gravity="center_vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_view_service"
-                android:layout_marginLeft="@dimen/common_block_space"
-                style="@style/AppTheme.Text.Georgia.Italic"
-                android:textColor="@color/colorButtonRed"
-                android:textSize="@dimen/text_size_big_phone_bigger"
-
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            >
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="0.5"
-                android:stepSize="0.5"
-                android:id="@+id/addreviewactivity.rating.service"
-                />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorGrayLightSemi"
-            android:gravity="center_vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_view_quality_beer"
-                android:layout_marginLeft="@dimen/common_block_space"
-                style="@style/AppTheme.Text.Georgia.Italic"
-                android:textColor="@color/colorButtonRed"
-                android:textSize="@dimen/text_size_big_phone_bigger"
-
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            >
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="0.5"
-                android:stepSize="0.5"
-                android:id="@+id/addreviewactivity.rating.quality_beer"
-                />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorGrayLightSemi"
-            android:gravity="center_vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_view_common_effect"
-                android:layout_marginLeft="@dimen/common_block_space"
-                style="@style/AppTheme.Text.Georgia.Italic"
-                android:textColor="@color/colorButtonRed"
-                android:textSize="@dimen/text_size_big_phone_bigger"
-
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            >
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="0.5"
-                android:stepSize="0.5"
-                android:id="@+id/addreviewactivity.rating.common_effect"
-                />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorGrayLightSemi"
-            android:gravity="center_vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_view_your_review"
-                android:layout_marginLeft="@dimen/common_block_space"
-                style="@style/AppTheme.Text.Georgia.Italic"
-                android:textColor="@color/colorButtonRed"
-                android:textSize="@dimen/text_size_big_phone_bigger"
-                />
-        </LinearLayout>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/text_edit_hint_your_review"
-            android:layout_marginLeft="@dimen/common_block_space"
-            android:layout_marginRight="@dimen/common_block_space"
-            android:id="@+id/addreviewactivity.review.edit_text"
-            android:minHeight="200dp"
-            android:gravity="top|left"
-            />
-
-        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

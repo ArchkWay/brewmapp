@@ -450,9 +450,10 @@ public interface Api {
     @FormUrlEncoded
     Call<RegionTypes> loadRegions(@FieldMap WrapperParams params);
 
-    @POST("resto/getcoordinatesbytext")
+    @POST("resto/getcoordinatesbytext/{query}")
     @FormUrlEncoded
     Call<ListResponse<FilterRestoLocationInfo>> searchOnMap(
+            @Path("query") String query,
             @Query(Keys.LIMIT_START) int start,
             @Query(Keys.LIMIT_END) int end,
             @FieldMap RequestParams requestParams

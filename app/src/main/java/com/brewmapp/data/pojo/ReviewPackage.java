@@ -9,6 +9,7 @@ public class ReviewPackage extends BasePackage{
     private String related_id;
     private String text;
     private String user_id;
+    private int type;
 
     public String getText() {
         return text;
@@ -40,5 +41,13 @@ public class ReviewPackage extends BasePackage{
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 }

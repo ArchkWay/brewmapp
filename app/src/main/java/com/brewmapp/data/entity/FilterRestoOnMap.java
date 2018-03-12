@@ -20,6 +20,7 @@ public class FilterRestoOnMap {
     private Object mNameEn;
     @SerializedName("resto_id")
     private String mRestoId;
+    private String city;
 
     public FilterRestoOnMap(FilterRestoLocation next) {
         mLocationId=next.getLocationId();
@@ -37,10 +38,13 @@ public class FilterRestoOnMap {
     public FilterRestoOnMap(Resto model) {
         setName(model.getName());
         setRestoId(String.valueOf(model.getId()));
+
         try {
             setLocationLat(String.valueOf(model.getLocation().getLocation().getLat()));
-            setLocationLat(String.valueOf(model.getLocation().getLocation().getLon()));
-        }catch (Exception e){}
+            setLocationLon(String.valueOf(model.getLocation().getLocation().getLon()));
+            setCity(model.getLocation().getCity_id());
+        } catch (Exception e) {
+        }
 
     }
 
@@ -92,4 +96,11 @@ public class FilterRestoOnMap {
         mRestoId = restoId;
     }
 
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCity() {
+        return city;
+    }
 }

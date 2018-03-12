@@ -26,6 +26,8 @@ public class OnMapRestoFilterView extends BaseLinearLayout implements Interactiv
 
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.city)
+    TextView city;
 
     private Listener listener;
     private FilterRestoOnMap model;
@@ -63,6 +65,7 @@ public class OnMapRestoFilterView extends BaseLinearLayout implements Interactiv
         title.setTypeface(null, Typeface.BOLD_ITALIC);
         title.setText(model.getName());
         setOnClickListener(v -> listener.onModelAction(Actions.ACTION_RESTO, model));
+        city.setText(model.getCity());
     }
 
     @Override

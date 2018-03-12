@@ -597,8 +597,6 @@ public class BeerMapFragment extends BaseFragment implements
         arrayList.clear();
         adapter.notifyDataSetChanged();
         hideProgressBar();
-        hideList(true);
-
     }
 
     private void startQuery() {
@@ -805,8 +803,8 @@ public class BeerMapFragment extends BaseFragment implements
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;
         LatLng nearLeft = visibleRegion.nearLeft;
-        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.003 , nearLeft.longitude-0.003 );
-        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.003 , farRight.longitude+0.003);
+        String coordStart = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", nearLeft.latitude-0.004 , nearLeft.longitude-0.004 );
+        String coordEnd = String.format(MapUtils.getLocaleEn(), "%.2f|%.2f", farRight.latitude+0.004 , farRight.longitude+0.004);
         geoPackage.setCoordStart(coordStart);
         geoPackage.setCoordEnd(coordEnd);
         presenter.loadRestoByLatLngBounds(geoPackage);

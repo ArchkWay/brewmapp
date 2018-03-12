@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/title"
-            android:text="cvvxcv"
+            android:text="@string/text_view_value_not_found"
             android:textStyle="italic|bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,9 +44,21 @@
             android:layout_marginTop="8dp"
             android:lines="1"
             app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/city"
+            android:text="@string/text_view_value_not_found"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="0dp"
+            android:lines="1"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
+            />
 
         <ImageView
             android:layout_width="@dimen/arrow_right_width"

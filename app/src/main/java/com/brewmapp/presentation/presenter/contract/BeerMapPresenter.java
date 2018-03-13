@@ -17,7 +17,7 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface BeerMapPresenter extends LivePresenter<BeerMapView> {
-    void onLoadedRestoGeo(int cityId);
+
     void sendQueryRestoSearch(FullSearchPackage fullSearchPackage);
 
     void loadRestoByLatLngBounds(GeoPackage geoPackage);

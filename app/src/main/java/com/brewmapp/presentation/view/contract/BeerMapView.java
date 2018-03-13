@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.contract;
 import android.view.View;
 
 import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  */
 
 public interface BeerMapView extends BasicView {
-    void addRestoToMap(List<FilterRestoLocation> filterRestoLocations);
+    void addRestoToMap(List<FilterRestoLocationInfo> list);
     void showDialogProgressBar(boolean show);
     void showProgressBar();
     void hideProgressBar();

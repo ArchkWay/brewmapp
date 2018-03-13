@@ -74,21 +74,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
         searchOnMapTask.cancel();
     }
 
-    @Override
-    public void onLoadedRestoGeo(int id) {
-        loadRestoLocationTask.cancel();
-        loadRestoLocationTask.execute(id, new SimpleSubscriber<List<FilterRestoLocation>>() {
-            @Override
-            public void onError(Throwable e) {
-                showError(e.getMessage());
-            }
-
-            @Override
-            public void onNext(List<FilterRestoLocation> restoLocation) {
-                view.addRestoToMap(restoLocation);
-            }
-        });
-    }
 
     @Override
     public void sendQueryRestoSearch(FullSearchPackage fullSearchPackage) {
@@ -108,23 +93,6 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
                 view.hideProgressBar();
             }
         });
-
-
-
-//        searchOnMapTask.cancel();
-//        searchOnMapTask.execute(fullSearchPackage, new SimpleSubscriber<List<IFlexible>>(){
-//            @Override
-//            public void onNext(List<IFlexible> iFlexibles) {
-//                view.hideProgressBar();
-//                view.appendItems(iFlexibles);
-//            }
-//            @Override
-//            public void onError(Throwable e) {
-//                super.onError(e);
-//                view.hideProgressBar();
-//                view.showMessage(e.getMessage(),0);
-//            }
-//        });
     }
 
     @Override
@@ -138,14 +106,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             @Override
             public void onNext(List<FilterRestoLocationInfo> restoLocations) {
                 super.onNext(restoLocations);
-                //view.appendItems(new ArrayList<>(restoLocations));
-                ArrayList arrayList=new ArrayList<>();
-                Iterator<FilterRestoLocationInfo> infoIterator=restoLocations.iterator();
-
-                while (infoIterator.hasNext())
-                    arrayList.add(new FilterRestoLocation(infoIterator.next().getModel()));
-                view.addRestoToMap(arrayList);
-                view.hideProgressBar();
+                view.addRestoToMap(restoLocations);
             }
 
             @Override

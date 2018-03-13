@@ -45,6 +45,7 @@ import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShowView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
@@ -73,8 +74,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
-import ru.frosteye.ovsa.execution.executor.Callback;
+import ru.frosteye.ovsa.marker.Async;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -133,7 +135,6 @@ public class BeerMapFragment extends BaseFragment implements
     private HashMap<String,FilterRestoLocation> hmVisibleResto =new HashMap<>();
     private HashMap<String,String> hmResultSearch =new HashMap<>();
     private LatLngBounds latLngBounds;
-    private int cntRequestRestoFromUI =0;
     private InfoWindowMap contentInfoWindow =null;
     private float maxZoomPref=18.0f;
     private float minZoomPref=10.0f;
@@ -145,8 +146,9 @@ public class BeerMapFragment extends BaseFragment implements
     private final int MODE_SHOW_UNKNOW=0;
     private final int MODE_SHOW_RESTO_BY_USER_LOCATION =1;
     private final int MODE_SHOW_RESTO_BY_LIST_RESTO =3;
-    private int MODE;
+    private int mode;
     private boolean clickedClaster=false;
+    private android.os.AsyncTask asyncTask=null;
 
 
     //координаты отслеживаемой при прокрутке точки на карте
@@ -363,13 +365,17 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     @Override
-    public void addRestoToMap(List<FilterRestoLocation> restoLocations) {
+    public void addRestoToMap(List<FilterRestoLocationInfo> filterRestoLocationInfos) {
+
 
         //region changeVisibleResto
-        for(FilterRestoLocation filterRestoLocation:restoLocations) {
-            String key = filterRestoLocation.getRestoId();
+        Iterator<FilterRestoLocationInfo> infoIterator=filterRestoLocationInfos.iterator();
+        while (infoIterator.hasNext()){
+            FilterRestoOnMap filterRestoOnMap=infoIterator.next().getModel();
+            String key = filterRestoOnMap.getRestoId();
             if (!hmVisibleResto.containsKey(key)) {
-                switch (MODE){
+                FilterRestoLocation filterRestoLocation=new FilterRestoLocation(filterRestoOnMap);
+                switch (mode){
                     case MODE_SHOW_RESTO_BY_USER_LOCATION: {
                         mClusterManager.addItem(filterRestoLocation);
                         hmVisibleResto.put(key, filterRestoLocation);
@@ -383,29 +389,13 @@ public class BeerMapFragment extends BaseFragment implements
                 }
             }
         }
+        hideProgressBar();
         //endregion
 
 
         mClusterManager.cluster();
 
-//        arrayList.clear();
-//        Iterator<FilterRestoLocation> iterator=hmVisibleResto.values().iterator();
-//        while (iterator.hasNext())
-//            arrayList.add(new FilterRestoLocationInfo(new FilterRestoOnMap(iterator.next())));
-//        adapter.notifyDataSetChanged();
-//        adapter.filterItems(arrayList);
-
-
-
-
-        //region NextRequestOnlyAfterFinishPrevious
-        if(cntRequestRestoFromUI >1){
-            cntRequestRestoFromUI =0;
-            onCameraIdle();
-        }else if(cntRequestRestoFromUI ==1){
-            cntRequestRestoFromUI =0;
-        }
-        //endregion
+        asyncTask=null;
     }
 
     //endregion
@@ -434,27 +424,62 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public void onCameraIdle() {
 
-        //region RemoveInvisibleResto
-        latLngBounds=googleMap.getProjection().getVisibleRegion().latLngBounds;
-        Collection<FilterRestoLocation> oldRestoLocations=mClusterManager.getAlgorithm().getItems();
-        for(FilterRestoLocation filterRestoLocation:oldRestoLocations){
-            boolean contain=latLngBounds.contains(new LatLng(filterRestoLocation.getLocationLat(),filterRestoLocation.getLocationLon()));
-            if(!contain) {
-                String key = filterRestoLocation.getRestoId();
-                mClusterManager.getAlgorithm().removeItem(hmVisibleResto.get(key ));
-                hmVisibleResto.remove(key);
-            }
-        }
-        //endregion
-
-        mClusterManager.cluster();
 
         if(isNeedShowInfoWindow())
             showInfoWindow();
+
         if(clickedClaster)
             clickedClaster=false;
-        else
-            requestResto();
+        else {
+            if(asyncTask==null) {
+                Collection<FilterRestoLocation> oldRestoLocations = mClusterManager.getAlgorithm().getItems();
+                asyncTask = new android.os.AsyncTask<Object,Object,Object>() {
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
+                    }
+
+                    @Override
+                    protected Object doInBackground(Object... objects) {
+                        //region RemoveInvisibleResto
+                        for (FilterRestoLocation filterRestoLocation : oldRestoLocations) {
+                            boolean contain = latLngBounds.contains(new LatLng(filterRestoLocation.getLocationLat(), filterRestoLocation.getLocationLon()));
+                            if (!contain) {
+                                String key = filterRestoLocation.getRestoId();
+                                mClusterManager.removeItem(hmVisibleResto.get(key));
+                                hmVisibleResto.remove(key);
+                            }
+                        }
+                        //endregion
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object objects) {
+                        super.onPostExecute(objects);
+                        mClusterManager.cluster();
+                        if(mClusterManager.getAlgorithm().getItems().size()<1500)
+                            requestResto();
+                        else
+                            new DialogConfirm(getString(R.string.text_too_many_resto), getFragmentManager(), new DialogConfirm.OnConfirm() {
+                                @Override
+                                public void onOk() {
+                                    requestResto();
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    asyncTask=null;
+                                }
+                            });
+                    }
+                };
+                asyncTask.execute();
+            }else {
+                mClusterManager.cluster();
+            }
+        }
 
 
     }
@@ -483,7 +508,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void onMapLoaded() {
-        MODE =MODE_SHOW_UNKNOW;
+        mode =MODE_SHOW_UNKNOW;
         mLocationListener.requestLastLocation(location -> {
             userLocation=(location==null?mLocationListener.getDefaultLocation():location);
             parseArgumentsAndSetMode();
@@ -594,6 +619,7 @@ public class BeerMapFragment extends BaseFragment implements
     //endregion
 
     //region Functions
+
     private void prepareQuery() {
         scrollListener.reset();
         searchPackage.setPage(0);
@@ -621,6 +647,11 @@ public class BeerMapFragment extends BaseFragment implements
         UITools.hideKeyboard(getActivity());
         FilterRestoOnMap filterOnMapResto = (FilterRestoOnMap) payload;
         finder.clearFocus();
+        
+        if(mode==MODE_SHOW_RESTO_BY_LIST_RESTO){
+            if(!hmResultSearch.containsKey(filterOnMapResto.getRestoId()))
+                hmResultSearch.put(filterOnMapResto.getRestoId(),filterOnMapResto.getRestoId());
+        }
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(
                 new LatLng(Double.valueOf(filterOnMapResto.getLocationLat()), Double.valueOf(filterOnMapResto.getLocationLon())))
@@ -647,10 +678,10 @@ public class BeerMapFragment extends BaseFragment implements
 
         //region Prepare LatLngBounds AUSTRALIA
         LatLngBounds AUSTRALIA=null;
-        switch (MODE){
+        switch (mode){
             case MODE_SHOW_RESTO_BY_USER_LOCATION: {
                 Location newLocation = userLocation;
-                double delta=0.05;
+                double delta=0.01;
                 AUSTRALIA = new LatLngBounds(
                         new LatLng(
                                 newLocation.getLatitude()-delta,
@@ -754,14 +785,14 @@ public class BeerMapFragment extends BaseFragment implements
         restoLocations=(ArrayList<RestoLocation>) getArguments().getSerializable(Keys.LOCATION);
 
         if(restoLocations==null||restoLocations.size()==0){
-            MODE = MODE_SHOW_RESTO_BY_USER_LOCATION;
+            mode = MODE_SHOW_RESTO_BY_USER_LOCATION;
         }else  {
-            MODE = MODE_SHOW_RESTO_BY_LIST_RESTO;
+            mode = MODE_SHOW_RESTO_BY_LIST_RESTO;
         }
 
 
         hmBeersInResto.clear();
-        switch (MODE){
+        switch (mode){
             case MODE_SHOW_RESTO_BY_LIST_RESTO:{
                 for (RestoLocation restoLocation:restoLocations)
                     hmBeersInResto.put(restoLocation.getResto_id(),new ArrayList<>(restoLocation.getBeersId().values()));
@@ -802,15 +833,6 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void requestResto() {
-
-        //region NextRequestOnlyAfterFinishPrevious
-        cntRequestRestoFromUI++;
-        if(cntRequestRestoFromUI >1){
-            cntRequestRestoFromUI++;
-            return;
-        }
-        //endregion
-
 
         VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
         LatLng farRight = visibleRegion.farRight;

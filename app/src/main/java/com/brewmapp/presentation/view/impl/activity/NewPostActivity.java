@@ -2,7 +2,6 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,12 +15,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Location;
-import com.brewmapp.data.entity.Sale;
-import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.GeolocatorResultPackage;
-import com.brewmapp.data.pojo.SimpleLocation;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
 import com.brewmapp.execution.tool.HashTagHelper;
 import com.brewmapp.presentation.view.contract.ResultTask;
@@ -32,8 +27,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import droidninja.filepicker.FilePickerBuilder;
@@ -53,9 +46,7 @@ import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
-import com.twitter.Extractor;
 
-import ru.frosteye.ovsa.presentation.view.dialog.Confirm;
 import ru.frosteye.ovsa.tool.TextTools;
 
 public class NewPostActivity extends BaseActivity implements
@@ -161,7 +152,7 @@ public class NewPostActivity extends BaseActivity implements
         photos.setNestedScrollingEnabled(false);
         attachLocation.setOnClickListener(v -> {
             //startActivityForResult(new Intent(this, PickLocationActivity.class),RequestCodes.REQUEST_PICK_LOCATION);
-            requestLocation(new Callback<android.location.Location>() {
+            requestLastLocation(new Callback<android.location.Location>() {
                 @Override
                 public void onResult(android.location.Location location) {
                     if(location!=null) {

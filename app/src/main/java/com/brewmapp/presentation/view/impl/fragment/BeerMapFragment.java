@@ -17,7 +17,6 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsoluteLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -33,12 +31,13 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.FilterRestoOnMap;
 import com.brewmapp.data.entity.MenuField;
+import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
+import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -75,6 +74,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -323,10 +323,19 @@ public class BeerMapFragment extends BaseFragment implements
 
     //region Impl BeerMapView
     @Override
-    public void appendItems(List<IFlexible> restoList) {
+    public void appendItems(List<IFlexible> iFlexibles) {
+
+        ArrayList<IFlexible> arrayListfound=new ArrayList<>();
+        Iterator<IFlexible> iterator=iFlexibles.iterator();
+        while (iterator.hasNext()) {
+            RestoInfo restoInfo= (RestoInfo) iterator.next();
+            Resto resto=restoInfo.getModel();
+            arrayListfound.add(new FilterRestoLocationInfo(new FilterRestoOnMap(resto)));
+        }
+
         int oldSize=arrayList.size();
-        arrayList.addAll(restoList);
-        adapter.notifyItemRangeChanged(oldSize,restoList.size());
+        arrayList.addAll(arrayListfound);
+        adapter.notifyItemRangeChanged(oldSize,arrayList.size());
     }
 
     @Override
@@ -475,7 +484,7 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public void onMapLoaded() {
         MODE =MODE_SHOW_UNKNOW;
-        mLocationListener.requestLocation(location -> {
+        mLocationListener.requestLastLocation(location -> {
             userLocation=(location==null?mLocationListener.getDefaultLocation():location);
             parseArgumentsAndSetMode();
             showNewLocation();
@@ -497,12 +506,11 @@ public class BeerMapFragment extends BaseFragment implements
     public boolean onMyLocationButtonClick() {
         finder.clearFocus();
         clearInfoWindow();
-        mLocationListener.refreshLocation();
-        mLocationListener.requestLocation(location -> {
+        mLocationListener.requestLastLocation(location -> {
             userLocation=(location==null?mLocationListener.getDefaultLocation():location);
             showNewLocation();
         });
-
+        mLocationListener.requestRefreshLocation();
         return true;
     }
 

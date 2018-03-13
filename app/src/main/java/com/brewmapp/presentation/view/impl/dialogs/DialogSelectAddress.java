@@ -33,8 +33,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.util.List;
 
-import ru.frosteye.ovsa.execution.executor.Callback;
-
 /**
  * Created by Kras on 10.12.2017.
  */
@@ -111,9 +109,8 @@ public class DialogSelectAddress extends DialogFragment {
                     }
                 });
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.requestLocation(result -> {
+                baseActivity.requestLastLocation(result -> {
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        baseActivity.explanationLocation();
                         dismiss();
                         return;
                     }else {

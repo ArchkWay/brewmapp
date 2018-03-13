@@ -99,16 +99,7 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
                 view.hideProgressBar();
-
-                ArrayList<IFlexible> arrayList=new ArrayList<>();
-
-                Iterator<IFlexible> iterator=iFlexibles.iterator();
-                while (iterator.hasNext()) {
-                    RestoInfo restoInfo= (RestoInfo) iterator.next();
-                    arrayList.add(new FilterRestoLocationInfo(new FilterRestoOnMap(restoInfo.getModel())));
-                }
-
-                view.appendItems(arrayList);
+                view.appendItems(iFlexibles);
             }
 
             @Override

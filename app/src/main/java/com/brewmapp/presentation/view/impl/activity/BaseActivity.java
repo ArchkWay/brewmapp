@@ -57,7 +57,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener {
 
-    private Callback<Location> callback;
+    private Callback<Boolean> callbackRequestPermissionLocation;
     private ChatResultReceiver chatResultReceiver;
     @Inject
     public LoadCityTask loadCityTask;
@@ -141,14 +141,16 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             case RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLastLocation(new Callback<Location>() {
-                        @Override
-                        public void onResult(Location result) {
-                            replayLocation(result);
-                        }
-                    });
+                    callbackRequestPermissionLocation.onResult(true);
+//                        getLastLocation(new Callback<Location>() {
+//                            @Override
+//                            public void onResult(Location result) {
+//                                replayLocation(result);
+//                            }
+//                        });
                 } else {
-                    replayLocation(null);
+                    callbackRequestPermissionLocation.onResult(false);
+//                    replayLocation(null);
                 }
                 return;
             }
@@ -160,71 +162,46 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     //region Location
 
     @Override
-    public void requestLocation(Callback<Location> callback) {
-        this.callback = callback;
-        if (isLocationPermission()) {
-            getLastLocation(result -> replayLocation(result));
-        }
-    }
-
-    public void requestCity(Callback<City> callback){
-        getLastLocation(new Callback<Location>() {
+    public void requestLastLocation(Callback<Location> callback) {
+        requestPermissionLocation(new Callback<Boolean>() {
             @Override
-            public void onResult(Location location) {
-                if(location==null) {
-                    location = getDefaultLocation();
-                    refreshLocation();
-                }
-                Locale ru= MapUtils.getLocaleRu();
-                if(ru!=null) {
-                    Geocoder geocoder = new Geocoder(BaseActivity.this, ru);
-                    try {
-                        List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        loadCityTask.cancel();
-                        GeoPackage geoPackage = new GeoPackage();
-                        geoPackage.setCityName(list.get(0).getLocality());
-                        loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
-                            @Override
-                            public void onNext(List<City> cities) {
-                                super.onNext(cities);
-                                if(cities.size()==1) {
-                                    callback.onResult(cities.get(0));
-                                }else {
-                                    Starter.InfoAboutCrashSendToServer("size of list not eq 1 (List<City>)", getClass().getCanonicalName());
-                                    callback.onResult(null);
-                                }
+            public void onResult(Boolean aBoolean) {
+                if(aBoolean) {
+                    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    List<String> providers = locationManager.getProviders(true);
+                    for (int i = providers.size() - 1; i >= 0; i--) {
+                        if (ActivityCompat.checkSelfPermission(BaseActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(BaseActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        } else {
+                            Location l = locationManager.getLastKnownLocation(providers.get(i));
+                            if (l != null) {
+                                callback.onResult(l);
+                                return;
                             }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                                Starter.InfoAboutCrashSendToServer(e.getMessage(), getClass().getCanonicalName());
-                                callback.onResult(null);
-                            }
-                        });
-                    } catch (IOException e) {
-                        Starter.InfoAboutCrashSendToServer(e.getMessage(), getClass().getCanonicalName());
-                        callback.onResult(null);
+                        }
                     }
+                    callback.onResult(null);
+                }else {
+                    callback.onResult(null);
+                    requestRefreshLocation();
                 }
             }
         });
     }
 
     @Override
-    public void refreshLocation() {
-        if (isLocationPermission()) {
+    public void requestRefreshLocation() {
+        try {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             List<String> providers = locationManager.getProviders(true);
             for (int i = providers.size() - 1; i >= 0; i--) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(BaseActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(BaseActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 } else {
                     locationManager.requestLocationUpdates(providers.get(i), 0, 0, new LocationListener() {
                         @Override
                         public void onLocationChanged(Location location) {
                             locationManager.removeUpdates(this);
-                            replayLocation(location);
                         }
 
                         @Override
@@ -245,10 +222,61 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
                 }
             }
+        }catch (Exception e){}
+    }
+
+    public void requestCity(Callback<City> callback){
+        requestLastLocation(new Callback<Location>() {
+            @Override
+            public void onResult(Location location) {
+                decodeLocation(location,callback);
+                if(location==null){
+                    requestRefreshLocation();
+                }
+            }
+        });
+    }
+
+    private void decodeLocation(Location location, Callback<City> callback) {
+        if(location==null) {
+            location = getDefaultLocation();
+        }
+        Locale ru= MapUtils.getLocaleRu();
+        if(ru!=null) {
+            Geocoder geocoder = new Geocoder(BaseActivity.this, ru);
+            try {
+                List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                loadCityTask.cancel();
+                GeoPackage geoPackage = new GeoPackage();
+                geoPackage.setCityName(list.get(0).getLocality());
+                loadCityTask.execute(geoPackage, new SimpleSubscriber<List<City>>() {
+                    @Override
+                    public void onNext(List<City> cities) {
+                        super.onNext(cities);
+                        if(cities.size()==1) {
+                            callback.onResult(cities.get(0));
+                        }else {
+                            Starter.InfoAboutCrashSendToServer("size of list not eq 1 (List<City>)", getClass().getCanonicalName());
+                            callback.onResult(null);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        Starter.InfoAboutCrashSendToServer(e.getMessage(), getClass().getCanonicalName());
+                        callback.onResult(null);
+                    }
+                });
+            } catch (IOException e) {
+                Starter.InfoAboutCrashSendToServer(e.getMessage(), getClass().getCanonicalName());
+                callback.onResult(null);
+            }
         }
     }
 
-    private boolean isLocationPermission() {
+    private void requestPermissionLocation(Callback<Boolean> callbackRequestPermitionLocation) {
+        this.callbackRequestPermissionLocation = callbackRequestPermitionLocation;
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -256,60 +284,33 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                explanationLocation();
-
+                            new AlertDialog.Builder(this)
+                                    .setTitle(R.string.title_location_permission)
+                                    .setMessage(R.string.text_location_permission)
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //Prompt the user once explanation has been shown
+                                            ActivityCompat.requestPermissions(BaseActivity.this,
+                                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                    RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION);
+                                        }
+                                    })
+                                    .create()
+                                    .show();
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION);
             }
-            return false;
         } else {
-            return true;
+            this.callbackRequestPermissionLocation.onResult(true);
         }
     }
 
-    public void explanationLocation() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.title_location_permission)
-                .setMessage(R.string.text_location_permission)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //Prompt the user once explanation has been shown
-                        ActivityCompat.requestPermissions(BaseActivity.this,
-                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                RequestCodes.MY_PERMISSIONS_REQUEST_LOCATION);
-                    }
-                })
-                .create()
-                .show();
-    }
 
-    private void getLastLocation(Callback<Location> callback) {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = locationManager.getProviders(true);
-        for (int i = providers.size() - 1; i >= 0; i--) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            } else {
-                Location l = locationManager.getLastKnownLocation(providers.get(i));
-                if (l != null) {
-                    callback.onResult(l);
-                    return;
-                }
-            }
-        }
-        callback.onResult(null);
-    }
 
-    private void replayLocation(Location location) {
-        if (callback != null) {
-            callback.onResult(location);
-            callback = null;
-        }
-    }
 
     public Location getDefaultLocation(){
         Location location=new Location("gps");

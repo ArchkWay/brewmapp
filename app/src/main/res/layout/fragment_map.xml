@@ -6,11 +6,19 @@
     android:layout_height="match_parent">
 
 
+    <com.brewmapp.presentation.view.impl.widget.FinderView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:finderHint="@string/map_search"
+        android:id="@+id/activity.search.search"
+        />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/fragment.map.map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/activity.search.search"
+        >
     </com.google.android.gms.maps.MapView>
     <AbsoluteLayout
         android:layout_width="match_parent"
@@ -37,12 +45,6 @@
 
     </AbsoluteLayout>
 
-    <com.brewmapp.presentation.view.impl.widget.FinderView
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:finderHint="@string/map_search"
-        android:id="@+id/activity.search.search"
-        />
     <android.support.v7.widget.RecyclerView
         android:visibility="gone"
         android:id="@+id/restoList"

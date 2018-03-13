@@ -198,11 +198,13 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                             @Override
                             public void onError(Throwable e) {
                                 super.onError(e);
+                                Starter.InfoAboutCrashSendToServer(e.getMessage(), getClass().getCanonicalName());
                                 callback.onResult(null);
                             }
                         });
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Starter.InfoAboutCrashSendToServer(e.getMessage(), getClass().getCanonicalName());
+                        callback.onResult(null);
                     }
                 }
             }

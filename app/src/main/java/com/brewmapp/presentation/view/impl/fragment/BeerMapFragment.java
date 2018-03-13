@@ -136,7 +136,7 @@ public class BeerMapFragment extends BaseFragment implements
     private int cntRequestRestoFromUI =0;
     private InfoWindowMap contentInfoWindow =null;
     private float maxZoomPref=18.0f;
-    private float minZoomPref=12.0f;
+    private float minZoomPref=10.0f;
     private DialogShowView dialogShowView;
     private Location userLocation=null;
     private ArrayList arrayList=new ArrayList<>();
@@ -419,13 +419,6 @@ public class BeerMapFragment extends BaseFragment implements
         this.googleMap.setOnMyLocationButtonClickListener(this);
         this.googleMap.setOnMapClickListener(this);
         this.googleMap.setOnCameraIdleListener(this);
-
-        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        }else {
-            this.googleMap.setMyLocationEnabled(true);
-        }
-
         this.googleMap.setOnMapLoadedCallback(this);
     }
 
@@ -486,6 +479,12 @@ public class BeerMapFragment extends BaseFragment implements
             userLocation=(location==null?mLocationListener.getDefaultLocation():location);
             parseArgumentsAndSetMode();
             showNewLocation();
+            if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            }else {
+                this.googleMap.setMyLocationEnabled(true);
+            }
+
         });
 
     }
@@ -497,8 +496,13 @@ public class BeerMapFragment extends BaseFragment implements
     @Override
     public boolean onMyLocationButtonClick() {
         finder.clearFocus();
+        clearInfoWindow();
         mLocationListener.refreshLocation();
-        showNewLocation();
+        mLocationListener.requestLocation(location -> {
+            userLocation=(location==null?mLocationListener.getDefaultLocation():location);
+            showNewLocation();
+        });
+
         return true;
     }
 
@@ -638,15 +642,15 @@ public class BeerMapFragment extends BaseFragment implements
         switch (MODE){
             case MODE_SHOW_RESTO_BY_USER_LOCATION: {
                 Location newLocation = userLocation;
-                double delta=0.01;
+                double delta=0.05;
                 AUSTRALIA = new LatLngBounds(
                         new LatLng(
                                 newLocation.getLatitude()-delta,
-                                newLocation.getLongitude()-delta
+                                newLocation.getLongitude()
                         ),
                         new LatLng(
                                 newLocation.getLatitude()+delta,
-                                newLocation.getLongitude()+delta
+                                newLocation.getLongitude()
                         )
                 );
             }break;

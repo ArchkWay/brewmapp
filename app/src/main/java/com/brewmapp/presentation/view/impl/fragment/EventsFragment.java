@@ -284,7 +284,7 @@ public class EventsFragment extends BaseFragment implements
         if (dropdownItems != null)
             dropdownItems.clear();
 
-        if(mode==MODE_DEFAULT) {
+        if(mode.equals(MODE_DEFAULT)) {
             mLocationListener.requestCity(result -> {
                 if (result != null)
                     loadNewsPackage.setCity_Id(String.valueOf(result.getId()));

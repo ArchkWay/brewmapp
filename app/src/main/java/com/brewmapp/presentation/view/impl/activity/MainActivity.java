@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -96,6 +97,8 @@ public class MainActivity extends BaseActivity
     FrameLayout container;
     @BindView(R.id.activity_main_visible_container)
     RelativeLayout visible_container;
+    @BindView(R.id.progressToolbar)
+    ProgressBar progressToolbar;
     //endregion
 
     //region Private
@@ -216,6 +219,11 @@ public class MainActivity extends BaseActivity
         else
             finish();
 
+    }
+
+    @Override
+    public void showTopBarLoading(boolean show){
+        progressToolbar.setVisibility(show?View.VISIBLE:View.GONE);
     }
     //endregion
 

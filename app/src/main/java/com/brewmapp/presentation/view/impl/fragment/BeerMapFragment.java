@@ -354,14 +354,16 @@ public class BeerMapFragment extends BaseFragment implements
 
     @Override
     public void showProgressBar() {
-        finder.findViewById(R.id.progressBar).setVisibility(VISIBLE);
-        finder.findViewById(R.id.finder_cancel).setVisibility(View.GONE);
+        mListener.showTopBarLoading(true);
+//        finder.findViewById(R.id.progressBar).setVisibility(VISIBLE);
+//        finder.findViewById(R.id.finder_cancel).setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgressBar() {
-        finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
-        finder.findViewById(R.id.finder_cancel).setVisibility(VISIBLE);
+        mListener.showTopBarLoading(false);
+//        finder.findViewById(R.id.progressBar).setVisibility(View.GONE);
+//        finder.findViewById(R.id.finder_cancel).setVisibility(VISIBLE);
     }
 
     @Override
@@ -851,6 +853,8 @@ public class BeerMapFragment extends BaseFragment implements
         void setTitle(CharSequence name);
         OnLocationInteractionListener getLocationListener();
         void processChangeFragment(int id);
+
+        void showTopBarLoading(boolean b);
     }
 
     private class InfoWindowLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {

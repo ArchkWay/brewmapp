@@ -3,6 +3,7 @@ package com.brewmapp.presentation.presenter.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.brewmapp.R;
@@ -113,6 +114,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
     private Interest interest;
     private UserRepo userRepo;
     private UploadPhotoTask uploadPhotoTask;
+    private ResultReceiver resultReceiver;
     //endregion
 
     //region Inject
@@ -226,6 +228,10 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         } catch (Exception e){
             view.commonError(e.getMessage());return;
         }
+        resultReceiver=intent.getParcelableExtra(context.getString(R.string.key_blur));
+        if(resultReceiver!=null)
+            view.moveTaskToBack(true);
+
 
         refreshContent(Actions.MODE_REFRESH_ALL);
 
@@ -443,15 +449,17 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         }
         private void loadRestoDetails(int mode){
             if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
-                Log.i("SpeedLoad","loadRestoDetailPackage");
                 LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                 loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
-
                 loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
                     @Override public void onNext(RestoDetail _restoDetail) {
                         super.onNext(_restoDetail);
                         restoDetail=_restoDetail;
                         view.setModel(_restoDetail,mode);
+                        if(resultReceiver!=null) {
+                            resultReceiver.send(0, null);
+                            view.moveToTop();
+                        }
                         loadReviews(mode);
                     }
                     @Override public void onError(Throwable e) {

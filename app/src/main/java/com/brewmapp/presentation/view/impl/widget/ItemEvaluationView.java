@@ -25,6 +25,7 @@ import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.task.LoadProductTask;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.Iterator;
@@ -177,7 +178,7 @@ public class ItemEvaluationView extends BaseLinearLayout implements InteractiveM
     }
 
     private void handleResto() {
-        setOnClickListener(v -> Starter.RestoDetailActivity(getContext(), evaluationData.getId_of_object_evaluation()));
+        setOnClickListener(v -> Starter.RestoDetailActivity((BaseActivity) getContext(), evaluationData.getId_of_object_evaluation()));
         Iterator<BaseEvaluation> iterator = evaluationData.iterator();
         while (iterator.hasNext()) {
             EvaluationResto evaluationResto = (EvaluationResto) iterator.next();

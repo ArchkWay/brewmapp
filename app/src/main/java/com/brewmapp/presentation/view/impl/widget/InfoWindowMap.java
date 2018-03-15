@@ -23,6 +23,7 @@ import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -91,7 +92,7 @@ public class InfoWindowMap extends BaseLinearLayout {
             @Override
             public void run() {
                 //region User Events
-                setOnClickListener(v -> Starter.RestoDetailActivity(getContext(), resto_id));
+                setOnClickListener(v -> Starter.RestoDetailActivity((BaseActivity) getContext(), resto_id));
                 //endregion
 
                 //region Request Resto

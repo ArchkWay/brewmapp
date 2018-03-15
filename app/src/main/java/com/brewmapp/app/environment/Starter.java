@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Beer;
@@ -70,23 +71,23 @@ public class Starter {
 
     }
 
-    public static void RestoDetailActivityForResult(Activity activity, Interest interest, int requestCode) {
+    public static void RestoDetailActivityForResult(BaseActivity activity, Interest interest, int requestCode) {
         Intent intent = new Intent(activity, RestoDetailActivity.class);
         intent.putExtra(Keys.RESTO_ID, interest);
-
-
-        ((BaseActivity) activity).blurOn(true);
+        intent.putExtra(activity.getString(R.string.key_blur),activity.blurOn());
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(activity.getString(R.string.key_blur),true);
 
         activity.startActivityForResult(intent, requestCode);
     }
-    public static void RestoDetailActivity(Context context, String id_resto) {
+    public static void RestoDetailActivity(BaseActivity baseActivity, String id_resto) {
         if(id_resto!=null) {
-            Intent intent = new Intent(context, RestoDetailActivity.class);
+            Intent intent = new Intent(baseActivity, RestoDetailActivity.class);
             intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
-            context.startActivity(intent);
+            intent.putExtra(baseActivity.getString(R.string.key_blur),baseActivity.blurOn());
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            baseActivity.startActivity(intent);
         }
     }
 

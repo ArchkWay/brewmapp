@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Resto;
@@ -293,9 +294,10 @@ public class InterestListActivity extends BaseActivity
         Interest interest=(Interest)payload;
         switch (action){
             case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
-                Intent intent = new Intent(this, RestoDetailActivity.class);
-                intent.putExtra(Keys.RESTO_ID, interest);
-                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
+                Starter.RestoDetailActivityForResult(this,interest,REQUEST_CODE_REFRESH_ITEMS);
+//                Intent intent = new Intent(this, RestoDetailActivity.class);
+//                intent.putExtra(Keys.RESTO_ID, interest);
+//                startActivityForResult(intent, REQUEST_CODE_REFRESH_ITEMS);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_INTEREST_BEER:{
                 Intent intent = new Intent(this, BeerDetailActivity.class);

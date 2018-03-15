@@ -32,4 +32,8 @@ public interface RestoDetailView extends BasicView{
     void AverageEvaluation(List<AverageEvaluation> evaluations);
 
     void addItemsAddedToFavorite(List<IFlexible> iFlexibles);
+
+    boolean moveTaskToBack(boolean b);
+
+    void moveToTop();
 }

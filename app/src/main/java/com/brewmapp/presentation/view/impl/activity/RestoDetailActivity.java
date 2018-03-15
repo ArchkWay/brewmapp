@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -165,18 +166,13 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private ArrayList<String> photoArrayListPreview =new ArrayList<>();
     private FlexibleAdapter adapter_favorites;
     private FlexibleAdapter adapter_reviews;
-    private  swipeDelayed swipeDelayed=new swipeDelayed();
     private  ArrayList<Photo> photoArrayList;
-    private boolean backgrownd =false;
+
     //endregion
 
     //region Impl RestoDetailActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false)) {
-            backgrownd=true;
-            moveTaskToBack(true);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
@@ -237,19 +233,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     @Override
     public void enableControls(boolean enabled, int code) {
-        if(enabled){
-            swipeDelayed.cancel();
-            swipe.setRefreshing(false);
-            swipe.setEnabled(false);
-        }else{
-            swipe.postDelayed(swipeDelayed,2000);
-        }
-
-        ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
-                view.setEnabled(enabled);
-//                view.setClickable(enabled);
-                view.setAlpha(enabled?1.0f:0.5f);
-        });
+//        ButterKnife.apply(viewList, (ButterKnife.Action<View>) (view, index) -> {
+//                view.setEnabled(enabled);
+//                view.setAlpha(enabled?1.0f:0.5f);
+//        });
     }
 
     @Override
@@ -365,13 +352,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
         }
 
-        if(backgrownd){
-            backgrownd=false;
-            getIntent().putExtra(getString(R.string.key_blur),false);
-            Intent intent=new Intent(RestoDetailActivity.this,RestoDetailActivity.class);
-            intent.addFlags(intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
-        }
 
     }
 
@@ -596,20 +576,5 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     //endregion
 
-    //region Inner classes
-    class swipeDelayed implements Runnable {
-        private boolean cancel=false;
-        public void cancel(){
-            cancel=true;
-        }
-        @Override
-        public void run() {
-            if(cancel) return;
-            swipe.setEnabled(true);
-            swipe.setRefreshing(true);
-        }
-
-    }
-    //endregion
 
 }

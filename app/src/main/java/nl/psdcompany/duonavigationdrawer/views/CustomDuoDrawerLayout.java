@@ -33,29 +33,16 @@ public class CustomDuoDrawerLayout extends DuoDrawerLayout {
     @Override
     public void openDrawer() {
         super.openDrawer();
-
-        try {
-            Field f_mViewDragHelper=getClass().getSuperclass().getDeclaredField("mViewDragHelper");
-            f_mViewDragHelper.setAccessible(true);
-            Object o_mViewDragHelper=f_mViewDragHelper.get(this);
-
-            Field f_mScroller=o_mViewDragHelper.getClass().getDeclaredField("mScroller");
-            f_mScroller.setAccessible(true);
-            ScrollerCompat mScroller= (ScrollerCompat) f_mScroller.get(o_mViewDragHelper);
-
-            mScroller.abortAnimation();
-            ViewCompat.postInvalidateOnAnimation(CustomDuoDrawerLayout.this);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
+        breakAnimation();
     }
 
     @Override
     public void closeDrawer() {
         super.closeDrawer();
+        breakAnimation();
+    }
+
+    private void breakAnimation(){
         try {
             Field f_mViewDragHelper=getClass().getSuperclass().getDeclaredField("mViewDragHelper");
             f_mViewDragHelper.setAccessible(true);

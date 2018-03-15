@@ -16,12 +16,14 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -104,11 +106,6 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             }
         });
         //endregion
-
-
-        if (this instanceof MainActivity) {
-
-        }
     }
 
     @Override
@@ -140,11 +137,6 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     protected void onPause() {
         super.onPause();
         unRegisterSnackbarReceiver();
-        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false))
-            getIntent().putExtra(getString(R.string.key_blur),false);
-        else if(blurView!=null)
-            blurView.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -415,8 +407,8 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     //endregion
 
     //region Blur
-    public void blurOn(boolean blur){
-        if(blur){
+    public ResultReceiver blurOn(){
+
             //region blur On
             //region Create blur
             if(blurView==null) {
@@ -435,24 +427,38 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                     .blurRadius(0.0001f);
             //endregion
             //region Blur Animation
-            ValueAnimator valueAnimator=ValueAnimator.ofFloat(0.0001f,10f);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    blurViewSettings.blurRadius((Float) valueAnimator.getAnimatedValue());
-                    blurView.updateBlur();
-                }
-            });
-            valueAnimator.setDuration(5000);
-            valueAnimator.start();
+//            ValueAnimator valueAnimator=ValueAnimator.ofFloat(0.0001f,10f);
+//            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                    blurViewSettings.blurRadius((Float) valueAnimator.getAnimatedValue());
+//                    blurView.updateBlur();
+//                }
+//            });
+//            valueAnimator.setDuration(5000);
+//            valueAnimator.start();
             //endregion
-            getIntent().putExtra(getString(R.string.key_blur),true);
             //endregion
-        } else {
-            if(blurView!=null)
-                blurView.setVisibility(View.GONE);
-        }
 
+        return new ResultReceiver(new Handler(getMainLooper())){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                super.onReceiveResult(resultCode, resultData);
+                if(blurView!=null)
+                    blurView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            blurView.setVisibility(View.GONE);
+                        }
+                    },2000);
+
+            }
+        };
+    }
+    public void moveToTop(){
+        Intent intent=new Intent(this,getClass());
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
     //endregion
 }

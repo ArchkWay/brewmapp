@@ -75,13 +75,12 @@ public class Starter {
         intent.putExtra(Keys.RESTO_ID, interest);
 
 
-        if(activity instanceof BaseActivity){
-                ((BaseActivity) activity).blurOn(true);
-                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            }
+        ((BaseActivity) activity).blurOn(true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(activity.getString(R.string.key_blur),true);
 
-        //activity.startActivityForResult(intent, requestCode);
+        activity.startActivityForResult(intent, requestCode);
     }
     public static void RestoDetailActivity(Context context, String id_resto) {
         if(id_resto!=null) {

@@ -172,6 +172,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     //region Impl RestoDetailActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false))
+            moveTaskToBack(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
@@ -358,6 +360,13 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 try {like_counter.setText(restoDetail.getResto().getLike());}catch (Exception e){}
                 try {dislike_counter.setText(restoDetail.getResto().getDis_like());}catch (Exception e){}
 
+        }
+
+        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false)){
+            getIntent().putExtra(getString(R.string.key_blur),false);
+            Intent intent=new Intent(RestoDetailActivity.this,RestoDetailActivity.class);
+            intent.addFlags(intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
         }
 
     }

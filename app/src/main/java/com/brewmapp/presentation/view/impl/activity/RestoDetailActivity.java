@@ -167,13 +167,16 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private FlexibleAdapter adapter_reviews;
     private  swipeDelayed swipeDelayed=new swipeDelayed();
     private  ArrayList<Photo> photoArrayList;
+    private boolean backgrownd =false;
     //endregion
 
     //region Impl RestoDetailActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false))
+        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false)) {
+            backgrownd=true;
             moveTaskToBack(true);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
@@ -362,7 +365,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
         }
 
-        if(getIntent().getBooleanExtra(getString(R.string.key_blur),false)){
+        if(backgrownd){
+            backgrownd=false;
             getIntent().putExtra(getString(R.string.key_blur),false);
             Intent intent=new Intent(RestoDetailActivity.this,RestoDetailActivity.class);
             intent.addFlags(intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

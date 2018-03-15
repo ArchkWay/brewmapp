@@ -73,7 +73,15 @@ public class Starter {
     public static void RestoDetailActivityForResult(Activity activity, Interest interest, int requestCode) {
         Intent intent = new Intent(activity, RestoDetailActivity.class);
         intent.putExtra(Keys.RESTO_ID, interest);
-        activity.startActivityForResult(intent, requestCode);
+
+
+        if(activity instanceof BaseActivity){
+                ((BaseActivity) activity).blurOn(true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+
+        //activity.startActivityForResult(intent, requestCode);
     }
     public static void RestoDetailActivity(Context context, String id_resto) {
         if(id_resto!=null) {

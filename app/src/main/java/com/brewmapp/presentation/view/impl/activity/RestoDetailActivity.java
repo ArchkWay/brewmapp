@@ -292,11 +292,18 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent=getIntent();
-        if(intent.getBooleanExtra(getString(R.string.key_data_loaded),false)){
-            intent.putExtra(getString(R.string.key_data_loaded),false);
-            presenter.sendResultReceiver(Actions.ACTION_STOP_BLUR);
-        }
+
+        if((getIntent().getFlags()^Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)==0)
+            getWindow().getDecorView().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    // TODO your magic code to be run
+                    presenter.sendResultReceiver(Actions.ACTION_STOP_BLUR);
+                }
+
+            },500);
+
 
     }
 

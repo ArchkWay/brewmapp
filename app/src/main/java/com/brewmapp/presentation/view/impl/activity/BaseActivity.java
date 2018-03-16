@@ -1,11 +1,13 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -419,13 +421,18 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             //endregion
             //region set Captuere
             blurView.setVisibility(View.VISIBLE);
-            View decorView = getWindow().getDecorView();
-            ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
-            Drawable windowBackground = decorView.getBackground();
-            blurViewSettings=blurView.setupWith(rootView)
-                    .windowBackground(windowBackground)
-                    .blurAlgorithm(new RenderScriptBlur(BaseActivity.this))
-                    .blurRadius(0.0001f);
+            blurView.setBackgroundColor(Color.WHITE);
+            blurView.setAlpha(0.5f);
+            //ObjectAnimator.ofFloat(blurView,"alpha",0.5f).setDuration(1000).start();
+
+
+//            View decorView = getWindow().getDecorView();
+//            ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+//            Drawable windowBackground = decorView.getBackground();
+//            blurViewSettings=blurView.setupWith(rootView)
+//                    .windowBackground(windowBackground)
+//                    .blurAlgorithm(new RenderScriptBlur(BaseActivity.this))
+//                    .blurRadius(0.0001f);
             //endregion
             //endregion
 
@@ -447,14 +454,9 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         };
     }
     public void moveToTop(){
-//        Intent intent=new Intent(this,getClass());
-//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
+        //Intent intent=new Intent(this,getClass());
         Intent intent=getIntent();
-        intent.addFlags(~intent.getFlags());
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-        intent.putExtra(getString(R.string.key_data_loaded),true);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
     //endregion

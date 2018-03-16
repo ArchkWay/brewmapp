@@ -518,5 +518,6 @@
     <string name="negative">Отрицательный</string>
     <string name="text_too_many_resto">Слишком много заведений на карте. Продожение может повлиять на быстродействие. Продолжить?</string>
     <string name="key_blur">\"key_blur\"</string>
+    <string name="key_data_loaded">key_data_loaded</string>
 
 </resources>

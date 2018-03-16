@@ -35,5 +35,4 @@ public interface RestoDetailView extends BasicView{
 
     boolean moveTaskToBack(boolean b);
 
-    void moveToTop();
 }

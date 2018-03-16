@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.di.module.PresenterModule;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
@@ -426,38 +427,34 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                     .blurAlgorithm(new RenderScriptBlur(BaseActivity.this))
                     .blurRadius(0.0001f);
             //endregion
-            //region Blur Animation
-//            ValueAnimator valueAnimator=ValueAnimator.ofFloat(0.0001f,10f);
-//            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//                @Override
-//                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-//                    blurViewSettings.blurRadius((Float) valueAnimator.getAnimatedValue());
-//                    blurView.updateBlur();
-//                }
-//            });
-//            valueAnimator.setDuration(5000);
-//            valueAnimator.start();
-            //endregion
             //endregion
 
         return new ResultReceiver(new Handler(getMainLooper())){
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
                 super.onReceiveResult(resultCode, resultData);
-                if(blurView!=null)
-                    blurView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                switch (resultCode){
+                    case Actions.ACTION_STOP_BLUR:
+                        if(blurView!=null)
                             blurView.setVisibility(View.GONE);
-                        }
-                    },2000);
+                        break;
+                        case Actions.ACTION_ACTIVITY_DESTROY:
+                            moveToTop();
+                            break;
+                }
 
             }
         };
     }
     public void moveToTop(){
-        Intent intent=new Intent(this,getClass());
+//        Intent intent=new Intent(this,getClass());
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+        Intent intent=getIntent();
+        intent.addFlags(~intent.getFlags());
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+        intent.putExtra(getString(R.string.key_data_loaded),true);
         startActivity(intent);
     }
     //endregion

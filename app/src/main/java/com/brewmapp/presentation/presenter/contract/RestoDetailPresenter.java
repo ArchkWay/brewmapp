@@ -47,4 +47,6 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
     RestoDetail getRestoDetails();
 
     void uploadPhoto(File file,Callback<Integer> callback);
+
+    void sendResultReceiver(int actionStopBlur);
 }

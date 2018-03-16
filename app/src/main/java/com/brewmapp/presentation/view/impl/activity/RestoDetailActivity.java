@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -132,6 +134,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @BindView(R.id.activity_resto_details_container_added_to_favorite)    View container_added_to_favorite;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.activity_resto_details_root)    View root;
 
     @BindViews({
             R.id.activity_resto_detail_constraintLayout,
@@ -176,6 +179,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
+
 
     @Override
     protected void initView() {
@@ -285,6 +289,17 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         toolbarTitle.setText(title);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent=getIntent();
+        if(intent.getBooleanExtra(getString(R.string.key_data_loaded),false)){
+            intent.putExtra(getString(R.string.key_data_loaded),false);
+            presenter.sendResultReceiver(Actions.ACTION_STOP_BLUR);
+        }
+
+    }
+
     //endregion
 
     //region Imp RestoDetailView
@@ -344,6 +359,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 //endregion
 
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
+
+                moveToTop();
+
 
             case Actions.MODE_REFRESH_ONLY_LIKE:
 

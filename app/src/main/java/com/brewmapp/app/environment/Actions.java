@@ -32,6 +32,8 @@ public class Actions {
     public static final int ACTION_CLICK_ON_ITEM_REVIEW_ON_USER = 26;
     public static final int ACTION_REFRESH_FRAGMENT_CONTENT = 27;
 
+    public static final int ACTION_STOP_BLUR =28;
+    public static final int ACTION_ACTIVITY_DESTROY =29;
 
     public static final String PARAM1 = "PARAM1";
     public static final String PARAM2 = "PARAM2";

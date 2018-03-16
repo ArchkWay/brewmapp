@@ -171,12 +171,19 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         loadInterestTask.cancel();
         loadRestoAverageEvaluationTask.cancel();
         loadInterestTask.cancel();
+        sendResultReceiver(Actions.ACTION_ACTIVITY_DESTROY);
     }
 
     @Override
     public void onAttach(RestoDetailView restoDetailView) {
         super.onAttach(restoDetailView);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     //endregion
 
     //region Impl RestoDetailPresenter
@@ -456,10 +463,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
                         super.onNext(_restoDetail);
                         restoDetail=_restoDetail;
                         view.setModel(_restoDetail,mode);
-                        if(resultReceiver!=null) {
-                            resultReceiver.send(0, null);
-                            view.moveToTop();
-                        }
                         loadReviews(mode);
                     }
                     @Override public void onError(Throwable e) {
@@ -698,6 +701,15 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
 
         }
     }
+
+    @Override
+    public void sendResultReceiver(int actionResultReceiver) {
+        if(resultReceiver!=null) {
+            resultReceiver.send(actionResultReceiver, null);
+        }
+
+    }
+
     class TempDataHolder {
         private boolean favResto;
         private String id_interest;

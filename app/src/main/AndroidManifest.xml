@@ -150,7 +150,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.RestoDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMoveTaskToBack"
+            />
         <activity
             android:name=".presentation.view.impl.activity.FilterMapActivity"
             android:label=""

@@ -5,8 +5,6 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +35,6 @@ import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
-import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
@@ -64,7 +60,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.BindViews;
-import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -295,11 +290,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
         if((getIntent().getFlags()^Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)==0)
             getWindow().getDecorView().postDelayed(new Runnable() {
-
                 @Override
                 public void run() {
                     // TODO your magic code to be run
-                    presenter.sendResultReceiver(Actions.ACTION_STOP_BLUR);
+                    presenter.sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR);
                 }
 
             },500);
@@ -367,7 +361,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
 
-                moveToTop();
+                activityReorderToTop();
 
 
             case Actions.MODE_REFRESH_ONLY_LIKE:

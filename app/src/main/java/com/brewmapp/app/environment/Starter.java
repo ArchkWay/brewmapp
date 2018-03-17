@@ -5,14 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
@@ -74,7 +72,7 @@ public class Starter {
     public static void RestoDetailActivityForResult(BaseActivity activity, Interest interest, int requestCode) {
         Intent intent = new Intent(activity, RestoDetailActivity.class);
         intent.putExtra(Keys.RESTO_ID, interest);
-        intent.putExtra(activity.getString(R.string.key_blur),activity.blurOn());
+        intent.putExtra(activity.getString(R.string.key_blur),activity.ProgressBarOn());
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -84,7 +82,7 @@ public class Starter {
         if(id_resto!=null) {
             Intent intent = new Intent(baseActivity, RestoDetailActivity.class);
             intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
-            intent.putExtra(baseActivity.getString(R.string.key_blur),baseActivity.blurOn());
+            intent.putExtra(baseActivity.getString(R.string.key_blur),baseActivity.ProgressBarOn());
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             baseActivity.startActivity(intent);

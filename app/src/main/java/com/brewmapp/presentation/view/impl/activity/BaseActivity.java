@@ -1,15 +1,11 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -25,9 +21,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -54,8 +50,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import eightbitlab.com.blurview.BlurView;
-import eightbitlab.com.blurview.RenderScriptBlur;
 import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
@@ -69,8 +63,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
     private Callback<Boolean> callbackRequestPermissionLocation;
     private ChatResultReceiver chatResultReceiver;
-    private BlurView blurView;
-    private BlurView.ControllerSettings blurViewSettings;
+    private RelativeLayout containerProgressBar;
 
     @Inject
     public LoadCityTask loadCityTask;
@@ -410,51 +403,32 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     //endregion
 
     //region Blur
-    public ResultReceiver blurOn(){
+    public ResultReceiver ProgressBarOn(){
 
-            //region blur On
-            //region Create blur
-            if(blurView==null) {
-                blurView = (BlurView) getLayoutInflater().inflate(R.layout.view_blur, null);
-                addContentView(blurView,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            }
-            //endregion
-            //region set Captuere
-            blurView.setVisibility(View.VISIBLE);
-            blurView.setBackgroundColor(Color.WHITE);
-            blurView.setAlpha(0.5f);
-            //ObjectAnimator.ofFloat(blurView,"alpha",0.5f).setDuration(1000).start();
-
-
-//            View decorView = getWindow().getDecorView();
-//            ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
-//            Drawable windowBackground = decorView.getBackground();
-//            blurViewSettings=blurView.setupWith(rootView)
-//                    .windowBackground(windowBackground)
-//                    .blurAlgorithm(new RenderScriptBlur(BaseActivity.this))
-//                    .blurRadius(0.0001f);
-            //endregion
-            //endregion
+        if(containerProgressBar ==null) {
+            containerProgressBar = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_progress, null);
+            addContentView(containerProgressBar,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        containerProgressBar.setVisibility(View.VISIBLE);
 
         return new ResultReceiver(new Handler(getMainLooper())){
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
                 super.onReceiveResult(resultCode, resultData);
                 switch (resultCode){
-                    case Actions.ACTION_STOP_BLUR:
-                        if(blurView!=null)
-                            blurView.setVisibility(View.GONE);
+                    case Actions.ACTION_STOP_PROGRESS_BAR:
+                        if(containerProgressBar !=null)
+                            containerProgressBar.setVisibility(View.GONE);
                         break;
                         case Actions.ACTION_ACTIVITY_DESTROY:
-                            moveToTop();
+                            activityReorderToTop();
                             break;
                 }
 
             }
         };
     }
-    public void moveToTop(){
-        //Intent intent=new Intent(this,getClass());
+    public void activityReorderToTop(){
         Intent intent=getIntent();
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

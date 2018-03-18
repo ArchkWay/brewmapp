@@ -148,7 +148,7 @@ public class BeerMapFragment extends BaseFragment implements
     private final int MODE_SHOW_RESTO_BY_LIST_RESTO =3;
     private int mode;
     private boolean clickedClaster=false;
-    private android.os.AsyncTask asyncTask=null;
+
 
 
     //координаты отслеживаемой при прокрутке точки на карте
@@ -171,6 +171,7 @@ public class BeerMapFragment extends BaseFragment implements
     //Runnable, который обновляет положение окна
     private Runnable positionUpdaterRunnable;
 
+    private PrepareLoadResto prepareLoadResto=null;
     //endregion
 
     //region Impl BeerMapFragment
@@ -231,7 +232,6 @@ public class BeerMapFragment extends BaseFragment implements
         //запускаем периодическое обновление
         handler.post(positionUpdaterRunnable);
         clearInfoWindow();
-
     }
 
     @Override
@@ -397,7 +397,6 @@ public class BeerMapFragment extends BaseFragment implements
 
         mClusterManager.cluster();
 
-        asyncTask=null;
     }
 
     //endregion
@@ -433,51 +432,9 @@ public class BeerMapFragment extends BaseFragment implements
         if(clickedClaster)
             clickedClaster=false;
         else {
-            if(asyncTask==null) {
-                Collection<FilterRestoLocation> oldRestoLocations = mClusterManager.getAlgorithm().getItems();
-                asyncTask = new android.os.AsyncTask<Object,Object,Object>() {
-                    @Override
-                    protected void onPreExecute() {
-                        super.onPreExecute();
-                        latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
-                    }
-
-                    @Override
-                    protected Object doInBackground(Object... objects) {
-                        //region RemoveInvisibleResto
-                        for (FilterRestoLocation filterRestoLocation : oldRestoLocations) {
-                            boolean contain = latLngBounds.contains(new LatLng(filterRestoLocation.getLocationLat(), filterRestoLocation.getLocationLon()));
-                            if (!contain) {
-                                String key = filterRestoLocation.getRestoId();
-                                mClusterManager.removeItem(hmVisibleResto.get(key));
-                                hmVisibleResto.remove(key);
-                            }
-                        }
-                        //endregion
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object objects) {
-                        super.onPostExecute(objects);
-                        mClusterManager.cluster();
-                        if(mClusterManager.getAlgorithm().getItems().size()<1500)
-                            requestResto();
-                        else
-                            new DialogConfirm(getString(R.string.text_too_many_resto), getFragmentManager(), new DialogConfirm.OnConfirm() {
-                                @Override
-                                public void onOk() {
-                                    requestResto();
-                                }
-
-                                @Override
-                                public void onCancel() {
-                                    asyncTask=null;
-                                }
-                            });
-                    }
-                };
-                asyncTask.execute();
+            if(prepareLoadResto==null) {
+                prepareLoadResto=new PrepareLoadResto();
+                prepareLoadResto.execute();
             }else {
                 mClusterManager.cluster();
             }
@@ -893,5 +850,58 @@ public class BeerMapFragment extends BaseFragment implements
                 }
             }
         }
+    }
+
+    class PrepareLoadResto extends android.os.AsyncTask<Object,Object,Object>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
+        }
+
+        @Override
+        protected Object doInBackground(Object... objects) {
+            //region RemoveInvisibleResto
+            Collection<FilterRestoLocation> oldRestoLocations = mClusterManager.getAlgorithm().getItems();
+            for (FilterRestoLocation filterRestoLocation : oldRestoLocations) {
+                boolean contain = latLngBounds.contains(new LatLng(filterRestoLocation.getLocationLat(), filterRestoLocation.getLocationLon()));
+                if (!contain) {
+                    String key = filterRestoLocation.getRestoId();
+                    mClusterManager.removeItem(hmVisibleResto.get(key));
+                    hmVisibleResto.remove(key);
+                }
+            }
+            //endregion
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object objects) {
+            super.onPostExecute(objects);
+            mClusterManager.cluster();
+            if(mClusterManager.getAlgorithm().getItems().size()<1500)
+                requestResto();
+            else
+                new DialogConfirm(getString(R.string.text_too_many_resto), getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        requestResto();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        googleMap.animateCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                        googleMap.getProjection().getVisibleRegion().latLngBounds.getCenter(),
+                                        googleMap.getCameraPosition().zoom+1
+                                ),
+                                500,
+                                null
+                        );
+                    }
+                });
+            prepareLoadResto=null;
+        }
+
     }
 }

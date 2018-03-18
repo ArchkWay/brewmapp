@@ -421,14 +421,14 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                             containerProgressBar.setVisibility(View.GONE);
                         break;
                         case Actions.ACTION_ACTIVITY_DESTROY:
-                            activityReorderToTop();
+                            activityMoveToTop();
                             break;
                 }
 
             }
         };
     }
-    public void activityReorderToTop(){
+    public void activityMoveToTop(){
         Intent intent=getIntent();
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

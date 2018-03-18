@@ -9,7 +9,6 @@ import android.util.Log;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
@@ -73,7 +72,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
-import io.paperdb.Paper;
 import io.reactivex.Observable;
 import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.executor.MainThread;
@@ -237,7 +235,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         }
         resultReceiver=intent.getParcelableExtra(context.getString(R.string.key_blur));
         if(resultReceiver!=null)
-            view.moveTaskToBack(true);
+            view.activityMoveToBack(true);
 
 
         refreshContent(Actions.MODE_REFRESH_ALL);

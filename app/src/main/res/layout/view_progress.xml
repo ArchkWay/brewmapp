@@ -15,11 +15,12 @@
             android:gravity="center"
             >
         </LinearLayout>
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateTint="@android:color/darker_gray"
             android:layout_centerInParent="true"
-            />
+            android:background="@drawable/bg_progress"
+            android:indeterminateTint="#838383" />
 
 </RelativeLayout>

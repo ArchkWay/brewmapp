@@ -1,11 +1,15 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
+import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.ScrollerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,10 +45,13 @@ import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
+import com.brewmapp.presentation.view.impl.widget.PhotoSliderView;
+import com.daimajia.slider.library.Animations.BaseAnimationInterface;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Transformers.BaseTransformer;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.squareup.picasso.Picasso;
@@ -51,6 +60,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -70,6 +80,7 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
+import static android.animation.LayoutTransition.CHANGE_DISAPPEARING;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
 
@@ -289,14 +300,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.onResume();
 
         if((getIntent().getFlags()^Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)==0)
-            getWindow().getDecorView().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // TODO your magic code to be run
-                    presenter.sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR);
-                }
-
-            },500);
+            getWindow().getDecorView().postDelayed(() -> presenter.sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR),500);
 
 
     }
@@ -361,7 +365,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
 
-                activityReorderToTop();
+                activityMoveToTop();
 
 
             case Actions.MODE_REFRESH_ONLY_LIKE:
@@ -453,18 +457,23 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     }
 
+    @Override
+    public void activityMoveToBack(boolean b) {
+        moveTaskToBack(true);
+    }
+
     //endregion
 
     //region Functions
     private void fillSlider(RestoDetail restoDetail) {
-
         if(restoDetail.getResto().getThumb()!=null) {
-            DefaultSliderView defaultSliderView = new DefaultSliderView(RestoDetailActivity.this);
+            PhotoSliderView defaultSliderView = new PhotoSliderView(RestoDetailActivity.this);
             defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
             defaultSliderView.setPicasso(Picasso.with(slider.getContext()));
             defaultSliderView.image(restoDetail.getResto().getThumb());
             defaultSliderView.setOnSliderClickListener(slider1 -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList, RestoDetailActivity.this));
             slider.addSlider(defaultSliderView);
+
         }else {
             slider.addSlider(new DefaultSliderView(RestoDetailActivity.this)
                     .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
@@ -481,6 +490,39 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 photosCounter.setText(String.format(Locale.getDefault(),"%d/%d", position + 1, mountSliders));
             }
         });
+
+        slider.setPresetTransformer(5);
+        try {
+            Field f=slider.getClass().getDeclaredField("mViewPagerTransformer");
+            f.setAccessible(true);
+            BaseTransformer baseTransformer= (BaseTransformer) f.get(slider);
+            baseTransformer.setCustomAnimationInterface(
+                    new BaseAnimationInterface() {
+                        @Override
+                        public void onPrepareCurrentItemLeaveScreen(View current) {
+                        }
+
+                        @Override
+                        public void onPrepareNextItemShowInScreen(View next) {
+                        }
+
+                        @Override
+                        public void onCurrentItemDisappear(View view) {
+                        }
+
+                        @Override
+                        public void onNextItemAppear(View view) {
+                            slider.setPresetTransformer(0);
+                        }
+                    }
+
+            );
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

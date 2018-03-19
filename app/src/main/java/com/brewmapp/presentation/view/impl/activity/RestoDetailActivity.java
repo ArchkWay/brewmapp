@@ -4,6 +4,7 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -177,6 +178,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     private FlexibleAdapter adapter_reviews;
     private  ArrayList<Photo> photoArrayList;
 
+
     //endregion
 
     //region Impl RestoDetailActivity
@@ -185,7 +187,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_resto);
     }
-
 
     @Override
     protected void initView() {
@@ -211,7 +212,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         private_message.setOnClickListener(v -> presenter.startChat(this,resto.getUser_id()));
         call.setOnClickListener(v -> callPhone(number_call.getText().toString()));
         call1.setOnClickListener(v -> callPhone(number_cal2.getText().toString()));
-        button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription(true));
+        button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription());
         panel_i_here.setAlpha(0.5f);
         //panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
 
@@ -341,8 +342,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
                 //region Description
                 String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
-                if(strDescription.length()>0)  description.setText(strDescription);
-                setTitleToButtonOfMoreDescription(false);
+                if(strDescription.length()>0)  description.setText(strDescription.trim());
+
                 button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
                 //endregion
                 //endregion
@@ -579,19 +580,20 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         });
     }
 
-    private void setTitleToButtonOfMoreDescription(boolean click) {
-        if(button_more_description.getVisibility()==View.VISIBLE) {
-            if(click) {
-                if (description.getMaxLines() > 0) {
-                    int k = description.getLineCount() / description.getMaxLines() + 1;
-                    ObjectAnimator.ofInt(description, "height", description.getHeight() * k).setDuration(1000).start();
-                    button_more_description.setVisibility(View.GONE);
-                }
-            }
-            button_more_description.setText("Читать полностью");
+    private void setTitleToButtonOfMoreDescription() {
+        String currText=button_more_description.getText().toString();
+        int realLineHeight = (int) (description.getTextSize()+description.getLineSpacingExtra());
+        int newHeight;
+        if(currText.equals(getString(R.string.text_read_completely))) {
+            newHeight = realLineHeight * description.getLineCount();
+            button_more_description.setText(R.string.text_collapse);
         }else {
-            button_more_description.setOnClickListener(null);
+            int initLinesCount=getResources().getInteger(R.integer.init_max_lites_text_view);
+            newHeight = (int) (realLineHeight*initLinesCount-description.getLineSpacingExtra());
+            button_more_description.setText(R.string.text_read_completely);
         }
+        ObjectAnimator.ofInt(description, "height", newHeight).setDuration(1000).start();
+
     }
 
     private void processItemClickAction(int action, Object payload){

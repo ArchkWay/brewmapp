@@ -58,6 +58,7 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
 public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
+    //region BindView
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.activity_beer_detail_name)    TextView name;
     @BindView(R.id.activity_beer_detail_text_view_avg_cost)    TextView avg_cost;
@@ -104,70 +105,24 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
             R.id.layout_fav
     })    List<View> viewList;
 
-    @Inject BeerDetailPresenter presenter;
+    //endregion
 
+    //region Inject
+    @Inject BeerDetailPresenter presenter;
+    //endregion
+
+    //region Private
     private FlexibleAdapter adapter_review ;
     private FlexibleAdapter adapter_where_they_pour;
     private FlexibleAdapter adapter_added_to_favorite;
     private Beer beer;
+    //endregion
 
+    //region Impl BeerDetailActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beer_detail);
-    }
-
-    @Override
-    public void setModel(BeerDetail beerDetail,int mode) {
-        switch (mode){
-            case Actions.MODE_REFRESH_ALL:
-                beer=beerDetail.getBeer();
-
-                String tmpStr;
-
-                try {tmpStr=beer.getTitle();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) setTitle(beer.getFormatedTitle());
-                try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
-                try {tmpStr=beer.getTitle_ru();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) name.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getBeerTaste().iterator().next().getName();}catch (Exception e){tmpStr=null;}if(!TextUtils.isEmpty(tmpStr)) taste.setText(tmpStr);
-                try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getBeerBrand().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) brand.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getBrewery().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) brew.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getCountry().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) country.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getBeerType().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) type.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getBeerStrength().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) strength.setText(tmpStr);
-                try {tmpStr=beer.getRelations().getProductDensity().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) density.setText(tmpStr);
-                try {tmpStr=beer.getFiltered();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) filter_beer.setText(getString(tmpStr.equals("1")?R.string.yes:R.string.no));
-                try {tmpStr=beer.getRelations().getBeerAftertaste().iterator().next().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) after_taste.setText(tmpStr);
-                try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);else description.setLines(1);
-
-
-
-                ArrayList<String> photos=new ArrayList<>();
-                if(beer.getGetThumb()!=null&&beer.getGetThumb().length()>0)
-                    photos.add(beer.getGetThumb());
-                if(photos.size()==0){
-                    slider.addSlider(new DefaultSliderView(this)
-                            .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
-                            .image(R.drawable.ic_default_beer));
-                }else {
-                    for(String s:photos){
-                        slider.addSlider(new DefaultSliderView(this)
-                                .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                                .image(s)
-                                .setOnSliderClickListener(slider1 -> {
-                                    Intent intent = new Intent(this, PhotoSliderActivity.class);
-                                    String[] urls = {s};
-                                    intent.putExtra(Keys.PHOTOS, urls);
-                                    startActivity(intent);
-                                }));
-
-                    }
-                }
-            case Actions.MODE_REFRESH_ONLY_LIKE:
-                try {tmpStr=beerDetail.getBeer().getLike();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) like_counter.setText(tmpStr);
-                try {tmpStr=beerDetail.getBeer().getDis_like();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) dislike_counter.setText(tmpStr);
-        }
-        enableControls(true,0);
     }
 
     @Override
@@ -247,6 +202,61 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         }
         return super.onOptionsItemSelected(item);
     }
+    //endregion
+
+    //region Impl BeerDetailView
+    @Override
+    public void setModel(BeerDetail beerDetail,int mode) {
+        switch (mode){
+            case Actions.MODE_REFRESH_ALL:
+                beer=beerDetail.getBeer();
+
+                String tmpStr;
+
+                try {tmpStr=beer.getTitle();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) setTitle(beer.getFormatedTitle());
+                try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
+                try {tmpStr=beer.getTitle_ru();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) name.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerTaste().iterator().next().getName();}catch (Exception e){tmpStr=null;}if(!TextUtils.isEmpty(tmpStr)) taste.setText(tmpStr);
+                try {tmpStr=beer.getAvg_cost();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) avg_cost.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerBrand().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) brand.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBrewery().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) brew.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getCountry().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) country.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerType().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) type.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getBeerStrength().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) strength.setText(tmpStr);
+                try {tmpStr=beer.getRelations().getProductDensity().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) density.setText(tmpStr);
+                try {tmpStr=beer.getFiltered();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) filter_beer.setText(getString(tmpStr.equals("1")?R.string.yes:R.string.no));
+                try {tmpStr=beer.getRelations().getBeerAftertaste().iterator().next().getName();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) after_taste.setText(tmpStr);
+                try {tmpStr=Html.fromHtml(beer.getText()).toString();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) description.setText(tmpStr);else description.setLines(1);
+
+
+
+                ArrayList<String> photos=new ArrayList<>();
+                if(beer.getGetThumb()!=null&&beer.getGetThumb().length()>0)
+                    photos.add(beer.getGetThumb());
+                if(photos.size()==0){
+                    slider.addSlider(new DefaultSliderView(this)
+                            .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                            .image(R.drawable.ic_default_beer));
+                }else {
+                    for(String s:photos){
+                        slider.addSlider(new DefaultSliderView(this)
+                                .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                .image(s)
+                                .setOnSliderClickListener(slider1 -> {
+                                    Intent intent = new Intent(this, PhotoSliderActivity.class);
+                                    String[] urls = {s};
+                                    intent.putExtra(Keys.PHOTOS, urls);
+                                    startActivity(intent);
+                                }));
+
+                    }
+                }
+            case Actions.MODE_REFRESH_ONLY_LIKE:
+                try {tmpStr=beerDetail.getBeer().getLike();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) like_counter.setText(tmpStr);
+                try {tmpStr=beerDetail.getBeer().getDis_like();}catch (Exception e){tmpStr=null;} if(!TextUtils.isEmpty(tmpStr)) dislike_counter.setText(tmpStr);
+        }
+        enableControls(true,0);
+    }
 
     @Override
     public void commonError(String... strings) {
@@ -322,8 +332,9 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         toolbarTitle.setText(title);
 
     }
+    //endregion
 
-    //************************
+    //region Functions
     private void processItemClickAction(int action, Object payload){
 
 
@@ -366,5 +377,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         int[] mValueColor=getResources().getIntArray(R.array.product_average_value);
         return mValueColor[index>4?4:index];
     }
+    //endregion
 
 }

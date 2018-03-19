@@ -125,6 +125,7 @@ public class InterestListActivity extends BaseActivity
         switch (loadInterestPackage.getFilterInterest()){
             case Keys.CAP_BEER:
                 setTitle(R.string.fav_beer);
+                loadInterestPackage.setRelated_model(Keys.CAP_BEER);
                 break;
             case Keys.CAP_RESTO:
                 setTitle(R.string.fav_bars);

@@ -1,13 +1,16 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -15,6 +18,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Location;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -27,7 +31,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  */
 
 public class InterestView extends BaseLinearLayout implements InteractiveModelView<Interest> {
-    @BindView(R.id.view_interest_avatar)    ImageView avatar;
+    @BindView(R.id.view_interest_avatar)    RoundedImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
     @BindView(R.id.view_interest_craft)    TextView craft_text;
@@ -123,6 +127,8 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
             Picasso.with(getContext()).load(R.drawable.ic_default_beer).fit().centerCrop().into(avatar);
         else
             Picasso.with(getContext()).load(tmpStr).fit().centerInside().into(avatar);
+        avatar.setBackground(getResources().getDrawable(R.drawable.bg_ring_red));
+
         setOnClickListener(v -> listener.onModelAction(Actions.ACTION_CLICK_ON_ITEM_INTEREST_BEER,interest));
     }
     private void handleModelCommon() {

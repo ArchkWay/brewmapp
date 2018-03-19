@@ -714,7 +714,7 @@
                     android:textColor="@color/colorButtonRed"
                     style="@style/AppTheme.Paragraph"
                     android:textSize="@dimen/text_size_small"
-
+                    android:text="@string/text_read_completely"
                     />
             </LinearLayout>
 

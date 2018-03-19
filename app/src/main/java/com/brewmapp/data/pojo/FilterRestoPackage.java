@@ -21,6 +21,8 @@ public class FilterRestoPackage {
     private String restoOrderSort;
     private String restoBeer;
     private int page;
+    private double lat;
+    private double lon;
 
     public FilterRestoPackage(String restoCity, String restoTypes, String restoMetroes, String restoKitchens,
                               String restoFeatures, String menuBeer, String restoPrices, String restoAveragepriceRange,
@@ -161,5 +163,21 @@ public class FilterRestoPackage {
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 }

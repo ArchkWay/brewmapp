@@ -1,6 +1,7 @@
 package com.brewmapp.data.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Locale;
 public class Distance implements Serializable {
     private String distance;
     private String city_name;
+    private List<Metro> metro;
 
     public String getCity_name() {
         return city_name;
@@ -28,5 +30,13 @@ public class Distance implements Serializable {
 
     public void setDistance(String distance) {
         this.distance = distance;
+    }
+
+    public List<Metro> getMetro() {
+        return metro;
+    }
+
+    public void setMetro(List<Metro> metro) {
+        this.metro = metro;
     }
 }

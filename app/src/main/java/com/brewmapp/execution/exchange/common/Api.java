@@ -78,6 +78,7 @@ import com.brewmapp.execution.exchange.response.UserResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 
+import java.security.Key;
 import java.util.Map;
 
 import ru.frosteye.ovsa.execution.network.request.MultipartRequestParams;
@@ -240,6 +241,8 @@ public interface Api {
     @POST("search/resto")
     @FormUrlEncoded
     Call<Restos> loadRestos(@QueryMap RequestParams query,
+                            @Query(Keys.LAT) double lat,
+                            @Query(Keys.LON) double lon,
                             @Query(Keys.LIMIT_START) int start,
                             @Query(Keys.LIMIT_END) int end,
                             @FieldMap RequestParams params);

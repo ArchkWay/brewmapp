@@ -80,6 +80,10 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             filterRestoPackage.setRestoKitchens(searchPackage.getKitchen());
         if(searchPackage.getPrice()!=null)
             filterRestoPackage.setRestoPrices(searchPackage.getPrice());
+        if(searchPackage.getLat()!=0)
+            filterRestoPackage.setLat(searchPackage.getLat());
+        if(searchPackage.getLon()!=0)
+            filterRestoPackage.setLon(searchPackage.getLon());
 
         loadRestosList.execute(filterRestoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override
@@ -91,7 +95,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             @Override
             public void onNext(List<IFlexible> restoLocations) {
                 view.hideProgressBar();
-                    view.appendItems(restoLocations);
+                view.appendItems(restoLocations);
             }
 
             @Override

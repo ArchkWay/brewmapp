@@ -30,6 +30,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
     @BindView(R.id.view_interest_button_select)    ImageView arrow_right;
+    @BindView(R.id.view_interest_text_distance)    TextView text_distance;
+    @BindView(R.id.view_interest_text_metro)    TextView text_metro;
 
     private Resto resto;
     private Listener listener;
@@ -73,6 +75,15 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         }else {
             setOnClickListener(v -> listener.onModelAction(FilterRestoField.NAME, resto));
         }
+
+        try {
+            text_distance.setText(String.format("%.2f км", Float.valueOf(resto.getDistance().getDistance())/1000));
+        }catch (Exception e){}
+
+        try {
+            text_metro.setText(resto.getDistance().getMetro().get(0).getName());
+        }catch (Exception e){}
+
     }
 
     @Override

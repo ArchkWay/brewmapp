@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.activity;
 import javax.inject.Inject;
 
 import android.app.ProgressDialog;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +39,7 @@ import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -167,6 +169,7 @@ public class ResultSearchActivity extends BaseActivity implements
                             }break;
                         }
                     }
+
                 }
             }break;
             //endregion
@@ -440,7 +443,17 @@ public class ResultSearchActivity extends BaseActivity implements
         }
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
-                presenter.loadRestoList(0, searchPackage);
+                requestLastLocation(new Callback<Location>() {
+                    @Override
+                    public void onResult(Location location) {
+                        if(location==null)
+                            location=getDefaultLocation();
+                        searchPackage.setLat(location.getLatitude());
+                        searchPackage.setLon(location.getLongitude());
+                        presenter.loadRestoList(0, searchPackage);
+                    }
+                });
+
                 break;
             case SearchFragment.TAB_BEER:
                 presenter.loadBeerList( searchPackage);

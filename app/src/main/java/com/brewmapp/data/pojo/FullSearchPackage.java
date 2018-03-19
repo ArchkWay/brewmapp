@@ -30,6 +30,8 @@ public class FullSearchPackage {
     private String taste;
     private String afterTaste;
     private String id;
+    private double lat;
+    private double lon;
 
     public String getCountry() {
         return country;
@@ -205,5 +207,21 @@ public class FullSearchPackage {
 
     public String getId() {
         return id;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public double getLon() {
+        return lon;
     }
 }

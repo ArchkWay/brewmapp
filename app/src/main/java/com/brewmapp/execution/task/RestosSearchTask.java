@@ -63,7 +63,7 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
                 params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
 
                 queryParams.addParam(Keys.USER_ID, userRepo.load().getId());
-                Restos response = executeCall(getApi().loadRestos(queryParams, start, end, params));
+                Restos response = executeCall(getApi().loadRestos(queryParams,restoPackage.getLat(),restoPackage.getLon(), start, end, params));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

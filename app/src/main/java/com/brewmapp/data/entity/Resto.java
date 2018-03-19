@@ -63,6 +63,7 @@ public class Resto implements ICommonItem, Serializable {
     private String interested;
     private String no_interested;
     private String country;
+    private Distance distance;
 
     public Resto() {
 
@@ -78,6 +79,14 @@ public class Resto implements ICommonItem, Serializable {
         setName(name);
     }
 
+
+    public Distance getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Distance distance) {
+        this.distance = distance;
+    }
 
     public Location getLocation() {
         return location;

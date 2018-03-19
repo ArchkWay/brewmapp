@@ -37,7 +37,7 @@ import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
+import com.brewmapp.data.entity.wrapper.SearchRestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -74,9 +74,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
-import ru.frosteye.ovsa.marker.Async;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -330,8 +328,8 @@ public class BeerMapFragment extends BaseFragment implements
         ArrayList<IFlexible> arrayListfound=new ArrayList<>();
         Iterator<IFlexible> iterator=iFlexibles.iterator();
         while (iterator.hasNext()) {
-            RestoInfo restoInfo= (RestoInfo) iterator.next();
-            Resto resto=restoInfo.getModel();
+            SearchRestoInfo searchRestoInfo = (SearchRestoInfo) iterator.next();
+            Resto resto= searchRestoInfo.getModel();
             arrayListfound.add(new FilterRestoLocationInfo(new FilterRestoOnMap(resto)));
         }
 

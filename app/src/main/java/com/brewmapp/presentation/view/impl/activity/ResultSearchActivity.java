@@ -28,7 +28,7 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.SearchBeer;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
+import com.brewmapp.data.entity.wrapper.SearchRestoInfo;
 import com.brewmapp.data.entity.wrapper.SearchBeerInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
@@ -52,7 +52,6 @@ import com.brewmapp.presentation.view.impl.widget.FinderView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class ResultSearchActivity extends BaseActivity implements
@@ -309,8 +308,8 @@ public class ResultSearchActivity extends BaseActivity implements
                     hashMap.put(filterRestoLocation.getRestoId(),filterRestoLocation);
 
                 for (IFlexible iFlexible:listAdapter){
-                    RestoInfo restoInfo= (RestoInfo) iFlexible;
-                    FilterRestoLocation  filterRestoLocation=hashMap.get(String.valueOf(restoInfo.getModel().getId()));
+                    SearchRestoInfo searchRestoInfo = (SearchRestoInfo) iFlexible;
+                    FilterRestoLocation  filterRestoLocation=hashMap.get(String.valueOf(searchRestoInfo.getModel().getId()));
                     if(filterRestoLocation!=null)
                         arrayListResult.add(
                                 new RestoLocation(

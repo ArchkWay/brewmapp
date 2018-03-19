@@ -53,12 +53,13 @@
             app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
             android:layout_marginLeft="8dp"
             app:layout_constraintTop_toBottomOf="@+id/view.interest.title"
-            android:id="@+id/view.interest.container_distance">
+            android:id="@+id/view.interest.container_distance_metro">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:id="@+id/view.interest.container_distance"
                 >
                 <ImageView
                     android:layout_width="@dimen/size_icon_18"
@@ -102,12 +103,12 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:lines="3"
+            android:lines="2"
             android:text="@string/text_view_value_not_found"
             app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
             app:layout_constraintRight_toLeftOf="@+id/view.interest.button_select"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view.interest.container_distance"
+            app:layout_constraintTop_toBottomOf="@+id/view.interest.container_distance_metro"
             style="@style/AppTheme.Text.Georgia.Italic"
             android:ellipsize="end"
             />
@@ -126,14 +127,24 @@
             android:id="@+id/view.interest.button_select"
             android:layout_marginEnd="8dp" />
 
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="@string/text_view_value_not_found"
+            android:background="@drawable/bg_rating"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/view.interest.button_select"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            />
     </android.support.constraint.ConstraintLayout>
+
     <ru.frosteye.ovsa.presentation.view.widget.Line
         android:layout_width="match_parent"
         android:layout_height="2.5dp"
         android:background="@android:color/transparent"/>
-    <ru.frosteye.ovsa.presentation.view.widget.Line
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/colorSplitter"/>
 
 </com.brewmapp.presentation.view.impl.widget.InterestAddViewResto>

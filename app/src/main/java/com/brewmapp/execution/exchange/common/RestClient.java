@@ -26,7 +26,7 @@ import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PriceRangeInfo;
 import com.brewmapp.data.entity.wrapper.RegionInfo;
 import com.brewmapp.data.entity.wrapper.RestoDetailInfo;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
+import com.brewmapp.data.entity.wrapper.SearchRestoInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.entity.wrapper.ReviewInfo;
 import com.brewmapp.data.entity.wrapper.SaleInfo;
@@ -58,12 +58,13 @@ import com.brewmapp.execution.exchange.common.base.KitchenDeserializer;
 import com.brewmapp.execution.exchange.common.base.PriceRangeDeserializer;
 import com.brewmapp.execution.exchange.common.base.QuickSearchDeserializer;
 import com.brewmapp.execution.exchange.common.base.RegionDeserializer;
-import com.brewmapp.execution.exchange.common.base.RestoDeserializer;
+import com.brewmapp.execution.exchange.common.base.SearchRestoDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoDetailsDeserializer;
 import com.brewmapp.execution.exchange.common.base.ReviewDeserializer;
 import com.brewmapp.execution.exchange.common.base.RestoTypeDeserializer;
 import com.brewmapp.execution.exchange.common.base.SalesDeserializer;
 import com.brewmapp.execution.exchange.common.base.SearchBeerDeserializer;
+import com.brewmapp.execution.exchange.common.base.SearchRestoDeserializer2;
 import com.brewmapp.execution.exchange.common.base.SubscriptionDeserializer;
 import com.brewmapp.execution.exchange.common.base.UserDeserializer;
 import com.google.gson.GsonBuilder;
@@ -125,7 +126,8 @@ public class RestClient extends BaseRetrofitClient<Api> implements ApiClient {
                 .registerTypeAdapter(PhotoInfo.class, new PhotoDeserializer())
                 .registerTypeAdapter(BeerInfo.class, new BeerDeserializer())
                 .registerTypeAdapter(InterestInfo.class, new InterestDeserializer())
-                .registerTypeAdapter(RestoInfo.class, new RestoDeserializer())
+                //.registerTypeAdapter(SearchRestoInfo.class, new SearchRestoDeserializer())
+                .registerTypeAdapter(SearchRestoInfo.class, new SearchRestoDeserializer2())
                 .registerTypeAdapter(RestoDetailInfo.class, new RestoDetailsDeserializer())
                 .registerTypeAdapter(RestoTypeInfo.class, new RestoTypeDeserializer())
                 .registerTypeAdapter(KitchenInfo.class, new KitchenDeserializer())

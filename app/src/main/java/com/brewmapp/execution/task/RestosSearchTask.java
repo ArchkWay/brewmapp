@@ -1,12 +1,10 @@
 package com.brewmapp.execution.task;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.container.Restos;
+import com.brewmapp.data.entity.container.ResponseSearchResto;
 import com.brewmapp.data.pojo.FilterRestoPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -20,7 +18,6 @@ import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
-import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.execution.executor.MainThread;
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
 
@@ -63,7 +60,7 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
                 params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
 
                 queryParams.addParam(Keys.USER_ID, userRepo.load().getId());
-                Restos response = executeCall(getApi().loadRestos(queryParams,restoPackage.getLat(),restoPackage.getLon(), start, end, params));
+                ResponseSearchResto response = executeCall(getApi().searchResto(queryParams,restoPackage.getLat(),restoPackage.getLon(), start, end, params));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();
             } catch (Exception e) {

@@ -1,16 +1,12 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -35,7 +31,7 @@ public class InterestView extends BaseLinearLayout implements InteractiveModelVi
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
     @BindView(R.id.view_interest_craft)    TextView craft_text;
-    @BindView(R.id.view_interest_container_distance)    View container_distance;
+    @BindView(R.id.view_interest_container_distance_metro)    View container_distance;
     @BindView(R.id.view_interest_container_metro)    View container_metro;
     @BindView(R.id.view_interest_text_distance)    TextView text_distance;
     @BindView(R.id.view_interest_text_metro)    TextView text_metro;

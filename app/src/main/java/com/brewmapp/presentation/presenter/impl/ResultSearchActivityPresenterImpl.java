@@ -90,6 +90,7 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             public void onError(Throwable e) {
                 showError(e.getMessage());
                 view.hideProgressBar();
+                view.commonError(e.getMessage());
             }
 
             @Override

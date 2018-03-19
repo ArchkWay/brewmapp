@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     @BindView(R.id.view_interest_button_select)    ImageView arrow_right;
     @BindView(R.id.view_interest_text_distance)    TextView text_distance;
     @BindView(R.id.view_interest_text_metro)    TextView text_metro;
+    @BindView(R.id.view_interest_container_metro)    View container_metro;
+    @BindView(R.id.view_interest_container_distance)    View container_distance;
 
     private Resto resto;
     private Listener listener;
@@ -77,12 +80,18 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
         }
 
         try {
+            container_distance.setVisibility(VISIBLE);
             text_distance.setText(String.format("%.2f км", Float.valueOf(resto.getDistance().getDistance())/1000));
-        }catch (Exception e){}
+        }catch (Exception e){
+            container_distance.setVisibility(INVISIBLE);
+        }
 
         try {
+            container_metro.setVisibility(VISIBLE);
             text_metro.setText(resto.getDistance().getMetro().get(0).getName());
-        }catch (Exception e){}
+        }catch (Exception e){
+            container_metro.setVisibility(INVISIBLE);
+        }
 
     }
 

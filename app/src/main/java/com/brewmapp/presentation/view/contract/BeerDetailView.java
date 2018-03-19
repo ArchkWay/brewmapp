@@ -1,9 +1,7 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.Averagevalue;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.BeerDetail;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
 
 import java.util.ArrayList;
 import java.util.List;

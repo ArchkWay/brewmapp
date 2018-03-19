@@ -1,9 +1,6 @@
 package com.brewmapp.presentation.presenter.impl;
 
-import com.brewmapp.data.entity.FilterRestoLocation;
-import com.brewmapp.data.entity.FilterRestoOnMap;
 import com.brewmapp.data.entity.wrapper.FilterRestoLocationInfo;
-import com.brewmapp.data.entity.wrapper.RestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.RestoGeoPackage;
@@ -18,8 +15,6 @@ import com.brewmapp.execution.task.SearchOnMapTask;
 import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
 import com.brewmapp.presentation.view.contract.BeerMapView;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;

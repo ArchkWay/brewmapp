@@ -3,7 +3,7 @@ package com.brewmapp.execution.task;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.container.BeerBrands;
 import com.brewmapp.data.entity.container.Beers;
-import com.brewmapp.data.entity.container.Restos;
+import com.brewmapp.data.entity.container.ResponseSearchResto;
 import com.brewmapp.data.entity.container.Users;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.common.Api;
@@ -52,8 +52,8 @@ public class FullSearchTask extends BaseNetworkTask<FullSearchPackage,List<IFlex
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_RESTO:
-                        Restos restos=executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), start, end, params));
-                        subscriber.onNext(new ArrayList<>(restos.getModels()));
+                        ResponseSearchResto responseSearchResto =executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), start, end, params));
+                        subscriber.onNext(new ArrayList<>(responseSearchResto.getModels()));
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_USER:

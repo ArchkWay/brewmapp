@@ -340,7 +340,7 @@
                     android:layout_width="@dimen/common_block_space_triple"
                     android:layout_height="@dimen/common_block_space_triple"
                     android:text="@string/text_view_value_not_found"
-                    android:background="@drawable/bg_circle"
+                    android:background="@drawable/bg_rating"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
                     />

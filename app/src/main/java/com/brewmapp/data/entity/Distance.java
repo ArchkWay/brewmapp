@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +13,7 @@ import java.util.Locale;
 public class Distance implements Serializable {
     private String distance;
     private String city_name;
+    @SerializedName("disable_json_serialise")
     private List<Metro> metro;
 
     public String getCity_name() {

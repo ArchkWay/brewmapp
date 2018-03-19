@@ -10,7 +10,7 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  * Created by Kras on 25.10.2017.
  */
 
-public class RestoInfo extends AdapterItem<Resto, InterestAddViewResto> {
+public class SearchRestoInfo extends AdapterItem<Resto, InterestAddViewResto> {
     @Override
     public int getLayoutRes() {
         return R.layout.view_add_resto;

@@ -26,7 +26,6 @@ import com.brewmapp.data.entity.BeerPowerTypes;
 import com.brewmapp.data.entity.BeerSmellTypes;
 import com.brewmapp.data.entity.BeerTasteTypes;
 import com.brewmapp.data.entity.BeerTypesModel;
-import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.BreweryTypes;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.CityTypes;
@@ -44,7 +43,6 @@ import com.brewmapp.data.entity.PriceRangeTypes;
 import com.brewmapp.data.entity.RegionTypes;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
-import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.RestoTypes;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.Subscription;
@@ -61,7 +59,7 @@ import com.brewmapp.data.entity.container.InterestsByUser;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Beers;
 import com.brewmapp.data.entity.container.RestoDetails;
-import com.brewmapp.data.entity.container.Restos;
+import com.brewmapp.data.entity.container.ResponseSearchResto;
 import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.entity.container.SearchBeerTypes;
 import com.brewmapp.data.entity.container.Subscriptions;
@@ -78,7 +76,6 @@ import com.brewmapp.execution.exchange.response.UserResponse;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 
-import java.security.Key;
 import java.util.Map;
 
 import ru.frosteye.ovsa.execution.network.request.MultipartRequestParams;
@@ -240,12 +237,12 @@ public interface Api {
 
     @POST("search/resto")
     @FormUrlEncoded
-    Call<Restos> loadRestos(@QueryMap RequestParams query,
-                            @Query(Keys.LAT) double lat,
-                            @Query(Keys.LON) double lon,
-                            @Query(Keys.LIMIT_START) int start,
-                            @Query(Keys.LIMIT_END) int end,
-                            @FieldMap RequestParams params);
+    Call<ResponseSearchResto> searchResto(@QueryMap RequestParams query,
+                                          @Query(Keys.LAT) double lat,
+                                          @Query(Keys.LON) double lon,
+                                          @Query(Keys.LIMIT_START) int start,
+                                          @Query(Keys.LIMIT_END) int end,
+                                          @FieldMap RequestParams params);
 
     @POST("search/beer")
     @FormUrlEncoded
@@ -285,7 +282,7 @@ public interface Api {
 
     @POST("full_search/{query}")
     @FormUrlEncoded
-    Call<Restos> fullSearchResto(
+    Call<ResponseSearchResto> fullSearchResto(
             @Path("query") String query,
             @Query(Keys.LIMIT_START) int start,
             @Query(Keys.LIMIT_END) int end,

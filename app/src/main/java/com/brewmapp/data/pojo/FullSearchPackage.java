@@ -32,6 +32,8 @@ public class FullSearchPackage {
     private String id;
     private double lat;
     private double lon;
+    private String order;
+    private String cityName;
 
     public String getCountry() {
         return country;
@@ -223,5 +225,21 @@ public class FullSearchPackage {
 
     public double getLon() {
         return lon;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCityName() {
+        return cityName;
     }
 }

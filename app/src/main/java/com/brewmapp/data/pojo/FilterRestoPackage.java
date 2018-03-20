@@ -23,6 +23,7 @@ public class FilterRestoPackage {
     private int page;
     private double lat;
     private double lon;
+    private String order;
 
     public FilterRestoPackage(String restoCity, String restoTypes, String restoMetroes, String restoKitchens,
                               String restoFeatures, String menuBeer, String restoPrices, String restoAveragepriceRange,
@@ -179,5 +180,13 @@ public class FilterRestoPackage {
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getOrder() {
+        return order;
     }
 }

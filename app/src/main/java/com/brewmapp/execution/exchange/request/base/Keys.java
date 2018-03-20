@@ -203,4 +203,8 @@ public class Keys {
     public static final String CoordStart="coordStart";
     public static final String CoordEnd="coordEnd";
     public static final String CAP_REVIEW = "Review";
+    public static final String NOMENU = "nomenu";
+    public static final String ORDER_SORT_RATING_DESC = "t.avg_ball DESC";
+    public static final String ORDER_SORT_RATING_ASC = "t.avg_ball ASC";
+    public static final String ORDER_SORT_DISTANCE_ASC = "dist ASC";
 }

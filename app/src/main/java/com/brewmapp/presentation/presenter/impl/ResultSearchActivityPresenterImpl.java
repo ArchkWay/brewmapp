@@ -84,6 +84,8 @@ public class ResultSearchActivityPresenterImpl extends BasePresenter<ResultSearc
             filterRestoPackage.setLat(searchPackage.getLat());
         if(searchPackage.getLon()!=0)
             filterRestoPackage.setLon(searchPackage.getLon());
+        if(searchPackage.getOrder()!=null)
+            filterRestoPackage.setOrder(searchPackage.getOrder());
 
         loadRestosList.execute(filterRestoPackage, new SimpleSubscriber<List<IFlexible>>() {
             @Override

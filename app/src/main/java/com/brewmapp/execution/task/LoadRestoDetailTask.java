@@ -38,7 +38,7 @@ public class LoadRestoDetailTask extends BaseNetworkTask<LoadRestoDetailPackage,
                 WrapperParams wrapperParams=new WrapperParams("");
                 RestoDetails restoDetails;
                 if(loadRestoDetailPackage.getLat()!=0&&loadRestoDetailPackage.getLon()!=0) {
-                    restoDetails = executeCall(getApi().getRestoDetailsWithDistance(loadRestoDetailPackage.getId(), wrapperParams,loadRestoDetailPackage.getLat(),loadRestoDetailPackage.getLon()));
+                    restoDetails = executeCall(getApi().getRestoDetailsWithDistance(loadRestoDetailPackage.getId(), wrapperParams,loadRestoDetailPackage.getLat(),loadRestoDetailPackage.getLon(),loadRestoDetailPackage.getNoMenu()));
                 }else {
                     restoDetails = executeCall(getApi().getRestoDetails(loadRestoDetailPackage.getId(), wrapperParams));
                 }

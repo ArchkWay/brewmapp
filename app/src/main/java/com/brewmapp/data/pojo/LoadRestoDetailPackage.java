@@ -8,6 +8,7 @@ public class LoadRestoDetailPackage extends BasePackage{
     private String id;
     private double lat;
     private double lon;
+    private double noMenu;
 
     public String getId() {
         return id;
@@ -31,5 +32,13 @@ public class LoadRestoDetailPackage extends BasePackage{
 
     public double getLon() {
         return lon;
+    }
+
+    public double getNoMenu() {
+        return noMenu;
+    }
+
+    public void setNoMenu(double noMenu) {
+        this.noMenu = noMenu;
     }
 }

@@ -3,8 +3,9 @@ package com.brewmapp.presentation.view.impl.activity;
 import javax.inject.Inject;
 
 import android.app.ProgressDialog;
-import android.location.Location;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,17 +26,20 @@ import android.widget.TextView;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
+import com.brewmapp.data.FilterAdapter;
 import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.data.entity.FilteredTitle;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoLocation;
 import com.brewmapp.data.entity.SearchBeer;
 import com.brewmapp.data.entity.wrapper.SearchRestoInfo;
 import com.brewmapp.data.entity.wrapper.SearchBeerInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ResultSearchActivityPresenter;
 import com.brewmapp.presentation.view.contract.ResultSearchActivityView;
 
@@ -39,7 +48,6 @@ import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
-import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -49,25 +57,36 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class ResultSearchActivity extends BaseActivity implements
-        ResultSearchActivityView
+        ResultSearchActivityView,
+        View.OnClickListener,
+        AdapterView.OnItemClickListener
 {
 
     //region BindView
-    @BindView(R.id.filter_category_toolbar) Toolbar toolbar;
+    @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_search_list) RecyclerView list;
     @BindView(R.id.activity_search_search) FinderView finder;
     @BindView(R.id.activity_search_more) Button more;
-    @BindView(R.id.title_toolbar)    TextView titleToolbar;
+    @BindView(R.id.common_toolbar_title)    TextView titleToolbar;
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
     @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_search_progress)    RelativeLayout progress;
-    @BindView(R.id.progress_bar)    ProgressBar progressBar;
+    @BindView(R.id.progressToolbar)    ProgressBar progressBar;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbar_subtitle;
+    @BindView(R.id.filter_list)    ListView filter_list;
+    @BindView(R.id.container_filter_list)    LinearLayout container_filter_list;
+
+
     //endregion
 
     //region Private
@@ -120,6 +139,7 @@ public class ResultSearchActivity extends BaseActivity implements
                 invalidateOptionsMenu();
                 switch (selectedTab) {
                     case SearchFragment.TAB_RESTO: {
+                        filterListVisible(false);
                         presenter.getLocationsResto(searchPackage);
                     }
                     break;
@@ -140,6 +160,8 @@ public class ResultSearchActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
         enableBackButton();
 
         //region Parse Intent
@@ -156,6 +178,7 @@ public class ResultSearchActivity extends BaseActivity implements
                             }break;
                             case FilterRestoField.CITY:{
                                 searchPackage.setCity(filterRestoField.getSelectedItemId());
+                                searchPackage.setCityName(filterRestoField.getSelectedFilter());
                             }break;
                             case FilterRestoField.BEER:{
                                 searchPackage.setBeer(filterRestoField.getSelectedItemId());
@@ -254,6 +277,9 @@ public class ResultSearchActivity extends BaseActivity implements
         adapter = new FlexibleModelAdapter<>(listAdapter, this::processAction);
         list.setAdapter(adapter);
         finder.setVisibility(View.GONE);
+        searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
+        toolbar_subtitle.setOnClickListener(this);
+        filter_list.setOnItemClickListener(this);
         //endregion
 
     }
@@ -415,8 +441,10 @@ public class ResultSearchActivity extends BaseActivity implements
 
     //region User Events
     private void processAction(int action, Object payload) {
+
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
+                filterListVisible(false);
                 Starter.RestoDetailActivity(this,String.valueOf(((Resto) payload).getId()));
                 break;
             case SearchFragment.TAB_BEER:
@@ -427,6 +455,73 @@ public class ResultSearchActivity extends BaseActivity implements
                 break;
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.common_toolbar_subtitle:
+                ArrayList<FilteredTitle> arrayList=new ArrayList<>();
+                String[] orders = getResources().getStringArray(R.array.order_search_resto);
+                for (int i=0;i<orders.length;i++)
+                    arrayList.add(new FilteredTitle(orders[i], toolbar_subtitle.getText().toString().toLowerCase().contains(orders[i].toLowerCase())));
+
+                filter_list.setAdapter(new FilterAdapter(this,arrayList));
+                filterListVisible(container_filter_list.getVisibility()==View.GONE);
+
+                break;
+        }
+    }
+
+    private void filterListVisible(boolean visible) {
+        if(visible){
+            container_filter_list.setVisibility(View.VISIBLE);
+            filter_list.setAlpha(0);
+            ObjectAnimator.ofFloat(filter_list,"alpha",1).setDuration(500).start();
+        }else {
+            ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(filter_list,"alpha",0).setDuration(500);
+            objectAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    container_filter_list.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            objectAnimator.start();
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        filterListVisible(false);
+        switch (position){
+            case 0:
+                searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
+                break;
+            case 1:
+                searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_ASC);
+                break;
+        }
+        setSubtitle(getTextSubtitle(), true);
+        searchPackage.setPage(0);
+        loadResult(searchPackage);
+        progress.setVisibility(View.VISIBLE);
+    }
+
+
     //endregion
 
     //region Functions
@@ -440,19 +535,16 @@ public class ResultSearchActivity extends BaseActivity implements
             swipe.setEnabled(true);
             swipe.setRefreshing(true);
         }
+        setSubtitle(getTextSubtitle(), true);
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
-                requestLastLocation(new Callback<Location>() {
-                    @Override
-                    public void onResult(Location location) {
-                        if(location==null)
-                            location=getDefaultLocation();
-                        searchPackage.setLat(location.getLatitude());
-                        searchPackage.setLon(location.getLongitude());
-                        presenter.loadRestoList(0, searchPackage);
-                    }
+                requestLastLocation(location -> {
+                    if(location==null)
+                        location=getDefaultLocation();
+                    searchPackage.setLat(location.getLatitude());
+                    searchPackage.setLon(location.getLongitude());
+                    presenter.loadRestoList(0, searchPackage);
                 });
-
                 break;
             case SearchFragment.TAB_BEER:
                 presenter.loadBeerList( searchPackage);
@@ -463,6 +555,45 @@ public class ResultSearchActivity extends BaseActivity implements
             default: break;
         }
     }
+
+    private void setSubtitle(String subtitle, boolean visible) {
+        if(subtitle!=null) {
+            toolbar_subtitle.setVisibility(visible ? View.VISIBLE : View.GONE);
+            toolbar_subtitle.setText(subtitle);
+        }else {
+            toolbar_subtitle.setVisibility(View.GONE);
+        }
+    }
+
+    private String getTextSubtitle() {
+        String textSubtitle=null;
+        switch (selectedTab) {
+            case SearchFragment.TAB_RESTO:
+                String[] orders = getResources().getStringArray(R.array.order_search_resto);
+                switch (searchPackage.getOrder()){
+                    case Keys.ORDER_SORT_RATING_DESC:
+                        textSubtitle=orders[0] +", по городу "+searchPackage.getCityName();
+                        break;
+                    case Keys.ORDER_SORT_DISTANCE_ASC:
+                        textSubtitle=orders[1]+ ", по городу "+searchPackage.getCityName();
+                        break;
+
+                }
+                break;
+            case SearchFragment.TAB_BEER:
+                break;
+            case SearchFragment.TAB_BREWERY:
+                break;
+            default:
+                break;
+        }
+        if(textSubtitle!=null&&textSubtitle.length()>0)
+            textSubtitle=textSubtitle.substring(0, 1).toUpperCase() + textSubtitle.substring(1);
+
+        return textSubtitle;
+    }
+
+
 
     //endregion
 

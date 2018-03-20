@@ -35,6 +35,12 @@
         <item>440 мл</item>
 
     </string-array>
+
+    <string-array name="order_search_resto">
+        <item> По рейтингу</item>
+        <item> Ближайшие</item>
+    </string-array>
+
     <array name="username_colors">
         <item>@color/username0</item>
         <item>@color/username1</item>

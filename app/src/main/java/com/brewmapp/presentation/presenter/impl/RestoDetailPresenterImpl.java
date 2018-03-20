@@ -456,6 +456,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
             if(mode== Actions.MODE_REFRESH_ALL ||mode== Actions.MODE_REFRESH_ONLY_LIKE) {
                 LoadRestoDetailPackage loadRestoDetailPackage =new LoadRestoDetailPackage();
                 loadRestoDetailPackage.setId(String.valueOf(restoDetail.getResto().getId()));
+                loadRestoDetailPackage.setNoMenu(1);
                 loadRestoDetailTask.execute(loadRestoDetailPackage, new SimpleSubscriber<RestoDetail>() {
                     @Override public void onNext(RestoDetail _restoDetail) {
                         super.onNext(_restoDetail);

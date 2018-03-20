@@ -308,7 +308,8 @@ public interface Api {
             @Query(Keys.RESTO_ID) String query,
             @FieldMap WrapperParams params,
             @Query(Keys.LAT) double start,
-            @Query(Keys.LON) double end
+            @Query(Keys.LON) double end,
+            @Query(Keys.NOMENU) double nomenu
         );
 
     @POST("resto/restodata")

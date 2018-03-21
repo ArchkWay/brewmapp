@@ -18,7 +18,7 @@ import java.util.List;
 public class FilterAdapter extends ArrayAdapter<FilteredTitle> {
 
     private Context context;
-    private List<FilteredTitle> filterList;
+    protected List<FilteredTitle> filterList;
 
     public FilterAdapter(Context context, List<FilteredTitle> filterList) {
         super(context, R.layout.list_filter_layout, filterList);

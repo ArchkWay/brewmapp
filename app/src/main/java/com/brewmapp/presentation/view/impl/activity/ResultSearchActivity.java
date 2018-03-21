@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -59,10 +56,10 @@ import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class ResultSearchActivity extends BaseActivity implements
@@ -76,13 +73,13 @@ public class ResultSearchActivity extends BaseActivity implements
     @BindView(R.id.activity_search_list) RecyclerView list;
     @BindView(R.id.activity_search_search) FinderView finder;
     @BindView(R.id.activity_search_more) Button more;
-    @BindView(R.id.common_toolbar_title)    TextView titleToolbar;
+    @BindView(R.id.common_toolbar_title)    TextView common_toolbar_title;
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
     @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.activity_search_progress)    RelativeLayout progress;
     @BindView(R.id.progressToolbar)    ProgressBar progressBar;
-    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
-    @BindView(R.id.common_toolbar_subtitle)    TextView toolbar_subtitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout common_toolbar_dropdown;
+    @BindView(R.id.common_toolbar_subtitle)    TextView common_toolbar_subtitle;
     @BindView(R.id.filter_list)    ListView filter_list;
     @BindView(R.id.container_filter_list)    LinearLayout container_filter_list;
 
@@ -139,7 +136,6 @@ public class ResultSearchActivity extends BaseActivity implements
                 invalidateOptionsMenu();
                 switch (selectedTab) {
                     case SearchFragment.TAB_RESTO: {
-                        filterListVisible(false);
                         presenter.getLocationsResto(searchPackage);
                     }
                     break;
@@ -161,7 +157,7 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     protected void initView() {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbarDropdown.setVisibility(View.VISIBLE);
+        common_toolbar_dropdown.setVisibility(View.VISIBLE);
         enableBackButton();
 
         //region Parse Intent
@@ -261,7 +257,7 @@ public class ResultSearchActivity extends BaseActivity implements
         //endregion
 
         //region setup View
-        titleToolbar.setText(titleContent[selectedTab]);
+        common_toolbar_title.setText(titleContent[selectedTab]);
         more.setOnClickListener(v -> startActivity(ExtendedSearchActivity.class));
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
@@ -278,8 +274,9 @@ public class ResultSearchActivity extends BaseActivity implements
         list.setAdapter(adapter);
         finder.setVisibility(View.GONE);
         searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
-        toolbar_subtitle.setOnClickListener(this);
         filter_list.setOnItemClickListener(this);
+        common_toolbar_dropdown.setOnClickListener(this);
+        container_filter_list.setOnClickListener(this);
         //endregion
 
     }
@@ -444,7 +441,6 @@ public class ResultSearchActivity extends BaseActivity implements
 
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
-                filterListVisible(false);
                 Starter.RestoDetailActivity(this,String.valueOf(((Resto) payload).getId()));
                 break;
             case SearchFragment.TAB_BEER:
@@ -459,26 +455,43 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.common_toolbar_subtitle:
-                ArrayList<FilteredTitle> arrayList=new ArrayList<>();
-                String[] orders = getResources().getStringArray(R.array.order_search_resto);
-                for (int i=0;i<orders.length;i++)
-                    arrayList.add(new FilteredTitle(orders[i], toolbar_subtitle.getText().toString().toLowerCase().contains(orders[i].toLowerCase())));
-
-                filter_list.setAdapter(new FilterAdapter(this,arrayList));
-                filterListVisible(container_filter_list.getVisibility()==View.GONE);
-
+            case R.id.common_toolbar_dropdown:
+            case R.id.container_filter_list:
+                filterListToggleVisible();
                 break;
         }
     }
 
-    private void filterListVisible(boolean visible) {
-        if(visible){
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        filterListToggleVisible();
+        switch (position){
+            case 0:
+                searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
+                break;
+            case 1:
+                searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_ASC);
+                break;
+        }
+        setSubtitle(getTextSubtitle(), true);
+        searchPackage.setPage(0);
+        loadResult(searchPackage);
+    }
+
+
+    //endregion
+
+    //region Functions
+
+    private void filterListToggleVisible() {
+        boolean show=container_filter_list.getVisibility()==View.GONE;
+        ObjectAnimator objectAnimator;
+        if(show){
             container_filter_list.setVisibility(View.VISIBLE);
-            filter_list.setAlpha(0);
-            ObjectAnimator.ofFloat(filter_list,"alpha",1).setDuration(500).start();
+            filter_list.setAdapter(new ResultSearchFilterAdapter (this));
+            objectAnimator=ObjectAnimator.ofFloat(container_filter_list,"alpha",1);
         }else {
-            ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(filter_list,"alpha",0).setDuration(500);
+            objectAnimator=ObjectAnimator.ofFloat(container_filter_list,"alpha",0);
             objectAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -500,38 +513,17 @@ public class ResultSearchActivity extends BaseActivity implements
 
                 }
             });
-            objectAnimator.start();
+
         }
+        objectAnimator.setDuration(500);
+        objectAnimator.start();
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        filterListVisible(false);
-        switch (position){
-            case 0:
-                searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
-                break;
-            case 1:
-                searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_ASC);
-                break;
-        }
-        setSubtitle(getTextSubtitle(), true);
-        searchPackage.setPage(0);
-        loadResult(searchPackage);
-        progress.setVisibility(View.VISIBLE);
-    }
-
-
-    //endregion
-
-    //region Functions
 
     private void loadResult(FullSearchPackage searchPackage) {
+        swipe.setVisibility(View.VISIBLE);
         if(searchPackage.getPage()==0) {
             progress.setVisibility(View.VISIBLE);
-            swipe.setVisibility(View.GONE);
         }else {
-            swipe.setVisibility(View.VISIBLE);
             swipe.setEnabled(true);
             swipe.setRefreshing(true);
         }
@@ -558,10 +550,10 @@ public class ResultSearchActivity extends BaseActivity implements
 
     private void setSubtitle(String subtitle, boolean visible) {
         if(subtitle!=null) {
-            toolbar_subtitle.setVisibility(visible ? View.VISIBLE : View.GONE);
-            toolbar_subtitle.setText(subtitle);
+            common_toolbar_subtitle.setVisibility(visible ? View.VISIBLE : View.GONE);
+            common_toolbar_subtitle.setText(subtitle);
         }else {
-            toolbar_subtitle.setVisibility(View.GONE);
+            common_toolbar_subtitle.setVisibility(View.GONE);
         }
     }
 
@@ -597,5 +589,20 @@ public class ResultSearchActivity extends BaseActivity implements
 
     //endregion
 
+    class ResultSearchFilterAdapter extends FilterAdapter{
+
+        public ResultSearchFilterAdapter(Context context) {
+            super(context, new ArrayList<>());
+            String[] orders = getResources().getStringArray(R.array.order_search_resto);
+            for (int i=0;i<orders.length;i++)
+                filterList.add(
+                        new FilteredTitle(
+                                orders[i],
+                                common_toolbar_subtitle.getText().toString().toLowerCase().contains(orders[i].toLowerCase())
+                        )
+                );
+
+        }
+    }
 
 }

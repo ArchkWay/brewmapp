@@ -19,6 +19,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
     <style name="AppThemeWithActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -75,8 +76,7 @@
         <item name="android:background">@drawable/selector_button_green_solid_square</item>
     </style>
 
-    <style name="AppTheme.Text">
-    </style>
+    <style name="AppTheme.Text"></style>
 
     <style name="AppTheme.Paragraph">
         <item name="android:textSize">@dimen/text_size_common</item>
@@ -149,6 +149,8 @@
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">@dimen/text_size_common_bigger</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
 </resources>

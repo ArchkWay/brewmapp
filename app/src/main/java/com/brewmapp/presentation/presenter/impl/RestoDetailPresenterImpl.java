@@ -223,7 +223,7 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
     }
 
     @Override
-    public void parseIntent(Intent intent) {
+    public boolean parseIntent(Intent intent) {
         //stub
         restoDetail=new RestoDetail();
         restoDetail.setResto(new Resto());
@@ -231,14 +231,15 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
             interest=(Interest) intent.getSerializableExtra(RESTO_ID);
             restoDetail.getResto().setId(Integer.valueOf(interest.getInterest_info().getId()));
         } catch (Exception e){
-            view.commonError(e.getMessage());return;
+            view.commonError(e.getMessage());
+            return false;
         }
         resultReceiver=intent.getParcelableExtra(context.getString(R.string.key_blur));
         if(resultReceiver!=null)
             view.activityMoveToBack(true);
 
+        return true;
 
-        refreshContent(Actions.MODE_REFRESH_ALL);
 
     }
 

@@ -38,4 +38,5 @@
     <dimen name="arrow_right_width">20dp</dimen>
     <dimen name="arrow_right_height">20dp</dimen>
     <dimen name="size_avatar_event_list">70dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

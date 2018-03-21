@@ -24,7 +24,7 @@ public interface RestoDetailPresenter extends LivePresenter<RestoDetailView> {
 
     void changeSubscription();
 
-    void parseIntent(Intent intent);
+    boolean parseIntent(Intent intent);
 
     void startShowEventFragment(RestoDetailActivity restoDetailActivity, int tab);
 

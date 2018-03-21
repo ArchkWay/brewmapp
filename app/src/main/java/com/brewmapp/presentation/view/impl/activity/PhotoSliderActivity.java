@@ -33,15 +33,20 @@ import java.util.List;
 
 public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView {
 
+    //region BindView
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.activity_photos_indicator) PagerIndicator indicator;
     @BindView(R.id.activity_photos_slider) SliderLayout slider;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    //endregion
 
+    //region Inject
     @Inject PhotoSliderPresenter presenter;
+    //endregion
 
+    //region PhotoSliderActivity Impl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +91,9 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
             showMessage(getString(R.string.enter));
             finish();
         }
+        slider.setCurrentPosition(
+                getIntent().getIntExtra(getString(R.string.key_photo_selected),0)
+        );
     }
 
     @Override
@@ -102,20 +110,25 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+    //endregion
 
-    //******************************
+    //region Static
     public static void startPhotoSliderActivity(List<Photo> photos, Context context) {
         try {
+            int selected=0;
             String[] urls=new String[photos.size()];
             for(int i=0;i<photos.size();i++) {
                 urls[i] = photos.get(i).getUrl();
                 if(urls[i]==null)
                     urls[i]=photos.get(i).getThumb().getUrl();
+                if(photos.get(i).isSelected())
+                    selected=i;
             }
             if(urls.length>0){
                 Intent intent = new Intent(context, PhotoSliderActivity.class);
                 intent.putExtra(Keys.PHOTOS, urls);
                 intent.putExtra(Keys.PHOTO_COUNT,  new ArrayList<>(photos));
+                intent.putExtra(context.getString(R.string.key_photo_selected),selected);
                 context.startActivity(intent);
             }
 
@@ -124,5 +137,6 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
         }
 
     }
+    //endregion
 
 }

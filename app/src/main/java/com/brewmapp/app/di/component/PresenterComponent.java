@@ -21,6 +21,7 @@ import com.brewmapp.presentation.view.impl.activity.EnterPasswordActivity;
 import com.brewmapp.presentation.view.impl.activity.EnterPhoneActivity;
 import com.brewmapp.presentation.view.impl.activity.EventDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.ExtendedSearchActivity;
+import com.brewmapp.presentation.view.impl.activity.PhotoGalleryActivity;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
@@ -135,4 +136,5 @@ public interface PresenterComponent {
     void inject(ReviewView reviewView);
     void inject(ReviewMoreImageButton reviewMoreImageButton);
     void inject(ReviewYesNoButton reviewYesNoButton);
+    void inject(PhotoGalleryActivity photoGalleryActivity);
 }

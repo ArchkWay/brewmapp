@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Interest;
+import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.User;
@@ -25,11 +26,13 @@ import com.brewmapp.presentation.view.impl.activity.InterestListActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
+import com.brewmapp.presentation.view.impl.activity.PhotoGalleryActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 /**
@@ -186,5 +189,14 @@ public class Starter {
                         .append(info_class_name)
                         .toString()
         ));
+    }
+
+    public static void PhotoGalleryActivity(BaseActivity baseActivity, ArrayList<Photo> photoArrayList, String related_model, String id_model) {
+                Intent intent=new Intent(baseActivity, PhotoGalleryActivity.class);
+                intent.putExtra(baseActivity.getString(R.string.key_photo_array_list),  photoArrayList);
+                intent.putExtra(baseActivity.getString(R.string.key_related_model),  related_model);
+                intent.putExtra(baseActivity.getString(R.string.key_id_model),  id_model);
+                baseActivity.startActivity(intent);
+
     }
 }

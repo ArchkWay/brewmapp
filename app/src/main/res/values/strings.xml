@@ -521,5 +521,12 @@
     <string name="key_blur">\"key_blur\"</string>
     <string name="text_read_completely">Читать полностью</string>
     <string name="text_collapse">Свернуть</string>
+    <string name="title_activity_photo_gallery">Фото</string>
+    <string name="key_photo_array_list">key_photo_array_list</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="key_photo_selected">key_photo_selected</string>
+    <string name="key_related_model">key_related_model</string>
+    <string name="key_id_model">key_id_model</string>
+    <string name="text_photo_sended_to_moderation">Фото отправлено на модерацию</string>
 
 </resources>

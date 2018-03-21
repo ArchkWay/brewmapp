@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.pojo.LikeDislikePackage;
+import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
@@ -206,7 +208,8 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
         layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
-        layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
+        layout_photo.setOnClickListener(v -> Starter.PhotoGalleryActivity(this,photoArrayList, Keys.CAP_RESTO,String.valueOf(presenter.getRestoDetails().getResto().getId())));
+        //layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
         private_message.setOnClickListener(v -> presenter.startChat(this,resto.getUser_id()));
@@ -229,7 +232,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.parseIntent(getIntent());
+        if(presenter.parseIntent(getIntent()))
+            presenter.refreshContent(Actions.MODE_REFRESH_ALL);
+
     }
 
     @Override
@@ -376,7 +381,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
         }
 
-
+        Log.i("BrewMapp","setModel");
     }
 
     @Override

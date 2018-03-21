@@ -402,7 +402,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
     //endregion
 
-    //region Blur
+    //region Progress
     public ResultReceiver ProgressBarOn(){
 
         if(containerProgressBar ==null) {

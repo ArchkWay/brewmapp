@@ -1,12 +1,10 @@
 package com.brewmapp.execution.task;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.container.SearchBeerTypes;
-import com.brewmapp.data.pojo.FilterBeerPackage;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -99,6 +97,9 @@ public class SearchBeerTask extends BaseNetworkTask<FullSearchPackage, List<IFle
 //                params.addParam(Keys.COORD_START , beerPackage.getCoordStart() != null ? beerPackage.getCoordStart() : "");
 //                params.addParam(Keys.COORD_END , beerPackage.getCoordEnd() != null ? beerPackage.getCoordEnd() : "");
 //                params.addParam(FilterKeys.BEER_IBU , beerPackage.getBeerIBU() != null ? beerPackage.getBeerIBU() : "");
+                if(fullSearchPackage.getOrder()!=null)
+                    params.addParam(Keys.ORDER_SORT_BEER,fullSearchPackage.getOrder());
+
                 SearchBeerTypes response = executeCall(getApi().loadBeers(start , end, params));
                 subscriber.onNext(new ArrayList<>(response.getModels()));
                 subscriber.onComplete();

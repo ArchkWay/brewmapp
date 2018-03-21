@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -56,7 +56,6 @@ import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +75,6 @@ public class ResultSearchActivity extends BaseActivity implements
     @BindView(R.id.common_toolbar_title)    TextView common_toolbar_title;
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
     @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
-    @BindView(R.id.activity_search_progress)    RelativeLayout progress;
     @BindView(R.id.progressToolbar)    ProgressBar progressBar;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout common_toolbar_dropdown;
     @BindView(R.id.common_toolbar_subtitle)    TextView common_toolbar_subtitle;
@@ -95,6 +93,8 @@ public class ResultSearchActivity extends BaseActivity implements
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private List<IFlexible> listAdapter=new ArrayList<>();
     private boolean clickGoMap=false;
+    private String[] orders=new String[0];
+    private ResultReceiver resultReceiver;
     //endregion
 
     //region Inject
@@ -163,8 +163,13 @@ public class ResultSearchActivity extends BaseActivity implements
         //region Parse Intent
         selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
         switch (selectedTab) {
+
             //region TAB_RESTO
             case SearchFragment.TAB_RESTO: {
+
+                orders = getResources().getStringArray(R.array.order_search_resto);
+                searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
+
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
                 for (FilterRestoField filterRestoField:restoFilterList){
                     if(filterRestoField.getSelectedItemId()!=null){
@@ -194,6 +199,10 @@ public class ResultSearchActivity extends BaseActivity implements
 
             //region TAB_BEER
             case SearchFragment.TAB_BEER: {
+
+                orders = getResources().getStringArray(R.array.order_search_beer);
+                searchPackage.setOrder(Keys.ORDER_SORT_RATING_BEER_DESC);
+
                 List<FilterBeerField> filterBeerFieldList = Paper.book().read(SearchFragment.CATEGORY_LIST_BEER);
                 for(FilterBeerField filterBeerField:filterBeerFieldList)
                     if(filterBeerField.getSelectedItemId()!=null){
@@ -225,7 +234,9 @@ public class ResultSearchActivity extends BaseActivity implements
                             case FilterBeerField.PRICE_BEER:
                                 searchPackage.setPrice(filterBeerField.getSelectedItemId());break;
                             case FilterBeerField.CITY:
-                                searchPackage.setCity(filterBeerField.getSelectedItemId());break;
+                                searchPackage.setCity(filterBeerField.getSelectedItemId());
+                                searchPackage.setCityName(filterBeerField.getSelectedFilter());
+                                break;
                         }
                     }
             }break;
@@ -249,6 +260,7 @@ public class ResultSearchActivity extends BaseActivity implements
                 }
             }break;
             //endregion
+
             //region DEFAULT
             default:
                     commonError(getString(R.string.not_valid_param));
@@ -264,7 +276,7 @@ public class ResultSearchActivity extends BaseActivity implements
             @Override
             public void onLoadMore(int currentPage) {
                 searchPackage.setPage(currentPage-1);
-                loadResult(searchPackage);
+                continueLoadResult();
             }
         };
         list.addOnScrollListener(scrollListener);
@@ -273,10 +285,10 @@ public class ResultSearchActivity extends BaseActivity implements
         adapter = new FlexibleModelAdapter<>(listAdapter, this::processAction);
         list.setAdapter(adapter);
         finder.setVisibility(View.GONE);
-        searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
         filter_list.setOnItemClickListener(this);
         common_toolbar_dropdown.setOnClickListener(this);
         container_filter_list.setOnClickListener(this);
+        swipe.setEnabled(false);
         //endregion
 
     }
@@ -284,10 +296,7 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        //region StartLoadResults
-        searchPackage.setPage(0);
-        loadResult(searchPackage);
-        //endregion
+        prepareLoadResult(searchPackage);
     }
 
     @Override
@@ -408,8 +417,6 @@ public class ResultSearchActivity extends BaseActivity implements
 
     @Override
     public void appendItems(List<IFlexible> list) {
-        progress.setVisibility(View.GONE);
-
         int startPosition=listAdapter.size();
         listAdapter.addAll(startPosition,list);
         adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
@@ -421,16 +428,12 @@ public class ResultSearchActivity extends BaseActivity implements
         if(listAdapter.size()==0) {
             tv_not_found.setVisibility(View.VISIBLE);
             swipe.setVisibility(View.GONE);
-        }else {
-            tv_not_found.setVisibility(View.GONE);
-            swipe.setVisibility(View.VISIBLE);
         }
 
-        swipe.setEnabled(false);
-        swipe.setRefreshing(false);
-
         invalidateOptionsMenu();
+        resultReceiver.send(Actions.ACTION_STOP_PROGRESS_BAR,null);
     }
+
     @Override
     public void enableControls(boolean enabled, int code) {
     }
@@ -457,25 +460,36 @@ public class ResultSearchActivity extends BaseActivity implements
         switch (v.getId()){
             case R.id.common_toolbar_dropdown:
             case R.id.container_filter_list:
-                filterListToggleVisible();
+                ToggleVisibleFilterList();
                 break;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        filterListToggleVisible();
+        ToggleVisibleFilterList();
         switch (position){
             case 0:
-                searchPackage.setOrder(Keys.ORDER_SORT_RATING_DESC);
+                if(selectedTab==SearchFragment.TAB_RESTO)
+                    searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
+                else if(selectedTab==SearchFragment.TAB_BEER)
+                    searchPackage.setOrder(Keys.ORDER_SORT_RATING_BEER_DESC);
                 break;
             case 1:
-                searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_ASC);
+                if(selectedTab==SearchFragment.TAB_RESTO)
+                    searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_RESTO_ASC);
+                else if(selectedTab==SearchFragment.TAB_BEER)
+                    searchPackage.setOrder(Keys.ORDER_SORT_PRICE_BEER_ASC);
                 break;
+            case 2:
+                if(selectedTab==SearchFragment.TAB_BEER)
+                    searchPackage.setOrder(Keys.ORDER_SORT_PRICE_BEER_DESC);
+                break;
+            default:
+                searchPackage.setOrder(null);
         }
-        setSubtitle(getTextSubtitle(), true);
-        searchPackage.setPage(0);
-        loadResult(searchPackage);
+
+        prepareLoadResult(searchPackage);
     }
 
 
@@ -483,7 +497,7 @@ public class ResultSearchActivity extends BaseActivity implements
 
     //region Functions
 
-    private void filterListToggleVisible() {
+    private void ToggleVisibleFilterList() {
         boolean show=container_filter_list.getVisibility()==View.GONE;
         ObjectAnimator objectAnimator;
         if(show){
@@ -519,15 +533,50 @@ public class ResultSearchActivity extends BaseActivity implements
         objectAnimator.start();
     }
 
-    private void loadResult(FullSearchPackage searchPackage) {
-        swipe.setVisibility(View.VISIBLE);
-        if(searchPackage.getPage()==0) {
-            progress.setVisibility(View.VISIBLE);
-        }else {
-            swipe.setEnabled(true);
-            swipe.setRefreshing(true);
+    private void prepareLoadResult(FullSearchPackage searchPackage) {
+
+        //region set Subtitle
+
+        String subtitle=null;
+
+        if(searchPackage.getOrder()!=null)
+            switch (searchPackage.getOrder()){
+                case Keys.ORDER_SORT_RATING_RESTO_DESC:
+                    subtitle=orders[0] +", по городу "+searchPackage.getCityName();
+                    break;
+                case Keys.ORDER_SORT_DISTANCE_RESTO_ASC:
+                    subtitle=orders[1]+ ", по городу "+searchPackage.getCityName();
+                    break;
+                case Keys.ORDER_SORT_RATING_BEER_DESC:
+                    subtitle=orders[0] +", по городу "+searchPackage.getCityName();
+                    break;
+                case Keys.ORDER_SORT_PRICE_BEER_ASC:
+                    subtitle=orders[1] +", по городу "+searchPackage.getCityName();
+                    break;
+                case Keys.ORDER_SORT_PRICE_BEER_DESC:
+                    subtitle=orders[2] +", по городу "+searchPackage.getCityName();
+                    break;
+                default:
+                    subtitle=null;
+            }
+
+        common_toolbar_subtitle.setVisibility(View.GONE);
+        if(subtitle!=null&&subtitle.length()>0){
+            subtitle=subtitle.substring(0, 1).toUpperCase() + subtitle.substring(1);
+            common_toolbar_subtitle.setText(subtitle);
+            common_toolbar_subtitle.setVisibility(View.VISIBLE);
         }
-        setSubtitle(getTextSubtitle(), true);
+        //endregion
+
+        searchPackage.setPage(0);
+        swipe.setVisibility(View.VISIBLE);
+        tv_not_found.setVisibility(View.GONE);
+        resultReceiver=ProgressBarOn();
+        continueLoadResult();
+
+    }
+
+    private void continueLoadResult() {
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
                 requestLastLocation(location -> {
@@ -548,42 +597,7 @@ public class ResultSearchActivity extends BaseActivity implements
         }
     }
 
-    private void setSubtitle(String subtitle, boolean visible) {
-        if(subtitle!=null) {
-            common_toolbar_subtitle.setVisibility(visible ? View.VISIBLE : View.GONE);
-            common_toolbar_subtitle.setText(subtitle);
-        }else {
-            common_toolbar_subtitle.setVisibility(View.GONE);
-        }
-    }
 
-    private String getTextSubtitle() {
-        String textSubtitle=null;
-        switch (selectedTab) {
-            case SearchFragment.TAB_RESTO:
-                String[] orders = getResources().getStringArray(R.array.order_search_resto);
-                switch (searchPackage.getOrder()){
-                    case Keys.ORDER_SORT_RATING_DESC:
-                        textSubtitle=orders[0] +", по городу "+searchPackage.getCityName();
-                        break;
-                    case Keys.ORDER_SORT_DISTANCE_ASC:
-                        textSubtitle=orders[1]+ ", по городу "+searchPackage.getCityName();
-                        break;
-
-                }
-                break;
-            case SearchFragment.TAB_BEER:
-                break;
-            case SearchFragment.TAB_BREWERY:
-                break;
-            default:
-                break;
-        }
-        if(textSubtitle!=null&&textSubtitle.length()>0)
-            textSubtitle=textSubtitle.substring(0, 1).toUpperCase() + textSubtitle.substring(1);
-
-        return textSubtitle;
-    }
 
 
 
@@ -593,7 +607,6 @@ public class ResultSearchActivity extends BaseActivity implements
 
         public ResultSearchFilterAdapter(Context context) {
             super(context, new ArrayList<>());
-            String[] orders = getResources().getStringArray(R.array.order_search_resto);
             for (int i=0;i<orders.length;i++)
                 filterList.add(
                         new FilteredTitle(

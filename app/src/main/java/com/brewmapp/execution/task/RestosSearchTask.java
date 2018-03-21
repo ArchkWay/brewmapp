@@ -60,7 +60,7 @@ public class RestosSearchTask extends BaseNetworkTask<FilterRestoPackage, List<I
                 params.addParam(Keys.COORD_END , restoPackage.getCoordEnd() != null ? restoPackage.getCoordEnd() : "");
 
                 if(restoPackage.getOrder()!=null)
-                    params.addParam(Keys.ORDER_SORT,restoPackage.getOrder());
+                    params.addParam(Keys.ORDER_SORT_RESTO,restoPackage.getOrder());
 
                 queryParams.addParam(Keys.USER_ID, userRepo.load().getId());
                 ResponseSearchResto response = executeCall(getApi().searchResto(queryParams,restoPackage.getLat(),restoPackage.getLon(), start, end, params));

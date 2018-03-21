@@ -142,7 +142,8 @@ public class Keys {
     public static final String RESTO_DISCOUNT = "resto_discount";
     public static final String COORD_START = "coordStart";
     public static final String COORD_END = "coordEnd";
-    public static final String ORDER_SORT = "restoOrderSort";
+    public static final String ORDER_SORT_RESTO = "restoOrderSort";
+    public static final String ORDER_SORT_BEER = "beerOrderSort";
 
     //Filter beer keys
     public static final String BEER_TYPES = "beerTypes";
@@ -204,7 +205,10 @@ public class Keys {
     public static final String CoordEnd="coordEnd";
     public static final String CAP_REVIEW = "Review";
     public static final String NOMENU = "nomenu";
-    public static final String ORDER_SORT_RATING_DESC = "t.avg_ball DESC";
-    public static final String ORDER_SORT_RATING_ASC = "t.avg_ball ASC";
-    public static final String ORDER_SORT_DISTANCE_ASC = "dist ASC";
+    public static final String ORDER_SORT_RATING_RESTO_DESC = "t.avg_ball DESC";
+    public static final String ORDER_SORT_DISTANCE_RESTO_ASC = "dist ASC";
+
+    public static final String ORDER_SORT_RATING_BEER_DESC = "beer.avg_ball DESC";
+    public static final String ORDER_SORT_PRICE_BEER_ASC = "beer_average_price.price ASC";
+    public static final String ORDER_SORT_PRICE_BEER_DESC = "beer_average_price.price DESC";
 }

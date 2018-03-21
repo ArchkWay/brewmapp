@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/activity.photos.slider">
 
-        <com.daimajia.slider.library.Indicators.PagerIndicator
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/activity.photos.indicator"/>
+        <!--<com.daimajia.slider.library.Indicators.PagerIndicator-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/activity.photos.indicator"-->
+            <!--/>-->
     </com.daimajia.slider.library.SliderLayout>
 </LinearLayout>

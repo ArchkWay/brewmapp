@@ -15,17 +15,39 @@
         >
 
     </com.github.chrisbanes.photoview.PhotoView>
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/view_custom_slider_avtor"
-        android:textColor="@color/colorWhite"
-        android:textSize="17dp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view_custom_slider_date"
-        android:textColor="@color/colorWhiteSemi"
-        />
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_custom_slider_avtor"
+                android:textColor="@color/colorWhite"
+                android:textSize="17dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_custom_slider_date"
+                android:textColor="@color/colorWhiteSemi"
+                />
+
+        </LinearLayout>
+        <com.brewmapp.presentation.view.impl.widget.LikeView
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:id="@+id/view.photoOverlay.likes"
+            android:layout_gravity="right"/>
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -211,4 +211,5 @@ public class Keys {
     public static final String ORDER_SORT_RATING_BEER_DESC = "beer.avg_ball DESC";
     public static final String ORDER_SORT_PRICE_BEER_ASC = "beer_average_price.price ASC";
     public static final String ORDER_SORT_PRICE_BEER_DESC = "beer_average_price.price DESC";
+    public static final int TYPE_LIKE = 1;
 }

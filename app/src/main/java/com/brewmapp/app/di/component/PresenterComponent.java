@@ -61,6 +61,7 @@ import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
+import com.brewmapp.presentation.view.impl.widget.LikeView;
 import com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton;
 import com.brewmapp.presentation.view.impl.widget.ReviewMoreImageButton;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
@@ -137,4 +138,5 @@ public interface PresenterComponent {
     void inject(ReviewMoreImageButton reviewMoreImageButton);
     void inject(ReviewYesNoButton reviewYesNoButton);
     void inject(PhotoGalleryActivity photoGalleryActivity);
+    void inject(LikeView likeView);
 }

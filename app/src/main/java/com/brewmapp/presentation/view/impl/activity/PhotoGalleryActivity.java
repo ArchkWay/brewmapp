@@ -162,6 +162,11 @@ public class PhotoGalleryActivity extends BaseActivity implements PhotoGalleryAc
 
     private void clickItemGallery(int action, Object payload){
         PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this);
+        Iterator<Photo> iterator=photoArrayList.iterator();
+        while (iterator.hasNext())
+            iterator.next().setSelected(false);
+
+
     }
 
     private void takePhoto() {

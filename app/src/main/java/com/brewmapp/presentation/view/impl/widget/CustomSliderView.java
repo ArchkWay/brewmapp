@@ -17,12 +17,9 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.security.Key;
 import java.util.List;
 
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
-import ru.frosteye.ovsa.tool.UITools;
 
 
 /**
@@ -56,6 +53,7 @@ public class CustomSliderView extends BaseSliderView {
         imageView = ((com.github.chrisbanes.photoview.PhotoView) view.findViewById(R.id.view_custom_slider_image));
         final TextView date= (TextView) view.findViewById(R.id.view_custom_slider_date);
         final TextView avtor= (TextView) view.findViewById(R.id.view_custom_slider_avtor);
+        final LikeView likeView= (LikeView) view.findViewById(R.id.view_photoOverlay_likes);
 
         Picasso.with(getContext()).load(url).into(imageView, new Callback() {
             @Override
@@ -87,6 +85,7 @@ public class CustomSliderView extends BaseSliderView {
                         PhotoDetails photoDetails = list.get(0);
                         date.setText(photoDetails.getTimestampFormated());
                         avtor.setText(photoDetails.getUser_info().getFormattedName());
+                        likeView.setPhotoDetails(photoDetails);
                     }catch (Exception e){}
                 }
 

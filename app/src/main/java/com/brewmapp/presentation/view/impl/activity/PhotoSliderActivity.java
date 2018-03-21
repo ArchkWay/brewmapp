@@ -19,24 +19,23 @@ import com.brewmapp.presentation.view.contract.PhotoSliderView;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.presentation.view.activity.PresenterActivity;
 
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.widget.CustomSliderView;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView {
 
     //region BindView
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
-    @BindView(R.id.activity_photos_indicator) PagerIndicator indicator;
+    //@BindView(R.id.activity_photos_indicator) PagerIndicator indicator;
     @BindView(R.id.activity_photos_slider) SliderLayout slider;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
@@ -46,12 +45,14 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     @Inject PhotoSliderPresenter presenter;
     //endregion
 
+    private int size_photo;
+
     //region PhotoSliderActivity Impl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_slider);
-        toolbar.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -68,7 +69,6 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     protected void initView() {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbarDropdown.setVisibility(View.VISIBLE);
-        toolbarTitle.setText(getTitle());
         toolbarSubTitle.setVisibility(View.GONE);
 
         enableBackButton();
@@ -87,13 +87,38 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
 
                 slider.addSlider(customSliderView);
             }
+            size_photo = photoArrayList.size();
         }catch (Exception e){
             showMessage(getString(R.string.enter));
             finish();
         }
+        slider.getPagerIndicator().setVisibility(View.GONE);
+        slider.addOnPageChangeListener(new ViewPagerEx.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                toolbarTitle.setText(
+                        String.format("%s из %s",String.valueOf(position+1),String.valueOf(size_photo))
+                );
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         slider.setCurrentPosition(
                 getIntent().getIntExtra(getString(R.string.key_photo_selected),0)
         );
+
+        if(getResources().getConfiguration().orientation!=ORIENTATION_PORTRAIT)
+            toolbar.setVisibility(View.GONE);
+
     }
 
     @Override

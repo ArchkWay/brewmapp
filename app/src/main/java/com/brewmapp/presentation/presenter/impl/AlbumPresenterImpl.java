@@ -100,7 +100,7 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
 
     @Override
     public void onLikePhoto(Photo photo, Callback<Boolean> callback) {
-        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_LIKE);
+        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(Keys.TYPE_LIKE);
         likeDislikePackage.setModel(Keys.CAP_PHOTO, photo.getId());
         likeTask.execute(likeDislikePackage, new SimpleSubscriber<MessageResponse>() {
             @Override

@@ -114,7 +114,7 @@ public class PhotoDetails {
         try {
 
             return new StringBuilder()
-                    .append(android.text.format.DateFormat.format("dd.MM.yyyy",new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").parse(getTimestamp())).toString())
+                    .append(android.text.format.DateFormat.format("dd MMMM yyyy в hh:mm",new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").parse(getTimestamp())).toString())
                     //.append(" ")
                     //.append(getTimeFrom())
                     .toString();

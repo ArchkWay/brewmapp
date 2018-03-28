@@ -25,4 +25,6 @@ public interface MultiListPresenter extends LivePresenter<MultiListView> {
     void loadReviewsBeer(int id_beer);
 
     void loadMyEvaluation(int step);
+
+    void loadMenu(FullSearchPackage fullSearchPackage);
 }

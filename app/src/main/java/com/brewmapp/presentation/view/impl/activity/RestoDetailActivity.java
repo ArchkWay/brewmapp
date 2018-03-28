@@ -207,9 +207,9 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
-        layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
+        //layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));
+        layout_menu.setOnClickListener(v -> Starter.MultiListActivity_MODE_SHOW_MENU(RestoDetailActivity.this,presenter.getRestoDetails().getResto()));
         layout_photo.setOnClickListener(v -> Starter.PhotoGalleryActivity(this,photoArrayList, Keys.CAP_RESTO,String.valueOf(presenter.getRestoDetails().getResto().getId())));
-        //layout_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(photoArrayList,this));
         layout_like.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_LIKE));
         layout_dislike.setOnClickListener(v -> presenter.clickLikeDislike(LikeDislikePackage.TYPE_DISLIKE));
         private_message.setOnClickListener(v -> presenter.startChat(this,resto.getUser_id()));
@@ -217,7 +217,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         call1.setOnClickListener(v -> callPhone(number_cal2.getText().toString()));
         button_more_description.setOnClickListener(v->setTitleToButtonOfMoreDescription());
         panel_i_here.setAlpha(0.5f);
-        //panel_i_here.setOnClickListener(v->showMessage(getString(R.string.message_develop)));
 
         panel_favorite.setOnClickListener(v->{presenter.clickFav();setResult(RESULT_OK);});
         panel_i_owner.setOnClickListener(v->Starter.MultiFragmentActivity_MODE_FORM_I_OWNER(this));

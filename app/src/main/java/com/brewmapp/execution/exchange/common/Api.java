@@ -37,6 +37,7 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
 import com.brewmapp.data.entity.LocationChild;
+import com.brewmapp.data.entity.MenuResto;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.PhotoDetails;
 import com.brewmapp.data.entity.PriceRangeTypes;
@@ -551,5 +552,11 @@ public interface Api {
     @POST("/api/reviews/approval")
     @FormUrlEncoded
     Call<Object>  addReviewsApproval(@FieldMap RequestParams params);
+
+    @POST("resto/menu")
+    @FormUrlEncoded
+    Call<ListResponse<MenuResto>> loadMenuResto(@Query(Keys.LIMIT_START) int start,
+                                                @Query(Keys.LIMIT_END) int end,
+                                                @FieldMap WrapperParams params);
 
 }

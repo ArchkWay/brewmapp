@@ -1,18 +1,24 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
 import android.content.Intent;
 
+import com.brewmapp.R;
 import com.brewmapp.data.entity.EvaluationBeer;
 import com.brewmapp.data.entity.EvaluationResto;
+import com.brewmapp.data.entity.MenuResto;
 import com.brewmapp.data.entity.wrapper.EvaluationData;
 import com.brewmapp.data.entity.wrapper.EvaluationItem;
+import com.brewmapp.data.entity.wrapper.MenuInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.EvaluationPackage;
 import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.LoadBeerEvaluationTask;
+import com.brewmapp.execution.task.LoadMenu;
 import com.brewmapp.execution.task.LoadRestoEvaluationTask;
 import com.brewmapp.execution.task.QuickSearchTask;
 import com.brewmapp.execution.task.containers.contract.ContainerTasks;
@@ -45,21 +51,23 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     private ContainerTasks containerTasks;
     private LoadRestoEvaluationTask loadRestoEvaluationTask;
     private LoadBeerEvaluationTask loadBeerEvaluationTask;
+    private LoadMenu loadMenu;
+    private Context context;
 
     private ArrayList<IFlexible> itemArrayList=new ArrayList<>();
 
 
     @Inject
-    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks,LoadRestoEvaluationTask loadRestoEvaluationTask,LoadBeerEvaluationTask loadBeerEvaluationTask){
+    public MultiListPresenterImpl(FullSearchTask fullSearchTask, QuickSearchTask quickSearchTask,ContainerTasks containerTasks,LoadRestoEvaluationTask loadRestoEvaluationTask,LoadBeerEvaluationTask loadBeerEvaluationTask,LoadMenu loadMenu,Context context){
         this.fullSearchTask = fullSearchTask;
         this.quickSearchTask = quickSearchTask;
         this.containerTasks = containerTasks;
         this.loadRestoEvaluationTask = loadRestoEvaluationTask;
         this.loadBeerEvaluationTask = loadBeerEvaluationTask;
+        this.loadMenu = loadMenu;
+        this.context = context;
 
     }
-
-
 
     @Override
     public void onAttach(MultiListView multiListView) {
@@ -70,8 +78,6 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
     public void onDestroy() {
 
     }
-
-
 
     @Override
     public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
@@ -109,6 +115,8 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                 return MultiListView.MODE_SHOW_HASHTAG;
             case Keys.CAP_USER_FRIENDS:
                 return MultiListView.MODE_SHOW_AND_SELECT_FRIENDS;
+            case MultiListView.MODE_SHOW_MENU:
+                return MultiListView.MODE_SHOW_MENU;
             default:
                 return MultiListView.MODE_ACTIVTY_ERROR;
         }
@@ -248,6 +256,49 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                 );
             }break;
         }
+    }
+
+    @Override
+    public void loadMenu(FullSearchPackage fullSearchPackage) {
+
+        loadMenu.execute(fullSearchPackage,new SimpleSubscriber<ListResponse<MenuResto>>(){
+            @Override
+            public void onNext(ListResponse<MenuResto> menuRestoListResponse) {
+                super.onNext(menuRestoListResponse);
+
+                //region Collect by key_beer
+                String[] capacity= context.getResources().getStringArray(R.array.resto_menu_capacity);
+                HashMap<String,MenuResto> hmCollectBy_key_beer=new HashMap<>();
+                Iterator<MenuResto> menuRestoIterator=menuRestoListResponse.getModels().iterator();
+                while (menuRestoIterator.hasNext()){
+                    MenuResto menuResto=menuRestoIterator.next();
+                    String key_beer=menuResto.getBeer_id();
+                    String key_capacity = capacity[Integer.valueOf(menuResto.getResto_menu_capacity_id())];
+                    String value_price = menuResto.getPrice();
+                    if(hmCollectBy_key_beer.containsKey(key_beer))
+                        hmCollectBy_key_beer.get(key_beer).getCapacity_price().put(key_capacity,value_price);
+                    else {
+                        menuResto.getCapacity_price().put(key_capacity, value_price);
+                        hmCollectBy_key_beer.put(key_beer, menuResto);
+                    }
+                }
+                //endregion
+
+                //region Make Items
+                ArrayList<IFlexible> iFlexibleArrayList=new ArrayList<>();
+                menuRestoIterator=hmCollectBy_key_beer.values().iterator();
+                while (menuRestoIterator.hasNext())
+                    iFlexibleArrayList.add(new MenuInfo(menuRestoIterator.next()));
+                //endregion
+
+                view.appendItems(iFlexibleArrayList);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+        });
     }
 
 }

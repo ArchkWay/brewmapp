@@ -433,7 +433,7 @@
     <string name="text_start_search">Начните вводить текст</string>
     <string name="txt_hint_dialog_select_address">Для выбора адреса тапните на карте, затем нажните ОК</string>
     <string name="search_result">Результаты поиска</string>
-    <string name="beer_avg_price">Средняя цена: 500мл / %s /U+20BD</string>
+    <string name="beer_avg_price">Средняя цена: 500мл / %s ₽</string>
     <string name="beer_craft">Крафтовое пиво</string>
     <string name="prompt_message">Написать сообщение</string>
     <string name="action_send">Send</string>
@@ -528,5 +528,6 @@
     <string name="key_related_model">key_related_model</string>
     <string name="key_id_model">key_id_model</string>
     <string name="text_photo_sended_to_moderation">Фото отправлено на модерацию</string>
+    <string name="rubl">₽</string>
 
 </resources>

@@ -79,13 +79,12 @@ public class MultiListActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarSubTitle.setVisibility(View.GONE);
-
         enableBackButton();
-
-        fullSearchPackage = new FullSearchPackage();
+        swipe.setOnRefreshListener(this::refreshItems);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
@@ -94,33 +93,70 @@ public class MultiListActivity extends BaseActivity implements
                 sendQuery();
             }
         };
+        recyclerview.setLayoutManager(manager);
+        adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
+        recyclerview.setAdapter(adapter);
+    }
+
+    @Override
+    protected void attachPresenter() {
+         presenter.onAttach(this);
+
+        fullSearchPackage = new FullSearchPackage();
 
         mode=presenter.parseIntent(getIntent());
+
         switch (mode){
+            case MODE_SHOW_MENU:
+                //region Prepare Menu
+                toolbarSearch.setVisibility(View.GONE);
+                toolbarSubTitle.setVisibility(View.VISIBLE);
+                setTitle(R.string.text_view_menu);
+                Resto resto;
+                try {
+                    resto= (Resto) getIntent().getSerializableExtra(getString(R.string.key_serializable_extra));
+                    toolbarSubTitle.setText(resto.getName());
+                }catch (Exception e){
+                    commonError(e.getMessage());
+                    return;
+                }
+                fullSearchPackage.setPage(0);
+                fullSearchPackage.setId(String.valueOf(resto.getId()));
+                sendQuery();
+                swipe.setEnabled(false);
+                //endregion
+                break;
             case MODE_SHOW_AND_SELECT_BEER:
+                //region Prepare Beer
                 start_search.setText(R.string.text_hint_search);
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_beer));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
+                //endregion
                 break;
             case MODE_SHOW_AND_SELECT_RESTO:
+                //region Prepare Resto
                 start_search.setText(R.string.text_hint_search);
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_resto));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
+                //endregion
                 break;
             case MODE_SHOW_AND_SELECT_FRIENDS:
+                //region Prepare Frends
                 start_search.setText(R.string.text_hint_search);
                 setTitle(R.string.action_find_friends);
                 fullSearchPackage.setType(Keys.TYPE_USER);
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
+                //endregion
                 break;
             case MODE_SHOW_HASHTAG:
+                //region Prepare HashTag
                 fullSearchPackage.setType(Keys.HASHTAG);
                 toolbarSearch.setVisibility(View.GONE);
                 try{
@@ -133,8 +169,10 @@ public class MultiListActivity extends BaseActivity implements
                 }catch (Exception e){
                     commonError(e.getMessage());
                 }
+                //endregion
                 break;
             case MODE_SHOW_REVIEWS_BEER:
+                //region Prepare ReviewBeer
                 start_search.setText(R.string.text_view_while_empty_review);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
@@ -146,9 +184,10 @@ public class MultiListActivity extends BaseActivity implements
                     else
                         commonError();
                 }catch (Exception e){commonError(e.getMessage());}
-
+                //endregion
                 break;
             case MODE_SHOW_REVIEWS_RESTO:
+                //region Prepare ReviewResto
                 start_search.setText(R.string.text_view_while_empty_review);
                 button_review_layout.setVisibility(View.VISIBLE);
                 button_review_layout.setOnClickListener(this);
@@ -159,28 +198,22 @@ public class MultiListActivity extends BaseActivity implements
                     int id_resto=Integer.valueOf(getIntent().getData().toString());
                     presenter.loadReviewsResto(id_resto);
                 }catch (Exception e){commonError(e.getMessage());}
-
+                //endregion
                 break;
             case MODE_SHOW_ALL_MY_EVALUATION:
+                //region Prepare Evaluation
                 start_search.setText(R.string.text_view_while_empty_evaluation);
                 swipe.setEnabled(false);
                 toolbarSearch.setVisibility(View.GONE);
                 start_search.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_my_evaluation);
                 presenter.loadMyEvaluation(0);
+                //endregion
                 break;
             default:
                 commonError();
         }
-        swipe.setOnRefreshListener(this::refreshItems);
-        recyclerview.setLayoutManager(manager);
-        adapter= new FlexibleModelAdapter<>(new ArrayList<>(), this::processAction);
-        recyclerview.setAdapter(adapter);
-    }
 
-    @Override
-    protected void attachPresenter() {
-            presenter.onAttach(this);
     }
 
     @Override
@@ -268,25 +301,26 @@ public class MultiListActivity extends BaseActivity implements
     }
     private void sendQuery() {
         try {
-            if(fullSearchPackage.getStringSearch().length() == 0){
-                fullSearchPackage.setPage(0);
-                appendItems(new ArrayList<>());
-            }else {
-                swipe.setRefreshing(true);
+                //swipe.setRefreshing(true);
                 switch (mode){
                     case MODE_SHOW_AND_SELECT_BEER:
                     case MODE_SHOW_AND_SELECT_RESTO:
                     case MODE_SHOW_AND_SELECT_FRIENDS:
-                        presenter.sendQueryFullSearch(fullSearchPackage);
+                        if(fullSearchPackage.getStringSearch().length() == 0) {
+                            fullSearchPackage.setPage(0);
+                            appendItems(new ArrayList<>());
+                        }else
+                            presenter.sendQueryFullSearch(fullSearchPackage);
                         break;
                     case MODE_SHOW_HASHTAG:
                         presenter.sentQueryQuickSearch(fullSearchPackage);
                         break;
+                    case MODE_SHOW_MENU:
+                        presenter.loadMenu(fullSearchPackage);
+                        break;
                     default:
                         commonError();
                 }
-
-            }
         }catch (Exception e){
             showMessage(e.getMessage());
         }

@@ -52,6 +52,11 @@ public class Starter {
     public static void MultiListActivity_MODE_SHOW_REVIEWS_RESTO(Activity activity,String resto_id) {
         activity.startActivity(new Intent(MultiListView.MODE_SHOW_REVIEWS_RESTO,Uri.parse(resto_id),activity,MultiListActivity.class));
     }
+    public static void MultiListActivity_MODE_SHOW_MENU(Activity activity,Resto resto) {
+        Intent intent=new Intent(MultiListView.MODE_SHOW_MENU,null,activity,MultiListActivity.class);
+        intent.putExtra(activity.getString(R.string.key_serializable_extra),resto);
+        activity.startActivity(intent);
+    }
     public static void MultiListActivity(Activity activity, String action) {
         activity.startActivity(new Intent(action, null,activity,MultiListActivity.class));
     }

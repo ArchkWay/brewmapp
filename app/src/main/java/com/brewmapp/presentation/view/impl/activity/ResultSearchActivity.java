@@ -25,6 +25,7 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.FilterAdapter;
 import com.brewmapp.data.entity.Brewery;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -45,6 +46,7 @@ import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -161,40 +163,65 @@ public class ResultSearchActivity extends BaseActivity implements
         enableBackButton();
 
         //region Parse Intent
+
+        boolean useCustomFilter=getIntent().getBooleanExtra(getString(R.string.key_use_custom_filter),false);
         selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
         switch (selectedTab) {
 
             //region TAB_RESTO
             case SearchFragment.TAB_RESTO: {
-
                 orders = getResources().getStringArray(R.array.order_search_resto);
                 searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
-
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-                for (FilterRestoField filterRestoField:restoFilterList){
-                    if(filterRestoField.getSelectedItemId()!=null){
-                        switch (filterRestoField.getId()){
-                            case FilterRestoField.TYPE:{
-                                searchPackage.setType(filterRestoField.getSelectedItemId());
-                            }break;
-                            case FilterRestoField.CITY:{
-                                searchPackage.setCity(filterRestoField.getSelectedItemId());
-                                searchPackage.setCityName(filterRestoField.getSelectedFilter());
-                            }break;
-                            case FilterRestoField.BEER:{
-                                searchPackage.setBeer(filterRestoField.getSelectedItemId());
-                            }break;
-                            case FilterRestoField.KITCHEN:{
-                                searchPackage.setKitchen(filterRestoField.getSelectedItemId());
-                            }break;
-                            case FilterRestoField.PRICE:{
-                                searchPackage.setPrice(filterRestoField.getSelectedItemId());
-                            }break;
+
+                if(useCustomFilter){
+                    for (FilterRestoField filterRestoField:restoFilterList) {
+                        if (filterRestoField.getSelectedItemId() != null) {
+                            switch (filterRestoField.getId()) {
+                                case FilterRestoField.CITY: {
+                                    searchPackage.setCity(filterRestoField.getSelectedItemId());
+                                    searchPackage.setCityName(filterRestoField.getSelectedFilter());
+                                }
+                                break;
+                            }
                         }
                     }
-
+                    String beer_id=getIntent().getStringExtra(getString(R.string.key_beer));
+                    if(beer_id==null)
+                        commonError();
+                    else
+                        searchPackage.setBeer(beer_id);
+                }else{
+                    for (FilterRestoField filterRestoField:restoFilterList) {
+                        if (filterRestoField.getSelectedItemId() != null) {
+                            switch (filterRestoField.getId()) {
+                                case FilterRestoField.TYPE: {
+                                    searchPackage.setType(filterRestoField.getSelectedItemId());
+                                }
+                                break;
+                                case FilterRestoField.CITY: {
+                                    searchPackage.setCity(filterRestoField.getSelectedItemId());
+                                    searchPackage.setCityName(filterRestoField.getSelectedFilter());
+                                }
+                                break;
+                                case FilterRestoField.BEER: {
+                                    searchPackage.setBeer(filterRestoField.getSelectedItemId());
+                                }
+                                break;
+                                case FilterRestoField.KITCHEN: {
+                                    searchPackage.setKitchen(filterRestoField.getSelectedItemId());
+                                }
+                                break;
+                                case FilterRestoField.PRICE: {
+                                    searchPackage.setPrice(filterRestoField.getSelectedItemId());
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
             }break;
+
             //endregion
 
             //region TAB_BEER
@@ -296,7 +323,21 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        prepareLoadResult(searchPackage);
+        if(searchPackage.getCity()==null||searchPackage.getCityName()==null){
+            requestCity(new Callback<City>() {
+                @Override
+                public void onResult(City city) {
+                    if(city!=null){
+                        searchPackage.setCity(String.valueOf(city.getId()));
+                        searchPackage.setCityName(String.valueOf(city.getName()));
+                    }else {
+                        commonError(getString(R.string.text_need_select_city));
+                    }
+                }
+            });
+        }else {
+            prepareLoadResult(searchPackage);
+        }
     }
 
     @Override
@@ -579,6 +620,7 @@ public class ResultSearchActivity extends BaseActivity implements
     private void continueLoadResult() {
         switch (selectedTab) {
             case SearchFragment.TAB_RESTO:
+                //region set user location
                 requestLastLocation(location -> {
                     if(location==null)
                         location=getDefaultLocation();
@@ -586,6 +628,7 @@ public class ResultSearchActivity extends BaseActivity implements
                     searchPackage.setLon(location.getLongitude());
                     presenter.loadRestoList(0, searchPackage);
                 });
+                //endregion
                 break;
             case SearchFragment.TAB_BEER:
                 presenter.loadBeerList( searchPackage);

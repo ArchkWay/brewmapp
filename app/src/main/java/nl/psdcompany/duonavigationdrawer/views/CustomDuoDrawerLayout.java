@@ -29,7 +29,6 @@ public class CustomDuoDrawerLayout extends DuoDrawerLayout {
         super(context, attrs, defStyle);
     }
 
-
     @Override
     public void openDrawer() {
         super.openDrawer();

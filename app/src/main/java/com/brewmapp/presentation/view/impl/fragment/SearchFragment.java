@@ -17,6 +17,7 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
@@ -28,6 +29,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.contract.SearchAllView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
@@ -255,9 +257,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                 }
             }break;
         }
-        Intent intent = new Intent(getActivity(), ResultSearchActivity.class);
-        intent.putExtra(Actions.PARAM1,selectedTab);
-        startActivity(intent);
+
+        Starter.ResultSearchActivity((BaseActivity) getActivity(),selectedTab);
     }
 
     private void processAction(int code, Object o) {

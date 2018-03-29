@@ -35,6 +35,7 @@ import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
@@ -340,8 +341,9 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
 
         switch (action){
             case Actions.ACTION_SHOW_ALL_RESTO_BY_BEER:{
-                Intent intent=new Intent(MainActivity.MODE_SEARCH_FRAGMENT,null,this,MainActivity.class);
-                startActivity(intent);
+                Starter.ResultSearchActivity(this, SearchFragment.TAB_RESTO,presenter.getBeerDetail().getBeer().getId());
+//                Intent intent=new Intent(MainActivity.MODE_SEARCH_FRAGMENT,null,this,MainActivity.class);
+//                startActivity(intent);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
                 Starter.RestoDetailActivityForResult(this,(Interest)payload,REQUEST_CODE_REFRESH_ITEMS);

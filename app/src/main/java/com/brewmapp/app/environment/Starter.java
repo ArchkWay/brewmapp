@@ -29,6 +29,7 @@ import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoGalleryActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
+import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.Serializable;
@@ -204,4 +205,21 @@ public class Starter {
                 baseActivity.startActivity(intent);
 
     }
-}
+
+    public static void ResultSearchActivity(BaseActivity baseActivity, int selectedTab) {
+        ResultSearchActivity(baseActivity, selectedTab, null);
+    }
+    public static void ResultSearchActivity(BaseActivity baseActivity, int selectedTab, String beer_id) {
+        Intent intent = new Intent(baseActivity, ResultSearchActivity.class);
+        intent.putExtra(Actions.PARAM1,selectedTab);
+        if(beer_id==null)
+            intent.putExtra(baseActivity.getString(R.string.key_use_custom_filter),false);
+        else {
+            intent.putExtra(baseActivity.getString(R.string.key_use_custom_filter),true);
+            intent.putExtra(baseActivity.getString(R.string.key_beer),beer_id);
+        }
+
+        baseActivity.startActivity(intent);
+
+    }
+    }

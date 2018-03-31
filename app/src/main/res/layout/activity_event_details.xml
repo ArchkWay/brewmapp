@@ -120,7 +120,7 @@
                     style="@style/AppTheme.Text.Georgia.BoldItalic"
                     android:textSize="@dimen/text_size_common"
                     android:gravity="center"
-                    android:background="@drawable/bg_rating"
+                    android:background="@drawable/bg_round_green"
                     android:textColor="@color/colorWhite"/>
             </LinearLayout>
 

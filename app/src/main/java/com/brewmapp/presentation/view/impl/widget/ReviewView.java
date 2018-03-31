@@ -80,7 +80,7 @@ public class ReviewView extends BaseLinearLayout implements InteractiveModelView
         try {
             if(model.getType().equals("1")){
                 plus_minus.setText("+");
-                plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_rating,getContext().getTheme()));
+                plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_round_green,getContext().getTheme()));
             }else {
                 plus_minus.setText("-");
                 plus_minus.setBackground(getResources().getDrawable(R.drawable.bg_circle_red, getContext().getTheme()));

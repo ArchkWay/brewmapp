@@ -117,10 +117,7 @@ public class DialogManageContact extends DialogFragment implements DialogInterfa
                     .setNegativeButton(R.string.no, this)
                     .setMessage(
                             new StringBuilder()
-                                    .append("Да - Добавить в друзья")
-                                    .append("\n")
-                                    .append("\n")
-                                    .append("Нет - Удалить предлоржение дружбы")
+                                    .append("Добавить в друзья ?")
                                     .toString()
                             );
                 return adb.create();

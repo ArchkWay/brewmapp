@@ -3,6 +3,8 @@ package com.brewmapp.data.entity.wrapper;
 import eu.davidea.flexibleadapter.items.IFilterable;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Contact;
+import com.brewmapp.data.entity.User;
+import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.impl.widget.ContactView;
 
 import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
@@ -28,7 +30,8 @@ public class ContactInfo extends AdapterItem<Contact, ContactView> implements IF
     @Override
     public boolean filter(String constraint) {
         try {
-            return getModel().getUser().getFormattedName()
+
+            return getModel().getFriend_info().getFormattedName()
                     .toLowerCase().contains(constraint.toLowerCase());
         } catch (Exception e) {
             return false;

@@ -11,6 +11,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import io.reactivex.Observable;
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.data.entity.wrapper.FriendsTitleInfo;
 import com.brewmapp.execution.exchange.common.Api;
@@ -19,6 +20,8 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.exchange.response.base.ListResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
+import com.brewmapp.presentation.view.contract.FriendsView;
+
 import ru.frosteye.ovsa.execution.executor.MainThread;
 
 import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
@@ -43,37 +46,48 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
     protected Observable<List<IFlexible>> prepareObservable(Void v) {
         return Observable.create(subscriber -> {
             try {
+                ListResponse<ContactInfo>  response;
+
                 List<IFlexible> out = new ArrayList<IFlexible>();
-                WrapperParams params = createParamsForType(2);
-                ListResponse<ContactInfo>  response = executeCall(getApi().listFriends(params));
-                boolean needFriendsHeader = false;
-                if(response.getModels().size() > 0) {
-                    FriendsTitleInfo incomingRequestInfo = new FriendsTitleInfo(getString(R.string.incoming_requests));
-                    out.add(incomingRequestInfo);
-                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(2);
-                    out.addAll(response.getModels());
-                    needFriendsHeader = true;
-                }
-
-                params = createParamsForType(0);
+                WrapperParams params = createParamsForType(FriendsView.FRIENDS_REQUEST_IN);
                 response = executeCall(getApi().listFriends(params));
                 if(response.getModels().size() > 0) {
-                    FriendsTitleInfo outgoingRequetInfo = new FriendsTitleInfo(getString(R.string.outgoing_requests));
-                    out.add(outgoingRequetInfo);
-                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(0);
+                    out.add(new FriendsTitleInfo(getString(R.string.incoming_requests),FriendsView.FRIENDS_REQUEST_IN));
+                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(FriendsView.FRIENDS_REQUEST_IN);
                     out.addAll(response.getModels());
-                    needFriendsHeader = true;
+                }
+
+                params = createParamsForType(FriendsView.FRIENDS_REQUEST_OUT);
+                response = executeCall(getApi().listFriends(params));
+                if(response.getModels().size() > 0) {
+                    out.add(new FriendsTitleInfo(getString(R.string.outgoing_requests),FriendsView.FRIENDS_REQUEST_OUT));
+                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(FriendsView.FRIENDS_REQUEST_OUT);
+                    out.addAll(response.getModels());
                 }
 
 
-                params = createParamsForType(1);
+                params = createParamsForType(FriendsView.FRIENDS_NOW);
                 response = executeCall(getApi().listFriends(params));
-                if(needFriendsHeader) {
-                    FriendsTitleInfo friends = new FriendsTitleInfo(getString(R.string.friends));
-                    Iterator<ContactInfo> iterator=response.getModels().iterator();while (iterator.hasNext()) iterator.next().getModel().setStatus(1);
-                    out.add(friends);
+                if(response.getModels().size()>0) {
+                    out.add(new FriendsTitleInfo(getString(R.string.friends),FriendsView.FRIENDS_NOW));
+                    Iterator<ContactInfo> iterator=response.getModels().iterator();
+                    while (iterator.hasNext())
+                        iterator.next().getModel().setStatus(FriendsView.FRIENDS_NOW);
                 }
                 out.addAll(response.getModels());
+
+                for (IFlexible iFlexible:out){
+                    if(iFlexible instanceof  ContactInfo){
+                        ContactInfo contactInfo= (ContactInfo) iFlexible;
+                        if(contactInfo.getModel().getFriend_info().getId()==userRepo.load().getId()){
+                            User tmpUser=contactInfo.getModel().getUser();
+                            User tmpFriend_info=contactInfo.getModel().getFriend_info();
+                            contactInfo.getModel().setFriend_info(tmpUser);
+                            contactInfo.getModel().setUser(tmpFriend_info);
+                        }
+                    }
+                }
+
 
 
                 subscriber.onNext(out);

@@ -52,6 +52,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     @Override
     public void loadFriends(boolean subscribers) {
         enableControls(false);
+        listFriendsTask.cancel();
         listFriendsTask.execute(null, new SimpleSubscriber<List<IFlexible>>() {
             @Override
             public void onError(Throwable e) {
@@ -116,20 +117,20 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     public void onClickItem(int code, Object payload, FragmentActivity fragmentActivity) {
         Contact contact=((Contact) payload);
         switch (contact.getStatus()){
-            case 2:
-            case 0:
+            case FriendsView.FRIENDS_REQUEST_IN:
+            case FriendsView.FRIENDS_REQUEST_OUT:
                 new DialogManageContact(fragmentActivity,fragmentActivity.getSupportFragmentManager(),contact,FriendsPresenterImpl.this);
                 break;
-                default:{
-                    Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, fragmentActivity, MultiFragmentActivity.class);
-                    User user=contact.getFriend_info();
-                    User friend=new User();
-                    friend.setId(user.getId());
-                    friend.setFirstname(user.getFirstname());
-                    friend.setLastname(user.getLastname());
-                    intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
-                    fragmentActivity.startActivity(intent);
-                }
+            case FriendsView.FRIENDS_NOW:{
+                Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, fragmentActivity, MultiFragmentActivity.class);
+                User user=contact.getFriend_info();
+                User friend=new User();
+                friend.setId(user.getId());
+                friend.setFirstname(user.getFirstname());
+                friend.setLastname(user.getLastname());
+                intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
+                fragmentActivity.startActivity(intent);
+            }
         }
 
     }

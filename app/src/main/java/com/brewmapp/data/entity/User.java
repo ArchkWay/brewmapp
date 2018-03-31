@@ -82,7 +82,7 @@ public class User implements Serializable {
     private Counts counts;
 
     @SerializedName(Keys.LAST_LOGIN)
-    private Date lastLogin;
+    private String lastLogin;
 
     @SerializedName(Keys.GET_THUMB)
     private String thumbnail;
@@ -401,11 +401,11 @@ public class User implements Serializable {
         this.status = status;
     }
 
-    public Date getLastLogin() {
+    public String getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
 

@@ -36,7 +36,7 @@
     <string name="enter_password_hint">Указанный номер телефона и пароль можно использовать для входа в Ваш аккаунт</string>
     <string name="new_password_hint">Придумайте ваш пароль</string>
     <string name="resend_code">Выслать код</string>
-    <string name="find_friend">Поиск друга</string>
+    <string name="find_friend">Поиск в списке друзей</string>
     <string name="find">Искать</string>
     <string name="done">Готово</string>
     <string name="invite_friend">Пригласить друга</string>
@@ -188,9 +188,9 @@
     <string name="post_deleted">Запись удалена</string>
     <string name="enter_title">* Введите заголовок</string>
     <string name="no_incoming_requests">Нет входящих запросов</string>
-    <string name="incoming_requests">Запросы в друзья</string>
+    <string name="incoming_requests">Входящие</string>
     <string name="no_outgoing_requests">Нет исходящих запросов</string>
-    <string name="outgoing_requests">Исходящие запросы</string>
+    <string name="outgoing_requests">Исходящие</string>
     <string name="no_friends">Друзей пока нет</string>
     <string name="albums_count">альбомов</string>
     <string name="logout">Выход</string>
@@ -531,5 +531,6 @@
     <string name="rubl">₽</string>
     <string name="key_use_custom_filter">key_use_custom_filter</string>
     <string name="key_beer">key_beer</string>
+    <string name="title_friends_request">Запросы на добавление в друзья</string>
 
 </resources>

@@ -121,17 +121,45 @@ public class MapUtils {
         return null;
     }
 
-    public static String FormatDate(String timestamp) {
-        String formatedData="Дата отсутствует";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date date = format.parse(timestamp);
-            formatedData=android.text.format.DateFormat.format("dd MMMM yyyy в hh:mm", date).toString();
 
+    public static String FormatDate(String timestamp) {
+
+        Date date=parseDate(timestamp);
+        if (date!=null) {
+            return FormatDate(date);
+        }else {
+            return "Дата отсутствует";
+        }
+    }
+
+    public static String FormatDate(Date date) {
+
+        if (date!=null) {
+            return android.text.format.DateFormat.format(
+                    "dd MMMM yyyy в hh:mm",
+                    date
+            ).toString();
+        }else {
+            return "Дата отсутствует";
+        }
+    }
+
+    private static Date parseDate(String timestamp) {
+        Locale locale=getLocaleEn();
+
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(timestamp+" GMT+03:00");
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return formatedData;
+
+        try {
+            if(locale!=null)
+                return new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", locale).parse(timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

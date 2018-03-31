@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.presentation.view.contract.FriendsView;
 import com.google.gson.annotations.SerializedName;
 
 import com.brewmapp.data.model.IPerson;
@@ -62,4 +63,5 @@ public class Contact implements IPerson {
     public void setStatus(int status) {
         this.status = status;
     }
+
 }

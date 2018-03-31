@@ -20,17 +20,24 @@ import com.brewmapp.presentation.view.contract.InviteView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
 
-public class InviteActivity extends BaseActivity implements InviteView {
+public class InviteActivity extends BaseActivity
+        implements InviteView
+{
 
+    //region BindView
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_invite_facebook) ImageView facebook;
     @BindView(R.id.activity_invite_phone) ImageView phone;
     @BindView(R.id.activity_invite_switter) ImageView twitter;
     @BindView(R.id.activity_invite_vk) ImageView vk;
     @BindView(R.id.activity_invite_brew) ImageView brew;
+    //endregion
 
+    //region Inject
     @Inject InvitePresenter presenter;
+    //endregion
 
+    //region Impl InviteActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +47,6 @@ public class InviteActivity extends BaseActivity implements InviteView {
     @Override
     protected Toolbar findActionBar() {
         return toolbar;
-    }
-
-    @Override
-    public void enableControls(boolean enabled, int code) {
-
     }
 
     @Override
@@ -79,9 +81,19 @@ public class InviteActivity extends BaseActivity implements InviteView {
     protected void inject(PresenterComponent component) {
         component.inject(this);
     }
+    //endregion
 
+    //region Impl InviteView
     @Override
     public Activity getActivity() {
         return this;
     }
+
+    @Override
+    public void enableControls(boolean enabled, int code) {
+
+    }
+    //endregion
+
+
 }

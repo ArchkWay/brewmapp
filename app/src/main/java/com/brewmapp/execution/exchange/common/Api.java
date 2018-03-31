@@ -559,4 +559,8 @@ public interface Api {
                                                 @Query(Keys.LIMIT_END) int end,
                                                 @FieldMap WrapperParams params);
 
+    @POST("getactivety")
+    @FormUrlEncoded
+    Call<ListResponse<User>> getActivetyUsets(@FieldMap RequestParams params);
+
 }

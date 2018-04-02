@@ -164,6 +164,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         //super.enableBackButton();
         TextView textView= (TextView) findViewById(R.id.action_bar_back);
         if(textView!=null) {
+            textView.setVisibility(View.VISIBLE);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

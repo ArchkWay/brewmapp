@@ -158,6 +158,21 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
         }
     }
+
+    @Override
+    protected void enableBackButton() {
+        //super.enableBackButton();
+        TextView textView= (TextView) findViewById(R.id.action_bar_back);
+        if(textView!=null) {
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+
+    }
     //endregion
 
     //region Location

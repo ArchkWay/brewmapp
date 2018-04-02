@@ -425,7 +425,7 @@ public class BeerMapFragment extends BaseFragment implements
 
 
         if(isNeedShowInfoWindow())
-            showInfoWindow();
+              showInfoWindow();
 
         if(clickedClaster)
             clickedClaster=false;
@@ -774,11 +774,12 @@ public class BeerMapFragment extends BaseFragment implements
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    for(int i=0;i<contentInfoWindow.getChildCount();i++){
-                        View view=contentInfoWindow.getChildAt(i);
-                        if(view instanceof InfoWindowMapBeer)
-                            ((InfoWindowMapBeer)view).showBeer(infoWindowContainer.getHeight());
-                    }
+                    if(contentInfoWindow!=null)
+                        for(int i=0;i<contentInfoWindow.getChildCount();i++){
+                            View view=contentInfoWindow.getChildAt(i);
+                            if(view instanceof InfoWindowMapBeer)
+                                ((InfoWindowMapBeer)view).showBeer(infoWindowContainer.getHeight());
+                        }
                 }
             });
             va.start();

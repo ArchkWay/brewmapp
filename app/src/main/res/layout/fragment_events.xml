@@ -46,5 +46,7 @@
             android:textSize="@dimen/text_size_common"
             android:id="@+id/fragment.events.empty"
             android:layout_centerInParent="true"/>
+
+
     </RelativeLayout>
 </LinearLayout>

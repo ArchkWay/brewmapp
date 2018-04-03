@@ -136,7 +136,7 @@ public class MapUtils {
 
         if (date!=null) {
             return android.text.format.DateFormat.format(
-                    "dd MMMM yyyy в hh:mm",
+                    "dd MMMM yyyy в HH:mm",
                     date
             ).toString();
         }else {

@@ -84,7 +84,7 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
             case EventsFragment.TAB_SALE:
                 loadSalesTask.execute(request, new NewsSubscriberSale());
                 break;
-            case EventsFragment.TAB_POST:
+            case EventsFragment.TAB_NEWS:
                 loadNewsTask.execute(request, new NewsSubscriberPosts());
                 break;
         }

@@ -1,16 +1,11 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 
-import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
-import android.animation.StateListAnimator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.widget.ScrollerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,8 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,7 +76,6 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
-import static android.animation.LayoutTransition.CHANGE_DISAPPEARING;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_EDIT_BEER;
 
 
@@ -204,7 +196,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         adapter_reviews =new FlexibleModelAdapter<>(new ArrayList<>(), this::processItemClickAction);
         adapter_favorites=new FlexibleModelAdapter<>(new ArrayList<>(), this::processItemClickAction);
         recycler_reviews.setLayoutManager(new LinearLayoutManager(this));
-        layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_POST));
+        layout_news.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_NEWS));
         layout_sale.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_SALE));
         layout_event.setOnClickListener(v -> presenter.startShowEventFragment(RestoDetailActivity.this, EventsFragment.TAB_EVENT));
         //layout_menu.setOnClickListener(v -> presenter.startShowMenu(RestoDetailActivity.this));

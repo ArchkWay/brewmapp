@@ -16,7 +16,7 @@
     <string name="gender_woman">Женский</string>
     <string name="next">Далее</string>
     <string name="my_profile">Мой профиль</string>
-    <string name="events">События</string>
+    <string name="events">Лента новостей</string>
     <string name="messages">Сообщения</string>
     <string name="serach">Поиск</string>
     <string name="meetings">Мероприятия</string>
@@ -89,10 +89,14 @@
         <item>Сделать фото</item>
     </string-array>
     <string-array name="event_types">
-        <item>События</item>
-        <item>Акции</item>
         <item>Новости</item>
+        <item>События</item>
     </string-array>
+    <!--<string-array name="event_types">-->
+        <!--<item>События</item>-->
+        <!--<item>Акции</item>-->
+        <!--<item>Новости</item>-->
+    <!--</string-array>-->
     <string-array name="search_types">
         <item>Пиво</item>
         <item>Заведения</item>
@@ -532,5 +536,6 @@
     <string name="key_use_custom_filter">key_use_custom_filter</string>
     <string name="key_beer">key_beer</string>
     <string name="title_friends_request">Запросы на добавление в друзья</string>
+    <string name="location_disabled">Геолокация выключена. По умолчанию Москва.</string>
 
 </resources>

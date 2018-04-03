@@ -364,7 +364,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void processSetActionBar(int position) {
-        if (position == 2) {
+        if (position == 0) {
             menuToShow = R.menu.search_add;
         } else if (position == Actions.ACTION_FILTER) {
             menuToShow = R.menu.filter;

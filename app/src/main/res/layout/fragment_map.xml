@@ -19,7 +19,9 @@
         android:layout_height="match_parent"
         android:layout_below="@id/activity.search.search"
         >
+
     </com.google.android.gms.maps.MapView>
+
     <AbsoluteLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,5 +55,16 @@
         android:layout_below="@id/activity.search.search"
         android:background="@color/colorWhite"
         />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fragment.map.fab_location_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity.search.search"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_location_disabled_black_24dp"
+        android:backgroundTint="@color/bg_gray"
+        android:alpha="0.5"/>
+
 
 </RelativeLayout>

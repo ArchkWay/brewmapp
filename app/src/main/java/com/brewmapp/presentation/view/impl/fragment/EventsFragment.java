@@ -89,9 +89,9 @@ public class EventsFragment extends BaseFragment implements
     //endregion
 
     //region Public
-    public static final int TAB_EVENT = 0;
-    public static final int TAB_SALE = 1;
-    public static final int TAB_POST = 2;
+    public static final int TAB_EVENT = 1;
+    public static final int TAB_SALE = 2;
+    public static final int TAB_NEWS = 0;
     private OnFragmentInteractionListener mListener;
     private OnLocationInteractionListener mLocationListener;
     //endregion
@@ -137,13 +137,14 @@ public class EventsFragment extends BaseFragment implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        int storedNumberTab=presenter.getStoredActiveTab();
-        TabLayout.Tab tab=tabsView.getTabs().getTabAt(storedNumberTab);
-        assert tab != null;
-        if(tabsView.getTabs().getSelectedTabPosition()==storedNumberTab)
-            onTabSelected(tab);
-        else
-            tab.select();
+        onTabSelected(tabsView.getTabs().getTabAt(TAB_NEWS));
+//        int storedNumberTab=presenter.getStoredActiveTab();
+//        TabLayout.Tab tab=tabsView.getTabs().getTabAt(storedNumberTab);
+//        assert tab != null;
+//        if(tabsView.getTabs().getSelectedTabPosition()==storedNumberTab)
+//            onTabSelected(tab);
+//        else
+//            tab.select();
     }
 
     @Override
@@ -181,11 +182,11 @@ public class EventsFragment extends BaseFragment implements
     @Override
     public List<String> getTitleDropDown() {
         switch (loadNewsPackage.getMode()) {
-            case 0:
-                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_events));
             case 1:
-                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_sales));
+                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_events));
             case 2:
+                return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_sales));
+            case 0:
                 return Arrays.asList(ResourceHelper.getResources().getStringArray(R.array.events_filter_news));
         }
         return super.getTitleDropDown();

@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -100,7 +101,8 @@ public class BeerMapFragment extends BaseFragment implements
                                                             GoogleMap.OnMapClickListener,
                                                             GoogleMap.OnMapLoadedCallback,
                                                             View.OnKeyListener,
-                                                            View.OnFocusChangeListener
+                                                            View.OnFocusChangeListener,
+                                                            View.OnClickListener
 
 
 {
@@ -112,6 +114,8 @@ public class BeerMapFragment extends BaseFragment implements
     FinderView finder;
     @BindView(R.id.restoList)
     RecyclerView list;
+    @BindView(R.id.fragment_map_fab_location_off)
+    FloatingActionButton fab_location_off;
     //endregion
 
     //region INJECT
@@ -218,6 +222,8 @@ public class BeerMapFragment extends BaseFragment implements
         finder.getInput().setOnFocusChangeListener(this);
         finder.getInput().setOnKeyListener(this);
 
+        fab_location_off.setOnClickListener(this);
+        fab_location_off.setVisibility(View.GONE);
 
         mapView.onCreate(null);
         mapView.getMapAsync(this);
@@ -472,8 +478,10 @@ public class BeerMapFragment extends BaseFragment implements
             showNewLocation();
             if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                fab_location_off.setVisibility(VISIBLE);
             }else {
                 this.googleMap.setMyLocationEnabled(true);
+                fab_location_off.setVisibility(View.GONE);
             }
 
         });
@@ -573,6 +581,14 @@ public class BeerMapFragment extends BaseFragment implements
                 break;
         }
     }
+
+
+    @Override
+    public void onClick(View v) {
+        onMyLocationButtonClick();
+        mListener.showSnackbarRed(getString(R.string.location_disabled));
+    }
+
     //endregion
 
     //region Functions
@@ -809,8 +825,8 @@ public class BeerMapFragment extends BaseFragment implements
         void setTitle(CharSequence name);
         OnLocationInteractionListener getLocationListener();
         void processChangeFragment(int id);
-
         void showTopBarLoading(boolean b);
+        void showSnackbarRed(String text);
     }
 
     private class InfoWindowLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {

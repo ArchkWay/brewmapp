@@ -106,10 +106,10 @@ public class MenuField extends AbstractFlexibleItem<ModelViewHolder<MenuFieldRow
     public static List<MenuField> createDefault(Context context) {
         List<MenuField> out = new ArrayList<>();
         out.add(new MenuField(EVENTS, R.drawable.ic_menu_events, context.getString(R.string.events)));
-        out.add(new MenuField(MESSAGES, R.drawable.ic_menu_messages, context.getString(R.string.messages)));
         out.add(new MenuField(SEARCH, R.drawable.ic_menu_search, context.getString(R.string.serach)));
 //        out.add(new MenuField(EVENTS, R.drawable.ic_menu_meetings, context.getString(R.string.meetings)));
         out.add(new MenuField(MAP, R.drawable.ic_menu_map, context.getString(R.string.map)));
+        out.add(new MenuField(MESSAGES, R.drawable.ic_menu_messages, context.getString(R.string.messages)));
         out.add(new MenuField(FRIENDS, R.drawable.ic_menu_friends, context.getString(R.string.friends)));
 //        out.add(new MenuField(EVENTS, R.drawable.ic_menu_groups, context.getString(R.string.groups)));
 //        out.add(new MenuField(EVENTS, R.drawable.ic_menu_games, context.getString(R.string.games)));

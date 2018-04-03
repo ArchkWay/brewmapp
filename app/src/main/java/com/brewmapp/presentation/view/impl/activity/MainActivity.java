@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         switch (mode){
             case MODE_DEFAULT:
-                if(menuToShow != 0){
+                if(menuToShow > 0){
                     getMenuInflater().inflate(menuToShow, menu);
                 }
                 break;

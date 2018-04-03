@@ -113,7 +113,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
     @Override
     public int getMenuToInflate() {
-        return 0;
+        return -1;
     }
 
     @Override
@@ -162,6 +162,11 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        search.clearFocus();
+    }
 
     //endregion
 

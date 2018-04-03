@@ -537,5 +537,7 @@
     <string name="key_beer">key_beer</string>
     <string name="title_friends_request">Запросы на добавление в друзья</string>
     <string name="location_disabled">Геолокация выключена. По умолчанию Москва.</string>
+    <string name="hint_email">email@example.com</string>
+    <string name="not_valid_login">Не верный пароль или логин </string>
 
 </resources>

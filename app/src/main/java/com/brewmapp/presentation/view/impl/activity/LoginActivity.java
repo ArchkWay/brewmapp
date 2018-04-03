@@ -3,13 +3,20 @@ package com.brewmapp.presentation.view.impl.activity;
 import javax.inject.Inject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.facebook.login.widget.LoginButton;
 
@@ -28,10 +35,13 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_login_enter) Button enter;
     @BindView(R.id.activity_login_login)    MaskedEditText login;
+    @BindView(R.id.activity_login_login_email)    AppCompatEditText login_email;
     @BindView(R.id.activity_login_password) EditText password;
     @BindView(R.id.activity_login_logo) View logoImage;
     @BindView(R.id.activity_login_fb) View fb;
     @BindView(R.id.activity_login_fbLogin) LoginButton fbLogin;
+    @BindView(R.id.activity_login_rbGroup)    RadioGroup radioGroup;
+    @BindView(R.id.activity_login_container)    LinearLayout container;
 
     @Inject LoginPresenter presenter;
 
@@ -63,6 +73,46 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setOnDoneListener(password, this::login);
         login.setOnFocusChangeListener(loginListener);
         password.setOnFocusChangeListener(passwordListener);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                boolean b=login.hasFocus()||login_email.hasFocus();
+                if(b)
+                    hideKeyboard();
+
+                login.setVisibility(View.INVISIBLE);
+                login_email.setVisibility(View.INVISIBLE);
+                switch (checkedId){
+                    case R.id.activity_login_rbGroup_phone:
+                        login.setVisibility(View.VISIBLE);
+                        if(b) {
+                            login.requestFocus();
+                            login.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    keyboard.showSoftInput(login, 0);
+                                }
+                            }, 500);
+                        }
+                        break;
+                    case R.id.activity_login_rbGroup_email:
+                        login_email.setVisibility(View.VISIBLE);
+                        if(b) {
+                            login_email.requestFocus();
+                            login_email.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    keyboard.showSoftInput(login_email, 0);
+                                }
+                            }, 500);
+                        }
+                        break;
+                }
+                container.requestLayout();
+            }
+        });
     }
 
     @Override
@@ -77,8 +127,21 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     private void login() {
-        if(TextTools.isTrimmedEmpty(login) || TextTools.isTrimmedEmpty(password)) return;
-        String loginString = login.getRawText();
+
+        if(login.getVisibility()==View.VISIBLE) {
+            if (TextTools.isTrimmedEmpty(login) || TextTools.isTrimmedEmpty(password)) {
+                showSnackbarRed(getString(R.string.not_valid_login));
+                return;
+            }
+        }else if(login_email.getVisibility()==View.VISIBLE) {
+            if (!TextTools.validateEmail(login_email) || TextTools.isTrimmedEmpty(password)) {
+                showSnackbarRed(getString(R.string.not_valid_login));
+                return;
+            }
+        }
+
+        String loginString = login.getVisibility()==View.VISIBLE?login.getRawText().trim():login_email.getText().toString().trim();
+
         String passString = TextTools.extractTrimmed(password);
         presenter.onLoginPassReady(loginString, passString);
     }

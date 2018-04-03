@@ -3,6 +3,8 @@
     <item>
         <shape>
             <corners
+                android:topLeftRadius="@dimen/radius_corners_default"
+                android:topRightRadius="@dimen/radius_corners_default"
                 android:bottomLeftRadius="@dimen/radius_corners_default"
                 android:bottomRightRadius="@dimen/radius_corners_default" />
             <solid
@@ -12,6 +14,8 @@
     <item android:top="1dp">
         <shape>
             <corners
+                android:topLeftRadius="@dimen/radius_corners_default"
+                android:topRightRadius="@dimen/radius_corners_default"
                 android:bottomLeftRadius="@dimen/radius_corners_default"
                 android:bottomRightRadius="@dimen/radius_corners_default" />
             <solid

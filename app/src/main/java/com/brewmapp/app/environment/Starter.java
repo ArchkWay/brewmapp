@@ -206,10 +206,10 @@ public class Starter {
 
     }
 
-    public static void ResultSearchActivity(BaseActivity baseActivity, int selectedTab) {
+    public static void ResultSearchActivity(BaseActivity baseActivity, String selectedTab) {
         ResultSearchActivity(baseActivity, selectedTab, null);
     }
-    public static void ResultSearchActivity(BaseActivity baseActivity, int selectedTab, String beer_id) {
+    public static void ResultSearchActivity(BaseActivity baseActivity, String selectedTab, String beer_id) {
         Intent intent = new Intent(baseActivity, ResultSearchActivity.class);
         intent.putExtra(Actions.PARAM1,selectedTab);
         if(beer_id==null)

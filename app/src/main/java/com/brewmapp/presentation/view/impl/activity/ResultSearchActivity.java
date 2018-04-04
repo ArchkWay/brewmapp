@@ -89,7 +89,7 @@ public class ResultSearchActivity extends BaseActivity implements
     //region Private
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage = new FullSearchPackage();
-    private int selectedTab;
+    private String selectedTab;
     private EndlessRecyclerOnScrollListener scrollListener;
     private ProgressDialog dialog;
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
@@ -117,11 +117,11 @@ public class ResultSearchActivity extends BaseActivity implements
         getMenuInflater().inflate(R.menu.map,menu);
         MenuItem menuItem=menu.findItem(R.id.action_map);
         switch (selectedTab){
-            case SearchFragment.TAB_RESTO:
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_RESTO:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 menuItem.setVisible(listAdapter.size()!=0&&!clickGoMap);
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 menuItem.setVisible(false);
                 break;
         }
@@ -137,11 +137,11 @@ public class ResultSearchActivity extends BaseActivity implements
                 clickGoMap=true;
                 invalidateOptionsMenu();
                 switch (selectedTab) {
-                    case SearchFragment.TAB_RESTO: {
+                    case SearchFragment.CATEGORY_LIST_RESTO: {
                         presenter.getLocationsResto(searchPackage);
                     }
                     break;
-                    case SearchFragment.TAB_BEER: {
+                    case SearchFragment.CATEGORY_LIST_BEER: {
                         presenter.getLocationsBeer(searchPackage);
                     }
                 }
@@ -165,11 +165,11 @@ public class ResultSearchActivity extends BaseActivity implements
         //region Parse Intent
 
         boolean useCustomFilter=getIntent().getBooleanExtra(getString(R.string.key_use_custom_filter),false);
-        selectedTab=getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        selectedTab=getIntent().getStringExtra(Actions.PARAM1);
         switch (selectedTab) {
 
             //region TAB_RESTO
-            case SearchFragment.TAB_RESTO: {
+            case SearchFragment.CATEGORY_LIST_RESTO: {
                 orders = getResources().getStringArray(R.array.order_search_resto);
                 searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
@@ -225,7 +225,7 @@ public class ResultSearchActivity extends BaseActivity implements
             //endregion
 
             //region TAB_BEER
-            case SearchFragment.TAB_BEER: {
+            case SearchFragment.CATEGORY_LIST_BEER: {
 
                 orders = getResources().getStringArray(R.array.order_search_beer);
                 searchPackage.setOrder(Keys.ORDER_SORT_RATING_BEER_DESC);
@@ -270,7 +270,7 @@ public class ResultSearchActivity extends BaseActivity implements
             //endregion
 
             //region TAB_BREWERY
-            case SearchFragment.TAB_BREWERY: {
+            case SearchFragment.CATEGORY_LIST_BREWERY: {
                 List<FilterBreweryField> filterBreweryFields = Paper.book().read(SearchFragment.CATEGORY_LIST_BREWERY);
                 for(FilterBreweryField filterBreweryField:filterBreweryFields){
                     switch (filterBreweryField.getId()){
@@ -296,7 +296,18 @@ public class ResultSearchActivity extends BaseActivity implements
         //endregion
 
         //region setup View
-        common_toolbar_title.setText(titleContent[selectedTab]);
+        switch (selectedTab){
+            case SearchFragment.CATEGORY_LIST_RESTO:
+                common_toolbar_title.setText(titleContent[0]);
+                break;
+            case SearchFragment.CATEGORY_LIST_BEER:
+                common_toolbar_title.setText(titleContent[1]);
+                break;
+            case SearchFragment.CATEGORY_LIST_BREWERY:
+                common_toolbar_title.setText(titleContent[2]);
+                break;
+        }
+
         more.setOnClickListener(v -> startActivity(ExtendedSearchActivity.class));
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
@@ -373,7 +384,7 @@ public class ResultSearchActivity extends BaseActivity implements
         ArrayList<RestoLocation> arrayListResult=new ArrayList<>();
 
         switch (selectedTab){
-            case SearchFragment.TAB_RESTO:{
+            case SearchFragment.CATEGORY_LIST_RESTO:{
                 //region Resto to Map
 
                 HashMap<String,FilterRestoLocation> hashMap=new HashMap<>();
@@ -398,7 +409,7 @@ public class ResultSearchActivity extends BaseActivity implements
                 Starter.MainActivity(this,MainActivity.MODE_MAP_FRAGMENT,arrayListResult);
                 //endregion
             }break;
-            case SearchFragment.TAB_BEER:{
+            case SearchFragment.CATEGORY_LIST_BEER:{
                 //region Beer to Map
                 HashMap<String,RestoLocation> hmListResult=new HashMap<>();
                 HashMap<String,ArrayList<FilterRestoLocation>> hmBeerPourResto=new HashMap<>();
@@ -484,13 +495,13 @@ public class ResultSearchActivity extends BaseActivity implements
     private void processAction(int action, Object payload) {
 
         switch (selectedTab) {
-            case SearchFragment.TAB_RESTO:
+            case SearchFragment.CATEGORY_LIST_RESTO:
                 Starter.RestoDetailActivity(this,String.valueOf(((Resto) payload).getId()));
                 break;
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 Starter.BeerDetailActivity(this,((SearchBeer)payload).getId());
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 Starter.BreweryDetailsActivity(this,((Brewery)payload).getId());
                 break;
         }
@@ -511,19 +522,19 @@ public class ResultSearchActivity extends BaseActivity implements
         ToggleVisibleFilterList();
         switch (position){
             case 0:
-                if(selectedTab==SearchFragment.TAB_RESTO)
+                if(selectedTab==SearchFragment.CATEGORY_LIST_RESTO)
                     searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
-                else if(selectedTab==SearchFragment.TAB_BEER)
+                else if(selectedTab==SearchFragment.CATEGORY_LIST_BEER)
                     searchPackage.setOrder(Keys.ORDER_SORT_RATING_BEER_DESC);
                 break;
             case 1:
-                if(selectedTab==SearchFragment.TAB_RESTO)
+                if(selectedTab==SearchFragment.CATEGORY_LIST_RESTO)
                     searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_RESTO_ASC);
-                else if(selectedTab==SearchFragment.TAB_BEER)
+                else if(selectedTab==SearchFragment.CATEGORY_LIST_BEER)
                     searchPackage.setOrder(Keys.ORDER_SORT_PRICE_BEER_ASC);
                 break;
             case 2:
-                if(selectedTab==SearchFragment.TAB_BEER)
+                if(selectedTab==SearchFragment.CATEGORY_LIST_BEER)
                     searchPackage.setOrder(Keys.ORDER_SORT_PRICE_BEER_DESC);
                 break;
             default:
@@ -619,7 +630,7 @@ public class ResultSearchActivity extends BaseActivity implements
 
     private void continueLoadResult() {
         switch (selectedTab) {
-            case SearchFragment.TAB_RESTO:
+            case SearchFragment.CATEGORY_LIST_RESTO:
                 //region set user location
                 requestLastLocation(location -> {
                     if(location==null)
@@ -630,10 +641,10 @@ public class ResultSearchActivity extends BaseActivity implements
                 });
                 //endregion
                 break;
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 presenter.loadBeerList( searchPackage);
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 presenter.loadBrewery(searchPackage);
                 break;
             default: break;

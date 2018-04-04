@@ -1,13 +1,6 @@
 package com.brewmapp.presentation.presenter.contract;
 
-import android.location.Location;
-
-import com.brewmapp.data.entity.FilterBeerField;
-import com.brewmapp.data.entity.FilterBreweryField;
-import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.presentation.view.contract.SearchAllView;
-
-import java.util.List;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -16,5 +9,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
-    void setTabActive(int position);
+    void setTabActive(String position);
 }

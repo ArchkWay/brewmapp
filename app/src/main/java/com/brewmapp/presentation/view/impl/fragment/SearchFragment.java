@@ -74,6 +74,12 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     @Inject    SearchFragmentPresenter presenter;
     //endregion
 
+    //region Public static
+    public static final String CATEGORY_LIST_RESTO = "restoCategoryList";
+    public static final String CATEGORY_LIST_BEER = "beerCategoryList";
+    public static final String CATEGORY_LIST_BREWERY = "breweryCategoryList";
+    //endregion
+
     //region Private
     private OnFragmentInteractionListener mListener;
     private OnLocationInteractionListener mLocationListener;
@@ -88,14 +94,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.search_title);
     //endregion
 
-    //region Public static
-    public static final int TAB_RESTO = 0;
-    public static final int TAB_BEER = 1;
-    public static final int TAB_BREWERY = 2;
-    public static final String CATEGORY_LIST_RESTO = "restoCategoryList";
-    public static final String CATEGORY_LIST_BEER = "beerCategoryList";
-    public static final String CATEGORY_LIST_BREWERY = "breweryCategoryList";
-    //endregion
 
     //region Impl SearchFragment
     @Override
@@ -115,13 +113,18 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 searchFragmentPackage.setMode(tab.getPosition());
-                presenter.setTabActive(tab.getPosition());
-                offer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 0 ? View.VISIBLE : View.GONE);
-                craft.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 1 ? View.VISIBLE : View.GONE);
-                filterBeer.setVisibility(tabsView.getTabs().getSelectedTabPosition() == 1 ? View.VISIBLE : View.GONE);
+                presenter.setTabActive((String) tab.getTag());
+                offer.setVisibility(tab.getTag() == CATEGORY_LIST_RESTO ? View.VISIBLE : View.GONE);
+                craft.setVisibility(tab.getTag() == CATEGORY_LIST_BEER ? View.VISIBLE : View.GONE);
+                filterBeer.setVisibility(tab.getTag() == CATEGORY_LIST_BEER ? View.VISIBLE : View.GONE);
                 interractor().processSetFilterFragmentActionBar(SearchFragment.this);
             }
         });
+
+        tabsView.getTabs().getTabAt(0).setTag(CATEGORY_LIST_RESTO);
+        tabsView.getTabs().getTabAt(1).setTag(CATEGORY_LIST_BEER);
+        tabsView.getTabs().getTabAt(2).setTag(CATEGORY_LIST_BREWERY);
+
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.addItemDecoration(new ListDivider(getContext(), ListDivider.VERTICAL_LIST));
         list.setNestedScrollingEnabled(true);
@@ -138,7 +141,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.setTabActive(TAB_RESTO);
+        presenter.setTabActive(CATEGORY_LIST_RESTO);
         mLocationListener.requestCity(result -> {
             if(result!=null) {
                 List<FilterRestoField> listResto = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
@@ -240,16 +243,16 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     //region User Events
     @OnClick(R.id.accept_filter_layout)
     public void acceptFilter() {
-        int selectedTab=tabsView.getTabs().getSelectedTabPosition();
-        switch (selectedTab){
-            case TAB_RESTO: {
+        String tag=(String) tabsView.getTabs().getTabAt(tabsView.getTabs().getSelectedTabPosition()).getTag();
+        switch (tag){
+            case CATEGORY_LIST_RESTO: {
                 String filtrCity = restoFilterList.get(FilterRestoField.CITY).getSelectedItemId();
                 if (filtrCity == null) {
                     mListener.showSnackbarRed(getString(R.string.text_need_select_city));
                     return;
                 }
             }break;
-            case TAB_BEER: {
+            case CATEGORY_LIST_BEER: {
                 String filtrCity = beerFilterList.get(FilterBeerField.CITY).getSelectedItemId();
                 if (filtrCity == null) {
                     mListener.showSnackbarRed(getString(R.string.text_need_select_city));
@@ -258,7 +261,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             }break;
         }
 
-        Starter.ResultSearchActivity((BaseActivity) getActivity(),selectedTab);
+        Starter.ResultSearchActivity((BaseActivity) getActivity(),tag);
     }
 
     private void processAction(int code, Object o) {
@@ -268,9 +271,10 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             int itemId=0;
             String filterTxt=null;
             String filterId=null;
-            switch (tabsView.getTabs().getSelectedTabPosition()){
+            String tag= (String) tabsView.getTag(tabsView.getTabs().getSelectedTabPosition());
+            switch (tag){
                 //region RESTO
-                case TAB_RESTO:{
+                case CATEGORY_LIST_RESTO:{
                     FilterRestoField f=((FilterRestoField)o);
                     itemId=f.getId();
                     filterTxt=f.getSelectedFilter();
@@ -290,7 +294,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                 //endregion
                 break;
                 //region BEER
-                case TAB_BEER:{
+                case CATEGORY_LIST_BEER:{
                     FilterBeerField f=((FilterBeerField)o);
                     itemId=f.getId();
                     filterTxt=f.getSelectedFilter();
@@ -347,7 +351,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                 //endregion
                 break;
                 //region BREWERY
-                case TAB_BREWERY:{
+                case CATEGORY_LIST_BREWERY:{
                     FilterBreweryField f=((FilterBreweryField)o);
                     itemId=f.getId();
                     filterTxt=f.getSelectedFilter();
@@ -389,18 +393,19 @@ public class SearchFragment extends BaseFragment implements SearchAllView
         }
         else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
             //region Clear category
-            switch (tabsView.getTabs().getSelectedTabPosition()){
-                case TAB_RESTO:
+
+            switch ((String)tabsView.getTag(tabsView.getTabs().getSelectedTabPosition())){
+                case CATEGORY_LIST_RESTO:
                     ((FilterRestoField)o).clearFilter();
                     restoAdapter.notifyDataSetChanged();
                     Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, restoFilterList );
                     break;
-                case TAB_BEER:
+                case CATEGORY_LIST_BEER:
                     ((FilterBeerField)o).clearFilter();
                     beerAdapter.notifyDataSetChanged();
                     Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, beerFilterList);
                     break;
-                case TAB_BREWERY:
+                case CATEGORY_LIST_BREWERY:
                     ((FilterBreweryField)o).clearFilter();
                     breweryAdapter.notifyDataSetChanged();
                     Paper.book().write(SearchFragment.CATEGORY_LIST_BREWERY, breweryList);
@@ -430,9 +435,9 @@ public class SearchFragment extends BaseFragment implements SearchAllView
         //endregion
 
         //region Refresh filter list
-        switch (numberTab) {
+        switch ((String)tabsView.getTag(numberTab)) {
             //region RESTO
-            case TAB_RESTO:
+            case CATEGORY_LIST_RESTO:
                 switch (numberMenuItem){
                     case FilterRestoField.TYPE:
                     case FilterRestoField.BEER:
@@ -454,7 +459,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                 break;
             //endregion
             //region BEER
-            case TAB_BEER:
+            case CATEGORY_LIST_BEER:
                 switch (numberMenuItem){
                     //region COUNTRY
                     case FilterBeerField.COUNTRY: {
@@ -582,7 +587,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                 break;
             //endregion
             //region BREWERY
-            case TAB_BREWERY:
+            case CATEGORY_LIST_BREWERY:
                 switch (numberMenuItem){
                     case FilterBreweryField.NAME:
                         break;

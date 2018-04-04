@@ -112,7 +112,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private String filterTxt;
     private String filterId;
     private List<IFlexible> original=new ArrayList<>();
-    private int numberTab;
+    private String numberTab;
     private int numberMenuItem;
     private HashMap<String,String> hashMap=new HashMap<>();
     private StringBuilder sb=new StringBuilder();
@@ -162,7 +162,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         //endregion
 
         //region parse intent
-        numberTab =getIntent().getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        numberTab =getIntent().getStringExtra(Actions.PARAM1);
         numberMenuItem =getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
         filterId=getIntent().getStringExtra(Actions.PARAM3);
         filterTxt=getIntent().getStringExtra(Actions.PARAM4);
@@ -176,13 +176,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         presenter.onAttach(this);
         //region Load data for selection
         switch (numberTab){
-            case SearchFragment.TAB_RESTO:
+            case SearchFragment.CATEGORY_LIST_RESTO:
                 initRestoFilterByCategory(numberMenuItem);
                 break;
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 initBeerFilterByCategory(numberMenuItem);
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 initBreweryFilterByCategory(numberMenuItem);
                 break;
             default:
@@ -207,7 +207,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     public void appendItems(List<IFlexible> list) {
 
         switch (numberTab){
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 //region Prepare append items for TAB_BEER
                 switch (numberMenuItem) {
                     case FilterBeerField.NAME:{
@@ -321,7 +321,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 //endregion
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 //region Prepare append items for TAB_BREWERY
                 switch (numberMenuItem){
                     case FilterBreweryField.COUNTRY: {
@@ -353,7 +353,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 //endregion
                 break;
-            case SearchFragment.TAB_RESTO:
+            case SearchFragment.CATEGORY_LIST_RESTO:
                 //region Prepare append items for TAB_RESTO
                 switch (numberMenuItem){
                     case FilterRestoField.BEER:
@@ -440,7 +440,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
 
         switch (numberTab){
-            case SearchFragment.TAB_RESTO:
+            case SearchFragment.CATEGORY_LIST_RESTO:
                 //region select item for TAB_RESTO
                 switch (numberMenuItem){
                     case FilterRestoField.NAME:
@@ -483,7 +483,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 //endregion
                 break;
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 //region select item for TAB_BEER
                 switch (numberMenuItem) {
                     case FilterBeerField.NAME:
@@ -580,7 +580,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 //endregion
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 //region select item for TAB_BREWERY
                 switch (numberMenuItem) {
                     case FilterBeerField.NAME:
@@ -899,7 +899,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         int type_filter=0;
 
         switch (numberTab){
-            case SearchFragment.TAB_BEER:
+            case SearchFragment.CATEGORY_LIST_BEER:
                 if(FilterBeerField.NAME == numberMenuItem)
                     type_filter=1;
                 else if(FilterBeerField.BREWERY == numberMenuItem)
@@ -909,13 +909,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 else if(FilterBeerField.CITY == numberMenuItem)
                     type_filter=1;
                 break;
-            case SearchFragment.TAB_BREWERY:
+            case SearchFragment.CATEGORY_LIST_BREWERY:
                 if(FilterBreweryField.NAME == numberMenuItem)
                     type_filter=1;
                 else if(FilterBreweryField.BRAND == numberMenuItem)
                     type_filter=1;
                 break;
-            case SearchFragment.TAB_RESTO:
+            case SearchFragment.CATEGORY_LIST_RESTO:
                 if(FilterRestoField.NAME == numberMenuItem)
                     type_filter=1;
                 else if(FilterRestoField.BEER == numberMenuItem)
@@ -941,9 +941,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     private void sendQuery() {
         if (fullSearchPackage.getStringSearch().length() > 0){
-            if(numberTab==SearchFragment.TAB_RESTO&&numberMenuItem ==FilterRestoField.CITY){
+            if(numberTab==SearchFragment.CATEGORY_LIST_RESTO&&numberMenuItem ==FilterRestoField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
-            }else if(numberTab==SearchFragment.TAB_BEER&&numberMenuItem ==FilterBeerField.CITY){
+            }else if(numberTab==SearchFragment.CATEGORY_LIST_BEER&&numberMenuItem ==FilterBeerField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
             }else{
                 presenter.sendQueryFullSearch(fullSearchPackage);

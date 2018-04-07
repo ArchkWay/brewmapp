@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import android.location.Location;
+
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.contract.SearchAllView;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
@@ -15,4 +17,5 @@ public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
 
     String getActiveTab();
 
+    Location getUsetLocation();
 }

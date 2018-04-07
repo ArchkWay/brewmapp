@@ -177,8 +177,8 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
     public static List<FilterRestoField> createDefault() {
         List<FilterRestoField> out = new ArrayList<>();
         out.add(new FilterRestoField(NAME));
-        out.add(new FilterRestoField(TYPE));
         out.add(new FilterRestoField(BEER));
+        out.add(new FilterRestoField(TYPE));
         out.add(new FilterRestoField(KITCHEN));
         out.add(new FilterRestoField(PRICE));
         out.add(new FilterRestoField(CITY));

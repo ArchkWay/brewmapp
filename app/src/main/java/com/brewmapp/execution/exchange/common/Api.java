@@ -292,6 +292,15 @@ public interface Api {
 
     @POST("full_search/{query}")
     @FormUrlEncoded
+    Call<ResponseSearchResto> fullSearchRestoWithLocate(
+            @Path("query") String query,
+            @Query(Keys.LAT) double lat,
+            @Query(Keys.LON) double lon,
+            @FieldMap WrapperParams params
+    );
+
+    @POST("full_search/{query}")
+    @FormUrlEncoded
     Call<Breweries> fullSearchBrewery(
             @Path("query") String query,
             @Query(Keys.LIMIT_START) int start,

@@ -39,5 +39,8 @@ public class Actions {
     public static final String PARAM2 = "PARAM2";
     public static final String PARAM3 = "PARAM3";
     public static final String PARAM4 = "PARAM4";
+    public static final String PARAM5 = "PARAM5";
+    public static final String PARAM6 = "PARAM6";
+    public static final String PARAM7 = "PARAM7";
 
 }

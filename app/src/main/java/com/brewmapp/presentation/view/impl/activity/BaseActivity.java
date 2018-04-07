@@ -242,11 +242,11 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         }catch (Exception e){}
     }
 
-    public void requestCity(Callback<City> callback){
+    public void requestCity(Callback<City> callbackCity){
         requestLastLocation(new Callback<Location>() {
             @Override
             public void onResult(Location location) {
-                decodeLocation(location,callback);
+                decodeLocation(location,callbackCity);
                 if(location==null){
                     requestRefreshLocation();
                 }

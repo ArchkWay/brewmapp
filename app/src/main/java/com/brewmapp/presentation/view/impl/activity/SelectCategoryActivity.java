@@ -162,10 +162,14 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         //endregion
 
         //region parse intent
-        numberTab =getIntent().getStringExtra(Actions.PARAM1);
-        numberMenuItem =getIntent().getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
-        filterId=getIntent().getStringExtra(Actions.PARAM3);
-        filterTxt=getIntent().getStringExtra(Actions.PARAM4);
+        Intent intent=getIntent();
+        numberTab =intent.getStringExtra(Actions.PARAM1);
+        numberMenuItem =intent.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
+        filterId=intent.getStringExtra(Actions.PARAM3);
+        filterTxt=intent.getStringExtra(Actions.PARAM4);
+        fullSearchPackage.setLat(intent.getDoubleExtra(Actions.PARAM5,0));
+        fullSearchPackage.setLon(intent.getDoubleExtra(Actions.PARAM6,0));
+        fullSearchPackage.setCity(intent.getStringExtra(Actions.PARAM7));
         //endregion
 
         initFinder();

@@ -53,7 +53,13 @@ public class FullSearchFilterTask extends BaseNetworkTask<FullSearchPackage, Lis
                         subscriber.onComplete();
                         break;
                     case Keys.TYPE_RESTO:
-                        ResponseSearchResto responseSearchResto = executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), start, end, params));
+                        ResponseSearchResto responseSearchResto;
+                        if(fullSearchPackage.getCity()!=null)
+                            params.addParam(Keys.CITY_ID,fullSearchPackage.getCity());
+                        if(fullSearchPackage.getLat()!=0&&fullSearchPackage.getLon()!=0)
+                            responseSearchResto = executeCall(getApi().fullSearchRestoWithLocate(fullSearchPackage.getStringSearch(), fullSearchPackage.getLat(), fullSearchPackage.getLon(), params));
+                        else
+                            responseSearchResto = executeCall(getApi().fullSearchResto(fullSearchPackage.getStringSearch(), start, end, params));
                         subscriber.onNext(new ArrayList<>(responseSearchResto.getModels()));
                         subscriber.onComplete();
                         break;

@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
+import android.location.Location;
 import android.text.TextUtils;
 
 import com.brewmapp.R;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 
 import static com.brewmapp.presentation.view.impl.fragment.SearchFragment.CATEGORY_LIST_BREWERY;
@@ -34,6 +36,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     private Context context;
     private LoadCityTask loadCityTask;
     private String ActiveTab;
+    private Location userLocation=null;
 
     @Inject
     public SearchFragmentPresenterImpl(Context context, UiSettingRepo uiSettingRepo,LoadCityTask loadCityTask) {
@@ -70,7 +73,14 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                             view.showRestoFilters(listResto);
                         }
                     }
-
+                    mLocationListener.requestLastLocation(new Callback<Location>() {
+                        @Override
+                        public void onResult(Location location) {
+                            userLocation=location;
+                            if(userLocation==null)
+                                userLocation=mLocationListener.getDefaultLocation();
+                        }
+                    });
                 });
                 view.showRestoFilters(listResto);
                 mListener.setTitle(titleContent[1]);
@@ -107,6 +117,11 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
     @Override
     public String getActiveTab() {
         return ActiveTab;
+    }
+
+    @Override
+    public Location getUsetLocation() {
+        return userLocation;
     }
 
 }

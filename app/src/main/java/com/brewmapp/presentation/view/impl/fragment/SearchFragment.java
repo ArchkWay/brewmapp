@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -137,7 +138,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
 
     @Override
     public int getMenuToInflate() {
-        return 0;
+        return R.menu.stub;
     }
 
     @Override
@@ -238,6 +239,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             int itemId=0;
             String filterTxt=null;
             String filterId=null;
+            String city_id=null;
             switch (presenter.getActiveTab()){
                 //region RESTO
                 case CATEGORY_LIST_RESTO:{
@@ -247,6 +249,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                     filterId=f.getSelectedItemId();
                     switch (itemId){
                         case FilterRestoField.NAME:
+                            List<FilterRestoField> listResto = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
+                            city_id=listResto.get(FilterRestoField.CITY).getSelectedItemId();
                         case FilterRestoField.BEER:
                         case FilterRestoField.CITY:
                         case FilterRestoField.PRICE:
@@ -349,6 +353,14 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                 intent.putExtra(Actions.PARAM2,itemId);
                 intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
                 intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
+                Location userLocation=presenter.getUsetLocation();
+                if(userLocation!=null){
+                    intent.putExtra(Actions.PARAM5,userLocation.getLatitude());
+                    intent.putExtra(Actions.PARAM6,userLocation.getLongitude());
+                }
+                if(city_id!=null)
+                    intent.putExtra(Actions.PARAM7,city_id);
+
                 startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
             }else {
                 Toast.makeText(getContext(), "В разработке...", Toast.LENGTH_SHORT).show();

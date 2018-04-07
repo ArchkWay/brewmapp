@@ -13,7 +13,5 @@ public interface FragmentInterractor {
     void processSpinnerTitleSubtitle(String subtitle);
     void processStartActivityWithRefresh(Intent intent,int requestCode);
     void processSetActionBar(int position);
-    void processSetFilterFragmentActionBar(SearchFragment searchFragment);
-
     void processChangeFragment(int id);
 }

@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -18,23 +15,16 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
-import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
-import com.brewmapp.data.entity.MenuField;
-import com.brewmapp.data.entity.SearchFragmentPackage;
-import com.brewmapp.data.entity.container.FilterBeer;
-import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.contract.SearchAllView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
-import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,7 +34,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
-import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -89,9 +78,8 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     private List<FilterRestoField> restoFilterList;
     private List<FilterBeerField> beerFilterList;
     private List<FilterBreweryField> breweryList;
-    private SearchFragmentPackage searchFragmentPackage = new SearchFragmentPackage();
     private String[] searchContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
-    private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.search_title);
+    private SimpleTabSelectListener simpleTabSelectListener;
     //endregion
 
 
@@ -108,21 +96,19 @@ public class SearchFragment extends BaseFragment implements SearchAllView
 
     @Override
     protected void initView(View view) {
-
-        tabsView.setItems(Arrays.asList(searchContent), new SimpleTabSelectListener() {
+        simpleTabSelectListener=new SimpleTabSelectListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                searchFragmentPackage.setMode(tab.getPosition());
-                presenter.setTabActive((String) tab.getTag());
+                presenter.setContentTab((String) tab.getTag(), mLocationListener, mListener);
                 offer.setVisibility(tab.getTag() == CATEGORY_LIST_RESTO ? View.VISIBLE : View.GONE);
                 craft.setVisibility(tab.getTag() == CATEGORY_LIST_BEER ? View.VISIBLE : View.GONE);
                 filterBeer.setVisibility(tab.getTag() == CATEGORY_LIST_BEER ? View.VISIBLE : View.GONE);
-                interractor().processSetFilterFragmentActionBar(SearchFragment.this);
             }
-        });
+        };
+        tabsView.setItems(Arrays.asList(searchContent), simpleTabSelectListener);
 
-        tabsView.getTabs().getTabAt(0).setTag(CATEGORY_LIST_RESTO);
-        tabsView.getTabs().getTabAt(1).setTag(CATEGORY_LIST_BEER);
+        tabsView.getTabs().getTabAt(0).setTag(CATEGORY_LIST_BEER);
+        tabsView.getTabs().getTabAt(1).setTag(CATEGORY_LIST_RESTO);
         tabsView.getTabs().getTabAt(2).setTag(CATEGORY_LIST_BREWERY);
 
         list.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -141,23 +127,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.setTabActive(CATEGORY_LIST_RESTO);
-        mLocationListener.requestCity(result -> {
-            if(result!=null) {
-                List<FilterRestoField> listResto = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-                listResto.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(result.getId()));
-                listResto.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(result.getName()));
-                Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, listResto);
-                refreshItemRestoFilters(FilterRestoField.CITY, listResto);
-
-                List<FilterBeerField> listBeer = Paper.book().read(SearchFragment.CATEGORY_LIST_BEER);
-                listBeer.get(FilterBeerField.CITY).setSelectedItemId(String.valueOf(result.getId()));
-                listBeer.get(FilterBeerField.CITY).setSelectedFilter(String.valueOf(result.getName()));
-                Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, listBeer);
-
-            }
-        });
-
+        simpleTabSelectListener.onTabSelected(tabsView.getTabs().getTabAt(0));
     }
 
     @Override
@@ -177,7 +147,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
 
     @Override
     public CharSequence getTitle() {
-        return titleContent[searchFragmentPackage.getMode()];
+            return "";
     }
 
     @Override
@@ -232,19 +202,13 @@ public class SearchFragment extends BaseFragment implements SearchAllView
 
     }
 
-    @Override
-    public void refreshItemRestoFilters(int position, List<FilterRestoField> list) {
-        this.restoFilterList.clear();
-        this.restoFilterList.addAll(list);
-        restoAdapter.notifyItemRangeChanged(position,1);
-    }
     //endregion
 
     //region User Events
     @OnClick(R.id.accept_filter_layout)
     public void acceptFilter() {
-        String tag=(String) tabsView.getTabs().getTabAt(tabsView.getTabs().getSelectedTabPosition()).getTag();
-        switch (tag){
+
+        switch (presenter.getActiveTab()){
             case CATEGORY_LIST_RESTO: {
                 String filtrCity = restoFilterList.get(FilterRestoField.CITY).getSelectedItemId();
                 if (filtrCity == null) {
@@ -261,18 +225,20 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             }break;
         }
 
-        Starter.ResultSearchActivity((BaseActivity) getActivity(),tag);
+        Starter.ResultSearchActivity((BaseActivity) getActivity(),presenter.getActiveTab());
     }
 
     private void processAction(int code, Object o) {
+
+
+
         if(code==FilterRestoField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBeerField.CODE_CLICK_FILTER_START_SELECTION ||code==FilterBreweryField.CODE_CLICK_FILTER_START_SELECTION){
             //region Selection category
             boolean result=false;
             int itemId=0;
             String filterTxt=null;
             String filterId=null;
-            String tag= (String) tabsView.getTag(tabsView.getTabs().getSelectedTabPosition());
-            switch (tag){
+            switch (presenter.getActiveTab()){
                 //region RESTO
                 case CATEGORY_LIST_RESTO:{
                     FilterRestoField f=((FilterRestoField)o);
@@ -379,7 +345,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
             //region Go to SelectCategoryActivity
             if(result){
                 Intent intent = new Intent(getContext(), SelectCategoryActivity.class);
-                intent.putExtra(Actions.PARAM1,tabsView.getTabs().getSelectedTabPosition());
+                intent.putExtra(Actions.PARAM1,presenter.getActiveTab());
                 intent.putExtra(Actions.PARAM2,itemId);
                 intent.putExtra(Actions.PARAM3,new StringBuilder().append(filterId).toString());
                 intent.putExtra(Actions.PARAM4,new StringBuilder().append(filterTxt).toString());
@@ -394,7 +360,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
         else if(code==FilterRestoField.CODE_CLICK_FILTER_CLEAR||code==FilterBeerField.CODE_CLICK_FILTER_CLEAR||code==FilterBreweryField.CODE_CLICK_FILTER_CLEAR){
             //region Clear category
 
-            switch ((String)tabsView.getTag(tabsView.getTabs().getSelectedTabPosition())){
+            switch (presenter.getActiveTab()){
                 case CATEGORY_LIST_RESTO:
                     ((FilterRestoField)o).clearFilter();
                     restoAdapter.notifyDataSetChanged();

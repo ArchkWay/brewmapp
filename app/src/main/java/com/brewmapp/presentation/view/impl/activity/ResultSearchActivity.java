@@ -298,10 +298,10 @@ public class ResultSearchActivity extends BaseActivity implements
         //region setup View
         switch (selectedTab){
             case SearchFragment.CATEGORY_LIST_RESTO:
-                common_toolbar_title.setText(titleContent[0]);
+                common_toolbar_title.setText(titleContent[1]);
                 break;
             case SearchFragment.CATEGORY_LIST_BEER:
-                common_toolbar_title.setText(titleContent[1]);
+                common_toolbar_title.setText(titleContent[0]);
                 break;
             case SearchFragment.CATEGORY_LIST_BREWERY:
                 common_toolbar_title.setText(titleContent[2]);

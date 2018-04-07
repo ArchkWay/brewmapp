@@ -376,10 +376,10 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void processSetFilterFragmentActionBar(SearchFragment searchFragment) {
+    public void setTitle(CharSequence charSequence) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
-        toolbarTitle.setText(searchFragment.getTitle());
+        toolbarTitle.setText(charSequence);
     }
     //endregion
 

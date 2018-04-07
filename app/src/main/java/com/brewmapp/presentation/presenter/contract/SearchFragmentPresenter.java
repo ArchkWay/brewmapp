@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.presenter.contract;
 
+import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.contract.SearchAllView;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -9,5 +11,8 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface SearchFragmentPresenter extends LivePresenter<SearchAllView> {
-    void setTabActive(String position);
+    void setContentTab(String position, OnLocationInteractionListener mLocationListener, SearchFragment.OnFragmentInteractionListener mListener);
+
+    String getActiveTab();
+
 }

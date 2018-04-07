@@ -156,8 +156,8 @@
     </string-array>
 
     <string-array name="full_search">
-        <item>Заведения</item>
         <item>Пиво</item>
+        <item>Заведения</item>
         <item>Пивоварни</item>
     </string-array>
 

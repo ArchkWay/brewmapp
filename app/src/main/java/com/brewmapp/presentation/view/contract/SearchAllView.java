@@ -17,6 +17,4 @@ public interface SearchAllView extends BasicView {
     void showBeerFilters(List<FilterBeerField> fieldList);
     void showBreweryFilters(List<FilterBreweryField> fieldList);
     void commonError(String... strings);
-
-    void refreshItemRestoFilters(int position, List<FilterRestoField> list);
 }

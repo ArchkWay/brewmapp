@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity
     //endregion
 
     //region Static
-    public static final String KEY_FIRST_FRAGMENT = "first_fragment";
+    //public static final String KEY_FIRST_FRAGMENT = "first_fragment";
     public static final String MODE_DEFAULT = "default";
     public static final String MODE_EVENT_FRAGMENT_WITHOUT_TABS = "event_fragment";
     public static final String MODE_MAP_FRAGMENT = "map_fragment";
@@ -146,17 +146,11 @@ public class MainActivity extends BaseActivity
             case MODE_DEFAULT:
                 if(menuToShow > 0){
                     getMenuInflater().inflate(menuToShow, menu);
+                    break;
                 }
-                break;
-            case MODE_EVENT_FRAGMENT_WITHOUT_TABS:
-            case MODE_MAP_FRAGMENT:
-                if (menu!=null) menu.clear();
+            default:
+                menu.clear();
                 getMenuInflater().inflate(R.menu.stub, menu);
-                break;
-            case MODE_SEARCH_FRAGMENT:
-                if (menu!=null) menu.clear();
-                getMenuInflater().inflate(R.menu.stub, menu);
-                break;
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -267,10 +261,9 @@ public class MainActivity extends BaseActivity
     public void showFragment(BaseFragment fragment) {
         baseFragment = fragment;
         baseFragment .setArguments(presenter.prepareArguments(getIntent(),container));
-        menuToShow = baseFragment .getMenuToInflate();
         invalidateOptionsMenu();
         processTitleDropDown(baseFragment , 0);
-        if(menuToShow == 0) processSetActionBar(0);
+        processSetActionBar(baseFragment .getMenuToInflate());
         navigator.setActionBarItemDelegate(baseFragment );
         getSupportFragmentManager()
                 .beginTransaction()
@@ -363,14 +356,9 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void processSetActionBar(int position) {
-        if (position == 0) {
-            menuToShow = R.menu.search_add;
-        } else if (position == Actions.ACTION_FILTER) {
-            menuToShow = R.menu.filter;
-        } else {
-            menuToShow = R.menu.stub;
-        }
+    public void processSetActionBar(int menu_id) {
+
+        menuToShow=menu_id > 0?menu_id:R.menu.stub;
 
         invalidateOptionsMenu();
     }

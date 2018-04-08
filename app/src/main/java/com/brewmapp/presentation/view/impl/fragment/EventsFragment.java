@@ -107,7 +107,7 @@ public class EventsFragment extends BaseFragment implements
         if(getArguments().get(Keys.RELATED_MODEL)!=null&&getArguments().get(Keys.RELATED_ID)!=null)
             mode = MODE_TABS_INVISIBLE;
 
-        interractor().processSetActionBar(0);
+        //interractor().processSetActionBar(0);
         tabsView.setItems(Arrays.asList(tabContent), this);
         initFilterItems();
         filterList.setOnItemClickListener(this);
@@ -154,7 +154,7 @@ public class EventsFragment extends BaseFragment implements
 
     @Override
     public int getMenuToInflate() {
-        return R.menu.search_add;
+        return -1;
     }
 
     @Override
@@ -178,6 +178,7 @@ public class EventsFragment extends BaseFragment implements
                 break;
         }
     }
+
 
     @Override
     public List<String> getTitleDropDown() {
@@ -279,7 +280,7 @@ public class EventsFragment extends BaseFragment implements
         loadNewsPackage.dropAll();
         loadNewsPackage.setMode(tab.getPosition());
         interractor().processTitleDropDown(EventsFragment.this, loadNewsPackage.getFilter());
-        interractor().processSetActionBar(tab.getPosition());
+        interractor().processSetActionBar(tab.getPosition()==0?R.menu.add:-1);
         presenter.storeTabActive(tab.getPosition());
         hideFilterLayout();
         if (dropdownItems != null)

@@ -30,6 +30,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
             android:scaleType="centerCrop"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
             />
 
         <TextView

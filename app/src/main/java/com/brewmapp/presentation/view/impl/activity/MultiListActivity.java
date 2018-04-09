@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -57,6 +58,9 @@ public class MultiListActivity extends BaseActivity implements
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.mulilist_activity_button_review_layout)    LinearLayout button_review_layout;
+    @BindView(R.id.activity_add_interest_container_header) LinearLayout container_header;
+    @BindView(R.id.activity_add_interest_button_add_resto) Button button_add_resto;
+    @BindView(R.id.activity_add_interest_button_add_beer) Button button_add_beer;
     //endregion
 
     //region Inject
@@ -136,6 +140,27 @@ public class MultiListActivity extends BaseActivity implements
                 recyclerview.addOnScrollListener(scrollListener);
                 //endregion
                 break;
+            case MODE_SHOW_AND_ADD_BEER:
+                //region Add Beer
+                start_search.setText(R.string.text_hint_search);
+                fullSearchPackage.setType(Keys.TYPE_BEER);
+                setTitle(R.string.action_find_beer);
+                finder.setHintString(getString(R.string.hint_find_beer));
+                finder.setListener(string -> prepareQuery(string));
+                recyclerview.addOnScrollListener(scrollListener);
+                button_add_beer.setVisibility(View.VISIBLE);
+                //endregion
+                break;
+            case MODE_SHOW_AND_ADD_RESTO:
+                //region Prepare Add Resto
+                start_search.setText(R.string.text_hint_search);
+                fullSearchPackage.setType(Keys.TYPE_RESTO);
+                setTitle(R.string.action_find_beer);
+                finder.setHintString(getString(R.string.hint_find_resto));
+                finder.setListener(string -> prepareQuery(string));
+                recyclerview.addOnScrollListener(scrollListener);
+                button_add_resto.setVisibility(View.VISIBLE);
+                //endregion
             case MODE_SHOW_AND_SELECT_RESTO:
                 //region Prepare Resto
                 start_search.setText(R.string.text_hint_search);
@@ -305,6 +330,8 @@ public class MultiListActivity extends BaseActivity implements
                 switch (mode){
                     case MODE_SHOW_AND_SELECT_BEER:
                     case MODE_SHOW_AND_SELECT_RESTO:
+                    case MODE_SHOW_AND_ADD_RESTO:
+                    case MODE_SHOW_AND_ADD_BEER:
                     case MODE_SHOW_AND_SELECT_FRIENDS:
                         if(fullSearchPackage.getStringSearch().length() == 0) {
                             fullSearchPackage.setPage(0);

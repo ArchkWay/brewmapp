@@ -36,6 +36,7 @@ import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.AddRestoFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

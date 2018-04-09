@@ -18,6 +18,8 @@ import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.AboutFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.AddBeerFragment;
+import com.brewmapp.presentation.view.impl.fragment.Simple.AddRestoFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.OwnerFragment;
 import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 
@@ -34,7 +36,9 @@ public class MultiFragmentActivity extends BaseActivity implements
         BeerEditFragment.OnFragmentInteractionListener,
         RestoEditFragment.OnFragmentInteractionListener,
         ChatFragment.OnFragmentInteractionListener,
-        OwnerFragment.OnFragmentInteractionListener
+        OwnerFragment.OnFragmentInteractionListener,
+        AddRestoFragment.OnFragmentInteractionListener,
+        AddBeerFragment.OnFragmentInteractionListener
 
 {
 

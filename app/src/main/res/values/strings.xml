@@ -93,9 +93,9 @@
         <item>События</item>
     </string-array>
     <!--<string-array name="event_types">-->
-        <!--<item>События</item>-->
-        <!--<item>Акции</item>-->
-        <!--<item>Новости</item>-->
+    <!--<item>События</item>-->
+    <!--<item>Акции</item>-->
+    <!--<item>Новости</item>-->
     <!--</string-array>-->
     <string-array name="search_types">
         <item>Пиво</item>
@@ -539,5 +539,9 @@
     <string name="location_disabled">Геолокация выключена. По умолчанию Москва.</string>
     <string name="hint_email">email@example.com</string>
     <string name="not_valid_login">Не верный пароль или логин </string>
+    <string name="title_friends_add_resto">Новое заведение</string>
+    <string name="title_friends_add_beer">Новое пиво</string>
+    <string name="text_button_add_resto">Добавить заведение</string>
+    <string name="text_button_add_beer">Добавить пиво</string>
 
 </resources>

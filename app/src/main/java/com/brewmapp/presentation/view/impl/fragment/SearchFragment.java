@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,9 +21,13 @@ import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.presentation.presenter.contract.SearchFragmentPresenter;
+import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.contract.SearchAllView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
+import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.brewmapp.presentation.view.impl.widget.TabsView;
 
@@ -39,6 +44,8 @@ import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
+
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_INTEREST;
 
 /**
  * Created by ovcst on 24.08.2017.
@@ -138,7 +145,7 @@ public class SearchFragment extends BaseFragment implements SearchAllView
 
     @Override
     public int getMenuToInflate() {
-        return R.menu.stub;
+        return R.menu.add_string;
     }
 
     @Override
@@ -167,6 +174,27 @@ public class SearchFragment extends BaseFragment implements SearchAllView
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+    @Override
+    public void onBarAction(int id) {
+        switch (id){
+            case R.id.action_add:
+                switch (presenter.getActiveTab()){
+                    case CATEGORY_LIST_RESTO:
+                        startActivity(new Intent(MultiListView.MODE_SHOW_AND_ADD_RESTO,null,getActivity(), MultiListActivity.class));
+                        return;
+                    case CATEGORY_LIST_BEER:
+                        startActivity(new Intent(MultiListView.MODE_SHOW_AND_ADD_BEER,null,getActivity(), MultiListActivity.class));
+                        return;
+                    case CATEGORY_LIST_BREWERY:
+                        return;
+                }
+
+                return;
+        }
+        super.onBarAction(id);
+    }
+
     //endregion
 
     //region Impl SearchAllView

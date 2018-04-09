@@ -41,22 +41,51 @@
         android:background="@color/colorBlockSplitter"
         android:orientation="vertical"
         android:layout_weight="1">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/activity.add.interest.list"/>
-            <TextView
+                android:layout_height="wrap_content"
+                android:id="@+id/activity.add.interest.container.header"
+                android:orientation="vertical">
+                <com.brewmapp.presentation.view.impl.widget.CreateRestoButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/AppTheme.Button.Green.Solid.Square"
+                    android:text="@string/text_button_add_resto"
+                    android:id="@+id/activity.add.interest.button_add_resto"
+                    android:visibility="gone"
+                    />
+                <com.brewmapp.presentation.view.impl.widget.CreateBeerButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/AppTheme.Button.Green.Solid.Square"
+                    android:text="@string/text_button_add_beer"
+                    android:id="@+id/activity.add.interest.button_add_beer"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                style="@style/AppTheme.Text.Georgia.Italic"
-                android:id="@+id/activity.add.interest.text_info_empty_list"
-                />
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/activity.add.interest.list"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    style="@style/AppTheme.Text.Georgia.Italic"
+                    android:id="@+id/activity.add.interest.text_info_empty_list"
+                    />
 
-        </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 

@@ -83,7 +83,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                     });
                 });
                 view.showRestoFilters(listResto);
-                mListener.setTitle(titleContent[1]);
+                mListener.setTitle(titleContent[0]);
 
                 break;
             case SearchFragment.CATEGORY_LIST_BEER:
@@ -102,7 +102,7 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                     }
                 });
                 view.showBeerFilters(listBeer);
-                mListener.setTitle(titleContent[0]);
+                mListener.setTitle(titleContent[1]);
                 break;
             case CATEGORY_LIST_BREWERY:
                 if(!Paper.book().contains(ActiveTab))

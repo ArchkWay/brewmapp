@@ -20,6 +20,8 @@ public interface MultiFragmentActivityView extends BasicView{
     String MODE_RESTO_EDIT ="3";
     String MODE_CHAT ="4";
     String MODE_FORM_I_OWNER ="5";
+    String MODE_ADD_RESTO ="6";
+    String MODE_ADD_BEER ="7";
 
     void showFragment(Fragment fragment);
 }

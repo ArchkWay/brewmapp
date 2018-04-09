@@ -81,18 +81,21 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     @Override
     public void sendQueryFullSearch(FullSearchPackage fullSearchPackage) {
+        view.showProgress(true);
         fullSearchTask.cancel();
         fullSearchTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);
+                view.showProgress(false);
             }
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
                 view.onError();
                 view.showMessage(e.getMessage(),0);
+                view.showProgress(false);
             }
         });
 
@@ -128,17 +131,21 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     @Override
     public void sentQueryQuickSearch(FullSearchPackage fullSearchPackage) {
+        view.showProgress(true);
+        quickSearchTask.cancel();
         quickSearchTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
                 super.onNext(iFlexibles);
                 view.appendItems(iFlexibles);
+                view.showProgress(false);
             }
 
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
                 view.appendItems(new ArrayList<IFlexible>());
+                view.showProgress(false);
             }
         });
 
@@ -264,7 +271,8 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
 
     @Override
     public void loadMenu(FullSearchPackage fullSearchPackage) {
-
+        loadMenu.cancel();
+        view.showProgress(true);
         loadMenu.execute(fullSearchPackage,new SimpleSubscriber<ListResponse<MenuResto>>(){
             @Override
             public void onNext(ListResponse<MenuResto> menuRestoListResponse) {
@@ -296,11 +304,14 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                 //endregion
 
                 view.appendItems(iFlexibleArrayList);
+
+                view.showProgress(false);
             }
 
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                view.showProgress(false);
             }
         });
     }

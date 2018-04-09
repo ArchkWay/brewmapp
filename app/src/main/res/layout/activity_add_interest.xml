@@ -82,7 +82,13 @@
                     style="@style/AppTheme.Text.Georgia.Italic"
                     android:id="@+id/activity.add.interest.text_info_empty_list"
                     />
-
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/activity.add.interest.progressBar"
+                    android:visibility="gone"
+                    />
             </RelativeLayout>
 
         </LinearLayout>

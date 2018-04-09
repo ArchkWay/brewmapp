@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -15,6 +17,7 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
@@ -34,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
@@ -61,6 +65,7 @@ public class MultiListActivity extends BaseActivity implements
     @BindView(R.id.activity_add_interest_container_header) LinearLayout container_header;
     @BindView(R.id.activity_add_interest_button_add_resto) Button button_add_resto;
     @BindView(R.id.activity_add_interest_button_add_beer) Button button_add_beer;
+    @BindView(R.id.activity_add_interest_progressBar)    ProgressBar progressBar;
     //endregion
 
     //region Inject
@@ -160,6 +165,7 @@ public class MultiListActivity extends BaseActivity implements
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
                 button_add_resto.setVisibility(View.VISIBLE);
+                fillUserPosition();
                 //endregion
             case MODE_SHOW_AND_SELECT_RESTO:
                 //region Prepare Resto
@@ -169,6 +175,7 @@ public class MultiListActivity extends BaseActivity implements
                 finder.setHintString(getString(R.string.hint_find_resto));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
+                fillUserPosition();
                 //endregion
                 break;
             case MODE_SHOW_AND_SELECT_FRIENDS:
@@ -316,6 +323,15 @@ public class MultiListActivity extends BaseActivity implements
         finish();
 
     }
+
+    @Override
+    public void showProgress(boolean show) {
+        progressBar.setVisibility(View.GONE);
+        if(fullSearchPackage.getPage()==0)
+            if(show)
+                progressBar.setVisibility(View.VISIBLE);
+
+    }
     //endregion
 
     //region Functions
@@ -358,11 +374,18 @@ public class MultiListActivity extends BaseActivity implements
     private void processAction(int action, Object payload) {
         switch (action){
             case Actions.ACTION_SELECT_MODEL: {
-                Intent intent = new Intent(this, InterestListActivity.class);
-                intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
-                intent.setAction(String.valueOf(Actions.ACTION_SELECT_MODEL));
-                setResult(RESULT_OK, intent);
-                finish();
+                switch (mode){
+                    case MODE_SHOW_AND_SELECT_BEER:
+                    case MODE_SHOW_AND_SELECT_RESTO:
+                        Intent intent = new Intent(this, InterestListActivity.class);
+                        intent.putExtra(getString(R.string.key_serializable_extra), (Serializable) payload);
+                        intent.setAction(String.valueOf(Actions.ACTION_SELECT_MODEL));
+                        setResult(RESULT_OK, intent);
+                        finish();
+                        break;
+                    default:
+                        processAction(Actions.ACTION_VIEW_MODEL, payload);
+                }
             }break;
             case Actions.ACTION_VIEW_MODEL: {
                 if(payload instanceof Resto){
@@ -394,6 +417,26 @@ public class MultiListActivity extends BaseActivity implements
                 break;
         }
     }
+
+    private void fillUserPosition() {
+        requestCity(new Callback<City>() {
+            @Override
+            public void onResult(City city) {
+                if(city!=null)
+                    fullSearchPackage.setCity(String.valueOf(city.getId()));
+                requestLastLocation(new Callback<Location>(){
+                    @Override
+                    public void onResult(Location location) {
+                        if(location==null)
+                            location=getDefaultLocation();
+                        fullSearchPackage.setLat(location.getLatitude());
+                        fullSearchPackage.setLon(location.getLongitude());
+                    }
+                } );
+            }
+        });
+    }
+
     //endregion
 
 }

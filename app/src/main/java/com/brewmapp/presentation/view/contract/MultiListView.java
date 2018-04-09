@@ -27,4 +27,5 @@ public interface MultiListView extends BasicView{
     void onError();
     void commonError(String... strings);
 
+    void showProgress(boolean show);
 }

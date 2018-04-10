@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
@@ -26,7 +28,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by Kras on 21.10.2017.
  */
 
-public class InterestAddViewResto extends BaseLinearLayout implements InteractiveModelView<Resto>{
+public class InterestAddViewResto extends BaseLinearLayout implements InteractiveModelView<Resto>,View.OnClickListener{
     @BindView(R.id.view_interest_avatar)    ImageView avatar;
     @BindView(R.id.view_interest_title)    TextView title;
     @BindView(R.id.view_interest_shot_text)    TextView shot_text;
@@ -38,6 +40,8 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
 
     private Resto resto;
     private Listener listener;
+    TextView text_i_owner;
+    TextView text_raiting;
 
 
     public InterestAddViewResto(Context context) {
@@ -93,6 +97,9 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
             container_metro.setVisibility(INVISIBLE);
         }
 
+        if(text_i_owner!=null)
+            text_i_owner.setOnClickListener(this);
+
     }
 
     @Override
@@ -109,5 +116,17 @@ public class InterestAddViewResto extends BaseLinearLayout implements Interactiv
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
+        text_i_owner= (TextView) findViewById(R.id.view_interest_text_i_owner);
+        text_raiting= (TextView) findViewById(R.id.view_interest_text_raiting);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.view_interest_text_i_owner:
+                Starter.MultiFragmentActivity_MODE_FORM_I_OWNER((Activity) getContext());
+                break;
+        }
     }
 }

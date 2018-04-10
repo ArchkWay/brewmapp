@@ -5,14 +5,10 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.brewmapp.R;
-import com.brewmapp.app.di.module.PresenterModule;
-import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.presentation.view.impl.widget.FilterRestoRowField;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
@@ -103,7 +99,7 @@ public class FilterRestoField extends AbstractFlexibleItem<ModelViewHolder<Filte
                     break;
                 case TYPE:
                     icon = R.drawable.ic_resto;
-                    title = context.getString(R.string.search_resto_type);
+                    title = context.getString(R.string.text_resto_type);
                     if(selectedFilter==null)
                         selectedFilter = context.getString(R.string.search_resto_type_defailt);
                     break;

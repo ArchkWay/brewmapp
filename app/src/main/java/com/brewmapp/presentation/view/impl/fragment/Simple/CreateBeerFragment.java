@@ -13,20 +13,17 @@ import android.view.ViewGroup;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.BeerMap;
-import com.brewmapp.execution.task.LoadCityTask;
-
-import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddRestoFragment extends Fragment {
+public class CreateBeerFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
 
 
-    public AddRestoFragment() {
+    public CreateBeerFragment() {
         // Required empty public constructor
 
     }
@@ -36,14 +33,14 @@ public class AddRestoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_resto, container, false);
+        return inflater.inflate(R.layout.fragment_beer_create, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-        mListener.setTitle(getString(R.string.title_friends_add_resto));
+        mListener.setTitle(getString(R.string.title_friends_add_beer));
         BeerMap.getAppComponent().plus().inject(this);
     }
 

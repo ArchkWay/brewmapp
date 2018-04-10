@@ -17,13 +17,13 @@ import com.brewmapp.app.environment.BeerMap;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddBeerFragment extends Fragment {
+public class CreateRestoFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
 
 
-    public AddBeerFragment() {
+    public CreateRestoFragment() {
         // Required empty public constructor
 
     }
@@ -33,14 +33,14 @@ public class AddBeerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_resto, container, false);
+        return inflater.inflate(R.layout.fragment_resto_create, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-        mListener.setTitle(getString(R.string.title_friends_add_beer));
+        mListener.setTitle(getString(R.string.title_friends_add_resto));
         BeerMap.getAppComponent().plus().inject(this);
     }
 

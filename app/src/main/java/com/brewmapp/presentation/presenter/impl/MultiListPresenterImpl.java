@@ -118,10 +118,10 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                 return MultiListView.MODE_SHOW_HASHTAG;
             case Keys.CAP_USER_FRIENDS:
                 return MultiListView.MODE_SHOW_AND_SELECT_FRIENDS;
-            case MultiListView.MODE_SHOW_AND_ADD_RESTO:
-                return MultiListView.MODE_SHOW_AND_ADD_RESTO;
-            case MultiListView.MODE_SHOW_AND_ADD_BEER:
-                return MultiListView.MODE_SHOW_AND_ADD_BEER;
+            case MultiListView.MODE_SHOW_AND_CREATE_RESTO:
+                return MultiListView.MODE_SHOW_AND_CREATE_RESTO;
+            case MultiListView.MODE_SHOW_AND_CREATE_BEER:
+                return MultiListView.MODE_SHOW_AND_CREATE_BEER;
             case MultiListView.MODE_SHOW_MENU:
                 return MultiListView.MODE_SHOW_MENU;
             default:

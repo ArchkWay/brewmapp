@@ -62,7 +62,7 @@
     </style>
 
     <style name="AppTheme.Button.Green">
-        <item name="android:background">@drawable/selector_button_green</item>
+        <item name="android:background">@drawable/selector_button_green_frame</item>
         <item name="android:textColor">@color/color_text_button_green</item>
     </style>
 

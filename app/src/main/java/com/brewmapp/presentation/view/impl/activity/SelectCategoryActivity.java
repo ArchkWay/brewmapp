@@ -833,7 +833,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 invalidateMenu();
                 break;
             case FilterRestoField.TYPE:
-                toolbarTitle.setText(R.string.search_resto_type);
+                toolbarTitle.setText(R.string.text_resto_type);
                 filterStringToHashMap();
                 presenter.loadRestoTypes();
                 finder.clearFocus();

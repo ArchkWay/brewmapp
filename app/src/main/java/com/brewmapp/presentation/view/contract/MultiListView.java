@@ -21,8 +21,8 @@ public interface MultiListView extends BasicView{
     String MODE_SHOW_REVIEWS_RESTO ="6";
     String MODE_SHOW_ALL_MY_EVALUATION ="7";
     String MODE_SHOW_MENU ="8";
-    String MODE_SHOW_AND_ADD_RESTO ="9";
-    String MODE_SHOW_AND_ADD_BEER ="10";
+    String MODE_SHOW_AND_CREATE_RESTO ="9";
+    String MODE_SHOW_AND_CREATE_BEER ="10";
     void appendItems(List<IFlexible> s);
     void onError();
     void commonError(String... strings);

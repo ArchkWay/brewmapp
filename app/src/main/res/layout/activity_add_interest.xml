@@ -54,16 +54,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/AppTheme.Button.Green.Solid.Square"
-                    android:text="@string/text_button_add_resto"
-                    android:id="@+id/activity.add.interest.button_add_resto"
+                    android:text="@string/text_button_creat_resto"
+                    android:id="@+id/activity.add.interest.button_create_resto"
                     android:visibility="gone"
                     />
                 <com.brewmapp.presentation.view.impl.widget.CreateBeerButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/AppTheme.Button.Green.Solid.Square"
-                    android:text="@string/text_button_add_beer"
-                    android:id="@+id/activity.add.interest.button_add_beer"
+                    android:text="@string/text_button_create_beer"
+                    android:id="@+id/activity.add.interest.button_create_beer"
                     android:visibility="gone"
                     />
             </LinearLayout>

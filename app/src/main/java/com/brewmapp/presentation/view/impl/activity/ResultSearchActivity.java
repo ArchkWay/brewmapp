@@ -299,10 +299,10 @@ public class ResultSearchActivity extends BaseActivity implements
         //region setup View
         switch (selectedTab){
             case SearchFragment.CATEGORY_LIST_RESTO:
-                common_toolbar_title.setText(titleContent[1]);
+                common_toolbar_title.setText(getString(R.string.arrow_down_small,titleContent[1]));
                 break;
             case SearchFragment.CATEGORY_LIST_BEER:
-                common_toolbar_title.setText(titleContent[0]);
+                common_toolbar_title.setText(getString(R.string.arrow_down_small,titleContent[0]));
                 break;
             case SearchFragment.CATEGORY_LIST_BREWERY:
                 common_toolbar_title.setText(titleContent[2]);
@@ -507,21 +507,22 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ToggleVisibleFilterList();
+        listAdapter.clear();
         switch (position){
             case 0:
-                if(selectedTab==SearchFragment.CATEGORY_LIST_RESTO)
+                if(selectedTab.equals(SearchFragment.CATEGORY_LIST_RESTO))
                     searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
-                else if(selectedTab==SearchFragment.CATEGORY_LIST_BEER)
+                else if(selectedTab.equals(SearchFragment.CATEGORY_LIST_BEER))
                     searchPackage.setOrder(Keys.ORDER_SORT_RATING_BEER_DESC);
                 break;
             case 1:
-                if(selectedTab==SearchFragment.CATEGORY_LIST_RESTO)
+                if(selectedTab.equals(SearchFragment.CATEGORY_LIST_RESTO))
                     searchPackage.setOrder(Keys.ORDER_SORT_DISTANCE_RESTO_ASC);
-                else if(selectedTab==SearchFragment.CATEGORY_LIST_BEER)
+                else if(selectedTab.equals(SearchFragment.CATEGORY_LIST_BEER))
                     searchPackage.setOrder(Keys.ORDER_SORT_PRICE_BEER_ASC);
                 break;
             case 2:
-                if(selectedTab==SearchFragment.CATEGORY_LIST_BEER)
+                if(selectedTab.equals(SearchFragment.CATEGORY_LIST_BEER))
                     searchPackage.setOrder(Keys.ORDER_SORT_PRICE_BEER_DESC);
                 break;
             default:

@@ -342,8 +342,6 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
         switch (action){
             case Actions.ACTION_SHOW_ALL_RESTO_BY_BEER:{
                 Starter.ResultSearchActivity(this, SearchFragment.CATEGORY_LIST_RESTO,presenter.getBeerDetail().getBeer().getId());
-//                Intent intent=new Intent(MainActivity.MODE_SEARCH_FRAGMENT,null,this,MainActivity.class);
-//                startActivity(intent);
             }break;
             case Actions.ACTION_CLICK_ON_ITEM_INTEREST_RESTO:{
                 Starter.RestoDetailActivityForResult(this,(Interest)payload,REQUEST_CODE_REFRESH_ITEMS);

@@ -534,7 +534,6 @@
     <string name="key_id_model">key_id_model</string>
     <string name="text_photo_sended_to_moderation">Фото отправлено на модерацию</string>
     <string name="rubl">₽</string>
-    <string name="key_use_custom_filter">key_use_custom_filter</string>
     <string name="key_beer">key_beer</string>
     <string name="title_friends_request">Запросы на добавление в друзья</string>
     <string name="location_disabled">Геолокация выключена. По умолчанию Москва.</string>

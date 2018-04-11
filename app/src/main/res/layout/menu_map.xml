@@ -3,23 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:clickable="true"
     >
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/map"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorAccent"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_map_red_big"
-
-            />
-    </LinearLayout>
+        android:text="@string/map"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/colorButtonRed"
+        android:textSize="@dimen/common_block_space_double"
+        android:paddingRight="@dimen/common_block_space"
+        />
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_menu_map_red_big"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="5dp"
+        />
 
 </LinearLayout>

@@ -25,7 +25,6 @@ import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.FilterAdapter;
 import com.brewmapp.data.entity.Brewery;
-import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -46,7 +45,6 @@ import butterknife.BindView;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import io.paperdb.Paper;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
-import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
@@ -113,18 +111,25 @@ public class ResultSearchActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        //region setCustomMenu
         if(menu!=null) menu.clear();
         getMenuInflater().inflate(R.menu.map,menu);
-//        MenuItem menuItem=menu.findItem(R.id.action_map);
-//        switch (selectedTab){
-//            case SearchFragment.CATEGORY_LIST_RESTO:
-//            case SearchFragment.CATEGORY_LIST_BEER:
-//                menuItem.setVisible(listAdapter.size()!=0&&!clickGoMap);
-//                break;
-//            case SearchFragment.CATEGORY_LIST_BREWERY:
-//                menuItem.setVisible(false);
-//                break;
-//        }
+        menu.findItem(R.id.action_map).getActionView().setOnClickListener(v -> onOptionsItemSelected(menu.findItem(R.id.action_map)));
+        //endregion
+
+        //region VisibleMenuControl
+        MenuItem menuItem=menu.findItem(R.id.action_map);
+        switch (selectedTab){
+            case SearchFragment.CATEGORY_LIST_RESTO:
+            case SearchFragment.CATEGORY_LIST_BEER:
+                menuItem.setVisible(listAdapter.size()!=0&&!clickGoMap);
+                break;
+            case SearchFragment.CATEGORY_LIST_BREWERY:
+                menuItem.setVisible(false);
+                break;
+        }
+        //endregion
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -164,7 +169,7 @@ public class ResultSearchActivity extends BaseActivity implements
 
         //region Parse Intent
 
-        boolean useCustomFilter=getIntent().getBooleanExtra(getString(R.string.key_use_custom_filter),false);
+
         selectedTab=getIntent().getStringExtra(Actions.PARAM1);
         switch (selectedTab) {
 
@@ -173,8 +178,8 @@ public class ResultSearchActivity extends BaseActivity implements
                 orders = getResources().getStringArray(R.array.order_search_resto);
                 searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
-
-                if(useCustomFilter){
+                String beer_id=getIntent().getStringExtra(getString(R.string.key_beer));
+                if(beer_id!=null){
                     for (FilterRestoField filterRestoField:restoFilterList) {
                         if (filterRestoField.getSelectedItemId() != null) {
                             switch (filterRestoField.getId()) {
@@ -186,11 +191,7 @@ public class ResultSearchActivity extends BaseActivity implements
                             }
                         }
                     }
-                    String beer_id=getIntent().getStringExtra(getString(R.string.key_beer));
-                    if(beer_id==null)
-                        commonError();
-                    else
-                        searchPackage.setBeer(beer_id);
+                    searchPackage.setBeer(beer_id);
                 }else{
                     for (FilterRestoField filterRestoField:restoFilterList) {
                         if (filterRestoField.getSelectedItemId() != null) {
@@ -334,21 +335,7 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        if(searchPackage.getCity()==null||searchPackage.getCityName()==null){
-            requestCity(new Callback<City>() {
-                @Override
-                public void onResult(City city) {
-                    if(city!=null){
-                        searchPackage.setCity(String.valueOf(city.getId()));
-                        searchPackage.setCityName(String.valueOf(city.getName()));
-                    }else {
-                        commonError(getString(R.string.text_need_select_city));
-                    }
-                }
-            });
-        }else {
-            prepareLoadResult(searchPackage);
-        }
+        prepareLoadResult(searchPackage);
     }
 
     @Override

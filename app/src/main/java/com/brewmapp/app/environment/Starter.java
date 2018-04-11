@@ -212,12 +212,7 @@ public class Starter {
     public static void ResultSearchActivity(BaseActivity baseActivity, String selectedTab, String beer_id) {
         Intent intent = new Intent(baseActivity, ResultSearchActivity.class);
         intent.putExtra(Actions.PARAM1,selectedTab);
-        if(beer_id==null)
-            intent.putExtra(baseActivity.getString(R.string.key_use_custom_filter),false);
-        else {
-            intent.putExtra(baseActivity.getString(R.string.key_use_custom_filter),true);
-            intent.putExtra(baseActivity.getString(R.string.key_beer),beer_id);
-        }
+        intent.putExtra(baseActivity.getString(R.string.key_beer),beer_id);
 
         baseActivity.startActivity(intent);
 

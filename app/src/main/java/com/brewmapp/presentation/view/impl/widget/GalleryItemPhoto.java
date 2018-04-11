@@ -28,7 +28,7 @@ public class GalleryItemPhoto extends BaseLinearLayout implements ModelView<Phot
     @BindView(R.id.gallery_progress)    ProgressBar gallery_progress;
 
     private Photo model;
-
+    private Target target;
     public GalleryItemPhoto(Context context) {
         super(context);
     }
@@ -54,7 +54,7 @@ public class GalleryItemPhoto extends BaseLinearLayout implements ModelView<Phot
     @Override
     public void setModel(Photo model) {
         this.model=model;
-        Target target=new Target() {
+        target=new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 gallery_progress.setVisibility(INVISIBLE);

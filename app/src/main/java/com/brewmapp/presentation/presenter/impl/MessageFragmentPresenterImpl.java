@@ -191,6 +191,7 @@ public class MessageFragmentPresenterImpl extends BasePresenter<MessageFragmentV
                         contact.setId(users.get(0).getId());
                         contact.setFriend_info(users.get(0));
                         contact.setUser(users.get(0));
+                        contact.setChatDialog(chatListDialogs.get(0));
                         contactInfo.setModel(contact);
                         arrayList.add(contactInfo);
                     }else {

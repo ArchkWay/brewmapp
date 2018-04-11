@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.data.entity.Album;
@@ -59,6 +60,9 @@ public class AlbumActivity extends BaseActivity implements
     @BindView(R.id.activity_album_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_album_text_empty) TextView textView;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     //endregion
 
     //region Inject
@@ -85,7 +89,14 @@ public class AlbumActivity extends BaseActivity implements
     protected void initView() {
         this.albumId = getIntent().getIntExtra(Keys.ALBUM_ID, 0);
         this.albumTitle = getIntent().getStringExtra(Keys.ALBUM_TITLE);
+
         setTitle(albumTitle);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
+
         enableBackButton();
         swipe.setOnRefreshListener(() -> presenter.onRequestPhotos(albumId));
         adapter = new FlexibleAdapter<>(arrayList, this);

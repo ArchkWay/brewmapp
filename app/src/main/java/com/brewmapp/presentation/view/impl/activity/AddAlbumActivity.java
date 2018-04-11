@@ -7,7 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -26,6 +29,9 @@ public class AddAlbumActivity extends BaseActivity implements AddAlbumView {
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_addAlbum_description) EditText description;
     @BindView(R.id.activity_addAlbum_name) EditText name;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
 
     @Inject AddAlbumPresenter presenter;
 
@@ -76,6 +82,11 @@ public class AddAlbumActivity extends BaseActivity implements AddAlbumView {
             description.setText(editAlbumPackage.getDescription());
             name.setSelection(editAlbumPackage.getName().length());
         }
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
+
         enableBackButton();
         registerTextChangeListeners(s -> {
             editAlbumPackage.setDescription(TextTools.extractTrimmed(description));

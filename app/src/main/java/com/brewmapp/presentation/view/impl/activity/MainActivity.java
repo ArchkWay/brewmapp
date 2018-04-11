@@ -407,6 +407,9 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onDrawerClosed() {
                         navigator.onDrawerClosed();
+                        for (int i=0;i<menu.getAdapter().getItemCount();i++){
+                            menu.getLayoutManager().getChildAt(i).findViewById(R.id.view_menuField_badget).setVisibility(View.GONE);
+                        }
                     }
                     @Override
                     public void onDrawerOpen() {
@@ -423,9 +426,13 @@ public class MainActivity extends BaseActivity
                                                 int cntUnread=0;
                                                 for (ChatDialog chatDialog:chatListDialogs)
                                                     cntUnread+=chatDialog.getUnread();
-                                                TextView textView= (TextView) menu.getLayoutManager().getChildAt(MenuField.MESSAGES).findViewById(R.id.view_menuField_badget);
-                                                textView.setVisibility(cntUnread==0?View.GONE:View.VISIBLE);
-                                                textView.setText(String.valueOf(cntUnread));
+                                                for (int i=0;i<menu.getAdapter().getItemCount();i++){
+                                                    TextView textView = (TextView) menu.getLayoutManager().getChildAt(i).findViewById(R.id.view_menuField_badget);
+                                                    if(MenuField.MESSAGES==menu.getAdapter().getItemId(i)) {
+                                                        textView.setVisibility(cntUnread == 0 ? View.GONE : View.VISIBLE);
+                                                        textView.setText(String.valueOf(cntUnread));
+                                                    }
+                                                }
 
                                             }
                                         })

@@ -1,6 +1,7 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import com.brewmapp.data.model.IPerson;
@@ -21,6 +22,9 @@ public class Contact implements IPerson {
     private User user;
 
     private User friend_info;
+
+    @Expose(serialize = false)
+    private ChatDialog chatDialog;
 
     public void setId(int id) {
         this.id = id;
@@ -64,4 +68,11 @@ public class Contact implements IPerson {
         this.status = status;
     }
 
+    public ChatDialog getChatDialog() {
+        return chatDialog;
+    }
+
+    public void setChatDialog(ChatDialog chatDialog) {
+        this.chatDialog = chatDialog;
+    }
 }

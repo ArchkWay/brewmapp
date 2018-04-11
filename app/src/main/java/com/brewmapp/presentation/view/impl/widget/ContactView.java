@@ -7,11 +7,13 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -46,6 +48,9 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
     @BindView(R.id.view_contact_subtitle) TextView subtitle;
     @BindView(R.id.view_contact_username) TextView username;
     @BindView(R.id.view_contact_online) TextView online;
+    @BindView(R.id.view_contact_contaiter1)    LinearLayout contaiter1;
+    @BindView(R.id.view_contact_contaiter0)    LinearLayout contaiter0;
+    @BindView(R.id.view_contact_last_message)    TextView last_message;
 
     @Inject
     ActivetyUsers activetyUsers;
@@ -108,7 +113,6 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
         }
         //endregion
 
-
         //region fill date
         String last_login=model.getFriend_info().getLastLogin();
         subtitle.setText(MapUtils.FormatDate(last_login));
@@ -128,6 +132,15 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
             }
         });
         //endregion
+
+        ChatDialog chatDialog=model.getChatDialog();
+        if(chatDialog==null) {
+            contaiter1.setOrientation(VERTICAL);
+            last_message.setVisibility(GONE);
+        }else {
+            last_message.setVisibility(VISIBLE);
+            last_message.setText(chatDialog.getLastMessage().getText());
+        }
     }
 
     @Override

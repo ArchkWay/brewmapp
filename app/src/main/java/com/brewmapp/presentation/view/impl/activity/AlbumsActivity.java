@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class AlbumsActivity extends BaseActivity implements
     @BindView(R.id.activity_list_list) RecyclerView list;
     @BindView(R.id.activity_list_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.activity_album_text_empty)    TextView textView;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown) LinearLayout toolbarDropdown;
     //endregion
 
     //region Inject
@@ -92,6 +96,11 @@ public class AlbumsActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
+
         enableBackButton();
         swipe.setOnRefreshListener(() -> presenter.onLoadAlbums());
         list.setLayoutManager(new LinearLayoutManager(this));

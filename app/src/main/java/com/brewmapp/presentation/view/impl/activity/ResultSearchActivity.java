@@ -115,16 +115,16 @@ public class ResultSearchActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if(menu!=null) menu.clear();
         getMenuInflater().inflate(R.menu.map,menu);
-        MenuItem menuItem=menu.findItem(R.id.action_map);
-        switch (selectedTab){
-            case SearchFragment.CATEGORY_LIST_RESTO:
-            case SearchFragment.CATEGORY_LIST_BEER:
-                menuItem.setVisible(listAdapter.size()!=0&&!clickGoMap);
-                break;
-            case SearchFragment.CATEGORY_LIST_BREWERY:
-                menuItem.setVisible(false);
-                break;
-        }
+//        MenuItem menuItem=menu.findItem(R.id.action_map);
+//        switch (selectedTab){
+//            case SearchFragment.CATEGORY_LIST_RESTO:
+//            case SearchFragment.CATEGORY_LIST_BEER:
+//                menuItem.setVisible(listAdapter.size()!=0&&!clickGoMap);
+//                break;
+//            case SearchFragment.CATEGORY_LIST_BREWERY:
+//                menuItem.setVisible(false);
+//                break;
+//        }
 
         return super.onCreateOptionsMenu(menu);
     }

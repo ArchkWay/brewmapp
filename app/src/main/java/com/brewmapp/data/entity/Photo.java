@@ -17,7 +17,6 @@ public class Photo implements ILikeable,Serializable{
     private int id;
     private int like;
     private boolean selected;
-
     private String title;
 
     @SerializedName(Keys.DIS_LIKE)

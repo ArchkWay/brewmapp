@@ -160,7 +160,14 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public static void startPhotoSliderActivity(String path, Context context) {
+        ArrayList<Photo> photoArrayList=new ArrayList<>();
+        Photo photo=new Photo();
+        photo.setUrl(path);
+        photoArrayList.add(photo);
+        startPhotoSliderActivity(photoArrayList, context);
     }
     //endregion
 

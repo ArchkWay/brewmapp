@@ -10,11 +10,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Starter;
+import com.brewmapp.data.entity.Photo;
+import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
+import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,11 +31,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private List<Message> mMessages;
     private int[] mUsernameColors;
     private int widthImage =480;
+    private Context context;
 
     public MessageAdapter(Context context, List<Message> messages, int widthRecycler) {
         mMessages = messages;
         mUsernameColors = context.getResources().getIntArray(R.array.username_colors);
         this.widthImage = (int) (widthRecycler*0.7f);
+        this.context = context;
     }
 
     @Override
@@ -136,13 +143,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         p.height=(int) (imageHeight*ratio);
                         p.width= widthImage;
                         mImageView.post(() -> {
-                            //.networkPolicy(NetworkPolicy.OFFLINE)
                             mImageView.setLayoutParams(p);
                             if(path.startsWith("http"))
                                 Picasso.with(mImageView.getContext()).load(path).fit().centerCrop().into(mImageView);
                             else
                                 Picasso.with(mImageView.getContext()).load(new File(path)).fit().centerCrop().networkPolicy(NetworkPolicy.OFFLINE).into(mImageView);
-
+                            mImageView.setOnClickListener(view -> PhotoSliderActivity.startPhotoSliderActivity(path, context));
                         });
 
                 mImageView.setVisibility(View.VISIBLE);

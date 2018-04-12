@@ -19,9 +19,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by nixus on 02.12.2017.
@@ -144,6 +146,20 @@ public class MapUtils {
         }
     }
 
+    public static String FormatTime(String timestamp) {
+
+        Date date=parseDate(timestamp);
+
+        if (date!=null) {
+            return android.text.format.DateFormat.format(
+                    "HH:mm",
+                    date
+            ).toString();
+        }else {
+            return "Дата отсутствует";
+        }
+    }
+
     private static Date parseDate(String timestamp) {
         Locale locale=getLocaleEn();
 
@@ -156,6 +172,15 @@ public class MapUtils {
         try {
             if(locale!=null)
                 return new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", locale).parse(timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(locale!=null) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", locale);
+                Date date=simpleDateFormat.parse(timestamp);
+                return date;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

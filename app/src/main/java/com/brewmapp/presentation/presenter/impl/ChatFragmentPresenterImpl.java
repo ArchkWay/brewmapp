@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -266,6 +267,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                         .setImage(image)
                                         .setImageHeight(imageHeight)
                                         .setImageWidth(imageWidth)
+                                        .setDate(chatMessage.getDate())
                                         .build()
                         );
                         break;
@@ -278,6 +280,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                         .setImage(image)
                                         .setImageHeight(imageHeight)
                                         .setImageWidth(imageWidth)
+                                        .setDate(chatMessage.getDate())
                                         .build()
                         );
                         break;
@@ -345,6 +348,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .username(userRepo.load().getFormattedName())
                                 .message(text_send)
                                 .stateSending(true)
+                                .setDate(Calendar.getInstance().getTime().toString())
                                 .build()
                 );
                 view.addMessages(list,false);

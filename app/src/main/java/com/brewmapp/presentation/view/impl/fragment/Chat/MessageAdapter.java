@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -65,6 +66,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         viewHolder.setImageHeight(message.getImageHeight());
         viewHolder.setImageWidth(message.getImageWidth());
         viewHolder.setImage(message.getImage());
+        viewHolder.setTime(message.getDate());
 
     }
 
@@ -85,6 +87,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mMessageView;
         private TextView mStatusSendingView;
+        private TextView mStatusRecieveView;
         private ImageView mImageView;
         private int imageHeight;
         private int imageWidth;
@@ -94,7 +97,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             super(itemView);
 
             mMessageView = (TextView) itemView.findViewById(R.id.message);
-            mStatusSendingView = (TextView) itemView.findViewById(R.id.status);
+            mStatusSendingView = (TextView) itemView.findViewById(R.id.status_out);
+            mStatusRecieveView = (TextView) itemView.findViewById(R.id.status_in);
             mImageView = (ImageView) itemView.findViewById(R.id.image);
         }
 
@@ -121,8 +125,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         public void setStatus(boolean b) {
-            if(mStatusSendingView!=null)
-                mStatusSendingView.setVisibility(b?View.VISIBLE:View.GONE);
+//            if(mStatusSendingView!=null)
+//                mStatusSendingView.setVisibility(b?View.VISIBLE:View.INVISIBLE);
         }
 
         public void setImage(String path){
@@ -147,6 +151,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 mImageView.setVisibility(View.GONE);
                 mMessageView.setVisibility(View.VISIBLE);
             }
+        }
+
+        public void setTime(String date) {
+            try {
+                if(mStatusSendingView!=null)
+                    mStatusSendingView.setText(MapUtils.FormatTime(date));
+            }catch (Exception e){}
+            try {
+                if(mStatusRecieveView!=null)
+                    mStatusRecieveView.setText(MapUtils.FormatTime(date));
+            }catch (Exception e){}
         }
     }
 }

@@ -20,6 +20,7 @@ public class Message {
     private String image;
     private int imageHeight;
     private int imageWidth;
+    private String date;
 
     private Message() {}
 
@@ -83,6 +84,14 @@ public class Message {
         this.mDirection = mDirection;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public static class Builder {
         private final int mType;
         private String mUsername;
@@ -92,6 +101,7 @@ public class Message {
         private String image;
         private int imageHeight;
         private int imageWidth;
+        private String date;
 
 
         public int getImageHeight() {
@@ -146,6 +156,7 @@ public class Message {
             message.image=image;
             message.imageHeight=imageHeight;
             message.imageWidth=imageWidth;
+            message.date=date;
 
             return message;
         }
@@ -153,6 +164,15 @@ public class Message {
         public Builder setId(int id) {
             this.id = id;
             return this;
+        }
+
+        public Builder setDate(String date) {
+            this.date = date;
+            return this;
+        }
+
+        public String getDate() {
+            return date;
         }
     }
 }

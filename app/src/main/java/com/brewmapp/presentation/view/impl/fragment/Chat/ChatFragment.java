@@ -75,7 +75,10 @@ public class ChatFragment extends BaseFragment implements
             }
         });
         mInputMessageView.setOnEditorActionListener((v, id, event) -> {presenter.sendMessage(v);return true;});
-        send_button.setOnClickListener(v -> {presenter.sendMessage(mInputMessageView);mInputMessageView.setText("");});
+        send_button.setOnClickListener(v -> {
+            presenter.sendMessage(mInputMessageView);
+            mInputMessageView.setText("");}
+            );
         onScrollListener=new RecyclerView.OnScrollListener() {
             boolean needCalcDownload=false;
             int countCommonItems=0;
@@ -107,13 +110,15 @@ public class ChatFragment extends BaseFragment implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
+        presenter.parseIntent(getActivity().getIntent());
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.parseIntent(getActivity().getIntent());
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -65,9 +65,10 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                 List<FilterRestoField> listResto = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
                 mLocationListener.requestCity(result -> {
                     if(result!=null) {
-                        String city_id=listResto.get(FilterRestoField.CITY).getSelectedItemId();
-                        if(TextUtils.isEmpty(city_id)) {
-                            listResto.get(FilterRestoField.CITY).setSelectedItemId(String.valueOf(result.getId()));
+                        String city_id_old=listResto.get(FilterRestoField.CITY).getSelectedItemId();
+                        String city_id_new=String.valueOf(result.getId());
+                        if(TextUtils.isEmpty(city_id_old)||!city_id_old.equals(city_id_new)) {
+                            listResto.get(FilterRestoField.CITY).setSelectedItemId(city_id_new);
                             listResto.get(FilterRestoField.CITY).setSelectedFilter(String.valueOf(result.getName()));
                             Paper.book().write(SearchFragment.CATEGORY_LIST_RESTO, listResto);
                             view.showRestoFilters(listResto);
@@ -92,8 +93,9 @@ public class SearchFragmentPresenterImpl extends BasePresenter<SearchAllView> im
                 List<FilterBeerField> listBeer = Paper.book().read(ActiveTab);
                 mLocationListener.requestCity(result -> {
                     if(result!=null) {
-                        String city_id=listBeer.get(FilterBeerField.CITY).getSelectedItemId();
-                        if(TextUtils.isEmpty(city_id)) {
+                        String city_id_old=listBeer.get(FilterBeerField.CITY).getSelectedItemId();
+                        String city_id_new=String.valueOf(result.getId());
+                        if(TextUtils.isEmpty(city_id_old)||!city_id_old.equals(city_id_new)) {
                             listBeer.get(FilterBeerField.CITY).setSelectedItemId(String.valueOf(result.getId()));
                             listBeer.get(FilterBeerField.CITY).setSelectedFilter(String.valueOf(result.getName()));
                             Paper.book().write(SearchFragment.CATEGORY_LIST_BEER, listBeer);

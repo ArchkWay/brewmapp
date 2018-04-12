@@ -43,7 +43,9 @@
                 mask:allowed_chars="1234567890"
                 mask:mask="+# (###) ###-##-##"
                 android:id="@+id/activity.login.login"
-                />
+                >
+                <requestFocus></requestFocus>
+                </br.com.sapereaude.maskedEditText.MaskedEditText>
 
             <android.support.v7.widget.AppCompatEditText
                 style="@style/AppTheme.Input"

@@ -79,7 +79,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/text_name_necessarily"
                     android:inputType="textCapWords"
-                    android:lines="1"/>
+                    android:lines="1"
+                    android:id="@+id/fragment.create_resto.name_resto"/>
             </android.support.design.widget.TextInputLayout>
             <ImageView
                 android:layout_width="wrap_content"

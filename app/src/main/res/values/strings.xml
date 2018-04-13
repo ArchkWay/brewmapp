@@ -551,5 +551,7 @@
     <string name="text_name_necessarily">*Название</string>
     <string name="text_address_necessarily">*Адрес</string>
     <string name="text_necessarily">* Обязательно для ввода</string>
+    <string name="key_city_id">key_city_id</string>
+    <string name="key_city_name">key_city_name</string>
 
 </resources>

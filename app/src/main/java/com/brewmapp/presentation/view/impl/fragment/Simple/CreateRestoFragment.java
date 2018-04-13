@@ -2,8 +2,10 @@ package com.brewmapp.presentation.view.impl.fragment.Simple;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,13 +16,19 @@ import android.view.ViewGroup;
 import com.brewmapp.R;
 import com.brewmapp.app.environment.BeerMap;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CreateRestoFragment extends Fragment {
 
+    @BindView(R.id.fragment_create_resto_name_resto)    TextInputEditText name_resto;
 
+    //region Private
     private OnFragmentInteractionListener mListener;
+    //endregion
 
 
     public CreateRestoFragment() {
@@ -39,9 +47,16 @@ public class CreateRestoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //region Prepare view
         setHasOptionsMenu(true);
         mListener.setTitle(getString(R.string.title_friends_add_resto));
         BeerMap.getAppComponent().plus().inject(this);
+        ButterKnife.bind(this,view);
+        //endregion
+
+        Intent intent=mListener.getIntent();
+
+        name_resto.setText(intent.getData().toString());
     }
 
     @Override
@@ -66,6 +81,8 @@ public class CreateRestoFragment extends Fragment {
         void commonError(String... message);
         void invalidateOptionsMenu();
         void setTitle(CharSequence name);
+
+        Intent getIntent();
     }
 
 }

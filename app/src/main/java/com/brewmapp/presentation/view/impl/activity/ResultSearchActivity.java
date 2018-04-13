@@ -179,19 +179,12 @@ public class ResultSearchActivity extends BaseActivity implements
                 searchPackage.setOrder(Keys.ORDER_SORT_RATING_RESTO_DESC);
                 List<FilterRestoField> restoFilterList = Paper.book().read(SearchFragment.CATEGORY_LIST_RESTO);
                 String beer_id=getIntent().getStringExtra(getString(R.string.key_beer));
-                if(beer_id!=null){
-                    for (FilterRestoField filterRestoField:restoFilterList) {
-                        if (filterRestoField.getSelectedItemId() != null) {
-                            switch (filterRestoField.getId()) {
-                                case FilterRestoField.CITY: {
-                                    searchPackage.setCity(filterRestoField.getSelectedItemId());
-                                    searchPackage.setCityName(filterRestoField.getSelectedFilter());
-                                }
-                                break;
-                            }
-                        }
-                    }
+                String city_id=getIntent().getStringExtra(getString(R.string.key_city_id));
+                String city_name=getIntent().getStringExtra(getString(R.string.key_city_name));
+                if(beer_id!=null && city_id!=null && city_name!=null){
                     searchPackage.setBeer(beer_id);
+                    searchPackage.setCity(city_id);
+                    searchPackage.setCityName(city_name);
                 }else{
                     for (FilterRestoField filterRestoField:restoFilterList) {
                         if (filterRestoField.getSelectedItemId() != null) {

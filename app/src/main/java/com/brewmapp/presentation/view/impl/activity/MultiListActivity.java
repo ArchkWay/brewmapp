@@ -67,7 +67,7 @@ public class MultiListActivity extends BaseActivity implements
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.mulilist_activity_button_review_layout)    LinearLayout button_review_layout;
     @BindView(R.id.activity_add_interest_container_header) LinearLayout container_header;
-    @BindView(R.id.activity_add_interest_button_create_resto) Button button_create_resto;
+    @BindView(R.id.activity_add_interest_button_create_resto) com.brewmapp.presentation.view.impl.widget.CreateRestoButton button_create_resto;
     @BindView(R.id.activity_add_interest_button_create_beer) Button button_create_beer;
     @BindView(R.id.activity_add_interest_progressBar)    ProgressBar progressBar;
     //endregion
@@ -171,6 +171,7 @@ public class MultiListActivity extends BaseActivity implements
 
                 fillUserPosition();
                 //endregion
+                break;
             case MODE_SHOW_AND_SELECT_RESTO:
                 //region Prepare Resto
                 start_search.setText(R.string.text_hint_search);
@@ -305,13 +306,14 @@ public class MultiListActivity extends BaseActivity implements
     @Override
     public void appendItems(List<IFlexible> list) {
 
-        //region CustomItems
+        //region CustomCreateItems
         switch (mode){
             case MODE_SHOW_AND_CREATE_RESTO:{
                 //region Visible button_create_resto
                 button_create_resto.setVisibility(View.VISIBLE);
                 button_create_resto.setEnabled(true);
                 button_create_resto.setText(getString(R.string.text_button_creat_resto,""));
+                button_create_resto.setNameRestoForCreate(fullSearchPackage.getStringSearch());
                 String restoNameSoughtAfter=fullSearchPackage.getStringSearch();
                 Iterator<IFlexible> iterator=list.iterator();
                 ArrayList<SearchRestoInfo> arrayList=new ArrayList<>();
@@ -395,6 +397,18 @@ public class MultiListActivity extends BaseActivity implements
     }
     //endregion
 
+    //region UserEvent
+    @Override
+    public void onClick(View view) {
+        switch (mode){
+            case MODE_SHOW_REVIEWS_RESTO:
+                Starter.RestoDetailActivity_With_SCROLL(this,String.valueOf(getIntent().getData().toString()), RestoDetailView.ACTION_SCROLL_TO_ADD_REVIEWS);
+                break;
+        }
+    }
+    //endregion
+
+
     //region Functions
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
@@ -469,16 +483,6 @@ public class MultiListActivity extends BaseActivity implements
             }break;
         }
     }
-
-    @Override
-    public void onClick(View view) {
-        switch (mode){
-            case MODE_SHOW_REVIEWS_RESTO:
-                Starter.RestoDetailActivity_With_SCROLL(this,String.valueOf(getIntent().getData().toString()), RestoDetailView.ACTION_SCROLL_TO_ADD_REVIEWS);
-                break;
-        }
-    }
-
     private void fillUserPosition() {
         requestCity(new Callback<City>() {
             @Override

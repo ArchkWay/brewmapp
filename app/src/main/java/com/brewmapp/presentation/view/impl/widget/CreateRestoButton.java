@@ -14,6 +14,8 @@ import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 
 public class CreateRestoButton extends AppCompatButton implements ViewUserItem.OnClickListener{
 
+    private String nameRestoForCreate;
+
     public CreateRestoButton(Context context) {
         super(context);
     }
@@ -40,6 +42,14 @@ public class CreateRestoButton extends AppCompatButton implements ViewUserItem.O
         else
             return;
         activity.finish();
-        activity.startActivity(new Intent(MultiFragmentActivityView.MODE_ADD_RESTO, Uri.EMPTY,activity, MultiFragmentActivity.class));
+        activity.startActivity(new Intent(MultiFragmentActivityView.MODE_ADD_RESTO, Uri.parse(nameRestoForCreate),activity, MultiFragmentActivity.class));
+    }
+
+    public void setNameRestoForCreate(String nameRestoForCreate) {
+        this.nameRestoForCreate = nameRestoForCreate;
+    }
+
+    public String getNameRestoForCreate() {
+        return nameRestoForCreate;
     }
 }

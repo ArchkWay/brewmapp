@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Beer;
+import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Photo;
 import com.brewmapp.data.entity.Resto;
@@ -34,6 +35,8 @@ import com.crashlytics.android.Crashlytics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import ru.frosteye.ovsa.execution.executor.Callback;
 
 
 /**
@@ -213,8 +216,20 @@ public class Starter {
         Intent intent = new Intent(baseActivity, ResultSearchActivity.class);
         intent.putExtra(Actions.PARAM1,selectedTab);
         intent.putExtra(baseActivity.getString(R.string.key_beer),beer_id);
-
-        baseActivity.startActivity(intent);
+        if(beer_id==null){
+            baseActivity.startActivity(intent);
+        }else {
+            baseActivity.requestCity(new Callback<City>() {
+                @Override
+                public void onResult(City city) {
+                    if(city!=null){
+                        intent.putExtra(baseActivity.getString(R.string.key_city_id),String.valueOf(city.getId()));
+                        intent.putExtra(baseActivity.getString(R.string.key_city_name),city.getName());
+                        baseActivity.startActivity(intent);
+                    }
+                }
+            });
+        }
 
     }
     }

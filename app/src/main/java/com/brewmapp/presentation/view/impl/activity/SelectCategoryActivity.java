@@ -945,9 +945,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     private void sendQuery() {
         if (fullSearchPackage.getStringSearch().length() > 0){
-            if(numberTab==SearchFragment.CATEGORY_LIST_RESTO&&numberMenuItem ==FilterRestoField.CITY){
+            if(SearchFragment.CATEGORY_LIST_RESTO.equals(numberTab)&&numberMenuItem ==FilterRestoField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
-            }else if(numberTab==SearchFragment.CATEGORY_LIST_BEER&&numberMenuItem ==FilterBeerField.CITY){
+            }else if(SearchFragment.CATEGORY_LIST_BEER.equals(numberTab)&&numberMenuItem ==FilterBeerField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
             }else{
                 presenter.sendQueryFullSearch(fullSearchPackage);

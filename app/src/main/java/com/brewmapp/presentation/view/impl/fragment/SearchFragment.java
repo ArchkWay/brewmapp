@@ -431,14 +431,14 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     public void showResult(Intent data) {
 
         //region Parse intent
-        int numberTab=data.getIntExtra(Actions.PARAM1,Integer.MAX_VALUE);
+        String numberTab=data.getStringExtra(Actions.PARAM1);
         int numberMenuItem=data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE);
         String filterID=data.getStringExtra(Actions.PARAM3);
         String filterTXT=data.getStringExtra(Actions.PARAM4);
         //endregion
 
         //region Refresh filter list
-        switch ((String)tabsView.getTag(numberTab)) {
+        switch (numberTab) {
             //region RESTO
             case CATEGORY_LIST_RESTO:
                 switch (numberMenuItem){

@@ -554,5 +554,8 @@
     <string name="key_city_id">key_city_id</string>
     <string name="key_city_name">key_city_name</string>
     <string name="text_not_found_nothing">Ничего не найдено, попробуйте изменить запрос</string>
+    <string name="features">Особенности</string>
+    <string name="text_view_avg_check">Средний чек</string>
+    <string name="text_description">Описание</string>
 
 </resources>

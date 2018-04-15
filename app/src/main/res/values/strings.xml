@@ -553,5 +553,6 @@
     <string name="text_necessarily">* Обязательно для ввода</string>
     <string name="key_city_id">key_city_id</string>
     <string name="key_city_name">key_city_name</string>
+    <string name="text_not_found_nothing">Ничего не найдено, попробуйте изменить запрос</string>
 
 </resources>

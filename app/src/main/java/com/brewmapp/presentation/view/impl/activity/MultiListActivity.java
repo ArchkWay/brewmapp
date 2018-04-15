@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.view.impl.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +23,6 @@ import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.Interest_info;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
-import com.brewmapp.data.entity.wrapper.SearchBeerInfo;
 import com.brewmapp.data.entity.wrapper.SearchRestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -61,7 +61,7 @@ public class MultiListActivity extends BaseActivity implements
     @BindView(R.id.activity_search_search)    FinderView finder;
     @BindView(R.id.activity_add_interest_list)    RecyclerView recyclerview;
     @BindView(R.id.activity_add_interest_swipe)    RefreshableSwipeRefreshLayout swipe;
-    @BindView(R.id.activity_add_interest_text_info_empty_list)    TextView start_search;
+    @BindView(R.id.activity_add_interest_text_info_empty_list)    TextView text_empty_list;
     @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
     @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
@@ -81,6 +81,7 @@ public class MultiListActivity extends BaseActivity implements
     private FullSearchPackage fullSearchPackage;
     private EndlessRecyclerOnScrollListener scrollListener;
     private String mode;
+    private int id_text_empty=0;
 
     //endregion
 
@@ -103,8 +104,8 @@ public class MultiListActivity extends BaseActivity implements
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {
             @Override
             public void onLoadMore(int currentPage) {
-                fullSearchPackage.setPage(currentPage-1);
-                sendQuery();
+                //fullSearchPackage.setPage(currentPage-1);
+                //sendQuery();
             }
         };
         recyclerview.setLayoutManager(manager);
@@ -142,7 +143,7 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_AND_SELECT_BEER:
                 //region Prepare Beer
-                start_search.setText(R.string.text_hint_search);
+                id_text_empty=R.string.text_hint_search;
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_beer));
@@ -152,7 +153,7 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_AND_CREATE_BEER:
                 //region Add Beer
-                start_search.setText(R.string.text_hint_search);
+                id_text_empty=R.string.text_hint_search;
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_beer));
@@ -162,7 +163,7 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_AND_CREATE_RESTO:
                 //region Prepare Add Resto
-                start_search.setText(R.string.text_hint_search);
+                id_text_empty=R.string.text_hint_search;
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_resto));
@@ -174,7 +175,7 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_AND_SELECT_RESTO:
                 //region Prepare Resto
-                start_search.setText(R.string.text_hint_search);
+                id_text_empty=R.string.text_hint_search;
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_resto));
@@ -185,7 +186,7 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_AND_SELECT_FRIENDS:
                 //region Prepare Frends
-                start_search.setText(R.string.text_hint_search);
+                id_text_empty=R.string.text_hint_search;
                 setTitle(R.string.action_find_friends);
                 fullSearchPackage.setType(Keys.TYPE_USER);
                 finder.setListener(string -> prepareQuery(string));
@@ -210,9 +211,9 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_REVIEWS_BEER:
                 //region Prepare ReviewBeer
-                start_search.setText(R.string.text_view_while_empty_review);
+                id_text_empty=R.string.text_view_while_empty_review;
                 toolbarSearch.setVisibility(View.GONE);
-                start_search.setVisibility(View.GONE);
+                text_empty_list.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_reviews);
                 try {
                     int id_beer=Integer.valueOf(getIntent().getData().toString());
@@ -225,11 +226,11 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_REVIEWS_RESTO:
                 //region Prepare ReviewResto
-                start_search.setText(R.string.text_view_while_empty_review);
+                id_text_empty=R.string.text_view_while_empty_review;
                 button_review_layout.setVisibility(View.VISIBLE);
                 button_review_layout.setOnClickListener(this);
                 toolbarSearch.setVisibility(View.GONE);
-                start_search.setVisibility(View.GONE);
+                text_empty_list.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_reviews);
                 try {
                     int id_resto=Integer.valueOf(getIntent().getData().toString());
@@ -239,10 +240,10 @@ public class MultiListActivity extends BaseActivity implements
                 break;
             case MODE_SHOW_ALL_MY_EVALUATION:
                 //region Prepare Evaluation
-                start_search.setText(R.string.text_view_while_empty_evaluation);
+                id_text_empty=R.string.text_view_while_empty_evaluation;
                 swipe.setEnabled(false);
                 toolbarSearch.setVisibility(View.GONE);
-                start_search.setVisibility(View.GONE);
+                text_empty_list.setVisibility(View.GONE);
                 setTitle(R.string.action_text_title_my_evaluation);
                 presenter.loadMyEvaluation(0);
                 //endregion
@@ -250,6 +251,7 @@ public class MultiListActivity extends BaseActivity implements
             default:
                 commonError();
         }
+        text_empty_list.setText(id_text_empty);
 
     }
 
@@ -306,70 +308,77 @@ public class MultiListActivity extends BaseActivity implements
     @Override
     public void appendItems(List<IFlexible> list) {
 
-        //region CustomCreateItems
-        switch (mode){
-            case MODE_SHOW_AND_CREATE_RESTO:{
-                //region Visible button_create_resto
-                button_create_resto.setVisibility(View.VISIBLE);
-                button_create_resto.setEnabled(true);
-                button_create_resto.setText(getString(R.string.text_button_creat_resto,""));
-                button_create_resto.setNameRestoForCreate(fullSearchPackage.getStringSearch());
-                String restoNameSoughtAfter=fullSearchPackage.getStringSearch();
-                Iterator<IFlexible> iterator=list.iterator();
-                ArrayList<SearchRestoInfo> arrayList=new ArrayList<>();
-                while (iterator.hasNext()){
-                    SearchRestoInfo searchRestoInfo=((SearchRestoInfo) iterator.next());
-                    arrayList.add(new SearchRestoInfo(searchRestoInfo.getModel(),1));
-                    String restoName=searchRestoInfo.getModel().getName();
-
-                    if(restoName.toLowerCase().equals(restoNameSoughtAfter.toLowerCase())) {
-                        button_create_resto.setEnabled(false);
-                        showSnackbarRed(getString(R.string.message_resto_exist,restoName));
-                    }
-                }
-                if(button_create_resto.isEnabled()) {
-                    restoNameSoughtAfter =  "\""+ restoNameSoughtAfter.substring(0, 1).toUpperCase() + restoNameSoughtAfter.substring(1)+"\"";
-                    button_create_resto.setText(getString(R.string.text_button_creat_resto, restoNameSoughtAfter));
-                }
-                list=new ArrayList<>(arrayList);
-                //endregion
-            }break;
-            case MODE_SHOW_AND_CREATE_BEER:{
-                //region Visible button_create_beer
-                button_create_beer.setVisibility(View.VISIBLE);
-                button_create_beer.setEnabled(true);
-                button_create_beer.setText(getString(R.string.text_button_create_beer," "));
-                String restoBeerSoughtAfter=fullSearchPackage.getStringSearch();
-                Iterator<IFlexible> iterator=list.iterator();
-
-                while (iterator.hasNext()){
-                    BeerInfo beerInfo= (BeerInfo) iterator.next();
-
-                    String beerName=beerInfo.getModel().getTitle();
-
-                    if(beerName.toLowerCase().equals(restoBeerSoughtAfter.toLowerCase())) {
-                        button_create_beer.setEnabled(false);
-                        showSnackbarRed(getString(R.string.message_resto_exist,beerName));
-                    }
-                }
-                if(button_create_beer.isEnabled()) {
-                    restoBeerSoughtAfter =  "\""+ restoBeerSoughtAfter.substring(0, 1).toUpperCase() + restoBeerSoughtAfter.substring(1)+"\"";
-                    button_create_beer.setText(getString(R.string.text_button_create_beer, restoBeerSoughtAfter));
-                }
-
-                //endregion
-            }break;
-        }
-        //endregion
-
         adapter.clear();
-        adapter.addItems(0,list);
-        adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
 
-        start_search.setVisibility(adapter.getItemCount()==0?View.VISIBLE:View.GONE);
+        if(list.size()==0){
+            text_empty_list.setVisibility(View.VISIBLE);
+            text_empty_list.setText(R.string.text_not_found_nothing);
+            text_empty_list.setTextColor(Color.RED);
+        }else {
+            text_empty_list.setVisibility(View.GONE);
 
+            //region CustomCreateItems
+            switch (mode) {
+                case MODE_SHOW_AND_CREATE_RESTO: {
+                    //region Visible button_create_resto
+                    button_create_resto.setVisibility(View.VISIBLE);
+                    button_create_resto.setEnabled(true);
+                    button_create_resto.setText(getString(R.string.text_button_creat_resto, ""));
+                    button_create_resto.setNameRestoForCreate(fullSearchPackage.getStringSearch());
+                    String restoNameSoughtAfter = fullSearchPackage.getStringSearch();
+                    Iterator<IFlexible> iterator = list.iterator();
+                    ArrayList<SearchRestoInfo> arrayList = new ArrayList<>();
+                    while (iterator.hasNext()) {
+                        SearchRestoInfo searchRestoInfo = ((SearchRestoInfo) iterator.next());
+                        arrayList.add(new SearchRestoInfo(searchRestoInfo.getModel(), 1));
+                        String restoName = searchRestoInfo.getModel().getName();
 
+                        if (restoName.toLowerCase().equals(restoNameSoughtAfter.toLowerCase())) {
+                            button_create_resto.setEnabled(false);
+                            showSnackbarRed(getString(R.string.message_resto_exist, restoName));
+                        }
+                    }
+                    if (button_create_resto.isEnabled()) {
+                        restoNameSoughtAfter = "\"" + restoNameSoughtAfter.substring(0, 1).toUpperCase() + restoNameSoughtAfter.substring(1) + "\"";
+                        button_create_resto.setText(getString(R.string.text_button_creat_resto, restoNameSoughtAfter));
+                    }
+                    list = new ArrayList<>(arrayList);
+                    //endregion
+                }
+                break;
+                case MODE_SHOW_AND_CREATE_BEER: {
+                    //region Visible button_create_beer
+                    button_create_beer.setVisibility(View.VISIBLE);
+                    button_create_beer.setEnabled(true);
+                    button_create_beer.setText(getString(R.string.text_button_create_beer, " "));
+                    String restoBeerSoughtAfter = fullSearchPackage.getStringSearch();
+                    Iterator<IFlexible> iterator = list.iterator();
+
+                    while (iterator.hasNext()) {
+                        BeerInfo beerInfo = (BeerInfo) iterator.next();
+
+                        String beerName = beerInfo.getModel().getTitle();
+
+                        if (beerName.toLowerCase().equals(restoBeerSoughtAfter.toLowerCase())) {
+                            button_create_beer.setEnabled(false);
+                            showSnackbarRed(getString(R.string.message_resto_exist, beerName));
+                        }
+                    }
+                    if (button_create_beer.isEnabled()) {
+                        restoBeerSoughtAfter = "\"" + restoBeerSoughtAfter.substring(0, 1).toUpperCase() + restoBeerSoughtAfter.substring(1) + "\"";
+                        button_create_beer.setText(getString(R.string.text_button_create_beer, restoBeerSoughtAfter));
+                    }
+
+                    //endregion
+                }
+                break;
+            }
+            //endregion
+
+            adapter.addItems(0, list);
+            adapter.notifyDataSetChanged();
+            swipe.setRefreshing(false);
+        }
     }
 
     @Override
@@ -408,7 +417,6 @@ public class MultiListActivity extends BaseActivity implements
     }
     //endregion
 
-
     //region Functions
     private void prepareQuery(String stringSearch) {
         fullSearchPackage.setPage(0);
@@ -416,6 +424,7 @@ public class MultiListActivity extends BaseActivity implements
         sendQuery();
     }
     private void sendQuery() {
+        text_empty_list.setVisibility(View.GONE);
         try {
                 //swipe.setRefreshing(true);
                 switch (mode){
@@ -427,6 +436,8 @@ public class MultiListActivity extends BaseActivity implements
                         if(fullSearchPackage.getStringSearch().length() == 0) {
                             fullSearchPackage.setPage(0);
                             appendItems(new ArrayList<>());
+                            text_empty_list.setText(id_text_empty);
+                            text_empty_list.setTextColor(Color.BLACK);
                         }else
                             presenter.sendQueryFullSearch(fullSearchPackage);
                         break;

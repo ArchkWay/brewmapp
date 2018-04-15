@@ -51,6 +51,7 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
     @BindView(R.id.view_contact_contaiter1)    LinearLayout contaiter1;
     @BindView(R.id.view_contact_contaiter0)    LinearLayout contaiter0;
     @BindView(R.id.view_contact_last_message)    TextView last_message;
+    @BindView(R.id.view_contact_badget)    TextView badget;
 
     @Inject
     ActivetyUsers activetyUsers;
@@ -133,13 +134,19 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
         });
         //endregion
 
+        badget.setVisibility(GONE);
         ChatDialog chatDialog=model.getChatDialog();
         if(chatDialog==null) {
             contaiter1.setOrientation(VERTICAL);
             last_message.setVisibility(GONE);
+
         }else {
             last_message.setVisibility(VISIBLE);
             last_message.setText(chatDialog.getLastMessage().getText());
+            if(chatDialog.getUnread()>0){
+                badget.setVisibility(VISIBLE);
+                badget.setText(String.valueOf(chatDialog.getUnread()));
+            }
         }
     }
 

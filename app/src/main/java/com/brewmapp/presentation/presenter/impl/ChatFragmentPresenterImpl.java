@@ -352,7 +352,8 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
                                 .build()
                 );
                 view.addMessages(list,false);
-                toChatService(ChatService.ACTION_SEND_MESSAGE,friend,escapeUnicodeText(text_send));
+                toChatService(ChatService.ACTION_SEND_MESSAGE,friend,text_send);
+                //toChatService(ChatService.ACTION_SEND_MESSAGE,friend,escapeUnicodeText(text_send));
             }
 
         }

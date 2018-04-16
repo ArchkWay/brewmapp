@@ -103,7 +103,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:id="@+id/fragment.create_resto.container_address"
+            android:clickable="true"
+            android:focusable="true"
+            android:duplicateParentState="false">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,9 +117,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/text_address_necessarily"
-                    android:inputType="textCapWords"
                     android:lines="1"
                     android:layout_weight="1"
+                    android:id="@+id/fragment.create_resto.address"
+                    android:focusable="false"
+                    android:clickable="true"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView
@@ -151,7 +157,9 @@
                     android:inputType="textCapWords"
                     android:lines="1"
                     android:layout_weight="1"
-                    android:enabled="false"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:id="@+id/fragment.create_resto.type_resto"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView

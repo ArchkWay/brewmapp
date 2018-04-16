@@ -12,7 +12,7 @@ public class Location implements Serializable {
     private Metro metro;
 
     public Location() {
-
+        location=new LocationChild();
     }
 
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.brewmapp.R;
@@ -31,6 +32,7 @@ import com.brewmapp.presentation.view.impl.activity.PhotoGalleryActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
+import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.Serializable;
@@ -232,4 +234,41 @@ public class Starter {
         }
 
     }
+
+    public static void SelectCategoryActivity(
+            BaseActivity activity,
+            String category,
+            int filter,
+            String split_id,
+            String split_name,
+            int requestSearchCode) {
+
+        Intent intent = new Intent(activity, SelectCategoryActivity.class);
+        intent.putExtra(Actions.PARAM1,category);
+        intent.putExtra(Actions.PARAM2,filter);
+        intent.putExtra(Actions.PARAM3,split_id);
+        intent.putExtra(Actions.PARAM4,split_name);
+
+        activity.startActivityForResult(intent,requestSearchCode);
+
     }
+
+    public static void SelectCategoryActivity(
+            Fragment fragment,
+            String category,
+            int filter,
+            String split_id,
+            String split_name,
+            int requestSearchCode) {
+
+        Intent intent = new Intent(fragment.getActivity(), SelectCategoryActivity.class);
+        intent.putExtra(Actions.PARAM1,category);
+        intent.putExtra(Actions.PARAM2,filter);
+        intent.putExtra(Actions.PARAM3,split_id);
+        intent.putExtra(Actions.PARAM4,split_name);
+
+        fragment.startActivityForResult(intent,requestSearchCode);
+
+    }
+
+}

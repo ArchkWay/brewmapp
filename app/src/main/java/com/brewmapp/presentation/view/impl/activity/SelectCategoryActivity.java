@@ -29,6 +29,7 @@ import com.brewmapp.data.entity.BeerTaste;
 import com.brewmapp.data.entity.Brewery;
 import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.Country;
+import com.brewmapp.data.entity.Feature;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
@@ -48,6 +49,7 @@ import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.BreweryInfo;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
+import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PropertyFilterBeerInfo;
@@ -385,6 +387,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     case FilterRestoField.PRICE:
                         this.original.clear();
                         break;
+                    case FilterRestoField.FEATURES:
+
+                        break;
                 }
                 //endregion
                 break;
@@ -476,6 +481,13 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                     }break;
                     case FilterRestoField.CITY: {
                         City model = (City) payload;
+                        key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                        name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                        selected = model.isSelected();
+                    }break;
+                    case FilterRestoField.FEATURES: {
+//                        FeatureInfo
+                        Feature model = (Feature) payload;
                         key = sb.delete(0,sb.length()).append(model.getId()).toString();
                         name = sb.delete(0,sb.length()).append(model.getName()).toString();
                         selected = model.isSelected();

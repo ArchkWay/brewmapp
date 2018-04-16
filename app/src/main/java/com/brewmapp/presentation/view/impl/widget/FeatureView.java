@@ -80,6 +80,7 @@ public class FeatureView extends BaseLinearLayout implements InteractiveModelVie
                 model.setSelected(false);
                 restoTypeCheckbox.setChecked(false);
             }
+            listener.onModelAction(0,model);
         });
     }
 

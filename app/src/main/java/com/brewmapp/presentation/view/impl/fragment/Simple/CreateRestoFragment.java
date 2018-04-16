@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
@@ -36,6 +37,8 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.fragment_create_resto_name_resto)    TextInputEditText name_resto;
     @BindView(R.id.fragment_create_resto_address)    TextInputEditText address;
     @BindView(R.id.fragment_create_resto_type_resto)    TextInputEditText type_resto;
+    @BindView(R.id.fragment_create_resto_kitchen)    TextInputEditText kitchen;
+    @BindView(R.id.fragment_create_resto_features)    TextInputEditText features;
 
     //region Private
     private OnFragmentInteractionListener mListener;
@@ -74,6 +77,8 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
         name_resto.setText(intent.getData().toString());
         address.setOnClickListener(this);
         type_resto.setOnClickListener(this);
+        kitchen.setOnClickListener(this);
+        features.setOnClickListener(this);
         //endregion
     }
 
@@ -111,6 +116,26 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
                         RequestCodes.REQUEST_SEARCH_CODE
                 );
                 break;
+            case R.id.fragment_create_resto_kitchen:
+                Starter.SelectCategoryActivity(
+                        CreateRestoFragment.this,
+                        SearchFragment.CATEGORY_LIST_RESTO,
+                        FilterRestoField.KITCHEN,
+                        "",
+                        "",
+                        RequestCodes.REQUEST_SEARCH_CODE
+                );
+                break;
+            case R.id.fragment_create_resto_features:
+                Starter.SelectCategoryActivity(
+                        CreateRestoFragment.this,
+                        SearchFragment.CATEGORY_LIST_RESTO,
+                        FilterRestoField.FEATURES,
+                        "",
+                        "",
+                        RequestCodes.REQUEST_SEARCH_CODE
+                );
+                break;
         }
     }
 
@@ -118,7 +143,18 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case RequestCodes.REQUEST_SEARCH_CODE:
-                if(requestCode== Activity.RESULT_OK){
+                if(resultCode== Activity.RESULT_OK){
+                    switch (data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE)){
+                        case FilterRestoField.TYPE:
+                            type_resto.setText(data.getStringExtra(Actions.PARAM4));
+                            break;
+                        case FilterRestoField.KITCHEN:
+                            kitchen.setText(data.getStringExtra(Actions.PARAM4));
+                            break;
+                        case FilterRestoField.FEATURES:
+                            features.setText(data.getStringExtra(Actions.PARAM4));
+                            break;
+                    }
 
                 }
                 break;

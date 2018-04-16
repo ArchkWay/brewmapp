@@ -37,7 +37,6 @@ public class FeatureTask extends BaseNetworkTask<Feature, List<IFlexible>> {
             try {
                 FeatureTypes response = executeCall(getApi().loadFeature());
                 List<FeatureInfo> featureInfos = new ArrayList<>();
-                featureInfos.add(0, new FeatureInfo(new Feature("Не имеют значения  ")));
                 featureInfos.addAll(response.getModels());
                 subscriber.onNext(new ArrayList<>(featureInfos));
                 subscriber.onComplete();

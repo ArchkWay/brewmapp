@@ -336,6 +336,8 @@
                     android:lines="10"
                     android:layout_weight="1"
                     android:gravity="top"
+                    android:id="@+id/fragment.create_resto.description"
+
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView

@@ -528,7 +528,7 @@ public interface Api {
 
     @POST("geo/location/add")
     @FormUrlEncoded
-    Call<SingleResponse<LocationChild>> addLocation(@FieldMap WrapperParams params);
+    Call<SingleResponse<LocationChild>> createLocation(@FieldMap WrapperParams params);
 
     @POST("photo")
     @FormUrlEncoded
@@ -572,7 +572,7 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<User>> getActivetyUsets(@FieldMap RequestParams params);
 
-    @POST("resto/add")
+    @POST("resto/resto/add")
     @FormUrlEncoded
     Call<Object> createResto(@FieldMap RequestParams params);
 

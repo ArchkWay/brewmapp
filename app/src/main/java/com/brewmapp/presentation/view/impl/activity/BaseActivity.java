@@ -339,13 +339,20 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
     //region Chat Snackbar
     public void showSnackbar(String text) {
+        showSnackbar(text, null);
+    }
+
+    public void showSnackbar(String text, Snackbar.Callback callback) {
         View view = getWindow().getDecorView().findViewById(android.R.id.content);
         if (view != null) {
             Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
             snackbar.getView().setBackgroundColor(ContextCompat.getColor(BaseActivity.this, R.color.mdtp_accent_color));
+            if(callback!=null)
+                snackbar.addCallback(callback);
             snackbar.show();
         }
     }
+
     public void showSnackbarRed(String text) {
         View view = getWindow().getDecorView().findViewById(android.R.id.content);
         if (view != null) {

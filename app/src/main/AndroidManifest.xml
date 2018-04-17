@@ -167,7 +167,7 @@
         <activity android:name=".presentation.view.impl.activity.AddReviewBeerActivity" />
         <activity
             android:name=".presentation.view.impl.activity.MultiFragmentActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize" android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.view.impl.activity.SplashActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"

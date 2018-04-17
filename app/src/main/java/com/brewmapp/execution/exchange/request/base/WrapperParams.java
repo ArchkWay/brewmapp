@@ -16,6 +16,10 @@ public class WrapperParams extends RequestParams {
 
     @Override
     public RequestParams addParam(String key, Object value) {
-        return super.addParam(wrapper + "[" + key + "]", value);
+        return super.addParam(createKey(key), value);
+    }
+
+    public String createKey(String key){
+        return wrapper + "[" + key + "]";
     }
 }

@@ -402,10 +402,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         this.original.addAll(list);
         adapter.notifyItemRangeInserted(numberStartNotificationInsert,list.size());
         //endregion
+
         //region Visible control
         showProgressBar(false);
         emptyView.setVisibility(original.size()==0?View.VISIBLE:View.GONE);
         filterList.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
+        finder.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
         //endregion
     }
 
@@ -851,8 +853,10 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 presenter.loadRestoTypes();
                 finder.clearFocus();
+                finder.setVisibility(View.GONE);
                 emptyView.setVisibility(View.GONE);
                 showProgressBar(true);
+
                 break;
             case FilterRestoField.BEER:
                 filterList.addOnScrollListener(scrollListener);
@@ -871,6 +875,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 finder.clearFocus();
                 emptyView.setVisibility(View.GONE);
                 showProgressBar(true);
+                finder.setVisibility(View.GONE);
                 break;
             case FilterRestoField.PRICE:
                 toolbarTitle.setText(R.string.search_resto_price);
@@ -883,6 +888,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 filterStringToHashMap();
                 emptyTitle.setText(getString(R.string.filter_search_city));
                 toolbarTitle.setText(R.string.filter_search_city_title);
+                finder.setVisibility(View.GONE);
                 break;
             case FilterRestoField.METRO:
                 toolbarTitle.setText(R.string.select_metro);
@@ -891,6 +897,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 toolbarTitle.setText(R.string.search_resto_other);
                 presenter.loadFeatureTypes();
                 emptyView.setVisibility(View.GONE);
+                finder.setVisibility(View.GONE);
                 showProgressBar(true);
                 break;
             default:

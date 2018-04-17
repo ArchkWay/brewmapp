@@ -283,9 +283,9 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
         }
 
     }
-    class AddLocation extends BaseNetworkTask<LocationChild, String>{
+    class CreateLocation extends BaseNetworkTask<LocationChild, String>{
 
-        public AddLocation(MainThread mainThread, Executor executor, Api api) {
+        public CreateLocation(MainThread mainThread, Executor executor, Api api) {
             super(mainThread, executor, api);
         }
 
@@ -302,7 +302,7 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
                     wrapperParams.addParam(Keys.LAT,locationChild.getLat());
                     wrapperParams.addParam(Keys.LON,locationChild.getLon());
 
-                    SingleResponse<LocationChild> response=executeCall(getApi().addLocation(wrapperParams));
+                    SingleResponse<LocationChild> response=executeCall(getApi().createLocation(wrapperParams));
                     locationChild.setId(response.getData().getId());
                     subscriber.onNext("");
                     subscriber.onComplete();
@@ -391,7 +391,7 @@ public class RestoEditFragmentPresenterImpl extends BasePresenter<RestoEditFragm
             }
         }
         private void addLocation(LocationChild locationChild, SimpleSubscriber locationSubscriber) {
-            new AddLocation(
+            new CreateLocation(
                     BeerMap.getAppComponent().mainThread(),
                     BeerMap.getAppComponent().executor(),
                     BeerMap.getAppComponent().api()

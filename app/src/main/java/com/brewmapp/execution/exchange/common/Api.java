@@ -572,4 +572,8 @@ public interface Api {
     @FormUrlEncoded
     Call<ListResponse<User>> getActivetyUsets(@FieldMap RequestParams params);
 
+    @POST("resto/add")
+    @FormUrlEncoded
+    Call<Object> createResto(@FieldMap RequestParams params);
+
 }

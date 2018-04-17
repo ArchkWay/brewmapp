@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
@@ -640,11 +641,12 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             String[] txts = filterTxt.split(",");
             int i = 0;
             for (String s : ids)
-                if(!"null".equals(s))
-                    hashMap.put(
-                            new StringBuilder().append(s).toString(),
-                            new StringBuilder().append(txts[i++]).toString()
-                    );
+                if(!"null".equals(s)) {
+                    String key = new StringBuilder().append(s).toString();
+                    String value=new StringBuilder().append(txts[i++]).toString();
+                    if(!TextUtils.isEmpty(key)&&!TextUtils.isEmpty(value))
+                        hashMap.put(key,value);
+                }
         } catch (Exception e) {
         }
         invalidateMenu();
@@ -887,7 +889,9 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 break;
             case FilterRestoField.FEATURES:
                 toolbarTitle.setText(R.string.search_resto_other);
-                    presenter.loadFeatureTypes();
+                presenter.loadFeatureTypes();
+                emptyView.setVisibility(View.GONE);
+                showProgressBar(true);
                 break;
             default:
                 commonError(getString(R.string.not_valid_param));
@@ -906,7 +910,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         }else {
             finder.setListener(string -> prepareQuery(string));
         }
-
+        finder.clearFocus();
     }
 
     private int getTypeFilter() {

@@ -25,7 +25,10 @@
                 android:text="@string/text_are_you"
                 android:layout_weight="1"
                 style="@style/AppTheme.Text.H4"
-                />
+                android:focusable="true"
+                >
+                <requestFocus/>
+            </TextView>
             <info.hoang8f.android.segmented.SegmentedGroup
                 xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/activity.register.segmented"
@@ -80,14 +83,9 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/text_name_necessarily"
                     android:inputType="textCapWords"
-                    android:lines="1"
-                    android:id="@+id/fragment.create_resto.name_resto"/>
+                    android:id="@+id/fragment.create_resto.name_resto">
+                </android.support.design.widget.TextInputEditText>
             </android.support.design.widget.TextInputLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_chevron_right"
-                />
 
         </LinearLayout>
 
@@ -105,14 +103,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:id="@+id/fragment.create_resto.container_address"
-            android:clickable="true"
-            android:focusable="true"
-            android:duplicateParentState="false">
+            android:id="@+id/fragment.create_resto.container_address">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                >
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
@@ -122,13 +118,13 @@
                     android:layout_weight="1"
                     android:id="@+id/fragment.create_resto.address"
                     android:focusable="false"
-                    android:clickable="true"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chevron_right"
+                android:id="@+id/fragment.create_resto.chevron_address"
                 />
         </LinearLayout>
 
@@ -155,18 +151,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/text_resto_type_necessarily"
-                    android:inputType="textCapWords"
-                    android:lines="1"
                     android:layout_weight="1"
-                    android:focusable="false"
-                    android:clickable="true"
                     android:id="@+id/fragment.create_resto.type_resto"
+                    android:focusable="false"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chevron_right"
+                android:id="@+id/fragment.create_resto.chevron_type_resto"
                 />
         </LinearLayout>
 
@@ -193,18 +187,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/search_resto_kitchen"
-                    android:inputType="textCapWords"
-                    android:lines="1"
                     android:layout_weight="1"
                     android:focusable="false"
-                    android:clickable="true"
                     android:id="@+id/fragment.create_resto.kitchen"
                     />
             </android.support.design.widget.TextInputLayout>
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chevron_right"
+                android:id="@+id/fragment.create_resto.chevron_kitchen"
                 />
         </LinearLayout>
 
@@ -231,17 +224,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/features"
-                    android:lines="1"
                     android:layout_weight="1"
-                    android:focusable="false"
-                    android:clickable="true"
                     android:id="@+id/fragment.create_resto.features"
+                    android:focusable="false"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chevron_right"
+                android:id="@+id/fragment.create_resto.chevron_features"
                 />
         </LinearLayout>
 
@@ -262,22 +254,23 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                >
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/text_view_avg_check"
-                    android:inputType="textCapWords"
-                    android:lines="1"
                     android:layout_weight="1"
-                    android:enabled="false"
+                    android:id="@+id/fragment.create_resto.prices"
+                    android:focusable="false"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chevron_right"
+                android:id="@+id/fragment.create_resto.chevron_prices"
                 />
         </LinearLayout>
 
@@ -304,16 +297,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/text_view_photo"
-                    android:inputType="textCapWords"
-                    android:lines="1"
                     android:layout_weight="1"
-                    android:enabled="false"
+                    android:focusable="false"
+                    android:id="@+id/fragment.create_resto.photo"
                     />
             </android.support.design.widget.TextInputLayout>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chevron_right"
+                android:id="@+id/fragment.create_resto.chevron_photo"
                 />
         </LinearLayout>
 
@@ -361,10 +354,6 @@
 
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_necessarily"/>
 
     </LinearLayout>
 

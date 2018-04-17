@@ -26,6 +26,7 @@ import com.brewmapp.presentation.view.impl.fragment.Simple.WebViewFragment;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import ru.frosteye.ovsa.presentation.callback.SimpleTextChangeCallback;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.listener.SelectListener;
 
@@ -120,7 +121,6 @@ public class MultiFragmentActivity extends BaseActivity implements
                 .beginTransaction()
                 .replace(R.id.multiactivity_сontainer, fragment)
                 .commit();
-
     }
     //endregion
 
@@ -139,6 +139,14 @@ public class MultiFragmentActivity extends BaseActivity implements
     @Override
     public void selectPhoto(SelectListener selectListener) {
         showSelect(this, R.array.avatar_options, selectListener);
+
+    }
+
+    @Override
+    public void changeListeners(SimpleTextChangeCallback changeCallback, TextView... views) {
+        registerTextChangeListeners(changeCallback, views);
     }
     //endregion
+
+
 }

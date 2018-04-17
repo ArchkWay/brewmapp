@@ -276,7 +276,7 @@
     //Resto filter strings
     <string name="search_resto_name">Поиск по названию заведения</string>
     <string name="text_resto_type">Тип заведения</string>
-    <string name="text_resto_type_necessarily">*Тип заведения</string>
+    <string name="text_resto_type_necessarily">Тип заведения (обязательно)</string>
     <string name="search_resto_beer">Поиск по названию пива</string>
     <string name="search_resto_kitchen">Кухня</string>
     <string name="search_resto_price">Средний счет</string>
@@ -548,9 +548,8 @@
     <string name="text_are_you">Кто вы?</string>
     <string name="text_owner">Владелец</string>
     <string name="text_client">Посетитель</string>
-    <string name="text_name_necessarily">*Название</string>
-    <string name="text_address_necessarily">*Адрес</string>
-    <string name="text_necessarily">* Обязательно для ввода</string>
+    <string name="text_name_necessarily">Название (обязательно)</string>
+    <string name="text_address_necessarily">Адрес (обязательно)</string>
     <string name="key_city_id">key_city_id</string>
     <string name="key_city_name">key_city_name</string>
     <string name="text_not_found_nothing">Ничего не найдено, попробуйте изменить запрос</string>

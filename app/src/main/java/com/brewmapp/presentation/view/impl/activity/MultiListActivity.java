@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -68,8 +67,7 @@ public class MultiListActivity extends BaseActivity implements
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
     @BindView(R.id.mulilist_activity_button_review_layout)    LinearLayout button_review_layout;
     @BindView(R.id.activity_add_interest_container_header) LinearLayout container_header;
-    @BindView(R.id.activity_add_interest_button_create_resto) com.brewmapp.presentation.view.impl.widget.CreateRestoButton button_create_resto;
-    @BindView(R.id.activity_add_interest_button_create_beer) Button button_create_beer;
+    @BindView(R.id.activity_add_interest_button_create) com.brewmapp.presentation.view.impl.widget.ButtonCreate button_create;
     @BindView(R.id.activity_add_interest_progressBar)    ProgressBar progressBar;
     //endregion
 
@@ -83,6 +81,7 @@ public class MultiListActivity extends BaseActivity implements
     private EndlessRecyclerOnScrollListener scrollListener;
     private String mode;
     private int id_text_empty=0;
+    private final int cntCharStartSearch=4;
 
     //endregion
 
@@ -153,7 +152,7 @@ public class MultiListActivity extends BaseActivity implements
                 //endregion
                 break;
             case MODE_SHOW_AND_CREATE_BEER:
-                //region Add Beer
+                //region Prepare Create Beer
                 id_text_empty=R.string.text_hint_search;
                 fullSearchPackage.setType(Keys.TYPE_BEER);
                 setTitle(R.string.action_find_beer);
@@ -163,14 +162,13 @@ public class MultiListActivity extends BaseActivity implements
                 //endregion
                 break;
             case MODE_SHOW_AND_CREATE_RESTO:
-                //region Prepare Add Resto
+                //region Prepare Create Resto
                 id_text_empty=R.string.text_hint_search;
                 fullSearchPackage.setType(Keys.TYPE_RESTO);
                 setTitle(R.string.action_find_beer);
                 finder.setHintString(getString(R.string.hint_find_resto));
                 finder.setListener(string -> prepareQuery(string));
                 recyclerview.addOnScrollListener(scrollListener);
-
                 fillUserPosition();
                 //endregion
                 break;
@@ -312,62 +310,54 @@ public class MultiListActivity extends BaseActivity implements
         adapter.clear();
 
 
-        //region CustomCreateItems
+        //region Prepare ButtonCreate and Items
         switch (mode) {
             case MODE_SHOW_AND_CREATE_RESTO: {
-                //region Visible button_create_resto
-                button_create_resto.setVisibility(View.VISIBLE);
-                button_create_resto.setEnabled(true);
-                button_create_resto.setText(getString(R.string.text_button_creat_resto, ""));
-                button_create_resto.setNameRestoForCreate(fullSearchPackage.getStringSearch());
-                String restoNameSoughtAfter = fullSearchPackage.getStringSearch();
+                String restoNameSearch = fullSearchPackage.getStringSearch();
+                boolean restoNameFound=false;
+                //region Prepare Items
                 Iterator<IFlexible> iterator = list.iterator();
                 ArrayList<SearchRestoInfo> arrayList = new ArrayList<>();
                 while (iterator.hasNext()) {
                     SearchRestoInfo searchRestoInfo = ((SearchRestoInfo) iterator.next());
+                    //region SearchRestoInfo switch to mode 1
                     arrayList.add(new SearchRestoInfo(searchRestoInfo.getModel(), 1));
+                    //endregion
                     String restoName = searchRestoInfo.getModel().getName();
-
-
-                    if (restoName.toLowerCase().equals(restoNameSoughtAfter.toLowerCase())) {
-                        button_create_resto.setEnabled(false);
-                        showSnackbarRed(getString(R.string.message_resto_exist, restoName));
+                    if (restoName.toLowerCase().equals(restoNameSearch.toLowerCase())) {
+                        restoNameFound=true;
                     }
                 }
-                if (button_create_resto.isEnabled()&&restoNameSoughtAfter.length()>0) {
-                    restoNameSoughtAfter = "\"" + restoNameSoughtAfter.substring(0, 1).toUpperCase() + restoNameSoughtAfter.substring(1) + "\"";
-                    button_create_resto.setText(getString(R.string.text_button_creat_resto, restoNameSoughtAfter));
-                }else {
-                    button_create_resto.setEnabled(false);
-                }
                 list = new ArrayList<>(arrayList);
+                //endregion
+                //region Prepare Button
+
+                button_create.setVisibility(restoNameSearch.length()>=cntCharStartSearch?View.VISIBLE:View.GONE);
+                button_create.setEnabled(!restoNameFound);
+                button_create.storeNewRestoName(fullSearchPackage.getStringSearch());
+
+                if(restoNameFound)
+                    showSnackbarRed(getString(R.string.message_resto_exist, restoNameSearch));
+
                 //endregion
             }
             break;
             case MODE_SHOW_AND_CREATE_BEER: {
-                //region Visible button_create_beer
-                button_create_beer.setVisibility(View.VISIBLE);
-                button_create_beer.setEnabled(true);
-                button_create_beer.setText(getString(R.string.text_button_create_beer, " "));
-                String restoBeerSoughtAfter = fullSearchPackage.getStringSearch();
+                String beerNameSearch = fullSearchPackage.getStringSearch();
+                boolean beerNameFound=false;
+                //region Prepare Button
                 Iterator<IFlexible> iterator = list.iterator();
-
                 while (iterator.hasNext()) {
-                    BeerInfo beerInfo = (BeerInfo) iterator.next();
-
-                    String beerName = beerInfo.getModel().getTitle();
-
-                    if (beerName.toLowerCase().equals(restoBeerSoughtAfter.toLowerCase())) {
-                        button_create_beer.setEnabled(false);
-                        showSnackbarRed(getString(R.string.message_resto_exist, beerName));
-                    }
+                    beerNameFound=((BeerInfo) iterator.next()).getModel().getTitle().toLowerCase().equals(beerNameSearch);
+                    if(beerNameFound)
+                        break;
                 }
-                if (button_create_beer.isEnabled()&&restoBeerSoughtAfter.length()>0) {
-                    restoBeerSoughtAfter = "\"" + restoBeerSoughtAfter.substring(0, 1).toUpperCase() + restoBeerSoughtAfter.substring(1) + "\"";
-                    button_create_beer.setText(getString(R.string.text_button_create_beer, restoBeerSoughtAfter));
-                }else {
-                    button_create_beer.setEnabled(false);
-                }
+
+                button_create.setVisibility(beerNameSearch.length()>=cntCharStartSearch?View.VISIBLE:View.GONE);
+                button_create.setEnabled(!beerNameFound);
+                button_create.storeNewBeerName(fullSearchPackage.getStringSearch());
+                if(beerNameFound)
+                    showSnackbarRed(getString(R.string.message_beer_exist, beerNameSearch));
 
                 //endregion
             }
@@ -398,9 +388,16 @@ public class MultiListActivity extends BaseActivity implements
 
     @Override
     public void showProgress(boolean show) {
-        progressBar.setVisibility(View.GONE);
-        if(show) {
+
+        //region Visible Progress
+        if(show)
             progressBar.setVisibility(View.VISIBLE);
+        else
+            progressBar.setVisibility(View.GONE);
+        //endregion
+
+        //region Visible and content text show
+        if(show) {
             text_empty_list.setVisibility(View.GONE);
         }else {
             text_empty_list.setVisibility(View.GONE);
@@ -409,12 +406,16 @@ public class MultiListActivity extends BaseActivity implements
                 if(TextUtils.isEmpty(fullSearchPackage.getStringSearch())){
                     text_empty_list.setText(id_text_empty);
                     text_empty_list.setTextColor(Color.BLACK);
+                }else if(fullSearchPackage.getStringSearch().length()<cntCharStartSearch){
+                    text_empty_list.setText(R.string.text_more_chars);
+                    text_empty_list.setTextColor(Color.BLUE);
                 }else {
                     text_empty_list.setText(R.string.text_not_found_nothing);
                     text_empty_list.setTextColor(Color.RED);
                 }
             }
         }
+        //endregion
 
     }
     //endregion
@@ -446,12 +447,13 @@ public class MultiListActivity extends BaseActivity implements
                     case MODE_SHOW_AND_CREATE_RESTO:
                     case MODE_SHOW_AND_CREATE_BEER:
                     case MODE_SHOW_AND_SELECT_FRIENDS:
-                        if(fullSearchPackage.getStringSearch().length() == 0) {
+                        if(fullSearchPackage.getStringSearch().length() < cntCharStartSearch) {
                             fullSearchPackage.setPage(0);
                             appendItems(new ArrayList<>());
                             showProgress(false);
-                        }else
+                        }else {
                             presenter.sendQueryFullSearch(fullSearchPackage);
+                        }
                         break;
                     case MODE_SHOW_HASHTAG:
                         presenter.sentQueryQuickSearch(fullSearchPackage);

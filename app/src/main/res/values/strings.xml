@@ -456,9 +456,9 @@
     <string name="error_send_data">Ошибка отправки данных</string>
     <string name="without_tite">Без названия</string>
     <string name="text_craft_beer">Крафтовое пиво</string>
-    <string name="hint_find_beer">Поиск любимого пива</string>
+    <string name="hint_find_beer">Поиск пива</string>
     <string name="text_hint_search">Для начала поиска начните вводить название</string>
-    <string name="hint_find_resto">Поиск любимого заведения</string>
+    <string name="hint_find_resto">Поиск заведения</string>
     <string name="text_view_rating">Рейтинг:</string>
     <string name="text_view_i_hear_work">Я здесь работаю</string>
     <string name="text_view_reviews">Отзывы</string>
@@ -546,6 +546,7 @@
     <string name="text_button_creat_resto">Добавить заведение %s</string>
     <string name="text_button_create_beer">Добавить пиво %s</string>
     <string name="message_resto_exist">Заведение \"%s\" уже есть в нашей базе</string>
+    <string name="message_beer_exist">Пиво \"%s\" уже есть в нашей базе</string>
     <string name="text_are_you">Кто вы?</string>
     <string name="text_owner">Владелец</string>
     <string name="text_client">Посетитель</string>
@@ -557,5 +558,6 @@
     <string name="features">Особенности</string>
     <string name="text_view_avg_check">Средний чек</string>
     <string name="text_description">Описание</string>
+    <string name="text_more_chars">Продолжайте набор, длина запроса должна быть больше 3 символов</string>
 
 </resources>

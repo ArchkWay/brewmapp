@@ -407,7 +407,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         showProgressBar(false);
         emptyView.setVisibility(original.size()==0?View.VISIBLE:View.GONE);
         filterList.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
-        finder.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
+        if(getTypeFilter()==0)
+            finder.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
         //endregion
     }
 

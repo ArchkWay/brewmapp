@@ -11,6 +11,8 @@ import ru.frosteye.ovsa.presentation.adapter.AdapterItem;
  */
 
 public class SearchRestoInfo extends AdapterItem<Resto, InterestAddViewResto> {
+    // mode 0 - item for select resto(default)
+    // mode 1 - item for create resto
 
     private int mode=0;
 

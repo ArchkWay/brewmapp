@@ -50,20 +50,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/activity.add.interest.container.header"
                 android:orientation="vertical">
-                <com.brewmapp.presentation.view.impl.widget.CreateRestoButton
+                <com.brewmapp.presentation.view.impl.widget.ButtonCreate
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="@style/AppTheme.Button.Green.Solid.Square"
-                    android:text="@string/text_button_creat_resto"
-                    android:id="@+id/activity.add.interest.button_create_resto"
-                    android:visibility="gone"
-                    />
-                <com.brewmapp.presentation.view.impl.widget.CreateBeerButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/AppTheme.Button.Green.Solid.Square"
-                    android:text="@string/text_button_create_beer"
-                    android:id="@+id/activity.add.interest.button_create_beer"
+                    android:id="@+id/activity.add.interest.button_create"
                     android:visibility="gone"
                     />
             </LinearLayout>

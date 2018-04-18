@@ -85,7 +85,6 @@ public class SearchFragment extends BaseFragment implements SearchAllView
     private SimpleTabSelectListener simpleTabSelectListener;
     //endregion
 
-
     //region Impl SearchFragment
     @Override
     protected int getFragmentLayout() {

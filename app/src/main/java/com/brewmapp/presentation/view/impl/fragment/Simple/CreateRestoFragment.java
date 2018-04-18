@@ -186,7 +186,7 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
                             @Override
                             public void onError(Throwable e) {
                                 super.onError(e);
-                                mListener.showSnackbarRed(getString(R.string.error));
+                                    mListener.showSnackbarRed(getString(R.string.error));
                             }
                         });
                     }
@@ -197,9 +197,6 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
                         mListener.showSnackbarRed(getString(R.string.error));
                     }
                 });
-
-
-
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -390,13 +387,9 @@ public class CreateRestoFragment extends Fragment implements View.OnClickListene
         void commonError(String... message);
         void invalidateOptionsMenu();
         void setTitle(CharSequence name);
-
         Intent getIntent();
-
         void hideKeyboard();
-
         void selectPhoto(SelectListener listener);
-
         void changeListeners(SimpleTextChangeCallback changeCallback, TextView... views);
 
         void showSnackbarRed(String string);

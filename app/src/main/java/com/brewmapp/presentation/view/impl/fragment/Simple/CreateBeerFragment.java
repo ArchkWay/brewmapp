@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,10 +28,14 @@ import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.task.CreateBeerTask;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.callback.SimpleTextChangeCallback;
 
 /**
@@ -43,6 +49,11 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.fragment_create_beer_country_chevron)    ImageView country_chevron;
     @BindView(R.id.fragment_create_beer_brand)    TextInputEditText beer_brand;
     @BindView(R.id.fragment_create_beer_brand_chevron)    ImageView brand_chevron;
+    @BindView(R.id.fragment_create_beer_type)    TextInputEditText beer_type;
+    @BindView(R.id.fragment_create_beer_type_chevron)    ImageView type_chevron;
+    @BindView(R.id.fragment_create_beer_brewery)    TextInputEditText beer_brewery;
+    @BindView(R.id.fragment_create_beer_brewery_chevron)    ImageView brewery_chevron;
+    @BindView(R.id.fragment_create_beer_description)    TextInputEditText beer_description;
     //endregion
 
     //region Private
@@ -50,6 +61,7 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
     private WrapperParams wrapperParamsBeer =new WrapperParams(Keys.CAP_BEER);
     //endregion
 
+    @Inject    CreateBeerTask createBeerTask;
 
     public CreateBeerFragment() {}
 
@@ -89,6 +101,11 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
         beer_brand.setOnClickListener(this);
         brand_chevron.setOnClickListener(this);
 
+        beer_type.setOnClickListener(this);
+        type_chevron.setOnClickListener(this);
+
+        beer_brewery.setOnClickListener(this);
+        brewery_chevron.setOnClickListener(this);
         //endregion
 
 
@@ -98,12 +115,49 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.send,menu);
         menu.findItem(R.id.action_send).setEnabled(
-            !TextUtils.isEmpty(beer_name.getText())&&
-            !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.COUNTRY_ID)))&&
+            !TextUtils.isEmpty(beer_name.getText())
+                    &&
+            !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.COUNTRY_ID)))
+                    &&
             !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.BRAND_ID)))
+                    &&
+            !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.TYPE_ID)))
+                    &&
+            !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.BREWERY_ID)))
         );
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_send:
+                wrapperParamsBeer.addParam(Keys.TEXT,beer_description.getText());
+                wrapperParamsBeer.addParam(Keys.TITLE,beer_name.getText());
+                createBeerTask.execute(wrapperParamsBeer,new SimpleSubscriber<String>(){
+                    @Override
+                    public void onNext(String s) {
+                        super.onNext(s);
+                        mListener.showSnackbar(getString(R.string.text_beer_sended_to_moderation),new Snackbar.Callback(){
+                            @Override
+                            public void onDismissed(Snackbar transientBottomBar, int event) {
+                                super.onDismissed(transientBottomBar, event);
+                                mListener.finish();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        mListener.showSnackbarRed(getString(R.string.error));
+                    }
+                });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    //beer_description
 
     @Override
     public void onAttach(Context context) {
@@ -152,6 +206,32 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
                 );
                 //endregion
             }break;
+            case R.id.fragment_create_beer_type:
+            case R.id.fragment_create_beer_type_chevron:{
+                //region Select type
+                Starter.SelectCategoryActivity(
+                        CreateBeerFragment.this,
+                        SearchFragment.CATEGORY_LIST_BEER,
+                        FilterBeerField.TYPE,
+                        wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.TYPE_ID)),
+                        beer_type.getText().toString(),
+                        RequestCodes.REQUEST_SEARCH_CODE
+                );
+                //endregion
+            }break;
+            case R.id.fragment_create_beer_brewery:
+            case R.id.fragment_create_beer_brewery_chevron:{
+                //region Select brewery
+                Starter.SelectCategoryActivity(
+                        CreateBeerFragment.this,
+                        SearchFragment.CATEGORY_LIST_BEER,
+                        FilterBeerField.BREWERY,
+                        wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.BREWERY_ID)),
+                        beer_brewery.getText().toString(),
+                        RequestCodes.REQUEST_SEARCH_CODE
+                );
+                //endregion
+            }break;
         }
     }
 
@@ -177,6 +257,20 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
                                 mListener.invalidateOptionsMenu();
                             }catch (Exception e){}
                             break;
+                        case FilterBeerField.TYPE:
+                            try {
+                                wrapperParamsBeer.addParam(Keys.TYPE_ID,param3.split(",")[0]);
+                                beer_type.setText(param4.split(",")[0]);
+                                mListener.invalidateOptionsMenu();
+                            }catch (Exception e){}
+                            break;
+                        case FilterBeerField.BREWERY:
+                            try {
+                                wrapperParamsBeer.addParam(Keys.BREWERY_ID,param3.split(",")[0]);
+                                beer_brewery.setText(param4.split(",")[0]);
+                                mListener.invalidateOptionsMenu();
+                            }catch (Exception e){}
+                            break;
                     }
                 }
                 break;
@@ -191,6 +285,9 @@ public class CreateBeerFragment extends Fragment implements View.OnClickListener
         Intent getIntent();
         void changeListeners(SimpleTextChangeCallback changeCallback, TextView... views);
         void hideKeyboard();
+        void showSnackbar(String string, Snackbar.Callback callback);
+        void finish();
+        void showSnackbarRed(String string);
     }
 
 }

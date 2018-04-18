@@ -535,6 +535,7 @@
     <string name="key_id_model">key_id_model</string>
     <string name="text_photo_sended_to_moderation">Фото отправлено на модерацию</string>
     <string name="text_resto_sended_to_moderation">Заведение отправлено на модерацию</string>
+    <string name="text_beer_sended_to_moderation">Пиво отправлено на модерацию</string>
     <string name="rubl">₽</string>
     <string name="key_beer">key_beer</string>
     <string name="title_friends_request">Запросы на добавление в друзья</string>
@@ -554,6 +555,8 @@
     <string name="text_address_necessarily">Адрес (обязательно)</string>
     <string name="text_country_necessarily">Страна производитель (обязательно)</string>
     <string name="text_brand_necessarily">Бренд (обязательно)</string>
+    <string name="text_brewery_necessarily">Пивоварня (обязательно)</string>
+    <string name="text_type_necessarily">Тип (обязательно)</string>
     <string name="key_city_id">key_city_id</string>
     <string name="key_city_name">key_city_name</string>
     <string name="text_not_found_nothing">Ничего не найдено, попробуйте изменить запрос</string>

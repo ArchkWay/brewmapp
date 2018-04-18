@@ -14,15 +14,6 @@
             android:orientation="vertical"
             android:layout_margin="10dp">
 
-            <ru.frosteye.ovsa.presentation.view.widget.Line
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorSplitter"
-                android:layout_marginTop="5dp"
-
-                />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,6 +109,114 @@
                     android:src="@drawable/ic_chevron_right"
                     android:id="@+id/fragment.create_beer.brand_chevron"
                     />
+            </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorSplitter"
+                android:layout_marginTop="5dp"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/text_type_necessarily"
+                        android:lines="1"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.create_beer.type"
+                        android:focusable="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_chevron_right"
+                    android:id="@+id/fragment.create_beer.type_chevron"
+                    />
+            </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorSplitter"
+                android:layout_marginTop="5dp"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/text_brewery_necessarily"
+                        android:lines="1"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.create_beer.brewery"
+                        android:focusable="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_chevron_right"
+                    android:id="@+id/fragment.create_beer.brewery_chevron"
+                    />
+            </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorSplitter"
+                android:layout_marginTop="5dp"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/text_description"
+                        android:lines="10"
+                        android:layout_weight="1"
+                        android:gravity="top"
+                        android:id="@+id/fragment.create_beer.description"
+
+                        />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <ru.frosteye.ovsa.presentation.view.widget.Line

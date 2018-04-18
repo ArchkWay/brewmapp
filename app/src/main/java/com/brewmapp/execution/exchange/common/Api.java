@@ -576,4 +576,8 @@ public interface Api {
     @FormUrlEncoded
     Call<Object> createResto(@FieldMap RequestParams params);
 
+    @POST("beer/beer/add")
+    @FormUrlEncoded
+    Call<Object> createBeer(@FieldMap RequestParams params);
+
 }

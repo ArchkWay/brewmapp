@@ -1,23 +1,32 @@
 package com.brewmapp.presentation.view.impl.fragment.Simple;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
+import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
+import com.brewmapp.data.entity.FilterBeerField;
+import com.brewmapp.data.entity.container.FilterBeer;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,15 +35,19 @@ import ru.frosteye.ovsa.presentation.callback.SimpleTextChangeCallback;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateBeerFragment extends Fragment {
+public class CreateBeerFragment extends Fragment implements View.OnClickListener{
 
     //region BindView
     @BindView(R.id.fragment_create_beer_name)    TextInputEditText beer_name;
+    @BindView(R.id.fragment_create_beer_country)    TextInputEditText beer_country;
+    @BindView(R.id.fragment_create_beer_country_chevron)    ImageView country_chevron;
+    @BindView(R.id.fragment_create_beer_brand)    TextInputEditText beer_brand;
+    @BindView(R.id.fragment_create_beer_brand_chevron)    ImageView brand_chevron;
     //endregion
 
     //region Private
     private OnFragmentInteractionListener mListener;
-    private WrapperParams wrapperParamsResto =new WrapperParams(Keys.CAP_BEER);
+    private WrapperParams wrapperParamsBeer =new WrapperParams(Keys.CAP_BEER);
     //endregion
 
 
@@ -65,11 +78,17 @@ public class CreateBeerFragment extends Fragment {
         //region Prepare views
 
         mListener.changeListeners(s->{
-                    wrapperParamsResto.addParam(Keys.NAME,s.toString());
+                    wrapperParamsBeer.addParam(Keys.NAME,s.toString());
                     mListener.invalidateOptionsMenu();},
                 beer_name);
-
         beer_name.setText(intent.getData().toString());
+
+        beer_country.setOnClickListener(this);
+        country_chevron.setOnClickListener(this);
+
+        beer_brand.setOnClickListener(this);
+        brand_chevron.setOnClickListener(this);
+
         //endregion
 
 
@@ -78,6 +97,11 @@ public class CreateBeerFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.send,menu);
+        menu.findItem(R.id.action_send).setEnabled(
+            !TextUtils.isEmpty(beer_name.getText())&&
+            !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.COUNTRY_ID)))&&
+            !TextUtils.isEmpty(wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.BRAND_ID)))
+        );
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -99,6 +123,66 @@ public class CreateBeerFragment extends Fragment {
         beer_name.postDelayed(() -> mListener.hideKeyboard(),500);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fragment_create_beer_country:
+            case R.id.fragment_create_beer_country_chevron:{
+                //region Select country
+                Starter.SelectCategoryActivity(
+                        CreateBeerFragment.this,
+                        SearchFragment.CATEGORY_LIST_BEER,
+                        FilterBeerField.COUNTRY,
+                        wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.COUNTRY_ID)),
+                        beer_country.getText().toString(),
+                        RequestCodes.REQUEST_SEARCH_CODE
+                );
+                //endregion
+            }break;
+            case R.id.fragment_create_beer_brand:
+            case R.id.fragment_create_beer_brand_chevron:{
+                //region Select brand
+                Starter.SelectCategoryActivity(
+                        CreateBeerFragment.this,
+                        SearchFragment.CATEGORY_LIST_BEER,
+                        FilterBeerField.BRAND,
+                        wrapperParamsBeer.get(wrapperParamsBeer.createKey(Keys.BRAND_ID)),
+                        beer_brand.getText().toString(),
+                        RequestCodes.REQUEST_SEARCH_CODE
+                );
+                //endregion
+            }break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RequestCodes.REQUEST_SEARCH_CODE:
+                if(resultCode== Activity.RESULT_OK){
+                    String param3=data.getStringExtra(Actions.PARAM3);
+                    String param4=data.getStringExtra(Actions.PARAM4);
+                    switch (data.getIntExtra(Actions.PARAM2,Integer.MAX_VALUE)) {
+                        case FilterBeerField.COUNTRY:
+                            try {
+                                wrapperParamsBeer.addParam(Keys.COUNTRY_ID,param3.split(",")[0]);
+                                beer_country.setText(param4.split(",")[0]);
+                                mListener.invalidateOptionsMenu();
+                            }catch (Exception e){}
+                            break;
+                        case FilterBeerField.BRAND:
+                            try {
+                                wrapperParamsBeer.addParam(Keys.BRAND_ID,param3.split(",")[0]);
+                                beer_brand.setText(param4.split(",")[0]);
+                                mListener.invalidateOptionsMenu();
+                            }catch (Exception e){}
+                            break;
+                    }
+                }
+                break;
+        }
+                super.onActivityResult(requestCode, resultCode, data);
+    }
 
     public interface OnFragmentInteractionListener {
         void commonError(String... message);

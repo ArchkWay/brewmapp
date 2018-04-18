@@ -552,6 +552,8 @@
     <string name="text_client">Посетитель</string>
     <string name="text_name_necessarily">Название (обязательно)</string>
     <string name="text_address_necessarily">Адрес (обязательно)</string>
+    <string name="text_country_necessarily">Страна производитель (обязательно)</string>
+    <string name="text_brand_necessarily">Бренд (обязательно)</string>
     <string name="key_city_id">key_city_id</string>
     <string name="key_city_name">key_city_name</string>
     <string name="text_not_found_nothing">Ничего не найдено, попробуйте изменить запрос</string>

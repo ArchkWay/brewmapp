@@ -61,21 +61,24 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    >
 
                     <android.support.design.widget.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/text_address_necessarily"
-                        android:inputType="textCapWords"
+                        android:hint="@string/text_country_necessarily"
                         android:lines="1"
                         android:layout_weight="1"
+                        android:id="@+id/fragment.create_beer.country"
+                        android:focusable="false"
                         />
                 </android.support.design.widget.TextInputLayout>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_chevron_right"
+                    android:id="@+id/fragment.create_beer.country_chevron"
                     />
             </LinearLayout>
 
@@ -88,6 +91,43 @@
 
                 />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/text_brand_necessarily"
+                        android:lines="1"
+                        android:layout_weight="1"
+                        android:id="@+id/fragment.create_beer.brand"
+                        android:focusable="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_chevron_right"
+                    android:id="@+id/fragment.create_beer.brand_chevron"
+                    />
+            </LinearLayout>
+
+            <ru.frosteye.ovsa.presentation.view.widget.Line
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorSplitter"
+                android:layout_marginTop="5dp"
+
+                />
 
         </LinearLayout>
     </ScrollView>

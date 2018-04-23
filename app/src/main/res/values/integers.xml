@@ -2,4 +2,5 @@
 <resources>
     <integer name="init_max_lites_text_view">5</integer>
     <integer name="step_items_load">30</integer>
+    <integer name="cnt_char_for_start_search">4</integer>
 </resources>

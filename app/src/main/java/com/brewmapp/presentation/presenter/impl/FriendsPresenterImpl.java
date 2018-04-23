@@ -1,25 +1,32 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.AddFriend;
+import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.presentation.view.contract.FriendsView;
 
@@ -38,10 +45,12 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
 
     private ListFriendsTask listFriendsTask;
     private AddFriend addFriend;
+    private FullSearchTask fullSearchTask;
     @Inject
-    public FriendsPresenterImpl(ListFriendsTask listFriendsTask,AddFriend addFriend) {
+    public FriendsPresenterImpl(ListFriendsTask listFriendsTask,AddFriend addFriend,FullSearchTask fullSearchTask) {
         this.listFriendsTask = listFriendsTask;
         this.addFriend = addFriend;
+        this.fullSearchTask = fullSearchTask;
     }
 
     @Override
@@ -132,6 +141,28 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
                 fragmentActivity.startActivity(intent);
             }
         }
+
+    }
+
+    @Override
+    public void searchFriends(FullSearchPackage fullSearchPackage) {
+        listFriendsTask.cancel();
+        enableControls(false);
+        fullSearchTask.execute(fullSearchPackage,new SimpleSubscriber<List<IFlexible>>(){
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
+                enableControls(true);
+                view.showFriends(iFlexibles);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                enableControls(true);
+                showMessage(e.getMessage());
+            }
+        });
 
     }
 }

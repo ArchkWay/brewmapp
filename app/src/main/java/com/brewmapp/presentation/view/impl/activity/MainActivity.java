@@ -33,6 +33,7 @@ import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -427,10 +428,14 @@ public class MainActivity extends BaseActivity
                                                 for (ChatDialog chatDialog:chatListDialogs)
                                                     cntUnread+=chatDialog.getUnread();
                                                 for (int i=0;i<menu.getAdapter().getItemCount();i++){
-                                                    TextView textView = (TextView) menu.getLayoutManager().getChildAt(i).findViewById(R.id.view_menuField_badget);
-                                                    if(MenuField.MESSAGES==menu.getAdapter().getItemId(i)) {
-                                                        textView.setVisibility(cntUnread == 0 ? View.GONE : View.VISIBLE);
-                                                        textView.setText(String.valueOf(cntUnread));
+                                                    try {
+                                                        TextView textView = (TextView) menu.getLayoutManager().getChildAt(i).findViewById(R.id.view_menuField_badget);
+                                                        if(MenuField.MESSAGES==menu.getAdapter().getItemId(i)) {
+                                                            textView.setVisibility(cntUnread == 0 ? View.GONE : View.VISIBLE);
+                                                            textView.setText(String.valueOf(cntUnread));
+                                                        }
+                                                    }catch (Exception e){
+                                                        Crashlytics.logException(e);
                                                     }
                                                 }
 

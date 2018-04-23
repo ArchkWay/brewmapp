@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 
@@ -17,4 +18,6 @@ public interface FriendsPresenter extends LivePresenter<FriendsView> {
     void setItemTouchHelper(RecyclerView list);
 
     void onClickItem(int code, Object payload, FragmentActivity fragmentActivity);
+
+    void searchFriends(FullSearchPackage fullSearchPackage);
 }

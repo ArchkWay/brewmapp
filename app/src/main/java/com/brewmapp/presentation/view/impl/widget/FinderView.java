@@ -121,4 +121,6 @@ public class FinderView extends BaseFrameLayout {
         input.clearFocus();
         hideInputKeyboard();
     }
+
+
 }

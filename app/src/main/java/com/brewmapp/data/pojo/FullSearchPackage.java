@@ -242,4 +242,5 @@ public class FullSearchPackage {
     public String getCityName() {
         return cityName;
     }
+
 }

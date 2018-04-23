@@ -1,14 +1,19 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +27,7 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.data.entity.wrapper.FriendsTitleInfo;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
@@ -45,6 +51,12 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     @BindView(R.id.fragment_friends_swipe) SwipeRefreshLayout swipe;
     @BindView(R.id.fragment_friends_requests) RecyclerView requests;
     @BindView(R.id.fragment_friends_friends) RecyclerView friends;
+    @BindView(R.id.fragment_friends_find_friends) RecyclerView find_friends;
+    @BindView(R.id.fragment_friends_container_show_friends)    LinearLayout container_show_friends;
+    @BindView(R.id.fragment_friends_container_find_friends)    LinearLayout container_find_friends;
+    @BindView(R.id.fragment_friends_progressBar)    RelativeLayout progressBar;
+    @BindView(R.id.fragment_friends_text_info_pre_search)    TextView text_info_pre_search;
+
     //endregion
 
     //region Inject
@@ -53,9 +65,18 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
     //region Private
     private FlexibleAdapter<IFlexible> adapter_friends;
+    private FlexibleAdapter<IFlexible> adapter_find_friends;
     private FlexibleAdapter<IFlexible> adapter_requests;
     private List<IFlexible> original_friends=new ArrayList<>();
+    private List<IFlexible> original_find_friends=new ArrayList<>();
     private List<IFlexible> original_requests=new ArrayList<>();
+    private final int MODE_SHOW_FRIENDS=0;
+    private final int MODE_FIND_FRIENDS=1;
+    private FullSearchPackage fullSearchPackage=new FullSearchPackage();
+    private boolean enabled_control=true;
+    private int mode=MODE_SHOW_FRIENDS;
+    private int cnt_char_for_start_search;
+
     //endregion
 
     //region Impl FriendsFragment
@@ -72,11 +93,18 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         });
 
         search.setListener(string -> {
-            adapter_friends.setSearchText(string);
-            adapter_friends.filterItems(original_friends);
-            adapter_requests.setSearchText(string);
-            adapter_requests.filterItems(original_requests);
+//            adapter_friends.setSearchText(string);
+//            adapter_friends.filterItems(original_friends);
+//            adapter_requests.setSearchText(string);
+//            adapter_requests.filterItems(original_requests);
+            mode=TextUtils.isEmpty(string)?MODE_SHOW_FRIENDS:MODE_FIND_FRIENDS;
+
+            prepQueryFriends(string);
+
+            tuneModeView();
+
         });
+        search.setEnabled(false);
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
         adapter_friends = new FlexibleModelAdapter<>(original_friends, (code, payload) -> presenter.onClickItem(code, payload,getActivity()));
@@ -89,10 +117,20 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         requests.setLayoutManager(new LinearLayoutManager(getActivity()));
         requests.setAdapter(adapter_requests);
 
+
+        adapter_find_friends= new FlexibleModelAdapter<>(original_find_friends, (code, payload) -> presenter.onClickItem(code, payload,getActivity()));
+        find_friends.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
+        find_friends.setLayoutManager(new LinearLayoutManager(getActivity()));
+        find_friends.setAdapter(adapter_find_friends);
+
         presenter.setItemTouchHelper(friends);
 
+        cnt_char_for_start_search=getResources().getInteger(R.integer.cnt_char_for_start_search);
+
+        tuneModeView();
 
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -174,46 +212,120 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     @Override
     public void enableControls(boolean enabled, int code) {
         swipe.setRefreshing(!enabled);
+        enabled_control=enabled;
     }
 
     @Override
     public void showFriends(List<IFlexible> list) {
-        original_requests.clear();
-        original_friends.clear();
+        search.setEnabled(true);
+        switch (mode){
+            case MODE_SHOW_FRIENDS:
+                //region Show friend
+                original_requests.clear();
+                original_friends.clear();
 
-        Iterator<IFlexible> iterator=list.iterator();
-        while (iterator.hasNext()){
+                Iterator<IFlexible> iterator=list.iterator();
+                while (iterator.hasNext()){
 
-            IFlexible iFlexible=iterator.next();
+                    IFlexible iFlexible=iterator.next();
 
-            //region get status
-            int status=0;
-            if(iFlexible instanceof FriendsTitleInfo)
-                status =((FriendsTitleInfo)iFlexible).getStatus();
-            else if (iFlexible instanceof ContactInfo){
-                status =((ContactInfo)iFlexible).getModel().getStatus();
-            }
-            //endregion
+                    //region get status
+                    int status=0;
+                    if(iFlexible instanceof FriendsTitleInfo)
+                        status =((FriendsTitleInfo)iFlexible).getStatus();
+                    else if (iFlexible instanceof ContactInfo){
+                        status =((ContactInfo)iFlexible).getModel().getStatus();
+                    }
+                    //endregion
 
-            //region fill items
-            switch (status){
-                case FriendsView.FRIENDS_REQUEST_IN:
-                case FriendsView.FRIENDS_REQUEST_OUT:
-                    original_requests.add(iFlexible);
-                    break;
-                case FriendsView.FRIENDS_NOW:
-                    original_friends.add(iFlexible);
-                    break;
-            }
-            //endregion
+                    //region fill items
+                    switch (status){
+                        case FriendsView.FRIENDS_REQUEST_IN:
+                        case FriendsView.FRIENDS_REQUEST_OUT:
+                            original_requests.add(iFlexible);
+                            break;
+                        case FriendsView.FRIENDS_NOW:
+                            original_friends.add(iFlexible);
+                            break;
+                    }
+                    //endregion
+                }
+
+                if(original_requests.size()>0)
+                    original_requests.add(0,new FriendsTitleInfo(getString(R.string.title_friends_request),FRIENDS_DEFAULT));
+
+                adapter_requests.notifyDataSetChanged();
+                adapter_friends.notifyDataSetChanged();
+                //endregion
+                break;
+            case MODE_FIND_FRIENDS:
+                //region Find Friends
+                original_find_friends.addAll(list);
+                adapter_find_friends.notifyDataSetChanged();
+                //endregion
+                break;
         }
-
-        if(original_requests.size()>0)
-            original_requests.add(0,new FriendsTitleInfo(getString(R.string.title_friends_request),FRIENDS_DEFAULT));
-
-        adapter_requests.notifyDataSetChanged();
-        adapter_friends.notifyDataSetChanged();
+        tuneModeView();
     }
     //endregion
+
+    //region Functions
+    private void tuneModeView() {
+
+        switch (mode){
+            case MODE_FIND_FRIENDS:
+                //region Tune MODE_FIND_FRIENDS
+                container_find_friends.setVisibility(View.VISIBLE);
+                container_show_friends.setVisibility(View.GONE);
+                text_info_pre_search.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                find_friends.setVisibility(View.GONE);
+
+                if(enabled_control){
+                    String strSearch=fullSearchPackage.getStringSearch();
+                    if(enabled_control&&strSearch.length()<=cnt_char_for_start_search){
+                        text_info_pre_search.setVisibility(View.VISIBLE);
+                        text_info_pre_search.setText(R.string.text_continue_input);
+                        text_info_pre_search.setTextColor(Color.BLUE);
+                    }else if(original_find_friends.size()==0){
+                        text_info_pre_search.setVisibility(View.VISIBLE);
+                        text_info_pre_search.setText(R.string.text_not_found_nothing);
+                        text_info_pre_search.setTextColor(Color.RED);
+                    }else {
+                        find_friends.setVisibility(View.VISIBLE);
+                    }
+                }else {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                //endregion
+                break;
+            case MODE_SHOW_FRIENDS:
+                //region Tune MODE_SHOW_FRIENDS
+                container_find_friends.setVisibility(View.GONE);
+                container_show_friends.setVisibility(View.VISIBLE);
+                //endregion
+                break;
+        }
+
+    }
+
+
+    private void prepQueryFriends(String string) {
+        fullSearchPackage.setPage(0);
+        fullSearchPackage.setStringSearch(string);
+        fullSearchPackage.setType(Keys.TYPE_USER);
+        original_find_friends.clear();
+        if(string.length()>cnt_char_for_start_search)
+            QueryFriends(fullSearchPackage);
+
+    }
+
+    private void QueryFriends(FullSearchPackage fullSearchPackage) {
+        presenter.searchFriends(fullSearchPackage);
+    }
+
+    //endregion
+
 
 }

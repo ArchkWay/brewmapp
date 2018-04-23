@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/invite_friend"
             android:id="@+id/view.friends.invite.text"
-            style="@style/AppTheme.Text.Georgia.BoldItalic"
+            style="@style/AppTheme.Text.Georgia.Bold2"
             android:textSize="@dimen/text_size_common_bigger"
             android:layout_centerInParent="true"
             android:textColor="@color/colorAccent"/>

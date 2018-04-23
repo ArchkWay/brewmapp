@@ -6,7 +6,7 @@
     android:textSize="@dimen/text_size_common_bigger"
     android:padding="@dimen/common_block_space_double_semi"
     android:textColor="@color/colorGray"
-    style="@style/AppTheme.Text.Georgia.BoldItalic"
+    style="@style/AppTheme.Text.Georgia.Bold2"
     android:paddingLeft="@dimen/common_block_space_double">
 
 </com.brewmapp.presentation.view.impl.widget.FriendsTitleView>

@@ -39,7 +39,7 @@
                         android:id="@+id/view.review.author"
                         android:textSize="@dimen/text_size_big_phone"
                         android:layout_marginBottom="@dimen/common_block_space_half"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        style="@style/AppTheme.Text.Georgia.Bold2"
                         android:text="@string/text_view_value_not_found"
                         />
 

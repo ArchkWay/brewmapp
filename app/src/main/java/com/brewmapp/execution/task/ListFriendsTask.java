@@ -73,7 +73,7 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
                 params = createParamsForType(FriendsView.FRIENDS_NOW);
                 response = executeCall(getApi().listFriends(params));
                 if(response.getModels().size()>0) {
-                    out.add(new FriendsTitleInfo(getString(R.string.friends),FriendsView.FRIENDS_NOW));
+                    //out.add(new FriendsTitleInfo(getString(R.string.friends),FriendsView.FRIENDS_NOW));
                     Iterator<ContactInfo> iterator=response.getModels().iterator();
                     while (iterator.hasNext())
                         iterator.next().getModel().setStatus(FriendsView.FRIENDS_NOW);

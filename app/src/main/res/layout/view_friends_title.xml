@@ -6,7 +6,7 @@
     android:textSize="@dimen/text_size_common"
     android:padding="@dimen/common_block_space_double_semi"
     android:textColor="@color/colorBlack"
-    style="@style/AppTheme.Text.Georgia.BoldItalic"
+    style="@style/AppTheme.Text.Georgia.Bold2"
     android:paddingLeft="@dimen/common_block_space_double"
     android:background="@color/bg_gray"
     >

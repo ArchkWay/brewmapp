@@ -25,8 +25,10 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.data.entity.wrapper.FriendsTitleInfo;
+import com.brewmapp.data.entity.wrapper.UserInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
@@ -97,7 +99,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 //            adapter_friends.filterItems(original_friends);
 //            adapter_requests.setSearchText(string);
 //            adapter_requests.filterItems(original_requests);
-            mode=TextUtils.isEmpty(string)?MODE_SHOW_FRIENDS:MODE_FIND_FRIENDS;
+            setMode(TextUtils.isEmpty(string)?MODE_SHOW_FRIENDS:MODE_FIND_FRIENDS);
 
             prepQueryFriends(string);
 
@@ -134,7 +136,8 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.add,menu);
+        //inflater.inflate(R.menu.add,menu);
+        inflater.inflate(R.menu.stub,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -260,11 +263,26 @@ public class FriendsFragment extends BaseFragment implements FriendsView
                 break;
             case MODE_FIND_FRIENDS:
                 //region Find Friends
-                original_find_friends.addAll(list);
-                adapter_find_friends.notifyDataSetChanged();
+                Iterator<IFlexible> infoIterator=list.iterator();
+                while (infoIterator.hasNext())
+                    original_find_friends.add(new ContactInfo(new Contact(((UserInfo) infoIterator.next()).getModel())));
+
+                //original_find_friends.addAll(list);
+                adapter_find_friends.notifyItemRangeInserted(0,original_find_friends.size());
                 //endregion
                 break;
         }
+        tuneModeView();
+    }
+
+    @Override
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    @Override
+    public void ModeShowFrendsON() {
+        setMode(MODE_SHOW_FRIENDS);
         tuneModeView();
     }
     //endregion
@@ -315,7 +333,9 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(string);
         fullSearchPackage.setType(Keys.TYPE_USER);
+        //adapter_find_friends.notifyItemRangeRemoved(0,original_find_friends.size());
         original_find_friends.clear();
+        adapter_find_friends.notifyDataSetChanged();
         if(string.length()>cnt_char_for_start_search)
             QueryFriends(fullSearchPackage);
 

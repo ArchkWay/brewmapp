@@ -36,7 +36,7 @@
     <string name="enter_password_hint">Указанный номер телефона и пароль можно использовать для входа в Ваш аккаунт</string>
     <string name="new_password_hint">Придумайте ваш пароль</string>
     <string name="resend_code">Выслать код</string>
-    <string name="find_friend">Поиск в списке друзей</string>
+    <string name="find_friend">Поиск новых друзей</string>
     <string name="find">Искать</string>
     <string name="done">Готово</string>
     <string name="invite_friend">Пригласить друга</string>
@@ -566,5 +566,6 @@
     <string name="text_more_chars">Продолжайте набор, длина запроса должна быть больше 3 символов</string>
     <string name="text_button_friend_delete">Удалить</string>
     <string name="text_button_friend_accept">Дружить</string>
+    <string name="text_button_friend_select">Выбрать</string>
 
 </resources>

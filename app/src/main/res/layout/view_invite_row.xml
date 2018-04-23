@@ -43,7 +43,7 @@
                 android:ellipsize="marquee"
                 android:lines="1"
                 android:scrollHorizontally="true"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+                style="@style/AppTheme.Text.Georgia.Bold2"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

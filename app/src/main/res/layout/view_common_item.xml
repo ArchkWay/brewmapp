@@ -39,7 +39,7 @@
                 android:ellipsize="marquee"
                 android:lines="1"
                 android:scrollHorizontally="true"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+                style="@style/AppTheme.Text.Georgia.Bold2"/>
         </LinearLayout>
     </HorizontalScrollView>
 </com.brewmapp.presentation.view.impl.widget.CommonItemView>

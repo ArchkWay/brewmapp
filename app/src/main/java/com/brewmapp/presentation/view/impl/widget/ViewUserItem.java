@@ -13,8 +13,11 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.squareup.picasso.Picasso;
@@ -93,6 +96,16 @@ public class ViewUserItem extends BaseLinearLayout implements InteractiveModelVi
                         RequestCodes.REQUEST_PROFILE_FRIEND
                 );
             });
+        }else if(getContext() instanceof MainActivity){
+            Contact contact=new Contact();
+            contact.setFriend_info(user);
+            setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_CLICK,contact));
+//            setOnClickListener(view -> {
+//                ((Activity) getContext()).startActivityForResult(
+//                        new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileEditActivity.class),
+//                        RequestCodes.REQUEST_PROFILE_FRIEND
+//                );
+//            });
         }
 
     }

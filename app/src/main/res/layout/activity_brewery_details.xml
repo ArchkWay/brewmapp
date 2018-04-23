@@ -66,7 +66,7 @@
 
                     <TextView
                         android:id="@+id/activity.brewery.details.name"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        style="@style/AppTheme.Text.Georgia.Bold2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -186,7 +186,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        style="@style/AppTheme.Text.Georgia.Bold2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -221,7 +221,7 @@
                     >
 
                     <TextView
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        style="@style/AppTheme.Text.Georgia.Bold2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

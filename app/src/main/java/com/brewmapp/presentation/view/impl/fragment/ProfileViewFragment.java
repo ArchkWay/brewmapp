@@ -150,7 +150,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.friens,menu);
+        inflater.inflate(R.menu.stub,menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

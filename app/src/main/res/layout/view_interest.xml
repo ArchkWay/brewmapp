@@ -46,7 +46,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/view.interest.avatar"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    style="@style/AppTheme.Text.Georgia.Bold2"
                     android:lines="1"
                     android:ellipsize="end"
                     />

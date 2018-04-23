@@ -13,6 +13,15 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 
 public class Contact implements IPerson {
 
+
+    public Contact(){
+
+    }
+
+    public Contact(User user){
+        setFriend_info(user);
+    }
+
     @SerializedName(Keys.FRIEND_ID)
     private int id;
 

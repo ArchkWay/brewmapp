@@ -43,11 +43,20 @@
                 android:layout_height="wrap_content"
                 android:text="@string/invite_friends"
                 android:id="@+id/view.friends.invite.text"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                style="@style/AppTheme.Text.Georgia.Bold2"
                 android:textSize="@dimen/text_size_common_bigger"
                 android:layout_centerInParent="true"
                 android:textColor="@color/colorAccent"/>
         </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:text="Поиск друзей"
+            style="@style/AppTheme.Text.Georgia.Bold2"
+            android:gravity="top|left"
+            android:background="@color/bg_gray"
+            android:padding="10dp"
+            />
 
         <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
             android:layout_width="match_parent"

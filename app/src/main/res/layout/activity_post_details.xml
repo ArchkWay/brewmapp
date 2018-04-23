@@ -51,7 +51,7 @@
                 android:id="@+id/activity.post.details.title"
                 android:textSize="20dp"
                 android:text="@string/text_view_value_not_found"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                style="@style/AppTheme.Text.Georgia.Bold2"
                 />
             <TextView
                 android:layout_width="wrap_content"

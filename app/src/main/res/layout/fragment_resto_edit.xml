@@ -63,7 +63,7 @@
 
                     <TextView
                         android:id="@+id/fragment.edit.resto.name"
-                        style="@style/AppTheme.Text.Georgia.BoldItalic"
+                        style="@style/AppTheme.Text.Georgia.Bold2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

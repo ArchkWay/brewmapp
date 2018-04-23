@@ -435,7 +435,7 @@ public class MainActivity extends BaseActivity
                                                             textView.setText(String.valueOf(cntUnread));
                                                         }
                                                     }catch (Exception e){
-                                                        Crashlytics.logException(e);
+                                                        //Crashlytics.logException(e);
                                                     }
                                                 }
 

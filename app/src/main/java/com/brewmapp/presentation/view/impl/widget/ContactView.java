@@ -1,11 +1,9 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,11 +11,9 @@ import android.widget.TextView;
 
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
-import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.ChatDialog;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.task.ActivetyUsers;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
@@ -28,14 +24,9 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 import com.brewmapp.data.entity.Contact;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import ru.frosteye.ovsa.execution.network.request.RequestParams;
-import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
@@ -64,6 +55,7 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
     private Listener listener;
     private final int MODE_VIEW_FRIENDS=0;
     private final int MODE_VIEW_MESSAGE=1;
+    private final int MODE_VIEW_USERS_LIST =2;
     private int mode;
 
     public ContactView(Context context) {
@@ -142,36 +134,43 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
 
         //region Visible
         ChatDialog chatDialog=model.getChatDialog();
-        if(chatDialog==null)
-            mode=MODE_VIEW_FRIENDS;
-        else
-            mode=MODE_VIEW_MESSAGE;
+        if(chatDialog==null) {
+            if (model.getUser() == null)
+                mode = MODE_VIEW_USERS_LIST;
+            else
+                mode = MODE_VIEW_FRIENDS;
+        }else {
+            mode = MODE_VIEW_MESSAGE;
+        }
 
+        button_friend_accept.setVisibility(GONE);
+        button_friend_delete.setVisibility(GONE);
+        badget.setVisibility(GONE);
+        last_message.setVisibility(GONE);
+        contaiter1.setOrientation(VERTICAL);
         switch (mode){
             case MODE_VIEW_FRIENDS:
                 //region MODE_VIEW_FRIENDS
-                contaiter1.setOrientation(VERTICAL);
-                last_message.setVisibility(GONE);
-                button_friend_accept.setVisibility(GONE);
-                button_friend_delete.setVisibility(GONE);
-                button_friend_accept.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_ACCEPT,model));
-                button_friend_delete.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
+
                 int status=model.getStatus();
                 switch (status){
                     case FriendsView.FRIENDS_REQUEST_IN:
                         button_friend_accept.setVisibility(VISIBLE);
                         button_friend_delete.setVisibility(VISIBLE);
+                        button_friend_accept.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_ACCEPT,model));
+                        button_friend_delete.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
                         break;
                     case FriendsView.FRIENDS_NOW:
                     case FriendsView.FRIENDS_REQUEST_OUT:
                         button_friend_delete.setVisibility(VISIBLE);
+                        button_friend_delete.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
                         break;
                 }
                 //endregion
                 break;
             case MODE_VIEW_MESSAGE:
                 //region MODE_VIEW_MESSAGE
-                badget.setVisibility(GONE);
+                contaiter1.setOrientation(HORIZONTAL);
                 last_message.setVisibility(VISIBLE);
                 last_message.setText(chatDialog.getLastMessage().getText());
                 if(chatDialog.getUnread()>0){
@@ -179,6 +178,10 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
                     badget.setText(String.valueOf(chatDialog.getUnread()));
                 }
                 //endregion
+                break;
+            case MODE_VIEW_USERS_LIST:
+                button_friend_accept.setVisibility(VISIBLE);
+                button_friend_accept.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT,model));
                 break;
         }
 

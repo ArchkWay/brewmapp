@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.brewmapp.R;
@@ -162,29 +163,30 @@ public class MapUtils {
 
     private static Date parseDate(String timestamp) {
         Locale locale=getLocaleEn();
+        if(!TextUtils.isEmpty(timestamp)) {
 
-        try {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(timestamp+" GMT+03:00");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if(locale!=null)
-                return new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", locale).parse(timestamp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            if(locale!=null) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", locale);
-                Date date=simpleDateFormat.parse(timestamp);
-                return date;
+            try {
+                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(timestamp + " GMT+03:00");
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
+            try {
+                if (locale != null)
+                    return new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", locale).parse(timestamp);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (locale != null) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss z", locale);
+                    Date date = simpleDateFormat.parse(timestamp);
+                    return date;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 }

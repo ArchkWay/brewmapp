@@ -57,7 +57,7 @@
                     android:textSize="@dimen/text_size_common_bigger"
                     android:lines="1"
                     android:ellipsize="end"
-                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    style="@style/AppTheme.Text.Georgia.Bold2"
                     android:text="@string/text_view_value_not_found"
                     android:visibility="gone"
                     />

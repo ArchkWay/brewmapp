@@ -42,7 +42,7 @@
                     android:textSize="@dimen/text_size_common_biggest"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/view.menu.title"
-                    style="@style/AppTheme.Text.Georgia.BoldItalic"
+                    style="@style/AppTheme.Text.Georgia.Bold2"
                     android:lines="1"
                     android:ellipsize="end"
                     android:layout_weight="1"

@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -31,6 +33,10 @@ public class InviteActivity extends BaseActivity
     @BindView(R.id.activity_invite_switter) ImageView twitter;
     @BindView(R.id.activity_invite_vk) ImageView vk;
     @BindView(R.id.activity_invite_brew) ImageView brew;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
+
     //endregion
 
     //region Inject
@@ -51,6 +57,11 @@ public class InviteActivity extends BaseActivity
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
+
         enableBackButton();
         facebook.setOnClickListener(v -> presenter.onFacebookShare());
         vk.setOnClickListener(listener);

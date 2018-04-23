@@ -100,4 +100,14 @@ public class FriendsActivity extends BaseActivity implements FriendsView {
         original = list;
         adapter.updateDataSet(list);
     }
+
+    @Override
+    public void setMode(int mode) {
+
+    }
+
+    @Override
+    public void ModeShowFrendsON() {
+
+    }
 }

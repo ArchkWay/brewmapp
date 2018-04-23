@@ -40,6 +40,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
@@ -83,6 +84,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
             @Override
             public void onNext(List<IFlexible> result) {
                 enableControls(true);
+                view.ModeShowFrendsON();
                 view.showFriends(result);
             }
         });
@@ -136,17 +138,105 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     @Override
     public void onClickItem(int code, Object payload, FragmentActivity fragmentActivity) {
         Contact contact=((Contact) payload);
+        final int id_friend=contact.getFriend_info().getId();
+
         switch (code){
             case FriendsView.FRIENDS_ACTION_CLICK:
+                //region User Details
                 Intent intent=new Intent(
                         String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
-                        Uri.parse(String.valueOf(contact.getFriend_info().getId())),
+                        Uri.parse(String.valueOf(id_friend)),
                         fragmentActivity, ProfileEditActivity.class);
                 fragmentActivity.startActivity(intent);
+                //endregion
                 break;
             case FriendsView.FRIENDS_ACTION_ACCEPT:
+                //region Accept friend
+                new DialogConfirm("Добавить в друзья?", fragmentActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.USER_ID, id_friend);
+                        allowFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                            @Override
+                            public void onNext(String s) {
+                                super.onNext(s);
+                                loadFriends(false);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                showMessage(e.getMessage());
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                //endregion
                 break;
             case FriendsView.FRIENDS_ACTION_DELETE:
+                //region Delete Friend
+                new DialogConfirm("Удалить?", fragmentActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.USER_ID, id_friend);
+                        deleteFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                            @Override
+                            public void onNext(String s) {
+                                super.onNext(s);
+                                loadFriends(false);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                showMessage(e.getMessage());
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                //endregion
+                break;
+            case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
+                new DialogConfirm("Дружить?", fragmentActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.FRIEND_ID, id_friend);
+                        addFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                            @Override
+                            public void onNext(String s) {
+                                super.onNext(s);
+                                loadFriends(true);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                showMessage(e.getMessage());
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
                 break;
         }
 //        switch (contact.getStatus()){

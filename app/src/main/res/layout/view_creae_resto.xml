@@ -43,7 +43,7 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="8dp"
-                style="@style/AppTheme.Text.Georgia.BoldItalic"
+                style="@style/AppTheme.Text.Georgia.Bold2"
 
                 android:layout_marginStart="8dp" />
 

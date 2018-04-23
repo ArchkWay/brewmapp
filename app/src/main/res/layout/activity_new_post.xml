@@ -19,7 +19,7 @@
         android:paddingTop="@dimen/common_block_space_double_semi"
         android:paddingBottom="@dimen/common_block_space"
         android:textSize="@dimen/text_size_common_bigger"
-        style="@style/AppTheme.Text.Georgia.BoldItalic"
+        style="@style/AppTheme.Text.Georgia.Bold2"
         android:textStyle="bold"
         android:lineSpacingExtra="4dp"
         android:inputType="textCapSentences"

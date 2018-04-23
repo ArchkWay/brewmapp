@@ -17,7 +17,7 @@
         android:id="@+id/view.profileCounter.counter"
         android:textSize="@dimen/text_size_big_phone_bigger"
         android:layout_marginBottom="@dimen/common_block_space_half"
-        style="@style/AppTheme.Text.Georgia.BoldItalic"/>
+        style="@style/AppTheme.Text.Georgia.Bold2"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,11 +48,13 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
     @BindView(R.id.view_contact_avatar) ImageView avatar;
     @BindView(R.id.view_contact_subtitle) TextView subtitle;
     @BindView(R.id.view_contact_username) TextView username;
-    @BindView(R.id.view_contact_online) TextView online;
+    //@BindView(R.id.view_contact_online) TextView online;
     @BindView(R.id.view_contact_contaiter1)    LinearLayout contaiter1;
     @BindView(R.id.view_contact_contaiter0)    LinearLayout contaiter0;
     @BindView(R.id.view_contact_last_message)    TextView last_message;
     @BindView(R.id.view_contact_badget)    TextView badget;
+    @BindView(R.id.view_contact_button_friend_accept)    Button button_friend_accept;
+    @BindView(R.id.view_contact_button_friend_delete)    Button button_friend_delete;
 
     @Inject
     ActivetyUsers activetyUsers;
@@ -59,6 +62,9 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
 
     private Contact model;
     private Listener listener;
+    private final int MODE_VIEW_FRIENDS=0;
+    private final int MODE_VIEW_MESSAGE=1;
+    private int mode;
 
     public ContactView(Context context) {
         super(context);
@@ -93,7 +99,7 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
         this.model = model;
 
         setOnClickListener(view -> {
-            listener.onModelAction(0,model);
+            listener.onModelAction(FriendsView.FRIENDS_ACTION_CLICK,model);
         });
 
         //region fill text image
@@ -120,34 +126,63 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
 
         RequestParams requestParams=new RequestParams();
         requestParams.addParam(Keys.USER_ID,model.getFriend_info().getId());
-        activetyUsers.execute(requestParams,new SimpleSubscriber<List<User>>(){
-            @Override
-            public void onNext(List<User> users) {
-                super.onNext(users);
-                Drawable drawable;
-                if(users.size()>0)
-                    drawable=(getContext().getResources().getDrawable(R.drawable.bg_round_green));
-                else
-                    drawable=(getContext().getResources().getDrawable(R.drawable.bg_round_gray));
-                online.setBackground(drawable);
-            }
-        });
+//        activetyUsers.execute(requestParams,new SimpleSubscriber<List<User>>(){
+//            @Override
+//            public void onNext(List<User> users) {
+//                super.onNext(users);
+//                Drawable drawable;
+//                if(users.size()>0)
+//                    drawable=(getContext().getResources().getDrawable(R.drawable.bg_round_green));
+//                else
+//                    drawable=(getContext().getResources().getDrawable(R.drawable.bg_round_gray));
+//                online.setBackground(drawable);
+//            }
+//        });
         //endregion
 
-        badget.setVisibility(GONE);
+        //region Visible
         ChatDialog chatDialog=model.getChatDialog();
-        if(chatDialog==null) {
-            contaiter1.setOrientation(VERTICAL);
-            last_message.setVisibility(GONE);
+        if(chatDialog==null)
+            mode=MODE_VIEW_FRIENDS;
+        else
+            mode=MODE_VIEW_MESSAGE;
 
-        }else {
-            last_message.setVisibility(VISIBLE);
-            last_message.setText(chatDialog.getLastMessage().getText());
-            if(chatDialog.getUnread()>0){
-                badget.setVisibility(VISIBLE);
-                badget.setText(String.valueOf(chatDialog.getUnread()));
-            }
+        switch (mode){
+            case MODE_VIEW_FRIENDS:
+                //region MODE_VIEW_FRIENDS
+                contaiter1.setOrientation(VERTICAL);
+                last_message.setVisibility(GONE);
+                button_friend_accept.setVisibility(GONE);
+                button_friend_delete.setVisibility(GONE);
+                button_friend_accept.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_ACCEPT,model));
+                button_friend_delete.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
+                int status=model.getStatus();
+                switch (status){
+                    case FriendsView.FRIENDS_REQUEST_IN:
+                        button_friend_accept.setVisibility(VISIBLE);
+                        button_friend_delete.setVisibility(VISIBLE);
+                        break;
+                    case FriendsView.FRIENDS_NOW:
+                    case FriendsView.FRIENDS_REQUEST_OUT:
+                        button_friend_delete.setVisibility(VISIBLE);
+                        break;
+                }
+                //endregion
+                break;
+            case MODE_VIEW_MESSAGE:
+                //region MODE_VIEW_MESSAGE
+                badget.setVisibility(GONE);
+                last_message.setVisibility(VISIBLE);
+                last_message.setText(chatDialog.getLastMessage().getText());
+                if(chatDialog.getUnread()>0){
+                    badget.setVisibility(VISIBLE);
+                    badget.setText(String.valueOf(chatDialog.getUnread()));
+                }
+                //endregion
+                break;
         }
+
+        //endregion
     }
 
     @Override

@@ -564,5 +564,7 @@
     <string name="text_view_avg_check">Средний чек</string>
     <string name="text_description">Описание</string>
     <string name="text_more_chars">Продолжайте набор, длина запроса должна быть больше 3 символов</string>
+    <string name="text_button_friend_delete">Удалить</string>
+    <string name="text_button_friend_accept">Дружить</string>
 
 </resources>

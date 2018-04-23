@@ -1,6 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.pojo.FullSearchPackage;
@@ -26,6 +28,8 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.AddFriend;
+import com.brewmapp.execution.task.AllowFriend;
+import com.brewmapp.execution.task.DeleteFriend;
 import com.brewmapp.execution.task.FullSearchTask;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.presentation.view.contract.FriendsView;
@@ -35,7 +39,9 @@ import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
@@ -46,11 +52,16 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     private ListFriendsTask listFriendsTask;
     private AddFriend addFriend;
     private FullSearchTask fullSearchTask;
+    private DeleteFriend deleteFriend;
+    private AllowFriend allowFriend;
+
     @Inject
-    public FriendsPresenterImpl(ListFriendsTask listFriendsTask,AddFriend addFriend,FullSearchTask fullSearchTask) {
+    public FriendsPresenterImpl(ListFriendsTask listFriendsTask,AddFriend addFriend,FullSearchTask fullSearchTask,DeleteFriend deleteFriend,AllowFriend allowFriend) {
         this.listFriendsTask = listFriendsTask;
         this.addFriend = addFriend;
         this.fullSearchTask = fullSearchTask;
+        this.allowFriend = allowFriend;
+        this.deleteFriend = deleteFriend;
     }
 
     @Override
@@ -125,22 +136,35 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     @Override
     public void onClickItem(int code, Object payload, FragmentActivity fragmentActivity) {
         Contact contact=((Contact) payload);
-        switch (contact.getStatus()){
-            case FriendsView.FRIENDS_REQUEST_IN:
-            case FriendsView.FRIENDS_REQUEST_OUT:
-                new DialogManageContact(fragmentActivity,fragmentActivity.getSupportFragmentManager(),contact,FriendsPresenterImpl.this);
-                break;
-            case FriendsView.FRIENDS_NOW:{
-                Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, fragmentActivity, MultiFragmentActivity.class);
-                User user=contact.getFriend_info();
-                User friend=new User();
-                friend.setId(user.getId());
-                friend.setFirstname(user.getFirstname());
-                friend.setLastname(user.getLastname());
-                intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
+        switch (code){
+            case FriendsView.FRIENDS_ACTION_CLICK:
+                Intent intent=new Intent(
+                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        Uri.parse(String.valueOf(contact.getFriend_info().getId())),
+                        fragmentActivity, ProfileEditActivity.class);
                 fragmentActivity.startActivity(intent);
-            }
+                break;
+            case FriendsView.FRIENDS_ACTION_ACCEPT:
+                break;
+            case FriendsView.FRIENDS_ACTION_DELETE:
+                break;
         }
+//        switch (contact.getStatus()){
+//            case FriendsView.FRIENDS_REQUEST_IN:
+//            case FriendsView.FRIENDS_REQUEST_OUT:
+//                new DialogManageContact(fragmentActivity,fragmentActivity.getSupportFragmentManager(),contact,FriendsPresenterImpl.this);
+//                break;
+//            case FriendsView.FRIENDS_NOW:{
+//                Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, fragmentActivity, MultiFragmentActivity.class);
+//                User user=contact.getFriend_info();
+//                User friend=new User();
+//                friend.setId(user.getId());
+//                friend.setFirstname(user.getFirstname());
+//                friend.setLastname(user.getLastname());
+//                intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
+//                fragmentActivity.startActivity(intent);
+//            }
+//        }
 
     }
 

@@ -57,7 +57,6 @@
             android:layout_marginEnd="8dp"
             android:layout_gravity="center_horizontal"
             android:id="@+id/common.toolbar.title"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/text_size_big_phone"

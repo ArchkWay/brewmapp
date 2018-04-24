@@ -110,30 +110,30 @@
     </style>
 
     <style name="AppTheme.Paragraph.Italic">
-        <item name="fontPath">fonts/italic.ttf</item>
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
     </style>
 
     <style name="AppTheme.Text.Georgia">
-        <item name="fontPath">fonts/italic.ttf</item>
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
     </style>
 
     <style name="AppTheme.Text.Georgia.Bold">
-        <item name="fontPath">fonts/bold.ttf</item>
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
     </style>
 
     <style name="AppTheme.Text.Georgia.Bold2">
-        <item name="fontPath">fonts/bold.ttf</item>
-        <!--<item name="fontPath">fonts/bold_italic.ttf</item>-->
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
+        <!--<item name="fontPath">fonts/bold_GillSans-SemiBold.ttf</item>-->
         <!--<item name="android:textStyle">bold</item>-->
         <!--<item name="android:textStyle">bold|italic</item>-->
     </style>
 
     <style name="AppTheme.Text.Georgia.Italic">
-        <item name="fontPath">fonts/italic.ttf</item>
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
     </style>
 
     <style name="AppTheme.Text.Georgia.Italic.TitleResto">
-        <item name="fontPath">fonts/italic.ttf</item>
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
         <item name="android:textColor">@color/colorButtonRed</item>
         <item name="android:textSize">@dimen/text_size_big_phone_bigger</item>
     </style>
@@ -172,7 +172,7 @@
     </style>
 
     <style name="AppTheme.Text.Georgia.Italic.TitleResto.ListEvent">
-        <item name="fontPath">fonts/italic.ttf</item>
+        <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">@dimen/text_size_common_bigger</item>
     </style>

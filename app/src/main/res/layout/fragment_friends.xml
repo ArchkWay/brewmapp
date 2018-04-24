@@ -23,65 +23,60 @@
         android:orientation="vertical"
         >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/ovsa_bg_selector_simple"
-            android:id="@+id/fragment.friends.addFriend"
-            android:paddingLeft="@dimen/common_block_space_double"
-            android:paddingRight="@dimen/common_block_space_double" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/size_icon_24"
-                android:layout_toLeftOf="@+id/view.friends.invite.text"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_add_friend"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/invite_friends"
-                android:id="@+id/view.friends.invite.text"
-                style="@style/AppTheme.Text.Georgia.Bold2"
-                android:textSize="@dimen/text_size_common_bigger"
-                android:layout_centerInParent="true"
-                android:textColor="@color/colorAccent"/>
-        </RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:text="Поиск друзей"
-            style="@style/AppTheme.Text.Georgia.Bold2"
-            android:gravity="top|left"
-            android:background="@color/bg_gray"
-            android:padding="10dp"
-            />
 
         <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fragment.friends.swipe">
-            <ScrollView
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@drawable/ovsa_bg_selector_simple"
+                        android:id="@+id/fragment.friends.addFriend"
+                        android:paddingLeft="@dimen/common_block_space_double"
+                        android:paddingRight="@dimen/common_block_space_double" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/size_icon_24"
+                            android:layout_toLeftOf="@+id/view.friends.invite.text"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_add_friend"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/invite_friends"
+                            android:id="@+id/view.friends.invite.text"
+                            style="@style/AppTheme.Text.Georgia.Bold2"
+                            android:textSize="@dimen/text_size_common_bigger"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/colorAccent"/>
+                    </RelativeLayout>
+
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/fragment.friends.friends"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:nestedScrollingEnabled="false"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/fragment.friends.requests"
-                        android:layout_weight="10"/>
+                        android:layout_weight="10"
+                        android:nestedScrollingEnabled="false"/>
                 </LinearLayout>
-            </ScrollView>
+            </android.support.v4.widget.NestedScrollView>
         </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 
     </LinearLayout>
@@ -91,7 +86,8 @@
         android:layout_height="match_parent"
         android:id="@+id/fragment.friends.container_find_friends"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

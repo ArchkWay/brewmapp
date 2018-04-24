@@ -513,7 +513,7 @@
     <string name="text_view_event">Событие</string>
     <string name="title_call_phone_permission">Исходящий вызов</string>
     <string name="text_call_phone_permission">Для совершения вызова требуется соответствующее разрешение</string>
-    <string name="text_continue_input">Продолжайте ввод</string>
+    <string name="text_continue_input">Для начала поиска, продолжите ввод </string>
     <string name="list_all_photos">Общий список</string>
     <string name="i_am_owner">Я владелец</string>
     <string name="you_first_last_name">Ваше фамилия имя и отчество</string>
@@ -565,7 +565,7 @@
     <string name="text_description">Описание</string>
     <string name="text_more_chars">Продолжайте набор, длина запроса должна быть больше 3 символов</string>
     <string name="text_button_friend_delete">Удалить</string>
-    <string name="text_button_friend_accept">Дружить</string>
+    <string name="text_button_friend_accept">Добавить</string>
     <string name="text_button_friend_select">Выбрать</string>
 
 </resources>

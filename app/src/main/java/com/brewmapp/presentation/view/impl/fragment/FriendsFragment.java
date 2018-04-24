@@ -6,8 +6,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -124,6 +127,11 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         find_friends.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         find_friends.setLayoutManager(new LinearLayoutManager(getActivity()));
         find_friends.setAdapter(adapter_find_friends);
+        find_friends.setOnTouchListener((v, event) -> {
+            if(search.isFocused())
+                search.clearFocus();
+            return false;
+        });
 
         presenter.setItemTouchHelper(friends);
 
@@ -209,6 +217,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         search.clearFocus();
     }
 
+
     //endregion
 
     //region Impl FriendsView
@@ -263,6 +272,9 @@ public class FriendsFragment extends BaseFragment implements FriendsView
                 break;
             case MODE_FIND_FRIENDS:
                 //region Find Friends
+                if(original_find_friends.size()==0&&list.size()>0){
+                    original_find_friends.add(0,new FriendsTitleInfo(getString(R.string.action_find_friends),FRIENDS_DEFAULT));
+                }
                 Iterator<IFlexible> infoIterator=list.iterator();
                 while (infoIterator.hasNext())
                     original_find_friends.add(new ContactInfo(new Contact(((UserInfo) infoIterator.next()).getModel())));
@@ -304,7 +316,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
                     if(enabled_control&&strSearch.length()<=cnt_char_for_start_search){
                         text_info_pre_search.setVisibility(View.VISIBLE);
                         text_info_pre_search.setText(R.string.text_continue_input);
-                        text_info_pre_search.setTextColor(Color.BLUE);
+                        text_info_pre_search.setTextColor(Color.GRAY);
                     }else if(original_find_friends.size()==0){
                         text_info_pre_search.setVisibility(View.VISIBLE);
                         text_info_pre_search.setText(R.string.text_not_found_nothing);

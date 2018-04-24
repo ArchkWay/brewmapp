@@ -122,5 +122,10 @@ public class FinderView extends BaseFrameLayout {
         hideInputKeyboard();
     }
 
+    @Override
+    public boolean isFocused(){
+        return input.isFocused();
+    }
+
 
 }

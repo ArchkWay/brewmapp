@@ -37,7 +37,7 @@ public class BeerMap extends Application {
     public void onCreate() {
         super.onCreate();
         appContext=getApplicationContext();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
@@ -46,14 +46,14 @@ public class BeerMap extends Application {
 
         Paper.init(this);
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-                Crashlytics.logException(paramThrowable);
-                Paper.book().destroy();
-                RestartApp();
-            }
-        });
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//            @Override
+//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+//                Crashlytics.logException(paramThrowable);
+//                Paper.book().destroy();
+//                RestartApp();
+//            }
+//        });
 
     }
 

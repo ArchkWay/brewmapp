@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/view.contact.username"
-                    android:textSize="@dimen/text_size_common_bigger"
+                    android:textSize="@dimen/text_size_common"
                     android:ellipsize="end"
                     android:lines="1"
                     android:scrollHorizontally="true"

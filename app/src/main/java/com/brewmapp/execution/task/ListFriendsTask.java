@@ -30,9 +30,10 @@ import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
  * Created by oleg on 26.07.17.
  */
 
-public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
+public class ListFriendsTask extends BaseNetworkTask<String, List<IFlexible>> {
 
     private UserRepo userRepo;
+    private String user_id;
 
     @Inject
     public ListFriendsTask(MainThread mainThread,
@@ -43,7 +44,8 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
     }
 
     @Override
-    protected Observable<List<IFlexible>> prepareObservable(Void v) {
+    protected Observable<List<IFlexible>> prepareObservable(String user_id) {
+        this.user_id = user_id;
         return Observable.create(subscriber -> {
             try {
                 ListResponse<ContactInfo>  response;
@@ -104,7 +106,7 @@ public class ListFriendsTask extends BaseNetworkTask<Void, List<IFlexible>> {
 
     private WrapperParams createParamsForType(int type) {
         WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-        wrapperParams.addParam(Keys.USER_ID, userRepo.load().getId());
+        wrapperParams.addParam(Keys.USER_ID, user_id==null?userRepo.load().getId():user_id);
         wrapperParams.addParam(Keys.STATUS, type);
         return wrapperParams;
     }

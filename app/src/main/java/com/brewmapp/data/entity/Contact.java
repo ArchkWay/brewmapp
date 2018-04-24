@@ -1,5 +1,6 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.BuildConfig;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -20,7 +21,10 @@ public class Contact implements IPerson {
 
     public Contact(User user){
         setFriend_info(user);
+        setUser_getThumb(user.getThumbnail());
     }
+
+    private String user_getThumb;
 
     @SerializedName(Keys.FRIEND_ID)
     private int id;
@@ -84,4 +88,21 @@ public class Contact implements IPerson {
     public void setChatDialog(ChatDialog chatDialog) {
         this.chatDialog = chatDialog;
     }
+
+    public String getUser_getThumb() {
+        return user_getThumb;
+    }
+    public String getUser_getThumb_Formatted() {
+
+        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
+            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
+
+        return user_getThumb;
+    }
+
+    public void setUser_getThumb(String user_getThumb) {
+        this.user_getThumb = user_getThumb;
+    }
+
+
 }

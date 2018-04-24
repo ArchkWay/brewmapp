@@ -1,5 +1,7 @@
 package com.brewmapp.data.entity;
 
+import android.text.TextUtils;
+
 import com.brewmapp.BuildConfig;
 import com.google.gson.annotations.SerializedName;
 
@@ -96,7 +98,11 @@ public class User implements Serializable {
     }
 
     public String getFormattedName() {
-        return String.format("%s %s", firstname, lastname);
+
+        return String.format("%s %s",
+                TextUtils.isEmpty(firstname)?"":firstname,
+                TextUtils.isEmpty(lastname)?"":lastname
+        );
     }
     public String getFormattedPlace() {
 //        try {

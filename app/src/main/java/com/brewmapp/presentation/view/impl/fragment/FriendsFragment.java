@@ -340,7 +340,6 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
     }
 
-
     private void prepQueryFriends(String string) {
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(string);

@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/activity.start.register"
-        style="@style/AppTheme.Button.Red"
+        style="@style/AppTheme.Button.White"
         android:layout_marginBottom="@dimen/common_block_space_quadro"
         android:text="@string/register"/>
 

@@ -470,7 +470,7 @@
     <string name="action_text_title_reviews">Отзывы</string>
     <string name="action_text_title_my_evaluation">Мои оценки</string>
     <string name="text_view_data_not_found">Дата отсутствует</string>
-    <string name="button_text_request">Заявка</string>
+    <string name="button_text_request">Добавить в друзья</string>
     <string name="replay_not_valid">Не верный ответ сервера</string>
     <string name="not_valid_param">Не верный параметр</string>
     <string name="message_need_filtr">Не выбраны критерии поиска</string>
@@ -567,5 +567,6 @@
     <string name="text_button_friend_delete">Удалить</string>
     <string name="text_button_friend_accept">Добавить</string>
     <string name="text_button_friend_select">Выбрать</string>
+    <string name="key_status_frend">key_status_frend</string>
 
 </resources>

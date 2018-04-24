@@ -2,8 +2,6 @@ package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.User;
 
-import java.io.File;
-
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
 /**
@@ -14,4 +12,5 @@ public interface ProfileViewFragmentView extends BasicView {
     void setContent(User user);
     void commonError(String... strings);
 
+    void setStatus(int status);
 }

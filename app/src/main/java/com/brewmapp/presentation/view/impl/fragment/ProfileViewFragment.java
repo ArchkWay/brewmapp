@@ -19,10 +19,12 @@ import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
+import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,12 +48,14 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @BindView(R.id.fragment_profile_view_avatar)    ImageView avatar;
     @BindView(R.id.fragment_profile_view_name)      TextView name;
     @BindView(R.id.fragment_profile_view_place)      TextView place;
+    @BindView(R.id.fragment_profile_view_time)      TextView time;
     @BindView(R.id.fragment_profile_view_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_profile_view_counter_friends)    InfoCounter counter_friends;
     @BindView(R.id.fragment_profile_view_counter_photos)    InfoCounter counter_photos;
     @BindView(R.id.fragment_profile_view_counter_subscribers)    InfoCounter counter_subscribers;
     @BindView(R.id.fragment_profile_view_counter_subscribes)    InfoCounter counter_subscribes;
     @BindView(R.id.fragment_profile_view_menu)    RecyclerView menu;
+    @BindView(R.id.fragment_profile_view_request)    Button view_request;
     @BindView(R.id.fragment_profile_button_private_message) Button private_message;
 
     private OnFragmentInteractionListener mListener;
@@ -104,7 +108,6 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
-
     }
 
     @Override
@@ -136,6 +139,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         counter_photos.setCount(user.getCounts().getPhotos());
         counter_subscribers.setCount(user.getCounts().getSubscriptions());
         counter_subscribes.setCount(user.getCounts().getSubscribers());
+        time.setText(MapUtils.FormatDate(user.getLastLogin()));
 
     }
 
@@ -146,6 +150,24 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         else
             showMessage(strings[0]);
         mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.ERROR)));
+    }
+
+    @Override
+    public void setStatus(int status) {
+        switch (status){
+            case FriendsView.FRIENDS_NOW:
+                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_red));
+                view_request.setText(R.string.text_button_friend_delete);
+                break;
+            case FriendsView.FRIENDS_REQUEST_IN:
+                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_red));
+                view_request.setText(R.string.text_button_friend_delete);
+                break;
+            case FriendsView.FRIENDS_REQUEST_OUT:
+                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_red));
+                view_request.setText(R.string.text_button_friend_delete);
+                break;
+        }
     }
 
     @Override

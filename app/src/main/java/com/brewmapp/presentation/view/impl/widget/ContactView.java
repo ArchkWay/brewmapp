@@ -101,8 +101,10 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
         }catch (Exception e){return;};
 
         username.setText(userShow.getFormattedName());
-        if (userShow.getThumbnail() != null) {
-            Picasso.with(getContext()).load(userShow.getThumbnail()).fit().centerCrop().into(avatar);
+
+        String pathAvatar=model.getUser_getThumb_Formatted();
+        if (pathAvatar != null) {
+            Picasso.with(getContext()).load(pathAvatar).fit().centerCrop().into(avatar);
         } else {
             try {
                 avatar.setImageResource(userShow.getGender() == 1 ? R.drawable.ic_user_man : R.drawable.ic_user_woman);

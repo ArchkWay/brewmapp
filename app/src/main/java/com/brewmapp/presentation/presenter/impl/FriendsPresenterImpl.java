@@ -139,6 +139,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     public void onClickItem(int code, Object payload, FragmentActivity fragmentActivity) {
         Contact contact=((Contact) payload);
         final int id_friend=contact.getFriend_info().getId();
+        final String status_friend=contact.getFriend_info().getStatus();
 
         switch (code){
             case FriendsView.FRIENDS_ACTION_CLICK:
@@ -147,6 +148,8 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
                         String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
                         Uri.parse(String.valueOf(id_friend)),
                         fragmentActivity, ProfileEditActivity.class);
+                intent.putExtra(fragmentActivity.getString(R.string.key_status_frend),status_friend);
+
                 fragmentActivity.startActivity(intent);
                 //endregion
                 break;

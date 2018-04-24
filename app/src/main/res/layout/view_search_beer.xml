@@ -28,7 +28,6 @@
 
         <TextView
             android:id="@+id/beer_title"
-            style="@style/AppTheme.Text.Georgia.Bold2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -40,7 +39,10 @@
             android:textSize="@dimen/text_size_medium_phone"
             app:layout_constraintLeft_toRightOf="@+id/ic_beer"
             app:layout_constraintRight_toLeftOf="@+id/ic_arrow"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@color/colorBlack"
+            />
 
         <TextView
             android:id="@+id/beer_price"
@@ -52,9 +54,11 @@
             android:layout_marginStart="8dp"
             android:lines="1"
             android:text="@string/text_view_value_not_found"
-            android:textSize="@dimen/text_size_small"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             app:layout_constraintLeft_toRightOf="@+id/ic_beer"
-            app:layout_constraintTop_toBottomOf="@+id/beer_title" />
+            app:layout_constraintTop_toBottomOf="@+id/beer_title"
+
+            />
 
         <TextView
             android:id="@+id/beer_craft"
@@ -66,23 +70,24 @@
             android:layout_marginStart="8dp"
             android:lines="1"
             android:text="@string/beer_craft"
-            android:textSize="@dimen/text_size_small"
             app:layout_constraintLeft_toRightOf="@+id/ic_beer"
             app:layout_constraintRight_toLeftOf="@+id/ic_arrow"
-            app:layout_constraintTop_toBottomOf="@+id/beer_price" />
+            app:layout_constraintTop_toBottomOf="@+id/beer_price"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            />
 
         <TextView
             android:id="@+id/beer_short_text"
-            style="@style/AppTheme.Text.Georgia"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="5dp"
             android:maxLines="3"
-            android:textSize="@dimen/text_size_nano"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             app:layout_constraintRight_toLeftOf="@+id/ic_arrow"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ic_beer" />
+            app:layout_constraintTop_toBottomOf="@+id/ic_beer"
+            android:textColor="@color/colorBlack"/>
 
 
         <TextView

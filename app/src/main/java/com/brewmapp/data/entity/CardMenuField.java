@@ -27,6 +27,9 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
     public static final int FAVORITE_BEER = 2;
     public static final int FAVORITE_RESTO = 3;
     public static final int MY_RATINGS = 4;
+    public static final int SUBSCRIBE = 5;
+    public static final int MY_WORK = 8;
+    public static final int MY_RESUME = 9;
 
     public static final int EVENT_DATE = 5;
     public static final int EVENT_LOCATION = 6;
@@ -102,10 +105,12 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
 
     public static List<CardMenuField> createProfileViewItems(Context context) {
         List<CardMenuField> out = new ArrayList<>();
-        out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_bar, context.getString(R.string.fav_subscrabe)));
-        out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_bar, context.getString(R.string.fav_beer)));
-        out.add(new CardMenuField(FAVORITE_RESTO, R.drawable.ic_fav_bar, context.getString(R.string.fav_bars)));
-        out.add(new CardMenuField(MY_RATINGS, R.drawable.ic_fav_bar, context.getString(R.string.my_ratings)));
+        out.add(new CardMenuField(SUBSCRIBE, R.drawable.ic_subscrible, context.getString(R.string.fav_subscrabe)));
+        out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_beer, context.getString(R.string.fav_beer)));
+        out.add(new CardMenuField(FAVORITE_RESTO, R.drawable.ic_fav_resto, context.getString(R.string.fav_bars)));
+        out.add(new CardMenuField(MY_RATINGS, R.drawable.ic_my_elevation, context.getString(R.string.my_ratings)));
+        out.add(new CardMenuField(MY_WORK, R.drawable.ic_my_work, context.getString(R.string.my_work)));
+        out.add(new CardMenuField(MY_RESUME, R.drawable.ic_my_experiance, context.getString(R.string.my_resume)));
 
 
         return out;

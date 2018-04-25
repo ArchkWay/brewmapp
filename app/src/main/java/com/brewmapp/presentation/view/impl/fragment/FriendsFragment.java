@@ -62,6 +62,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     @BindView(R.id.fragment_friends_container_find_friends)    LinearLayout container_find_friends;
     @BindView(R.id.fragment_friends_progressBar)    RelativeLayout progressBar;
     @BindView(R.id.fragment_friends_text_info_pre_search)    TextView text_info_pre_search;
+    @BindView(R.id.fragment_friends_text_empty)    TextView text_empty;
 
     //endregion
 
@@ -262,6 +263,16 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
                 adapter_requests.notifyDataSetChanged();
                 adapter_friends.notifyDataSetChanged();
+
+                boolean isFriendsEmpty=adapter_requests.getItemCount()==0&&adapter_requests.getItemCount()==0;
+
+                text_empty.setVisibility(isFriendsEmpty?View.VISIBLE:View.GONE);
+                friends.setVisibility(!isFriendsEmpty?View.VISIBLE:View.GONE);
+                requests.setVisibility(!isFriendsEmpty?View.VISIBLE:View.GONE);
+
+
+                //text_empty
+
                 //endregion
                 break;
             case MODE_FIND_FRIENDS:

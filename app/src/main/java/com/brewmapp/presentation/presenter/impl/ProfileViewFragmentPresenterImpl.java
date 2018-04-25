@@ -101,10 +101,11 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
                         User friend = contactInfo.getModel().getFriend_info();
                         if (friend.getId() == user_id) {
                             view.setFriends(contactInfo.getModel().getStatus());
-                            break;
+                            return;
                         }
                     }
                 }
+                view.setFriends(-1);
             }
 
             @Override

@@ -28,59 +28,77 @@
         <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/fragment.friends.swipe">
-            <android.support.v4.widget.NestedScrollView
+            android:id="@+id/fragment.friends.swipe"
+            >
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
+                    android:layout_weight="2">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="@drawable/ovsa_bg_selector_simple"
-                        android:id="@+id/fragment.friends.addFriend"
-                        android:paddingLeft="@dimen/common_block_space_double"
-                        android:paddingRight="@dimen/common_block_space_double" >
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/size_icon_24"
-                            android:layout_toLeftOf="@+id/view.friends.invite.text"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/ic_add_friend"/>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:background="@drawable/ovsa_bg_selector_simple"
+                            android:id="@+id/fragment.friends.addFriend"
+                            android:paddingLeft="@dimen/common_block_space_double"
+                            android:paddingRight="@dimen/common_block_space_double" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/size_icon_24"
+                                android:layout_toLeftOf="@+id/view.friends.invite.text"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_add_friend"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/invite_friends"
+                                android:id="@+id/view.friends.invite.text"
+                                style="@style/AppTheme.Text.Georgia.Bold2"
+                                android:textSize="@dimen/text_size_common_bigger"
+                                android:layout_centerInParent="true"
+                                android:textColor="@color/colorAccent"/>
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/invite_friends"
-                            android:id="@+id/view.friends.invite.text"
-                            style="@style/AppTheme.Text.Georgia.Bold2"
-                            android:textSize="@dimen/text_size_common_bigger"
-                            android:layout_centerInParent="true"
-                            android:textColor="@color/colorAccent"/>
-                    </RelativeLayout>
+                            android:id="@+id/fragment.friends.friends"
+                            android:layout_weight="1"
+                            android:nestedScrollingEnabled="false"/>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/fragment.friends.friends"
-                        android:layout_weight="1"
-                        android:nestedScrollingEnabled="false"/>
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fragment.friends.requests"
+                            android:layout_weight="10"
+                            android:nestedScrollingEnabled="false"/>
+                    </LinearLayout>
+                </android.support.v4.widget.NestedScrollView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|top"
+                    android:visibility="gone"
+                    android:text="@string/text_empty_friends"
+                    android:id="@+id/fragment.friends.text_empty"
+                    android:layout_weight="1"/>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/fragment.friends.requests"
-                        android:layout_weight="10"
-                        android:nestedScrollingEnabled="false"/>
-                </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
+
+            </LinearLayout>
         </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

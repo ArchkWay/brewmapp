@@ -571,5 +571,8 @@
     <string name="text_button_friend_select">Выбрать</string>
     <string name="text_button_friend_request_send">Завявка отправлена</string>
     <string name="fav_subscrabe">Подписаться</string>
+    <string name="my_work">Моя работа</string>
+    <string name="my_resume">Мое резюме</string>
+    <string name="text_empty_friends">Вы еще не добавляли своих друзей, воспользуйтесь поиском чтобы найти ихю</string>
 
 </resources>

@@ -30,10 +30,10 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewFragmentView> implements ProfileViewFragmentPresenter {
 
     private User user_old_data;
-
     private LoadFreeProfileTask loadFreeProfileTask;
     private ListFriendsTask listFriendsTask;
     private UserRepo userRepo;
+    private int user_id;
 
     @Inject
     public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo){
@@ -63,35 +63,7 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     @Override
     public void loadContent(Intent intent) {
         try {
-            int user_id=Integer.valueOf(intent.getData().toString());
-
-            listFriendsTask.execute(null,new SimpleSubscriber<List<IFlexible>>(){
-                @Override
-                public void onNext(List<IFlexible> iFlexibles) {
-                    super.onNext(iFlexibles);
-
-                    Iterator<IFlexible> iterator=iFlexibles.iterator();
-                    while (iterator.hasNext()){
-                        IFlexible iFlexible=iterator.next();
-                        if(iFlexible instanceof ContactInfo) {
-                            ContactInfo contactInfo=(ContactInfo) iFlexible;
-                            User friend = contactInfo.getModel().getFriend_info();
-                            if (friend.getId() == user_id) {
-                                view.setStatus(contactInfo.getModel().getStatus());
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    super.onError(e);
-                    view.commonError(e.getMessage());
-                }
-            });
-
-
+            user_id=Integer.valueOf(intent.getData().toString());
 
             loadFreeProfileTask.execute(user_id,new SimpleSubscriber<UserProfile>(){
                 @Override
@@ -111,6 +83,36 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
         }catch (Exception e){
             view.commonError(e.getMessage());
         }
+
+    }
+
+    @Override
+    public void loadFriends() {
+        listFriendsTask.execute(null,new SimpleSubscriber<List<IFlexible>>(){
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
+
+                Iterator<IFlexible> iterator=iFlexibles.iterator();
+                while (iterator.hasNext()){
+                    IFlexible iFlexible=iterator.next();
+                    if(iFlexible instanceof ContactInfo) {
+                        ContactInfo contactInfo=(ContactInfo) iFlexible;
+                        User friend = contactInfo.getModel().getFriend_info();
+                        if (friend.getId() == user_id) {
+                            view.setFriends(contactInfo.getModel().getStatus());
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
 
     }
 

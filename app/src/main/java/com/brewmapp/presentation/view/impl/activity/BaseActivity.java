@@ -78,7 +78,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
 
         resultReceiverVisibleParentActivity =getIntent().getParcelableExtra(getString(R.string.key_start_activity_invisible));
 
-        InVisibleChildActivity();
+        HideChildActivity();
 
         //region Inject components
         PresenterComponent component = BeerMap.getAppComponent().plus(new PresenterModule(this));
@@ -436,7 +436,8 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
     //endregion
 
-    //region Progress and Visible Activity Control
+    //region Progress In ParentActivity and Hide ChildActivity while load data
+
     public ResultReceiver StartProgressBarInParentActivity(){
 
         //region Start Progress In Parent Activity
@@ -473,13 +474,13 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         };
     }
 
-    private void InVisibleChildActivity() {
-        if(isActivityInVisible())
+    private void HideChildActivity() {
+        if(isModeActivityInVisible())
             moveTaskToBack(true);
     }
 
     public void VisibleChildActivity(){
-        if(isActivityInVisible()) {
+        if(isModeActivityInVisible()) {
             Intent intent = getIntent();
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
@@ -488,16 +489,14 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
 
     public void stopProgressParentActivity(){
-        if(isActivityInVisible()) {
+        if(isModeActivityInVisible()) {
             resultReceiverVisibleParentActivity.send(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY, null);
         }
     }
 
-
-    private boolean isActivityInVisible(){
+    private boolean isModeActivityInVisible(){
         return resultReceiverVisibleParentActivity !=null;
     }
-
 
     //endregion
 }

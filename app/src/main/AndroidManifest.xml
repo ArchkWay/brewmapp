@@ -150,7 +150,7 @@
         <activity
             android:name=".presentation.view.impl.activity.RestoDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMoveTaskToBack" />
+            android:theme="@style/AppThemeInvisibleWhileLoad" />
         <activity
             android:name=".presentation.view.impl.activity.FilterMapActivity"
             android:label=""
@@ -166,7 +166,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".presentation.view.impl.activity.ProfileEditActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMoveTaskToBack"
+            android:theme="@style/AppThemeInvisibleWhileLoad"
             />
         <activity android:name=".presentation.view.impl.activity.AddReviewBeerActivity"
             android:screenOrientation="portrait"/>

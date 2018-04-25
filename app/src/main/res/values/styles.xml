@@ -21,7 +21,7 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="AppThemeMoveTaskToBack" parent="AppTheme">
+    <style name="AppThemeInvisibleWhileLoad" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>

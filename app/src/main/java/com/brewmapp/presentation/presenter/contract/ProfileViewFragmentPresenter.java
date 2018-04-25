@@ -24,6 +24,7 @@ public interface ProfileViewFragmentPresenter extends LivePresenter<ProfileViewF
 
 
     void loadContent(Intent intent);
+    void loadFriends();
 
     void finish(FragmentActivity activity);
 }

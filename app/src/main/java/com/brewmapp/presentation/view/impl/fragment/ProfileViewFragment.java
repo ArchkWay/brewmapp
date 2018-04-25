@@ -155,7 +155,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         counter_subscribes.setCount(user.getCounts().getSubscribers());
         time.setText(MapUtils.FormatDate(user.getLastLogin()));
 
-        mListener.VisibleChildActivity();
+        presenter.loadFriends();
 
     }
 
@@ -169,7 +169,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     }
 
     @Override
-    public void setStatus(int status) {
+    public void setFriends(int status) {
         view_request.setTag(status);
         switch (status){
             case FriendsView.FRIENDS_NOW:
@@ -184,6 +184,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 view_request.setText(R.string.text_button_friend_request_send);
                 break;
         }
+        mListener.VisibleChildActivity();
     }
 
     @Override

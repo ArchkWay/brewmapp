@@ -524,7 +524,7 @@
     <string name="positive">Положительный</string>
     <string name="negative">Отрицательный</string>
     <string name="text_too_many_resto">Слишком много заведений на карте. Продожение может повлиять на быстродействие. Продолжить?</string>
-    <string name="key_blur">\"key_blur\"</string>
+    <string name="key_start_activity_invisible">\"key_start_activity_invisible\"</string>
     <string name="text_read_completely">Читать полностью</string>
     <string name="text_collapse">Свернуть</string>
     <string name="title_activity_photo_gallery">Фото</string>
@@ -570,6 +570,6 @@
     <string name="text_button_friend_accept_full">Принять заявку</string>
     <string name="text_button_friend_select">Выбрать</string>
     <string name="text_button_friend_request_send">Завявка отправлена</string>
-    <string name="key_status_frend">key_status_frend</string>
+    <string name="fav_subscrabe">Подписаться</string>
 
 </resources>

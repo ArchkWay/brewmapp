@@ -99,16 +99,9 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         });
 
         search.setListener(string -> {
-//            adapter_friends.setSearchText(string);
-//            adapter_friends.filterItems(original_friends);
-//            adapter_requests.setSearchText(string);
-//            adapter_requests.filterItems(original_requests);
             setMode(TextUtils.isEmpty(string)?MODE_SHOW_FRIENDS:MODE_FIND_FRIENDS);
-
             prepQueryFriends(string);
-
             tuneModeView();
-
         });
         search.setEnabled(false);
 

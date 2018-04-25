@@ -1,32 +1,22 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 
-import com.brewmapp.R;
-import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Contact;
-import com.brewmapp.data.entity.User;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
-import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.AddFriend;
 import com.brewmapp.execution.task.AllowFriend;
 import com.brewmapp.execution.task.DeleteFriend;
@@ -38,14 +28,10 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
-import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
-import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.widget.ContactView;
 
 public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements FriendsPresenter {
@@ -143,18 +129,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
 
         switch (code){
             case FriendsView.FRIENDS_ACTION_CLICK:
-                //region User Details
-                Intent intent=new Intent(
-                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
-                        Uri.parse(String.valueOf(id_friend)),
-                        baseActivity, ProfileEditActivity.class);
-                intent.putExtra(baseActivity.getString(R.string.key_blur),baseActivity.ProgressBarOn());
-                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(baseActivity.getString(R.string.key_status_frend),status_friend);
-
-                baseActivity.startActivity(intent);
-                //endregion
+                Starter.ProfileEditActivity_StartInVisible(baseActivity,String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend));
                 break;
             case FriendsView.FRIENDS_ACTION_ACCEPT:
                 //region Accept friend

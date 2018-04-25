@@ -14,7 +14,8 @@ public interface ProfileEditView extends BasicView {
     int ERROR = 4;
     int USER_SAVED = 5;
     int SELECT_PHOTO = 6;
-    int SHOW_FRAGMENT_VIEW =7;
+    int SHOW_PROFILE_FRAGMENT_VIEW_SHOT =7;
+    int SHOW_PROFILE_FRAGMENT_VIEW_FULL =8;
 
     void commonError(String... string);
     void showFragment(int fragment);

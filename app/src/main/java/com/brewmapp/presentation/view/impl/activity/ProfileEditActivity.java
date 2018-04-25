@@ -1,6 +1,5 @@
 package com.brewmapp.presentation.view.impl.activity;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -81,6 +80,9 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
 
     @Override
     public void commonError(String... strings) {
+        //VisibleChildActivity();
+        //sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY);
+
         if(strings.length==0)
             showMessage(getString(R.string.error));
         else
@@ -94,7 +96,7 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
             case SHOW_FRAGMENT_EDIT:
                 baseFragment=new ProfileEditFragment();
                 break;
-            case SHOW_FRAGMENT_VIEW:
+            case SHOW_PROFILE_FRAGMENT_VIEW_SHOT:
                 baseFragment=new ProfileViewFragment();
                 break;
             default: {commonError();return;}

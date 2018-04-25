@@ -353,7 +353,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
 
-                activityMoveToTop();
+                VisibleChildActivity();
 
 
             case Actions.MODE_REFRESH_ONLY_LIKE:
@@ -583,7 +583,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case Actions.ACTION_CLICK_ON_ITEM_USER: {
                 Starter.ProfileEditActivityForResult(
                         this,
-                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                         String.valueOf(((Interest) payload).getUser_info().getId()),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );
@@ -592,7 +592,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER: {
                 Starter.ProfileEditActivityForResult(
                         this,
-                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                         ((Review) payload).getUser_id(),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );

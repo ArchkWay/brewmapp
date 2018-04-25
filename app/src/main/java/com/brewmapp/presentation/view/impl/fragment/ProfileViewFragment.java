@@ -21,7 +21,9 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.MultiListView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
@@ -58,6 +60,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @BindView(R.id.fragment_profile_view_menu)    RecyclerView menu;
     @BindView(R.id.fragment_profile_view_request)    Button view_request;
     @BindView(R.id.fragment_profile_button_private_message) Button private_message;
+    @BindView(R.id.fragment_profile_view_information) ImageView view_information;
     //endregion
 
     //region Private
@@ -114,6 +117,11 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
+        view_information.setOnClickListener(v->Starter.ProfileEditActivity_StartInVisible(
+                (BaseActivity) getActivity(),
+                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
+                getActivity().getIntent().getData().toString())
+        );
     }
 
     @Override
@@ -147,7 +155,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         counter_subscribes.setCount(user.getCounts().getSubscribers());
         time.setText(MapUtils.FormatDate(user.getLastLogin()));
 
-        mListener.activityMoveToTop();
+        mListener.VisibleChildActivity();
 
     }
 
@@ -214,8 +222,8 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void VisibleChildActivity();
 
-        void activityMoveToTop();
     }
 
 }

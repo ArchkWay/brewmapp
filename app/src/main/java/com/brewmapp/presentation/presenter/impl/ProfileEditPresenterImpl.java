@@ -77,10 +77,6 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
     @Override
     public int parseIntent(Intent intent) {
         try {
-//            resultReceiver=intent.getParcelableExtra(context.getString(R.string.key_blur));
-//            if(resultReceiver!=null)
-//                view.activityMoveToBack(true);
-
             return Integer.valueOf(intent.getAction());
         }catch (Exception e){
             return 0;
@@ -88,12 +84,5 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
 
 
     }
-
-//    @Override
-//    public void sendResultReceiver(int actionResultReceiver) {
-//        if(resultReceiver!=null) {
-//            resultReceiver.send(actionResultReceiver, null);
-//        }
-//    }
 
 }

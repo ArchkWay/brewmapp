@@ -308,7 +308,7 @@ public class ProfileFragment extends BaseFragment implements
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
                 Starter.ProfileEditActivity(
                         getActivity(),
-                        String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
+                        String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                         String.valueOf(((Review) payload).getUser_id())
                 );
                 break;

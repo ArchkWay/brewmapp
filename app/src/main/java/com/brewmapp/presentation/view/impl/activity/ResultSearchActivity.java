@@ -463,7 +463,7 @@ public class ResultSearchActivity extends BaseActivity implements
         }
 
         invalidateOptionsMenu();
-        resultReceiver.send(Actions.ACTION_STOP_PROGRESS_BAR,null);
+        resultReceiver.send(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY,null);
     }
 
     @Override
@@ -604,7 +604,7 @@ public class ResultSearchActivity extends BaseActivity implements
         searchPackage.setPage(0);
         swipe.setVisibility(View.VISIBLE);
         tv_not_found.setVisibility(View.GONE);
-        resultReceiver=ProgressBarOn();
+        resultReceiver= StartProgressBarInParentActivity();
         continueLoadResult();
 
     }

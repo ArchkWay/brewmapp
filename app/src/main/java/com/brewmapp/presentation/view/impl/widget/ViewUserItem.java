@@ -27,8 +27,6 @@ import butterknife.ButterKnife;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
 
-import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_PROFILE;
-
 /**
  * Created by xpusher on 11/28/2017.
  */
@@ -92,7 +90,7 @@ public class ViewUserItem extends BaseLinearLayout implements InteractiveModelVi
             });
             setOnClickListener(view -> {
                 ((Activity) getContext()).startActivityForResult(
-                        new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileEditActivity.class),
+                        new Intent(String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileEditActivity.class),
                         RequestCodes.REQUEST_PROFILE_FRIEND
                 );
             });
@@ -100,12 +98,6 @@ public class ViewUserItem extends BaseLinearLayout implements InteractiveModelVi
             Contact contact=new Contact();
             contact.setFriend_info(user);
             setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_CLICK,contact));
-//            setOnClickListener(view -> {
-//                ((Activity) getContext()).startActivityForResult(
-//                        new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileEditActivity.class),
-//                        RequestCodes.REQUEST_PROFILE_FRIEND
-//                );
-//            });
         }
 
     }

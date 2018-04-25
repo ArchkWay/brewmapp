@@ -86,7 +86,7 @@ public class Starter {
     public static void RestoDetailActivityForResult(BaseActivity activity, Interest interest, int requestCode) {
         Intent intent = new Intent(activity, RestoDetailActivity.class);
         intent.putExtra(Keys.RESTO_ID, interest);
-        intent.putExtra(activity.getString(R.string.key_blur),activity.ProgressBarOn());
+        intent.putExtra(activity.getString(R.string.key_start_activity_invisible),activity.StartProgressBarInParentActivity());
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -96,7 +96,7 @@ public class Starter {
         if(id_resto!=null) {
             Intent intent = new Intent(baseActivity, RestoDetailActivity.class);
             intent.putExtra(Keys.RESTO_ID, new Interest(new Resto(id_resto, "")));
-            intent.putExtra(baseActivity.getString(R.string.key_blur),baseActivity.ProgressBarOn());
+            intent.putExtra(baseActivity.getString(R.string.key_start_activity_invisible),baseActivity.StartProgressBarInParentActivity());
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             baseActivity.startActivity(intent);
@@ -167,6 +167,17 @@ public class Starter {
                 )
         );
 
+    }
+    public static void ProfileEditActivity_StartInVisible(BaseActivity baseActivity, String action, String user_id) {
+        Intent intent=new Intent(
+                action,
+                Uri.parse(user_id),
+                baseActivity, ProfileEditActivity.class);
+        intent.putExtra(baseActivity.getString(R.string.key_start_activity_invisible),baseActivity.StartProgressBarInParentActivity());
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        baseActivity.startActivity(intent);
     }
 
     public static void MultiFragmentActivity_MODE_CHAT(Activity activity, User friend) {

@@ -17,4 +17,5 @@ public interface ProfileEditPresenter extends LivePresenter<ProfileEditView> {
 
     int parseIntent(Intent intent);
 
+//    void sendResultReceiver(int actionStopProgressBar);
 }

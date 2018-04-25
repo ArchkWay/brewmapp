@@ -64,6 +64,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     private Callback<Boolean> callbackRequestPermissionLocation;
     private ChatResultReceiver chatResultReceiver;
     private RelativeLayout containerProgressBar;
+    private ResultReceiver resultReceiverHideActivityWhileLoadData;
 
     @Inject
     public LoadCityTask loadCityTask;
@@ -74,6 +75,8 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        activityMoveToBack();
 
         //region Inject components
         PresenterComponent component = BeerMap.getAppComponent().plus(new PresenterModule(this));
@@ -127,6 +130,15 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     protected void onResume() {
         super.onResume();
         registerSnackbarReceiver();
+        if((getIntent().getFlags()^ Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)==0)
+            getWindow().getDecorView().postDelayed(() -> sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR),500);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sendResultReceiver(Actions.ACTION_ACTIVITY_DESTROY);
     }
 
     @Override
@@ -425,7 +437,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
     //endregion
 
-    //region Progress
+    //region Progress and Visible Activity Control
     public ResultReceiver ProgressBarOn(){
 
         if(containerProgressBar ==null) {
@@ -451,10 +463,24 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
             }
         };
     }
+
+    private void activityMoveToBack() {
+        resultReceiverHideActivityWhileLoadData=getIntent().getParcelableExtra(getString(R.string.key_blur));
+        if(resultReceiverHideActivityWhileLoadData!=null)
+            moveTaskToBack(true);
+    }
+
     public void activityMoveToTop(){
         Intent intent=getIntent();
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
+
+    public void sendResultReceiver(int actionResultReceiver) {
+        if(resultReceiverHideActivityWhileLoadData!=null) {
+            resultReceiverHideActivityWhileLoadData.send(actionResultReceiver, null);
+        }
+    }
+
     //endregion
 }

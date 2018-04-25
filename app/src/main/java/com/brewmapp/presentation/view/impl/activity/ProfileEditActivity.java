@@ -1,5 +1,6 @@
 package com.brewmapp.presentation.view.impl.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
@@ -153,4 +155,5 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
         super.setTitle(title);
         toolbarTitle.setText(getTitle());
     }
+
 }

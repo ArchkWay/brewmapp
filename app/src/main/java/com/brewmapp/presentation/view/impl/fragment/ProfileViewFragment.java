@@ -45,6 +45,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
  */
 public class ProfileViewFragment extends BaseFragment implements ProfileViewFragmentView , FlexibleAdapter.OnItemClickListener{
 
+    //region BindView
     @BindView(R.id.fragment_profile_view_avatar)    ImageView avatar;
     @BindView(R.id.fragment_profile_view_name)      TextView name;
     @BindView(R.id.fragment_profile_view_place)      TextView place;
@@ -57,12 +58,17 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @BindView(R.id.fragment_profile_view_menu)    RecyclerView menu;
     @BindView(R.id.fragment_profile_view_request)    Button view_request;
     @BindView(R.id.fragment_profile_button_private_message) Button private_message;
+    //endregion
 
+    //region Private
     private OnFragmentInteractionListener mListener;
     private List<CardMenuField> cardMenuFields = new ArrayList<>();
     private User user;
+    //endregion
 
+    //region Inject
     @Inject    ProfileViewFragmentPresenter presenter;
+    //endregion
 
     @Override
     protected int getFragmentLayout() {
@@ -141,6 +147,8 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         counter_subscribes.setCount(user.getCounts().getSubscribers());
         time.setText(MapUtils.FormatDate(user.getLastLogin()));
 
+        mListener.activityMoveToTop();
+
     }
 
     @Override
@@ -154,18 +162,18 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public void setStatus(int status) {
+        view_request.setTag(status);
         switch (status){
             case FriendsView.FRIENDS_NOW:
                 view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_red));
-                view_request.setText(R.string.text_button_friend_delete);
+                view_request.setText(R.string.text_button_friend_delete_full);
                 break;
             case FriendsView.FRIENDS_REQUEST_IN:
-                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_red));
-                view_request.setText(R.string.text_button_friend_delete);
+                view_request.setText(R.string.text_button_friend_accept_full);
                 break;
             case FriendsView.FRIENDS_REQUEST_OUT:
-                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_red));
-                view_request.setText(R.string.text_button_friend_delete);
+                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_gray));
+                view_request.setText(R.string.text_button_friend_request_send);
                 break;
         }
     }
@@ -206,6 +214,8 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
+        void activityMoveToTop();
     }
 
 }

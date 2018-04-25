@@ -18,4 +18,5 @@ public interface ProfileEditView extends BasicView {
 
     void commonError(String... string);
     void showFragment(int fragment);
+
 }

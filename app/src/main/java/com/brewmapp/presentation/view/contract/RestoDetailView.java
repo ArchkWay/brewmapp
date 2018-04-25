@@ -33,6 +33,5 @@ public interface RestoDetailView extends BasicView{
 
     void addItemsAddedToFavorite(List<IFlexible> iFlexibles);
 
-    void activityMoveToBack(boolean b);
 
 }

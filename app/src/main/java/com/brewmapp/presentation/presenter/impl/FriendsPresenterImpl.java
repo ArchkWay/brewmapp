@@ -136,7 +136,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     }
 
     @Override
-    public void onClickItem(int code, Object payload, FragmentActivity fragmentActivity) {
+    public void onClickItem(int code, Object payload, BaseActivity baseActivity) {
         Contact contact=((Contact) payload);
         final int id_friend=contact.getFriend_info().getId();
         final String status_friend=contact.getFriend_info().getStatus();
@@ -147,15 +147,18 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
                 Intent intent=new Intent(
                         String.valueOf(ProfileEditView.SHOW_FRAGMENT_VIEW),
                         Uri.parse(String.valueOf(id_friend)),
-                        fragmentActivity, ProfileEditActivity.class);
-                intent.putExtra(fragmentActivity.getString(R.string.key_status_frend),status_friend);
+                        baseActivity, ProfileEditActivity.class);
+                intent.putExtra(baseActivity.getString(R.string.key_blur),baseActivity.ProgressBarOn());
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(baseActivity.getString(R.string.key_status_frend),status_friend);
 
-                fragmentActivity.startActivity(intent);
+                baseActivity.startActivity(intent);
                 //endregion
                 break;
             case FriendsView.FRIENDS_ACTION_ACCEPT:
                 //region Accept friend
-                new DialogConfirm("Добавить в друзья?", fragmentActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                new DialogConfirm("Добавить в друзья?", baseActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
                     @Override
                     public void onOk() {
                         WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
@@ -185,7 +188,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
                 break;
             case FriendsView.FRIENDS_ACTION_DELETE:
                 //region Delete Friend
-                new DialogConfirm("Удалить?", fragmentActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                new DialogConfirm("Удалить?", baseActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
                     @Override
                     public void onOk() {
                         WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
@@ -214,7 +217,7 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
                 //endregion
                 break;
             case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
-                new DialogConfirm("Дружить?", fragmentActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
+                new DialogConfirm("Дружить?", baseActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
                     @Override
                     public void onOk() {
                         WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);

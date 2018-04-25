@@ -292,15 +292,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         toolbarTitle.setText(title);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if((getIntent().getFlags()^Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)==0)
-            getWindow().getDecorView().postDelayed(() -> presenter.sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR),500);
-
-
-    }
 
     //endregion
 
@@ -452,11 +443,6 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
         adapter_favorites.addItems(0,iFlexibles);
         adapter_favorites.notifyItemRangeInserted(0,iFlexibles.size());
 
-    }
-
-    @Override
-    public void activityMoveToBack(boolean b) {
-        moveTaskToBack(true);
     }
 
     //endregion

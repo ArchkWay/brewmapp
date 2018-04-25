@@ -36,6 +36,7 @@ import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
@@ -112,18 +113,18 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         search.setEnabled(false);
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
-        adapter_friends = new FlexibleModelAdapter<>(original_friends, (code, payload) -> presenter.onClickItem(code, payload,getActivity()));
+        adapter_friends = new FlexibleModelAdapter<>(original_friends, (code, payload) -> presenter.onClickItem(code, payload,(BaseActivity) getActivity()));
         friends.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         friends.setLayoutManager(new LinearLayoutManager(getActivity()));
         friends.setAdapter(adapter_friends);
 
-        adapter_requests = new FlexibleModelAdapter<>(original_requests, (code, payload) -> presenter.onClickItem(code, payload,getActivity()));
+        adapter_requests = new FlexibleModelAdapter<>(original_requests, (code, payload) -> presenter.onClickItem(code, payload,(BaseActivity)getActivity()));
         requests.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         requests.setLayoutManager(new LinearLayoutManager(getActivity()));
         requests.setAdapter(adapter_requests);
 
 
-        adapter_find_friends= new FlexibleModelAdapter<>(original_find_friends, (code, payload) -> presenter.onClickItem(code, payload,getActivity()));
+        adapter_find_friends= new FlexibleModelAdapter<>(original_find_friends, (code, payload) -> presenter.onClickItem(code, payload,(BaseActivity)getActivity()));
         find_friends.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         find_friends.setLayoutManager(new LinearLayoutManager(getActivity()));
         find_friends.setAdapter(adapter_find_friends);

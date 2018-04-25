@@ -13,6 +13,10 @@
     <color name="colorButtonGreenDark">#329b4f</color>
     <color name="colorButtonGreenDisabled">#85329b4f</color>
 
+    <color name="colorButtonGray">#d1d1d1</color>
+    <color name="colorButtonGrayDark">#b3b3b3</color>
+    <color name="colorButtonGrayDisabled">#84a3a3a3</color>
+
 
     <color name="colorSplitter">#c2c2c5</color>
 

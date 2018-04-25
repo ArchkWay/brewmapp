@@ -65,18 +65,18 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
         try {
             int user_id=Integer.valueOf(intent.getData().toString());
 
-            listFriendsTask.execute(String.valueOf(user_id),new SimpleSubscriber<List<IFlexible>>(){
+            listFriendsTask.execute(null,new SimpleSubscriber<List<IFlexible>>(){
                 @Override
                 public void onNext(List<IFlexible> iFlexibles) {
                     super.onNext(iFlexibles);
-                    int owner_id=userRepo.load().getId();
+
                     Iterator<IFlexible> iterator=iFlexibles.iterator();
                     while (iterator.hasNext()){
                         IFlexible iFlexible=iterator.next();
                         if(iFlexible instanceof ContactInfo) {
                             ContactInfo contactInfo=(ContactInfo) iFlexible;
-                            User user = contactInfo.getModel().getUser();
-                            if (user.getId() == owner_id) {
+                            User friend = contactInfo.getModel().getFriend_info();
+                            if (friend.getId() == user_id) {
                                 view.setStatus(contactInfo.getModel().getStatus());
                                 break;
                             }

@@ -112,7 +112,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
     private Interest interest;
     private UserRepo userRepo;
     private UploadPhotoTask uploadPhotoTask;
-    private ResultReceiver resultReceiver;
     //endregion
 
     //region Inject
@@ -169,7 +168,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         loadInterestTask.cancel();
         loadRestoAverageEvaluationTask.cancel();
         loadInterestTask.cancel();
-        sendResultReceiver(Actions.ACTION_ACTIVITY_DESTROY);
     }
 
     @Override
@@ -234,9 +232,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
             view.commonError(e.getMessage());
             return false;
         }
-        resultReceiver=intent.getParcelableExtra(context.getString(R.string.key_blur));
-        if(resultReceiver!=null)
-            view.activityMoveToBack(true);
 
         return true;
 
@@ -702,13 +697,6 @@ public class RestoDetailPresenterImpl extends BasePresenter<RestoDetailView>
         }
     }
 
-    @Override
-    public void sendResultReceiver(int actionResultReceiver) {
-        if(resultReceiver!=null) {
-            resultReceiver.send(actionResultReceiver, null);
-        }
-
-    }
 
     class TempDataHolder {
         private boolean favResto;

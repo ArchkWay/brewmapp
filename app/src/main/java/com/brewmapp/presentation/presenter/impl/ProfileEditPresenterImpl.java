@@ -1,7 +1,10 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.ResultReceiver;
 
+import com.brewmapp.R;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
@@ -23,9 +26,12 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> implements ProfileEditPresenter {
 
+    private Context context;
+    private ResultReceiver resultReceiver;
 
     @Inject
-    public ProfileEditPresenterImpl(){
+    public ProfileEditPresenterImpl(Context context){
+        this.context = context;
     }
 
     @Override
@@ -71,6 +77,10 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
     @Override
     public int parseIntent(Intent intent) {
         try {
+//            resultReceiver=intent.getParcelableExtra(context.getString(R.string.key_blur));
+//            if(resultReceiver!=null)
+//                view.activityMoveToBack(true);
+
             return Integer.valueOf(intent.getAction());
         }catch (Exception e){
             return 0;
@@ -78,5 +88,12 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
 
 
     }
+
+//    @Override
+//    public void sendResultReceiver(int actionResultReceiver) {
+//        if(resultReceiver!=null) {
+//            resultReceiver.send(actionResultReceiver, null);
+//        }
+//    }
 
 }

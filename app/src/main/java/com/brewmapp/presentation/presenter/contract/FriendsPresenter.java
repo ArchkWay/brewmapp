@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
@@ -17,7 +18,7 @@ public interface FriendsPresenter extends LivePresenter<FriendsView> {
 
     void setItemTouchHelper(RecyclerView list);
 
-    void onClickItem(int code, Object payload, FragmentActivity fragmentActivity);
+    void onClickItem(int code, Object payload, BaseActivity baseActivity);
 
     void searchFriends(FullSearchPackage fullSearchPackage);
 }

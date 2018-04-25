@@ -565,8 +565,11 @@
     <string name="text_description">Описание</string>
     <string name="text_more_chars">Продолжайте набор, длина запроса должна быть больше 3 символов</string>
     <string name="text_button_friend_delete">Удалить</string>
+    <string name="text_button_friend_delete_full">Удалить из друзей</string>
     <string name="text_button_friend_accept">Добавить</string>
+    <string name="text_button_friend_accept_full">Принять заявку</string>
     <string name="text_button_friend_select">Выбрать</string>
+    <string name="text_button_friend_request_send">Завявка отправлена</string>
     <string name="key_status_frend">key_status_frend</string>
 
 </resources>

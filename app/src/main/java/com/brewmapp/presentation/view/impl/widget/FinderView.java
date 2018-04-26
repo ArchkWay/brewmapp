@@ -95,10 +95,8 @@ public class FinderView extends BaseFrameLayout {
                     return true;
                 }
                 else  if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
-                    try {
-                        input.setText(null);
-                        ((View)getParent()).requestFocus();
-                    }catch (Exception e){}
+                    cancel.performClick();
+                    clearFocus();
                     return true;
                 }
                 return false;
@@ -126,7 +124,10 @@ public class FinderView extends BaseFrameLayout {
     @Override
     public void clearFocus() {
         super.clearFocus();
-        input.clearFocus();
+        //input.clearFocus();
+        try {
+            ((View)getParent()).requestFocus();
+        }catch (Exception e){}
         hideInputKeyboard();
     }
 

@@ -9,11 +9,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,7 +43,6 @@ import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
-import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
@@ -216,28 +212,9 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     public void onResume() {
         super.onResume();
         search.clearFocus();
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
-
-                    // handle back button
-                    if(mode!=MODE_SHOW_FRIENDS) {
-                        setMode(MODE_SHOW_FRIENDS);
-                        tuneModeView();
-                        return true;
-                    }
-
-                }
-
-                return false;
-            }
-        });
-
+        setHandlerBackSpace();
     }
+
 
 
     //endregion
@@ -448,6 +425,30 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
     private void QueryFriends(FullSearchPackage fullSearchPackage) {
         presenter.searchFriends(fullSearchPackage);
+    }
+
+    private void setHandlerBackSpace() {
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+
+                    // handle back button
+                    if(mode!=MODE_SHOW_FRIENDS) {
+                        setMode(MODE_SHOW_FRIENDS);
+                        tuneModeView();
+                        return true;
+                    }
+
+                }
+
+                return false;
+            }
+        });
+
     }
 
     //endregion

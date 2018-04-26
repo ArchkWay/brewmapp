@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ReceiverAction;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
@@ -53,7 +55,7 @@ import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import static android.app.Activity.RESULT_OK;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
-public class FriendsFragment extends BaseFragment implements FriendsView
+public class FriendsFragment extends BaseFragment implements FriendsView,ReceiverAction
 {
 
     //region BindView
@@ -72,7 +74,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     //endregion
 
     //region Inject
-    @Inject public FriendsPresenter presenter;
+    @Inject FriendsPresenter presenter;
     //endregion
 
     //region Private
@@ -458,6 +460,11 @@ public class FriendsFragment extends BaseFragment implements FriendsView
             }
         });
 
+    }
+
+    @Override
+    public void onAction(int action, Bundle bundle) {
+        presenter.loadFriends(false);
     }
 
     //endregion

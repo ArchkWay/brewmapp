@@ -21,10 +21,7 @@ import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
-import com.brewmapp.presentation.view.contract.MultiListView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
-import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
@@ -80,38 +77,6 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public int getMenuToInflate() {
-        return 0;
-    }
-
-    @Override
-    protected void inject(PresenterComponent component) {
-        component.inject(this);
-    }
-
-    @Override
-    public CharSequence getTitle() {
-        return getString(R.string.title_view_profile);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     protected void initView(View view) {
         setHasOptionsMenu(true);
         cardMenuFields=CardMenuField.createProfileViewItems(getActivity());
@@ -123,7 +88,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 //                (BaseActivity) getActivity(),
 //                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
 //                getActivity().getIntent().getData().toString())
-                showMessage(getString(R.string.message_develop))
+                        showMessage(getString(R.string.message_develop))
         );
         view_request.setOnClickListener(this);
     }
@@ -132,15 +97,6 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     protected void attachPresenter() {
         presenter.onAttach(this);
         presenter.loadContent(getActivity().getIntent());
-    }
-
-    @Override
-    protected LivePresenter<?> getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    public void enableControls(boolean enabled, int code) {
     }
 
     @Override
@@ -159,17 +115,8 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         counter_subscribes.setCount(user.getCounts().getSubscribers());
         time.setText(MapUtils.FormatDate(user.getLastLogin()));
 
-        presenter.loadFriends();
+        presenter.loadStatusUser();
 
-    }
-
-    @Override
-    public void commonError(String... strings) {
-        if(strings.length==0)
-            showMessage(getString(R.string.error));
-        else
-            showMessage(strings[0]);
-        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.ERROR)));
     }
 
     @Override
@@ -193,43 +140,6 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 break;
         }
         mListener.VisibleChildActivity();
-    }
-
-    @Override
-    public void friendDeletedSuccess() {
-        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
-        mListener.showSnackbar(getString(R.string.text_friend_deleted_success));
-        setStatusFriend(FriendsView.FRIENDS_NOBODY);
-    }
-
-    @Override
-    public void friendAllowSuccess() {
-        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
-        mListener.showSnackbar(getString(R.string.text_friend_added_success));
-        setStatusFriend(FriendsView.FRIENDS_NOW);
-    }
-
-    @Override
-    public void requestSendSuccess() {
-        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
-        mListener.showSnackbar(getString(R.string.text_friend_sent_success));
-        setStatusFriend(FriendsView.FRIENDS_REQUEST_OUT);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.stub,menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_friends:
-                presenter.finish(getActivity());
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -281,6 +191,98 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 break;
         }
     }
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public int getMenuToInflate() {
+        return 0;
+    }
+
+    @Override
+    protected void inject(PresenterComponent component) {
+        component.inject(this);
+    }
+
+    @Override
+    public CharSequence getTitle() {
+        return getString(R.string.title_view_profile);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+
+    @Override
+    protected LivePresenter<?> getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    public void enableControls(boolean enabled, int code) {
+    }
+
+    @Override
+    public void commonError(String... strings) {
+        if(strings.length==0)
+            showMessage(getString(R.string.error));
+        else
+            showMessage(strings[0]);
+        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.ERROR)));
+    }
+
+    @Override
+    public void friendDeletedSuccess() {
+        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.showSnackbar(getString(R.string.text_friend_deleted_success));
+        setStatusFriend(FriendsView.FRIENDS_NOBODY);
+    }
+
+    @Override
+    public void friendAllowSuccess() {
+        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.showSnackbar(getString(R.string.text_friend_added_success));
+        setStatusFriend(FriendsView.FRIENDS_NOW);
+    }
+
+    @Override
+    public void requestSendSuccess() {
+        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.showSnackbar(getString(R.string.text_friend_sent_success));
+        setStatusFriend(FriendsView.FRIENDS_REQUEST_OUT);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.stub,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_friends:
+                presenter.finish(getActivity());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     //***********************************
     public interface OnFragmentInteractionListener {

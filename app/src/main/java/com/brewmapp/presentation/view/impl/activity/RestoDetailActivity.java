@@ -353,7 +353,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
                 try {scrollTo(Integer.valueOf(getIntent().getAction()));}catch (Exception e){}
 
-                VisibleChildActivity();
+                setVisibleChildActivity();
 
 
             case Actions.MODE_REFRESH_ONLY_LIKE:

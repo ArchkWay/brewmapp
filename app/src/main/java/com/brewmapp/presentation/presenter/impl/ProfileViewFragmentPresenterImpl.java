@@ -105,7 +105,7 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     }
 
     @Override
-    public void loadFriends() {
+    public void loadStatusUser() {
         listFriendsTask.execute(null,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {

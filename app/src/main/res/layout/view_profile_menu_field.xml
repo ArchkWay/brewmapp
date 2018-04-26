@@ -19,8 +19,8 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="@dimen/size_menu_icon"
-                android:layout_height="@dimen/size_menu_icon"
+                android:layout_width="@dimen/size_icon_24"
+                android:layout_height="@dimen/size_icon_24"
                 android:layout_marginRight="@dimen/common_block_space_double_semi"
                 android:id="@+id/view.cardOption.icon"/>
 
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
-                android:textSize="17sp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:id="@+id/view.cardOption.name"/>
         </LinearLayout>
         <View

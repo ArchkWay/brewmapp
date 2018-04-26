@@ -28,19 +28,25 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
+import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.data.entity.wrapper.FriendsTitleInfo;
 import com.brewmapp.data.entity.wrapper.UserInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
+import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
@@ -107,18 +113,18 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         search.setEnabled(false);
 
         swipe.setOnRefreshListener(() -> presenter.loadFriends(false));
-        adapter_friends = new FlexibleModelAdapter<>(original_friends, (code, payload) -> presenter.onClickItem(code, payload,(BaseActivity) getActivity()));
+        adapter_friends = new FlexibleModelAdapter<>(original_friends, this::onClickItem);
         friends.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         friends.setLayoutManager(new LinearLayoutManager(getActivity()));
         friends.setAdapter(adapter_friends);
 
-        adapter_requests = new FlexibleModelAdapter<>(original_requests, (code, payload) -> presenter.onClickItem(code, payload,(BaseActivity)getActivity()));
+        adapter_requests = new FlexibleModelAdapter<>(original_requests, this::onClickItem);
         requests.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         requests.setLayoutManager(new LinearLayoutManager(getActivity()));
         requests.setAdapter(adapter_requests);
 
 
-        adapter_find_friends= new FlexibleModelAdapter<>(original_find_friends, (code, payload) -> presenter.onClickItem(code, payload,(BaseActivity)getActivity()));
+        adapter_find_friends= new FlexibleModelAdapter<>(original_find_friends, this::onClickItem);
         find_friends.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         find_friends.setLayoutManager(new LinearLayoutManager(getActivity()));
         find_friends.setAdapter(adapter_find_friends);
@@ -210,6 +216,27 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     public void onResume() {
         super.onResume();
         search.clearFocus();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+
+                    // handle back button
+                    if(mode!=MODE_SHOW_FRIENDS) {
+                        setMode(MODE_SHOW_FRIENDS);
+                        tuneModeView();
+                        return true;
+                    }
+
+                }
+
+                return false;
+            }
+        });
+
     }
 
 
@@ -264,7 +291,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
                 adapter_requests.notifyDataSetChanged();
                 adapter_friends.notifyDataSetChanged();
 
-                boolean isFriendsEmpty=adapter_requests.getItemCount()==0&&adapter_requests.getItemCount()==0;
+                boolean isFriendsEmpty=original_friends.size()==0&&original_requests.size()==0;
 
                 text_empty.setVisibility(isFriendsEmpty?View.VISIBLE:View.GONE);
                 friends.setVisibility(!isFriendsEmpty?View.VISIBLE:View.GONE);
@@ -305,6 +332,68 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     //endregion
 
     //region Functions
+
+    private void onClickItem(int code, Object payload) {
+        Contact contact=((Contact) payload);
+        final int id_friend=contact.getFriend_info().getId();
+        search.clearFocus();
+        switch (code){
+            case FriendsView.FRIENDS_ACTION_CLICK:
+                Starter.ProfileEditActivity_StartInVisible((BaseActivity) getActivity(),String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend));
+                break;
+            case FriendsView.FRIENDS_ACTION_ACCEPT:
+                //region Accept friend
+                new DialogConfirm("Добавить в друзья?", getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.USER_ID, id_friend);
+                        presenter.allowFriend(wrapperParams);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                //endregion
+                break;
+            case FriendsView.FRIENDS_ACTION_DELETE:
+                //region Delete Friend
+                new DialogConfirm("Удалить?", getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.USER_ID, id_friend);
+                        presenter.deleteFriend(wrapperParams);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                //endregion
+                break;
+            case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
+                new DialogConfirm("Дружить?", getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.FRIEND_ID, id_friend);
+                        presenter.addFriend(wrapperParams);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                break;
+        }
+
+    }
+
     private void tuneModeView() {
 
         switch (mode){

@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,6 +92,13 @@ public class FinderView extends BaseFrameLayout {
                 if (event.getAction() == KeyEvent.ACTION_DOWN
                         && event.getKeyCode() ==       KeyEvent.KEYCODE_ENTER) {
                     hideInputKeyboard();
+                    return true;
+                }
+                else  if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
+                    try {
+                        input.setText(null);
+                        ((View)getParent()).requestFocus();
+                    }catch (Exception e){}
                     return true;
                 }
                 return false;

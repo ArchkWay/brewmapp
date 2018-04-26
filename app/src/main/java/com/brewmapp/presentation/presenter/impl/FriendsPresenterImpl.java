@@ -123,103 +123,6 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
 
     @Override
     public void onClickItem(int code, Object payload, BaseActivity baseActivity) {
-        Contact contact=((Contact) payload);
-        final int id_friend=contact.getFriend_info().getId();
-        final String status_friend=contact.getFriend_info().getStatus();
-
-        switch (code){
-            case FriendsView.FRIENDS_ACTION_CLICK:
-                Starter.ProfileEditActivity_StartInVisible(baseActivity,String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend));
-                break;
-            case FriendsView.FRIENDS_ACTION_ACCEPT:
-                //region Accept friend
-                new DialogConfirm("Добавить в друзья?", baseActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-                        wrapperParams.addParam(Keys.USER_ID, id_friend);
-                        allowFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
-                            @Override
-                            public void onNext(String s) {
-                                super.onNext(s);
-                                loadFriends(false);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                                showMessage(e.getMessage());
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-                //endregion
-                break;
-            case FriendsView.FRIENDS_ACTION_DELETE:
-                //region Delete Friend
-                new DialogConfirm("Удалить?", baseActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-                        wrapperParams.addParam(Keys.USER_ID, id_friend);
-                        deleteFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
-                            @Override
-                            public void onNext(String s) {
-                                super.onNext(s);
-                                loadFriends(false);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                                showMessage(e.getMessage());
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-                //endregion
-                break;
-            case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
-                new DialogConfirm("Дружить?", baseActivity.getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-                        wrapperParams.addParam(Keys.FRIEND_ID, id_friend);
-                        addFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
-                            @Override
-                            public void onNext(String s) {
-                                super.onNext(s);
-                                loadFriends(true);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                                showMessage(e.getMessage());
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-                break;
-        }
 //        switch (contact.getStatus()){
 //            case FriendsView.FRIENDS_REQUEST_IN:
 //            case FriendsView.FRIENDS_REQUEST_OUT:
@@ -255,6 +158,61 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
             public void onError(Throwable e) {
                 super.onError(e);
                 enableControls(true);
+                showMessage(e.getMessage());
+            }
+        });
+
+    }
+
+    @Override
+    public void deleteFriend(WrapperParams wrapperParams) {
+        deleteFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+            @Override
+            public void onNext(String s) {
+                super.onNext(s);
+                loadFriends(false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                showMessage(e.getMessage());
+            }
+        });
+
+    }
+
+    @Override
+    public void addFriend(WrapperParams wrapperParams) {
+        addFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+            @Override
+            public void onNext(String s) {
+                super.onNext(s);
+                loadFriends(true);
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                showMessage(e.getMessage());
+            }
+        });
+
+    }
+
+    @Override
+    public void allowFriend(WrapperParams wrapperParams) {
+        allowFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+            @Override
+            public void onNext(String s) {
+                super.onNext(s);
+                loadFriends(false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
                 showMessage(e.getMessage());
             }
         });

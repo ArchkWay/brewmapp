@@ -438,6 +438,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
     //endregion
 
+
     //region Progress In ParentActivity and Hide ChildActivity while load data
 
     public ResultReceiver StartProgressBarInParentActivity(){

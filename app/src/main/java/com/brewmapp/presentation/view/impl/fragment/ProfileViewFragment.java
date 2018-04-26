@@ -139,7 +139,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 view_request.setText(R.string.button_text_request);
                 break;
         }
-        mListener.VisibleChildActivity();
+        mListener.setVisibleChildActivity();
     }
 
     @Override
@@ -248,21 +248,21 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public void friendDeletedSuccess() {
-        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.sendActionParentActivity(Actions.ACTION_REFRESH);
         mListener.showSnackbar(getString(R.string.text_friend_deleted_success));
         setStatusFriend(FriendsView.FRIENDS_NOBODY);
     }
 
     @Override
     public void friendAllowSuccess() {
-        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.sendActionParentActivity(Actions.ACTION_REFRESH);
         mListener.showSnackbar(getString(R.string.text_friend_added_success));
         setStatusFriend(FriendsView.FRIENDS_NOW);
     }
 
     @Override
     public void requestSendSuccess() {
-        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.sendActionParentActivity(Actions.ACTION_REFRESH);
         mListener.showSnackbar(getString(R.string.text_friend_sent_success));
         setStatusFriend(FriendsView.FRIENDS_REQUEST_OUT);
     }
@@ -288,13 +288,13 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void VisibleChildActivity();
+        void setVisibleChildActivity();
 
         void setResult(int resultOk);
 
         void finish();
 
-        void sentActionParentActivity(int actionRefresh);
+        void sendActionParentActivity(int actionRefresh);
 
         void showSnackbar(String string);
     }

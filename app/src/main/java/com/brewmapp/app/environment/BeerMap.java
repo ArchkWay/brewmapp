@@ -46,14 +46,14 @@ public class BeerMap extends Application {
 
         Paper.init(this);
 
-//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-//            @Override
-//            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-//                Crashlytics.logException(paramThrowable);
-//                Paper.book().destroy();
-//                RestartApp();
-//            }
-//        });
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                Crashlytics.logException(paramThrowable);
+                Paper.book().destroy();
+                RestartApp();
+            }
+        });
 
     }
 

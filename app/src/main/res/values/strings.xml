@@ -574,5 +574,12 @@
     <string name="my_work">Моя работа</string>
     <string name="my_resume">Мое резюме</string>
     <string name="text_empty_friends">Вы еще не добавляли своих друзей, воспользуйтесь поиском чтобы найти ихю</string>
+    <string name="text_request_cancel">Отменить запрос на дружбу?</string>
+    <string name="text_request_reject">Отклонить запрос на дружбу?</string>
+    <string name="text_request_friend_delete">Удалить их друзей?</string>
+    <string name="request_friends">Отправить запрос на дружбу?</string>
+    <string name="text_friend_added_success">Добавлен в друзья</string>
+    <string name="text_friend_sent_success">Запрос отправлен</string>
+    <string name="text_friend_deleted_success">Удален из списка друзей</string>
 
 </resources>

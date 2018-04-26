@@ -21,5 +21,9 @@ public interface ProfileViewFragmentPresenter extends LivePresenter<ProfileViewF
 
     void finish(FragmentActivity activity);
 
-    void deleteFriend(FragmentManager fragmentManager);
+    void deleteFriend(FragmentManager fragmentManager, String string);
+
+    void allowFriens(FragmentManager fragmentManager, String string);
+
+    void sendRequestFriends(FragmentManager fragmentManager, String string);
 }

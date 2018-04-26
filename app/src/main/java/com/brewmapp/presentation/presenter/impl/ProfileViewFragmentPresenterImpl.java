@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
@@ -15,10 +14,13 @@ import com.brewmapp.data.entity.wrapper.ContactInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.task.AddFriend;
+import com.brewmapp.execution.task.AllowFriend;
 import com.brewmapp.execution.task.DeleteFriend;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.execution.task.LoadFreeProfileTask;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
+import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 
@@ -44,15 +46,19 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     private int user_id;
     private Context context;
     private DeleteFriend deleteFriend;
+    private AllowFriend allowFriend;
+    private AddFriend addFriend;
 
     @Inject
-    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo,Context context,DeleteFriend deleteFriend){
+    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo,Context context,DeleteFriend deleteFriend,AllowFriend allowFriend,AddFriend addFriend){
 
         this.loadFreeProfileTask = loadFreeProfileTask;
         this.listFriendsTask = listFriendsTask;
         this.userRepo = userRepo;
         this.context = context;
         this.deleteFriend = deleteFriend;
+        this.allowFriend = allowFriend;
+        this.addFriend = addFriend;
 
     }
 
@@ -112,12 +118,12 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
                         ContactInfo contactInfo=(ContactInfo) iFlexible;
                         User friend = contactInfo.getModel().getFriend_info();
                         if (friend.getId() == user_id) {
-                            view.setFriends(contactInfo.getModel().getStatus());
+                            view.setStatusFriend(contactInfo.getModel().getStatus());
                             return;
                         }
                     }
                 }
-                view.setFriends(-1);
+                view.setStatusFriend(FriendsView.FRIENDS_NOBODY);
             }
 
             @Override
@@ -138,9 +144,9 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     }
 
     @Override
-    public void deleteFriend(FragmentManager fragmentManager) {
+    public void deleteFriend(FragmentManager fragmentManager, String string) {
         //region Delete Friend
-        new DialogConfirm(context.getString(R.string.text_button_friend_delete_full), fragmentManager, new DialogConfirm.OnConfirm() {
+        new DialogConfirm(string, fragmentManager, new DialogConfirm.OnConfirm() {
             @Override
             public void onOk() {
                 WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
@@ -166,6 +172,66 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
             }
         });
         //endregion
+
+    }
+
+    @Override
+    public void allowFriens(FragmentManager fragmentManager, String string) {
+        new DialogConfirm(string, fragmentManager, new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                wrapperParams.addParam(Keys.USER_ID, user_id);
+                allowFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                    @Override
+                    public void onNext(String s) {
+                        super.onNext(s);
+                        view.friendAllowSuccess();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showMessage(e.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void sendRequestFriends(FragmentManager fragmentManager, String string) {
+        new DialogConfirm(string, fragmentManager, new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                wrapperParams.addParam(Keys.FRIEND_ID, user_id);
+                addFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                    @Override
+                    public void onNext(String s) {
+                        super.onNext(s);
+                        view.requestSendSuccess();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        view.commonError(e.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
 
     }
 

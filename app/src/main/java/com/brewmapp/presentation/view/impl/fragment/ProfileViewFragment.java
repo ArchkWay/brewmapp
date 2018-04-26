@@ -1,12 +1,10 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -120,10 +118,12 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
-        view_information.setOnClickListener(v->Starter.ProfileEditActivity_StartInVisible(
-                (BaseActivity) getActivity(),
-                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
-                getActivity().getIntent().getData().toString())
+        view_information.setOnClickListener(v->
+//                Starter.ProfileEditActivity_StartInVisible(
+//                (BaseActivity) getActivity(),
+//                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
+//                getActivity().getIntent().getData().toString())
+                showMessage(getString(R.string.message_develop))
         );
         view_request.setOnClickListener(this);
     }
@@ -173,7 +173,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     }
 
     @Override
-    public void setFriends(int status) {
+    public void setStatusFriend(int status) {
         view_request.setTag(status);
         switch (status){
             case FriendsView.FRIENDS_NOW:
@@ -187,6 +187,10 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_gray));
                 view_request.setText(R.string.text_button_friend_request_send);
                 break;
+            case FriendsView.FRIENDS_NOBODY:
+                view_request.setBackground(getResources().getDrawable(R.drawable.selector_button_green_solid));
+                view_request.setText(R.string.button_text_request);
+                break;
         }
         mListener.VisibleChildActivity();
     }
@@ -194,7 +198,22 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @Override
     public void friendDeletedSuccess() {
         mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
-        mListener.finish();
+        mListener.showSnackbar(getString(R.string.text_friend_deleted_success));
+        setStatusFriend(FriendsView.FRIENDS_NOBODY);
+    }
+
+    @Override
+    public void friendAllowSuccess() {
+        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.showSnackbar(getString(R.string.text_friend_added_success));
+        setStatusFriend(FriendsView.FRIENDS_NOW);
+    }
+
+    @Override
+    public void requestSendSuccess() {
+        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.showSnackbar(getString(R.string.text_friend_sent_success));
+        setStatusFriend(FriendsView.FRIENDS_REQUEST_OUT);
     }
 
     @Override
@@ -223,8 +242,13 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO,user.getId());
                 break;
             case CardMenuField.MY_RATINGS:
-                Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
+            case CardMenuField.MY_RESUME:
+            case CardMenuField.MY_WORK:
+            case CardMenuField.SUBSCRIBE:
+                //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
+                showMessage(getString(R.string.message_develop));
                 break;
+
         }
         return false;
     }
@@ -240,7 +264,16 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
                 switch (tag){
                     case FriendsView.FRIENDS_REQUEST_OUT:
-                        presenter.deleteFriend(getFragmentManager());
+                        presenter.deleteFriend(getFragmentManager(),getString(R.string.text_request_cancel));
+                        break;
+                    case FriendsView.FRIENDS_NOW:
+                        presenter.deleteFriend(getFragmentManager(),getString(R.string.text_request_friend_delete));
+                        break;
+                    case FriendsView.FRIENDS_REQUEST_IN:
+                        presenter.allowFriens(getFragmentManager(),getString(R.string.text_request_reject));
+                        break;
+                    case FriendsView.FRIENDS_NOBODY:
+                        presenter.sendRequestFriends(getFragmentManager(),getString(R.string.request_friends));
                         break;
 
                 }
@@ -260,6 +293,8 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         void finish();
 
         void sentActionParentActivity(int actionRefresh);
+
+        void showSnackbar(String string);
     }
 
 }

@@ -12,7 +12,11 @@ public interface ProfileViewFragmentView extends BasicView {
     void setContent(User user);
     void commonError(String... strings);
 
-    void setFriends(int status);
+    void setStatusFriend(int status);
 
     void friendDeletedSuccess();
+
+    void friendAllowSuccess();
+
+    void requestSendSuccess();
 }

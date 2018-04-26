@@ -362,7 +362,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
                 //endregion
                 break;
             case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
-                new DialogConfirm("Дружить?", getFragmentManager(), new DialogConfirm.OnConfirm() {
+                new DialogConfirm(getString(R.string.request_friends), getFragmentManager(), new DialogConfirm.OnConfirm() {
                     @Override
                     public void onOk() {
                         WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);

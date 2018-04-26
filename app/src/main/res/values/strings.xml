@@ -569,7 +569,7 @@
     <string name="text_button_friend_accept">Добавить</string>
     <string name="text_button_friend_accept_full">Принять заявку</string>
     <string name="text_button_friend_select">Выбрать</string>
-    <string name="text_button_friend_request_send">Завявка отправлена</string>
+    <string name="text_button_friend_request_send">Отменить завявку</string>
     <string name="fav_subscrabe">Подписаться</string>
     <string name="my_work">Моя работа</string>
     <string name="my_resume">Мое резюме</string>

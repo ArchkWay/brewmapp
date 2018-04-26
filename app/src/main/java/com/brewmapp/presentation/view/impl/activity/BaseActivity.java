@@ -18,6 +18,8 @@ import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +43,7 @@ import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
+import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 
 import java.io.IOException;
@@ -468,6 +471,11 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                             },500);
                         //endregion
                         break;
+                    case Actions.ACTION_REFRESH:{
+                        FriendsFragment friendsFragment= (FriendsFragment) getSupportFragmentManager().findFragmentByTag(FriendsFragment.class.getName());
+                        if(friendsFragment!=null)
+                            friendsFragment.presenter.loadFriends(false);
+                    }
                 }
 
             }
@@ -489,8 +497,12 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
     }
 
     public void stopProgressParentActivity(){
+        sentActionParentActivity(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY);
+    }
+
+    public void sentActionParentActivity(int action){
         if(isModeActivityInVisible()) {
-            resultReceiverVisibleParentActivity.send(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY, null);
+            resultReceiverVisibleParentActivity.send(action, null);
         }
     }
 

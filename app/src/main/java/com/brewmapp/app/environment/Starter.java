@@ -168,6 +168,7 @@ public class Starter {
         );
 
     }
+
     public static void ProfileEditActivity_StartInVisible(BaseActivity baseActivity, String action, String user_id) {
         Intent intent=new Intent(
                 action,
@@ -178,6 +179,19 @@ public class Starter {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         baseActivity.startActivity(intent);
+    }
+
+    public static void ProfileEditActivity_StartInVisible_For_Result(BaseActivity baseActivity, String action, String user_id, int requestCode) {
+        Intent intent=new Intent(
+                action,
+                Uri.parse(user_id),
+                baseActivity, ProfileEditActivity.class);
+        intent.putExtra(baseActivity.getString(R.string.key_start_activity_invisible),baseActivity.StartProgressBarInParentActivity());
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        baseActivity.startActivityForResult(intent,requestCode);
+
     }
 
     public static void MultiFragmentActivity_MODE_CHAT(Activity activity, User friend) {

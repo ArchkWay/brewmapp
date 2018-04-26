@@ -2,6 +2,7 @@ package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +41,7 @@ import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
@@ -49,6 +51,7 @@ import com.brewmapp.R;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 
 import static android.app.Activity.RESULT_OK;
+import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_ITEMS;
 
 public class FriendsFragment extends BaseFragment implements FriendsView
 {
@@ -69,7 +72,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
     //endregion
 
     //region Inject
-    @Inject FriendsPresenter presenter;
+    @Inject public FriendsPresenter presenter;
     //endregion
 
     //region Private
@@ -96,6 +99,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
 
     @Override
     protected void initView(View view) {
+
         setHasOptionsMenu(true);
         addFriend.setOnClickListener(v -> {
             startActivityForResult(new Intent(getActivity(), InviteActivity.class), RequestCodes.REQUEST_INVITE_FRIEND);
@@ -201,6 +205,11 @@ public class FriendsFragment extends BaseFragment implements FriendsView
             case RequestCodes.REQUEST_INTEREST:
                 if(resultCode==RESULT_OK){
                     presenter.requestNewFriend(data);
+                }
+                return;
+            case REQUEST_CODE_REFRESH_ITEMS:
+                if(resultCode==RESULT_OK){
+                    presenter.loadFriends(false);
                 }
                 return;
         }
@@ -316,7 +325,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
         search.clearFocus();
         switch (code){
             case FriendsView.FRIENDS_ACTION_CLICK:
-                Starter.ProfileEditActivity_StartInVisible((BaseActivity) getActivity(),String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend));
+                Starter.ProfileEditActivity_StartInVisible_For_Result((BaseActivity) getActivity(),String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend),REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case FriendsView.FRIENDS_ACTION_ACCEPT:
                 //region Accept friend
@@ -337,7 +346,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView
                 break;
             case FriendsView.FRIENDS_ACTION_DELETE:
                 //region Delete Friend
-                new DialogConfirm("Удалить?", getFragmentManager(), new DialogConfirm.OnConfirm() {
+                new DialogConfirm(getString(R.string.text_button_friend_delete_full), getFragmentManager(), new DialogConfirm.OnConfirm() {
                     @Override
                     public void onOk() {
                         WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);

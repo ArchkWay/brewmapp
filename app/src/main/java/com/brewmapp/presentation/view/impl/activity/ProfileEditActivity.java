@@ -80,8 +80,6 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
 
     @Override
     public void commonError(String... strings) {
-        //VisibleChildActivity();
-        //sendResultReceiver(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY);
 
         if(strings.length==0)
             showMessage(getString(R.string.error));
@@ -156,6 +154,9 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     public void setTitle(CharSequence title) {
         super.setTitle(title);
         toolbarTitle.setText(getTitle());
+
     }
+
+
 
 }

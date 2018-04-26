@@ -1,18 +1,26 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
+import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.brewmapp.execution.exchange.request.base.WrapperParams;
+import com.brewmapp.execution.exchange.request.base.Wrappers;
+import com.brewmapp.execution.task.DeleteFriend;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.execution.task.LoadFreeProfileTask;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
+import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,13 +42,17 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     private ListFriendsTask listFriendsTask;
     private UserRepo userRepo;
     private int user_id;
+    private Context context;
+    private DeleteFriend deleteFriend;
 
     @Inject
-    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo){
+    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo,Context context,DeleteFriend deleteFriend){
 
         this.loadFreeProfileTask = loadFreeProfileTask;
         this.listFriendsTask = listFriendsTask;
         this.userRepo = userRepo;
+        this.context = context;
+        this.deleteFriend = deleteFriend;
 
     }
 
@@ -123,6 +135,38 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
             activity.setResult(Activity.RESULT_OK,new Intent(null,Uri.parse(String.valueOf(user_old_data.getId()))));
             activity.finish();
         }catch (Exception e){}
+    }
+
+    @Override
+    public void deleteFriend(FragmentManager fragmentManager) {
+        //region Delete Friend
+        new DialogConfirm(context.getString(R.string.text_button_friend_delete_full), fragmentManager, new DialogConfirm.OnConfirm() {
+            @Override
+            public void onOk() {
+                WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                wrapperParams.addParam(Keys.USER_ID, user_id);
+                deleteFriend.execute(wrapperParams,new SimpleSubscriber<String>(){
+                    @Override
+                    public void onNext(String s) {
+                        super.onNext(s);
+                        view.friendDeletedSuccess();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        showMessage(e.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+        //endregion
+
     }
 
 }

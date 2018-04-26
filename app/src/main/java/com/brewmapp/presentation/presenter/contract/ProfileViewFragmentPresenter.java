@@ -2,16 +2,9 @@ package com.brewmapp.presentation.presenter.contract;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.TextView;
+import android.support.v4.app.FragmentManager;
 
-import com.brewmapp.data.entity.User;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
-import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
-
-import java.io.File;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
@@ -27,4 +20,6 @@ public interface ProfileViewFragmentPresenter extends LivePresenter<ProfileViewF
     void loadFriends();
 
     void finish(FragmentActivity activity);
+
+    void deleteFriend(FragmentManager fragmentManager);
 }

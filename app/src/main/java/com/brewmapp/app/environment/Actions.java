@@ -33,6 +33,7 @@ public class Actions {
     public static final int ACTION_REFRESH_FRAGMENT_CONTENT = 27;
 
     public static final int ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY =28;
+    public static final int ACTION_REFRESH =29;
 
     public static final String PARAM1 = "PARAM1";
     public static final String PARAM2 = "PARAM2";

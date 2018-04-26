@@ -265,7 +265,7 @@ public class MainActivity extends BaseActivity
         navigator.setActionBarItemDelegate(baseFragment );
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_main_container, baseFragment )
+                .replace(R.id.activity_main_container, baseFragment,baseFragment.getClass().getName() )
                 .commit();
     }
 

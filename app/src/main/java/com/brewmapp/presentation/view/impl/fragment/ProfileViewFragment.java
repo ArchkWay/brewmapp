@@ -1,10 +1,12 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.User;
@@ -45,7 +48,7 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
  * {@link ProfileViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ProfileViewFragment extends BaseFragment implements ProfileViewFragmentView , FlexibleAdapter.OnItemClickListener{
+public class ProfileViewFragment extends BaseFragment implements ProfileViewFragmentView , FlexibleAdapter.OnItemClickListener, View.OnClickListener{
 
     //region BindView
     @BindView(R.id.fragment_profile_view_avatar)    ImageView avatar;
@@ -122,6 +125,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                 String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
                 getActivity().getIntent().getData().toString())
         );
+        view_request.setOnClickListener(this);
     }
 
     @Override
@@ -188,6 +192,12 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     }
 
     @Override
+    public void friendDeletedSuccess() {
+        mListener.sentActionParentActivity(Actions.ACTION_REFRESH);
+        mListener.finish();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.stub,menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -219,12 +229,37 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         return false;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fragment_profile_view_request:
+                int tag;
+                try {
+                    tag= (int) v.getTag();
+                }catch (Exception e){return;}
+
+                switch (tag){
+                    case FriendsView.FRIENDS_REQUEST_OUT:
+                        presenter.deleteFriend(getFragmentManager());
+                        break;
+
+                }
+
+                break;
+        }
+    }
+
     //***********************************
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void VisibleChildActivity();
 
+        void setResult(int resultOk);
+
+        void finish();
+
+        void sentActionParentActivity(int actionRefresh);
     }
 
 }

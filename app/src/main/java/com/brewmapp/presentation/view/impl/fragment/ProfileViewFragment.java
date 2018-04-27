@@ -17,7 +17,11 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.CardMenuField;
+import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
@@ -28,6 +32,7 @@ import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -111,12 +116,58 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         place.setText(user.getCountryCityFormated());
         counter_friends.setCount(user.getCounts().getFriends());
         counter_photos.setCount(user.getCounts().getPhotos());
-        counter_subscribers.setCount(user.getCounts().getSubscriptions());
-        counter_subscribes.setCount(user.getCounts().getSubscribers());
+        counter_subscribers.setCount(user.getCounts().getSubscribers());
+
         time.setText(MapUtils.FormatDate(user.getLastLogin()));
 
-        presenter.loadStatusUser();
+        presenter.loadSubscription();
 
+    }
+
+    @Override
+    public void setSubscriptions(Subscriptions subscriptions) {
+
+        //region set Title menu Subscription
+        List<SubscriptionInfo> subscriptionInfoList = subscriptions.getModels();
+        CardMenuField cardMenuField=CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE);
+        if(cardMenuField!=null) {
+            Iterator<SubscriptionInfo> subscriptionInfoIterator = subscriptionInfoList.iterator();
+            while (subscriptionInfoIterator.hasNext()) {
+                SubscriptionInfo subscriptionInfo = subscriptionInfoIterator.next();
+                Subscription subscription = subscriptionInfo.getModel();
+                if (Keys.CAP_USER.equals(subscription.getRelated_model())) {
+                    if (subscription.getRelated_id().equals(presenter.getUser_id())) {
+                        cardMenuField.setTitle(getString(R.string.fav_unsubscrabe));
+                        cardMenuField.setExternalId(subscription.getId());
+                    }else
+                        cardMenuField.setTitle(getString(R.string.fav_subscrabe));
+                    menu.getAdapter().notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+        //endregion
+        counter_subscribes.setCount(subscriptionInfoList.size());
+        presenter.loadNews();
+
+    }
+
+    @Override
+    public void setNews(Posts posts) {
+
+        presenter.loadStatusUser();
+    }
+
+    @Override
+    public void subscriptionSuccess() {
+        CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_subscrabe));
+        menu.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void unSubscriptionSuccess() {
+        CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_unsubscrabe));
+        menu.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -151,10 +202,22 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
             case CardMenuField.FAVORITE_RESTO:
                 Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO,user.getId());
                 break;
+            case CardMenuField.SUBSCRIBE:
+                CardMenuField cardMenuField=CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE);
+                String title=cardMenuField.getTitle();
+                String text_subsOFF=getString(R.string.fav_unsubscrabe);
+                String text_subsON=getString(R.string.fav_subscrabe);
+                if(title.equals(text_subsOFF)) {
+                    presenter.SubscriptionOnTask();
+                }else if(title.equals(text_subsON)){
+                    presenter.SubscriptionOffTask(cardMenuField.getExternalId());
+                }else {
+                    commonError();
+                }
+                break;
             case CardMenuField.MY_RATINGS:
             case CardMenuField.MY_RESUME:
             case CardMenuField.MY_WORK:
-            case CardMenuField.SUBSCRIBE:
                 //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
                 showMessage(getString(R.string.message_develop));
                 break;
@@ -266,6 +329,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         mListener.showSnackbar(getString(R.string.text_friend_sent_success));
         setStatusFriend(FriendsView.FRIENDS_REQUEST_OUT);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

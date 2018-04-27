@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.view.contract;
 
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.container.Subscriptions;
 
 import ru.frosteye.ovsa.presentation.view.BasicView;
 
@@ -19,4 +21,12 @@ public interface ProfileViewFragmentView extends BasicView {
     void friendAllowSuccess();
 
     void requestSendSuccess();
+
+    void setSubscriptions(Subscriptions subscriptions);
+
+    void setNews(Posts posts);
+
+    void subscriptionSuccess();
+
+    void unSubscriptionSuccess();
 }

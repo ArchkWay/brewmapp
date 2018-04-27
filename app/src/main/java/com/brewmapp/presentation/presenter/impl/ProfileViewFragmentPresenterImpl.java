@@ -10,7 +10,11 @@ import android.support.v4.app.FragmentManager;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
+import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
+import com.brewmapp.data.pojo.LoadNewsPackage;
+import com.brewmapp.data.pojo.SubscriptionPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
@@ -19,6 +23,10 @@ import com.brewmapp.execution.task.AllowFriend;
 import com.brewmapp.execution.task.DeleteFriend;
 import com.brewmapp.execution.task.ListFriendsTask;
 import com.brewmapp.execution.task.LoadFreeProfileTask;
+import com.brewmapp.execution.task.LoadNewsTask;
+import com.brewmapp.execution.task.LoadSubscriptionsItemsTask;
+import com.brewmapp.execution.task.SubscriptionOffTask;
+import com.brewmapp.execution.task.SubscriptionOnTask;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
@@ -48,9 +56,13 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     private DeleteFriend deleteFriend;
     private AllowFriend allowFriend;
     private AddFriend addFriend;
+    private LoadSubscriptionsItemsTask loadSubscriptionsItemsTask;
+    private LoadNewsTask loadNewsTask;
+    private SubscriptionOnTask subscriptionOnTask;
+    private SubscriptionOffTask subscriptionOffTask;
 
     @Inject
-    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo,Context context,DeleteFriend deleteFriend,AllowFriend allowFriend,AddFriend addFriend){
+    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo,Context context,DeleteFriend deleteFriend,AllowFriend allowFriend,AddFriend addFriend,LoadSubscriptionsItemsTask loadSubscriptionsItemsTask,LoadNewsTask loadNewsTask,SubscriptionOnTask subscriptionOnTask,SubscriptionOffTask subscriptionOffTask){
 
         this.loadFreeProfileTask = loadFreeProfileTask;
         this.listFriendsTask = listFriendsTask;
@@ -59,6 +71,10 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
         this.deleteFriend = deleteFriend;
         this.allowFriend = allowFriend;
         this.addFriend = addFriend;
+        this.loadSubscriptionsItemsTask = loadSubscriptionsItemsTask;
+        this.loadNewsTask = loadNewsTask;
+        this.subscriptionOnTask = subscriptionOnTask;
+        this.subscriptionOffTask = subscriptionOffTask;
 
     }
 
@@ -233,6 +249,88 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
             }
         });
 
+    }
+
+    @Override
+    public void loadSubscription() {
+        loadSubscriptionsItemsTask.execute(user_id,new SimpleSubscriber<Subscriptions>(){
+            @Override
+            public void onNext(Subscriptions subscriptions) {
+                super.onNext(subscriptions);
+                view.setSubscriptions(subscriptions);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
+
+    }
+
+    @Override
+    public void loadNews() {
+        LoadNewsPackage loadNewsPackage=new LoadNewsPackage();
+        loadNewsPackage.setUser_id(String.valueOf(user_id));
+        loadNewsPackage.setRelated_model(Keys.CAP_USER);
+        loadNewsTask.execute(loadNewsPackage,new SimpleSubscriber<Posts>(){
+            @Override
+            public void onNext(Posts posts) {
+                super.onNext(posts);
+                view.setNews(posts);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void SubscriptionOnTask() {
+        SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
+        subscriptionPackage.setRelated_model(Keys.CAP_USER);
+        subscriptionPackage.setRelated_id(String.valueOf(user_id));
+        subscriptionOnTask.execute(subscriptionPackage,new SimpleSubscriber<String>(){
+            @Override
+            public void onNext(String s) {
+                super.onNext(s);
+                view.subscriptionSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public String getUser_id() {
+        return String.valueOf(user_id);
+    }
+
+    @Override
+    public void SubscriptionOffTask(String externalId) {
+        SubscriptionPackage subscriptionPackage=new SubscriptionPackage();
+        subscriptionPackage.setId(externalId);
+        subscriptionOffTask.execute(subscriptionPackage,new SimpleSubscriber<String>(){
+            @Override
+            public void onNext(String s) {
+                super.onNext(s);
+                view.unSubscriptionSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.commonError(e.getMessage());
+            }
+        });
     }
 
 }

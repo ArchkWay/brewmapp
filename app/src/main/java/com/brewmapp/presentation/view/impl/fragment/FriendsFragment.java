@@ -144,7 +144,6 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
 
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflater.inflate(R.menu.add,menu);
@@ -157,6 +156,69 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
         presenter.onAttach(this);
         presenter.loadFriends(false);
     }
+
+
+    private void onClickItem(int code, Object payload) {
+        Contact contact=((Contact) payload);
+        final int id_friend=contact.getFriend_info().getId();
+        search.clearFocus();
+        switch (code){
+            case FriendsView.FRIENDS_ACTION_CLICK:
+                Starter.ProfileEditActivity_StartInVisible_For_Result((BaseActivity) getActivity(),String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend),REQUEST_CODE_REFRESH_ITEMS);
+                break;
+            case FriendsView.FRIENDS_ACTION_ACCEPT:
+                //region Accept friend
+                new DialogConfirm(getString(R.string.request_friends_accept), getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.USER_ID, id_friend);
+                        presenter.allowFriend(wrapperParams);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                //endregion
+                break;
+            case FriendsView.FRIENDS_ACTION_DELETE:
+                //region Delete Friend
+                new DialogConfirm(getString(R.string.text_button_friend_delete_full), getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.USER_ID, id_friend);
+                        presenter.deleteFriend(wrapperParams);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                //endregion
+                break;
+            case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
+                new DialogConfirm(getString(R.string.request_friends), getFragmentManager(), new DialogConfirm.OnConfirm() {
+                    @Override
+                    public void onOk() {
+                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
+                        wrapperParams.addParam(Keys.FRIEND_ID, id_friend);
+                        presenter.addFriend(wrapperParams);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+                break;
+        }
+
+    }
+
 
     @Override
     protected LivePresenter<?> getPresenter() {
@@ -320,67 +382,6 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
     //endregion
 
     //region Functions
-
-    private void onClickItem(int code, Object payload) {
-        Contact contact=((Contact) payload);
-        final int id_friend=contact.getFriend_info().getId();
-        search.clearFocus();
-        switch (code){
-            case FriendsView.FRIENDS_ACTION_CLICK:
-                Starter.ProfileEditActivity_StartInVisible_For_Result((BaseActivity) getActivity(),String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend),REQUEST_CODE_REFRESH_ITEMS);
-                break;
-            case FriendsView.FRIENDS_ACTION_ACCEPT:
-                //region Accept friend
-                new DialogConfirm("Добавить в друзья?", getFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-                        wrapperParams.addParam(Keys.USER_ID, id_friend);
-                        presenter.allowFriend(wrapperParams);
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-                //endregion
-                break;
-            case FriendsView.FRIENDS_ACTION_DELETE:
-                //region Delete Friend
-                new DialogConfirm(getString(R.string.text_button_friend_delete_full), getFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-                        wrapperParams.addParam(Keys.USER_ID, id_friend);
-                        presenter.deleteFriend(wrapperParams);
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-                //endregion
-                break;
-            case FriendsView.FRIENDS_ACTION_REQUEST_ACCEPT:
-                new DialogConfirm(getString(R.string.request_friends), getFragmentManager(), new DialogConfirm.OnConfirm() {
-                    @Override
-                    public void onOk() {
-                        WrapperParams wrapperParams = new WrapperParams(Wrappers.USER_FRIENDS);
-                        wrapperParams.addParam(Keys.FRIEND_ID, id_friend);
-                        presenter.addFriend(wrapperParams);
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-                break;
-        }
-
-    }
 
     private void tuneModeView() {
 

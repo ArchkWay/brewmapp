@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -36,10 +37,13 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
     public static final int EVENT_SHARE = 7;
     public static final int EVENT_ALERT = 8;
 
+    private static List<CardMenuField> listProfileViewItems;
+
     private int id;
     private int icon;
     private String title;
     private boolean extraSpaceBottom = false;
+    private String externalId;
 
     public CardMenuField(int id, int icon, String title) {
         this.id = id;
@@ -102,6 +106,9 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public static List<CardMenuField> createProfileViewItems(Context context) {
         List<CardMenuField> out = new ArrayList<>();
@@ -112,7 +119,7 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         out.add(new CardMenuField(MY_WORK, R.drawable.ic_my_work, context.getString(R.string.my_work)));
         out.add(new CardMenuField(MY_RESUME, R.drawable.ic_my_experiance, context.getString(R.string.my_resume)));
 
-
+        listProfileViewItems=out;
         return out;
     }
 
@@ -138,5 +145,26 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         out.add(new CardMenuField(EVENT_ALERT, R.drawable.ic_alert, getString(R.string.alert)));
 
         return out;
+    }
+
+    public static CardMenuField getItemProfileViewItemsById(int id_card_menu) {
+        if(listProfileViewItems!=null){
+            Iterator<CardMenuField> cardMenuFieldIterator=listProfileViewItems.iterator();
+            while (cardMenuFieldIterator.hasNext()){
+                CardMenuField cardMenuField=cardMenuFieldIterator.next();
+                if(cardMenuField.getId()==id_card_menu){
+                    return cardMenuField;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public String getExternalId() {
+        return externalId;
     }
 }

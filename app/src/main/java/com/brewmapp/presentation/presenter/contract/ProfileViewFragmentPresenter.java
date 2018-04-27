@@ -26,4 +26,14 @@ public interface ProfileViewFragmentPresenter extends LivePresenter<ProfileViewF
     void allowFriens(FragmentManager fragmentManager, String string);
 
     void sendRequestFriends(FragmentManager fragmentManager, String string);
+
+    void loadSubscription();
+
+    void loadNews();
+
+    void SubscriptionOnTask();
+
+    String getUser_id();
+
+    void SubscriptionOffTask(String externalId);
 }

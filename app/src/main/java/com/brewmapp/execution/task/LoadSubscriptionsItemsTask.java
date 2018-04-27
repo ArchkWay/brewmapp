@@ -39,11 +39,15 @@ public class LoadSubscriptionsItemsTask extends BaseNetworkTask<Integer, Subscri
     }
 
     @Override
-    protected Observable<Subscriptions> prepareObservable(Integer params) {
+    protected Observable<Subscriptions> prepareObservable(Integer user_id) {
         return Observable.create(subscriber -> {
             try {
                 WrapperParams params1 = new WrapperParams(Wrappers.SUBSCRIPTION);
-                params1.addParam(Keys.USER_ID, userRepo.load().getId());
+                if(user_id==0)
+                    params1.addParam(Keys.USER_ID, userRepo.load().getId());
+                else
+                    params1.addParam(Keys.USER_ID,user_id);
+
                 Subscriptions subscriptions = executeCall(getApi().loadUserSubscriptionsItems(params1));
                 subscriber.onNext(subscriptions);
                 subscriber.onComplete();

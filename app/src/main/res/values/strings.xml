@@ -581,5 +581,7 @@
     <string name="text_friend_added_success">Добавлен в друзья</string>
     <string name="text_friend_sent_success">Запрос отправлен</string>
     <string name="text_friend_deleted_success">Удален из списка друзей</string>
+    <string name="request_friends_accept">Добавить в друзья?</string>
+    <string name="fav_unsubscrabe">Отписаться</string>
 
 </resources>

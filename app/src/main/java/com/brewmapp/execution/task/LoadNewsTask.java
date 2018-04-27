@@ -51,6 +51,9 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, Posts> {
                     params.addParam(Keys.RELATED_MODEL,request.getRelated_model());
                     params.addParam(Keys.RELATED_ID,request.getResto_id());
                 }
+                if(request.getUser_id()!=null){
+                    params.addParam(Keys.USER_SUBSCRIPTION,request.getUser_id());
+                }
                 if(request.isOnlyMount()) {
                     start=0; end = 1;
                 }

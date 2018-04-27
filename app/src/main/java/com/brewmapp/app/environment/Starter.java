@@ -20,6 +20,7 @@ import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
 import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.impl.activity.AddReviewBeerActivity;
 import com.brewmapp.presentation.view.impl.activity.AddReviewRestoActivity;
+import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.BeerDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.BreweryDetailsActivity;
@@ -296,4 +297,7 @@ public class Starter {
 
     }
 
+    public static void AlbumsActivity(BaseActivity baseActivity, int user_id) {
+        baseActivity.startActivity(new Intent("",Uri.parse(String.valueOf(user_id)),baseActivity,AlbumsActivity.class));
+    }
 }

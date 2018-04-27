@@ -1,5 +1,7 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.text.TextUtils;
+
 import java.io.File;
 
 import javax.inject.Inject;
@@ -32,9 +34,8 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
     private UploadPhotoTask uploadPhotoTask;
     private LoadAlbumPhotosTask loadAlbumPhotosTask;
     private LikeTask likeTask;
-    private UserRepo userRepo;
     private DeletePhotoTask deletePhotoTask;
-
+    private UserRepo userRepo;
     @Inject
     public AlbumPresenterImpl(UploadPhotoTask uploadPhotoTask,
                               LoadAlbumPhotosTask loadAlbumPhotosTask,
@@ -44,8 +45,8 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
         this.uploadPhotoTask = uploadPhotoTask;
         this.loadAlbumPhotosTask = loadAlbumPhotosTask;
         this.likeTask = likeTask;
-        this.userRepo = userRepo;
         this.deletePhotoTask = deletePhotoTask;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -55,28 +56,32 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
     }
 
     @Override
-    public void onRequestPhotos(int albumId) {
-        enableControls(false);
-        WrapperParams wrapperParams = new WrapperParams(Wrappers.PHOTO);
-        if(albumId==0){
-            wrapperParams.addParam(Keys.RELATED_MODEL,Keys.CAP_USER);
-            wrapperParams.addParam(Keys.RELATED_ID,userRepo.load().getId());
-        }else {
-            wrapperParams.addParam(Keys.PHOTO_ALBUM_ID, albumId);
-        }
-        loadAlbumPhotosTask.execute(wrapperParams, new SimpleSubscriber<AlbumPhotos>() {
-            @Override
-            public void onError(Throwable e) {
-                enableControls(true);
-                showMessage(e.getMessage());
+    public void onRequestPhotos(int albumId, String user_id) {
+        if(!TextUtils.isEmpty(user_id)) {
+            enableControls(false);
+            WrapperParams wrapperParams = new WrapperParams(Wrappers.PHOTO);
+            if (albumId == 0) {
+                wrapperParams.addParam(Keys.RELATED_MODEL, Keys.CAP_USER);
+                wrapperParams.addParam(Keys.RELATED_ID, user_id);
+            } else {
+                wrapperParams.addParam(Keys.PHOTO_ALBUM_ID, albumId);
             }
+            loadAlbumPhotosTask.execute(wrapperParams, new SimpleSubscriber<AlbumPhotos>() {
+                @Override
+                public void onError(Throwable e) {
+                    enableControls(true);
+                    showMessage(e.getMessage());
+                }
 
-            @Override
-            public void onNext(AlbumPhotos albumPhotos) {
-                enableControls(true);
-                view.showPhotos(albumPhotos);
-            }
-        });
+                @Override
+                public void onNext(AlbumPhotos albumPhotos) {
+                    enableControls(true);
+                    view.showPhotos(albumPhotos);
+                }
+            });
+        }else {
+            view.commonError();
+        }
     }
 
     @Override
@@ -92,7 +97,7 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
             @Override
             public void onNext(SingleResponse<UploadPhotoResponse> responseBody) {
                 enableControls(true);
-                onRequestPhotos(albumId);
+                view.uploadPhotoSuccess();
                 file.delete();
             }
         });
@@ -121,6 +126,11 @@ public class AlbumPresenterImpl extends BasePresenter<AlbumView> implements Albu
         WrapperParams wrapperParams=new WrapperParams(Keys.CAP_PHOTO);
         wrapperParams.addParam(Keys.ID,photo_id);
         deletePhotoTask.execute(wrapperParams,simpleSubscriber);
+    }
+
+    @Override
+    public boolean isOwner(String user_id) {
+        return userRepo.load().getId()==Integer.valueOf(user_id);
     }
 
     private class LikeSubscriber extends SimpleSubscriber<MessageResponse> {

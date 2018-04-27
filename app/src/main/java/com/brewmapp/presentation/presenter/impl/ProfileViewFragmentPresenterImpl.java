@@ -296,9 +296,9 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
         subscriptionPackage.setRelated_id(String.valueOf(user_id));
         subscriptionOnTask.execute(subscriptionPackage,new SimpleSubscriber<String>(){
             @Override
-            public void onNext(String s) {
-                super.onNext(s);
-                view.subscriptionSuccess();
+            public void onNext(String subscription_id) {
+                super.onNext(subscription_id);
+                view.subscriptionSuccess(subscription_id);
             }
 
             @Override

@@ -2,13 +2,9 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,16 +15,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.brewmapp.data.entity.Album;
 import com.brewmapp.data.entity.Photo;
-import com.brewmapp.data.entity.wrapper.AlbumInfo;
 import com.brewmapp.presentation.view.impl.widget.LikeView;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -41,7 +34,6 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.AlbumPresenter;
 import com.brewmapp.presentation.view.contract.AlbumView;
 
-import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.tool.DateTools;
@@ -71,6 +63,7 @@ public class AlbumActivity extends BaseActivity implements
 
     //region Private
     private int albumId;
+    private String user_id;
     private String albumTitle;
     private FlexibleAdapter<PhotoInfo> adapter;
     private AlbumPhotos albumPhotos;
@@ -89,6 +82,7 @@ public class AlbumActivity extends BaseActivity implements
     protected void initView() {
         this.albumId = getIntent().getIntExtra(Keys.ALBUM_ID, 0);
         this.albumTitle = getIntent().getStringExtra(Keys.ALBUM_TITLE);
+        this.user_id = getIntent().getStringExtra(Keys.USER_ID);
 
         setTitle(albumTitle);
 
@@ -98,7 +92,7 @@ public class AlbumActivity extends BaseActivity implements
         toolbarTitle.setText(getTitle());
 
         enableBackButton();
-        swipe.setOnRefreshListener(() -> presenter.onRequestPhotos(albumId));
+        swipe.setOnRefreshListener(() -> presenter.onRequestPhotos(albumId, user_id));
         adapter = new FlexibleAdapter<>(arrayList, this);
         adapter.addListener(this);
 
@@ -113,10 +107,14 @@ public class AlbumActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(mode_selection_on){
-            getMenuInflater().inflate(R.menu.delete, menu);
+        if(presenter.isOwner(user_id)) {
+            if (mode_selection_on) {
+                getMenuInflater().inflate(R.menu.delete, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.add, menu);
+            }
         }else {
-            getMenuInflater().inflate(R.menu.add, menu);
+            getMenuInflater().inflate(R.menu.stub, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -142,7 +140,7 @@ public class AlbumActivity extends BaseActivity implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.onRequestPhotos(albumId);
+        presenter.onRequestPhotos(albumId,user_id);
     }
 
     @Override
@@ -167,6 +165,12 @@ public class AlbumActivity extends BaseActivity implements
         list.setVisibility(photos.getModels().size()==0?View.GONE:View.VISIBLE);
         mode_selection_on=false;
     }
+
+    @Override
+    public void uploadPhotoSuccess() {
+        presenter.onRequestPhotos(albumId, user_id);
+    }
+
 
     @Override
     public void enableControls(boolean enabled, int code) {

@@ -2,7 +2,6 @@ package com.brewmapp.presentation.view.impl.activity;
 
 import javax.inject.Inject;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,7 +32,6 @@ import com.brewmapp.R;
 
 import ru.frosteye.ovsa.presentation.view.dialog.Confirm;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
-import ru.frosteye.ovsa.stub.listener.SelectListener;
 
 public class AlbumsActivity extends BaseActivity implements
         AlbumsView,
@@ -73,7 +71,10 @@ public class AlbumsActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add, menu);
+        if(presenter.isOwnerUser())
+            getMenuInflater().inflate(R.menu.add, menu);
+        else
+            getMenuInflater().inflate(R.menu.stub, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -90,7 +91,7 @@ public class AlbumsActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            presenter.onLoadAlbums();
+            presenter.onLoadAlbums(getIntent());
         }
     }
 
@@ -102,7 +103,7 @@ public class AlbumsActivity extends BaseActivity implements
         toolbarTitle.setText(getTitle());
 
         enableBackButton();
-        swipe.setOnRefreshListener(() -> presenter.onLoadAlbums());
+        swipe.setOnRefreshListener(() -> presenter.onLoadAlbums(getIntent()));
         list.setLayoutManager(new LinearLayoutManager(this));
         list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         adapter = new FlexibleAdapter<>(new ArrayList<>(), this);
@@ -112,7 +113,7 @@ public class AlbumsActivity extends BaseActivity implements
     @Override
     protected void attachPresenter() {
         presenter.onAttach(this);
-        presenter.onLoadAlbums();
+        presenter.onLoadAlbums(getIntent());
     }
 
     @Override
@@ -149,6 +150,11 @@ public class AlbumsActivity extends BaseActivity implements
         textView.setVisibility(albums.getModels().size()!=0? View.GONE:View.VISIBLE);
         list.setVisibility(albums.getModels().size()==0?View.GONE:View.VISIBLE);
     }
+
+    @Override
+    public void removeAlbumSuccess() {
+        presenter.onLoadAlbums(getIntent());
+    }
     //endregion
 
     @Override
@@ -157,6 +163,7 @@ public class AlbumsActivity extends BaseActivity implements
         Intent intent = new Intent(this, AlbumActivity.class);
         intent.putExtra(Keys.ALBUM_ID, albumInfo.getModel().getId());
         intent.putExtra(Keys.ALBUM_TITLE, albumInfo.getModel().getName());
+        intent.putExtra(Keys.USER_ID,presenter.getUserId());
         startActivity(intent);
         return false;
     }

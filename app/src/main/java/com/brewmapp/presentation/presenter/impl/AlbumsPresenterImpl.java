@@ -1,5 +1,8 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.content.Intent;
+import android.text.TextUtils;
+
 import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UserRepo;
@@ -23,6 +26,7 @@ public class AlbumsPresenterImpl extends BasePresenter<AlbumsView> implements Al
     private LoadAlbumsTask loadAlbumsTask;
     private DeleteAlbumTask deleteAlbumTask;
     private UserRepo userRepo;
+    private String user_id;
 
     @Inject
     public AlbumsPresenterImpl(LoadAlbumsTask loadAlbumsTask, DeleteAlbumTask deleteAlbumTask,
@@ -39,16 +43,22 @@ public class AlbumsPresenterImpl extends BasePresenter<AlbumsView> implements Al
     }
 
     @Override
-    public void onLoadAlbums() {
+    public void onLoadAlbums(Intent intent) {
         enableControls(false);
         WrapperParams params = new WrapperParams(Wrappers.PHOTO_ALBUM);
-        params.addParam(Keys.USER_ID, userRepo.load().getId());
-        loadAlbumsTask.execute(params, new LoaderSubscriber<Albums>(view) {
-            @Override
-            public void onResult(Albums result) {
-                view.showAlbums(result);
-            }
-        });
+        user_id=intent.getData().toString();
+        if(!TextUtils.isEmpty(user_id)){
+            params.addParam(Keys.USER_ID, user_id);
+            loadAlbumsTask.execute(params, new LoaderSubscriber<Albums>(view) {
+                @Override
+                public void onResult(Albums result) {
+                    view.showAlbums(result);
+                }
+            });
+
+        }else {
+            view.commonError();
+        }
     }
 
     @Override
@@ -63,8 +73,18 @@ public class AlbumsPresenterImpl extends BasePresenter<AlbumsView> implements Al
 
             @Override
             public void onNext(MessageResponse messageResponse) {
-                onLoadAlbums();
+                view.removeAlbumSuccess();
             }
         });
+    }
+
+    @Override
+    public String getUserId() {
+        return user_id;
+    }
+
+    @Override
+    public boolean isOwnerUser() {
+        return userRepo.load().getId()==Integer.valueOf(user_id);
     }
 }

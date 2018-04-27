@@ -21,11 +21,13 @@ import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
+import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
@@ -39,6 +41,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
@@ -68,7 +71,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     //region Private
     private OnFragmentInteractionListener mListener;
-    private List<CardMenuField> cardMenuFields = new ArrayList<>();
+    private List<IFlexible> cardMenuFields = new ArrayList<>();
     private User user;
     //endregion
 
@@ -87,6 +90,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         cardMenuFields=CardMenuField.createProfileViewItems(getActivity());
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
+
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
         view_information.setOnClickListener(v->
 //                Starter.ProfileEditActivity_StartInVisible(
@@ -96,6 +100,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                         showMessage(getString(R.string.message_develop))
         );
         view_request.setOnClickListener(this);
+        counter_photos.setOnClickListener(this);
     }
 
     @Override
@@ -129,7 +134,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
         //region set Title menu Subscription
         List<SubscriptionInfo> subscriptionInfoList = subscriptions.getModels();
-        CardMenuField cardMenuField=CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE);
+        CardMenuField cardMenuField= getCardMenuFieldById(CardMenuField.SUBSCRIBE);
         if(cardMenuField!=null) {
             Iterator<SubscriptionInfo> subscriptionInfoIterator = subscriptionInfoList.iterator();
             while (subscriptionInfoIterator.hasNext()) {
@@ -147,6 +152,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
             }
         }
         //endregion
+
         counter_subscribes.setCount(subscriptionInfoList.size());
         presenter.loadNews();
 
@@ -155,19 +161,31 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     @Override
     public void setNews(Posts posts) {
 
+        List<PostInfo> postInfoList=posts.getModels();
+        cardMenuFields.addAll(postInfoList);
+        FlexibleAdapter flexibleAdapter= (FlexibleAdapter) menu.getAdapter();
+        flexibleAdapter.notifyItemRangeInserted(flexibleAdapter.getItemCount(),postInfoList.size());
+
         presenter.loadStatusUser();
     }
 
     @Override
-    public void subscriptionSuccess() {
-        CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_subscrabe));
-        menu.getAdapter().notifyDataSetChanged();
+    public void subscriptionSuccess(String subscription_id) {
+        CardMenuField cardMenuField= getCardMenuFieldById(CardMenuField.SUBSCRIBE);
+        if(cardMenuField!=null) {
+            cardMenuField.setTitle(getString(R.string.fav_unsubscrabe));
+            cardMenuField.setExternalId(subscription_id);
+            menu.getAdapter().notifyItemChanged(getPositionCardMenuFieldById(CardMenuField.SUBSCRIBE));
+        }
     }
 
     @Override
     public void unSubscriptionSuccess() {
-        CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_unsubscrabe));
-        menu.getAdapter().notifyDataSetChanged();
+        CardMenuField cardMenuField= getCardMenuFieldById(CardMenuField.SUBSCRIBE);
+        if(cardMenuField!=null) {
+            cardMenuField.setTitle(getString(R.string.fav_subscrabe));
+            menu.getAdapter().notifyItemChanged(getPositionCardMenuFieldById(CardMenuField.SUBSCRIBE));
+        }
     }
 
     @Override
@@ -195,33 +213,36 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public boolean onItemClick(int position) {
-        switch (cardMenuFields.get(position).getId()){
-            case CardMenuField.FAVORITE_BEER:
-                Starter.InterestListActivity(getActivity(), Keys.CAP_BEER,user.getId());
-                break;
-            case CardMenuField.FAVORITE_RESTO:
-                Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO,user.getId());
-                break;
-            case CardMenuField.SUBSCRIBE:
-                CardMenuField cardMenuField=CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE);
-                String title=cardMenuField.getTitle();
-                String text_subsOFF=getString(R.string.fav_unsubscrabe);
-                String text_subsON=getString(R.string.fav_subscrabe);
-                if(title.equals(text_subsOFF)) {
-                    presenter.SubscriptionOnTask();
-                }else if(title.equals(text_subsON)){
-                    presenter.SubscriptionOffTask(cardMenuField.getExternalId());
-                }else {
-                    commonError();
-                }
-                break;
-            case CardMenuField.MY_RATINGS:
-            case CardMenuField.MY_RESUME:
-            case CardMenuField.MY_WORK:
-                //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
-                showMessage(getString(R.string.message_develop));
-                break;
+        IFlexible iFlexible=cardMenuFields.get(position);
+        if(iFlexible instanceof CardMenuField) {
+            CardMenuField cardMenuField= (CardMenuField) iFlexible;
+            switch (cardMenuField.getId()){
+                case CardMenuField.FAVORITE_BEER:
+                    Starter.InterestListActivity(getActivity(), Keys.CAP_BEER, user.getId());
+                    break;
+                case CardMenuField.FAVORITE_RESTO:
+                    Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO, user.getId());
+                    break;
+                case CardMenuField.SUBSCRIBE:
+                    String title = cardMenuField.getTitle();
+                    String text_subsON = getString(R.string.fav_unsubscrabe);
+                    String text_subsOFF = getString(R.string.fav_subscrabe);
+                    if (title.equals(text_subsOFF)) {
+                        presenter.SubscriptionOnTask();
+                    } else if (title.equals(text_subsON)) {
+                        presenter.SubscriptionOffTask(cardMenuField.getExternalId());
+                    } else {
+                        commonError();
+                    }
+                    break;
+                case CardMenuField.MY_RATINGS:
+                case CardMenuField.MY_RESUME:
+                case CardMenuField.MY_WORK:
+                    //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
+                    showMessage(getString(R.string.message_develop));
+                    break;
 
+            }
         }
         return false;
     }
@@ -230,6 +251,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.fragment_profile_view_request:
+                //region Friends control
                 int tag;
                 try {
                     tag= (int) v.getTag();
@@ -250,7 +272,10 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                         break;
 
                 }
-
+                //endregion
+                break;
+            case R.id.fragment_profile_view_counter_photos:
+                Starter.AlbumsActivity(((BaseActivity)getActivity()),Integer.valueOf(presenter.getUser_id()));
                 break;
         }
     }
@@ -346,6 +371,32 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    //region Funtions
+    private CardMenuField getCardMenuFieldById(int menu_id) {
+        int position= getPositionCardMenuFieldById(menu_id);
+        if(position>=0){
+            return (CardMenuField) cardMenuFields.get(position);
+        }else
+            return null;
+    }
+
+    private int getPositionCardMenuFieldById(int menu_id){
+        int position=0;
+        Iterator<IFlexible> iterator=cardMenuFields.iterator();
+        while (iterator.hasNext()){
+            IFlexible iFlexible=iterator.next();
+            if(iFlexible instanceof CardMenuField){
+                CardMenuField cardMenuField= (CardMenuField) iFlexible;
+                if(cardMenuField.getId()==menu_id)
+                    return position;
+            }
+            position++;
+        }
+        return -1;
+    }
+    //endregion
 
 
     //***********************************

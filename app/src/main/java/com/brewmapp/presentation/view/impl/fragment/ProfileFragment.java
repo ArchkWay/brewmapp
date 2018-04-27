@@ -111,7 +111,7 @@ public class ProfileFragment extends BaseFragment implements
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.addItemDecoration(new ListDivider(getActivity(), ListDivider.VERTICAL_LIST));
         menu.setAdapter(menuAdapter);
-        photosCounter.setOnClickListener(v -> startActivity(new Intent(getActivity(), AlbumsActivity.class)));
+        photosCounter.setOnClickListener(v -> Starter.AlbumsActivity(((BaseActivity)getActivity()),profile.getUser().getId()));
         friendsCounter.setOnClickListener(v -> Starter.StartFriendsActivity(getActivity(),true));
 
         segment.setOnCheckedChangeListener((group, checkedId) -> {
@@ -270,7 +270,7 @@ public class ProfileFragment extends BaseFragment implements
                 startActivityForResult(new Intent(getActivity(), NewPostActivity.class),REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case CardMenuField.ADD_PHOTO:
-                startActivity(new Intent(getActivity(), AlbumsActivity.class));
+                Starter.AlbumsActivity(((BaseActivity)getActivity()),profile.getUser().getId());
                 break;
             case CardMenuField.FAVORITE_BEER:
                 Starter.InterestListActivity(getActivity(),Keys.CAP_BEER,profile.getUser().getId());

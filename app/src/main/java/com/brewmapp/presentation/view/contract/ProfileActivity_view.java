@@ -8,7 +8,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  * Created by Kras on 08.11.2017.
  */
 
-public interface ProfileEditView extends BasicView {
+public interface ProfileActivity_view extends BasicView {
     int SHOW_FRAGMENT_EDIT =1;
     int INVALIDATE_MENU = 3;
     int ERROR = 4;

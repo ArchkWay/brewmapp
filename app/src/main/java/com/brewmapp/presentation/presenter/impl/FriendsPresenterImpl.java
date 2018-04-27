@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 
-import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -28,9 +27,7 @@ import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.dialogs.DialogManageContact;
 import com.brewmapp.presentation.view.impl.widget.ContactView;
 

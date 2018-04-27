@@ -22,10 +22,10 @@ import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.data.pojo.LoadPostsPackage;
 import com.brewmapp.presentation.view.contract.MultiListView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -195,7 +195,7 @@ public class ProfileFragmentMain extends BaseFragment implements
     public void onBarAction(int id) {
         switch (id){
             case R.id.action_create:
-                startActivityForResult(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class), REQUEST_CODE_REFRESH_PROFILE);
+                startActivityForResult(new Intent(String.valueOf(ProfileActivity_view.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileActivity.class), REQUEST_CODE_REFRESH_PROFILE);
                 return;
             default:
                 super.onBarAction(id);
@@ -307,7 +307,7 @@ public class ProfileFragmentMain extends BaseFragment implements
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:
                 Starter.ProfileEditActivity(
                         getActivity(),
-                        String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
+                        String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                         String.valueOf(((Review) payload).getUser_id())
                 );
                 break;

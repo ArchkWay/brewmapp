@@ -37,7 +37,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.contract.RestoDetailView;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.widget.AddPhotoSliderView;
@@ -583,7 +583,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case Actions.ACTION_CLICK_ON_ITEM_USER: {
                 Starter.ProfileEditActivityForResult(
                         this,
-                        String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
+                        String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                         String.valueOf(((Interest) payload).getUser_info().getId()),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );
@@ -592,7 +592,7 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER: {
                 Starter.ProfileEditActivityForResult(
                         this,
-                        String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
+                        String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                         ((Review) payload).getUser_id(),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );

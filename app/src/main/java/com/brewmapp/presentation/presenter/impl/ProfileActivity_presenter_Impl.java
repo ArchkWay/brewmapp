@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.ResultReceiver;
 
-import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileActivity_presenter;
 import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
@@ -22,18 +22,18 @@ import static android.app.Activity.RESULT_OK;
  * Created by Kras on 08.11.2017.
  */
 
-public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> implements ProfileEditPresenter {
+public class ProfileActivity_presenter_Impl extends BasePresenter<ProfileActivity_view> implements ProfileActivity_presenter {
 
     private Context context;
     private ResultReceiver resultReceiver;
 
     @Inject
-    public ProfileEditPresenterImpl(Context context){
+    public ProfileActivity_presenter_Impl(Context context){
         this.context = context;
     }
 
     @Override
-    public void onAttach(ProfileEditView profileEditView) {
+    public void onAttach(ProfileActivity_view profileEditView) {
         super.onAttach(profileEditView);
 
     }

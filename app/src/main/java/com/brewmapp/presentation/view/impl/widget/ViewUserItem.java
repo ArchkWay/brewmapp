@@ -16,10 +16,10 @@ import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.entity.Contact;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.view.contract.FriendsView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -90,7 +90,7 @@ public class ViewUserItem extends BaseLinearLayout implements InteractiveModelVi
             });
             setOnClickListener(view -> {
                 ((Activity) getContext()).startActivityForResult(
-                        new Intent(String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileEditActivity.class),
+                        new Intent(String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT), Uri.parse(String.valueOf(user.getId())), getContext(), ProfileActivity.class),
                         RequestCodes.REQUEST_PROFILE_FRIEND
                 );
             });

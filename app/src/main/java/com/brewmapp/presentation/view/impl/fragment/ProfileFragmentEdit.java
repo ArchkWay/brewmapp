@@ -18,7 +18,7 @@ import com.brewmapp.data.entity.User;
 
 import com.brewmapp.presentation.presenter.contract.ProfileFragmentEdit_presenter;
 import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
 import com.squareup.picasso.Picasso;
 
@@ -133,7 +133,7 @@ public class ProfileFragmentEdit extends BaseFragment implements ProfileFragment
         registerTextChangeListeners(s ->{user.setLastname(TextTools.extractTrimmed(lastName));invalidateOptionsMenu();},lastName);
         segmentedGroup.setOnCheckedChangeListener((group, checkedId) -> {user.setGender(checkedId== R.id.fragment_profile_edit_man?1:2);text_family_status.setText("");invalidateOptionsMenu();});
         layout_birthday.setOnClickListener(presenter.getOnClickBirthday(getActivity(),user,text_birthday));
-        avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.SELECT_PHOTO))));
+        avatar.setOnClickListener(v->mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileActivity.SELECT_PHOTO))));
         layout_family_status.setOnClickListener(v -> showSelect(getActivity(), user.getGender() == 1 ? R.array.family_status_man : R.array.family_status_women, (text, position) -> {text_family_status.setText(text);user.setFamilyStatus(position);invalidateOptionsMenu();}));
         layout_city.setOnClickListener(v -> new DialogSelectCountryCity(getActivity(),getActivity().getSupportFragmentManager(), city -> {
             String nameCountry=getString(R.string.text_view_city_not_found);
@@ -225,7 +225,7 @@ public class ProfileFragmentEdit extends BaseFragment implements ProfileFragment
             showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
-        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.ERROR)));
+        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileActivity.ERROR)));
     }
 
     @Override
@@ -236,7 +236,7 @@ public class ProfileFragmentEdit extends BaseFragment implements ProfileFragment
     }
 
     private void invalidateOptionsMenu(){
-        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.INVALIDATE_MENU)));
+        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileActivity.INVALIDATE_MENU)));
     };
 
     /**

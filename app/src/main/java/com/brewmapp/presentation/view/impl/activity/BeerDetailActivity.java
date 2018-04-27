@@ -33,7 +33,7 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.BeerDetailPresenter;
 import com.brewmapp.presentation.view.contract.BeerDetailView;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -348,10 +348,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
             case Actions.ACTION_CLICK_ON_ITEM_USER: {
                 startActivityForResult(
                         new Intent(
-                                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
+                                String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                                 Uri.parse(String.valueOf(((Interest) payload).getUser_info().getId())),
                                 this,
-                                ProfileEditActivity.class
+                                ProfileActivity.class
                         ),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );
@@ -359,10 +359,10 @@ public class BeerDetailActivity extends  BaseActivity implements BeerDetailView{
             case Actions.ACTION_CLICK_ON_ITEM_REVIEW_ON_USER:{
                 startActivityForResult(
                         new Intent(
-                                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
+                                String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),
                                 Uri.parse(String.valueOf(((Review) payload).getUser_id())),
                                 this,
-                                ProfileEditActivity.class
+                                ProfileActivity.class
                         ),
                         RequestCodes.REQUEST_CODE_REFRESH_ITEMS
                 );

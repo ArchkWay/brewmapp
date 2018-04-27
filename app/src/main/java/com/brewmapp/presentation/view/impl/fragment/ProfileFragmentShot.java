@@ -27,10 +27,10 @@ import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileFragmentShot_presenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.MultiListView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.contract.ProfileFragmentShot_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.squareup.picasso.Picasso;
@@ -97,7 +97,7 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
         view_information.setOnClickListener(v->
                 Starter.ProfileEditActivity_StartInVisible(
                 (BaseActivity) getActivity(),
-                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
+                String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
                 getActivity().getIntent().getData().toString())
         );
         view_request.setOnClickListener(this);
@@ -335,7 +335,7 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
             showMessage(getString(R.string.error));
         else
             showMessage(strings[0]);
-        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.ERROR)));
+        mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileActivity.ERROR)));
     }
 
     @Override

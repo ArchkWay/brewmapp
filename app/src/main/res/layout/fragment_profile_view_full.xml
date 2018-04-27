@@ -1,6 +1,965 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit">
+    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment.profile.view_full.swipe"
+        android:orientation="vertical"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorDecorBgGray"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:background="@color/colorWhite"
+                    android:focusableInTouchMode="true"
+                    android:padding="@dimen/common_block_space">
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/size_icon_72"
+                        android:layout_height="@dimen/size_icon_72"
+                        android:layout_marginRight="@dimen/common_block_space"
+                        android:layout_marginLeft="@dimen/common_block_space">
+
+                        <LinearLayout
+                            android:layout_width="@dimen/size_icon_72"
+                            android:layout_height="@dimen/size_icon_72"
+                            android:orientation="vertical"
+                            android:background="@drawable/selector_ring"
+                            android:padding="@dimen/common_block_space"
+                            android:id="@+id/activity.register.avatar.placeholder"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="@dimen/size_icon_24"
+                                android:layout_height="@dimen/size_icon_24"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/ic_add"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:layout_marginTop="@dimen/common_block_space_half"
+                                android:text="@string/photo"/>
+                        </LinearLayout>
+
+                        <com.makeramen.roundedimageview.RoundedImageView
+                            android:layout_width="@dimen/size_icon_72"
+                            android:layout_height="@dimen/size_icon_72"
+                            android:id="@+id/fragment.profile.view_full.avatar"
+                            android:background="@drawable/selector_ring"
+                            app:riv_oval="true"/>
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/AppTheme.Input.Lesser"
+                            android:id="@+id/fragment.profile.view_full.name"
+                            android:background="@null"
+                            android:hint="@string/name"/>
+
+                        <ru.frosteye.ovsa.presentation.view.widget.Line
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="@dimen/common_block_space_double_semi"
+                            android:background="@color/colorSplitter"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/AppTheme.Input.Lesser"
+                            android:background="@null"
+                            android:id="@+id/fragment.profile.view_full.lastName"
+                            android:hint="@string/last_name"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:paddingTop="@dimen/common_block_space_double_semi"
+                    android:paddingBottom="@dimen/common_block_space_double_semi"
+                    android:paddingLeft="@dimen/common_block_space_double_semi"
+                    android:paddingRight="@dimen/common_block_space_double_semi"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
+                    <info.hoang8f.android.segmented.SegmentedGroup
+                        xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/fragment.profile.view_full.segmented"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        segmentedgroup:sc_border_width="2dp"
+                        segmentedgroup:sc_tint_color="@color/colorGrayControls"
+                        segmentedgroup:sc_corner_radius="@dimen/radius_corners_default_big">
+
+                        <RadioButton
+                            android:id="@+id/fragment.profile.view_full.man"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/gender_man"
+                            style="@style/RadioButton" />
+
+                        <RadioButton
+                            android:id="@+id/fragment.profile.view_full.woman"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/gender_woman"
+                            style="@style/RadioButton" />
+                    </info.hoang8f.android.segmented.SegmentedGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/common_block_space"
+                    android:paddingBottom="@dimen/common_block_space"
+                    android:paddingLeft="@dimen/common_block_space_double_semi"
+                    android:paddingRight="@dimen/common_block_space_double_semi"
+                    android:orientation="vertical"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_status"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorGrayDark"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        android:text="@string/your_state"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/input_status_hint"
+                        android:id="@+id/fragment.profile.view_full.text_status"
+                        style="@style/AppTheme.Text.H4"
+                        android:background="@null"
+
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorDecorBgGray"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        style="@style/AppTheme.Text.Georgia.Italic"
+                        android:text="@string/text_view_basic_info"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+
+                        />
+
+                </LinearLayout>
+
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_birthday"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/birthday"
+                            android:textColor="@color/colorGrayDark"
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            />
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/birthday_hint"
+                            android:id="@+id/fragment.profile.view_full.text_birthday"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/fragment.profile.view_full.layout_city"
+                        >
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_country_city"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/birthday_hint1"
+                            android:id="@+id/fragment.profile.view_full.text_city"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_family_status"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_simple_marital_status"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/birthday_hint1"
+                            android:id="@+id/fragment.profile.view_full.text_family_status"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorDecorBgGray"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        style="@style/AppTheme.Text.Georgia.Italic"
+                        android:text="@string/text_view_contacts"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        />
+
+                </LinearLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_phone"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        >
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_mobile_phone"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <br.com.sapereaude.maskedEditText.MaskedEditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_mobile_phone"
+                            android:inputType="phone"
+                            android:lines="1"
+                            mask:allowed_chars="1234567890"
+                            mask:mask="+# (###) ###-##-##"
+                            android:id="@+id/fragment.profile.view_full.edit_text_phone"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_phone_dop"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_additional_mobile_phone"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <br.com.sapereaude.maskedEditText.MaskedEditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_mobile_phone"
+                            android:inputType="phone"
+                            android:lines="1"
+                            mask:allowed_chars="1234567890"
+                            mask:mask="+# (###) ###-##-##"
+                            android:id="@+id/fragment.profile.view_full.edit_text_phone_dop"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_skype"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_address_skype"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_skype"
+                            android:id="@+id/fragment.profile.view_full.edit_skype"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_site"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_address_site"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_site"
+                            android:id="@+id/fragment.profile.view_full.edit_site"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorDecorBgGray"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_big_phone"
+                        android:layout_marginBottom="@dimen/common_block_space_half"
+                        style="@style/AppTheme.Text.Georgia.Italic"
+                        android:text="@string/text_view_additional_info"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+
+                        />
+
+                </LinearLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_work"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_place_of_work"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_place_of_work"
+                            android:id="@+id/fragment.profile.view_full.edit_work"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_interest"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_interests"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_interests"
+                            android:id="@+id/fragment.profile.view_full.edit_interest"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_music"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_music"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_music"
+                            android:id="@+id/fragment.profile.view_full.edit_music"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_film"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_films"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_films"
+                            android:id="@+id/fragment.profile.view_full.edit_film"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_book"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_books"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_books"
+                            android:id="@+id/fragment.profile.view_full.edit_book"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:id="@+id/fragment.profile.view_full.layout_game"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/common_block_space"
+                        android:paddingLeft="@dimen/common_block_space_double_semi"
+                        android:paddingRight="@dimen/common_block_space_double_semi"
+                        android:paddingTop="@dimen/common_block_space"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/common_block_space_half"
+                            android:text="@string/text_view_games"
+                            android:textColor="@color/colorGrayDark" />
+
+                        <EditText
+                            style="@style/AppTheme.Text.H4"
+                            android:background="@null"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_games"
+                            android:id="@+id/fragment.profile.view_full.edit_game"
+                            />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/arrow_right_width"
+                        android:layout_height="@dimen/arrow_right_height"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_arrow_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </android.support.constraint.ConstraintLayout>
+
+                <ru.frosteye.ovsa.presentation.view.widget.Line
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorSplitter"/>
+            </LinearLayout>
+        </ScrollView>
+    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 </FrameLayout>

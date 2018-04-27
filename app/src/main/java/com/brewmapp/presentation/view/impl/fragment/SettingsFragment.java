@@ -10,19 +10,15 @@ import com.brewmapp.BuildConfig;
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.BeerMap;
-import com.brewmapp.data.entity.User;
 import com.brewmapp.execution.exchange.common.Api;
-import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.presentation.presenter.contract.MainPresenter;
 import com.brewmapp.presentation.presenter.contract.SettingsPresenter;
 import com.brewmapp.presentation.view.contract.MultiFragmentActivityView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.contract.SettingsView;
-import com.brewmapp.presentation.view.impl.activity.LoginActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.brewmapp.presentation.view.impl.activity.StartActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 
@@ -77,9 +73,9 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         help.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse(BuildConfig.SERVER_ROOT_URL),getActivity(), MultiFragmentActivity.class)));
         write_to_us.setOnClickListener(v -> showMessage(getString(R.string.message_develop)));
         terms_of_use.setOnClickListener(view1 -> startActivity(new Intent(MultiFragmentActivityView.MODE_WEBVIEW, Uri.parse("https://brewmapp.com/company/terms"),getActivity(), MultiFragmentActivity.class)));
-        profile.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
+        profile.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileActivity_view.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileActivity.class)));
         change_password.setOnClickListener(v -> presenter.setPassword(getActivity()));
-        change_phone.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileEditView.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileEditActivity.class)));
+        change_phone.setOnClickListener(v -> startActivity(new Intent(String.valueOf(ProfileActivity_view.SHOW_FRAGMENT_EDIT),null,getActivity(), ProfileActivity.class)));
         simple_exit.setOnClickListener(v -> new DialogConfirm(getString(R.string.message_quit), getActivity().getSupportFragmentManager(), new DialogConfirm.OnConfirm() {
             @Override
             public void onOk() {

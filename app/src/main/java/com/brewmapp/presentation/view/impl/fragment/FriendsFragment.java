@@ -2,7 +2,6 @@ package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,12 +37,11 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.presentation.presenter.contract.FriendsPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
-import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileActivity_view;
 import com.brewmapp.presentation.view.contract.ReceiverAction;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.InviteActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
@@ -164,7 +162,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
         search.clearFocus();
         switch (code){
             case FriendsView.FRIENDS_ACTION_CLICK:
-                Starter.ProfileEditActivity_StartInVisible_For_Result((BaseActivity) getActivity(),String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend),REQUEST_CODE_REFRESH_ITEMS);
+                Starter.ProfileEditActivity_StartInVisible_For_Result((BaseActivity) getActivity(),String.valueOf(ProfileActivity_view.SHOW_PROFILE_FRAGMENT_VIEW_SHOT),String.valueOf(id_friend),REQUEST_CODE_REFRESH_ITEMS);
                 break;
             case FriendsView.FRIENDS_ACTION_ACCEPT:
                 //region Accept friend

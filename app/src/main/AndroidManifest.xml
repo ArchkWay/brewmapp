@@ -164,7 +164,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".presentation.view.impl.activity.AddReviewRestoActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".presentation.view.impl.activity.ProfileEditActivity"
+        <activity android:name=".presentation.view.impl.activity.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeInvisibleWhileLoad"
             />

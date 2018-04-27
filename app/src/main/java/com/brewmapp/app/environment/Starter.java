@@ -30,7 +30,7 @@ import com.brewmapp.presentation.view.impl.activity.MainActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiFragmentActivity;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoGalleryActivity;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.brewmapp.presentation.view.impl.activity.ResultSearchActivity;
 import com.brewmapp.presentation.view.impl.activity.SelectCategoryActivity;
@@ -155,7 +155,7 @@ public class Starter {
                         action,
                         Uri.parse(user_id),
                         activity,
-                        ProfileEditActivity.class
+                        ProfileActivity.class
                 ),
                 requestCode
         );
@@ -167,7 +167,7 @@ public class Starter {
                         action,
                         Uri.parse(user_id),
                         activity,
-                        ProfileEditActivity.class
+                        ProfileActivity.class
                 )
         );
 
@@ -177,7 +177,7 @@ public class Starter {
         Intent intent=new Intent(
                 action,
                 Uri.parse(user_id),
-                baseActivity, ProfileEditActivity.class);
+                baseActivity, ProfileActivity.class);
         intent.putExtra(baseActivity.getString(R.string.key_start_activity_invisible),baseActivity.StartProgressBarInParentActivity());
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -189,7 +189,7 @@ public class Starter {
         Intent intent=new Intent(
                 action,
                 Uri.parse(user_id),
-                baseActivity, ProfileEditActivity.class);
+                baseActivity, ProfileActivity.class);
         intent.putExtra(baseActivity.getString(R.string.key_start_activity_invisible),baseActivity.StartProgressBarInParentActivity());
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

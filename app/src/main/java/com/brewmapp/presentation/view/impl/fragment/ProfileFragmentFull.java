@@ -1,13 +1,17 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.data.entity.User;
 import com.brewmapp.presentation.presenter.contract.ProfileFragmentFull_presenter;
 import com.brewmapp.presentation.view.contract.ProfileFragmentFull_view;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -20,10 +24,43 @@ public class ProfileFragmentFull extends BaseFragment implements ProfileFragment
 
     @Inject    ProfileFragmentFull_presenter presenter;
 
+
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_profile_view_full;
     }
+
+    @Override
+    protected void attachPresenter() {
+        presenter.onAttach(this);
+        if(presenter.parseIntent(mListener.getIntent()))
+            presenter.loadProfile();
+        else
+            mListener.commonError();
+    }
+
+    @Override
+    protected void initView(View view) {
+        mListener.setVisibleChildActivity();
+
+    }
+
+    @Override
+    public void showProfile(ArrayList<User> users) {
+        if(users.size()!=1){
+            commonError();
+            return;
+        }
+
+
+
+    }
+
+
+
+
+
+
 
     @Override
     public int getMenuToInflate() {
@@ -45,15 +82,6 @@ public class ProfileFragmentFull extends BaseFragment implements ProfileFragment
 
     }
 
-    @Override
-    protected void initView(View view) {
-        mListener.setVisibleChildActivity();
-    }
-
-    @Override
-    protected void attachPresenter() {
-        presenter.onAttach(this);
-    }
 
     @Override
     protected LivePresenter<?> getPresenter() {
@@ -71,6 +99,12 @@ public class ProfileFragmentFull extends BaseFragment implements ProfileFragment
         }
     }
 
+    @Override
+    public void commonError(String... message) {
+        mListener.commonError(message);
+    }
+
+
 
     //***********************************
     public interface OnFragmentInteractionListener {
@@ -82,6 +116,10 @@ public class ProfileFragmentFull extends BaseFragment implements ProfileFragment
         void sendActionParentActivity(int actionRefresh);
 
         void showSnackbar(String string);
+
+        Intent getIntent();
+
+        void commonError(String... strings);
     }
 
 }

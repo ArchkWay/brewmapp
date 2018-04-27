@@ -18,7 +18,7 @@ import com.brewmapp.execution.task.ProfileChangeTask;
 import com.brewmapp.execution.task.UploadAvatarTask;
 import com.brewmapp.presentation.presenter.contract.ProfileFragmentEdit_presenter;
 import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
+import com.brewmapp.presentation.view.impl.activity.ProfileActivity;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit;
 import com.squareup.picasso.Picasso;
 
@@ -167,7 +167,7 @@ public class ProfileFragmentEdit_presenter_Impl extends BasePresenter<ProfileFra
                             super.onNext(userProfile);
                             userRepo.save(userProfile.getUser());
                             Picasso.with(context).invalidate(userProfile.getUser().getThumbnail());
-                            mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.USER_SAVED)));
+                            mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileActivity.USER_SAVED)));
                         }
 
                         @Override
@@ -177,7 +177,7 @@ public class ProfileFragmentEdit_presenter_Impl extends BasePresenter<ProfileFra
                         }
                     });
                 }else {
-                    mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileEditActivity.USER_SAVED)));
+                    mListener.onFragmentInteraction(Uri.parse(Integer.toString(ProfileActivity.USER_SAVED)));
                 }
             }
 

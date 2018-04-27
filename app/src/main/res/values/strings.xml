@@ -338,6 +338,8 @@
     <string name="text_view_replay_users">Отзывы пользователей</string>
     <string name="text_view_while_empty_review">Пока отзывов нет, \n оставте свой отзыв первым ;)</string>
     <string name="text_view_while_empty_evaluation">Пока оценок нет, \n поставьте оценку первым ;)</string>
+    <string name="text_view_while_empty_my_work">Список мест работы пуст</string>
+    <string name="text_view_while_empty_my_resume">Список резюме пуст</string>
     <string name="button_text_write_review"><u>Оставить отзыв</u></string>
     <string name="title_activity_add_review">Добавить отзыв</string>
     <string name="text_view_your_review">Вaш отзыв</string>
@@ -469,6 +471,8 @@
     <string name="text_view_item_show_all_resto">Показать все заведения</string>
     <string name="action_text_title_reviews">Отзывы</string>
     <string name="action_text_title_my_evaluation">Мои оценки</string>
+    <string name="action_text_title_my_resume">Мои резюме</string>
+    <string name="action_text_title_my_work">Работа</string>
     <string name="text_view_data_not_found">Дата отсутствует</string>
     <string name="button_text_request">Добавить в друзья</string>
     <string name="replay_not_valid">Не верный ответ сервера</string>
@@ -583,5 +587,6 @@
     <string name="text_friend_deleted_success">Удален из списка друзей</string>
     <string name="request_friends_accept">Добавить в друзья?</string>
     <string name="fav_unsubscrabe">Отписаться</string>
+    <string name="text_button_friend_cancel">Отменить</string>
 
 </resources>

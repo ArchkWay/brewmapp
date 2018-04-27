@@ -247,6 +247,24 @@ public class MultiListActivity extends BaseActivity implements
                 presenter.loadMyEvaluation(0);
                 //endregion
                 break;
+            case MODE_SHOW_MY_RESUME:
+                //region Prepare Resume
+                id_text_empty=R.string.text_view_while_empty_my_resume;
+                swipe.setEnabled(false);
+                toolbarSearch.setVisibility(View.GONE);
+                text_empty_list.setVisibility(View.VISIBLE);
+                setTitle(R.string.action_text_title_my_resume);
+                //endregion
+                break;
+            case MODE_SHOW_MY_WORK:
+                //region Prepare Work
+                id_text_empty=R.string.text_view_while_empty_my_work;
+                swipe.setEnabled(false);
+                toolbarSearch.setVisibility(View.GONE);
+                text_empty_list.setVisibility(View.VISIBLE);
+                setTitle(R.string.action_text_title_my_work);
+                //endregion
+                break;
             default:
                 commonError();
         }

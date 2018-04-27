@@ -64,8 +64,11 @@ public class Starter {
         intent.putExtra(activity.getString(R.string.key_serializable_extra),resto);
         activity.startActivity(intent);
     }
-    public static void MultiListActivity(Activity activity, String action) {
-        activity.startActivity(new Intent(action, null,activity,MultiListActivity.class));
+    public static void MultiListActivity(Activity activity, String action){
+        MultiListActivity(activity, action, null);
+    }
+    public static void MultiListActivity(Activity activity, String action, String use_id) {
+        activity.startActivity(new Intent(action, Uri.parse(use_id),activity,MultiListActivity.class));
     }
 
     public static void MainActivity(BaseActivity activity, String action, Object... o) {

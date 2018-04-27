@@ -26,6 +26,7 @@ import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
+import com.brewmapp.presentation.view.contract.MultiListView;
 import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
@@ -236,10 +237,13 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
                     }
                     break;
                 case CardMenuField.MY_RATINGS:
+                    Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION,presenter.getUser_id());
+                    break;
                 case CardMenuField.MY_RESUME:
+                    Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_MY_RESUME,presenter.getUser_id());
+                    break;
                 case CardMenuField.MY_WORK:
-                    //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
-                    showMessage(getString(R.string.message_develop));
+                    Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_MY_WORK,presenter.getUser_id());
                     break;
 
             }

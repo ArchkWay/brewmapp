@@ -46,6 +46,7 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
     @BindView(R.id.view_contact_badget)    TextView badget;
     @BindView(R.id.view_contact_button_friend_accept)    Button button_friend_accept;
     @BindView(R.id.view_contact_button_friend_delete)    Button button_friend_delete;
+    @BindView(R.id.view_contact_button_friend_cancel)    Button button_friend_cancel;
 
     @Inject
     ActivetyUsers activetyUsers;
@@ -102,7 +103,9 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
 
         username.setText(userShow.getFormattedName());
 
-        String pathAvatar=model.getUser_getThumb_Formatted();
+        String pathAvatar=model.getFriend_info().getThumbnail();
+        if(pathAvatar==null)
+            pathAvatar=model.getUser_getThumb_Formatted();
         if (pathAvatar != null) {
             Picasso.with(getContext()).load(pathAvatar).fit().centerCrop().into(avatar);
         } else {
@@ -147,13 +150,13 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
 
         button_friend_accept.setVisibility(GONE);
         button_friend_delete.setVisibility(GONE);
+        button_friend_cancel.setVisibility(GONE);
         badget.setVisibility(GONE);
         last_message.setVisibility(GONE);
         contaiter1.setOrientation(VERTICAL);
         switch (mode){
             case MODE_VIEW_FRIENDS:
                 //region MODE_VIEW_FRIENDS
-
                 int status=model.getStatus();
                 switch (status){
                     case FriendsView.FRIENDS_REQUEST_IN:
@@ -163,9 +166,12 @@ public class ContactView extends BaseLinearLayout implements InteractiveModelVie
                         button_friend_delete.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
                         break;
                     case FriendsView.FRIENDS_NOW:
-                    case FriendsView.FRIENDS_REQUEST_OUT:
                         button_friend_delete.setVisibility(VISIBLE);
                         button_friend_delete.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
+                        break;
+                    case FriendsView.FRIENDS_REQUEST_OUT:
+                        button_friend_cancel.setVisibility(VISIBLE);
+                        button_friend_cancel.setOnClickListener(v->listener.onModelAction(FriendsView.FRIENDS_ACTION_DELETE,model));
                         break;
                 }
                 //endregion

@@ -124,6 +124,10 @@ public class MultiListPresenterImpl extends BasePresenter<MultiListView> impleme
                 return MultiListView.MODE_SHOW_AND_CREATE_BEER;
             case MultiListView.MODE_SHOW_MENU:
                 return MultiListView.MODE_SHOW_MENU;
+            case MultiListView.MODE_SHOW_MY_RESUME:
+                return MultiListView.MODE_SHOW_MY_RESUME;
+            case MultiListView.MODE_SHOW_MY_WORK:
+                return MultiListView.MODE_SHOW_MY_WORK;
             default:
                 return MultiListView.MODE_ACTIVTY_ERROR;
         }

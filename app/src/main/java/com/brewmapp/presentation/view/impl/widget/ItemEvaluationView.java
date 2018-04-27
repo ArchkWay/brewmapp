@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.widget;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -124,16 +125,18 @@ public class ItemEvaluationView extends BaseLinearLayout implements InteractiveM
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if(isInEditMode()) return;
-        switch (evaluationData.getType_of_object_evaluation()){
-            case Keys.CAP_RESTO:
-                container_beer.setVisibility(GONE);
-                handleResto();
-            break;
-            case Keys.CAP_BEER:
-                container_resto.setVisibility(GONE);
-                handleBeer();
-                break;
+        if(evaluationData!=null) {
+            switch (evaluationData.getType_of_object_evaluation()) {
+                case Keys.CAP_RESTO:
+                    container_beer.setVisibility(GONE);
+                    handleResto();
+                    break;
+                case Keys.CAP_BEER:
+                    container_resto.setVisibility(GONE);
+                    handleBeer();
+                    break;
 
+            }
         }
     }
     //***********************************
@@ -159,6 +162,7 @@ public class ItemEvaluationView extends BaseLinearLayout implements InteractiveM
         }
         LoadProductPackage loadProductPackage=new LoadProductPackage();
         loadProductPackage.setId(evaluationData.getId_of_object_evaluation());
+        avatar.setImageResource(R.drawable.ic_default_beer);
         loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
             @Override
             public void onNext(List<IFlexible> iFlexibles) {
@@ -200,14 +204,18 @@ public class ItemEvaluationView extends BaseLinearLayout implements InteractiveM
 
         LoadRestoDetailPackage loadRestoDetailPackage=new LoadRestoDetailPackage();
         loadRestoDetailPackage.setId(evaluationData.getId_of_object_evaluation());
+        avatar.setImageResource(R.drawable.ic_default_resto);
         loadRestoDetailTask.execute(loadRestoDetailPackage,new SimpleSubscriber<RestoDetail>(){
             @Override
             public void onNext(RestoDetail restoDetail) {
                 super.onNext(restoDetail);
                 Resto resto=restoDetail.getResto();
-                try {
-                    Picasso.with(getContext()).load(resto.getThumb()).fit().centerCrop().error(R.drawable.ic_default_resto).into(avatar);
-                }catch (Exception e){}
+                if(!TextUtils.isEmpty(resto.getThumb())) {
+                    try {
+                        Picasso.with(getContext()).load(resto.getThumb()).fit().centerCrop().error(R.drawable.ic_default_resto).into(avatar);
+                    } catch (Exception e) {
+                    }
+                }
                 try {
                     title.setText(resto.getName());
                 }catch (Exception e){}

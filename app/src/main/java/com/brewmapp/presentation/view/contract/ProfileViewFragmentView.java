@@ -26,7 +26,7 @@ public interface ProfileViewFragmentView extends BasicView {
 
     void setNews(Posts posts);
 
-    void subscriptionSuccess();
+    void subscriptionSuccess(String subscription_id);
 
     void unSubscriptionSuccess();
 }

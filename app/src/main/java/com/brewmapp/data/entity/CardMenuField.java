@@ -12,6 +12,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import com.brewmapp.R;
 import com.brewmapp.presentation.view.impl.widget.CardOptionRow;
+
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
 import ru.frosteye.ovsa.tool.DateTools;
 
@@ -37,7 +39,6 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
     public static final int EVENT_SHARE = 7;
     public static final int EVENT_ALERT = 8;
 
-    private static List<CardMenuField> listProfileViewItems;
 
     private int id;
     private int icon;
@@ -110,7 +111,7 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         this.title = title;
     }
 
-    public static List<CardMenuField> createProfileViewItems(Context context) {
+    public static List<IFlexible> createProfileViewItems(Context context) {
         List<CardMenuField> out = new ArrayList<>();
         out.add(new CardMenuField(SUBSCRIBE, R.drawable.ic_subscrible, context.getString(R.string.fav_subscrabe)));
         out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_beer, context.getString(R.string.fav_beer)));
@@ -119,8 +120,7 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         out.add(new CardMenuField(MY_WORK, R.drawable.ic_my_work, context.getString(R.string.my_work)));
         out.add(new CardMenuField(MY_RESUME, R.drawable.ic_my_experiance, context.getString(R.string.my_resume)));
 
-        listProfileViewItems=out;
-        return out;
+        return new ArrayList<>(out);
     }
 
     public static List<CardMenuField> createProfileItems(Context context) {
@@ -145,19 +145,6 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         out.add(new CardMenuField(EVENT_ALERT, R.drawable.ic_alert, getString(R.string.alert)));
 
         return out;
-    }
-
-    public static CardMenuField getItemProfileViewItemsById(int id_card_menu) {
-        if(listProfileViewItems!=null){
-            Iterator<CardMenuField> cardMenuFieldIterator=listProfileViewItems.iterator();
-            while (cardMenuFieldIterator.hasNext()){
-                CardMenuField cardMenuField=cardMenuFieldIterator.next();
-                if(cardMenuField.getId()==id_card_menu){
-                    return cardMenuField;
-                }
-            }
-        }
-        return null;
     }
 
     public void setExternalId(String externalId) {

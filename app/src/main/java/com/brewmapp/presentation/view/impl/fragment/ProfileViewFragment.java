@@ -21,6 +21,7 @@ import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
@@ -39,6 +40,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
@@ -68,7 +70,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     //region Private
     private OnFragmentInteractionListener mListener;
-    private List<CardMenuField> cardMenuFields = new ArrayList<>();
+    private List<IFlexible> cardMenuFields = new ArrayList<>();
     private User user;
     //endregion
 
@@ -87,6 +89,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
         cardMenuFields=CardMenuField.createProfileViewItems(getActivity());
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
         menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
+
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
         view_information.setOnClickListener(v->
 //                Starter.ProfileEditActivity_StartInVisible(
@@ -129,7 +132,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
         //region set Title menu Subscription
         List<SubscriptionInfo> subscriptionInfoList = subscriptions.getModels();
-        CardMenuField cardMenuField=CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE);
+        CardMenuField cardMenuField=getItemMenuById(CardMenuField.SUBSCRIBE);
         if(cardMenuField!=null) {
             Iterator<SubscriptionInfo> subscriptionInfoIterator = subscriptionInfoList.iterator();
             while (subscriptionInfoIterator.hasNext()) {
@@ -147,27 +150,48 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
             }
         }
         //endregion
+
         counter_subscribes.setCount(subscriptionInfoList.size());
         presenter.loadNews();
 
     }
 
+    private CardMenuField getItemMenuById(int menu_id) {
+        Iterator<IFlexible> iterator=cardMenuFields.iterator();
+        while (iterator.hasNext()){
+            IFlexible iFlexible=iterator.next();
+            if(iFlexible instanceof CardMenuField){
+                CardMenuField cardMenuField= (CardMenuField) iFlexible;
+                if(cardMenuField.getId()==menu_id)
+                    return cardMenuField;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void setNews(Posts posts) {
+
+        List<PostInfo> postInfoList=posts.getModels();
+        cardMenuFields.addAll(postInfoList);
+        FlexibleAdapter flexibleAdapter= (FlexibleAdapter) menu.getAdapter();
+        flexibleAdapter.notifyItemRangeInserted(flexibleAdapter.getItemCount(),postInfoList.size());
 
         presenter.loadStatusUser();
     }
 
     @Override
-    public void subscriptionSuccess() {
-        CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_subscrabe));
-        menu.getAdapter().notifyDataSetChanged();
+    public void subscriptionSuccess(String subscription_id) {
+        CardMenuField cardMenuField=getItemMenuById(CardMenuField.SUBSCRIBE);
+        cardMenuField.setTitle(getString(R.string.fav_unsubscrabe));
+        cardMenuField.setExternalId(subscription_id);
+        menu.getAdapter().notifyItemChanged(0);
     }
 
     @Override
     public void unSubscriptionSuccess() {
-        CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_unsubscrabe));
-        menu.getAdapter().notifyDataSetChanged();
+        getItemMenuById(CardMenuField.SUBSCRIBE).setTitle(getString(R.string.fav_subscrabe));
+        menu.getAdapter().notifyItemChanged(0);
     }
 
     @Override
@@ -195,33 +219,36 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
     @Override
     public boolean onItemClick(int position) {
-        switch (cardMenuFields.get(position).getId()){
-            case CardMenuField.FAVORITE_BEER:
-                Starter.InterestListActivity(getActivity(), Keys.CAP_BEER,user.getId());
-                break;
-            case CardMenuField.FAVORITE_RESTO:
-                Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO,user.getId());
-                break;
-            case CardMenuField.SUBSCRIBE:
-                CardMenuField cardMenuField=CardMenuField.getItemProfileViewItemsById(CardMenuField.SUBSCRIBE);
-                String title=cardMenuField.getTitle();
-                String text_subsOFF=getString(R.string.fav_unsubscrabe);
-                String text_subsON=getString(R.string.fav_subscrabe);
-                if(title.equals(text_subsOFF)) {
-                    presenter.SubscriptionOnTask();
-                }else if(title.equals(text_subsON)){
-                    presenter.SubscriptionOffTask(cardMenuField.getExternalId());
-                }else {
-                    commonError();
-                }
-                break;
-            case CardMenuField.MY_RATINGS:
-            case CardMenuField.MY_RESUME:
-            case CardMenuField.MY_WORK:
-                //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
-                showMessage(getString(R.string.message_develop));
-                break;
+        IFlexible iFlexible=cardMenuFields.get(position);
+        if(iFlexible instanceof CardMenuField) {
+            CardMenuField cardMenuField= (CardMenuField) iFlexible;
+            switch (cardMenuField.getId()){
+                case CardMenuField.FAVORITE_BEER:
+                    Starter.InterestListActivity(getActivity(), Keys.CAP_BEER, user.getId());
+                    break;
+                case CardMenuField.FAVORITE_RESTO:
+                    Starter.InterestListActivity(getActivity(), Keys.CAP_RESTO, user.getId());
+                    break;
+                case CardMenuField.SUBSCRIBE:
+                    String title = cardMenuField.getTitle();
+                    String text_subsON = getString(R.string.fav_unsubscrabe);
+                    String text_subsOFF = getString(R.string.fav_subscrabe);
+                    if (title.equals(text_subsOFF)) {
+                        presenter.SubscriptionOnTask();
+                    } else if (title.equals(text_subsON)) {
+                        presenter.SubscriptionOffTask(cardMenuField.getExternalId());
+                    } else {
+                        commonError();
+                    }
+                    break;
+                case CardMenuField.MY_RATINGS:
+                case CardMenuField.MY_RESUME:
+                case CardMenuField.MY_WORK:
+                    //Starter.MultiListActivity(getActivity(), MultiListView.MODE_SHOW_ALL_MY_EVALUATION);
+                    showMessage(getString(R.string.message_develop));
+                    break;
 
+            }
         }
         return false;
     }

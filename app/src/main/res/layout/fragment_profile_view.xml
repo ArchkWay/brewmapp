@@ -12,7 +12,7 @@
         android:id="@+id/fragment.profile.view.swipe"
         android:orientation="vertical"
         >
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
@@ -188,10 +188,10 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/fragment.profile.view.menu"/>
-
+                    android:id="@+id/fragment.profile.view.menu"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 </FrameLayout>

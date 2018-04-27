@@ -14,11 +14,10 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.data.entity.City;
 import com.brewmapp.data.entity.User;
 
-import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentEdit_presenter;
+import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogSelectCountryCity;
 import com.squareup.picasso.Picasso;
@@ -37,10 +36,10 @@ import ru.frosteye.ovsa.tool.TextTools;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileEditFragment.OnFragmentInteractionListener} interface
+ * {@link ProfileFragmentEdit.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ProfileEditFragment extends BaseFragment implements ProfileEditFragmentView {
+public class ProfileFragmentEdit extends BaseFragment implements ProfileFragmentEdit_view {
 
     @BindView(R.id.fragment_profile_edit_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_profile_edit_avatar)    ImageView avatar;
@@ -80,7 +79,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     private OnFragmentInteractionListener mListener;
 
 
-    @Inject    ProfileEditFragmentPresenter presenter;
+    @Inject    ProfileFragmentEdit_presenter presenter;
 
     @Override
     protected int getFragmentLayout() {

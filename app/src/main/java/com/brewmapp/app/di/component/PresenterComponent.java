@@ -54,9 +54,10 @@ import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.MessageFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentFull;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentMain;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentShot;
 import com.brewmapp.presentation.view.impl.fragment.RestoEditFragment;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
@@ -79,18 +80,19 @@ public interface PresenterComponent {
     void inject(ChatService service);
 
     void inject(BaseFragment baseFragment);
-    void inject(ProfileFragment fragment);
+    void inject(ProfileFragmentMain fragment);
     void inject(FriendsFragment fragment);
     void inject(EventsFragment fragment);
     void inject(SearchFragment fragment);
     void inject(BeerMapFragment fragment);
     void inject(SettingsFragment fragment);
-    void inject(ProfileEditFragment fragment);
-    void inject(ProfileViewFragment fragment);
+    void inject(ProfileFragmentEdit fragment);
+    void inject(ProfileFragmentShot fragment);
     void inject(MessageFragment fragment);
     void inject(BeerEditFragment fragment);
     void inject(RestoEditFragment fragment);
     void inject(ChatFragment fragment);
+    void inject(ProfileFragmentFull fragment);
 
     void inject(BaseActivity activity);
     void inject(StartActivity activity);

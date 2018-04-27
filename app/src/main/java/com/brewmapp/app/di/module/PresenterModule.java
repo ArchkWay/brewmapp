@@ -23,6 +23,7 @@ import com.brewmapp.presentation.presenter.contract.EnterPasswordPresenter;
 import com.brewmapp.presentation.presenter.contract.EventDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.EventsPresenter;
 import com.brewmapp.presentation.presenter.contract.ExtendedSearchPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentFull_presenter;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.presenter.contract.InterestListPresenter;
 import com.brewmapp.presentation.presenter.contract.FilterMapPresenter;
@@ -38,8 +39,8 @@ import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.presenter.contract.PickLocationPresenter;
 import com.brewmapp.presentation.presenter.contract.PostDetailsPresenter;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
-import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
-import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentMain_presenter;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentShot_presenter;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoDetailPresenter;
 import com.brewmapp.presentation.presenter.contract.RestoEditFragmentPresenter;
@@ -68,6 +69,7 @@ import com.brewmapp.presentation.presenter.impl.EnterPasswordPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventDetailsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.EventsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ExtendedSearchPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ProfileFragmentFull_presenter_Impl;
 import com.brewmapp.presentation.presenter.impl.SelectCategoryActivityPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.InterestListPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.FilerMapPresenterImpl;
@@ -82,10 +84,10 @@ import com.brewmapp.presentation.presenter.impl.NewPostSettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PhotoSliderPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PickLocationPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.PostDetailsPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.ProfileEditFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ProfileFragmentEdit_presenter_Impl;
 import com.brewmapp.presentation.presenter.impl.ProfileEditPresenterImpl;
-import com.brewmapp.presentation.presenter.impl.ProfilePresenterImpl;
-import com.brewmapp.presentation.presenter.impl.ProfileViewFragmentPresenterImpl;
+import com.brewmapp.presentation.presenter.impl.ProfileFragmentMain_presenter_Impl;
+import com.brewmapp.presentation.presenter.impl.ProfileFragmentShot_presenter_Impl;
 import com.brewmapp.presentation.presenter.impl.RegisterPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RestoDetailPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.RestoEditFragmentPresenterImpl;
@@ -95,7 +97,7 @@ import com.brewmapp.presentation.presenter.impl.ResultSearchActivityPresenterImp
 import com.brewmapp.presentation.presenter.impl.SettingsPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.ShareLikeViewPresenterImpl;
 import com.brewmapp.presentation.presenter.impl.StartPresenterImpl;
-import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentEdit_presenter;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 
@@ -147,7 +149,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    ProfilePresenter provideProfilePresenter(ProfilePresenterImpl presenter) {
+    ProfileFragmentMain_presenter provideProfilePresenter(ProfileFragmentMain_presenter_Impl presenter) {
         return presenter;
     }
 
@@ -304,7 +306,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    ProfileEditFragmentPresenter provideProfileEditFragmentPresenter(ProfileEditFragmentPresenterImpl presenter){
+    ProfileFragmentEdit_presenter provideProfileEditFragmentPresenter(ProfileFragmentEdit_presenter_Impl presenter){
         return presenter;
     }
 
@@ -319,7 +321,7 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
 
     @Provides @PresenterScope
-    ProfileViewFragmentPresenter provideProfileViewFragmentPresenter(ProfileViewFragmentPresenterImpl presenter){
+    ProfileFragmentShot_presenter provideProfileViewFragmentPresenter(ProfileFragmentShot_presenter_Impl presenter){
         return presenter;
     }
 
@@ -344,6 +346,11 @@ public class PresenterModule extends BasePresenterModule<BaseActivity, BaseFragm
     }
     @Provides @PresenterScope
     BreweryDetailsActivityPresenter provideBreweryDetailsActivityPresenter(BreweryDetailsActivityPresenterImpl presenter){
+        return presenter;
+    }
+
+    @Provides @PresenterScope
+    ProfileFragmentFull_presenter provideProfileFragmentFull_presenter(ProfileFragmentFull_presenter_Impl presenter){
         return presenter;
     }
 }

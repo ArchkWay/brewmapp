@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.ResultReceiver;
 
-import com.brewmapp.R;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
+import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
-import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
@@ -47,7 +45,7 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
 
     @Override
     public void handlePhoto(BaseFragment baseFragment, int position) {
-        if(baseFragment instanceof ProfileEditFragmentView)
+        if(baseFragment instanceof ProfileFragmentEdit_view)
         switch (position) {
             case 0:
                 RxPaparazzo.single(baseFragment.getActivity())
@@ -56,7 +54,7 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                             if (response.resultCode() != RESULT_OK) return;
-                            ((ProfileEditFragmentView)baseFragment).selectedPhoto(response.data().getFile());
+                            ((ProfileFragmentEdit_view)baseFragment).selectedPhoto(response.data().getFile());
                         });
 
                 break;
@@ -67,7 +65,7 @@ public class ProfileEditPresenterImpl extends BasePresenter<ProfileEditView> imp
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                             if (response.resultCode() != RESULT_OK) return;
-                            ((ProfileEditFragmentView)baseFragment).selectedPhoto(response.data().getFile());
+                            ((ProfileFragmentEdit_view)baseFragment).selectedPhoto(response.data().getFile());
                         });
 
                 break;

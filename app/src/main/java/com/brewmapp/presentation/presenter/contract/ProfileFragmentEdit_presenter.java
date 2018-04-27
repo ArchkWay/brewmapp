@@ -5,8 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.brewmapp.data.entity.User;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
-import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
+import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit;
 
 import java.io.File;
 
@@ -16,10 +16,10 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  * Created by Kras on 09.11.2017.
  */
 
-public interface ProfileEditFragmentPresenter extends LivePresenter<ProfileEditFragmentView> {
+public interface ProfileFragmentEdit_presenter extends LivePresenter<ProfileFragmentEdit_view> {
     CharSequence getTitle();
 
-    void save(ProfileEditFragment.OnFragmentInteractionListener mListener);
+    void save(ProfileFragmentEdit.OnFragmentInteractionListener mListener);
 
 
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment"
+    tools:context="com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit"
     >
     <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
         android:layout_width="match_parent"

@@ -10,7 +10,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  * Created by Kras on 09.11.2017.
  */
 
-public interface ProfileEditFragmentView extends BasicView {
+public interface ProfileFragmentEdit_view extends BasicView {
     void setContent(User user);
     void commonError(String... strings);
 

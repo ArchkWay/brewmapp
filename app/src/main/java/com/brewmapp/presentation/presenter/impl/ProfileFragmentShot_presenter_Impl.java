@@ -27,9 +27,9 @@ import com.brewmapp.execution.task.LoadNewsTask;
 import com.brewmapp.execution.task.LoadSubscriptionsItemsTask;
 import com.brewmapp.execution.task.SubscriptionOffTask;
 import com.brewmapp.execution.task.SubscriptionOnTask;
-import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentShot_presenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
-import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
+import com.brewmapp.presentation.view.contract.ProfileFragmentShot_view;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 
 import java.util.Iterator;
@@ -45,7 +45,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by Kras on 09.11.2017.
  */
 
-public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewFragmentView> implements ProfileViewFragmentPresenter {
+public class ProfileFragmentShot_presenter_Impl extends BasePresenter<ProfileFragmentShot_view> implements ProfileFragmentShot_presenter {
 
     private User user_old_data;
     private LoadFreeProfileTask loadFreeProfileTask;
@@ -62,7 +62,7 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     private SubscriptionOffTask subscriptionOffTask;
 
     @Inject
-    public ProfileViewFragmentPresenterImpl( LoadFreeProfileTask loadFreeProfileTask,ListFriendsTask listFriendsTask,UserRepo userRepo,Context context,DeleteFriend deleteFriend,AllowFriend allowFriend,AddFriend addFriend,LoadSubscriptionsItemsTask loadSubscriptionsItemsTask,LoadNewsTask loadNewsTask,SubscriptionOnTask subscriptionOnTask,SubscriptionOffTask subscriptionOffTask){
+    public ProfileFragmentShot_presenter_Impl(LoadFreeProfileTask loadFreeProfileTask, ListFriendsTask listFriendsTask, UserRepo userRepo, Context context, DeleteFriend deleteFriend, AllowFriend allowFriend, AddFriend addFriend, LoadSubscriptionsItemsTask loadSubscriptionsItemsTask, LoadNewsTask loadNewsTask, SubscriptionOnTask subscriptionOnTask, SubscriptionOffTask subscriptionOffTask){
 
         this.loadFreeProfileTask = loadFreeProfileTask;
         this.listFriendsTask = listFriendsTask;
@@ -84,7 +84,7 @@ public class ProfileViewFragmentPresenterImpl extends BasePresenter<ProfileViewF
     }
 
     @Override
-    public void onAttach(ProfileViewFragmentView profileViewFragmentView) {
+    public void onAttach(ProfileFragmentShot_view profileViewFragmentView) {
         super.onAttach(profileViewFragmentView);
     }
 

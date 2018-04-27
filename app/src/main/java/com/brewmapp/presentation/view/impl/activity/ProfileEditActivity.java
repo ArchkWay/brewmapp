@@ -12,19 +12,23 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
-import com.brewmapp.app.environment.Actions;
 import com.brewmapp.presentation.presenter.contract.ProfileEditPresenter;
 import com.brewmapp.presentation.view.contract.ProfileEditView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileViewFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentShot;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentFull;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
-public class ProfileEditActivity extends BaseActivity implements ProfileEditView,ProfileEditFragment.OnFragmentInteractionListener,ProfileViewFragment.OnFragmentInteractionListener  {
+public class ProfileEditActivity extends BaseActivity implements ProfileEditView,
+        ProfileFragmentEdit.OnFragmentInteractionListener,
+        ProfileFragmentShot.OnFragmentInteractionListener,
+        ProfileFragmentFull.OnFragmentInteractionListener
+{
     @BindView(R.id.common_toolbar)    Toolbar toolbar;
     @BindView(R.id.profile_info_activity_container)FrameLayout frameLayout;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
@@ -92,10 +96,13 @@ public class ProfileEditActivity extends BaseActivity implements ProfileEditView
     public void showFragment(int fragment) {
         switch (fragment){
             case SHOW_FRAGMENT_EDIT:
-                baseFragment=new ProfileEditFragment();
+                baseFragment=new ProfileFragmentEdit();
                 break;
             case SHOW_PROFILE_FRAGMENT_VIEW_SHOT:
-                baseFragment=new ProfileViewFragment();
+                baseFragment=new ProfileFragmentShot();
+                break;
+            case SHOW_PROFILE_FRAGMENT_VIEW_FULL:
+                baseFragment=new ProfileFragmentFull();
                 break;
             default: {commonError();return;}
         }

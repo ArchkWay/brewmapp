@@ -16,10 +16,10 @@ import com.brewmapp.execution.task.LoadProfileTask;
 import com.brewmapp.execution.task.LoadUsersTask;
 import com.brewmapp.execution.task.ProfileChangeTask;
 import com.brewmapp.execution.task.UploadAvatarTask;
-import com.brewmapp.presentation.presenter.contract.ProfileEditFragmentPresenter;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentEdit_presenter;
+import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
-import com.brewmapp.presentation.view.impl.fragment.ProfileEditFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentEdit;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -39,7 +39,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by Kras on 09.11.2017.
  */
 
-public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditFragmentView> implements ProfileEditFragmentPresenter {
+public class ProfileFragmentEdit_presenter_Impl extends BasePresenter<ProfileFragmentEdit_view> implements ProfileFragmentEdit_presenter {
 
     private User user_old_data;
     private User user_new_data=new User();
@@ -55,7 +55,7 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
 
 
     @Inject
-    public ProfileEditFragmentPresenterImpl(Context context,UserRepo userRepo, ProfileChangeTask profileChangeTask,UploadAvatarTask uploadAvatarTask,LoadProfileTask loadProfileTask,LoadUsersTask loadUsersTask){
+    public ProfileFragmentEdit_presenter_Impl(Context context, UserRepo userRepo, ProfileChangeTask profileChangeTask, UploadAvatarTask uploadAvatarTask, LoadProfileTask loadProfileTask, LoadUsersTask loadUsersTask){
         this.context=context;
         user_old_data=userRepo.load();
 
@@ -72,7 +72,7 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     }
 
     @Override
-    public void onAttach(ProfileEditFragmentView profileEditFragmentView) {
+    public void onAttach(ProfileFragmentEdit_view profileEditFragmentView) {
         super.onAttach(profileEditFragmentView);
 
         loadUsersTask.execute(user_old_data.getId(),new SimpleSubscriber<ArrayList<User>>(){
@@ -108,7 +108,7 @@ public class ProfileEditFragmentPresenterImpl extends BasePresenter<ProfileEditF
     }
 
     @Override
-    public void save(ProfileEditFragment.OnFragmentInteractionListener mListener) {
+    public void save(ProfileFragmentEdit.OnFragmentInteractionListener mListener) {
         class save {
             boolean needRefreshRepo=false;
 

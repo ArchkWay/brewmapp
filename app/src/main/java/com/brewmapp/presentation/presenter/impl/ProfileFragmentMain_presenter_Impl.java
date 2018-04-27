@@ -4,13 +4,11 @@ import android.content.Context;
 
 import javax.inject.Inject;
 
-import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Post;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.UserProfile;
-import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadPostsPackage;
@@ -22,8 +20,8 @@ import com.brewmapp.execution.task.LoadPostsTask;
 import com.brewmapp.execution.task.LoadProfileTask;
 import com.brewmapp.execution.task.LoadReviewsTask;
 import com.brewmapp.execution.task.LoadSubscriptionsItemsTask;
-import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
-import com.brewmapp.presentation.view.contract.ProfileView;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentMain_presenter;
+import com.brewmapp.presentation.view.contract.ProfileFragmentMain_view;
 
 import java.util.List;
 
@@ -35,7 +33,7 @@ import ru.frosteye.ovsa.presentation.presenter.BasePresenter;
  * Created by ovcst on 03.08.2017.
  */
 
-public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements ProfilePresenter {
+public class ProfileFragmentMain_presenter_Impl extends BasePresenter<ProfileFragmentMain_view> implements ProfileFragmentMain_presenter {
 
     private UserRepo userRepo;
     private LoadPostsTask loadPostsTask;
@@ -47,13 +45,13 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     private LoadReviewsTask loadReviewsTask;
 
     @Inject
-    public ProfilePresenterImpl(UserRepo userRepo, LoadPostsTask loadPostsTask,
-                                LoadProfileTask loadProfileTask,
-                                LikeTask likeTask,
-                                LoadSubscriptionsItemsTask loadSubscriptionsItemsTask,
-                                UiSettingRepo uiSettingRepo,
-                                Context context,
-                                LoadReviewsTask loadReviewsTask) {
+    public ProfileFragmentMain_presenter_Impl(UserRepo userRepo, LoadPostsTask loadPostsTask,
+                                              LoadProfileTask loadProfileTask,
+                                              LikeTask likeTask,
+                                              LoadSubscriptionsItemsTask loadSubscriptionsItemsTask,
+                                              UiSettingRepo uiSettingRepo,
+                                              Context context,
+                                              LoadReviewsTask loadReviewsTask) {
         this.userRepo = userRepo;
         this.loadPostsTask = loadPostsTask;
         this.loadProfileTask = loadProfileTask;
@@ -65,7 +63,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> implements 
     }
 
     @Override
-    public void onAttach(ProfileView profileView) {
+    public void onAttach(ProfileFragmentMain_view profileView) {
         super.onAttach(profileView);
         refreshProfile();
     }

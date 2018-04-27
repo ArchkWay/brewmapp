@@ -21,7 +21,7 @@ import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.presenter.contract.ChatFragmentPresenter;
 import com.brewmapp.presentation.view.contract.ChatFragmentView;
 import com.brewmapp.execution.exchange.response.ChatListDialogs;
-import com.brewmapp.presentation.view.contract.ProfileEditFragmentView;
+import com.brewmapp.presentation.view.contract.ProfileFragmentEdit_view;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.Chat.Message;
@@ -314,7 +314,7 @@ public class ChatFragmentPresenterImpl extends BasePresenter<ChatFragmentView> i
 
                     break;
                 case 2:
-                    ((ProfileEditFragmentView)baseFragment).selectedPhoto(null);
+                    ((ProfileFragmentEdit_view)baseFragment).selectedPhoto(null);
                     break;
             }
 

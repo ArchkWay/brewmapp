@@ -31,9 +31,8 @@ import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentMain;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
-import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -457,8 +456,8 @@ public class MainActivity extends BaseActivity
 
     public void refreshState() {
         if(baseFragment!=null)
-            if(baseFragment instanceof ProfileFragment)
-                ((ProfileFragment) baseFragment).refreshState();
+            if(baseFragment instanceof ProfileFragmentMain)
+                ((ProfileFragmentMain) baseFragment).refreshState();
     }
 
     //endregion

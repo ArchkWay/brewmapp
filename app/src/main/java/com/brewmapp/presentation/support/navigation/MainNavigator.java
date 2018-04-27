@@ -11,7 +11,7 @@ import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.MessageFragment;
-import com.brewmapp.presentation.view.impl.fragment.ProfileFragment;
+import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentMain;
 import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 import com.brewmapp.presentation.view.impl.fragment.SettingsFragment;
 
@@ -39,7 +39,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
         storeCodeActiveFragment(MenuField.EVENTS);
         switch (action.code()) {
             case MenuField.PROFILE:
-                fragmentToShow = new ProfileFragment();
+                fragmentToShow = new ProfileFragmentMain();
                 storeCodeActiveFragment(action.code());
                 break;
             case MenuField.EVENTS:

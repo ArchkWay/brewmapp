@@ -24,10 +24,11 @@ import com.brewmapp.data.entity.container.Subscriptions;
 import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.ProfileViewFragmentPresenter;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentShot_presenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
 import com.brewmapp.presentation.view.contract.MultiListView;
-import com.brewmapp.presentation.view.contract.ProfileViewFragmentView;
+import com.brewmapp.presentation.view.contract.ProfileEditView;
+import com.brewmapp.presentation.view.contract.ProfileFragmentShot_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.brewmapp.presentation.view.impl.activity.ProfileEditActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
@@ -49,10 +50,10 @@ import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileViewFragment.OnFragmentInteractionListener} interface
+ * {@link ProfileFragmentShot.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class ProfileViewFragment extends BaseFragment implements ProfileViewFragmentView , FlexibleAdapter.OnItemClickListener, View.OnClickListener{
+public class ProfileFragmentShot extends BaseFragment implements ProfileFragmentShot_view, FlexibleAdapter.OnItemClickListener, View.OnClickListener{
 
     //region BindView
     @BindView(R.id.fragment_profile_view_avatar)    ImageView avatar;
@@ -77,7 +78,7 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
     //endregion
 
     //region Inject
-    @Inject    ProfileViewFragmentPresenter presenter;
+    @Inject    ProfileFragmentShot_presenter presenter;
     //endregion
 
     @Override
@@ -94,11 +95,10 @@ public class ProfileViewFragment extends BaseFragment implements ProfileViewFrag
 
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
         view_information.setOnClickListener(v->
-//                Starter.ProfileEditActivity_StartInVisible(
-//                (BaseActivity) getActivity(),
-//                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
-//                getActivity().getIntent().getData().toString())
-                        showMessage(getString(R.string.message_develop))
+                Starter.ProfileEditActivity_StartInVisible(
+                (BaseActivity) getActivity(),
+                String.valueOf(ProfileEditView.SHOW_PROFILE_FRAGMENT_VIEW_FULL),
+                getActivity().getIntent().getData().toString())
         );
         view_request.setOnClickListener(this);
         counter_photos.setOnClickListener(this);

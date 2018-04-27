@@ -43,9 +43,8 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.data.entity.CardMenuField;
 import com.brewmapp.data.entity.UserProfile;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.ProfilePresenter;
-import com.brewmapp.presentation.view.contract.ProfileView;
-import com.brewmapp.presentation.view.impl.activity.AlbumsActivity;
+import com.brewmapp.presentation.presenter.contract.ProfileFragmentMain_presenter;
+import com.brewmapp.presentation.view.contract.ProfileFragmentMain_view;
 import com.brewmapp.presentation.view.impl.activity.NewPostActivity;
 import com.brewmapp.presentation.view.impl.widget.InfoCounter;
 
@@ -62,8 +61,8 @@ import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_REFRESH_PRO
  * Created by ovcst on 03.08.2017.
  */
 
-public class ProfileFragment extends BaseFragment implements
-        ProfileView,
+public class ProfileFragmentMain extends BaseFragment implements
+        ProfileFragmentMain_view,
         FlexibleAdapter.OnItemClickListener
 {
 
@@ -87,7 +86,7 @@ public class ProfileFragment extends BaseFragment implements
     //endregion
 
     //region Inject
-    @Inject    ProfilePresenter presenter;
+    @Inject    ProfileFragmentMain_presenter presenter;
     //endregion
 
     //region Private
@@ -98,7 +97,7 @@ public class ProfileFragment extends BaseFragment implements
     private UserProfile profile;
     //endregion
 
-    //region Impl ProfileFragment
+    //region Impl ProfileFragmentMain
     @Override
     protected int getFragmentLayout() {
         return R.layout.fragment_profile;
@@ -210,7 +209,7 @@ public class ProfileFragment extends BaseFragment implements
     //endregion
 
 
-    //region Impl ProfileView
+    //region Impl ProfileFragmentMain_view
     @Override
     public void enableControls(boolean enabled, int code) {
     }

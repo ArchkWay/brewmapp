@@ -517,6 +517,7 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         message=strings.length==0?getString(R.string.error):strings[1];
         showMessage(message);
         Starter.InfoAboutCrashSendToServer(message,getClass().getName());
+        stopProgressParentActivity();
         finish();
     }
     //endregion

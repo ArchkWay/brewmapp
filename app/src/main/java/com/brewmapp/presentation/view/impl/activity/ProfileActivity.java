@@ -85,16 +85,6 @@ public class ProfileActivity extends BaseActivity implements ProfileActivity_vie
     }
 
     @Override
-    public void commonError(String... strings) {
-
-        if(strings.length==0)
-            showMessage(getString(R.string.error));
-        else
-            showMessage(strings[0]);
-        finish();
-    }
-
-    @Override
     public void showFragment(int fragment) {
         switch (fragment){
             case SHOW_FRAGMENT_EDIT:

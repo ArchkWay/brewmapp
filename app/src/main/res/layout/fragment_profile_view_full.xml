@@ -124,7 +124,10 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/gender_man"
-                            style="@style/RadioButton" />
+                            style="@style/RadioButton"
+                            android:focusable="false"
+                            android:clickable="false"
+                            />
 
                         <RadioButton
                             android:id="@+id/fragment.profile.view_full.woman"
@@ -132,7 +135,10 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/gender_woman"
-                            style="@style/RadioButton" />
+                            style="@style/RadioButton"
+                            android:focusable="false"
+                            android:clickable="false"
+                            />
                     </info.hoang8f.android.segmented.SegmentedGroup>
                 </LinearLayout>
 
@@ -157,7 +163,7 @@
                         android:background="@null"
                         />
 
-                    <EditText
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/input_status_hint"
@@ -168,7 +174,6 @@
                         />
 
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -242,14 +247,10 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
 
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
-
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/fragment.profile.view_full.layout_city"
                     >
 
                     <LinearLayout
@@ -263,7 +264,6 @@
                         android:paddingTop="@dimen/common_block_space"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:id="@+id/fragment.profile.view_full.layout_city"
                         >
 
                         <TextView
@@ -297,10 +297,6 @@
 
                 </android.support.constraint.ConstraintLayout>
 
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -351,11 +347,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
 
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -374,11 +365,6 @@
                         />
 
                 </LinearLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -420,6 +406,8 @@
                             mask:allowed_chars="1234567890"
                             mask:mask="+# (###) ###-##-##"
                             android:id="@+id/fragment.profile.view_full.edit_text_phone"
+                            android:focusable="false"
+                            android:clickable="false"
                             />
 
                     </LinearLayout>
@@ -434,11 +422,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -478,7 +461,9 @@
                             android:lines="1"
                             mask:allowed_chars="1234567890"
                             mask:mask="+# (###) ###-##-##"
-                            android:id="@+id/fragment.profile.view_full.edit_text_phone_dop"/>
+                            android:id="@+id/fragment.profile.view_full.edit_text_phone_dop"
+                            android:focusable="false"
+                            android:clickable="false"/>
 
                     </LinearLayout>
 
@@ -492,11 +477,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -526,13 +506,13 @@
                             android:text="@string/text_view_address_skype"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_skype"
-                            android:id="@+id/fragment.profile.view_full.edit_skype"
+                            android:id="@+id/fragment.profile.view_full.text_skype"
                             />
 
                     </LinearLayout>
@@ -547,11 +527,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -581,13 +556,13 @@
                             android:text="@string/text_view_address_site"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_site"
-                            android:id="@+id/fragment.profile.view_full.edit_site"/>
+                            android:id="@+id/fragment.profile.view_full.text_site"/>
 
                     </LinearLayout>
 
@@ -601,11 +576,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -626,11 +596,6 @@
                         />
 
                 </LinearLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -660,13 +625,13 @@
                             android:text="@string/text_view_place_of_work"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_place_of_work"
-                            android:id="@+id/fragment.profile.view_full.edit_work"
+                            android:id="@+id/fragment.profile.view_full.text_work"
                             />
 
                     </LinearLayout>
@@ -681,11 +646,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -715,13 +675,13 @@
                             android:text="@string/text_view_interests"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_interests"
-                            android:id="@+id/fragment.profile.view_full.edit_interest"
+                            android:id="@+id/fragment.profile.view_full.text_interest"
                             />
 
                     </LinearLayout>
@@ -736,11 +696,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -770,13 +725,13 @@
                             android:text="@string/text_view_music"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_music"
-                            android:id="@+id/fragment.profile.view_full.edit_music"/>
+                            android:id="@+id/fragment.profile.view_full.text_music"/>
 
                     </LinearLayout>
 
@@ -790,12 +745,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -825,13 +774,13 @@
                             android:text="@string/text_view_films"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_films"
-                            android:id="@+id/fragment.profile.view_full.edit_film"/>
+                            android:id="@+id/fragment.profile.view_full.text_film"/>
 
                     </LinearLayout>
 
@@ -845,11 +794,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -879,13 +823,13 @@
                             android:text="@string/text_view_books"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_books"
-                            android:id="@+id/fragment.profile.view_full.edit_book"/>
+                            android:id="@+id/fragment.profile.view_full.text_book"/>
 
                     </LinearLayout>
 
@@ -899,11 +843,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
-
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -933,13 +872,13 @@
                             android:text="@string/text_view_games"
                             android:textColor="@color/colorGrayDark" />
 
-                        <EditText
+                        <TextView
                             style="@style/AppTheme.Text.H4"
                             android:background="@null"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_games"
-                            android:id="@+id/fragment.profile.view_full.edit_game"
+                            android:id="@+id/fragment.profile.view_full.text_game"
                             />
 
                     </LinearLayout>
@@ -955,10 +894,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
 
-                <ru.frosteye.ovsa.presentation.view.widget.Line
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSplitter"/>
             </LinearLayout>
         </ScrollView>
     </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>

@@ -588,5 +588,6 @@
     <string name="request_friends_accept">Добавить в друзья?</string>
     <string name="fav_unsubscrabe">Отписаться</string>
     <string name="text_button_friend_cancel">Отменить</string>
+    <string name="text_podrobno">Подробно</string>
 
 </resources>

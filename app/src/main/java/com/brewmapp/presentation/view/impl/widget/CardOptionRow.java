@@ -13,6 +13,8 @@ import butterknife.ButterKnife;
 import com.brewmapp.R;
 
 import com.brewmapp.data.entity.CardMenuField;
+
+import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.ModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseRelativeLayout;
 
@@ -50,15 +52,18 @@ public class CardOptionRow extends BaseRelativeLayout implements ModelView<CardM
         ButterKnife.bind(this);
     }
 
+
     @Override
     public CardMenuField getModel() {
         return model;
     }
 
+    @Override
     public void setModel(CardMenuField model) {
         this.model = model;
         this.title.setText(model.getTitle());
         this.icon.setImageResource(model.getIcon());
         this.bottom.setVisibility(model.isExtraSpaceBottom() ? View.VISIBLE : View.GONE);
     }
+
 }

@@ -12,8 +12,9 @@ import io.reactivex.Observable;
 import com.brewmapp.R;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.User;
+import com.brewmapp.data.entity.contract.InfoItem_view;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
-import com.brewmapp.data.entity.wrapper.FriendsTitleInfo;
+import com.brewmapp.data.entity.wrapper.InfoItem;
 import com.brewmapp.execution.exchange.common.Api;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.request.base.WrapperParams;
@@ -54,7 +55,7 @@ public class ListFriendsTask extends BaseNetworkTask<String, List<IFlexible>> {
                 WrapperParams params = createParamsForType(FriendsView.FRIENDS_REQUEST_IN);
                 response = executeCall(getApi().listFriends(params));
                 if(response.getModels().size() > 0) {
-                    //out.add(new FriendsTitleInfo(getString(R.string.incoming_requests),FriendsView.FRIENDS_REQUEST_IN));
+                    //out.add(new InfoItem(getString(R.string.incoming_requests),FriendsView.FRIENDS_REQUEST_IN));
                     Iterator<ContactInfo> iterator=response.getModels().iterator();
                     while (iterator.hasNext())
                         iterator.next().getModel().setStatus(FriendsView.FRIENDS_REQUEST_IN);
@@ -64,7 +65,7 @@ public class ListFriendsTask extends BaseNetworkTask<String, List<IFlexible>> {
                 params = createParamsForType(FriendsView.FRIENDS_REQUEST_OUT);
                 response = executeCall(getApi().listFriends(params));
                 if(response.getModels().size() > 0) {
-                    //out.add(new FriendsTitleInfo(getString(R.string.outgoing_requests),FriendsView.FRIENDS_REQUEST_OUT));
+                    //out.add(new InfoItem(getString(R.string.outgoing_requests),FriendsView.FRIENDS_REQUEST_OUT));
                     Iterator<ContactInfo> iterator=response.getModels().iterator();
                     while (iterator.hasNext())
                         iterator.next().getModel().setStatus(FriendsView.FRIENDS_REQUEST_OUT);
@@ -75,7 +76,7 @@ public class ListFriendsTask extends BaseNetworkTask<String, List<IFlexible>> {
                 params = createParamsForType(FriendsView.FRIENDS_NOW);
                 response = executeCall(getApi().listFriends(params));
                 if(response.getModels().size()>0) {
-                    out.add(new FriendsTitleInfo(getString(R.string.friends),FriendsView.FRIENDS_NOW));
+                    out.add(new InfoItem(getString(R.string.friends), InfoItem_view.FRIENDS_NOW));
                     Iterator<ContactInfo> iterator=response.getModels().iterator();
                     while (iterator.hasNext())
                         iterator.next().getModel().setStatus(FriendsView.FRIENDS_NOW);

@@ -10,19 +10,19 @@ import ru.frosteye.ovsa.presentation.view.ModelView;
  * Created by oleg on 17.08.17.
  */
 
-public class FriendsTitleView extends AppCompatTextView implements ModelView<String> {
+public class InfoItemView extends AppCompatTextView implements ModelView<String> {
 
     private String model;
 
-    public FriendsTitleView(Context context) {
+    public InfoItemView(Context context) {
         super(context);
     }
 
-    public FriendsTitleView(Context context, AttributeSet attrs) {
+    public InfoItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FriendsTitleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public InfoItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

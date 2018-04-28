@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.brewmapp.R;
 
+import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.entity.Interest;
@@ -31,11 +32,15 @@ import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.execution.tool.Text2TextWithHashTag;
 import com.brewmapp.presentation.view.impl.activity.MultiListActivity;
 import com.brewmapp.presentation.view.impl.activity.PhotoSliderActivity;
+import com.brewmapp.presentation.view.impl.activity.PostDetailsActivity;
 import com.brewmapp.presentation.view.impl.activity.RestoDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.execution.task.SimpleSubscriber;
 import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
@@ -44,7 +49,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by oleg on 16.08.17.
  */
 
-public class PostView extends BaseLinearLayout implements InteractiveModelView<Post> {
+public class PostView extends BaseLinearLayout implements InteractiveModelView<Post>, View.OnClickListener {
 
     @BindView(R.id.view_post_author) TextView author;
     @BindView(R.id.view_post_text) TextView text;
@@ -61,7 +66,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
 
     private Listener listener;
     private Post model;
-
+    @Inject ActiveBox activeBox;
 
     public PostView(Context context) {
         super(context);
@@ -84,6 +89,7 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     protected void prepareView() {
         if(isInEditMode()) return;
         ButterKnife.bind(this);
+        BeerMap.getAppComponent().plus(new PresenterModule(this)).inject(this);
         text.setMovementMethod(LinkMovementMethod.getInstance());
         avatar.setOnClickListener(v ->{
             Intent intent = new Intent(getContext(), RestoDetailActivity.class);
@@ -100,10 +106,14 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
                 getContext().startActivity(intent);
             }
         } );
-        subcontainer.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
-        text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
-        repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
-        post_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(model.getPhoto(),getContext()));
+        subcontainer.setOnClickListener(this);
+        text.setOnClickListener(this);
+        repost.setOnClickListener(this);
+        post_photo.setOnClickListener(this);
+//        subcontainer.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+//        text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+//        repost.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_POST, model));
+//        post_photo.setOnClickListener(v -> PhotoSliderActivity.startPhotoSliderActivity(model.getPhoto(),getContext()));
 
     }
 
@@ -248,4 +258,26 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.view_post_container_subcontainer:
+            case R.id.view_post_text:
+            case R.id.view_post_container_repost:
+                if(listener!=null)
+                    listener.onModelAction(Actions.ACTION_SELECT_POST, model);
+                else{
+                    activeBox.setActive(model);
+                    getContext().startActivity(new Intent(getContext(), PostDetailsActivity.class));
+
+                }
+
+
+                break;
+            case R.id.view_post_container_post_photo:
+                PhotoSliderActivity.startPhotoSliderActivity(model.getPhoto(),getContext());
+                break;
+
+        }
+    }
 }

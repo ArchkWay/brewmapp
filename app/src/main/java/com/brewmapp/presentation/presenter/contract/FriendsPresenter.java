@@ -19,8 +19,6 @@ public interface FriendsPresenter extends LivePresenter<FriendsView> {
 
     void setItemTouchHelper(RecyclerView list);
 
-    void onClickItem(int code, Object payload, BaseActivity baseActivity);
-
     void searchFriends(FullSearchPackage fullSearchPackage);
 
     void deleteFriend(WrapperParams wrapperParams);

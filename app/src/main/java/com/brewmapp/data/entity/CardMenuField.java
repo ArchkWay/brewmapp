@@ -15,6 +15,7 @@ import com.brewmapp.presentation.view.impl.widget.CardOptionRow;
 
 import eu.davidea.flexibleadapter.items.IFlexible;
 import ru.frosteye.ovsa.presentation.adapter.ModelViewHolder;
+import ru.frosteye.ovsa.presentation.view.InteractiveModelView;
 import ru.frosteye.ovsa.tool.DateTools;
 
 import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
@@ -23,7 +24,7 @@ import static ru.frosteye.ovsa.data.storage.ResourceHelper.getString;
  * Created by ovcst on 02.08.2017.
  */
 
-public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOptionRow>> {
+public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOptionRow>>  {
 
     public static final int NEW_POST = 0;
     public static final int ADD_PHOTO = 1;
@@ -127,9 +128,9 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
         List<CardMenuField> out = new ArrayList<>();
         out.add(new CardMenuField(NEW_POST, R.drawable.ic_new_post, context.getString(R.string.new_post)));
         out.add(new CardMenuField(ADD_PHOTO, R.drawable.ic_new_photo, context.getString(R.string.add_photo)));
-        out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_bar, context.getString(R.string.fav_beer)));
-        out.add(new CardMenuField(FAVORITE_RESTO, R.drawable.ic_fav_bar, context.getString(R.string.fav_bars)));
-        out.add(new CardMenuField(MY_RATINGS, R.drawable.ic_fav_bar, context.getString(R.string.my_ratings)));
+        out.add(new CardMenuField(FAVORITE_BEER, R.drawable.ic_fav_beer, context.getString(R.string.fav_beer)));
+        out.add(new CardMenuField(FAVORITE_RESTO, R.drawable.ic_fav_resto, context.getString(R.string.fav_bars)));
+        out.add(new CardMenuField(MY_RATINGS, R.drawable.ic_my_elevation, context.getString(R.string.my_ratings)));
 
 
         return out;
@@ -154,4 +155,5 @@ public class CardMenuField extends AbstractFlexibleItem<ModelViewHolder<CardOpti
     public String getExternalId() {
         return externalId;
     }
+
 }

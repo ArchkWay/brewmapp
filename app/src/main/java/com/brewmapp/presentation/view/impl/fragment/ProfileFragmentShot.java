@@ -17,12 +17,15 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.Actions;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.CardMenuField;
+import com.brewmapp.data.entity.Stub;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.entity.container.Posts;
 import com.brewmapp.data.entity.container.Subscriptions;
+import com.brewmapp.data.entity.contract.InfoItem_view;
 import com.brewmapp.data.entity.wrapper.PostInfo;
 import com.brewmapp.data.entity.wrapper.SubscriptionInfo;
+import com.brewmapp.data.entity.wrapper.InfoItem;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.ProfileFragmentShot_presenter;
 import com.brewmapp.presentation.view.contract.FriendsView;
@@ -44,8 +47,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
-import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
+import ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +64,6 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
     @BindView(R.id.fragment_profile_view_name)      TextView name;
     @BindView(R.id.fragment_profile_view_place)      TextView place;
     @BindView(R.id.fragment_profile_view_time)      TextView time;
-    @BindView(R.id.fragment_profile_view_swipe)    RefreshableSwipeRefreshLayout swipe;
     @BindView(R.id.fragment_profile_view_counter_friends)    InfoCounter counter_friends;
     @BindView(R.id.fragment_profile_view_counter_photos)    InfoCounter counter_photos;
     @BindView(R.id.fragment_profile_view_counter_subscribers)    InfoCounter counter_subscribers;
@@ -69,6 +72,7 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
     @BindView(R.id.fragment_profile_view_request)    Button view_request;
     @BindView(R.id.fragment_profile_button_private_message) Button private_message;
     @BindView(R.id.fragment_profile_view_information) ImageView view_information;
+    @BindView(R.id.fragment_profile_view_swipe)    SwipeRefreshLayoutBottom refreshLayout;
     //endregion
 
     //region Private
@@ -91,7 +95,7 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
         setHasOptionsMenu(true);
         cardMenuFields=CardMenuField.createProfileViewItems(getActivity());
         menu.setLayoutManager(new LinearLayoutManager(getActivity()));
-        menu.setAdapter(new FlexibleAdapter<>(cardMenuFields, this));
+        menu.setAdapter(new FlexibleModelAdapter<>(cardMenuFields, this));
 
         private_message.setOnClickListener(v -> Starter.MultiFragmentActivity_MODE_CHAT(getActivity(),user));
         view_information.setOnClickListener(v->
@@ -102,6 +106,7 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
         );
         view_request.setOnClickListener(this);
         counter_photos.setOnClickListener(this);
+        refreshLayout.setOnRefreshListener(() -> refreshLayout.postDelayed(() -> refreshLayout.setRefreshing(false),1000));
     }
 
     @Override
@@ -163,10 +168,14 @@ public class ProfileFragmentShot extends BaseFragment implements ProfileFragment
     public void setNews(Posts posts) {
 
         List<PostInfo> postInfoList=posts.getModels();
-        cardMenuFields.addAll(postInfoList);
-        FlexibleAdapter flexibleAdapter= (FlexibleAdapter) menu.getAdapter();
-        flexibleAdapter.notifyItemRangeInserted(flexibleAdapter.getItemCount(),postInfoList.size());
-
+        cardMenuFields.add(new InfoItem("", InfoItem_view.SEPARATOR));
+        if(postInfoList.size()==0){
+            cardMenuFields.add(new InfoItem(getString(R.string.text_no_while_news), InfoItem_view.WHILE_NOT_EXIST_SUBSCRIBE));
+        }else {
+            cardMenuFields.addAll(postInfoList);
+        }
+        FlexibleAdapter flexibleAdapter = (FlexibleAdapter) menu.getAdapter();
+        flexibleAdapter.notifyItemRangeInserted(flexibleAdapter.getItemCount(), postInfoList.size());
         presenter.loadStatusUser();
     }
 

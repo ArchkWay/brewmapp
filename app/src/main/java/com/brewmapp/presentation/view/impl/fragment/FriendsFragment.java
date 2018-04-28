@@ -28,8 +28,9 @@ import com.brewmapp.app.di.component.PresenterComponent;
 import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Contact;
+import com.brewmapp.data.entity.contract.InfoItem_view;
 import com.brewmapp.data.entity.wrapper.ContactInfo;
-import com.brewmapp.data.entity.wrapper.FriendsTitleInfo;
+import com.brewmapp.data.entity.wrapper.InfoItem;
 import com.brewmapp.data.entity.wrapper.UserInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -313,8 +314,8 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
 
                     //region get status
                     int status=0;
-                    if(iFlexible instanceof FriendsTitleInfo)
-                        status =((FriendsTitleInfo)iFlexible).getStatus();
+                    if(iFlexible instanceof InfoItem)
+                        status =((InfoItem)iFlexible).getStatus();
                     else if (iFlexible instanceof ContactInfo){
                         status =((ContactInfo)iFlexible).getModel().getStatus();
                     }
@@ -334,7 +335,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
                 }
 
                 if(original_requests.size()>0)
-                    original_requests.add(0,new FriendsTitleInfo(getString(R.string.title_friends_request),FRIENDS_DEFAULT));
+                    original_requests.add(0,new InfoItem(getString(R.string.title_friends_request), InfoItem_view.FRIENDS_DEFAULT));
 
                 adapter_requests.notifyDataSetChanged();
                 adapter_friends.notifyDataSetChanged();
@@ -353,7 +354,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
             case MODE_FIND_FRIENDS:
                 //region Find Friends
                 if(original_find_friends.size()==0&&list.size()>0){
-                    original_find_friends.add(0,new FriendsTitleInfo(getString(R.string.action_find_friends),FRIENDS_DEFAULT));
+                    original_find_friends.add(0,new InfoItem(getString(R.string.action_find_friends), InfoItem_view.FRIENDS_DEFAULT));
                 }
                 Iterator<IFlexible> infoIterator=list.iterator();
                 while (infoIterator.hasNext())

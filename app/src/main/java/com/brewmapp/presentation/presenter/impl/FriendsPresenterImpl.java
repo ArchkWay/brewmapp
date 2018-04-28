@@ -119,27 +119,6 @@ public class FriendsPresenterImpl extends BasePresenter<FriendsView> implements 
     }
 
     @Override
-    public void onClickItem(int code, Object payload, BaseActivity baseActivity) {
-//        switch (contact.getStatus()){
-//            case FriendsView.FRIENDS_REQUEST_IN:
-//            case FriendsView.FRIENDS_REQUEST_OUT:
-//                new DialogManageContact(fragmentActivity,fragmentActivity.getSupportFragmentManager(),contact,FriendsPresenterImpl.this);
-//                break;
-//            case FriendsView.FRIENDS_NOW:{
-//                Intent intent=new Intent(MultiFragmentActivityView.MODE_CHAT, null, fragmentActivity, MultiFragmentActivity.class);
-//                User user=contact.getFriend_info();
-//                User friend=new User();
-//                friend.setId(user.getId());
-//                friend.setFirstname(user.getFirstname());
-//                friend.setLastname(user.getLastname());
-//                intent.putExtra(RequestCodes.INTENT_EXTRAS,friend);
-//                fragmentActivity.startActivity(intent);
-//            }
-//        }
-
-    }
-
-    @Override
     public void searchFriends(FullSearchPackage fullSearchPackage) {
         listFriendsTask.cancel();
         enableControls(false);

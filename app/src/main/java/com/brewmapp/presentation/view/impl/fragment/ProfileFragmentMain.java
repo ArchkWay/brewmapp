@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -82,7 +83,7 @@ public class ProfileFragmentMain extends BaseFragment implements
     @BindView(R.id.fragment_profile_flow_segment) SegmentedGroup segment;
     @BindView(R.id.fragment_profile_text_no_record) TextView text_no_record;
     @BindView(R.id.fragment_profile_transitions_container) ViewGroup transitions_container;
-    @BindView(R.id.fragment_profile_scrollView) ScrollView scrollView;
+    @BindView(R.id.fragment_profile_scrollView)    NestedScrollView scrollView;
     //endregion
 
     //region Inject

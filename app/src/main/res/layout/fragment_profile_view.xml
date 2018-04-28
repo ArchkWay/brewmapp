@@ -190,7 +190,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/fragment.profile.view.menu"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    android:nestedScrollingEnabled="false"/>
+                    android:nestedScrollingEnabled="false"
+                    />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

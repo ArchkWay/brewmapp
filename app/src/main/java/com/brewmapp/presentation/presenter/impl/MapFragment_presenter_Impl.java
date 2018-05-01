@@ -12,8 +12,8 @@ import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadRestoGeoTask;
 import com.brewmapp.execution.task.LoadRestoLocationTask;
 import com.brewmapp.execution.task.SearchOnMapTask;
-import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
-import com.brewmapp.presentation.view.contract.BeerMapView;
+import com.brewmapp.presentation.presenter.contract.MapFragment_presenter;
+import com.brewmapp.presentation.view.contract.MapFragment_view;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import ru.frosteye.ovsa.tool.Geolocator;
  * Created by ovcst on 24.08.2017.
  */
 
-public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements BeerMapPresenter {
+public class MapFragment_presenter_Impl extends BasePresenter<MapFragment_view> implements MapFragment_presenter {
 
     private SimpleLocation simpleLocation;
     private Geolocator geolocator;
@@ -43,13 +43,13 @@ public class BeerMapPresenterImpl extends BasePresenter<BeerMapView> implements 
     private LoadRestoGeoTask loadRestoGeoTask;
 
     @Inject
-    public BeerMapPresenterImpl(LoadCityTask loadCityTask,
-                                LoadRestoLocationTask loadRestoLocationTask,
-                                FilterRestoTask filterRestoTask,
-                                FilterBeerTask filterBeerTask,
-                                SearchOnMapTask searchOnMapTask,
-                                LoadRestoGeoTask loadRestoGeoTask,
-                                FullSearchFilterTask fullSearchFilterTask) {
+    public MapFragment_presenter_Impl(LoadCityTask loadCityTask,
+                                      LoadRestoLocationTask loadRestoLocationTask,
+                                      FilterRestoTask filterRestoTask,
+                                      FilterBeerTask filterBeerTask,
+                                      SearchOnMapTask searchOnMapTask,
+                                      LoadRestoGeoTask loadRestoGeoTask,
+                                      FullSearchFilterTask fullSearchFilterTask) {
 
         this.loadRestoLocationTask = loadRestoLocationTask;
         this.loadCityTask = loadCityTask;

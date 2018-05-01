@@ -7,7 +7,7 @@ import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.entity.MenuField;
 import com.brewmapp.presentation.view.contract.MainView;
 import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
-import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
+import com.brewmapp.presentation.view.impl.fragment.MapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.MessageFragment;
@@ -49,7 +49,7 @@ public class MainNavigator extends BaseNavigatorImpl<MainView> implements Naviga
                 fragmentToShow = new SearchFragment();
                 break;
             case MenuField.MAP:
-                fragmentToShow = new BeerMapFragment();
+                fragmentToShow = new MapFragment();
                 break;
             case MenuField.SETTINGS:
                 fragmentToShow = new SettingsFragment();

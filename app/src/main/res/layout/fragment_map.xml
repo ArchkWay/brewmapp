@@ -28,22 +28,32 @@
 
         >
 
-        <LinearLayout
+        <com.brewmapp.presentation.view.impl.widget.InfoWindowContainer
             android:id="@+id/container_popup"
             android:layout_x="0dp"
             android:layout_y="0dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/colorWhite"
+
             >
-            <!--<ImageView-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:src="@drawable/ic_default_beer"-->
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/InfoWindowMap_progressBar"
+    >
+    <include layout="@layout/view_progress_small"/>
+</LinearLayout>
+            <!--<ProgressBar-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/InfoWindowMap_progressBar"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:indeterminateTint="#838383"-->
                 <!--/>-->
-            <!-- всплывающее окно -->
-        </LinearLayout>
+
+        </com.brewmapp.presentation.view.impl.widget.InfoWindowContainer>
 
     </AbsoluteLayout>
 

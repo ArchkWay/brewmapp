@@ -50,7 +50,7 @@ import com.brewmapp.presentation.view.impl.fragment.BaseFragment;
 import dagger.Subcomponent;
 
 import com.brewmapp.presentation.view.impl.fragment.BeerEditFragment;
-import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
+import com.brewmapp.presentation.view.impl.fragment.MapFragment;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.FriendsFragment;
 import com.brewmapp.presentation.view.impl.fragment.MessageFragment;
@@ -85,7 +85,7 @@ public interface PresenterComponent {
     void inject(FriendsFragment fragment);
     void inject(EventsFragment fragment);
     void inject(SearchFragment fragment);
-    void inject(BeerMapFragment fragment);
+    void inject(MapFragment fragment);
     void inject(SettingsFragment fragment);
     void inject(ProfileFragmentEdit fragment);
     void inject(ProfileFragmentShot fragment);

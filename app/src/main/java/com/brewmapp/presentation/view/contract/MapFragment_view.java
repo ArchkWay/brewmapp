@@ -15,7 +15,7 @@ import ru.frosteye.ovsa.presentation.view.BasicView;
  * Created by ovcst on 24.08.2017.
  */
 
-public interface BeerMapView extends BasicView {
+public interface MapFragment_view extends BasicView {
     void addRestoToMap(List<FilterRestoLocationInfo> list);
     void showDialogProgressBar(boolean show);
     void showProgressBar();

@@ -130,7 +130,7 @@ public class FriendsFragment extends BaseFragment implements FriendsView,Receive
         find_friends.setLayoutManager(new LinearLayoutManager(getActivity()));
         find_friends.setAdapter(adapter_find_friends);
         find_friends.setOnTouchListener((v, event) -> {
-            if(search.isFocused())
+            if(search.isSearchFocused())
                 search.clearFocus();
             return false;
         });

@@ -28,7 +28,7 @@ import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.support.navigation.FragmentInterractor;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
-import com.brewmapp.presentation.view.impl.fragment.BeerMapFragment;
+import com.brewmapp.presentation.view.impl.fragment.MapFragment;
 import com.brewmapp.presentation.view.impl.fragment.Chat.ChatResultReceiver;
 import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 import com.brewmapp.presentation.view.impl.fragment.ProfileFragmentMain;
@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity
         FlexibleAdapter.OnItemClickListener,
         FragmentInterractor,
         SearchFragment.OnFragmentInteractionListener,
-        BeerMapFragment.OnFragmentInteractionListener,
+        MapFragment.OnFragmentInteractionListener,
         EventsFragment.OnFragmentInteractionListener
 {
 

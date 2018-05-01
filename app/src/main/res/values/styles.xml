@@ -15,8 +15,13 @@
 
         <item name="actionButtonStyle">@style/AppTheme.Widget.ActionButton</item>
 
+        <item name="android:textAppearanceSmall">@style/TextAppearance.Small</item>
+
     </style>
 
+    <style name="TextAppearance.Small" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
     <style name="AppTheme.Widget.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
         <item name="textAllCaps">false</item>
     </style>

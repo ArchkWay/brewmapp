@@ -131,8 +131,8 @@ public class FinderView extends BaseFrameLayout {
         hideInputKeyboard();
     }
 
-    @Override
-    public boolean isFocused(){
+
+    public boolean isSearchFocused(){
         return input.isFocused();
     }
 

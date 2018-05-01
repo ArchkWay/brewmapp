@@ -1,9 +1,6 @@
 package com.brewmapp.presentation.view.impl.fragment;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,13 +39,14 @@ import com.brewmapp.data.entity.wrapper.SearchRestoInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import com.brewmapp.presentation.presenter.contract.BeerMapPresenter;
-import com.brewmapp.presentation.view.contract.BeerMapView;
+import com.brewmapp.presentation.presenter.contract.MapFragment_presenter;
+import com.brewmapp.presentation.view.contract.MapFragment_view;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.dialogs.DialogShowView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowContainer;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMapBeer;
 import com.brewmapp.utils.events.markerCluster.ClusterRender;
@@ -82,15 +80,14 @@ import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.tool.UITools;
 
-import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.brewmapp.app.environment.RequestCodes.REQUEST_CODE_MAP_RESULT;
 
 /**
  * Created by ovcst on 24.08.2017.
  */
-public class BeerMapFragment extends BaseFragment implements
-                                                            BeerMapView,
+public class MapFragment extends BaseFragment implements
+                                                            MapFragment_view,
                                                             OnMapReadyCallback,
                                                             GoogleMap.OnCameraIdleListener,
                                                             GoogleMap.OnInfoWindowClickListener,
@@ -120,7 +117,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     //region INJECT
     @Inject
-    BeerMapPresenter presenter;
+    MapFragment_presenter presenter;
     //endregion
 
     //region Privates
@@ -137,7 +134,6 @@ public class BeerMapFragment extends BaseFragment implements
     private HashMap<String,FilterRestoLocation> hmVisibleResto =new HashMap<>();
     private HashMap<String,String> hmResultSearch =new HashMap<>();
     private LatLngBounds latLngBounds;
-    private InfoWindowMap contentInfoWindow =null;
     private float maxZoomPref=18.0f;
     private float minZoomPref=10.0f;
     private DialogShowView dialogShowView;
@@ -164,19 +160,19 @@ public class BeerMapFragment extends BaseFragment implements
     private ViewTreeObserver.OnGlobalLayoutListener infoWindowLayoutListener;
     //контейнер всплывающего окна
     @BindView(R.id.container_popup)
-    LinearLayout infoWindowContainer;
+    InfoWindowContainer infoWindowContainer;
     //интервал обновления положения всплывающего окна.
     //для плавности необходимо 60 fps, то есть 1000 ms / 60 = 16 ms между обновлениями.
     private final int POPUP_POSITION_REFRESH_INTERVAL = 16;
     //Handler, запускающий обновление окна с заданным интервалом
     private Handler handler;
     //Runnable, который обновляет положение окна
-    private Runnable positionUpdaterRunnable;
+    private PositionUpdaterRunnable positionUpdaterRunnable;
 
     private PrepareLoadResto prepareLoadResto=null;
     //endregion
 
-    //region Impl BeerMapFragment
+    //region Impl MapFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,7 +202,6 @@ public class BeerMapFragment extends BaseFragment implements
                 startQuery();
             }
         };
-        //list.addOnScrollListener(scrollListener);
 
         adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
@@ -230,7 +225,8 @@ public class BeerMapFragment extends BaseFragment implements
 
         infoWindowLayoutListener = new InfoWindowLayoutListener();
         infoWindowContainer.getViewTreeObserver().addOnGlobalLayoutListener(infoWindowLayoutListener );
-        handler = new Handler(Looper.getMainLooper());
+        infoWindowContainer.setInfoWindowLayoutListener(infoWindowLayoutListener);
+                handler = new Handler(Looper.getMainLooper());
         positionUpdaterRunnable = new PositionUpdaterRunnable();
 
         //запускаем периодическое обновление
@@ -327,7 +323,7 @@ public class BeerMapFragment extends BaseFragment implements
 
     //endregion
 
-    //region Impl BeerMapView
+    //region Impl MapFragment_view
     @Override
     public void appendItems(List<IFlexible> iFlexibles) {
 
@@ -430,8 +426,9 @@ public class BeerMapFragment extends BaseFragment implements
     public void onCameraIdle() {
 
 
-        if(isNeedShowInfoWindow())
-              showInfoWindow();
+
+        infoWindowContainer.processVisibleAnimation();
+
 
         if(clickedClaster)
             clickedClaster=false;
@@ -460,11 +457,8 @@ public class BeerMapFragment extends BaseFragment implements
         trackedPosition = marker.getPosition();
         Point trackedPoint = projection.toScreenLocation(trackedPosition);
         trackedPoint.y -= popupYOffset / 2;
-        infoWindowContainer.removeAllViews();
-        if(contentInfoWindow !=null) {
-            contentInfoWindow.setMarker(marker);
-            infoWindowContainer.addView(contentInfoWindow);
-        }
+
+        infoWindowContainer.setMarker(marker);
 
         return null;
     }
@@ -522,7 +516,9 @@ public class BeerMapFragment extends BaseFragment implements
             dialogShowView=new DialogShowView();
             dialogShowView.setView(scrollView);
             dialogShowView.setCallBack(result -> clearDialog());
-            contentInfoWindow = createInfoWindowForListResto(cluster);
+            infoWindowContainer.setInfoWindow(
+                    createInfoWindowForListResto(cluster)
+            );
             clickedClaster=true;
             return false;
         }else {
@@ -542,7 +538,10 @@ public class BeerMapFragment extends BaseFragment implements
     public boolean onClusterItemClick(FilterRestoLocation filterRestoLocation) {
         finder.clearFocus();
         clearInfoWindow();
-        contentInfoWindow = createInfoWindowForOneResto(filterRestoLocation);
+        infoWindowContainer.setInfoWindow(
+                createInfoWindowForOneResto(filterRestoLocation)
+        );
+
         return false;
     }
 
@@ -774,36 +773,7 @@ public class BeerMapFragment extends BaseFragment implements
     }
 
     private void clearInfoWindow() {
-        contentInfoWindow =null;
-        infoWindowContainer.setVisibility(INVISIBLE);
-    }
-
-    private void showInfoWindow() {
-        if(infoWindowContainer.getVisibility()==INVISIBLE) {
-            infoWindowContainer.setVisibility(VISIBLE);
-            ValueAnimator va = ValueAnimator.ofFloat(0, 1);
-            va.setDuration(500);
-            va.addUpdateListener(animation -> {
-                infoWindowContainer.setAlpha((Float) animation.getAnimatedValue());
-            });
-            va.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    if(contentInfoWindow!=null)
-                        for(int i=0;i<contentInfoWindow.getChildCount();i++){
-                            View view=contentInfoWindow.getChildAt(i);
-                            if(view instanceof InfoWindowMapBeer)
-                                ((InfoWindowMapBeer)view).showBeer(infoWindowContainer.getHeight());
-                        }
-                }
-            });
-            va.start();
-        }
-    }
-
-    private boolean isNeedShowInfoWindow(){
-        return contentInfoWindow !=null;
+        infoWindowContainer.clearContainer();
     }
 
     private void requestResto() {
@@ -838,9 +808,11 @@ public class BeerMapFragment extends BaseFragment implements
         }
     }
 
-    private class PositionUpdaterRunnable implements Runnable {
-        private int lastXPosition = Integer.MIN_VALUE;
-        private int lastYPosition = Integer.MIN_VALUE;
+    public class PositionUpdaterRunnable implements Runnable {
+        public int lastXPosition = Integer.MIN_VALUE;
+        public int lastYPosition = Integer.MIN_VALUE;
+
+        private int lastPopupXOffset = 0;
 
         @Override
         public void run() {
@@ -852,7 +824,7 @@ public class BeerMapFragment extends BaseFragment implements
                 Point targetPosition = googleMap.getProjection().toScreenLocation(trackedPosition);
 
                 //если положение окна не изменилось, ничего не делаем
-                if (lastXPosition != targetPosition.x || lastYPosition != targetPosition.y) {
+                if (lastXPosition != targetPosition.x || lastYPosition != targetPosition.y || lastPopupXOffset!=popupXOffset) {
                     //обновляем положение
                     AbsoluteLayout.LayoutParams overlayLayoutParams = (AbsoluteLayout.LayoutParams) infoWindowContainer.getLayoutParams();
                     overlayLayoutParams.x = targetPosition.x - popupXOffset;
@@ -862,6 +834,7 @@ public class BeerMapFragment extends BaseFragment implements
                     //запоминаем текущие координаты
                     lastXPosition = targetPosition.x;
                     lastYPosition = targetPosition.y;
+                    lastPopupXOffset=popupXOffset;
                 }
             }
         }

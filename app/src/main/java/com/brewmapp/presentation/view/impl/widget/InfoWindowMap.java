@@ -6,6 +6,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -61,6 +63,9 @@ public class InfoWindowMap extends BaseLinearLayout {
     private Marker marker;
     private Target target;
     private String resto_id;
+    private double locationLat;
+    private double locationLon;
+    private Handler.Callback listenerFinishLoadData;
 
     public InfoWindowMap(Context context) {
         super(context);
@@ -82,31 +87,46 @@ public class InfoWindowMap extends BaseLinearLayout {
     protected void prepareView() {
         ButterKnife.bind(this);
         BeerMap.getAppComponent().plus(new PresenterModule(this)).inject(this);
+        setOnClickListener(v -> Starter.RestoDetailActivity((BaseActivity) getContext(), resto_id));
 
     }
 
 
-    public void setResto(String restoId, double locationLat, double locationLon){
-        this.resto_id=restoId;
-        post(new Runnable() {
+    public  void requestData(){
+        //region Request Resto
+        getRestoDetail(resto_id, locationLat, locationLon, new Callback<RestoDetail>() {
             @Override
-            public void run() {
-                //region User Events
-                setOnClickListener(v -> Starter.RestoDetailActivity((BaseActivity) getContext(), resto_id));
-                //endregion
-
-                //region Request Resto
-                getRestoDetail(restoId, locationLat, locationLon, new Callback<RestoDetail>() {
-                    @Override
-                    public void onResult(RestoDetail restoDetail) {
-                        setDistance(restoDetail);
-                        setLogo(restoDetail);
-                    }
-                });
-                //endregion
-
+            public void onResult(RestoDetail restoDetail) {
+                setDistance(restoDetail);
+                setLogo(restoDetail);
             }
         });
+        //endregion
+
+    }
+    public void setResto(String restoId, double locationLat, double locationLon){
+        this.resto_id=restoId;
+        this.locationLat=locationLat;
+        this.locationLon=locationLon;
+//        post(new Runnable() {
+//            @Override
+//            public void run() {
+//                //region User Events
+//                setOnClickListener(v -> Starter.RestoDetailActivity((BaseActivity) getContext(), resto_id));
+//                //endregion
+//
+//                //region Request Resto
+//                getRestoDetail(restoId, locationLat, locationLon, new Callback<RestoDetail>() {
+//                    @Override
+//                    public void onResult(RestoDetail restoDetail) {
+//                        setDistance(restoDetail);
+//                        setLogo(restoDetail);
+//                    }
+//                });
+//                //endregion
+//
+//            }
+//        });
 
     }
 
@@ -150,53 +170,64 @@ public class InfoWindowMap extends BaseLinearLayout {
 
         try {
             metro.setText(restoDetail.getResto().getLocation().getMetro().getName());
-
-            layout_metro.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    layout_metro.setVisibility(VISIBLE);
-                    layout_metro.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    ValueAnimator va = ValueAnimator.ofInt(0, layout_city.getHeight());
-                    va.setDuration(500);
-                    va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            Integer value = (Integer) animation.getAnimatedValue();
-                            layout_metro.getLayoutParams().height = value.intValue();
-                            layout_metro.requestLayout();
-
-                        }
-                    });
-                    va.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            for(int i=0;i<getChildCount();i++){
-                                View view=getChildAt(i);
-                                if(view instanceof InfoWindowMapBeer){
-                                    ((InfoWindowMapBeer) view).setMenu(restoDetail.getMenu());
-
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-
-                        }
-                    });
-                    va.start();
-                }
-            });
+//            layout_metro.getLayoutParams().height=layout_city.getHeight();
+//            layout_metro.requestLayout();
+            layout_metro.setVisibility(VISIBLE);
+            listenerFinishLoadData.handleMessage(new Message());
+//            layout_metro.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                @Override
+//                public void onGlobalLayout() {
+//                    layout_metro.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                    listenerFinishLoadData.handleMessage(new Message());
+//                    for(int i=0;i<getChildCount();i++){
+//                        View view=getChildAt(i);
+//                        if(view instanceof InfoWindowMapBeer){
+//                            ((InfoWindowMapBeer) view).setMenu(restoDetail.getMenu());
+//
+//                        }
+//                    }
+//
+////                    ValueAnimator va = ValueAnimator.ofInt(0, layout_city.getHeight());
+////                    va.setDuration(500);
+////                    va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+////                        @Override
+////                        public void onAnimationUpdate(ValueAnimator animation) {
+////                            Integer value = (Integer) animation.getAnimatedValue();
+////                            layout_metro.getLayoutParams().height = value.intValue();
+////                            layout_metro.requestLayout();
+////
+////                        }
+////                    });
+////                    va.addListener(new Animator.AnimatorListener() {
+////                        @Override
+////                        public void onAnimationStart(Animator animation) {
+////
+////                        }
+////
+////                        @Override
+////                        public void onAnimationEnd(Animator animation) {
+////                            for(int i=0;i<getChildCount();i++){
+////                                View view=getChildAt(i);
+////                                if(view instanceof InfoWindowMapBeer){
+////                                    ((InfoWindowMapBeer) view).setMenu(restoDetail.getMenu());
+////
+////                                }
+////                            }
+////                        }
+////
+////                        @Override
+////                        public void onAnimationCancel(Animator animation) {
+////
+////                        }
+////
+////                        @Override
+////                        public void onAnimationRepeat(Animator animation) {
+////
+////                        }
+////                    });
+////                    va.start();
+//                }
+//            });
         }catch (Exception e){
             layout_metro.setVisibility(GONE);
         }
@@ -231,4 +262,11 @@ public class InfoWindowMap extends BaseLinearLayout {
         });
     }
 
+    public void setListenerFinishLoadData(Handler.Callback listenerFinishLoadData) {
+        this.listenerFinishLoadData = listenerFinishLoadData;
+    }
+//
+//    public Handler.Callback getListenerFinishLoadData() {
+//        return listenerFinishLoadData;
+//    }
 }

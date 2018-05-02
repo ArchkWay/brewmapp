@@ -1,8 +1,5 @@
 package com.brewmapp.presentation.view.impl.widget;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -10,13 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ViewAnimator;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
@@ -25,12 +18,11 @@ import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
+import com.brewmapp.presentation.view.contract.InfoWindowMap_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -44,7 +36,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by Kras on 24.02.2018.
  */
 
-public class InfoWindowMap extends BaseLinearLayout {
+public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_view {
 
     @BindView(R.id.city)
     TextView city;
@@ -91,7 +83,7 @@ public class InfoWindowMap extends BaseLinearLayout {
 
     }
 
-
+    @Override
     public  void requestData(){
         //region Request Resto
         getRestoDetail(resto_id, locationLat, locationLon, new Callback<RestoDetail>() {
@@ -100,10 +92,12 @@ public class InfoWindowMap extends BaseLinearLayout {
                 setDistance(restoDetail);
                 setLogo(restoDetail);
             }
+
         });
         //endregion
 
     }
+
     public void setResto(String restoId, double locationLat, double locationLon){
         this.resto_id=restoId;
         this.locationLat=locationLat;
@@ -173,7 +167,6 @@ public class InfoWindowMap extends BaseLinearLayout {
 //            layout_metro.getLayoutParams().height=layout_city.getHeight();
 //            layout_metro.requestLayout();
             layout_metro.setVisibility(VISIBLE);
-            listenerFinishLoadData.handleMessage(new Message());
 //            layout_metro.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                @Override
 //                public void onGlobalLayout() {
@@ -245,6 +238,15 @@ public class InfoWindowMap extends BaseLinearLayout {
             public void onNext(RestoDetail restoDetail) {
                 super.onNext(restoDetail);
                 callback.onResult(restoDetail);
+                if(listenerFinishLoadData!=null)
+                    listenerFinishLoadData.handleMessage(new Message());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                if(listenerFinishLoadData!=null)
+                    listenerFinishLoadData.handleMessage(new Message());
             }
         });
     }
@@ -262,11 +264,14 @@ public class InfoWindowMap extends BaseLinearLayout {
         });
     }
 
+    @Override
     public void setListenerFinishLoadData(Handler.Callback listenerFinishLoadData) {
         this.listenerFinishLoadData = listenerFinishLoadData;
     }
-//
-//    public Handler.Callback getListenerFinishLoadData() {
-//        return listenerFinishLoadData;
-//    }
+
+    @Override
+    public View getView() {
+        return this;
+    }
+
 }

@@ -3,13 +3,27 @@ package com.brewmapp.presentation.view.impl.dialogs;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+
+import com.brewmapp.data.entity.FilterRestoLocation;
+import com.brewmapp.presentation.view.contract.InfoWindowMap_view;
+import com.brewmapp.presentation.view.impl.fragment.MapFragment;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
+import com.google.android.gms.maps.model.Marker;
+import com.google.maps.android.clustering.Cluster;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 import ru.frosteye.ovsa.execution.executor.Callback;
 
@@ -18,7 +32,7 @@ import ru.frosteye.ovsa.execution.executor.Callback;
  */
 
 public class DialogShowView extends DialogFragment {
-    private View view;
+    private ViewGroup view;
     private Callback<Void> callBack;
 
     @Nullable
@@ -28,7 +42,7 @@ public class DialogShowView extends DialogFragment {
         return view;
     }
 
-    public void setView(View view) {
+    public void setView(ViewGroup view) {
         this.view = view;
 
     }
@@ -46,5 +60,17 @@ public class DialogShowView extends DialogFragment {
 
     public Callback<Void> getCallBack() {
         return callBack;
+    }
+
+    @Override
+    public void show(android.app.FragmentManager manager, String tag) {
+        super.show(manager, tag);
+    }
+
+
+    @Nullable
+    @Override
+    public ViewGroup getView() {
+        return view;
     }
 }

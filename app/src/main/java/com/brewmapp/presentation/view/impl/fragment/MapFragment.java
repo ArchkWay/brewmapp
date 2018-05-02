@@ -23,8 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsoluteLayout;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.brewmapp.R;
@@ -44,9 +42,9 @@ import com.brewmapp.presentation.view.contract.MapFragment_view;
 import com.brewmapp.presentation.view.contract.OnLocationInteractionListener;
 import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
-import com.brewmapp.presentation.view.impl.dialogs.DialogShowView;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowContainer;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMapList;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMapBeer;
 import com.brewmapp.utils.events.markerCluster.ClusterRender;
@@ -136,7 +134,7 @@ public class MapFragment extends BaseFragment implements
     private LatLngBounds latLngBounds;
     private float maxZoomPref=18.0f;
     private float minZoomPref=10.0f;
-    private DialogShowView dialogShowView;
+    //private DialogShowView dialogShowView;
     private Location userLocation=null;
     private ArrayList arrayList=new ArrayList<>();
     private ArrayList<RestoLocation> restoLocations;
@@ -145,7 +143,6 @@ public class MapFragment extends BaseFragment implements
     private final int MODE_SHOW_RESTO_BY_USER_LOCATION =1;
     private final int MODE_SHOW_RESTO_BY_LIST_RESTO =3;
     private int mode;
-    private boolean clickedClaster=false;
 
 
 
@@ -425,20 +422,13 @@ public class MapFragment extends BaseFragment implements
     @Override
     public void onCameraIdle() {
 
-
-
         infoWindowContainer.processVisibleAnimation();
 
-
-        if(clickedClaster)
-            clickedClaster=false;
-        else {
-            if(prepareLoadResto==null) {
-                prepareLoadResto=new PrepareLoadResto();
-                prepareLoadResto.execute();
-            }else {
-                mClusterManager.cluster();
-            }
+        if(prepareLoadResto==null) {
+            prepareLoadResto=new PrepareLoadResto();
+            prepareLoadResto.execute();
+        }else {
+            mClusterManager.cluster();
         }
 
 
@@ -500,26 +490,13 @@ public class MapFragment extends BaseFragment implements
 
     @Override
     public boolean onClusterClick(Cluster<FilterRestoLocation> cluster) {
+
         finder.clearFocus();
         clearInfoWindow();
         if(googleMap.getCameraPosition().zoom==maxZoomPref){
-            ScrollView scrollView=new ScrollView(getContext());
-            LinearLayout linearLayout=new LinearLayout(getContext());
-            LinearLayout.LayoutParams param=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-            linearLayout.setLayoutParams(param);
-            Collection<FilterRestoLocation> collection=cluster.getItems();
-            Iterator<FilterRestoLocation> iterator=collection.iterator();
-            while (iterator.hasNext())
-                linearLayout.addView(createInfoWindowForOneResto(iterator.next()));
-            scrollView.addView(linearLayout);
-            dialogShowView=new DialogShowView();
-            dialogShowView.setView(scrollView);
-            dialogShowView.setCallBack(result -> clearDialog());
-            infoWindowContainer.setInfoWindow(
-                    createInfoWindowForListResto(cluster)
-            );
-            clickedClaster=true;
+            InfoWindowMapList infoWindowMapList= (InfoWindowMapList) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window_list,null);
+            infoWindowMapList.setContent(cluster,this);
+            infoWindowContainer.setInfoWindowMapView(infoWindowMapList);
             return false;
         }else {
             googleMap.animateCamera(
@@ -538,7 +515,7 @@ public class MapFragment extends BaseFragment implements
     public boolean onClusterItemClick(FilterRestoLocation filterRestoLocation) {
         finder.clearFocus();
         clearInfoWindow();
-        infoWindowContainer.setInfoWindow(
+        infoWindowContainer.setInfoWindowMapView(
                 createInfoWindowForOneResto(filterRestoLocation)
         );
 
@@ -705,7 +682,7 @@ public class MapFragment extends BaseFragment implements
         );
     }
 
-    private InfoWindowMap createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
+    public InfoWindowMap createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
         LayoutInflater inflater= getActivity().getLayoutInflater();
 
         InfoWindowMap view= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window,null);
@@ -731,19 +708,14 @@ public class MapFragment extends BaseFragment implements
         TextView restoTitle = (TextView) view.findViewById(R.id.title);
         restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
         restoTitle.setText(getString(R.string.select_resto,String.valueOf(cluster.getItems().size())));
-        view.setOnClickListener(v -> dialogShowView.show(getActivity().getFragmentManager(),"dialog"));
         if(userLocation!=null)
             if(cluster.getItems().size()>0)
-                view.countDistanceCluster(cluster.getItems().iterator().next().getRestoId(),userLocation.getLatitude(),userLocation.getLongitude());
+                view.setResto(cluster.getItems().iterator().next().getRestoId(),userLocation.getLatitude(),userLocation.getLongitude());
         return view;
     }
 
     private void clearDialog() {
-        if(dialogShowView!=null)
-            try {
-                dialogShowView.dismiss();
-            }catch (Exception e){};
-        dialogShowView=null;
+
         if(marker!=null) {
             try {
                 marker.hideInfoWindow();
@@ -804,7 +776,7 @@ public class MapFragment extends BaseFragment implements
         public void onGlobalLayout() {
             //размеры окна изменились, обновляем смещения
             popupXOffset = infoWindowContainer.getWidth() / 2;
-            popupYOffset = infoWindowContainer.getHeight();
+            popupYOffset = infoWindowContainer.getHeight()/2;
         }
     }
 
@@ -828,7 +800,7 @@ public class MapFragment extends BaseFragment implements
                     //обновляем положение
                     AbsoluteLayout.LayoutParams overlayLayoutParams = (AbsoluteLayout.LayoutParams) infoWindowContainer.getLayoutParams();
                     overlayLayoutParams.x = targetPosition.x - popupXOffset;
-                    overlayLayoutParams.y = targetPosition.y;// - popupYOffset - markerHeight;
+                    overlayLayoutParams.y = targetPosition.y - popupYOffset;// - markerHeight;
                     infoWindowContainer.setLayoutParams(overlayLayoutParams);
 
                     //запоминаем текущие координаты

@@ -22,8 +22,12 @@ import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.Starter;
 import com.brewmapp.data.entity.Beer;
 import com.brewmapp.data.entity.Menu;
+import com.brewmapp.data.entity.MenuResto;
 import com.brewmapp.data.entity.wrapper.BeerInfo;
+import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.LoadProductPackage;
+import com.brewmapp.execution.exchange.response.base.ListResponse;
+import com.brewmapp.execution.task.LoadMenu;
 import com.brewmapp.execution.task.LoadProductTask;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
@@ -53,10 +57,12 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
     RoundedImageView imageView;
     @Inject
     LoadProductTask loadProductTask;
+    @Inject
+    LoadMenu loadMenu;
 
     private Target target;
     private String beer_id;
-    private List<Menu> menu;
+    private List<MenuResto> menu;
     private Handler.Callback listenerFinishLoadData;
 
     public InfoWindowMapBeer(Context context) {
@@ -90,47 +96,10 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
 
     public void setBeerId(String s) {
         beer_id=s;
-
     }
 
-    public void showBeer(int height) {
 
-                //region Animation open
-                setVisibility(VISIBLE);
-                ValueAnimator va = ValueAnimator.ofInt(0, height);
-                va.setDuration(500);
-                va.addUpdateListener(animation -> {
-                    Integer value = (Integer) animation.getAnimatedValue();
-                    getLayoutParams().height = value.intValue();
-                    requestLayout();
-                });
-        va.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                showPrice();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-                va.start();
-                //endregion
-
-    }
-
-    public void setMenu(List<Menu> menu) {
+    public void setMenu(List<MenuResto> menu) {
         this.menu = menu;
         showPrice();
     }
@@ -138,23 +107,13 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
     private void showPrice() {
         if(textViewPrice.getHeight()==0&&menu!=null) {
             try {
-                for (Menu menuItem : menu) {
+                for (MenuResto menuItem : menu) {
                     if (menuItem.getBeer_id().equals(beer_id)) {
                         textViewPrice.setText(menuItem.getPrice());
                         String[] capacity= getContext().getResources().getStringArray(R.array.resto_menu_capacity);
                         try {
                             textViewPrice.setText(textViewPrice.getText()+ Html.fromHtml(" &#x20bd").toString() +" / "+capacity[Integer.valueOf(menuItem.getResto_menu_capacity_id())]);
                         }catch (Exception e){}
-                        ValueAnimator va = ValueAnimator.ofInt(0, textView.getHeight());
-                        va.setDuration(500);
-                        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                textViewPrice.setVisibility(VISIBLE);
-                                textViewPrice.setHeight((Integer) animation.getAnimatedValue());
-                            }
-                        });
-                        va.start();
                     }
                 }
             } catch (Exception e) {
@@ -162,7 +121,7 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
         }
     }
 
-    public void requstData() {
+    public void requstData(String resto_id) {
 
 
         LoadProductPackage loadProductPackage=new LoadProductPackage();
@@ -210,8 +169,25 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
                     }
                 }
                 //endregion
-                if(listenerFinishLoadData!=null)
-                    listenerFinishLoadData.handleMessage(new Message());
+                FullSearchPackage fullSearchPackage=new FullSearchPackage();
+                fullSearchPackage.setId(resto_id);
+                loadMenu.execute(fullSearchPackage,new SimpleSubscriber<ListResponse<MenuResto>>(){
+                    @Override
+                    public void onNext(ListResponse<MenuResto> menuRestoListResponse) {
+                        super.onNext(menuRestoListResponse);
+                        setMenu(menuRestoListResponse.getModels());
+                        if(listenerFinishLoadData!=null)
+                            listenerFinishLoadData.handleMessage(new Message());
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        if(listenerFinishLoadData!=null)
+                            listenerFinishLoadData.handleMessage(new Message());
+                    }
+                });
             }
         });
 

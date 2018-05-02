@@ -22,4 +22,5 @@ public interface MapFragment_view extends BasicView {
     void hideProgressBar();
     void appendItems(List<IFlexible> list);
 
+    void commonError(String message);
 }

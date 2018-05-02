@@ -85,6 +85,7 @@ public class MapFragment_presenter_Impl extends BasePresenter<MapFragment_view> 
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
+                view.commonError(e.getMessage());
                 view.hideProgressBar();
             }
         });

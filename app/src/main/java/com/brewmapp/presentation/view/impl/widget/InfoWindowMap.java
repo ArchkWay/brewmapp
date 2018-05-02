@@ -24,7 +24,6 @@ import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.presentation.view.contract.InfoWindowMap_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
-import com.brewmapp.presentation.view.impl.fragment.MapFragment;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -247,18 +246,19 @@ public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_vie
             public void onNext(RestoDetail restoDetail) {
                 super.onNext(restoDetail);
                 callback.onResult(restoDetail);
-                requestBeer();
+                requestBeer(String.valueOf(restoDetail.getResto().getId()));
             }
 
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                requestBeer();
+                if(listenerFinishLoadData!=null)
+                    listenerFinishLoadData.handleMessage(new Message());
             }
         });
     }
 
-    private void requestBeer() {
+    private void requestBeer(String resto_id) {
         cntInfoWindowMapBeer=0;
         for(int i=0;i<getChildCount();i++){
             View view=getChildAt(i);
@@ -276,7 +276,7 @@ public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_vie
                         return false;
                     }
                 });
-                infoWindowMapBeer.requstData();
+                infoWindowMapBeer.requstData(resto_id);
             }
         }
         if(cntInfoWindowMapBeer==0){

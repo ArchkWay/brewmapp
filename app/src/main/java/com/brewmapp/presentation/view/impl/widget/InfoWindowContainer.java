@@ -49,7 +49,7 @@ public class InfoWindowContainer extends RelativeLayout {
     }
 
     public void processVisibleAnimation(){
-        if(infoWindowMapView !=null) {
+        if(infoWindowMapView !=null&&getVisibility()!=VISIBLE) {
 
             //region ResetView
             if (progressBar == null)

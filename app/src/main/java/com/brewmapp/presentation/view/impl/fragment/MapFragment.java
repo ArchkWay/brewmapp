@@ -338,6 +338,11 @@ public class MapFragment extends BaseFragment implements
     }
 
     @Override
+    public void commonError(String message) {
+        mListener.commonError(message);
+    }
+
+    @Override
     public void showDialogProgressBar(boolean show) {
         if (show) {
             dialog = ProgressDialog.show(getContext(), getString(R.string.loading),

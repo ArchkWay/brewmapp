@@ -14,7 +14,7 @@
         app:riv_mutate_background="true"
         android:background="@android:color/transparent"
         app:riv_oval="false"
-        android:layout_marginLeft="8dp"
+        android:layout_margin="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_beer"
@@ -22,7 +22,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginRight="8dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

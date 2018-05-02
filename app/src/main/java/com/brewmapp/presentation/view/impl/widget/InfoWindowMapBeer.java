@@ -6,6 +6,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -55,6 +57,7 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
     private Target target;
     private String beer_id;
     private List<Menu> menu;
+    private Handler.Callback listenerFinishLoadData;
 
     public InfoWindowMapBeer(Context context) {
         super(context);
@@ -84,73 +87,6 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
 
     }
 
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        //region set height and width
-
-        post(new Runnable() {
-            @Override
-            public void run() {
-                InfoWindowMap infoWindowMap= (InfoWindowMap) getParent();
-                getLayoutParams().width = infoWindowMap.getWidth();
-                requestLayout();
-
-                //region Request Beer
-                LoadProductPackage loadProductPackage=new LoadProductPackage();
-                loadProductPackage.setId(beer_id);
-                loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
-                    @Override
-                    public void onNext(List<IFlexible> iFlexibles) {
-                        super.onNext(iFlexibles);
-                        //region Replay Beer
-                        if (iFlexibles.size() == 1) {
-                            Beer beer = null;
-                            try {
-                                beer = ((BeerInfo) iFlexibles.get(0)).getModel();
-                            } catch (Exception e) {
-                                return;
-                            }
-
-                            if (beer != null) {
-                                //region set Text and Image
-                                textView.setText(beer.getFormatedTitle());
-                                String imgUrl = beer.getGetThumb();
-                                if(imgUrl!=null) {
-                                    target = new Target() {
-                                        @Override
-                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                            imageView.setImageBitmap(bitmap);
-                                        }
-
-                                        @Override
-                                        public void onBitmapFailed(Drawable errorDrawable) {
-
-                                        }
-
-                                        @Override
-                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                                        }
-                                    };
-                                    Picasso.with(
-                                            getContext()).
-                                            load(imgUrl).
-                                            into(target);
-                                }
-                                //endregion
-                            }
-                        }
-                        //endregion
-                    }
-                });
-                //endregion
-
-            }
-        });
-        //endregion
-    }
 
     public void setBeerId(String s) {
         beer_id=s;
@@ -224,5 +160,69 @@ public class InfoWindowMapBeer extends BaseLinearLayout {
             } catch (Exception e) {
             }
         }
+    }
+
+    public void requstData() {
+
+
+        LoadProductPackage loadProductPackage=new LoadProductPackage();
+        loadProductPackage.setId(beer_id);
+        loadProductTask.execute(loadProductPackage,new SimpleSubscriber<List<IFlexible>>(){
+            @Override
+            public void onNext(List<IFlexible> iFlexibles) {
+                super.onNext(iFlexibles);
+                //region Replay Beer
+                if (iFlexibles.size() == 1) {
+                    Beer beer = null;
+                    try {
+                        beer = ((BeerInfo) iFlexibles.get(0)).getModel();
+                    } catch (Exception e) {
+                        return;
+                    }
+
+                    if (beer != null) {
+                        //region set Text and Image
+                        textView.setText(beer.getFormatedTitle());
+                        String imgUrl = beer.getGetThumb();
+                        if(imgUrl!=null) {
+                            target = new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    imageView.setImageBitmap(bitmap);
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            };
+                            Picasso.with(
+                                    getContext()).
+                                    load(imgUrl).
+                                    into(target);
+                        }
+                        //endregion
+                    }
+                }
+                //endregion
+                if(listenerFinishLoadData!=null)
+                    listenerFinishLoadData.handleMessage(new Message());
+            }
+        });
+
+
+    }
+
+    public void setListenerFinishLoadData(Handler.Callback listenerFinishLoadData) {
+        this.listenerFinishLoadData = listenerFinishLoadData;
+    }
+
+    public Handler.Callback getListenerFinishLoadData() {
+        return listenerFinishLoadData;
     }
 }

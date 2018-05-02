@@ -684,34 +684,9 @@ public class MapFragment extends BaseFragment implements
 
     public InfoWindowMap createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
         LayoutInflater inflater= getActivity().getLayoutInflater();
-
-        InfoWindowMap view= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window,null);
-
-        TextView restoTitle = (TextView) view.findViewById(R.id.title);
-        restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
-        restoTitle.setText(filterRestoLocation.getmName());
-        String restoId=filterRestoLocation.getRestoId();
-        view.setResto(restoId,userLocation.getLatitude(),userLocation.getLongitude());
-        ArrayList<String> arrayListBeers= hmBeersInResto.get(restoId);
-        if(arrayListBeers!=null)
-            for (String s:arrayListBeers) {
-                InfoWindowMapBeer infoWindowMapBeer= (InfoWindowMapBeer) inflater.inflate(R.layout.layout_info_window_beer, null);
-                infoWindowMapBeer.setVisibility(View.GONE);
-                infoWindowMapBeer.setBeerId(s);
-                view.addView(infoWindowMapBeer);
-            }
-        return view;
-    }
-
-    private InfoWindowMap createInfoWindowForListResto(Cluster<FilterRestoLocation> cluster) {
-        InfoWindowMap view= (InfoWindowMap) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window, null);
-        TextView restoTitle = (TextView) view.findViewById(R.id.title);
-        restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
-        restoTitle.setText(getString(R.string.select_resto,String.valueOf(cluster.getItems().size())));
-        if(userLocation!=null)
-            if(cluster.getItems().size()>0)
-                view.setResto(cluster.getItems().iterator().next().getRestoId(),userLocation.getLatitude(),userLocation.getLongitude());
-        return view;
+        InfoWindowMap infoWindowMap= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window,null);
+        infoWindowMap.setContent(filterRestoLocation,hmBeersInResto,userLocation,inflater);
+        return infoWindowMap;
     }
 
     private void clearDialog() {

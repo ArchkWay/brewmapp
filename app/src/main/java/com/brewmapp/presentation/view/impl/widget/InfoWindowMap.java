@@ -2,11 +2,14 @@ package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,14 +18,19 @@ import com.brewmapp.R;
 import com.brewmapp.app.di.module.PresenterModule;
 import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.app.environment.Starter;
+import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
 import com.brewmapp.presentation.view.contract.InfoWindowMap_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
+import com.brewmapp.presentation.view.impl.fragment.MapFragment;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -58,6 +66,7 @@ public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_vie
     private double locationLat;
     private double locationLon;
     private Handler.Callback listenerFinishLoadData;
+    private int cntInfoWindowMapBeer;
 
     public InfoWindowMap(Context context) {
         super(context);
@@ -238,30 +247,47 @@ public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_vie
             public void onNext(RestoDetail restoDetail) {
                 super.onNext(restoDetail);
                 callback.onResult(restoDetail);
-                if(listenerFinishLoadData!=null)
-                    listenerFinishLoadData.handleMessage(new Message());
+                requestBeer();
             }
 
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                if(listenerFinishLoadData!=null)
-                    listenerFinishLoadData.handleMessage(new Message());
+                requestBeer();
             }
         });
+    }
+
+    private void requestBeer() {
+        cntInfoWindowMapBeer=0;
+        for(int i=0;i<getChildCount();i++){
+            View view=getChildAt(i);
+            if(view instanceof  InfoWindowMapBeer){
+                cntInfoWindowMapBeer++;
+                InfoWindowMapBeer infoWindowMapBeer=((InfoWindowMapBeer)view);
+                infoWindowMapBeer.setListenerFinishLoadData(new Handler.Callback(){
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        cntInfoWindowMapBeer--;
+                        if(cntInfoWindowMapBeer==0){
+                            if(listenerFinishLoadData!=null)
+                                listenerFinishLoadData.handleMessage(new Message());
+                        }
+                        return false;
+                    }
+                });
+                infoWindowMapBeer.requstData();
+            }
+        }
+        if(cntInfoWindowMapBeer==0){
+            if(listenerFinishLoadData!=null)
+                listenerFinishLoadData.handleMessage(new Message());
+        }
+
     }
 
     public void setMarker(Marker marker) {
         this.marker = marker;
-    }
-
-    public void countDistanceCluster(String restoId, double locationLat, double locationLon) {
-        getRestoDetail(restoId, locationLat, locationLon, new Callback<RestoDetail>() {
-            @Override
-            public void onResult(RestoDetail restoDetail) {
-                setDistance(restoDetail);
-            }
-        });
     }
 
     @Override
@@ -274,4 +300,19 @@ public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_vie
         return this;
     }
 
+    public void setContent(FilterRestoLocation filterRestoLocation, HashMap<String, ArrayList<String>> hmBeersInResto, Location userLocation, LayoutInflater inflater) {
+        TextView restoTitle = (TextView) findViewById(R.id.title);
+        restoTitle.setTypeface(null, Typeface.BOLD_ITALIC);
+        restoTitle.setText(filterRestoLocation.getmName());
+        String restoId=filterRestoLocation.getRestoId();
+        setResto(restoId,userLocation.getLatitude(),userLocation.getLongitude());
+        ArrayList<String> arrayListBeers= hmBeersInResto.get(restoId);
+        if(arrayListBeers!=null)
+            for (String s:arrayListBeers) {
+                InfoWindowMapBeer infoWindowMapBeer= (InfoWindowMapBeer) inflater.inflate(R.layout.layout_info_window_beer, null);
+                infoWindowMapBeer.setBeerId(s);
+                addView(infoWindowMapBeer);
+            }
+
+    }
 }

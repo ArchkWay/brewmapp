@@ -40,7 +40,9 @@
         <activity
             android:name=".presentation.view.impl.activity.MainActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
+            />
         <activity
             android:name=".presentation.view.impl.activity.StartActivity"
             android:screenOrientation="portrait" />

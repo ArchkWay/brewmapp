@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AbsoluteLayout;
-import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -44,9 +42,8 @@ import com.brewmapp.presentation.view.impl.activity.FilterMapActivity;
 import com.brewmapp.presentation.view.impl.dialogs.DialogConfirm;
 import com.brewmapp.presentation.view.impl.widget.FinderView;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowContainer;
-import com.brewmapp.presentation.view.impl.widget.InfoWindowMapList;
-import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
-import com.brewmapp.presentation.view.impl.widget.InfoWindowMapBeer;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMapContentList;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMapContent;
 import com.brewmapp.utils.events.markerCluster.ClusterRender;
 import com.brewmapp.utils.events.markerCluster.MapUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -122,7 +119,7 @@ public class MapFragment extends BaseFragment implements
     private OnFragmentInteractionListener mListener;
     private OnLocationInteractionListener mLocationListener;
     private GoogleMap googleMap;
-    private Marker marker;
+
     private ProgressDialog dialog;
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage;
@@ -499,9 +496,9 @@ public class MapFragment extends BaseFragment implements
         finder.clearFocus();
         clearInfoWindow();
         if(googleMap.getCameraPosition().zoom==maxZoomPref){
-            InfoWindowMapList infoWindowMapList= (InfoWindowMapList) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window_list,null);
+            InfoWindowMapContentList infoWindowMapList= (InfoWindowMapContentList) getActivity().getLayoutInflater().inflate(R.layout.layout_info_window_list,null);
             infoWindowMapList.setContent(cluster,this);
-            infoWindowContainer.setInfoWindowMapView(infoWindowMapList);
+            infoWindowContainer.setInfoWindowMapContent_view(infoWindowMapList);
             return false;
         }else {
             googleMap.animateCamera(
@@ -520,7 +517,7 @@ public class MapFragment extends BaseFragment implements
     public boolean onClusterItemClick(FilterRestoLocation filterRestoLocation) {
         finder.clearFocus();
         clearInfoWindow();
-        infoWindowContainer.setInfoWindowMapView(
+        infoWindowContainer.setInfoWindowMapContent_view(
                 createInfoWindowForOneResto(filterRestoLocation)
         );
 
@@ -529,13 +526,11 @@ public class MapFragment extends BaseFragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        this.marker=marker;
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
         finder.clearFocus();
-        clearDialog();
         clearInfoWindow();
 
     }
@@ -687,22 +682,13 @@ public class MapFragment extends BaseFragment implements
         );
     }
 
-    public InfoWindowMap createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
+    public InfoWindowMapContent createInfoWindowForOneResto(FilterRestoLocation filterRestoLocation) {
         LayoutInflater inflater= getActivity().getLayoutInflater();
-        InfoWindowMap infoWindowMap= (InfoWindowMap)inflater.inflate(R.layout.layout_info_window,null);
+        InfoWindowMapContent infoWindowMap= (InfoWindowMapContent)inflater.inflate(R.layout.layout_info_window,null);
         infoWindowMap.setContent(filterRestoLocation,hmBeersInResto,userLocation,inflater);
         return infoWindowMap;
     }
 
-    private void clearDialog() {
-
-        if(marker!=null) {
-            try {
-                marker.hideInfoWindow();
-            }catch (Exception e){};
-        }
-        marker=null;
-    }
 
     private void parseArgumentsAndSetMode() {
 

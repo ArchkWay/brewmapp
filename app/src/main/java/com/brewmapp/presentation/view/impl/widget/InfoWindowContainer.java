@@ -16,7 +16,7 @@ import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 
 import com.brewmapp.R;
-import com.brewmapp.presentation.view.contract.InfoWindowMap_view;
+import com.brewmapp.presentation.view.contract.InfoWindowMapContent_view;
 import com.google.android.gms.maps.model.Marker;
 
 public class InfoWindowContainer extends RelativeLayout {
@@ -24,10 +24,11 @@ public class InfoWindowContainer extends RelativeLayout {
     private final String infoWindowMapTAG="infoWindowMapTAG";
 
     private View progressBar;
-    private InfoWindowMap_view infoWindowMapView;
+    private InfoWindowMapContent_view infoWindowMapContent_view;
     private int finishWitdh;
     private int finishHight;
     private float ratio;
+    private AbsoluteLayout absoluteLayout;
 
     private ViewTreeObserver.OnGlobalLayoutListener infoWindowLayoutListener;
 
@@ -49,11 +50,19 @@ public class InfoWindowContainer extends RelativeLayout {
     }
 
     public void processVisibleAnimation(){
-        if(infoWindowMapView !=null&&getVisibility()!=VISIBLE) {
+        if(infoWindowMapContent_view !=null&&getVisibility()!=VISIBLE) {
 
             //region ResetView
             if (progressBar == null)
                 progressBar =  findViewById(R.id.InfoWindowMap_progressBar);
+            if(absoluteLayout==null)
+                absoluteLayout = (AbsoluteLayout) getParent();
+
+
+            absoluteLayout.setClickable(true);
+            absoluteLayout.setFocusable(true);
+            absoluteLayout.setFocusableInTouchMode(true);
+
 
             progressBar.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             progressBar.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -69,23 +78,23 @@ public class InfoWindowContainer extends RelativeLayout {
                 public void onGlobalLayout() {
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         //region Request Data
-                        infoWindowMapView.setListenerFinishLoadData(new Handler.Callback(){
+                        infoWindowMapContent_view.setListenerFinishLoadData(new Handler.Callback(){
                             @Override
                             public boolean handleMessage(Message msg) {
                                 //region Calculate new Size
-                                AbsoluteLayout absoluteLayout = (AbsoluteLayout) getParent();
-                                absoluteLayout.addView(infoWindowMapView.getView());
-                                infoWindowMapView.setVisibility(INVISIBLE);
-                                infoWindowMapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                                absoluteLayout.addView(infoWindowMapContent_view.getView());
+                                infoWindowMapContent_view.setVisibility(INVISIBLE);
+                                infoWindowMapContent_view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                                     @Override
                                     public void onGlobalLayout() {
                                         //region Animation New Size
-                                        infoWindowMapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                        infoWindowMapContent_view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                                         setBackgroundColor(Color.WHITE);
 
-                                        finishWitdh= infoWindowMapView.getWidth();
-                                        finishHight= infoWindowMapView.getHeight();
+                                        finishWitdh= infoWindowMapContent_view.getWidth();
+                                        finishHight= infoWindowMapContent_view.getHeight();
                                         int startHight = getHeight();
                                         int startWidth=getWidth();
 
@@ -103,13 +112,16 @@ public class InfoWindowContainer extends RelativeLayout {
                                                 infoWindowLayoutListener.onGlobalLayout();
                                             }
                                         });
-                                        absoluteLayout.removeView(infoWindowMapView.getView());
+                                        absoluteLayout.removeView(infoWindowMapContent_view.getView());
                                         vaWidth.addListener(new AnimatorListenerAdapter() {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
                                                 super.onAnimationEnd(animation);
-                                                infoWindowMapView.setVisibility(VISIBLE);
-                                                addView(infoWindowMapView.getView());
+                                                infoWindowMapContent_view.setVisibility(VISIBLE);
+                                                addView(infoWindowMapContent_view.getView());
+                                                absoluteLayout.setClickable(false);
+                                                absoluteLayout.setFocusable(false);
+                                                absoluteLayout.setFocusableInTouchMode(false);
                                             }
 
                                             @Override
@@ -127,7 +139,7 @@ public class InfoWindowContainer extends RelativeLayout {
                                 return false;
                             }
                         });
-                        infoWindowMapView.requestData();
+                        infoWindowMapContent_view.requestData();
                         //endregion
                 }
             });
@@ -139,7 +151,7 @@ public class InfoWindowContainer extends RelativeLayout {
             progressBar.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(infoWindowMapView.getVisibility()!=VISIBLE)
+                    if(infoWindowMapContent_view.getVisibility()!=VISIBLE)
                         progressBar.setVisibility(VISIBLE);
                 }
             },100);
@@ -151,9 +163,9 @@ public class InfoWindowContainer extends RelativeLayout {
 
     public void clearContainer() {
         setVisibility(INVISIBLE);
-        if(infoWindowMapView !=null)
-            removeView(infoWindowMapView.getView());
-        infoWindowMapView =null;
+        if(infoWindowMapContent_view !=null)
+            removeView(infoWindowMapContent_view.getView());
+        infoWindowMapContent_view =null;
     }
 
 
@@ -161,12 +173,12 @@ public class InfoWindowContainer extends RelativeLayout {
         this.infoWindowLayoutListener = infoWindowLayoutListener;
     }
 
-    public void setInfoWindowMapView(InfoWindowMap_view infoWindowMapView) {
-        this.infoWindowMapView = infoWindowMapView;
-        this.infoWindowMapView.setVisibility(INVISIBLE);
+    public void setInfoWindowMapContent_view(InfoWindowMapContent_view infoWindowMapContent_view) {
+        this.infoWindowMapContent_view = infoWindowMapContent_view;
+        this.infoWindowMapContent_view.setVisibility(INVISIBLE);
     }
 
     public void setMarker(Marker marker) {
-        infoWindowMapView.setMarker(marker);
+        infoWindowMapContent_view.setMarker(marker);
     }
 }

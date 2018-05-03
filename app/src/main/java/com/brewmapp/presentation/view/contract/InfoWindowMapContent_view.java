@@ -6,7 +6,7 @@ import android.view.ViewTreeObserver;
 
 import com.google.android.gms.maps.model.Marker;
 
-public interface InfoWindowMap_view {
+public interface InfoWindowMapContent_view {
     void requestData();
     void setListenerFinishLoadData(Handler.Callback listenerFinishLoadData);
 

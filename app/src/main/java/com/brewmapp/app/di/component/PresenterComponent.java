@@ -67,7 +67,7 @@ import com.brewmapp.presentation.view.impl.widget.LikeView;
 import com.brewmapp.presentation.view.impl.widget.PostView;
 import com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton;
 import com.brewmapp.presentation.view.impl.widget.ReviewMoreImageButton;
-import com.brewmapp.presentation.view.impl.widget.InfoWindowMap;
+import com.brewmapp.presentation.view.impl.widget.InfoWindowMapContent;
 import com.brewmapp.presentation.view.impl.widget.InfoWindowMapBeer;
 import com.brewmapp.presentation.view.impl.widget.ItemEvaluationView;
 import com.brewmapp.presentation.view.impl.widget.ReviewView;
@@ -136,7 +136,7 @@ public interface PresenterComponent {
     void inject(DialogManageContact dialogManageContact);
     void inject(ItemEvaluationView itemEvaluationView);
     void inject(BreweryDetailsActivity breweryDetailsActivity);
-    void inject(InfoWindowMap infoWindowMap);
+    void inject(InfoWindowMapContent infoWindowMap);
     void inject(InfoWindowMapBeer infoWindowMapBeer);
     void inject(ReviewView reviewView);
     void inject(ReviewMoreImageButton reviewMoreImageButton);

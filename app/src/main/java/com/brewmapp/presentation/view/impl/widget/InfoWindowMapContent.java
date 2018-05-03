@@ -22,7 +22,7 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.RestoDetail;
 import com.brewmapp.data.pojo.LoadRestoDetailPackage;
 import com.brewmapp.execution.task.LoadRestoDetailTask;
-import com.brewmapp.presentation.view.contract.InfoWindowMap_view;
+import com.brewmapp.presentation.view.contract.InfoWindowMapContent_view;
 import com.brewmapp.presentation.view.impl.activity.BaseActivity;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
@@ -43,7 +43,7 @@ import ru.frosteye.ovsa.presentation.view.widget.BaseLinearLayout;
  * Created by Kras on 24.02.2018.
  */
 
-public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_view {
+public class InfoWindowMapContent extends BaseLinearLayout implements InfoWindowMapContent_view {
 
     @BindView(R.id.city)
     TextView city;
@@ -67,19 +67,19 @@ public class InfoWindowMap extends BaseLinearLayout implements InfoWindowMap_vie
     private Handler.Callback listenerFinishLoadData;
     private int cntInfoWindowMapBeer;
 
-    public InfoWindowMap(Context context) {
+    public InfoWindowMapContent(Context context) {
         super(context);
     }
 
-    public InfoWindowMap(Context context, @Nullable AttributeSet attrs) {
+    public InfoWindowMapContent(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public InfoWindowMap(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public InfoWindowMapContent(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public InfoWindowMap(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public InfoWindowMapContent(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

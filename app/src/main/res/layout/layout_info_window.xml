@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.brewmapp.presentation.view.impl.widget.InfoWindowMap xmlns:android="http://schemas.android.com/apk/res/android"
+<com.brewmapp.presentation.view.impl.widget.InfoWindowMapContent xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="2dp"
@@ -107,4 +107,4 @@
                 />
         </LinearLayout>
 
-</com.brewmapp.presentation.view.impl.widget.InfoWindowMap>
+</com.brewmapp.presentation.view.impl.widget.InfoWindowMapContent>

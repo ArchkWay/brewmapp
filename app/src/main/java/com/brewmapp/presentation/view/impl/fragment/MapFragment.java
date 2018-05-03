@@ -119,7 +119,6 @@ public class MapFragment extends BaseFragment implements
     private OnFragmentInteractionListener mListener;
     private OnLocationInteractionListener mLocationListener;
     private GoogleMap googleMap;
-
     private ProgressDialog dialog;
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage;
@@ -131,7 +130,6 @@ public class MapFragment extends BaseFragment implements
     private LatLngBounds latLngBounds;
     private float maxZoomPref=18.0f;
     private float minZoomPref=10.0f;
-    //private DialogShowView dialogShowView;
     private Location userLocation=null;
     private ArrayList arrayList=new ArrayList<>();
     private ArrayList<RestoLocation> restoLocations;
@@ -199,13 +197,12 @@ public class MapFragment extends BaseFragment implements
 
         adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
-        finder.setListener(new FinderView.Listener() {
-            @Override
-            public void onTextChanged(String string) {
-                adapter.setSearchText(string);
-                searchPackage.setStringSearch(string);
-                prepareQuery();
-            }
+        finder.setListener(string -> {
+            adapter.setSearchText(string);
+            searchPackage.setStringSearch(string);
+            prepareQuery();
+            if(string.length()==0)
+                finder.clearFocus();
         });
         finder.clearFocus();
         finder.getInput().setOnFocusChangeListener(this);
@@ -554,6 +551,7 @@ public class MapFragment extends BaseFragment implements
         switch (v.getId()){
             case R.id.view_finder_input:
                     hideList(!hasFocus);
+                    clearInfoWindow();
                 break;
         }
     }

@@ -46,7 +46,7 @@ public class AppModule extends BaseAppModule<BeerMap> {
         Fresco.initialize(context);
         //Fabric.with(context, new Crashlytics());
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/GillSans-SemiBold.eot")
+                .setDefaultFontPath("fonts/GillSans-SemiBold.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

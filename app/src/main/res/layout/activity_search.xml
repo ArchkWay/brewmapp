@@ -16,24 +16,24 @@
         android:id="@+id/activity.search.search"/>
 
 
-    <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activity.search.swipe"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
-            <android.support.v7.widget.RecyclerView
+            <ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/activity.search.list"
-                />
+                android:id="@+id/activity.search.swipe"
+                android:orientation="vertical"
+                >
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/activity.search.list"
+                    />
+            </ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -60,7 +60,6 @@
 
         </RelativeLayout>
 
-    </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
 
         <Button
             android:layout_width="match_parent"

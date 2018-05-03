@@ -48,6 +48,7 @@ import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import ru.frosteye.ovsa.presentation.view.widget.ListDivider;
+import ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
 
@@ -74,7 +75,7 @@ public class ResultSearchActivity extends BaseActivity implements
     @BindView(R.id.activity_search_more) Button more;
     @BindView(R.id.common_toolbar_title)    TextView common_toolbar_title;
     @BindView(R.id.activity_search_tv_not_found)    TextView tv_not_found;
-    @BindView(R.id.activity_search_swipe)    RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.activity_search_swipe)    SwipeRefreshLayoutBottom swipeBottom;
     @BindView(R.id.progressToolbar)    ProgressBar progressBar;
     @BindView(R.id.common_toolbar_dropdown)    LinearLayout common_toolbar_dropdown;
     @BindView(R.id.common_toolbar_subtitle)    TextView common_toolbar_subtitle;
@@ -88,7 +89,7 @@ public class ResultSearchActivity extends BaseActivity implements
     private FlexibleModelAdapter<IFlexible> adapter;
     private FullSearchPackage searchPackage = new FullSearchPackage();
     private String selectedTab;
-    private EndlessRecyclerOnScrollListener scrollListener;
+    //private EndlessRecyclerOnScrollListener scrollListener;
     private ProgressDialog dialog;
     private String[] titleContent = ResourceHelper.getResources().getStringArray(R.array.full_search);
     private List<IFlexible> listAdapter=new ArrayList<>();
@@ -304,14 +305,16 @@ public class ResultSearchActivity extends BaseActivity implements
 
         more.setOnClickListener(v -> startActivity(ExtendedSearchActivity.class));
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                searchPackage.setPage(currentPage-1);
-                continueLoadResult();
-            }
-        };
-        list.addOnScrollListener(scrollListener);
+//        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+//            @Override
+//            public void onLoadMore(int currentPage) {
+//                searchPackage.setPage(currentPage-1);
+//                continueLoadResult();
+//            }
+//        };
+        //list.addOnScrollListener(scrollListener);
+        list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        });
         list.addItemDecoration(new ListDivider(this, ListDivider.VERTICAL_LIST));
         list.setLayoutManager(manager);
         adapter = new FlexibleModelAdapter<>(listAdapter, this::processAction);
@@ -320,7 +323,15 @@ public class ResultSearchActivity extends BaseActivity implements
         filter_list.setOnItemClickListener(this);
         common_toolbar_dropdown.setOnClickListener(this);
         container_filter_list.setOnClickListener(this);
-        swipe.setEnabled(false);
+
+        swipeBottom.setOnRefreshListener(new SwipeRefreshLayoutBottom.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchPackage.setPage(searchPackage.getPage()+1);
+                continueLoadResult();
+            }
+
+        });
         //endregion
 
     }
@@ -450,6 +461,9 @@ public class ResultSearchActivity extends BaseActivity implements
     @Override
     public void appendItems(List<IFlexible> list) {
         int startPosition=listAdapter.size();
+
+        swipeBottom.setRefreshing(false);
+
         listAdapter.addAll(startPosition,list);
         adapter.notifyItemRangeChanged(startPosition,listAdapter.size());
         if(listAdapter.size()==0) {
@@ -459,7 +473,6 @@ public class ResultSearchActivity extends BaseActivity implements
 
         if(listAdapter.size()==0) {
             tv_not_found.setVisibility(View.VISIBLE);
-            swipe.setVisibility(View.GONE);
         }
 
         invalidateOptionsMenu();
@@ -602,7 +615,6 @@ public class ResultSearchActivity extends BaseActivity implements
         //endregion
 
         searchPackage.setPage(0);
-        swipe.setVisibility(View.VISIBLE);
         tv_not_found.setVisibility(View.GONE);
         resultReceiver= StartProgressBarInParentActivity();
         continueLoadResult();

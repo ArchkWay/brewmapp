@@ -564,14 +564,14 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
 
     private void setTitleToButtonOfMoreDescription() {
         String currText=button_more_description.getText().toString();
-        int realLineHeight = (int) (description.getTextSize()+description.getLineSpacingExtra());
+        int realLineHeight = description.getLineHeight();//(int) (description.getTextSize()+description.getLineSpacingExtra());
         int newHeight;
         if(currText.equals(getString(R.string.text_read_completely))) {
-            newHeight = realLineHeight * description.getLineCount();
+            newHeight = realLineHeight * description.getLineCount()+ (int)description.getLineSpacingExtra();
             button_more_description.setText(R.string.text_collapse);
         }else {
             int initLinesCount=getResources().getInteger(R.integer.init_max_lites_text_view);
-            newHeight = (int) (realLineHeight*initLinesCount-description.getLineSpacingExtra());
+            newHeight = (int) (realLineHeight*initLinesCount);
             button_more_description.setText(R.string.text_read_completely);
         }
         ObjectAnimator.ofInt(description, "height", newHeight).setDuration(1000).start();

@@ -4,7 +4,10 @@ import javax.inject.Inject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -27,6 +30,10 @@ import com.brewmapp.presentation.view.impl.widget.CustomSliderView;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,22 +74,28 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:
-
-//                Bitmap icon = mBitmap;
-//                Intent share = new Intent(Intent.ACTION_SEND);
-//                share.setType("image/jpeg");
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//                icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-//                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
-//                try {
-//                    f.createNewFile();
-//                    FileOutputStream fo = new FileOutputStream(f);
-//                    fo.write(bytes.toByteArray());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
-//                startActivity(Intent.createChooser(share, "Share Image"));
+                Bitmap bitmap=((CustomSliderView)slider.getCurrentSlider()).getBitmap();
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                String tempFile=Environment.getExternalStorageDirectory()
+                        + File.separator
+                        +"temporary_file.jpg"
+//                        + new File((slider.getCurrentSlider()).getUrl()).getName()
+//                        +".jpg"
+                        ;
+                File f = new File(tempFile);
+                try {
+                    f.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+f.getAbsolutePath()));
+                //share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+                startActivity(Intent.createChooser(share, getString(R.string.send_photo)));
 
 
 //                slider.getCurrentSlider()

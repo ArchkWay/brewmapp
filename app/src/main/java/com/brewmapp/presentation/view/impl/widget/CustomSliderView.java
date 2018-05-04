@@ -1,6 +1,8 @@
 package com.brewmapp.presentation.view.impl.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -44,6 +46,14 @@ public class CustomSliderView extends BaseSliderView {
         this.url = url;
         this.photo= photo;
 
+    }
+
+    public Bitmap getBitmap(){
+        Bitmap bitmap=null;
+        try {
+            bitmap=((BitmapDrawable)imageView.getDrawable()).getBitmap();
+        }catch (Exception e){}
+        return bitmap;
     }
 
     @Override
@@ -96,5 +106,10 @@ public class CustomSliderView extends BaseSliderView {
             });
         }catch (Exception e){};
         return view ;
+    }
+
+    @Override
+    public String getUrl() {
+        return url;
     }
 }

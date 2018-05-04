@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.Actions;
+import com.brewmapp.data.entity.Information;
 import com.brewmapp.data.entity.Subscription;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.squareup.picasso.Picasso;
@@ -57,21 +58,46 @@ public class SubscriptionView extends BaseLinearLayout implements InteractiveMod
     @Override
     public void setModel(Subscription model) {
         this.model = model;
-        if(model.getInformation().getGetThumb() != null) {
+        String avatarPath=null;
+        try {
+            avatarPath=model.getInformation().getGetThumb();
+        }catch (Exception e){}
+
+        if(avatarPath != null) {
             Picasso.with(getContext()).load(model.getInformation().getGetThumb()).fit().centerCrop().into(avatar);
         } else if(Keys.CAP_RESTO.equals(model.getRelated_model())){
                 avatar.setImageResource(R.drawable.ic_default_resto);
         }
 
-        author.setText(model.getInformation().getName());
+        String authorText=null;
+
+        try {
+            authorText = model.getInformation().getName();
+        }catch (Exception e){}
+
+        author.setText(authorText);
 
         SimpleDateFormat dashedDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         try {
             date.setText(getContext().getString(R.string.subscribed, DateTools.formatDottedDateWithTime(dashedDateFormat.parse(model.getCreated_at()))));
         }catch (Exception t){}
 
-        setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_SHOW_NEWS,this.model.getInformation().getId()));
-        arrow_right.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY,this.model.getInformation().getId()));
+        final Information information=null;
+
+
+        setOnClickListener(v -> {
+            try {
+                listener.onModelAction(Actions.ACTION_START_SHOW_NEWS, this.model.getInformation().getId());
+            } catch (Exception e) {
+            }
+        });
+
+        arrow_right.setOnClickListener(v ->{
+            try {
+                listener.onModelAction(Actions.ACTION_START_DETAILS_ACTIVITY,this.model.getInformation().getId());
+            } catch (Exception e) {
+            }
+        });
     }
 
     @Override

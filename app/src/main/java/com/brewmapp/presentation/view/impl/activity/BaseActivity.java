@@ -499,6 +499,10 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
         sendActionParentActivity(Actions.ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY);
     }
 
+    public void StartProgressBarInActivity(){
+        resultReceiverVisibleParentActivity=StartProgressBarInParentActivity();
+    }
+
     public void sendActionParentActivity(int action){
         if(isModeActivityInVisible()) {
             resultReceiverVisibleParentActivity.send(action, null);

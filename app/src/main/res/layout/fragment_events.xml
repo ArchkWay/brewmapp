@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout
+        <ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fragment.events.swipe"
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/fragment.events.list"/>
-        </ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout>
+        </ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom>
 
         <include layout="@layout/dark_layout"/>
 

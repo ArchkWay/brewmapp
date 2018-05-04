@@ -4,6 +4,7 @@ package com.brewmapp.presentation.view.impl.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ import ru.frosteye.ovsa.data.storage.ActiveBox;
 import ru.frosteye.ovsa.data.storage.ResourceHelper;
 import ru.frosteye.ovsa.presentation.adapter.FlexibleModelAdapter;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
+import ru.frosteye.ovsa.presentation.view.widget.swipe.SwipeRefreshLayoutBottom;
 import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 import ru.frosteye.ovsa.stub.impl.SimpleTabSelectListener;
 import ru.frosteye.ovsa.stub.view.RefreshableSwipeRefreshLayout;
@@ -65,7 +67,7 @@ public class EventsFragment extends BaseFragment implements
     //region BindView
     @BindView(R.id.fragment_events_tabs) TabsView tabsView;
     @BindView(R.id.fragment_events_list) RecyclerView list;
-    @BindView(R.id.fragment_events_swipe) RefreshableSwipeRefreshLayout swipe;
+    @BindView(R.id.fragment_events_swipe)    SwipeRefreshLayoutBottom swipeBottom;
     @BindView(R.id.fragment_events_empty) TextView empty;
     @BindView(R.id.dark_layout) LinearLayout darkBackGround;
     @BindView(R.id.filter_list) ListView filterList;
@@ -80,7 +82,6 @@ public class EventsFragment extends BaseFragment implements
     private String[] tabContent = ResourceHelper.getResources().getStringArray(R.array.event_types);
     private LoadNewsPackage loadNewsPackage = new LoadNewsPackage();
     private FlexibleModelAdapter<IFlexible> adapter;
-    private EndlessRecyclerOnScrollListener scrollListener;
     private List<FilteredTitle> dropdownItems;
     private final String MODE_DEFAULT="0";
     private final String MODE_TABS_INVISIBLE ="1";
@@ -113,18 +114,19 @@ public class EventsFragment extends BaseFragment implements
         filterList.setOnItemClickListener(this);
         interractor().processSpinnerTitleSubtitle(this.getTitleDropDown().get(0));
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        scrollListener = new EndlessRecyclerOnScrollListener(manager) {
+        swipeBottom.setOnRefreshListener(new SwipeRefreshLayoutBottom.OnRefreshListener() {
             @Override
-            public void onLoadMore(int currentPage) {
-                loadNewsPackage.setPage(currentPage - 1);
+            public void onRefresh() {
+                loadNewsPackage.setPage(loadNewsPackage.getPage()+1);
                 presenter.onLoadItems(loadNewsPackage);
+
             }
-        };
+        });
         list.setLayoutManager(manager);
-        list.addOnScrollListener(scrollListener);
+
         adapter = new FlexibleModelAdapter<>(arrayList, this::processAction);
         list.setAdapter(adapter);
-        swipe.setOnRefreshListener(() -> refreshItems(false));
+
         //setActiveTab
         tabsView.setVisibility(mode.equals(MODE_TABS_INVISIBLE)?View.GONE:View.VISIBLE);
     }
@@ -218,7 +220,6 @@ public class EventsFragment extends BaseFragment implements
         setEmpty(loadNewsPackage.getPage() == 0 && list.isEmpty());
         if(loadNewsPackage.getPage() == 0) {
             arrayList.clear();
-            scrollListener.reset();
         }
         int prevSize=arrayList.size();
         arrayList.addAll(list);
@@ -228,7 +229,13 @@ public class EventsFragment extends BaseFragment implements
 
     @Override
     public void enableControls(boolean enabled, int code) {
-        if(enabled) swipe.setRefreshing(false);
+        if(enabled) {
+            mListener.stopProgressParentActivity();
+            swipeBottom.setRefreshing(false);
+        }else {
+            if(loadNewsPackage.getPage() == 0)
+                mListener.StartProgressBarInActivity();
+        }
     }
 
     @Override
@@ -314,10 +321,9 @@ public class EventsFragment extends BaseFragment implements
 
     //region Function
     public void refreshItems(boolean tabSelected) {
-        swipe.setRefreshing(true);
+
         arrayList.clear();
         adapter.notifyDataSetChanged();
-        scrollListener.reset();
         loadNewsPackage.setPage(0);
 
         try {loadNewsPackage.setResto_id(getArguments().getString(Keys.RELATED_ID));}catch (Exception e){}
@@ -413,6 +419,10 @@ public class EventsFragment extends BaseFragment implements
 
     public interface OnFragmentInteractionListener {
         OnLocationInteractionListener getLocationListener();
+
+        void StartProgressBarInActivity();
+
+        void stopProgressParentActivity();
     }
 
 }

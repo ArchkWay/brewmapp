@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,6 +54,48 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_slider);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_add:
+
+//                Bitmap icon = mBitmap;
+//                Intent share = new Intent(Intent.ACTION_SEND);
+//                share.setType("image/jpeg");
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+//                try {
+//                    f.createNewFile();
+//                    FileOutputStream fo = new FileOutputStream(f);
+//                    fo.write(bytes.toByteArray());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+//                startActivity(Intent.createChooser(share, "Share Image"));
+
+
+//                slider.getCurrentSlider()
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, text);
+//                sendIntent.setType("image/jpeg");
+//                startActivity(sendIntent);
+
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
 
     }
 

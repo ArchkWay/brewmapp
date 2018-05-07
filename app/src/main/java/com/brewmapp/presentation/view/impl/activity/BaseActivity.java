@@ -64,6 +64,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public abstract class BaseActivity extends PresenterActivity implements OnLocationInteractionListener {
 
     private Callback<Boolean> callbackRequestPermissionLocation;
+    private Callback<Boolean> callbackRequestPermissionWriteStorage;
     private ChatResultReceiver chatResultReceiver;
     private RelativeLayout containerProgressBar;
     private ResultReceiver resultReceiverVisibleParentActivity;
@@ -156,18 +157,19 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     callbackRequestPermissionLocation.onResult(true);
-//                        getLastLocation(new Callback<Location>() {
-//                            @Override
-//                            public void onResult(Location result) {
-//                                replayLocation(result);
-//                            }
-//                        });
                 } else {
                     callbackRequestPermissionLocation.onResult(false);
-//                    replayLocation(null);
                 }
                 return;
             }
+            case RequestCodes.MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    callbackRequestPermissionWriteStorage.onResult(true);
+                } else {
+                    callbackRequestPermissionWriteStorage.onResult(false);
+                }
+                return;
 
         }
     }
@@ -303,6 +305,40 @@ public abstract class BaseActivity extends PresenterActivity implements OnLocati
                 callback.onResult(null);
             }
         }
+    }
+
+    public void requestPermissionWriteStorage(Callback<Boolean> callbackRequestPermissionWriteStorage) {
+        this.callbackRequestPermissionWriteStorage=callbackRequestPermissionWriteStorage;
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.title_write_storage_permission)
+                        .setMessage(R.string.text_write_storage_permission)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(BaseActivity.this,
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        RequestCodes.MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        RequestCodes.MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+            }
+        } else {
+            this.callbackRequestPermissionWriteStorage.onResult(true);
+        }
+
     }
 
     private void requestPermissionLocation(Callback<Boolean> callbackRequestPermitionLocation) {

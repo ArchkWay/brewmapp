@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import com.brewmapp.presentation.presenter.contract.PhotoSliderPresenter;
 import com.brewmapp.presentation.view.contract.PhotoSliderView;
 
 import butterknife.BindView;
+import ru.frosteye.ovsa.execution.executor.Callback;
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 import com.brewmapp.R;
@@ -66,50 +68,68 @@ public class PhotoSliderActivity extends BaseActivity implements PhotoSliderView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add,menu);
+        getMenuInflater().inflate(R.menu.share,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_add:
-                Bitmap bitmap=((CustomSliderView)slider.getCurrentSlider()).getBitmap();
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("image/jpeg");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                String tempFile=Environment.getExternalStorageDirectory()
-                        + File.separator
-                        +"temporary_file.jpg"
-//                        + new File((slider.getCurrentSlider()).getUrl()).getName()
-//                        +".jpg"
-                        ;
-                File f = new File(tempFile);
-                try {
-                    f.createNewFile();
-                    FileOutputStream fo = new FileOutputStream(f);
-                    fo.write(bytes.toByteArray());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+f.getAbsolutePath()));
-                //share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
-                startActivity(Intent.createChooser(share, getString(R.string.send_photo)));
-
-
-//                slider.getCurrentSlider()
-//                Intent sendIntent = new Intent();
-//                sendIntent.setAction(Intent.ACTION_SEND);
-//                sendIntent.putExtra(Intent.EXTRA_STREAM, text);
-//                sendIntent.setType("image/jpeg");
-//                startActivity(sendIntent);
-
+            case R.id.action_share:
+                requestPermissionWriteStorage(aBoolean -> sharePhoto(aBoolean));
                 return true;
                 default:
                     return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void sharePhoto(Boolean aBoolean) {
+        if(aBoolean) {
+            Bitmap bitmap = ((CustomSliderView) slider.getCurrentSlider()).getBitmap();
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/jpeg");
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String filename = new StringBuilder()
+                    .append(getString(R.string.app_name))
+                    .append(Math.random())
+                    .append(".jpg").toString();
+            String appDir=Environment.getExternalStorageDirectory()
+                    + File.separator
+                    +getString(R.string.app_name);
+            if(!new File(appDir).exists())
+                try {
+                    new File(appDir).mkdir();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    showMessage(e.getMessage());
+                    return;
+                }
+
+            String tempFile =appDir+ File.separator+ filename;
+            File f = new File(tempFile);
+            try {
+                f.createNewFile();
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+            } catch (IOException e) {
+                e.printStackTrace();
+                showMessage(e.getMessage());
+                return;
+            }
+            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + f.getAbsolutePath()));
+            try {
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                startActivity(Intent.createChooser(share, getString(R.string.send_photo)));
+            }catch (Exception e){
+
+            }
+
+        }else {
+            showSnackbarRed(getString(R.string.permission_write_store_denied));
+        }
     }
 
     @Override

@@ -24,6 +24,8 @@ public class RequestCodes {
     public static final int REQUEST_EDIT_RESTO = 125;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 126;
     public static final int MY_PERMISSIONS_CALL_PHONE = 127;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 128;
+
     public static final int REQUEST_SEARCH_CODE = 999;
 
 

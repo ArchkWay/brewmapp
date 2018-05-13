@@ -29,24 +29,20 @@ import com.brewmapp.presentation.presenter.contract.LoginPresenter;
 public class LoginPresenterImpl extends BasePresenter<LoginView> implements LoginPresenter {
 
     private LoginTask loginTask;
-    private FbLoginTask fbLoginTask;
+
     private UserRepo userRepo;
-    private CallbackManager callbackManager;
+
 
     @Inject
-    public LoginPresenterImpl(LoginTask loginTask, FbLoginTask fbLoginTask, UserRepo userRepo) {
+    public LoginPresenterImpl(LoginTask loginTask, UserRepo userRepo) {
         this.loginTask = loginTask;
-        this.fbLoginTask = fbLoginTask;
         this.userRepo = userRepo;
     }
 
     @Override
     public void onAttach(LoginView loginView) {
         super.onAttach(loginView);
-        this.callbackManager = CallbackManager.Factory.create();
-        loginView.getLoginButton().setReadPermissions(Arrays.asList(view.getActivity().getResources()
-                .getStringArray(R.array.config_facebook_permissions)));
-        loginView.getLoginButton().registerCallback(callbackManager, facebookCallback);
+
     }
 
     @Override
@@ -64,43 +60,6 @@ public class LoginPresenterImpl extends BasePresenter<LoginView> implements Logi
         loginTask.execute(params, new LoginSubscriber());
     }
 
-    private void onFacebookLoginInner(LoginResult result) {
-        RequestParams params = new RequestParams();
-        params.addParam(Keys.ID, result.getAccessToken().getUserId());
-        params.addParam(Keys.TOKEN, result.getAccessToken().getToken());
-        fbLoginTask.execute(params, new LoginSubscriber());
-    }
-
-    @Override
-    public void onFacebookLogin() {
-        enableControls(false);
-        LoginManager.getInstance().logOut();
-        view.getLoginButton().performClick();
-    }
-
-    @Override
-    public CallbackManager requestCallbackManager() {
-        return callbackManager;
-    }
-
-    private FacebookCallback<LoginResult> facebookCallback = new FacebookCallback<LoginResult>() {
-        @Override
-        public void onSuccess(LoginResult loginResult) {
-            onFacebookLoginInner(loginResult);
-        }
-
-        @Override
-        public void onCancel() {
-            enableControls(true);
-        }
-
-        @Override
-        public void onError(FacebookException error) {
-            enableControls(true);
-            showMessage(error.getMessage());
-        }
-    };
-
     private class LoginSubscriber extends SimpleSubscriber<UserResponse> {
         @Override
         public void onError(Throwable e) {
@@ -115,4 +74,7 @@ public class LoginPresenterImpl extends BasePresenter<LoginView> implements Logi
             view.proceed();
         }
     }
+
+
+
 }

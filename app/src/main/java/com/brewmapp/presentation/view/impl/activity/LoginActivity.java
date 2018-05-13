@@ -41,11 +41,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.activity_login_login_email)    AppCompatEditText login_email;
     @BindView(R.id.activity_login_password) EditText password;
     @BindView(R.id.activity_login_logo) View logoImage;
-    @BindView(R.id.activity_login_fb) View fb;
-    @BindView(R.id.activity_login_fbLogin) LoginButton fbLogin;
+
     @BindView(R.id.activity_login_rbGroup)    RadioGroup radioGroup;
     @BindView(R.id.activity_login_container)    LinearLayout container;
-    @BindView(R.id.activity_start_terms_of_use)    TextView terms_of_use;
 
     @Inject LoginPresenter presenter;
 
@@ -64,8 +62,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         enter.setEnabled(enabled);
         login.setEnabled(enabled);
         password.setEnabled(enabled);
-        fb.setEnabled(enabled);
-        fb.setAlpha(enabled ? 1.0f : 0.3f);
     }
 
     @Override
@@ -73,13 +69,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
         enableBackButton();
         registerTextChangeListeners(enter, login, password);
         enter.setOnClickListener(v -> login());
-        fb.setOnClickListener(v -> presenter.onFacebookLogin());
+
         setOnDoneListener(password, this::login);
         login.setOnFocusChangeListener(loginListener);
         password.setOnFocusChangeListener(passwordListener);
-        String s="Нажимая \"Зарегистрироваться\", \"Войти с помощью Facebook\" или \"Войти\", я принимаю условия <a href=\"https://brewmapp.com/terms/\"  >Пользовательского соглашения</a>.";
-        terms_of_use.setText(Html.fromHtml(s));
-        terms_of_use.setMovementMethod(LinkMovementMethod.getInstance());
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -123,11 +116,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        presenter.requestCallbackManager().onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     protected Toolbar findActionBar() {
@@ -206,13 +194,5 @@ public class LoginActivity extends BaseActivity implements LoginView {
         startActivityAndClearTask(MainActivity.class);
     }
 
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
 
-    @Override
-    public LoginButton getLoginButton() {
-        return fbLogin;
-    }
 }

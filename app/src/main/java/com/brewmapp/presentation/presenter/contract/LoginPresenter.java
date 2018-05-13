@@ -8,6 +8,6 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 
 public interface LoginPresenter extends LivePresenter<LoginView> {
     void onLoginPassReady(String login, String pass);
-    void onFacebookLogin();
-    CallbackManager requestCallbackManager();
+
+
 }

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.facebook.login.widget.LoginButton;
 
@@ -42,6 +45,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.activity_login_fbLogin) LoginButton fbLogin;
     @BindView(R.id.activity_login_rbGroup)    RadioGroup radioGroup;
     @BindView(R.id.activity_login_container)    LinearLayout container;
+    @BindView(R.id.activity_start_terms_of_use)    TextView terms_of_use;
 
     @Inject LoginPresenter presenter;
 
@@ -73,6 +77,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setOnDoneListener(password, this::login);
         login.setOnFocusChangeListener(loginListener);
         password.setOnFocusChangeListener(passwordListener);
+        String s="Нажимая \"Зарегистрироваться\", \"Войти с помощью Facebook\" или \"Войти\", я принимаю условия <a href=\"https://brewmapp.com/terms/\"  >Пользовательского соглашения</a>.";
+        terms_of_use.setText(Html.fromHtml(s));
+        terms_of_use.setMovementMethod(LinkMovementMethod.getInstance());
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

@@ -594,5 +594,7 @@
     <string name="title_write_storage_permission">Подтверждение</string>
     <string name="text_write_storage_permission">Необходимо разрешение на запись файлов.</string>
     <string name="permission_write_store_denied">Нет разрешения на работу с файлами</string>
+    <string name="text_empty" />
+
 
 </resources>

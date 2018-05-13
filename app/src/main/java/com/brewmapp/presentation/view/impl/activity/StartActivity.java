@@ -4,7 +4,10 @@ import javax.inject.Inject;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import com.brewmapp.app.di.component.PresenterComponent;
@@ -20,6 +23,7 @@ public class StartActivity extends BaseActivity implements StartView {
     @BindView(R.id.activity_start_register) View register;
     @BindView(R.id.activity_start_container) View container;
     @BindView(R.id.activity_start_check_connection) View check_connection;
+
 
     @Inject StartPresenter presenter;
 

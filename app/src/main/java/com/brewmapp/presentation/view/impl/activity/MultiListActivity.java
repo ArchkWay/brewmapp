@@ -121,6 +121,8 @@ public class MultiListActivity extends BaseActivity implements
 
         mode=presenter.parseIntent(getIntent());
 
+        id_text_empty=R.string.text_empty;
+
         switch (mode){
             case MODE_SHOW_MENU:
                 //region Prepare Menu
@@ -268,7 +270,8 @@ public class MultiListActivity extends BaseActivity implements
             default:
                 commonError();
         }
-        text_empty_list.setText(id_text_empty);
+            text_empty_list.setText(id_text_empty);
+
 
     }
 

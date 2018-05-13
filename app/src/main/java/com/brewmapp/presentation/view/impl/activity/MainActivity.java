@@ -408,7 +408,11 @@ public class MainActivity extends BaseActivity
                     public void onDrawerClosed() {
                         navigator.onDrawerClosed();
                         for (int i=0;i<menu.getAdapter().getItemCount();i++){
-                            menu.getLayoutManager().getChildAt(i).findViewById(R.id.view_menuField_badget).setVisibility(View.GONE);
+                            try {
+                                menu.getLayoutManager().getChildAt(i).findViewById(R.id.view_menuField_badget).setVisibility(View.GONE);
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                     @Override

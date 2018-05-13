@@ -8,10 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
 import butterknife.BindView;
 import com.brewmapp.app.di.component.PresenterComponent;
+import com.brewmapp.app.environment.Actions;
+import com.brewmapp.app.environment.RequestCodes;
 import com.brewmapp.data.pojo.RegisterPackage;
 import com.brewmapp.data.pojo.RegisterPackageWithPhone;
 import com.brewmapp.presentation.presenter.contract.RegisterPresenter;
@@ -19,11 +24,16 @@ import com.brewmapp.presentation.view.contract.RegisterView;
 
 import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 import com.brewmapp.R;
+import com.brewmapp.presentation.view.impl.fragment.SearchFragment;
 
 public class EnterPhoneActivity extends BaseActivity implements RegisterView {
 
     @BindView(R.id.activity_enterPhone_bottom_phone) MaskedEditText phone;
+    @BindView(R.id.activity_enterPhone_bottom_country) LinearLayout country;
     @BindView(R.id.common_toolbar) Toolbar toolbar;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
 
 
     @Inject RegisterPresenter presenter;
@@ -44,6 +54,12 @@ public class EnterPhoneActivity extends BaseActivity implements RegisterView {
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
+        enableBackButton();
+
         registerPackage = new RegisterPackageWithPhone(
                 ((RegisterPackage) getIntent().getSerializableExtra(RegisterPackage.KEY))
         );
@@ -51,7 +67,19 @@ public class EnterPhoneActivity extends BaseActivity implements RegisterView {
             registerPackage.setPhone("7" + phone.getRawText());
             invalidateOptionsMenu();
         }, phone);
-        enableBackButton();
+
+        country.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EnterPhoneActivity.this, SelectCategoryActivity.class);
+                intent.putExtra(Actions.PARAM1, SearchFragment.CATEGORY_LIST_BEER );
+                intent.putExtra(Actions.PARAM2,1);
+                intent.putExtra(Actions.PARAM3,"null");
+                startActivityForResult(intent, RequestCodes.REQUEST_SEARCH_CODE);
+
+
+            }
+        });
     }
 
     @Override
@@ -100,5 +128,10 @@ public class EnterPhoneActivity extends BaseActivity implements RegisterView {
         Intent intent = new Intent(this, ConfirmCodeActivity.class);
         intent.putExtra(RegisterPackage.KEY, registerPackage);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

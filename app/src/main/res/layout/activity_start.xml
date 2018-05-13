@@ -77,11 +77,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/facebook"
-                        android:layout_marginLeft="@dimen/common_block_space_double"
+                        android:layout_marginLeft="@dimen/common_block_space"
                         android:textSize="@dimen/text_facebook_login"
                         android:textColor="@color/color_text_button_white"/>
 
                     <com.facebook.login.widget.LoginButton
+                        android:layout_marginLeft="@dimen/common_block_space_half_double"
                         android:id="@+id/activity.login.fbLogin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"  />

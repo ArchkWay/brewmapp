@@ -17,6 +17,7 @@ public class RegisterPackageWithPhone extends RegisterPackage implements Seriali
         setLastName(registerPackage.getLastName());
         setGender(registerPackage.getGender());
         setAvatarPath(registerPackage.getAvatarPath());
+        setEmail(registerPackage.getEmail());
     }
 
     public RegisterPackageWithPhone(User user) {
@@ -24,6 +25,7 @@ public class RegisterPackageWithPhone extends RegisterPackage implements Seriali
         setFirstName(user.getFirstname());
         setLastName(user.getLastname());
         setGender(user.getGender());
+        setEmail(user.getEmail());
     }
 
     public String getPhone() {

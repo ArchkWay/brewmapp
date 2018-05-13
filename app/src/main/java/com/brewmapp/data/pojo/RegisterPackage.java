@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
+import ru.frosteye.ovsa.tool.TextTools;
+
 /**
  * Created by oleg on 15.07.17.
  */
@@ -16,6 +18,7 @@ public class RegisterPackage implements Serializable {
     private String firstName;
     private String lastName;
     private String avatarPath;
+    private String email;
 
     @Inject
     public RegisterPackage() {
@@ -60,6 +63,15 @@ public class RegisterPackage implements Serializable {
     public boolean validate() {
         return gender != 0
                 && firstName != null && !firstName.isEmpty()
-                && lastName != null && !lastName.isEmpty();
+                && lastName != null && !lastName.isEmpty()
+                && email != null && TextTools.validateEmail(email);
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

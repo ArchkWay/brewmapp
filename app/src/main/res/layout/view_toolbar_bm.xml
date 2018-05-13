@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="Назад"
             android:textColor="@color/colorAccent"
-            style="@style/Base.TextAppearance.AppCompat.Small"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
             />
     </LinearLayout>
 

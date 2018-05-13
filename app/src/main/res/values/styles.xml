@@ -16,8 +16,9 @@
         <item name="actionButtonStyle">@style/AppTheme.Widget.ActionButton</item>
 
         <item name="android:textAppearanceSmall">@style/TextAppearance.Small</item>
-
+        <item name="android:actionMenuTextAppearance">@style/Base.TextAppearance.AppCompat.Medium</item>
     </style>
+
 
     <style name="TextAppearance.Small" parent="TextAppearance.AppCompat.Small">
         <item name="android:textSize">12sp</item>

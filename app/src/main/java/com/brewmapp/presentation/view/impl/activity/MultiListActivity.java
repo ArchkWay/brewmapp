@@ -99,6 +99,8 @@ public class MultiListActivity extends BaseActivity implements
         toolbarDropdown.setVisibility(View.VISIBLE);
         toolbarSubTitle.setVisibility(View.GONE);
         enableBackButton();
+
+
         swipe.setOnRefreshListener(this::refreshItems);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         scrollListener = new EndlessRecyclerOnScrollListener(manager) {

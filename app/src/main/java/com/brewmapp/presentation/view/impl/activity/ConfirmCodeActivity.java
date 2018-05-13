@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -29,6 +30,9 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
     @BindView(R.id.activity_confirmCode_phone) MaskedEditText phone;
     @BindView(R.id.activity_confirmCode_hintCounter) TextView hintCounter;
     @BindView(R.id.activity_confirmCode_resend) Button resend;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)    LinearLayout toolbarDropdown;
 
     @Inject ConfirmPhonePresenter presenter;
 
@@ -48,8 +52,14 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
 
     @Override
     protected void initView() {
-        registerPackage = ((RegisterPackageWithPhone) getIntent().getSerializableExtra(RegisterPackage.KEY));
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
         enableBackButton();
+        registerPackage = ((RegisterPackageWithPhone) getIntent().getSerializableExtra(RegisterPackage.KEY));
+
         phone.setText(registerPackage.getPhone());
         resend.setOnClickListener(v -> presenter.onPhoneReady(registerPackage.getPhone()));
         registerTextChangeListeners(s -> {

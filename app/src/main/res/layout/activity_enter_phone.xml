@@ -17,7 +17,10 @@
         android:background="@color/colorWhite"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:padding="@dimen/common_block_space_double_semi">
+        android:padding="@dimen/common_block_space_double_semi"
+        android:clickable="true"
+        android:id="@+id/activity.enterPhone.bottom.country"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,11 +96,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textSize="16sp"
+
+            android:layout_margin="@dimen/common_block_space_quadro"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3dp"
-            android:layout_margin="@dimen/common_block_space_quadro"
-            android:text="@string/enter_phone_hint"/>
+            android:text="@string/enter_phone_hint"
+            android:textSize="16sp" />
     </RelativeLayout>
 </LinearLayout>

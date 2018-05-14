@@ -59,7 +59,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/common_block_space_quadro"
+            android:layout_margin="@dimen/common_block_space"
             android:orientation="vertical">
 
             <TextView
@@ -80,22 +80,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:textSize="@dimen/text_size_common"
                     android:id="@+id/activity.confirmCode.hintCounter"
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/common_block_space"
-                    android:lineSpacingExtra="3dp" />
+                    android:lineSpacingExtra="3dp"
+                    />
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity.confirmCode.resend"
                     style="@style/AppTheme.Button.White"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="@dimen/common_block_space_quadro"
-                    android:text="@string/resend_code"/>
+                    android:layout_below="@id/activity.confirmCode.hintCounter"
+                    android:text="@string/resend_code"
+                    android:enabled="false"/>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

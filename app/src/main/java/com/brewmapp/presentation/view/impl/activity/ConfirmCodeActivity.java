@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,21 +115,23 @@ public class ConfirmCodeActivity extends BaseActivity implements ConfirmPhoneVie
     @Override
     public void startCounter() {
         hintCounter.setVisibility(View.VISIBLE);
-        resend.setVisibility(View.GONE);
+        resend.setEnabled(false);
         counter.start((time, seconds) -> {
             runOnUiThread(() -> {
                 if(seconds == 0) {
                     stopCounter();
                 } else {
-                    hintCounter.setText(getString(R.string.confirm_counter_pattern, time));
+                    hintCounter.setText(getString(R.string.confirm_counter_pattern, DateUtils.formatElapsedTime(seconds)));
                 }
             });
-        }, 60, true);
+        }, 300, true);
     }
 
     private void stopCounter() {
-        hintCounter.setVisibility(View.GONE);
-        resend.setVisibility(View.VISIBLE);
+        hintCounter.setVisibility(View.INVISIBLE);
+        resend.setEnabled(true);
         counter.stop();
     }
+
+
 }

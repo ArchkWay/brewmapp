@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -26,6 +28,10 @@ public class EnterPasswordActivity extends BaseActivity implements EnterPassword
     @BindView(R.id.common_toolbar) Toolbar toolbar;
     @BindView(R.id.activity_password_password) EditText password;
     @BindView(R.id.activity_password_phone) TextView phone;
+    @BindView(R.id.common_toolbar_title)    TextView toolbarTitle;
+    @BindView(R.id.common_toolbar_subtitle)    TextView toolbarSubTitle;
+    @BindView(R.id.common_toolbar_dropdown)
+    LinearLayout toolbarDropdown;
 
     @Inject EnterPasswordPresenter presenter;
 
@@ -39,6 +45,10 @@ public class EnterPasswordActivity extends BaseActivity implements EnterPassword
 
     @Override
     protected void initView() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbarDropdown.setVisibility(View.VISIBLE);
+        toolbarSubTitle.setVisibility(View.GONE);
+        toolbarTitle.setText(getTitle());
         enableBackButton();
         registerPackage = new RegisterPackageWithPhoneAndPassword(
                 ((RegisterPackageWithPhone) getIntent().getSerializableExtra(RegisterPackage.KEY))

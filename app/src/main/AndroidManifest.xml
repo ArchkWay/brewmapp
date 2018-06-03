@@ -91,7 +91,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="aa07a4cfc36bb9ffa8349d617f3c1d813463e8fc" />
+            android:value="677ac3499948d977b664c1c55c015b1c53aa0e6f" />
 
         <activity
             android:name=".presentation.view.impl.activity.NewPostActivity"

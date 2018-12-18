@@ -1,105 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.brewmapp.presentation.view.impl.widget.ReviewView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_margin="@dimen/common_block_space_double_semi"
-    >
+                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                       android:layout_width="match_parent"
+                                                       android:layout_height="wrap_content"
+                                                       android:background="@color/colorWhite"
+                                                       android:orientation="vertical">
 
+
+    <!--BIG header event-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/def_margin"
+        android:gravity="center_vertical"
+        >
+        <!--header avatar-->
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/review_big_avatar"
+            android:layout_width="@dimen/size_avatar_event_list"
+            android:layout_height="@dimen/size_avatar_event_list"
+            android:adjustViewBounds="true"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
+            app:riv_border_color="@color/colorButtonRedDark"
+            app:riv_border_width="2dip"
+            app:riv_oval="true"/>
+
+        <!--header text-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view.review.container"
+            android:orientation="vertical"
             >
+            <!--resto-->
+            <TextView
+                android:id="@+id/review_big_name_resto"
+                style="@style/AppTheme.Text.Georgia.Italic.TitleResto.ListEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:padding="@dimen/common_block_space_half_double"
+                android:text="@string/text_view_value_not_found"
+                />
+
+            <TextView
+                android:id="@+id/review_big_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/common_block_space_half_double"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/text_view_value_not_found"
+                android:padding="@dimen/common_block_space_half_double"
+                android:textColor="@color/colorProfileCounter"
+                android:textSize="@dimen/text_size_small"
+                />
+            <!--gone-->
+            <!--container date-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/common_block_space_half_double"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/size_event_icon_mini"
+                    android:layout_height="@dimen/size_event_icon_mini"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:src="@drawable/ic_calendar"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/view.event.date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/common_block_space_half_double"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="@string/text_view_value_not_found"
+                    android:textColor="@color/colorProfileCounter"
+                    android:textSize="@dimen/text_size_common"
+                    />
+            </LinearLayout>
+            <!--gone-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/size_event_icon_mini"
+                    android:layout_height="@dimen/size_event_icon_mini"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:src="@drawable/ic_loc"/>
+
+                <TextView
+                    android:id="@+id/view.event.location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/common_block_space_half_double"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/colorProfileCounter"
+                    android:textSize="@dimen/text_size_common"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!--BIG header event-->
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/def_margin"
+        android:background="@drawable/bg_with_corner_gray"
+        android:orientation="vertical"
+        android:padding="@dimen/def_margin">
+
+        <LinearLayout
+            android:id="@+id/view.review.container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
             <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/view.review.avatar"
                 android:layout_width="@dimen/size_avatar_lesser"
                 android:layout_height="@dimen/size_avatar_lesser"
-                android:id="@+id/view.review.avatar"
-                android:scaleType="fitCenter"
-                app:riv_border_width="1dp"
-                app:riv_border_color="@color/colorSplitter"
                 android:layout_marginRight="@dimen/common_block_space_double_semi"
-                app:riv_mutate_background="true"
                 android:background="@color/colorGrayLight"
+                android:scaleType="fitCenter"
+                app:riv_border_color="@color/colorButtonRedDark"
+                app:riv_mutate_background="true"
                 app:riv_oval="true"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/view.review.author"
-                        android:textSize="@dimen/text_size_big_phone"
-                        android:layout_marginBottom="@dimen/common_block_space_half"
-                        style="@style/AppTheme.Text.Georgia.Bold2"
-                        android:text="@string/text_view_value_not_found"
-                        />
-                    <LinearLayout
-                        android:id="@+id/widget.review.beer_linear_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/common_block_space"
-                        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/view.review.author"
+                    style="@style/AppTheme.Text.Georgia.Bold2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/common_block_space_half"
+                    android:text="@string/text_view_value_not_found"
+                    android:textSize="@dimen/text_size_big_phone"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/widget.review.beer_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/common_block_space"
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="60"
                         android:orientation="vertical"
-                        android:layout_marginRight="@dimen/common_block_space"
                         >
+
                         <LinearLayout
+                            android:id="@+id/widget.review.view.interior_linear_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:layout_weight="1"
-                            android:id="@+id/widget.review.view.interior_linear_layout"
+                            android:orientation="horizontal"
                             >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_view_interior"
-                                android:lines="1"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@string/text_view_interior"
 
                                 />
+
                             <TextView
+                                android:id="@+id/widget.review.interior"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/widget.review.interior"
-                                android:text="@string/text_view_value_not_found"
+                                android:layout_marginLeft="@dimen/normal_padding"
                                 android:gravity="center_vertical"
+                                android:text="@string/text_view_value_not_found"
                                 android:textColor="@color/evaluation"
                                 />
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/widget.review..service_linear_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:layout_weight="1"
-                            android:id="@+id/widget.review..service_linear_layout"
+                            android:orientation="horizontal"
                             >
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_view_service"
-                                android:lines="1"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@string/text_view_service"
                                 />
+
                             <TextView
+                                android:id="@+id/widget.review.service"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/widget.review.service"
-                                android:text="@string/text_view_value_not_found"
+                                android:layout_marginLeft="@dimen/normal_padding"
                                 android:gravity="center_vertical"
+                                android:text="@string/text_view_value_not_found"
                                 android:textColor="@color/evaluation"
                                 />
 
@@ -110,10 +231,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="40"
                         android:orientation="vertical"
-                        android:layout_marginLeft="@dimen/common_block_space"
-                        android:layout_marginRight="@dimen/common_block_space"
                         >
 
                         <LinearLayout
@@ -121,44 +240,51 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             >
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_view_quality_beer"
-                                android:lines="1"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@string/text_view_quality_beer"
                                 />
+
                             <TextView
                                 android:id="@+id/widget.review.quality.beer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_view_value_not_found"
+                                android:layout_marginLeft="@dimen/normal_padding"
                                 android:gravity="center_vertical"
+                                android:text="@string/text_view_value_not_found"
                                 android:textColor="@color/evaluation"
                                 />
                         </LinearLayout>
+
                         <LinearLayout
+                            android:id="@+id/widget.review.effect_linear_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:id="@+id/widget.review.effect_linear_layout"
                             >
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_view_common_effect"
-                                android:lines="1"
                                 android:layout_weight="1"
                                 android:ellipsize="end"
+                                android:lines="1"
+                                android:text="@string/text_view_common_effect"
                                 />
+
                             <TextView
                                 android:id="@+id/widget.review.common.effect"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_view_value_not_found"
+                                android:layout_marginLeft="@dimen/normal_padding"
                                 android:gravity="center_vertical"
                                 android:lines="1"
+                                android:text="@string/text_view_value_not_found"
                                 android:textColor="@color/evaluation"
                                 />
 
@@ -169,77 +295,103 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:id="@+id/view.review.plus_minus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="top"
-                android:textSize="10sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:layout_marginRight="10dp"
-                android:id="@+id/view.review.plus_minus"
-                />
+                android:textSize="10sp"/>
+
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/view.review.text"
                 style="@style/AppTheme.Paragraph"
-                android:text="@string/text_view_value_not_found"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                />
+                android:gravity="center_vertical"
+                android:text="@string/text_view_value_not_found"/>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/def_margin"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/view.review.date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="@dimen/normal_padding"
+            android:text="@string/text_view_value_not_found"
+            />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:gravity="bottom"
             >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/view.review.date"
-                    android:text="@string/text_view_value_not_found"
-                    android:layout_weight="1"
-                    />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    >
-                    <com.brewmapp.presentation.view.impl.widget.ReviewMoreImageButton
-                        android:layout_width="60dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_post_more"
-                        android:background="@drawable/selector_post_button"
-                        android:padding="10sp"
-                        android:id="@+id/view.review.more"
-                        />
-                    <com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton
-                        android:layout_width="60dp"
-                        android:layout_height="40dp"
-                        android:text="@string/yes"
-                        android:background="@drawable/selector_post_button_green"
-                        android:id="@+id/view.review.yes"
-                        android:textColor="#358400"
-                        android:textAllCaps="false"
-                        />
-                    <com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton
-                        android:layout_width="60dp"
-                        android:layout_height="40dp"
-                        android:text="@string/no"
-                        android:background="@drawable/selector_post_button_red"
-                        android:id="@+id/view.review.no"
-                        android:textColor="#e40000"
-                        android:textAllCaps="false"
-                        />
-                </LinearLayout>
+
+            <com.brewmapp.presentation.view.impl.widget.ReviewMoreImageButton
+                android:id="@+id/view.review.more"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/white"
+                android:src="@drawable/ic_post_more"
+                />
+
+            <com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton
+                android:id="@+id/view.review.yes"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_like"
+                android:text="@string/yes"
+                android:textAllCaps="false"
+                android:textColor="#358400"
+                />
+
+            <com.brewmapp.presentation.view.impl.widget.ReviewYesNoButton
+                android:id="@+id/view.review.no"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_dislike"
+                android:shadowColor="@color/white"
+                android:text="@string/no"
+                android:textAllCaps="false"
+                android:textColor="#e40000"
+                />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <ru.frosteye.ovsa.presentation.view.widget.Line
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/colorBlockSplitterBorder"/>
 
 </com.brewmapp.presentation.view.impl.widget.ReviewView>

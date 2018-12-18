@@ -1,10 +1,12 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.LocalizedStringsDeserializer;
 import com.brewmapp.data.model.ICommonItem;
 import com.brewmapp.data.pojo.SimpleImageSource;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -16,7 +18,19 @@ import java.io.Serializable;
 public class Resto implements ICommonItem, Serializable {
 
     private int id;
-    private String name, text;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    @SerializedName(Keys.NAME)
+    private LocalizedStrings mName;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    @SerializedName(Keys.TEXT)
+    private LocalizedStrings mText;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    @SerializedName(Keys.SHORT_TEXT)
+    private LocalizedStrings mShortText;
+
     private String site;
     private String music;
     private String user_id;
@@ -101,11 +115,11 @@ public class Resto implements ICommonItem, Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+//        this.name = name;
     }
 
     public void setText(String text) {
-        this.text = text;
+//        this.text = text;
     }
 
     public void setSite(String site) {
@@ -512,11 +526,15 @@ public class Resto implements ICommonItem, Serializable {
     }
 
     public String getName() {
-        return name;
+        return mName != null ? mName.toString() : null;
     }
 
     public String getText() {
-        return text==null?"":text;
+        return mText != null ? mText.toString() : null;
+    }
+
+    public String getShortText() {
+        return mShortText != null ? mShortText.toString() : null;
     }
 
     public String getSite() {

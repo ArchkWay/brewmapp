@@ -1,21 +1,26 @@
 package com.brewmapp.presentation.presenter.impl;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.brewmapp.R;
 import com.brewmapp.app.environment.FilterKeys;
 import com.brewmapp.data.entity.City;
+import com.brewmapp.data.entity.Country;
 import com.brewmapp.data.entity.FilterBeerField;
 import com.brewmapp.data.entity.FilterBreweryField;
 import com.brewmapp.data.entity.FilterRestoField;
+import com.brewmapp.data.entity.LocalizedStrings;
 import com.brewmapp.data.entity.PropertyFilterBeer;
 import com.brewmapp.data.entity.wrapper.CityInfo;
+import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.PropertyFilterBeerInfo;
 import com.brewmapp.data.pojo.FullSearchPackage;
 import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.data.pojo.PriceRangeType;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.task.BeerAftertasteTask;
 import com.brewmapp.execution.task.BeerBrandTask;
 import com.brewmapp.execution.task.BeerColorTask;
@@ -33,14 +38,21 @@ import com.brewmapp.execution.task.FullSearchFilterTask;
 import com.brewmapp.execution.task.KitchenTask;
 import com.brewmapp.execution.task.LoadCityTask;
 import com.brewmapp.execution.task.LoadCityTaskFilter;
+import com.brewmapp.execution.task.NewsRelModelsTask;
 import com.brewmapp.execution.task.PriceRangeTask;
 import com.brewmapp.execution.task.RegionTask;
 import com.brewmapp.execution.task.RestoTypeTask;
+import com.brewmapp.execution.task.ReviewsRelModelsTask;
+import com.brewmapp.execution.task.ReviewsRelModelsTask_Factory;
+import com.brewmapp.execution.task.SearchCountryTask;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -80,6 +92,10 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
     private BeerDensityTask beerDensityTask;
     private BeerIbuTask beerIbuTask;
     private LoadCityTask loadCityTask;
+    private ReviewsRelModelsTask loadReviewsRelModelsTask;
+    private NewsRelModelsTask loadNewsRelModelsTask;
+    private SearchCountryTask searchCountryTask;
+
 
     @Inject
     public SelectCategoryActivityPresenterImpl(Context context, RestoTypeTask restoTypeTask,
@@ -98,10 +114,13 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
                                                BeerDensityTask beerDensityTask,
                                                BeerIbuTask beerIbuTask,
                                                CountryTask countryTask,
+                                               SearchCountryTask searchCountryTask,
                                                RegionTask regionTask,
                                                LoadCityTaskFilter cityTask,
                                                BreweryTask breweryTask,
-                                               LoadCityTask loadCityTask) {
+                                               LoadCityTask loadCityTask,
+                                               ReviewsRelModelsTask reviewsRelModelsTask,
+                                               NewsRelModelsTask newsRelModelsTask) {
         this.context = context;
         this.restoTypeTask = restoTypeTask;
         this.kitchenTask = kitchenTask;
@@ -123,6 +142,9 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         this.cityTask = cityTask;
         this.breweryTask = breweryTask;
         this.loadCityTask = loadCityTask;
+        this.loadReviewsRelModelsTask = reviewsRelModelsTask;
+        this.loadNewsRelModelsTask = newsRelModelsTask;
+        this.searchCountryTask = searchCountryTask;
     }
 
     @Override
@@ -153,6 +175,9 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
         cityTask.cancel();
         breweryTask.cancel();
         loadCityTask.cancel();
+        loadReviewsRelModelsTask.cancel();
+        loadNewsRelModelsTask.cancel();
+        searchCountryTask.cancel();
     }
 
     @Override
@@ -468,6 +493,64 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
     }
 
     @Override
+    public void loadReviewsRelatedModels() {
+        loadReviewsRelModelsTask.cancel();
+        loadReviewsRelModelsTask.execute(null, new SimpleSubscriber<SingleResponse<LocalizedStrings>>() {
+            @Override
+            public void onError(Throwable e) {
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(SingleResponse<LocalizedStrings> resp) {
+
+                List<IFlexible> iFlexibles = new ArrayList<>();
+                Set<Map.Entry<String, String>> set = resp.getData().getStrings().entrySet();
+
+                for(Map.Entry<String, String> item : set){
+                    Country container = new Country(null);
+                    container.setName(item.getValue());
+                    container.setId(item.getKey());
+                    CountryInfo rootcontainer = new CountryInfo(container);
+                    iFlexibles.add(rootcontainer);
+                }
+
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+    @Override
+    public void loadNewsRelatedModels() {
+
+        loadNewsRelModelsTask.cancel();
+        loadNewsRelModelsTask.execute(null, new SimpleSubscriber<SingleResponse<LocalizedStrings>>() {
+            @Override
+            public void onError(Throwable e) {
+                showError(e.getMessage());
+            }
+
+            @Override
+            public void onNext(SingleResponse<LocalizedStrings> resp) {
+
+                List<IFlexible> iFlexibles = new ArrayList<>();
+                Set<Map.Entry<String, String>> set = resp.getData().getStrings().entrySet();
+
+                for(Map.Entry<String, String> item : set){
+                    Country container = new Country(null);
+                    container.setName(item.getValue());
+                    container.setId(item.getKey());
+                    CountryInfo rootcontainer = new CountryInfo(container);
+                    iFlexibles.add(rootcontainer);
+                }
+
+                view.appendItems(iFlexibles);
+            }
+        });
+    }
+
+
+    @Override
     public void loadBreweryCategoryItem(int filterCategory, FullSearchPackage searchPackage) {
         switch (filterCategory) {
             case FilterBreweryField.NAME:
@@ -585,9 +668,27 @@ public class SelectCategoryActivityPresenterImpl extends BasePresenter<SelectCat
                     cityInfoArrayList.add(new CityInfo(city));
                 view.appendItems(new ArrayList<>(cityInfoArrayList));
             }
-
         });
+    }
 
+    @Override
+    public void sendQueryCountrySearch(FullSearchPackage fullSearchPackage) {
+
+        Log.v("xzxz", "---DBG sendQueryCountrySearch");
+        searchCountryTask.cancel();
+        GeoPackage geoPackage = new GeoPackage();
+        geoPackage.setCityName(fullSearchPackage.getStringSearch());
+        searchCountryTask.execute(geoPackage, new SimpleSubscriber<List<IFlexible>>() {
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+
+            @Override
+            public void onNext(List<IFlexible> list) {
+                view.appendItems(list);
+            }
+        });
     }
 
     @Override

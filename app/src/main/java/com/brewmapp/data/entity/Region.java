@@ -2,6 +2,9 @@
 package com.brewmapp.data.entity;
 
 import javax.annotation.Generated;
+
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -14,12 +17,18 @@ public class Region implements Serializable {
     private String mCountryId;
     @SerializedName("id")
     private int mId;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
     @SerializedName("name")
-    private String mName;
-    @SerializedName("name_en")
-    private Object mNameEn;
+    private LocalizedStrings mName;
+
+//    @SerializedName("name_en")
+//    private Object mNameEn;
+
     @SerializedName("relations")
     private Relations mRelations;
+
+    private boolean selectable = false;
 
     public String getCountryId() {
         return mCountryId;
@@ -38,19 +47,19 @@ public class Region implements Serializable {
     }
 
     public String getName() {
-        return mName;
+        return mName != null ? mName.toString() : null;
     }
 
     public void setName(String name) {
-        mName = name;
+//        mName = name;
     }
 
     public Object getNameEn() {
-        return mNameEn;
+        return mName != null ? mName.getString("58") : null;
     }
 
     public void setNameEn(Object nameEn) {
-        mNameEn = nameEn;
+//        mNameEn = nameEn;
     }
 
     public Relations getRelations() {
@@ -61,4 +70,13 @@ public class Region implements Serializable {
         mRelations = relations;
     }
 
+
+    public boolean isSelectable() {
+
+        return selectable;
+    }
+    public void setSelectable(boolean selectable) {
+
+        this.selectable = selectable;
+    }
 }

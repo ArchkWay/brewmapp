@@ -83,7 +83,6 @@ import com.brewmapp.execution.exchange.common.base.FriendsDeserializer;
 import com.brewmapp.execution.exchange.common.base.PhotoDeserializer;
 import com.brewmapp.execution.exchange.common.base.PostDeserializer;
 import com.brewmapp.execution.exchange.request.base.Keys;
-import ru.frosteye.ovsa.execution.network.client.BaseRetrofitClient;
 import ru.frosteye.ovsa.execution.network.client.IdentityProvider;
 
 import static com.brewmapp.BuildConfig.SERVER_API_VER;

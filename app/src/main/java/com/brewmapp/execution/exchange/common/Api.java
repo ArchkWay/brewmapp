@@ -36,6 +36,7 @@ import com.brewmapp.data.entity.FilterRestoLocation;
 import com.brewmapp.data.entity.Interest;
 import com.brewmapp.data.entity.FeatureTypes;
 import com.brewmapp.data.entity.KitchenTypes;
+import com.brewmapp.data.entity.LocalizedStrings;
 import com.brewmapp.data.entity.LocationChild;
 import com.brewmapp.data.entity.MenuResto;
 import com.brewmapp.data.entity.Photo;
@@ -87,6 +88,9 @@ import ru.frosteye.ovsa.execution.network.request.RequestParams;
  */
 
 public interface Api {
+
+
+
 
     @POST("start/login")
     @FormUrlEncoded
@@ -347,9 +351,12 @@ public interface Api {
     @POST("reviews")
     @FormUrlEncoded
     Call<Reviews> loadReviews(@FieldMap WrapperParams params);
-//    @POST("reviews")
-//    @FormUrlEncoded
-//    Call<ListResponse<Review>> loadReviews(@FieldMap WrapperParams params);
+
+    @POST("reviews")
+    @FormUrlEncoded
+    Call<Reviews> loadReviews(@Query(Keys.LIMIT_START) int start,
+                              @Query(Keys.LIMIT_END) int end,
+                              @FieldMap WrapperParams params);
 
     @POST("/api/resto/restoevaluation")
     @FormUrlEncoded
@@ -580,4 +587,13 @@ public interface Api {
     @FormUrlEncoded
     Call<Object> createBeer(@FieldMap RequestParams params);
 
+    @POST("requestmoderation/relatedmodel")
+    @FormUrlEncoded
+    Call<SingleResponse<LocalizedStrings>> getModerationRelModels(@FieldMap WrapperParams params);
+
+    @GET("reviews/relatedmodel")
+    Call<SingleResponse<LocalizedStrings>> getReviewsRelModels();
+
+    @GET("news/relatedmodel")
+    Call<SingleResponse<LocalizedStrings>> getNewsRelModels();
 }

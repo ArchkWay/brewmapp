@@ -1,6 +1,8 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.data.LocalizedStringsDeserializer;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -13,8 +15,9 @@ public class BeerLocation {
     @SerializedName(Keys.LOCATION)
     private LocationInfo info;
 
+    @JsonAdapter (LocalizedStringsDeserializer.class)
     @SerializedName(Keys.CITY_ID)
-    private String city;
+    private LocalizedStrings cityId;
 
     private MetroInfo metro;
 
@@ -22,7 +25,7 @@ public class BeerLocation {
     private User user;
 
     public String getCity() {
-        return city;
+        return cityId != null ? cityId.toString() : null;
     }
 
     public MetroInfo getMetro() {
@@ -35,9 +38,9 @@ public class BeerLocation {
 
     public String getFormattedAddress() {
         if(info != null) {
-            return String.format("%s, %s", city, info.getFormattedAddress());
+            return String.format("%s, %s", cityId != null ? cityId.toString() : "" , info.getFormattedAddress());
         } else {
-            return city;
+            return cityId.toString();
         }
     }
 
@@ -56,8 +59,8 @@ public class BeerLocation {
         @SerializedName(Keys.METRO_ID)
         private int metroId;
 
-        private String street;
-        private String house;
+        private String mStreet;
+        private String mHouse;
         private String name;
         private double lat, lon;
 
@@ -92,11 +95,11 @@ public class BeerLocation {
         }
 
         public String getStreet() {
-            return street;
+            return mStreet;
         }
 
         public String getHouse() {
-            return house;
+            return mHouse;
         }
 
         public String getName() {
@@ -118,7 +121,7 @@ public class BeerLocation {
         @SerializedName(Keys.CITY_ID)
         private int cityId;
 
-        private String name;
+        private String mName;
         private double lat, lon;
         private int distance;
 
@@ -131,7 +134,7 @@ public class BeerLocation {
         }
 
         public String getName() {
-            return name;
+            return mName;
         }
 
         public double getLat() {

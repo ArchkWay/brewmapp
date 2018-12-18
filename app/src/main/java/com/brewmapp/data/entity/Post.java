@@ -1,14 +1,19 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.brewmapp.data.entity.wrapper.UserInfo;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.response.UploadPhotoResponse;
+import com.brewmapp.utils.events.markerCluster.MapUtils;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.brewmapp.data.entity.contract.Postable;
 import com.brewmapp.execution.exchange.request.base.Keys;
@@ -25,9 +30,17 @@ public class Post implements Postable, Serializable, ILikeable {
 
     private int id;
     //FIXME !!!
-    private String text, name = "Без названия";
+    @JsonAdapter(LocalizedStringsDeserializer.class)
+    private LocalizedStrings text;
+
+    @JsonAdapter(LocalizedStringsDeserializer.class)
+    private LocalizedStrings name;
+
+    private UserGetThumb user_getThumb;
+
     private double lat, lon;
     private int like;
+    private int dis_like;
     private Date delayedDate;
     private boolean friendsOnly;
     private String hashTag;
@@ -37,11 +50,17 @@ public class Post implements Postable, Serializable, ILikeable {
     private String repost_id;
     private Repost repost;
     private String related_model;
+
     private String related_id;
     private Related_model_data related_model_data;
-    private String user_getThumb;
     private List<Photo> photo=new ArrayList<>();
     private int type;
+
+    @SerializedName(Keys.DATE_NEWS)
+    private Date date;
+
+    @SerializedName(Keys.USER_INFO)
+    private User user;
 
 
     public String getRelated_id() {
@@ -60,15 +79,16 @@ public class Post implements Postable, Serializable, ILikeable {
         this.photo = photo;
     }
 
-    public String getUser_getThumb() {
-        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
-            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
-
+    public UserGetThumb getUser_getThumb() {
+//        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
+//            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
+//
+//        return user_getThumb;
         return user_getThumb;
     }
 
-    public void setUser_getThumb(String user_getThumb) {
-        this.user_getThumb = user_getThumb;
+    public void setUser_getThumb(UserGetThumb user_getThumb) {
+//        this.user_getThumb = user_getThumb;
     }
 
     public String getRelated_model() {
@@ -111,12 +131,6 @@ public class Post implements Postable, Serializable, ILikeable {
         this.repost_id = repost_id;
     }
 
-    @SerializedName(Keys.DATE_NEWS)
-    private Date date;
-
-    @SerializedName(Keys.USER_INFO)
-    private User user;
-
     public String getHashTag() {
         return hashTag;
     }
@@ -125,13 +139,14 @@ public class Post implements Postable, Serializable, ILikeable {
         this.hashTag = hashTag;
     }
 
+    @Override
     public void increaseLikes() {
         like++;
     }
 
     @Override
     public void increaseDisLikes() {
-
+        dis_like++;
     }
 
     public Date getDelayedDate() {
@@ -199,42 +214,48 @@ public class Post implements Postable, Serializable, ILikeable {
     }
 
     public String getName() {
-        return name;
+        return name != null ? name.toString() : null;
     }
 
     public void setName(String name) {
-        this.name = name;
+//        this.name = name;
     }
 
     public String getText() {
-        return text;
+        return text != null ? text.toString() : null;
     }
 
     public void setText(String text) {
-        this.text = text;
+//        this.text = text;
     }
 
     public boolean validate() {
-        return name != null && !name.isEmpty()
-                && (text != null && !text.isEmpty() || !getFilesToUpload().isEmpty());
+//        return name != null && !name.isEmpty()
+//                && (text != null && !text.isEmpty() || !getFilesToUpload().isEmpty());
+        return true;
     }
 
-    public boolean isStarted() {
-        return text != null && !text.isEmpty()
-                || name != null && !name.isEmpty()
-                || photoIds.size() > 0;
-    }
+//    public boolean isStarted() {
+//        return text != null && !text.isEmpty()
+//                || name != null && !name.isEmpty()
+//                || photoIds.size() > 0;
+//    }
 
     public int getLike() {
         return like;
+    }
+
+    public int getDislike() {
+
+        return dis_like;
     }
 
     @Override
     public WrapperParams createParams() {
         WrapperParams params = new WrapperParams(Wrappers.NEWS);
         params.addParam(Keys.RELATED_MODEL, Keys.CAP_USER);
-        params.addParam(Keys.TEXT, text);
-        params.addParam(Keys.NAME, name);
+//        params.addParam(Keys.TEXT, text);
+       // params.addParam(Keys.NAME, name);
 
         if(repost_id!=null&repost_model!=null) {
             params.addParam(Keys.REPOST_ID,repost_id);
@@ -271,5 +292,15 @@ public class Post implements Postable, Serializable, ILikeable {
 
     public int getType() {
         return type;
+    }
+
+    public String getDate_news() {
+
+        return MapUtils.FormatDate(date);
+    }
+
+    public String getDateTime() {
+
+        return MapUtils.FormatTime(date);
     }
 }

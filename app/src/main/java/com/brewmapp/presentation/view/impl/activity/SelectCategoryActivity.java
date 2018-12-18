@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
@@ -37,6 +38,7 @@ import com.brewmapp.data.entity.FilterRestoField;
 import com.brewmapp.data.entity.Kitchen;
 import com.brewmapp.data.entity.PriceRange;
 import com.brewmapp.data.entity.PropertyFilterBeer;
+import com.brewmapp.data.entity.Region;
 import com.brewmapp.data.entity.Resto;
 import com.brewmapp.data.entity.RestoType;
 import com.brewmapp.data.entity.wrapper.BeerAftertasteInfo;
@@ -49,14 +51,17 @@ import com.brewmapp.data.entity.wrapper.BeerSmellInfo;
 import com.brewmapp.data.entity.wrapper.BeerTasteInfo;
 import com.brewmapp.data.entity.wrapper.BeerTypeInfo;
 import com.brewmapp.data.entity.wrapper.BreweryInfo;
+import com.brewmapp.data.entity.wrapper.CityInfo;
 import com.brewmapp.data.entity.wrapper.CountryInfo;
 import com.brewmapp.data.entity.wrapper.FeatureInfo;
 import com.brewmapp.data.entity.wrapper.FilterBeerInfo;
 import com.brewmapp.data.entity.wrapper.KitchenInfo;
 import com.brewmapp.data.entity.wrapper.PropertyFilterBeerInfo;
+import com.brewmapp.data.entity.wrapper.RegionInfo;
 import com.brewmapp.data.entity.wrapper.RestoTypeInfo;
 import com.brewmapp.data.pojo.BeerTypes;
 import com.brewmapp.data.pojo.FullSearchPackage;
+import com.brewmapp.data.pojo.GeoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.presentation.presenter.contract.SelectCategoryActivityPresenter;
 import com.brewmapp.presentation.view.contract.SelectCategoryActivityView;
@@ -84,6 +89,11 @@ import ru.frosteye.ovsa.stub.impl.EndlessRecyclerOnScrollListener;
 
 public class SelectCategoryActivity extends BaseActivity implements SelectCategoryActivityView
 {
+    public static final String CHOOSE_COUNTRY = "CHOOSE_COUNTRY_SESSION";
+    public static final String CHOOSE_CITY = "CHOOSE_CITY_SESSION";
+
+    public static final String CHOOSE_REVIEWS_RELATED_MODELS = "CHOOSE_REVIEWS_RELATED_MODELS";
+    public static final String CHOOSE_NEWS_RELATED_MODELS = "CHOOSE_NEWS_RELATED_MODELS";
 
     //region BindView
     @BindView(R.id.filter_toolbar)
@@ -119,6 +129,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private int numberMenuItem;
     private HashMap<String,String> hashMap=new HashMap<>();
     private StringBuilder sb=new StringBuilder();
+    private String mCountryId = null;
     //endregion
 
     //region Inject
@@ -192,6 +203,19 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
             case SearchFragment.CATEGORY_LIST_BREWERY:
                 initBreweryFilterByCategory(numberMenuItem);
                 break;
+            case CHOOSE_COUNTRY:
+                initCountryList(numberMenuItem);
+                break;
+            case CHOOSE_CITY:
+                initCityList(mCountryId);
+                break;
+            case CHOOSE_REVIEWS_RELATED_MODELS:
+                initReviewRelModelsList();
+                break;
+            case CHOOSE_NEWS_RELATED_MODELS:
+                initNewsRelModelsList();
+                break;
+
             default:
                 commonError(getString(R.string.not_valid_param));
 
@@ -213,6 +237,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     @Override
     public void appendItems(List<IFlexible> list) {
 
+        Log.v("xzxz", "---DBG appendItems size="+ list.size());
+
         switch (numberTab){
             case SearchFragment.CATEGORY_LIST_BEER:
                 //region Prepare append items for TAB_BEER
@@ -232,7 +258,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                              CountryInfo countryInfo=(CountryInfo) iFlexible;
                              Country model=countryInfo.getModel();
                              String key=sb.delete(0,sb.length()).append(model.getId()).toString();
-                             model.setSelectable(true);
+                            // model.setSelectable(true);
                              model.setSelected(hashMap.containsKey(key));
                          }
                      }break;
@@ -394,12 +420,69 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 //endregion
                 break;
+            case CHOOSE_COUNTRY:{
+
+                    for (IFlexible iFlexible : list) {
+                        CountryInfo countryInfo=(CountryInfo) iFlexible;
+                        Country model=countryInfo.getModel();
+                        String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                        // model.setSelectable(true);
+                        model.setSelected(hashMap.containsKey(key));
+                    }
+
+                break;
+            }
+            case CHOOSE_CITY:{
+
+//                for (IFlexible iFlexible : list) {
+//                    RegionInfo item=(RegionInfo) iFlexible;
+//                    Region model = item.getModel();
+//                    String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+//
+//                    //model.setSelected(hashMap.containsKey(key));
+//                }
+
+                for (IFlexible iFlexible : list) {
+                    CityInfo item=(CityInfo) iFlexible;
+                    City model = item.getModel();
+                    String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                    // model.setSelectable(true);
+                    model.setSelected(hashMap.containsKey(key));
+                }
+
+                break;
+            }
+            case CHOOSE_REVIEWS_RELATED_MODELS:{
+
+                for (IFlexible iFlexible : list) {
+                    CountryInfo item=(CountryInfo) iFlexible;
+                    Country model = item.getModel();
+                    String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                    // model.setSelectable(true);
+                    model.setSelected(hashMap.containsKey(key));
+                }
+
+                break;
+            }
+            case CHOOSE_NEWS_RELATED_MODELS:{
+
+                for (IFlexible iFlexible : list) {
+                    CountryInfo item=(CountryInfo) iFlexible;
+                    Country model = item.getModel();
+                    String key=sb.delete(0,sb.length()).append(model.getId()).toString();
+                    // model.setSelectable(true);
+                    model.setSelected(hashMap.containsKey(key));
+                }
+
+                break;
+            }
         }
 
         //region Process append
         adapter.notifyDataSetChanged();
         int numberStartNotificationInsert=this.original.size();
         this.original.addAll(list);
+        Log.v("xzxz", "---DBG before notifyItemRangeInserted list.size="+ list.size());
         adapter.notifyItemRangeInserted(numberStartNotificationInsert,list.size());
         //endregion
 
@@ -407,8 +490,8 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         showProgressBar(false);
         emptyView.setVisibility(original.size()==0?View.VISIBLE:View.GONE);
         filterList.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
-        if(getTypeFilter()==0)
-            finder.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
+//        if(getTypeFilter()==0)
+//            finder.setVisibility(original.size()==0?View.GONE:View.VISIBLE);
         //endregion
     }
 
@@ -440,6 +523,20 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
         finish();
 
     }
+
+//    @OnClick(R.id.filter_toolbar_next)
+//    public void okNextClicked() {
+//
+//        Intent returnIntent = new Intent();
+//        returnIntent.putExtra(Actions.PARAM1, numberTab);
+//        returnIntent.putExtra(Actions.PARAM2, numberMenuItem);
+//        returnIntent.putExtra(Actions.PARAM3, MapUtils.strJoin(hashMap.keySet().toArray(),","));
+//        returnIntent.putExtra(Actions.PARAM4, MapUtils.strJoin(hashMap.values().toArray(),","));
+//
+//        setResult(RESULT_OK, returnIntent);
+//        finish();
+//
+//    }
 
     @OnClick(R.id.filter_toolbar_cancel)
     public void cancelFilterClicked() {
@@ -627,6 +724,48 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
                 }
                 //endregion
                 break;
+            case CHOOSE_COUNTRY:{
+                numberTab = CHOOSE_CITY;
+
+                adapter.notifyItemRangeRemoved(0, this.original.size());
+                original.clear();
+
+                Country model = (Country) payload;
+                initCityList(model.getId());
+
+                break;
+            }
+            case CHOOSE_CITY:{
+                City model = (City) payload;
+                showMessage(model.getName());
+
+                key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                selected = model.isSelected();
+                if(selected) hashMap.put(key,name);else hashMap.remove(key);
+                okFilterClicked();
+
+                break;
+            }
+            case CHOOSE_REVIEWS_RELATED_MODELS:{
+                Country model = (Country) payload;
+                key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                selected = model.isSelected();
+                if(selected) hashMap.put(key,name);else hashMap.remove(key);
+                okFilterClicked();
+                break;
+            }
+            case CHOOSE_NEWS_RELATED_MODELS:{
+                Country model = (Country) payload;
+                key = sb.delete(0,sb.length()).append(model.getId()).toString();
+                name = sb.delete(0,sb.length()).append(model.getName()).toString();
+                selected = model.isSelected();
+                if(selected) hashMap.put(key,name);else hashMap.remove(key);
+                okFilterClicked();
+
+                break;
+            }
             default:
                 commonError(getString(R.string.not_valid_param));
 
@@ -660,6 +799,75 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     private void invalidateMenu() {
         okButton.setVisibility(hashMap.size()==0?View.GONE:View.VISIBLE);
     }
+
+    private void initCountryList(int filterId) {
+
+//        switch (filterId) {
+//            case FilterBreweryField.COUNTRY:
+                toolbarTitle.setText(R.string.select_country);
+                presenter.loadCountries();
+                finder.clearFocus();
+                emptyView.setVisibility(View.GONE);
+                emptyTitle.setText(getString(R.string.search_country));
+                showProgressBar(true);
+
+                okButton.setVisibility(View.GONE);
+
+//                break;
+//            default:
+//                break;
+//        }
+    }
+
+    private void initCityList(String countryId) {
+
+//        switch (filterId) {
+//            case FilterBreweryField.COUNTRY:
+        toolbarTitle.setText(R.string.select_city);
+        presenter.loadCity(new GeoPackage(countryId, null));
+//        presenter.loadRegions(new GeoPackage(countryId, null));
+        finder.clearFocus();
+
+        emptyView.setVisibility(View.GONE);
+        showProgressBar(true);
+
+        okButton.setVisibility(View.GONE);
+//                break;
+//            default:
+//                break;
+//        }
+    }
+    private void initReviewRelModelsList() {
+
+//        switch (filterId) {
+//            case FilterBreweryField.COUNTRY:
+        toolbarTitle.setText(R.string.select_review_type);
+        presenter.loadReviewsRelatedModels();
+//        presenter.loadRegions(new GeoPackage(countryId, null));
+        finder.clearFocus();
+        emptyView.setVisibility(View.GONE);
+        showProgressBar(true);
+//                break;
+//            default:
+//                break;
+//        }
+    }
+    private void initNewsRelModelsList() {
+
+//        switch (filterId) {
+//            case FilterBreweryField.COUNTRY:
+        toolbarTitle.setText(R.string.select_news_type);
+        presenter.loadNewsRelatedModels();
+//        presenter.loadRegions(new GeoPackage(countryId, null));
+        finder.clearFocus();
+        emptyView.setVisibility(View.GONE);
+        showProgressBar(true);
+//                break;
+//            default:
+//                break;
+//        }
+    }
+
 
     private void initBreweryFilterByCategory(int filterId) {
 
@@ -908,16 +1116,19 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
 
     private void initFinder() {
 
-        if(getTypeFilter()==0) {
-            finder.setListener(string -> {
-                if (original != null) {
-                    adapter.setSearchText(string);
-                    adapter.filterItems(original);
-                }
-            });
-        }else {
+//        if(getTypeFilter()==0) {
+//            finder.setListener(string -> {
+//                if (original != null) {
+//                    adapter.setSearchText(string);
+//                    adapter.filterItems(original);
+//                }
+//            });
+//        }else {
             finder.setListener(string -> prepareQuery(string));
-        }
+            finder.setCancelClickListener(v -> {
+                attachPresenter();
+            });
+//        }
         finder.clearFocus();
     }
 
@@ -957,6 +1168,7 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void prepareQuery(String stringSearch) {
+        Log.v("xzxz", "---DBG prepareQuery="+ stringSearch);
         fullSearchPackage.setPage(0);
         fullSearchPackage.setStringSearch(stringSearch);
         scrollListener.reset();
@@ -968,12 +1180,18 @@ public class SelectCategoryActivity extends BaseActivity implements SelectCatego
     }
 
     private void sendQuery() {
+        Log.v("xzxz", "---DBG sendQuery");
         if (fullSearchPackage.getStringSearch().length() > 0){
             if(SearchFragment.CATEGORY_LIST_RESTO.equals(numberTab)&&numberMenuItem ==FilterRestoField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
             }else if(SearchFragment.CATEGORY_LIST_BEER.equals(numberTab)&&numberMenuItem ==FilterBeerField.CITY){
                 presenter.sendQueryCitySearch(fullSearchPackage);
-            }else{
+            }else if(CHOOSE_COUNTRY.equals(numberTab)){
+                presenter.sendQueryCountrySearch(fullSearchPackage);
+            }else if(CHOOSE_CITY.equals(numberTab)){
+                presenter.sendQueryCitySearch(fullSearchPackage);
+            }
+            else{
                 presenter.sendQueryFullSearch(fullSearchPackage);
             }
         }else {

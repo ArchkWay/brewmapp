@@ -1,5 +1,10 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -42,7 +47,9 @@ public class User_info implements Serializable {
     private String about;
     private String status;
     private String last_login;
-    private String city_name;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    private LocalizedStrings city_name;
 
     public String getId() {
         return id;
@@ -325,11 +332,11 @@ public class User_info implements Serializable {
     }
 
     public String getCity_name() {
-        return city_name;
+        return city_name != null ? city_name.toString() : null;
     }
 
     public void setCity_name(String city_name) {
-        this.city_name = city_name;
+//        this.city_name = city_name;
     }
 
     public String getFormattedName() {

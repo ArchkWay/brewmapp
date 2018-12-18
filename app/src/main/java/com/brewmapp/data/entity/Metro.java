@@ -2,6 +2,9 @@
 package com.brewmapp.data.entity;
 
 import javax.annotation.Generated;
+
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -18,8 +21,11 @@ public class Metro implements Serializable {
     private String mLat;
     @SerializedName("lon")
     private String mLon;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
     @SerializedName("name")
-    private String mName;
+    private LocalizedStrings mName;
+
     @SerializedName("distance")
     private int distance;
 
@@ -65,11 +71,11 @@ public class Metro implements Serializable {
     }
 
     public String getName() {
-        return mName;
+        return mName != null ? mName.toString() : null;
     }
 
     public void setName(String name) {
-        mName = name;
+//        mName = name;
     }
 
 }

@@ -94,10 +94,16 @@ public class ReviewYesNoButton extends android.support.v7.widget.AppCompatButton
 
     private void setTextButtom() {
         if(review!=null){
+//            if(val== POSITIVE_REVIEW){
+//                setText(getContext().getString(R.string.yes) + " "+String.valueOf(review.getLike()));
+//            }else if(val== NEGATIVE_REVIEW){
+//                setText(getContext().getString(R.string.no) + " "+String.valueOf(review.getDis_like()));
+//            }
+
             if(val== POSITIVE_REVIEW){
-                setText(getContext().getString(R.string.yes) + " "+String.valueOf(review.getLike()));
+                setText(String.valueOf(review.getLike()));
             }else if(val== NEGATIVE_REVIEW){
-                setText(getContext().getString(R.string.no) + " "+String.valueOf(review.getDis_like()));
+                setText(String.valueOf(review.getDis_like()));
             }
         }
     }

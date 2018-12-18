@@ -147,6 +147,18 @@ public class MapUtils {
         }
     }
 
+    public static String FormatTime(Date date) {
+
+        if (date!=null) {
+            return android.text.format.DateFormat.format(
+                    "HH:mm",
+                    date
+            ).toString();
+        }else {
+            return "Дата отсутствует";
+        }
+    }
+
     public static String FormatTime(String timestamp) {
 
         Date date=parseDate(timestamp);

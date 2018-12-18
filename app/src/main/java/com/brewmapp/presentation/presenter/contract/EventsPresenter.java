@@ -2,6 +2,7 @@ package com.brewmapp.presentation.presenter.contract;
 
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LoadNewsPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.presentation.view.contract.EventsView;
 import com.brewmapp.presentation.view.contract.RefreshableView;
 

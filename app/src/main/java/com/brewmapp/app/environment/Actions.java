@@ -20,6 +20,7 @@ public class Actions {
     public static final int ACTION_START_DETAILS_ACTIVITY = 13;
     public static final int ACTION_RESTO = 15;
 
+
     public static final int ACTION_SELECT_MODEL =16;
     public static final int ACTION_VIEW_MODEL =17;
     public static final int MODE_REFRESH_ALL =18;
@@ -34,6 +35,7 @@ public class Actions {
 
     public static final int ACTION_STOP_PROGRESS_BAR_IN_PARENT_ACTIVITY =28;
     public static final int ACTION_REFRESH =29;
+    public static final int ACTION_SELECT_REVIEW = 30;
 
     public static final String PARAM1 = "PARAM1";
     public static final String PARAM2 = "PARAM2";

@@ -11,11 +11,12 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
  */
 
 public interface SelectCategoryActivityPresenter extends LivePresenter<SelectCategoryActivityView> {
+    void loadNewsRelatedModels();
+    void loadReviewsRelatedModels();
     void loadRestoTypes();
     void loadKitchenTypes();
     void loadPriceRangeTypes(String type);
     void loadFeatureTypes();
-    void sendQueryFullSearch(FullSearchPackage fullSearchPackage);
     void loadBeerTypes(FullSearchPackage fullSearchPackage);
     void loadBeerPack();
     void loadBeerBrand(FullSearchPackage fullSearchPackage);
@@ -34,7 +35,9 @@ public interface SelectCategoryActivityPresenter extends LivePresenter<SelectCat
     void loadRestoCategoryItem(int filterCategory, FullSearchPackage searchPackage);
     void loadBeerCategoryItem(int filterCategory, FullSearchPackage searchPackage);
 
+    void sendQueryFullSearch(FullSearchPackage fullSearchPackage);
     void sendQueryCitySearch(FullSearchPackage fullSearchPackage);
+    void sendQueryCountrySearch(FullSearchPackage fullSearchPackage);
 
     void loadFilter();
 }

@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
-    <com.brewmapp.presentation.view.impl.widget.FinderView
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:finderHint="@string/map_search"
-        android:id="@+id/activity.search.search"
-        />
+
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/fragment.map.map"
@@ -29,51 +24,61 @@
 
         <com.brewmapp.presentation.view.impl.widget.InfoWindowContainer
             android:id="@+id/container_popup"
-            android:layout_x="0dp"
-            android:layout_y="0dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_x="0dp"
+            android:layout_y="0dp"
             android:orientation="vertical"
-
+            app:cardElevation="5dp"
             >
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:id="@+id/InfoWindowMap_progressBar"
-    >
-    <include layout="@layout/view_progress_small"/>
-</LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/InfoWindowMap_progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                >
+
+                <include layout="@layout/view_progress_small"/>
+            </LinearLayout>
             <!--<ProgressBar-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/InfoWindowMap_progressBar"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:indeterminateTint="#838383"-->
-                <!--/>-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/InfoWindowMap_progressBar"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:indeterminateTint="#838383"-->
+            <!--/>-->
 
         </com.brewmapp.presentation.view.impl.widget.InfoWindowContainer>
 
     </AbsoluteLayout>
 
+    <com.brewmapp.presentation.view.impl.widget.FinderView
+        android:id="@+id/activity.search.search"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:finderHint="@string/map_search"
+        />
+
     <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
         android:id="@+id/restoList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/activity.search.search"
         android:background="@color/colorWhite"
+        android:visibility="gone"
         />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fragment.map.fab_location_off"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity.search.search"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/activity.search.search"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_location_disabled_black_24dp"
+        android:alpha="0.5"
         app:backgroundTint="@color/bg_gray"
-        android:alpha="0.5"/>
+        app:srcCompat="@drawable/ic_location_disabled_black_24dp"/>
 
 
 </RelativeLayout>

@@ -6,16 +6,19 @@ import android.content.Intent;
 import javax.inject.Inject;
 
 import com.brewmapp.R;
+import com.brewmapp.app.environment.BeerMap;
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
-import com.brewmapp.data.entity.MenuField;
+import com.brewmapp.data.entity.LocalizedStrings;
 import com.brewmapp.data.entity.User;
 import com.brewmapp.data.pojo.ProfileInfoPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.UserResponse;
+import com.brewmapp.execution.exchange.response.base.SingleResponse;
 import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.execution.task.FbLoginTask;
 import com.brewmapp.execution.task.LoadProfileAndPostsTask;
+import com.brewmapp.execution.task.ReviewsRelModelsTask;
 import com.brewmapp.execution.tool.NetworkChangeReceiver;
 import com.brewmapp.presentation.view.contract.StartView;
 
@@ -85,6 +88,8 @@ public class StartPresenterImpl extends BasePresenter<StartView> implements Star
         }else {
             view.enableControls(true,0);
         }
+        ReviewsRelModelsTask relatedModels = new ReviewsRelModelsTask(BeerMap.getAppComponent().mainThread(), BeerMap.getAppComponent().executor(), BeerMap.getAppComponent().api());
+        relatedModels.execute(null, new SimpleSubscriber<SingleResponse<LocalizedStrings>>());
     }
 
     @Override

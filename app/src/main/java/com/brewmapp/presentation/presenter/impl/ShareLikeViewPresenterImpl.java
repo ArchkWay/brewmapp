@@ -53,18 +53,33 @@ public class ShareLikeViewPresenterImpl extends BasePresenter<ShareLikeView> imp
         else if (iLikeable instanceof Post)
             likeDislikePackage.setModel(Keys.CAP_NEWS, ((Post)iLikeable).getId());
 
-        likeTask.execute(likeDislikePackage, new LikeSubscriber(iLikeable, refreshableView));
+        likeTask.execute(likeDislikePackage, new LikeSubscriber(LikeDislikePackage.TYPE_LIKE, iLikeable, refreshableView));
 
+    }
+
+    @Override
+    public void onDislike(ILikeable iLikeable, RefreshableView refreshableView) {
+        LikeDislikePackage likeDislikePackage = new LikeDislikePackage(LikeDislikePackage.TYPE_DISLIKE);
+        if(iLikeable instanceof Event)
+            likeDislikePackage.setModel(Keys.CAP_EVENT, ((Event)iLikeable).getId());
+        else if (iLikeable instanceof Sale)
+            likeDislikePackage.setModel(Keys.CAP_SHARE, ((Sale)iLikeable).getId());
+        else if (iLikeable instanceof Post)
+            likeDislikePackage.setModel(Keys.CAP_NEWS, ((Post)iLikeable).getId());
+
+        likeTask.execute(likeDislikePackage, new LikeSubscriber(LikeDislikePackage.TYPE_DISLIKE, iLikeable, refreshableView));
     }
 
     class LikeSubscriber extends SimpleSubscriber<MessageResponse> {
 
+        private int  type = -1;
         private ILikeable iLikeable;
         private RefreshableView refreshableView;
 
-        LikeSubscriber(ILikeable iLikeable,RefreshableView refreshableView) {
+        LikeSubscriber(int type, ILikeable iLikeable,RefreshableView refreshableView) {
             this.iLikeable = iLikeable;
             this.refreshableView = refreshableView;
+            this.type = type;
         }
 
         @Override
@@ -74,7 +89,18 @@ public class ShareLikeViewPresenterImpl extends BasePresenter<ShareLikeView> imp
 
         @Override
         public void onNext(MessageResponse messageResponse) {
-            iLikeable.increaseLikes();
+
+            switch (type){
+                case LikeDislikePackage.TYPE_DISLIKE:{
+                    iLikeable.increaseDisLikes();
+                    break;
+                }
+                case LikeDislikePackage.TYPE_LIKE:{
+                    iLikeable.increaseLikes();
+                    break;
+                }
+            }
+
             refreshableView.refreshState();
         }
     }

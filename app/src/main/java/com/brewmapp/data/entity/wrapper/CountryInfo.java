@@ -25,6 +25,7 @@ public class CountryInfo extends AdapterItem<Country, CountryView> implements IF
 
     @Override
     public boolean filter(String constraint) {
+
         return getModel().getName().toLowerCase().contains(constraint);
     }
 

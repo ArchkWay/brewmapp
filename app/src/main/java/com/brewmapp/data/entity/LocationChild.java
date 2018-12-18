@@ -1,5 +1,8 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.google.gson.annotations.JsonAdapter;
+
 import java.io.Serializable;
 
 /**
@@ -12,14 +15,19 @@ public class LocationChild implements Serializable{
     private String by_user_id;
     private String city_id;
     private String country_id;
-    private String house;
+
     private String id;
     private double lat;
     private double lon;
     private String metro_id;
     private String name;
     private String region_id;
-    private String street;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    private LocalizedStrings house;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    private LocalizedStrings street;
     //private String timestamp;
 
 
@@ -56,11 +64,11 @@ public class LocationChild implements Serializable{
     }
 
     public String getHouse() {
-        return house;
+        return house.toString();
     }
 
     public void setHouse(String house) {
-        this.house = house;
+//        this.house = house;
     }
 
     public String getId() {
@@ -112,11 +120,11 @@ public class LocationChild implements Serializable{
     }
 
     public String getStreet() {
-        return street;
+        return street.toString();
     }
 
     public void setStreet(String street) {
-        this.street = street;
+//        this.street = street;
     }
 
 //    public String getTimestamp() {

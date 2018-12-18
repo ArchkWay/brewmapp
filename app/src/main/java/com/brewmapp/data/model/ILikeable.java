@@ -10,4 +10,5 @@ public interface ILikeable {
     void increaseDisLikes();
 
     int getLike();
+    int getDislike();
 }

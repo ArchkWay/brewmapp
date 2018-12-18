@@ -1,8 +1,10 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.LocalizedStringsDeserializer;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.execution.exchange.request.base.Keys;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -16,10 +18,18 @@ import java.util.List;
 
 public class Event implements Serializable, ILikeable {
     private int id;
-    private String name, text;
 
+    @JsonAdapter(LocalizedStringsDeserializer.class)
+    @SerializedName(Keys.NAME)
+    private LocalizedStrings mName;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    @SerializedName(Keys.TEXT)
+    private LocalizedStrings mText;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
     @SerializedName(Keys.SHORT_TEXT)
-    private String shortText;
+    private LocalizedStrings mShortText;
 
     private int type;
 
@@ -87,15 +97,15 @@ public class Event implements Serializable, ILikeable {
     }
 
     public String getName() {
-        return name;
+        return mName != null ? mName.toString() : null;
     }
 
     public String getText() {
-        return text;
+        return mText != null ? mText.toString() : null;
     }
 
     public String getShortText() {
-        return shortText;
+        return mShortText != null ? mShortText.toString() : null;
     }
 
     public int getType() {

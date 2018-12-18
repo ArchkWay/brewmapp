@@ -1,24 +1,31 @@
 package com.brewmapp.presentation.presenter.impl;
 
+import android.util.Log;
+
 import javax.inject.Inject;
 
 import com.brewmapp.data.db.contract.UiSettingRepo;
 import com.brewmapp.data.db.contract.UserRepo;
 import com.brewmapp.data.entity.Event;
 import com.brewmapp.data.entity.Post;
+import com.brewmapp.data.entity.Review;
 import com.brewmapp.data.entity.Sale;
 import com.brewmapp.data.entity.Sales;
 import com.brewmapp.data.entity.container.Events;
 import com.brewmapp.data.entity.container.Posts;
+import com.brewmapp.data.entity.container.Reviews;
 import com.brewmapp.data.model.ILikeable;
 import com.brewmapp.data.pojo.LikeDislikePackage;
 import com.brewmapp.data.pojo.LoadNewsPackage;
+import com.brewmapp.data.pojo.ReviewPackage;
 import com.brewmapp.execution.exchange.request.base.Keys;
 import com.brewmapp.execution.exchange.response.base.MessageResponse;
 import com.brewmapp.execution.task.DeleteNewsTask;
 import com.brewmapp.execution.task.LikeTask;
 import com.brewmapp.execution.task.LoadEventsTask;
 import com.brewmapp.execution.task.LoadNewsTask;
+import com.brewmapp.execution.task.LoadReviewsListTask;
+import com.brewmapp.execution.task.LoadReviewsTask;
 import com.brewmapp.execution.task.LoadSalesTask;
 import com.brewmapp.presentation.view.contract.EventsView;
 
@@ -38,18 +45,25 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     private LoadNewsTask loadNewsTask;
     private LoadEventsTask loadEventsTask;
     private LoadSalesTask loadSalesTask;
+    private LoadReviewsListTask loadReviewsTask;
     private LikeTask likeTask;
     private DeleteNewsTask deleteNewsTask;
     private UiSettingRepo uiSettingRepo;
 
     @Inject
-    public EventsPresenterImpl(UserRepo userRepo, LoadNewsTask loadNewsTask,
-                               LoadEventsTask loadEventsTask, LoadSalesTask loadSalesTask,
-                               LikeTask likeTask, DeleteNewsTask deleteNewsTask, UiSettingRepo uiSettingRepo) {
+    public EventsPresenterImpl(UserRepo userRepo,
+                               LoadNewsTask loadNewsTask,
+                               LoadEventsTask loadEventsTask,
+                               LoadSalesTask loadSalesTask,
+                               LoadReviewsListTask loadReviewsTask,
+                               LikeTask likeTask,
+                               DeleteNewsTask deleteNewsTask,
+                               UiSettingRepo uiSettingRepo) {
         this.userRepo = userRepo;
         this.loadNewsTask = loadNewsTask;
         this.loadEventsTask = loadEventsTask;
         this.loadSalesTask = loadSalesTask;
+        this.loadReviewsTask = loadReviewsTask;
         this.likeTask = likeTask;
         this.deleteNewsTask = deleteNewsTask;
         this.uiSettingRepo=uiSettingRepo;
@@ -69,6 +83,7 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         loadNewsTask.cancel();
         loadEventsTask.cancel();
         loadSalesTask.cancel();
+        loadReviewsTask.cancel();
         likeTask.cancel();
         deleteNewsTask.cancel();
     }
@@ -81,8 +96,8 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
             case EventsFragment.TAB_EVENT:
                 loadEventsTask.execute(request, new NewsSubscriberEvent());
                 break;
-            case EventsFragment.TAB_SALE:
-                loadSalesTask.execute(request, new NewsSubscriberSale());
+            case EventsFragment.TAB_REVIEWS:
+                loadReviewsTask.execute(request, new NewsSubscriberReview());
                 break;
             case EventsFragment.TAB_NEWS:
                 loadNewsTask.execute(request, new NewsSubscriberPosts());
@@ -153,6 +168,7 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
     class NewsSubscriberEvent extends SimpleSubscriber<Events> {
         @Override
         public void onNext(Events events) {
+            Log.v("xzxz", "---DBG NewsSubscriberEvent onNext size="+ events.getModels().size());
             enableControls(true);
             view.appendItems(new ArrayList<>(events.getModels()));
         }
@@ -163,6 +179,21 @@ public class EventsPresenterImpl extends BasePresenter<EventsView> implements Ev
         }
 
     }
+
+    class NewsSubscriberReview extends SimpleSubscriber<Reviews> {
+        @Override
+        public void onNext(Reviews list) {
+            enableControls(true);
+            view.appendItems(new ArrayList<>(list.getModels()));
+        }
+        @Override
+        public void onError(Throwable e) {
+            enableControls(true);
+            ((MainActivity)view.getActivity()).commonError(e.getMessage());
+        }
+
+    }
+
     class NewsSubscriberSale extends SimpleSubscriber<Sales> {
         @Override
         public void onNext(Sales sales) {

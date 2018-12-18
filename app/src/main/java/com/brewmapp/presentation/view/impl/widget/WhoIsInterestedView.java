@@ -56,9 +56,22 @@ public class WhoIsInterestedView extends BaseLinearLayout implements Interactive
         try {author.setText(model.getUser_info().getFormattedName());}catch (Exception e){}
 
         String imgUrl=null;
-        try {imgUrl=model.getUser_getThumb();Picasso.with(getContext()).load(imgUrl).fit().centerCrop().into(avatar);}catch (Exception e){}
-        try {date.setText(model.getCreated_at());}catch (Exception e){}
-        if(TextUtils.isEmpty(imgUrl))  try {Picasso.with(getContext()).load(model.getUser_info().getGender().equals("1")?R.drawable.ic_user_man:R.drawable.ic_user_woman).fit().centerCrop().into(avatar);}catch (Exception e){}
+        try {
+                imgUrl = model.getUser_getThumb();
+                Picasso.with(getContext()).load(imgUrl).fit().centerCrop().into(avatar);
+        }
+        catch (Exception e){}
+
+        try {
+                date.setText(model.getCreated_at());
+        }
+        catch (Exception e){}
+
+        if(TextUtils.isEmpty(imgUrl))
+            try {
+                    Picasso.with(getContext()).load(model.getUser_info().getGender().equals("1") ?R.drawable.ic_user_man:R.drawable.ic_user_woman).fit().centerCrop().into(avatar);
+            }
+            catch (Exception e){}
 
     }
 

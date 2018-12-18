@@ -1,6 +1,8 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.google.gson.annotations.JsonAdapter;
 
 import java.io.Serializable;
 
@@ -10,7 +12,8 @@ import java.io.Serializable;
 
 public class Interest_info implements Serializable{
 
-    String name;
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    private LocalizedStrings name;
     String alias_whell;
     String avg_ball;
     String avg_cost;
@@ -40,7 +43,7 @@ public class Interest_info implements Serializable{
     String title_ru;
     String type_eng_id;
     String type_id;
-    String user_getThumb;
+    UserGetThumb user_getThumb;
     Location location;
 
     public Location getLocation() {
@@ -52,11 +55,11 @@ public class Interest_info implements Serializable{
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
     public void setName(String name) {
-        this.name = name;
+//        this.name = name;
     }
 
 
@@ -324,11 +327,11 @@ public class Interest_info implements Serializable{
         this.type_id = type_id;
     }
 
-    public String getUser_getThumb() {
+    public UserGetThumb getUser_getThumb() {
         return user_getThumb;
     }
 
-    public void setUser_getThumb(String user_getThumb) {
+    public void setUser_getThumb(UserGetThumb user_getThumb) {
         this.user_getThumb = user_getThumb;
     }
 }

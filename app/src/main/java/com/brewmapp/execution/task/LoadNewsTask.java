@@ -11,6 +11,7 @@ import com.brewmapp.execution.exchange.request.base.WrapperParams;
 import com.brewmapp.execution.exchange.request.base.Wrappers;
 import com.brewmapp.execution.task.base.BaseNetworkTask;
 import com.brewmapp.presentation.view.contract.EventsView;
+import com.brewmapp.presentation.view.impl.fragment.EventsFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Executor;
@@ -47,18 +48,20 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, Posts> {
                 WrapperParams params = createRequestParams(request);
                 int start = request.getPage() * step;
                 int end = request.getPage() * step + step;
-                if(request.getRelated_model()!=null && request.getResto_id()!=null){
-                    params.addParam(Keys.RELATED_MODEL,request.getRelated_model());
-                    params.addParam(Keys.RELATED_ID,request.getResto_id());
-                }
-                if(request.getUser_id()!=null){
-                    params.addParam(Keys.USER_SUBSCRIPTION,request.getUser_id());
-                }
-                if(request.isOnlyMount()) {
-                    start=0; end = 1;
-                }
-                if(request.getCity_id()!=null)
-                    params.addParam(Keys.CITY_ID,request.getCity_id());
+
+//                if(request.getRelated_model()!=null && request.getResto_id()!=null){
+//                    params.addParam(Keys.RELATED_MODEL,request.getRelated_model());
+//                    params.addParam(Keys.RELATED_ID,request.getResto_id());
+//                }
+//                if(request.getUser_id()!=null){
+//                    params.addParam(Keys.USER_SUBSCRIPTION,request.getUser_id());
+//                }
+//                if(request.isOnlyMount()) {
+//                    start=0; end = 1;
+//                }
+//                if(request.getCity_id()!=null)
+//                    params.addParam(Keys.CITY_ID,request.getCity_id());
+
                 Posts posts = executeCall(getApi().loadPosts(start, end, params));
                 subscriber.onNext(posts);
                 subscriber.onComplete();
@@ -71,10 +74,9 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, Posts> {
     private WrapperParams createRequestParams(LoadNewsPackage request) {
         WrapperParams params = new WrapperParams(Wrappers.NEWS);
         switch (request.getMode()) {
-            case EventsView.MODE_NEWS:
+            case EventsFragment.TAB_NEWS:
                 switch (request.getFilter()) {
                     case 0:
-
                         break;
                     case 1:
                         params.addParam(Keys.USER_SUBSCRIPTION, userRepo.load().getId());
@@ -83,8 +85,14 @@ public class LoadNewsTask extends BaseNetworkTask<LoadNewsPackage, Posts> {
                         params.addParam(Keys.DATE_NEWS, format.format(request.getDateFrom()) + "|" + format.format(request.getDateTo()));
                         break;
                     case 3:
-                        params.addParam(Keys.RELATED_MODEL, Keys.CAP_USER);
                         params.addParam(Keys.RELATED_ID, userRepo.load().getId());
+                        params.addParam(Keys.RELATED_MODEL, "User");
+                        break;
+                    case 4:
+                        params.addParam(Keys.RELATED_MODEL, request.getRelated_model());
+                        break;
+                    case 5:
+                        params.addParam(Keys.CITY_ID, request.getCity_id());
                         break;
                 }
                 break;

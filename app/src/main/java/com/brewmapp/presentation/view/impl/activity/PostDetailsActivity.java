@@ -3,6 +3,7 @@ package com.brewmapp.presentation.view.impl.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -72,6 +73,15 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
         enableBackButton();
 
 
+//        String imgUrl = post.getUser_getThumb().getUrl_preview();
+//        if (TextUtils.isEmpty(imgUrl)) {
+//            try {
+//                Picasso.with(this).load(post.getUser_info().getGender().equals("1") ? R.drawable.ic_user_man : R.drawable.ic_user_woman).fit().centerCrop().into(avatar);
+//            }
+//            catch (Exception e) {
+//            }
+//        }
+
         text.setMovementMethod(LinkMovementMethod.getInstance());
         text.setLinksClickable(true);
         setTitle(R.string.title_activity_news_detail);
@@ -132,8 +142,9 @@ public class PostDetailsActivity extends BaseActivity implements PostDetailsView
                 texts();
                 Photo new_photo=null;try {new_photo=post.getPhoto().get(0);}catch (Exception e){}
                 photo(photo,new_photo,R.drawable.ic_default_resto);
+
                 String urlAvatar=null;
-                try {urlAvatar=post.getRelated_model_data().getGetThumb();}catch (Exception e){};
+                try {urlAvatar=post.getRelated_model_data().getGetThumb();}catch (Exception e){}
                 avatar(avatar,urlAvatar,R.drawable.ic_default_resto);
             }
 

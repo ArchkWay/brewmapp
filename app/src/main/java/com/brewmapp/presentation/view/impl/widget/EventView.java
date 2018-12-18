@@ -87,6 +87,9 @@ public class EventView extends BaseLinearLayout implements InteractiveModelView<
     public void setModel(Event model) {
         this.model = model;
         shareLikeView.setiLikeable(model);
+        shareLikeView.setLeftText(model.getResto().getName());
+        shareLikeView.setMiddleText(model.getDateFromFormated());
+
         name.setText(model.getName());
         new Text2TextWithHashTag(text, model.getText());
         text.setOnClickListener(v -> listener.onModelAction(Actions.ACTION_SELECT_EVENT, model));

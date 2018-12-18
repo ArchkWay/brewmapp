@@ -34,11 +34,13 @@ public class FinderView extends BaseFrameLayout {
     private String hintString;
 
 
+
     public interface Listener {
         void onTextChanged(String string);
     }
 
     private Listener listener;
+    private OnClickListener cancelListener;
 
     public FinderView(Context context) {
         super(context);
@@ -103,7 +105,12 @@ public class FinderView extends BaseFrameLayout {
             }
         });
         input.requestFocus();
-        cancel.setOnClickListener(v -> input.setText(null));
+        cancel.setOnClickListener(v -> {
+            if(input.getText().toString().length() > 0) {
+                input.setText(null);
+                cancelListener.onClick(v);
+            }
+        });
     }
 
     public void hideInputKeyboard() {
@@ -114,6 +121,10 @@ public class FinderView extends BaseFrameLayout {
 
     public void setListener(Listener listener) {
         this.listener = listener;
+    }
+
+    public void setCancelClickListener(OnClickListener listener) {
+        cancelListener = listener;
     }
 
     public void setHintString(String hintString) {

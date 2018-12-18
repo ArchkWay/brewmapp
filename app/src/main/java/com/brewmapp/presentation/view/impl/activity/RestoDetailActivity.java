@@ -328,8 +328,10 @@ public class RestoDetailActivity extends BaseActivity implements RestoDetailView
                 site.setText(restoDetail.getResto().getSite());
                 cost.setText(String.valueOf(restoDetail.getResto().getAvgCost()));
                 //region Description
-                String strDescription=Html.fromHtml(restoDetail.getResto().getText()).toString();
-                if(strDescription.length()>0)  description.setText(strDescription.trim());
+                if(restoDetail.getResto().getText() != null) {
+                    String strDescription = Html.fromHtml(restoDetail.getResto().getText()).toString();
+                    if (strDescription.length() > 0) description.setText(strDescription.trim());
+                }
 
                 button_more_description.setVisibility(description.getLineCount()>description.getMaxLines()?View.VISIBLE:View.GONE);
                 //endregion

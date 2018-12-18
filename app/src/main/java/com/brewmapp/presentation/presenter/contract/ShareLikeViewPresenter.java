@@ -13,4 +13,5 @@ import ru.frosteye.ovsa.presentation.presenter.LivePresenter;
 public interface ShareLikeViewPresenter extends LivePresenter<ShareLikeView>{
 
     void onLike(ILikeable iLikeable,RefreshableView refreshableView);
+    void onDislike(ILikeable iLikeable,RefreshableView refreshableView);
 }

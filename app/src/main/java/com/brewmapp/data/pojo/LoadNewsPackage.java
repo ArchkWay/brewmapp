@@ -9,12 +9,14 @@ import java.util.Date;
 public class LoadNewsPackage extends BasePackage{
 
     private String resto_id;
+    private String related_id;
     private String related_model;
     private int mode, filter, page;
     private Date dateFrom, dateTo;
     private String user_id;
     private boolean onlyMountNews=false;
     private String city_id;
+    private String country_id;
 
     public boolean isOnlyMount() {
         return onlyMountNews;

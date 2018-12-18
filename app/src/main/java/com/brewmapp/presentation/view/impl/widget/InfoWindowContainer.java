@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import com.brewmapp.R;
 import com.brewmapp.presentation.view.contract.InfoWindowMapContent_view;
 import com.google.android.gms.maps.model.Marker;
 
-public class InfoWindowContainer extends RelativeLayout {
+public class InfoWindowContainer extends CardView {
 
     private final String infoWindowMapTAG="infoWindowMapTAG";
 
@@ -45,11 +46,13 @@ public class InfoWindowContainer extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public InfoWindowContainer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+//    public InfoWindowContainer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        super(context, attrs, defStyleAttr, defStyleRes);
+//    }
+
 
     public void processVisibleAnimation(){
+
         if(infoWindowMapContent_view !=null&&getVisibility()!=VISIBLE) {
 
             //region ResetView

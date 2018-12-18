@@ -115,6 +115,11 @@
         <item name="android:minHeight">35dp</item>
     </style>
 
+    <style name="AppTheme.Paragraph1">
+        <item name="android:textSize">@dimen/text_size_common_small</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+    </style>
+
     <style name="AppTheme.Paragraph.Italic">
         <item name="fontPath">fonts/GillSans-SemiBold.ttf</item>
     </style>

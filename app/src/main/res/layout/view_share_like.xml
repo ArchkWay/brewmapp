@@ -10,6 +10,27 @@
     android:id="@+id/root_view_share_like"
     >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/left_name"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="resto_name"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/middle_text"
+        android:gravity="center"
+        android:lines="1"
+        android:layout_centerInParent="true"
+        android:text="time_text"
+        android:visibility="gone"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height_post_button"
@@ -34,15 +55,14 @@
         android:layout_toLeftOf="@+id/view.share.like"
         android:paddingBottom="@dimen/common_block_space_half"
         android:layout_marginRight="@dimen/common_block_space"
-        android:background="@drawable/selector_post_button"
         android:src="@drawable/ic_post_more"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_post_button"
         android:id="@+id/view.share.like"
         android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/view.share.dislike"
         android:paddingRight="@dimen/common_block_space"
         android:gravity="center_vertical">
 
@@ -62,6 +82,33 @@
             android:textColor="@color/colorButtonGreen"
             android:textSize="@dimen/text_size_common_bigger"
             android:id="@+id/view.share.like.counter"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view.share.dislike"
+        android:layout_alignParentRight="true"
+        android:paddingRight="@dimen/common_block_space"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_post_button"
+            android:adjustViewBounds="true"
+            android:paddingLeft="@dimen/common_block_space"
+            android:paddingRight="@dimen/common_block_space_half"
+            android:paddingTop="@dimen/common_block_space_half"
+            android:paddingBottom="@dimen/common_block_space_half"
+            android:src="@drawable/ic_dislike"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorButtonRed"
+            android:textSize="@dimen/text_size_common_bigger"
+            android:id="@+id/view.share.dislike.counter"/>
     </LinearLayout>
 
 

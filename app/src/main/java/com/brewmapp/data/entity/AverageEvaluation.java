@@ -1,12 +1,18 @@
 package com.brewmapp.data.entity;
 
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.google.gson.annotations.JsonAdapter;
+
 /**
  * Created by xpusher on 11/7/2017.
  */
 
 public class AverageEvaluation {
     private String evaluation_type_id;
-    private String name;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    private LocalizedStrings name;
+
     private String name_en;
     private String count;
     private String average_value;
@@ -21,11 +27,11 @@ public class AverageEvaluation {
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
     public void setName(String name) {
-        this.name = name;
+//        this.name = name;
     }
 
     public String getName_en() {

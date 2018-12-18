@@ -20,6 +20,7 @@ public class RestoDetail implements Serializable{
     private List<RestoWorkTime> resto_work_tyoe=new ArrayList<>();
 
 
+
     public Distance getDistance() {
         return distance;
     }

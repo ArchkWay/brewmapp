@@ -17,8 +17,12 @@ import com.brewmapp.execution.services.ChatService;
 import com.brewmapp.presentation.view.impl.activity.SplashActivity;
 import com.crashlytics.android.Crashlytics;
 
+import java.util.concurrent.TimeUnit;
+
 import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
 
 
 public class BeerMap extends Application {
@@ -54,7 +58,6 @@ public class BeerMap extends Application {
 //                RestartApp();
 //            }
 //        });
-
     }
 
     private BroadcastReceiver oldApiReceiver = new BroadcastReceiver() {

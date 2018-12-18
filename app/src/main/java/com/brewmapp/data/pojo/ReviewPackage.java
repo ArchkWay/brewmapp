@@ -9,7 +9,11 @@ public class ReviewPackage extends BasePackage{
     private String related_id;
     private String text;
     private String user_id;
+    private String city_id;
+    private String country_id;
+    private int mode, filter, page;
     private int type;
+
 
     public String getText() {
         return text;
@@ -49,5 +53,53 @@ public class ReviewPackage extends BasePackage{
 
     public int getType() {
         return type;
+    }
+
+    public String getCity_id() {
+
+        return city_id;
+    }
+    public void setCity_id(String city_id) {
+
+        this.city_id = city_id;
+    }
+    public String getCountry_id() {
+
+        return country_id;
+    }
+    public void setCountry_id(String country_id) {
+
+        this.country_id = country_id;
+    }
+    public int getFilter() {
+
+        return filter;
+    }
+    public void setFilter(int filter) {
+
+        this.filter = filter;
+    }
+
+    public int getMode() {
+
+        return mode;
+    }
+    public void setMode(int mode) {
+
+        this.mode = mode;
+    }
+    public int getPage() {
+
+        return page;
+    }
+    public void setPage(int page) {
+
+        this.page = page;
+    }
+    public void dropAll() {
+        //dropDates();
+        mode = 0;
+        filter = 0;
+        page = 0;
     }
 }

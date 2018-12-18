@@ -33,6 +33,7 @@ public class Interest implements Serializable {
     public Interest(Beer beer) {
         setInterest_info(new Interest_info(beer));
         setRelated_model(Keys.CAP_BEER);
+        setRelated_id(interest_info.getId());
     }
 
     public Interest(Resto resto) {

@@ -32,6 +32,9 @@ public class CityView extends BaseLinearLayout implements InteractiveModelView<C
     ImageView logo;
     @BindView(R.id.chkbox)
     CheckBox cityCheckbox;
+    @BindView(R.id.selectbox)
+    ImageView chevron;
+
     private Listener listener;
     private City model;
 
@@ -78,6 +81,9 @@ public class CityView extends BaseLinearLayout implements InteractiveModelView<C
             listener.onModelAction(0,model);
         });
         cityCheckbox.setChecked(model.isSelected());
+
+        chevron.setVisibility(model.isSelectable() ? GONE : VISIBLE);
+        cityCheckbox.setVisibility(model.isSelectable() ? VISIBLE : GONE);
     }
 
     @Override

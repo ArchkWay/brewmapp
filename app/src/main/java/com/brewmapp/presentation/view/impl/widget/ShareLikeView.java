@@ -38,6 +38,12 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
     @BindView(R.id.view_share_like_counter)    TextView likeCounter;
     @BindView(R.id.view_share_more)    ImageView more;
 
+    @BindView(R.id.view_share_dislike)    View dislike;
+    @BindView(R.id.view_share_dislike_counter)    TextView dislikeCounter;
+
+    @BindView(R.id.left_name)    TextView leftText;
+    @BindView(R.id.middle_text)     TextView middleText;
+
 
     @Inject    ShareLikeViewPresenter shareLikeViewPresenter;
 
@@ -69,8 +75,13 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
         ButterKnife.bind(this);
         shareLikeViewPresenter.onAttach(this);
 
+        dislike.setOnClickListener(view -> {shareLikeViewPresenter.onDislike(iLikeable,()->{
+            //iLikeable.increaseDisLikes();
+            setiLikeable(iLikeable);
+        });});
+
         like.setOnClickListener(view -> {shareLikeViewPresenter.onLike(iLikeable,()->{
-            iLikeable.increaseDisLikes();
+            //iLikeable.increaseLikes();
             setiLikeable(iLikeable);
         });});
         more.setOnClickListener(view -> {new DialogShare((BaseActivity) getContext(),iLikeable, () -> refreshItems());});
@@ -100,6 +111,16 @@ public class ShareLikeView extends RelativeLayout implements BasicView {
     public void setiLikeable(ILikeable iLikeable) {
         this.iLikeable = iLikeable;
         likeCounter.setText(String.valueOf(iLikeable.getLike()));
+        dislikeCounter.setText(String.valueOf(iLikeable.getDislike()));
+    }
+
+    public void setLeftText(String val) {
+        leftText.setText(val);
+        leftText.setVisibility(VISIBLE);
+    }
+    public void setMiddleText(String val) {
+        middleText.setText(val);
+        middleText.setVisibility(VISIBLE);
     }
 
 

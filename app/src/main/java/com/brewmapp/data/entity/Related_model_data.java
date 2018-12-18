@@ -1,6 +1,8 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.data.LocalizedStringsDeserializer;
+import com.google.gson.annotations.JsonAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,17 @@ import java.util.List;
 public class Related_model_data {
 
     private String id;
-    private String name;
-    private String text;
-    private String short_text;
+
+    @JsonAdapter (LocalizedStringsDeserializer.class)
+    private LocalizedStrings name;
+    @JsonAdapter(LocalizedStringsDeserializer.class)
+    private LocalizedStrings text;
+    @JsonAdapter(LocalizedStringsDeserializer.class)
+    private LocalizedStrings short_text;
+
+    @JsonAdapter(LocalizedStringsDeserializer.class)
+    private LocalizedStrings title;
+
     private String disposition_id;
     private String image;
     private String music;
@@ -29,7 +39,7 @@ public class Related_model_data {
     private String updated_at;
     private String location_id;
     private String getThumb;
-    private String user_getThumb;
+    private UserGetThumb user_getThumb;
     private String like;
     private String dis_like;
     private String interested;
@@ -50,27 +60,27 @@ public class Related_model_data {
     }
 
     public String getName() {
-        return name;
+        return name != null ? name.toString() : null;
     }
 
     public void setName(String name) {
-        this.name = name;
+//        this.name = name;
     }
 
     public String getText() {
-        return text;
+        return text != null ? text.toString() : null;
     }
 
     public void setText(String text) {
-        this.text = text;
+//        this.text = text;
     }
 
     public String getShort_text() {
-        return short_text;
+        return short_text != null ? short_text.toString() : null;
     }
 
     public void setShort_text(String short_text) {
-        this.short_text = short_text;
+//        this.short_text = short_text;
     }
 
     public String getDisposition_id() {
@@ -189,14 +199,14 @@ public class Related_model_data {
     }
 
     public String getUser_getThumb() {
-        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
-            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
+//        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
+//            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
 
-        return user_getThumb;
+        return user_getThumb.getUrl();
     }
 
     public void setUser_getThumb(String user_getThumb) {
-        this.user_getThumb = user_getThumb;
+//        this.user_getThumb = user_getThumb;
     }
 
     public String getLike() {
@@ -259,13 +269,15 @@ public class Related_model_data {
         return photo;
     }
 
-
-
-
-
-
-
     public void setPhoto(List<Photo> photo) {
         this.photo = photo;
+    }
+
+    public String getTitle() {
+        return title != null ? title.toString() : null;
+    }
+    public void setTitle(String title) {
+
+        //this.title = title;
     }
 }

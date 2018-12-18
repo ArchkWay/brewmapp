@@ -1,6 +1,8 @@
 package com.brewmapp.data.entity;
 
 import com.brewmapp.BuildConfig;
+import com.brewmapp.execution.exchange.request.base.Keys;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Kras on 04.11.2017.
@@ -12,25 +14,29 @@ public class Review {
     private String related_model;
     private String related_id;
     private String text;
-    private String timestamp;
     private String type;
+    private String timestamp;
+    private String country_id;
+    private String city_id12;
     private String getThumb;
     private User_info user_info ;
+
+    @SerializedName ("user_getThumb")
+    private UserGetThumb mUser_getThumb;
+
     private String like;
     private String dis_like;
     private String interested;
     private String no_interested;
-    private String user_getThumb;
+    private Related_model_data related_model_data;
 
-    public String getUser_getThumb() {
-        if(user_getThumb!= null && !user_getThumb.startsWith("http")&& !user_getThumb.startsWith("/"))
-            user_getThumb= BuildConfig.SERVER_ROOT_URL + user_getThumb;
 
-        return user_getThumb;
+    public UserGetThumb getUser_getThumb() {
+        return mUser_getThumb;
     }
 
-    public void setUser_getThumb(String user_getThumb) {
-        this.user_getThumb = user_getThumb;
+    public void setUser_getThumb(UserGetThumb user_getThumb) {
+        this.mUser_getThumb = user_getThumb;
     }
 
     public String getId() {
@@ -135,5 +141,10 @@ public class Review {
 
     public void setNo_interested(String no_interested) {
         this.no_interested = no_interested;
+    }
+
+    public Related_model_data getRelated_model_data() {
+
+        return related_model_data;
     }
 }

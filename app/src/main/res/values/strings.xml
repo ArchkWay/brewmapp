@@ -89,6 +89,7 @@
         <item>Сделать фото</item>
     </string-array>
     <string-array name="event_types">
+        <item>Отзывы</item>
         <item>Новости</item>
         <item>События</item>
     </string-array>
@@ -116,9 +117,10 @@
     <string-array name="events_filter_events">
         <item>Все</item>
         <item>Я пойду</item>
-        <item>Календарь</item>
         <item>Приглашения</item>
         <item>Подписка</item>
+        <item>Календарь</item>
+        <item>По городу: </item>
     </string-array>
     <string-array name="events_filter_sales">
         <item>Все</item>
@@ -140,6 +142,8 @@
         <item>Подписка</item>
         <item>Календарь</item>
         <item>Мои новости</item>
+        <item>По типу: </item>
+        <item>По городу: </item>
     </string-array>
 
     <string-array name="main_menu">
@@ -181,6 +185,14 @@
         <item>Редактировать</item>
         <item>Удалить</item>
     </string-array>
+
+    <string-array name="filter_review">
+        <item>Все</item>
+        <item>Мои отзывы</item>
+        <item>По типу: </item>
+        <item>По городу: </item>
+    </string-array>
+
     <string name="title_activity_maps">Map</string>
     <string name="select_place">Выберите место</string>
     <string name="send">Отправить</string>
@@ -272,6 +284,11 @@
     <string name="arrow_up">%s \u25B3</string>
     <string name="liked">Вы уже проголосовали</string>
     <string name="filter">Фильтр</string>
+
+    <string name="select_review_type">Типы отзывов</string>
+    <string name="select_news_type">Типы новостей</string>
+    <string name="search_country">Поиск по названию страны</string>
+    <string name="search_city">Поиск по названию города</string>
 
     //Resto filter strings
     <string name="search_resto_name">Поиск по названию заведения</string>

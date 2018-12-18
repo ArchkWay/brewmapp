@@ -154,7 +154,8 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
             }
 
             private void texts() {
-                new Text2TextWithHashTag(text,model.getText());
+//                new Text2TextWithHashTag(text,model.getText());
+                text.setText(model.getText());
                 date.setText(model.getDateFormated());
             }
 
@@ -240,6 +241,8 @@ public class PostView extends BaseLinearLayout implements InteractiveModelView<P
 
             public void fill() {
                 shareLikeView.setiLikeable(model);
+//                shareLikeView.setRestoName(model.getRelated_model_data().getName());
+                shareLikeView.setLeftText(model.getDate_news());
                 repost();
                 check_related_model_data();
                 texts();

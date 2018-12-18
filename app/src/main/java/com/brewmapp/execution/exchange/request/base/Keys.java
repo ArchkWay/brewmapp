@@ -80,6 +80,7 @@ public class Keys {
     public static final String LIMIT_END = "limit_end";
     public static final String SUBSCRIPTION = "subscription";
     public static final String USER_SUBSCRIPTION = "user_subscription";
+    public static final String USER_FRIENDS = "user_friends";
     public static final String USER_INVITATIONS = "user_invitations";
     public static final String USER_GO = "user_go";
     public static final String DATE_EVENTS = "date_events";
